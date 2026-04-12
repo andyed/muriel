@@ -1,13 +1,16 @@
 """
 render_assets — importable Python assets for the Render skill.
 
-Four modules, pulled out of the render channel subfiles so notebooks and
+Five modules, pulled out of the render channel subfiles so notebooks and
 CI checks can import them instead of copy-pasting.
 
   - matplotlibrc_dark  — OLED cream on near-black (default palette)
   - matplotlibrc_light — warm editorial palette (matches F explainer)
   - stats              — APA-style effect size / CI / phrasing helpers
   - contrast           — WCAG contrast audit (module + CLI)
+  - dimensions         — common screen-size footprints (Size / Device /
+                         PaperSize, social cards, video, viewports,
+                         academic figsize helper, dotted-name registry)
 
 Usage
 -----
@@ -49,13 +52,32 @@ Or from the command line:
     python -m render_assets.contrast examples/*.svg
     python -m render_assets.contrast file.svg --required 4.5 --background '#fff'
 
+Dimension lookups and academic figsize helpers:
+
+    from render_assets.dimensions import (
+        TWITTER_INSTREAM, OG_CARD, VIDEO_1080P, A4,
+        figsize_for, lookup, device, Size,
+    )
+    TWITTER_INSTREAM               # → Size(1600, 900)
+    OG_CARD.aspect_label           # → '1.91:1'
+    OG_CARD.scale(2)               # → Size(2400, 1260)  (retina upload)
+    A4.px_300dpi                   # → Size(2481, 3507)
+    figsize_for('chi', columns=1)  # → (3.33, 2.0)
+    device('iphone-15-pro').css    # → Size(393, 852)
+    lookup('twitter.instream')     # → Size(1600, 900)
+
+Or from the command line (prints the full registry + devices + paper):
+
+    python -m render_assets.dimensions
+
 See the module docstrings for the full APIs.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = [
     "matplotlibrc_dark",
     "matplotlibrc_light",
     "stats",
     "contrast",
+    "dimensions",
 ]

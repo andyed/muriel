@@ -208,8 +208,32 @@ ipad-pro-129-mockup-2048x2732.png
 
 Pattern: `{platform}-{role}-{widthXheight}.{ext}` for raster; `{platform}-{role}-{dpi|size}.{ext}` for paper. Platform prefix keeps sorting aligned; width×height is the canonical identifier.
 
+## Code counterpart
+
+All values in this file are also available as importable Python constants in [`render_assets/dimensions.py`](../render_assets/dimensions.py). Mirror of the markdown structure, standard-library-only, with three small classes (`Size`, `Device`, `PaperSize`), a dotted-name `REGISTRY` for programmatic lookup, and a `figsize_for(venue, columns, aspect)` helper so notebooks don't hardcode inch values.
+
+```python
+from render_assets.dimensions import (
+    TWITTER_INSTREAM, OG_CARD, VIDEO_1080P, A4,
+    figsize_for, lookup, device,
+)
+
+cvs_w, cvs_h = TWITTER_INSTREAM       # → (1600, 900)
+OG_CARD.scale(2)                      # → Size(2400, 1260) for retina upload
+A4.px_300dpi                          # → Size(2481, 3507)
+figsize_for('chi', columns=1)         # → (3.33, 2.0)
+device('iphone-15-pro').css           # → Size(393, 852)
+lookup('twitter.instream')            # → Size(1600, 900)
+```
+
+Run the module directly to print the full registry + device list + paper table + figsize examples:
+
+```bash
+python -m render_assets.dimensions
+```
+
 ## TODO
 
-- [ ] **`render_assets/dimensions.py`** — Expose these values as importable `NamedTuple` / `dataclass` constants so figure-generation scripts can `from render_assets.dimensions import TWITTER_INSTREAM, OG_CARD` etc. Mirror the markdown structure.
-- [ ] **Viewport-sweep capture script** — `render_assets/capture.py` helper that takes a URL and a tier list (`['mobile', 'tablet', 'laptop', 'desktop']`) and produces a set of Playwright screenshots named by the convention above. Pairs with `channels/web.md` static capture recipes.
-- [ ] **CHI / IEEE figsize helper** — Tiny function that returns `(width_in, height_in)` for a requested venue + column + aspect, so notebooks don't hardcode the inch values.
+- [x] **`render_assets/dimensions.py`** — Shipped. `Size` / `Device` / `PaperSize` NamedTuples, 34 registry entries, 17 devices, 5 paper sizes, `figsize_for()` for 7 academic venues, CLI self-test.
+- [ ] **Viewport-sweep capture script** — `render_assets/capture.py` helper that takes a URL and a tier list (`['mobile', 'tablet', 'laptop', 'desktop']`) and produces a set of Playwright screenshots named by the convention above. Pairs with `channels/web.md` static capture recipes. Can now pull from `RESPONSIVE_TIER_LIST` in `dimensions.py` instead of hardcoding.
+- [x] **CHI / IEEE figsize helper** — Shipped as `figsize_for(venue, columns, aspect)` in `render_assets/dimensions.py`. Supports chi, acm, iui, ieee, pnas, nature, lncs.
