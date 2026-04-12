@@ -141,7 +141,67 @@ print(format_exploratory(corr))
 
 See [`channels/science.md`](../channels/science.md) in the render repo for the full statistical reporting chapter.
 
+## contrast — WCAG audit helper
+
+Standard-library-only module for computing WCAG 2.1 contrast ratios and auditing SVG files against Render's 8:1 rule.
+
+### As a module
+
+```python
+from render_assets.contrast import (
+    contrast_ratio, check_text_pair, audit_svg,
+    RENDER_8, WCAG_AAA, WCAG_AA, WCAG_AA_LARGE,
+)
+
+# Single pair
+contrast_ratio("#e6e4d2", "#0a0a0f")
+# → 15.42
+
+check_text_pair("#8a8aa0", "#0a0a0f", required=RENDER_8)
+# → CheckResult(fg=(138,138,160), bg=(10,10,15), ratio=5.85,
+#                required=8.0, passes=False, wcag_tier='AA')
+
+# Whole SVG
+entries = audit_svg("examples/word-fingerprints.svg")
+# prints a formatted audit table and returns a list of SelectorEntry
+```
+
+### As a CLI
+
+```bash
+# Audit one SVG against Render's 8:1 rule
+python -m render_assets.contrast examples/word-fingerprints.svg
+
+# Multiple files in one run
+python -m render_assets.contrast examples/*.svg
+
+# Custom threshold (e.g. WCAG AA 4.5:1)
+python -m render_assets.contrast some.svg --required 4.5
+
+# Override background (auto-detects .bg class by default)
+python -m render_assets.contrast light-mode.svg --background '#ffffff'
+```
+
+Exit status: `0` if every text rule clears the threshold, `1` if any fail, `2` on usage errors. Slots into a pre-commit hook or CI check.
+
+### What it classifies as text vs decorative
+
+Class selectors are matched against substring hints:
+
+- **Text hints** (treated as body text, subject to the rule): `title`, `subtitle`, `heading`, `body`, `caption`, `label`, `kicker`, `footer`, `header`, `model`, `response`, `prompt`, `closer`, `callout`, `quote`, `pull`, `note`, `aside`, `margin`, `badge`, `footnote`, `mark`, `highlight`, `code`, `mono`, `stat`, `dropcap`, plus Render-specific `out-m`, `out-r`, `apple-m`, `apple-r`.
+- **Decorative hints** (exempt): `bg`, `background`, `rule`, `divider`, `border`, `frame`, `axis`, `grid`, `tick`, `shadow`, `glow`, `vignette`, `path`, `shape`, `line`, `icon`, `arrow`, `marker`, `vignette`.
+- **Ambiguous**: anything else — checked conservatively (better to audit than silently skip).
+
+Text hints beat decorative hints when both match. Add more hints to `_TEXT_HINTS` / `_DECORATIVE_HINTS` in the module if your project has its own class vocabulary.
+
+### Limitations
+
+- CSS parser is minimal — handles `<defs><style>` blocks with flat rules. Does not handle `@media`, nested rules, or inline `fill=` attributes on individual `<text>` elements. For SVGs that use inline fills, add a `<style>` block with equivalent classes first.
+- sRGB only — no P3, Rec.2020, or Oklab color spaces.
+- Alpha channel is ignored (assumes opaque text on opaque background).
+
 ## Dependencies
 
 - **matplotlibrc_*** — matplotlib (any recent version)
 - **stats** — standard library only. Uses normal approximations (z = 1.96 for 95% CI) accurate for n ≥ 30. For exact t-distribution CIs at small n, compute upstream with scipy and pass the endpoints directly into the formatters.
+- **contrast** — standard library only. `re`, `xml.etree.ElementTree`, `dataclasses`, `argparse`.

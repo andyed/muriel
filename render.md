@@ -133,8 +133,11 @@ For a multi-channel task (e.g., a blog post with an interactive demo captured as
 - [x] **`channels/science.md` subsection** — rcparams defaults, stats reporting, notebook editorial, LaTeX hooks, worked recipes.
 - [x] **`render_assets/matplotlibrc_dark.py` + `_light.py`** — Both rcparams blocks shipped as importable modules with graceful fallback when matplotlib is absent. Light variant matches the F explainer warm editorial palette.
 - [x] **Statistical reporting helpers** — `render_assets/stats.py` ships `format_comparison`, `format_null`, `format_correlation`, `format_auc`, `format_chi2`, `format_exploratory`, `cohens_d`, `cohens_d_paired`, `fisher_ci`, `apa_number`, `format_p`, `format_ci`. Standard library only. Enforces U+2212 minus signs, APA leading-zero stripping, detection-limit phrasing for nulls.
+- [x] **`render_assets/contrast.py` WCAG audit** — Standard-library-only module with `contrast_ratio`, `check_text_pair`, `audit_svg`, and a `python -m render_assets.contrast file.svg` CLI (exit 0 / 1 / 2 for CI use). Classifies CSS selectors as text / decorative / ambiguous via substring hints. Used for the 8:1 compliance audit that caught three failing text roles in word-fingerprints and four failing tokens in marginalia's light theme.
 - [ ] **Figure caption template tool** — Generate caption skeletons from a figure spec dict.
 - [ ] **Pre-registration boilerplate generator** — Common methods-section templates with fill-in slots.
+- [ ] **`render_assets/contrast.py` inline-fill pass** — Current audit only walks `<style>` CSS; add a second pass that walks `<text fill="…">` attributes for SVGs that set fills inline.
+- [ ] **`render_assets/contrast.py` marginalia-token audit** — Add a `audit_marginalia_tokens()` helper that reads `marginalia.css` and verifies every `--mg-*` custom property against both theme backgrounds.
 
 ### Web (editorial variant)
 - [x] **Light editorial palette documented** — `channels/web.md` now has a section on the F-explainer pattern, with the `.outer-note` / `.stats-detail` / `.has-dropcap` / staged-h2 extensions catalogued.

@@ -1,10 +1,13 @@
 """
 render_assets — importable Python assets for the Render skill.
 
-Two matplotlibrc blocks (dark OLED and warm editorial light) and a
-statistical reporting helper module, pulled out of
-`~/Documents/dev/render/channels/science.md` so notebooks can import
-them instead of copy-pasting.
+Four modules, pulled out of the render channel subfiles so notebooks and
+CI checks can import them instead of copy-pasting.
+
+  - matplotlibrc_dark  — OLED cream on near-black (default palette)
+  - matplotlibrc_light — warm editorial palette (matches F explainer)
+  - stats              — APA-style effect size / CI / phrasing helpers
+  - contrast           — WCAG contrast audit (module + CLI)
 
 Usage
 -----
@@ -33,7 +36,20 @@ Statistical reporting helpers:
         apa_number, format_p, format_ci,
     )
 
-See the module docstrings in `stats.py` for the full API.
+Contrast auditing:
+
+    from render_assets.contrast import (
+        contrast_ratio, check_text_pair, audit_svg, RENDER_8,
+    )
+    contrast_ratio("#e6e4d2", "#0a0a0f")     # → 15.42
+    audit_svg("examples/word-fingerprints.svg")  # prints an audit table
+
+Or from the command line:
+
+    python -m render_assets.contrast examples/*.svg
+    python -m render_assets.contrast file.svg --required 4.5 --background '#fff'
+
+See the module docstrings for the full APIs.
 """
 
 __version__ = "0.1.0"
@@ -41,4 +57,5 @@ __all__ = [
     "matplotlibrc_dark",
     "matplotlibrc_light",
     "stats",
+    "contrast",
 ]
