@@ -17,6 +17,7 @@ Each channel has a dedicated subfile with deep recipes, tooling, and lessons. Th
 | **Density viz** | PNG | [`channels/heatmaps.md`](channels/heatmaps.md) — Tobii-style Gaussian overlays |
 | **Gaze plots** | PNG / SVG / JS | [`channels/gaze.md`](channels/gaze.md) — scanpath, bubble, AOI timeline, saccade rose |
 | **Science** | matplotlib + LaTeX | [`channels/science.md`](channels/science.md) — rcparams, stats reporting, notebook editorial, paper figures |
+| **Dimensions** | *cross-channel reference* | [`channels/dimensions.md`](channels/dimensions.md) — social cards, device footprints, viewport tiers, video, paper/print, favicons, scale factors |
 
 Photoshop does one of these (raster), badly for the others, and zero of them reproducibly.
 
@@ -90,7 +91,9 @@ When the task lands in a specific channel, read the corresponding subfile *first
 | Tobii-style density heatmaps from fixation data | `channels/heatmaps.md` |
 | Scanpath plots, AOI timelines, bubble scanpaths, saccade roses | `channels/gaze.md` |
 | matplotlib figures, stats reporting, notebook editorial, LaTeX hooks | `channels/science.md` |
+| "What size should this be?" — social card / device / viewport / paper / video dimensions | `channels/dimensions.md` |
 | Sci-fi HUD aesthetic, FUI grammar, Territory/Perception lineage | `vocabularies/fui.md` |
+| Multi-scale typography, information landscapes, pretext, Cooper/Small lineage | `vocabularies/visible-language.md` |
 
 For a multi-channel task (e.g., a blog post with an interactive demo captured as a paper figure), read the relevant subfiles in order of primary channel first.
 
