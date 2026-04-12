@@ -1,0 +1,182 @@
+# Web — Marginalia, Pandoc, Static Capture, Data-URI
+
+The editorial-HTML channel and its tooling. Covers:
+
+- **Marginalia** — the typographic callout library for blog posts and paper-style pages
+- **Pandoc bridge** — the Lua filter that emits marginalia classes from markdown
+- **Web rendering & static capture** — Playwright / weasyprint / headless Chrome for DOM → PNG / PDF
+- **Data-URI embedding** — single-file portability trick for artifacts that must travel self-contained
+
+Part of the [Render](../render.md) skill — see the top-level index for mission, universal rules, and channel map.
+
+## Marginalia — Editorial HTML
+
+The editorial layer for blog posts, paper-style web pages, and any prose that needs typographic callouts. 15 components, zero dependencies, dark theme by default. CSS-only — JS is optional.
+
+**Library:** `~/Documents/dev/marginalia/` (CDN: `marginalia@latest`)
+**Reference:** `~/Documents/dev/marginalia/SKILL.md` (full pattern catalog) and `~/Documents/dev/marginalia/llm.md` (LLM cheat sheet)
+
+### Quick setup
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/marginalia@latest/marginalia.css">
+<script src="https://cdn.jsdelivr.net/npm/marginalia@latest/marginalia.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/marginalia@latest/marginalia-md.js" defer></script>
+```
+
+### Markdown patterns (subset)
+```
+> [!NOTE]    > [!TIP]    > [!WARNING]    > [!IMPORTANT]
+> [!QUOTE]   > [!ASIDE]  > [!MARGIN]
+==highlighted==    {Badge}    {Badge: tip}    [^1](footnote)
+{dropcap}
+```
+
+Plain `>` blockquotes become 3D perspective pull quotes — the signature component. Wrap content in `<div class="mg-spread">` for two-column magazine layout.
+
+### Rules (from past feedback)
+- **Core narrative inline always.** Sidebars are for "go deeper" references only — one per section, at the heading.
+- **Decorative elements ≥3:1 contrast.** Don't fade below — compute the ratio.
+- **All text 8:1 minimum.**
+- All marginalia classes use `mg-` prefix. Theme via `--mg-*` CSS custom properties — these inherit into child SVGs, so a single theme switch repaints the whole page including embedded vector graphics.
+
+## Pandoc → Marginalia Bridge
+
+Pandoc 3.2+ recognizes GitHub-style alerts (`> [!NOTE]`) via the `+alerts` extension. A Lua filter at `~/Documents/dev/marginalia/pandoc/marginalia.lua` rewrites pandoc's output to marginalia classes: GitHub alerts → `mg-callout[data-type]`, extended markers (ASIDE/MARGIN/QUOTE) → `mg-sidebar` / `mg-margin` / `mg-pull`, plain blockquotes → `mg-pull`, `==mark==` → `mg-mark`, `{Badge}` and multi-word `{Text: type}` → `mg-badge`, pandoc footnotes → `mg-fn` popover, fenced code → `mg-code`, inline code → `mg-inline-code`, `{dropcap}` line marker → `mg-dropcap` wrap.
+
+### Usage
+
+```bash
+pandoc draft.md \
+  --from markdown+mark+alerts \
+  --lua-filter ~/Documents/dev/marginalia/pandoc/marginalia.lua \
+  --template ~/Documents/dev/marginalia/pandoc/template.html \
+  --standalone \
+  -o draft.html
+```
+
+Same source fans out to PDF (via weasyprint), DOCX, or EPUB without losing marginalia's typographic voice:
+
+```bash
+# HTML → PDF
+weasyprint draft.html draft.pdf
+
+# Direct to DOCX (filter still applies)
+pandoc draft.md --from markdown+mark+alerts \
+  --lua-filter ~/Documents/dev/marginalia/pandoc/marginalia.lua \
+  -o draft.docx
+```
+
+### Reference example
+`~/Documents/dev/marginalia/pandoc/examples/us-constitution.md` — an annotated US Constitution reader's edition. Exercises every transformation: dropcap, all four callout colors, sidebars, margin notes in the desktop gutter via CSS Grid subgrid, pull quote, inline highlights, badges, footnote popover, fenced code, plus a cursive copperplate dropcap initial and closing signature paragraph. Good starting point for any new marginalia page.
+
+## Web Rendering & Static Capture
+
+The "DOM is the rendering engine" trick: build the artifact as HTML/CSS/SVG/JS, then capture it with headless Chrome or Playwright. Combines marginalia's editorial chrome, SVG's vector precision, and interactive JS's parameter sliders — then freezes one state into PNG or PDF for distribution.
+
+### When to use
+- Capture an SVG that's CSS-themed at runtime (avoids redoing colors per export)
+- Snapshot an interactive demo at a specific parameter state
+- Render a marginalia paper-style HTML page as PDF for paper submission
+- Build infographics in HTML (CSS Grid, marginalia callouts, embedded SVG) and rasterize for store/social
+- Capture a Three.js scene at exact framing for blog hero images
+- Generate device-frame screenshots from real page renders rather than mocking in Photoshop
+
+### Tooling
+
+| Tool | Strength | Recipe |
+|---|---|---|
+| **Playwright** (Python or Node) | Full automation, waits for fonts/network/JS, supports clip regions | `page.goto(url); page.locator('svg').screenshot()` |
+| **Puppeteer** | Same idea, Chrome-only, lighter | `await page.screenshot({ path, clip })` |
+| **`chrome --headless --screenshot`** | Zero-script one-off | `chrome --headless --screenshot=out.png --window-size=1280,720 file://...` |
+| **`weasyprint`** | HTML+CSS → PDF without a browser; respects `@page` rules | `weasyprint input.html out.pdf` |
+
+### Patterns
+
+- **Wait for fonts.** `page.evaluate(() => document.fonts.ready)` before screenshot, or webfonts render mid-capture.
+- **Set `device_scale_factor=2`** for retina-quality output.
+- **Use `clip` regions** to capture a single SVG/canvas instead of the whole viewport.
+- **Inject parameters via URL hash** so the same demo HTML can be captured at multiple states (pairs with PermalinkManager pattern).
+- **Use `--virtual-time-budget`** in headless Chrome to fast-forward animations to a stable frame.
+- **`prefers-color-scheme: dark` matters.** Force it via `page.emulate_media(color_scheme='dark')` so OLED palette renders correctly.
+- **Capture small multiples in one run.** Loop over parameter values, set URL hash, screenshot. Output a grid of frames that compose into a small-multiples figure.
+
+### Example: SVG → PNG via Playwright
+```python
+from playwright.sync_api import sync_playwright
+with sync_playwright() as p:
+    browser = p.chromium.launch()
+    page = browser.new_page(device_scale_factor=2)
+    page.set_content(open('chart.html').read())
+    page.evaluate('document.fonts.ready')
+    page.locator('svg#chart').screenshot(path='chart.png')
+    browser.close()
+```
+
+### Example: marginalia HTML → PDF via weasyprint
+```bash
+weasyprint paper-draft.html paper-draft.pdf
+```
+Add `@page { size: A4; margin: 2cm }` to the marginalia stylesheet override for paper formatting.
+
+### Static capture as the unifier
+This channel is what makes the whole toolkit composable. SVG rendered with CSS theming → captured as PNG → embedded in a video. Interactive demo at three parameter states → captured as small multiples → assembled into one image. Marginalia page → captured as PDF for submission. **The DOM is the most flexible compositor; static capture is the export step.**
+
+## Data-URI Embedding
+
+The portability trick: embed images directly inside HTML/SVG/CSS as `data:image/png;base64,...` URIs. Single-file artifacts with zero asset management — they email, paste into Slack, copy onto USB sticks, embed in iframes from sandboxes that block external loads.
+
+### When to use
+- Single-file HTML demos (one file = the whole thing)
+- SVG with embedded raster textures (one file = the whole figure)
+- Marginalia blog post fragments that need to be paste-able
+- Email-friendly artifacts (Outlook/Gmail strip external `<img>` until clicked)
+- Paper figures where the journal wants a self-contained submission
+- CSS backgrounds without HTTP round-trips
+- Inlining icons inside SVG so a single file renders correctly when downloaded
+
+### Recipes
+
+**Bash → data URI:**
+```bash
+# PNG → data URI string
+echo "data:image/png;base64,$(base64 -i input.png | tr -d '\n')"
+
+# SVG → data URI (URL-encoded, smaller than base64 for SVG)
+python3 -c "import urllib.parse; print('data:image/svg+xml,' + urllib.parse.quote(open('input.svg').read()))"
+```
+
+**Python → data URI:**
+```python
+import base64
+def data_uri(path, mime='image/png'):
+    with open(path, 'rb') as f:
+        b64 = base64.b64encode(f.read()).decode()
+    return f'data:{mime};base64,{b64}'
+
+img_uri = data_uri('icon.png')
+html = f'<img src="{img_uri}">'
+```
+
+**Pillow → data URI without writing a file:**
+```python
+import io, base64
+from PIL import Image
+buf = io.BytesIO()
+img.save(buf, format='PNG')
+uri = f'data:image/png;base64,{base64.b64encode(buf.getvalue()).decode()}'
+```
+
+**SVG `<image>` element with embedded raster:**
+```xml
+<svg viewBox="0 0 400 200">
+  <image href="data:image/png;base64,iVBORw0KG..." width="400" height="200"/>
+</svg>
+```
+
+### Size budget
+Base64 inflates by ~33%. Stay under ~200 KB per image inside HTML; above that, prefer external assets unless portability is non-negotiable. SVGs URL-encode smaller than base64 — use `urllib.parse.quote` instead.
+
+### Caveats
+- Data URIs **bypass browser cache**. Don't use for images that repeat across many pages.
+- Some XML parsers reject very long attribute values.
+- Email clients are inconsistent: Gmail strips data URIs in some contexts, Outlook handles them in HTML body but not signatures.
