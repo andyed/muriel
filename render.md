@@ -18,6 +18,7 @@ Each channel has a dedicated subfile with deep recipes, tooling, and lessons. Th
 | **Gaze plots** | PNG / SVG / JS | [`channels/gaze.md`](channels/gaze.md) — scanpath, bubble, AOI timeline, saccade rose |
 | **Science** | matplotlib + LaTeX | [`channels/science.md`](channels/science.md) — rcparams, stats reporting, notebook editorial, paper figures |
 | **Dimensions** | *cross-channel reference* | [`channels/dimensions.md`](channels/dimensions.md) — social cards, device footprints, viewport tiers, video, paper/print, favicons, scale factors |
+| **Style guides** | *brand schema* | [`channels/style-guides.md`](channels/style-guides.md) — brand.toml schema, loader, rule enforcement, CSS/matplotlibrc derivation, example brand.toml files |
 
 Photoshop does one of these (raster), badly for the others, and zero of them reproducibly.
 
@@ -92,6 +93,7 @@ When the task lands in a specific channel, read the corresponding subfile *first
 | Scanpath plots, AOI timelines, bubble scanpaths, saccade roses | `channels/gaze.md` |
 | matplotlib figures, stats reporting, notebook editorial, LaTeX hooks | `channels/science.md` |
 | "What size should this be?" — social card / device / viewport / paper / video dimensions | `channels/dimensions.md` |
+| Loading a brand's design tokens, enforcing brand ownership rules, deriving CSS / rcparams from a brand | `channels/style-guides.md` |
 | Sci-fi HUD aesthetic, FUI grammar, Territory/Perception lineage | `vocabularies/fui.md` |
 | Multi-scale typography, information landscapes, pretext, Cooper/Small lineage | `vocabularies/visible-language.md` |
 

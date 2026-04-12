@@ -1,0 +1,110 @@
+# Psychodeli+ brand style guide
+#
+# Read-only mirror of the tokens defined in:
+#   ~/Documents/dev/psychodeli-brand-guide/templates/shared-styles.css
+#
+# This file is for Render to import via render_assets.styleguide.load_styleguide().
+# The canonical source remains the CSS + CLAUDE.md in psychodeli-brand-guide.
+# If those tokens change, update this file to match.
+#
+# Per the CLAUDE.md ownership rule, Render must not use this brand to
+# regenerate wordmarks, monograms, favicons, or any image assets.
+# Those are owned by psychodeli-brand-guide's export pipeline.
+
+[meta]
+name             = "Psychodeli+"
+slug             = "psychodeli-plus"
+version          = "1.0.0"
+owner_repo       = "psychodeli-brand-guide"
+owner_path       = "~/Documents/dev/psychodeli-brand-guide"
+canonical_source = "templates/shared-styles.css"
+ownership_rule   = "psychodeli-brand-guide owns all Psychodeli image generation. Never rebuild elsewhere."
+
+[colors]
+background       = "#0a0a0f"
+background_2     = "#111118"
+background_3     = "#1a1a24"
+foreground       = "#e8e8f0"
+foreground_muted = "#a0a0b0"
+accent           = "#d2b06a"
+
+# 10-stop smooth gradient from dark (outer) to cyan (inner).
+# Widths in pixels — the outer rings are the largest text-stroke layers.
+# Rendered in templates/shared-styles.css as -webkit-text-stroke on stacked
+# pseudo-elements behind the fractal-fill text.
+[colors.rings]
+r10 = { color = "rgba(0,0,0,0.75)",  width_px = 76 }
+r9  = { color = "rgb(8,30,55)",      width_px = 68 }
+r8  = { color = "rgb(12,42,75)",     width_px = 60 }
+r7  = { color = "rgb(18,55,95)",     width_px = 52 }
+r6  = { color = "rgb(25,70,120)",    width_px = 44 }
+r5  = { color = "rgb(35,90,150)",    width_px = 37 }
+r4  = { color = "rgb(50,115,180)",   width_px = 30 }
+r3  = { color = "rgb(70,145,210)",   width_px = 23 }
+r2  = { color = "rgb(100,180,235)",  width_px = 14 }
+r1  = { color = "rgb(145,215,248)",  width_px = 6 }
+
+# Themed section accents from the brand guide HTML.
+# These are the per-section highlight hues used in brand-guide/index.html.
+[colors.accents]
+tiedye      = "#ff7f00"
+cyberpunk   = "#00ff80"
+coral       = "#ff7f50"
+orchid      = "#b478dc"
+deepsea     = "#50b4c8"
+wildflowers = "#dc64a0"
+
+[typography]
+display_family              = "Nunito"
+display_weight              = 900
+display_line_height         = 1.2
+display_letter_spacing_em   = -0.04   # approximately -2px at 50px display size
+body_family                 = "Nunito, -apple-system, sans-serif"
+paint_order                 = "stroke fill"
+
+[assets]
+wordmark_template    = "templates/logo-wordmark.html"
+monogram_template    = "templates/monogram-p-plus.html"
+fractal_fill_default = "sources/bg-wildflowers.jpg"
+fractal_fills = [
+    "sources/bg-wildflowers.jpg",
+    "sources/bg-forcefield.jpg",
+    "sources/bg-lorenz.jpg",
+    "sources/bg-metric.jpg",
+    "sources/bg-transcendental.jpg",
+    "sources/morph-peacock-zeta.jpg",
+    "sources/morph-leopard-spots.jpg",
+    "sources/origins-head-cheese.jpg",
+    "sources/origins-pinwheel.jpg",
+    "sources/origins-tie-dye.jpg",
+    "sources/playground-petals.jpg",
+    "sources/shaper-bypass.jpg",
+    "sources/shaper-diamond.jpg",
+    "sources/shaper-fold.jpg",
+    "sources/shaper-xor.jpg",
+    "sources/wave-mobius.jpg",
+]
+
+[dependencies]
+google_fonts = ["Nunito:wght@900"]
+
+# Export pipeline commands (defined in psychodeli-brand-guide/package.json).
+# Render should invoke these, not re-implement them, when assets need regen.
+[export]
+cmd_all      = "npm run export"
+cmd_wordmark = "npm run export:wordmark"
+cmd_monogram = "npm run export:monogram"
+cmd_serve    = "npm run serve"
+
+[rules]
+# Hard rules from the brand guide's CLAUDE.md. Enforced by
+# StyleGuide.rules.check() — any operation name matching 'wordmark',
+# 'monogram', 'logo', 'favicon', 'brand-asset', or 'app-icon' will raise
+# RuleViolation when this guide is loaded.
+never_modify_sources                       = true
+never_rebuild_image_generation_elsewhere   = true
+brand_owner                                = "psychodeli-brand-guide"
+
+# Non-reserved extras, preserved in rules.custom{}.
+one_font_treatment_per_app = true
+optical_alignment_over_mathematical = true

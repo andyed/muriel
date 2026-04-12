@@ -1,0 +1,54 @@
+# Render brand style guide — the render skill's own palette as a StyleGuide.
+#
+# Mirrors the constants baked into render_assets/matplotlibrc_dark.py and
+# the universal rules at the top of render.md. Useful as the default style
+# guide for any render operation that isn't targeting a specific project's
+# brand.
+#
+# Unlike psychodeli-brand.toml, this guide has no ownership lock — render
+# IS the owner, and operations that generate artifacts in this palette
+# are expected.
+
+[meta]
+name             = "Render"
+slug             = "render"
+version          = "0.3.0"
+owner_repo       = "render"
+owner_path       = "~/Documents/dev/render"
+canonical_source = "render_assets/matplotlibrc_dark.py"
+ownership_rule   = "Render's own palette — no external owner, free to use for any output"
+
+[colors]
+background       = "#0a0a0f"   # OLED near-black
+background_2     = "#0f1117"   # legend / inner-panel slightly brighter
+background_3     = "#1a1a24"
+foreground       = "#e6e4d2"   # cream — 15.42:1 on bg
+foreground_muted = "#b0b0c4"   # muted body — 9.27:1 on bg
+accent           = "#50b4c8"   # same as marginalia --mg-note
+accent_ink       = "#7dd4e4"   # brighter ink variant — 11.67:1 on bg
+
+# Semantic callout tokens (aligned with marginalia's --mg-* after the
+# 8:1 contrast bump in commit c511077).
+note      = "#50b4c8"   # 8.19:1
+tip       = "#66bb6a"   # 8.35:1 (bumped from Material green 500)
+warning   = "#e6a817"   # 9.38:1
+important = "#ff8282"   # 8.25:1 (bumped from e05252)
+
+# No ring gradient or section accents — this brand has a flat palette.
+
+[typography]
+display_family              = "Helvetica, 'Arial Black', sans-serif"
+display_weight              = 700
+display_line_height         = 1.2
+body_family                 = "Helvetica, Arial, sans-serif"
+mono_family                 = "'SF Mono', Menlo, Monaco, 'DejaVu Sans Mono', monospace"
+
+[dependencies]
+# No external fonts — all system stacks.
+
+[rules]
+# Render's own palette has no restrictions. These booleans are defaults
+# but kept explicit so consumers know they can freely generate.
+never_modify_sources                     = false
+never_rebuild_image_generation_elsewhere = false
+brand_owner                              = "render"

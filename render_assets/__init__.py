@@ -1,7 +1,7 @@
 """
 render_assets — importable Python assets for the Render skill.
 
-Six modules, pulled out of the render channel subfiles so notebooks and
+Seven modules, pulled out of the render channel subfiles so notebooks and
 CI checks can import them instead of copy-pasting.
 
   - matplotlibrc_dark  — OLED cream on near-black (default palette)
@@ -13,6 +13,9 @@ CI checks can import them instead of copy-pasting.
                          academic figsize helper, dotted-name registry)
   - capture            — Playwright viewport-sweep screenshot helper
                          (module + CLI, optional Playwright dependency)
+  - styleguide         — brand style guide schema and TOML loader with
+                         rule enforcement, contrast auditing, CSS +
+                         matplotlibrc derivation (module + CLI)
 
 Usage
 -----
@@ -91,10 +94,27 @@ Requires Playwright (optional install). Module imports cleanly without
 it; capture_responsive() raises ImportError with install instructions
 on first call.
 
+Brand style guides:
+
+    from render_assets.styleguide import load_styleguide, RuleViolation
+
+    sg = load_styleguide("examples/psychodeli-brand.toml")
+    sg.colors.accent                  # → '#d2b06a'
+    sg.audit_contrast(required=8.0)   # → per-role WCAG audit
+    sg.to_matplotlibrc()              # → dict for mpl.rcParams.update()
+    sg.to_css_vars(prefix="--brand-") # → :root custom-property block
+    sg.rules.check("regenerate-wordmark")  # → raises RuleViolation
+
+Or from the command line:
+
+    python -m render_assets.styleguide examples/psychodeli-brand.toml
+    python -m render_assets.styleguide brand.toml --css --css-prefix '--mg-'
+    python -m render_assets.styleguide brand.toml --contrast --required 8.0
+
 See the module docstrings for the full APIs.
 """
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 __all__ = [
     "matplotlibrc_dark",
     "matplotlibrc_light",
@@ -102,4 +122,5 @@ __all__ = [
     "contrast",
     "dimensions",
     "capture",
+    "styleguide",
 ]
