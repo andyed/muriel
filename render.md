@@ -25,6 +25,7 @@ Photoshop does one of these (raster), badly for the others, and zero of them rep
 Design grammars worth naming explicitly when a project's visual register calls for something specific. A menu of established traditions — borrow their conventions, don't reinvent them.
 
 - [`vocabularies/fui.md`](vocabularies/fui.md) — **Fantasy / Fictional User Interface.** Sci-fi HUDs. Perception NYC, Territory Studio, Ash Thorp, GMUNK lineage. Thin strokes, mono numerics, staggered reveals, radial geometry, restrained palettes.
+- [`vocabularies/visible-language.md`](vocabularies/visible-language.md) — **Visible Language Workshop.** The MIT Media Lab design tradition (Cooper, Small, Ishizaki, Maeda → Processing → pretext). Information landscapes, multi-scale typography, typography as data structure. Contemporary substrate: [`@chenglou/pretext`](https://chenglou.me/pretext/). See also `channels/interactive.md` for the pretext API and the `pretext-coachella` reference exemplar.
 
 Additional vocabularies (Swiss grid, editorial, brutalist, newsprint) can be added here without restructuring the skill.
 
@@ -64,8 +65,9 @@ When building interactive demos or UI affordances around the visuals, the design
 - **Fisheye menus** — focus+context lens that expands the item under the cursor while compressing peripheral items (the user's own MS Human Factors thesis, Clemson). The trick: each item gets a *guaranteed minimum size* below the lens floor so distant items remain clickable, not just visible.
 - **Marginalia callouts** — typographic affordances (pull quotes, asides, margin notes) are the editorial equivalent of fisheye: they create a visual hierarchy that lets the eye sample without losing the through-line.
 - **Cortical magnification & foveation** — the retinal-side reason fisheye works at all. Inside the Math is the canonical explainer; reference it when explaining *why* focus+context isn't a UI gimmick.
+- **"It is impossible to separate the visual design from the design of the interface."** — David Small, [*Navigating Large Bodies of Text*](https://smg.media.mit.edu/library/small1996.html) (IBM Systems Journal, 1996). Visual grammar and interaction grammar are the same grammar. Every choice about how text renders is a choice about how people navigate it — and vice versa. See [`vocabularies/visible-language.md`](vocabularies/visible-language.md) for the full MIT Media Lab lineage this is drawn from.
 
-Use these as design rationale in figure captions and blog posts — the vocabulary is precise, the laws are quantified, and the lineage runs from psychophysics to interaction design.
+Use these as design rationale in figure captions and blog posts — the vocabulary is precise, the laws are quantified, and the lineage runs from psychophysics through typography to interaction design.
 
 ---
 

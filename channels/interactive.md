@@ -73,6 +73,7 @@ One file. No build. Marginalia handles editorial chrome. Demo lives at `<project
 | Audio-reactive | Web Audio API + AnalyserNode | Native, zero deps |
 | Eye-tracking replay | Custom Canvas2D + rAF | Fixation timing matters; no abstraction |
 | Reactive UI controls | Vanilla `<input type="range">` | No framework needed for sliders |
+| Rich typographic layout | [`@chenglou/pretext`](https://chenglou.me/pretext/) | Non-DOM text measurement + multi-line layout + rich inline spans. See [Typographic canvas with pretext](#typographic-canvas-with-pretext). |
 
 ## Permalink convention
 Demos with shareable state should follow the **PermalinkManager** pattern from Scrutinizer/Psychodeli: URL hash encodes parameters, parsed on load, rewritten on change. Read the existing manager class first — don't reinvent it.
@@ -162,8 +163,120 @@ On CodePen specifically: tag each experiment with both a **technical** tag (`web
 
 Free CodePen Pens are public. Free Observable notebooks are public. Free gists can be "secret" but are still URL-accessible. Don't paste unreleased Scrutinizer shaders, unpublished research data, or client work into any free tier — use GitHub Pages (private repo + gh-pages) or local files for anything sensitive. When in doubt, ask before pasting.
 
+## Typographic canvas with pretext
+
+[chenglou/pretext](https://chenglou.me/pretext/) is a pure JS/TS library for multi-line text measurement and layout **without** ever touching the DOM. It side-steps `getBoundingClientRect` / `offsetHeight`, which trigger layout reflow — one of the most expensive operations in the browser — by implementing its own text measurement against the browser's font engine as ground truth.
+
+For the design lineage behind the typographic ambition here (Cooper, Small, Ishizaki, Maeda → Processing → pretext), see [`vocabularies/visible-language.md`](../vocabularies/visible-language.md).
+
+### When to reach for it
+
+- **Virtualization / occlusion** without height guesstimates — know the exact rendered height of every line before drawing
+- **Text-in-shape layouts** — fill letterforms with body text, flow copy through arbitrary polygonal bands, typeset inside a mask
+- **Masonry / JS-driven flexbox alternatives** where CSS-only layouts hit their limit (or introduce layout shift)
+- **Canvas / SVG / server-side text** where no DOM exists at all
+- **AI-loop development** — measure text outside the browser, verify that labels don't overflow, prevent layout shift when new text loads
+
+### Two API tiers
+
+**Tier 1 — simple paragraph wrap** (one string, one font, fixed width):
+
+```js
+import { prepareWithSegments, layoutWithLines } from 'https://esm.sh/@chenglou/pretext@0.0.5'
+
+const prepared = prepareWithSegments('AGI 春天到了. بدأت الرحلة 🚀', '18px "Inter"')
+const { lines } = layoutWithLines(prepared, 320 /* max width px */, 26 /* line height */)
+for (let i = 0; i < lines.length; i++) {
+  ctx.fillText(lines[i].text, 0, i * 26)
+}
+```
+
+Handles Unicode properly — CJK, RTL, emoji, combining characters, the works. `prepare*` is a one-time cost; `layout*` is the cheap hot path on resize.
+
+**Tier 2 — rich inline** (mixed weights, fonts, colors; text flowing through variable-width slots):
+
+```js
+import {
+  prepareRichInline,
+  layoutNextRichInlineLineRange,
+  materializeRichInlineLineRange,
+} from 'https://esm.sh/@chenglou/pretext@0.0.5/rich-inline'
+
+// Build a list of items: text fragments each with their own font
+const items = [
+  { text: 'HEADLINER',     font: '900 16px Inter' },
+  { text: ' · ',           font: '400 16px Inter' },
+  { text: 'Secondary Act', font: '600 16px Inter' },
+  // …
+]
+const colors = ['#ffffff', 'rgba(180,180,200,0.35)', '#4ecdc4', /* … */]
+
+const prepared = prepareRichInline(items)
+
+// Flow through a series of slots (e.g., bands inside a letterform)
+let cursor = 0
+for (const slot of slots) {
+  const range = layoutNextRichInlineLineRange(prepared, slot.width, cursor)
+  if (!range) break
+  const line = materializeRichInlineLineRange(prepared, range)
+  for (const frag of line.fragments) {
+    ctx.font = frag.font
+    ctx.fillStyle = colors[frag.itemIndex] ?? '#ffffff'
+    ctx.fillText(frag.text, slot.x + frag.x, slot.y + frag.y)
+  }
+  cursor = range.end
+}
+```
+
+This is what makes text-in-shape layouts *actually* work: the library takes your variable-width slots and tells you exactly which rich-inline characters fit in each one, cursor-carrying across slot boundaries.
+
+### ESM direct, no build step
+
+Pretext publishes as [`@chenglou/pretext`](https://www.npmjs.com/package/@chenglou/pretext) on npm and serves via esm.sh. Import in a single-file HTML demo — matches the Render no-bundler doctrine:
+
+```html
+<script type="module">
+  import { prepareRichInline } from 'https://esm.sh/@chenglou/pretext@0.0.5/rich-inline'
+  // …
+</script>
+```
+
+**Pin the version** (`@0.0.5` at time of writing) for reproducibility in shipped demos. Pretext is early (0.0.x) and the API is still stabilizing; expect breaking changes if you use `@latest`.
+
+### Font preloading is mandatory
+
+Canvas-side text measurement depends on the actual font being loaded. Measure against the fallback and the layout is wrong the instant Inter (or whatever) arrives. Preload before the first call to `prepare*`:
+
+```js
+if (document.fonts?.load) {
+  await Promise.all([
+    document.fonts.load('900 200px Inter'),
+    document.fonts.load('900 13px Inter'),
+    document.fonts.load('700 13px Inter'),
+    document.fonts.load('400 13px Inter'),
+  ])
+}
+```
+
+This is the Interactive JS-channel version of the Web Rendering channel's "wait for fonts" rule — same failure mode, different timing.
+
+### Reference exemplar: pretext-coachella
+
+[andyed/pretext-coachella](https://github.com/andyed/pretext-coachella) — the 2026 Coachella lineup typeset *inside* the letterforms of "COACHELLA". Four views over the same 169-artist JSON:
+
+| View | File | Pretext API | What it does |
+|---|---|---|---|
+| **Index** | `index.html` | none | landing page + cards linking the other three |
+| **Flow** | `flow.html` | `prepareRichInline` + whole-document walk | all 169 names as one shrinkwrapped paragraph, each word colored by genre family |
+| **Poster** | `poster.html` | `prepareRichInline` + `layoutNextRichInlineLineRange` + `materializeRichInlineLineRange` | the signature view: letters of COACHELLA sliced into bands and slots; artists sorted by tier descending, rendered 500–900 weight, stage-color per artist, justified per slot, live perf stats |
+| **Wall** | `wall.html` | `prepareWithSegments` + `layoutWithLines` | perspective wall of individually laid-out artist names |
+
+Reads as a direct descendant of David Small's 1996 Shakespeare navigation: text as navigable space, multi-scale rendering via tier-based weight (instead of Small's greeking), categorical stage color for structure (same role as Small's character-dialogue filter), Canvas2D at 60fps because pretext measures outside the DOM reflow path. Good scaffold for any new typographic-canvas work.
+
 ## Lessons from past projects
 - **No bare `console.log` in Psychodeli.** Use `window.debugManager`.
 - **Don't dim/fade SERP cards on hover or brush.**
 - **WebGL variable names: read the source, don't guess.**
 - **Shader changes need verification.** Run tests or capture a screenshot before claiming a fix is working.
+- **Pretext: always pin `@x.y.z`**, never `@latest`, in shipped demos.
+- **Pretext: always preload fonts** before the first `prepare*` call, or the measurement is against the fallback font.
