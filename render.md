@@ -55,6 +55,72 @@ When building interactive demos or UI affordances around the visuals, the design
 
 Use these as design rationale in figure captions and blog posts — the vocabulary is precise, the laws are quantified, and the lineage runs from psychophysics to interaction design.
 
+## Aesthetic vocabularies
+
+Design grammars worth naming explicitly when a project's visual register calls for something specific. Like the Visualization Principles section above, these are a menu of established traditions — borrow their conventions, don't reinvent them. Start with FUI; add more as projects demand.
+
+### FUI — Fantasy / Fictional User Interface
+
+The industry term for sci-fi UI: the HUDs, consoles, and data overlays you see in Iron Man, Blade Runner 2049, The Martian, Westworld, The Expanse. Not "cyberpunk" (too broad, that's the umbrella aesthetic). Not "HUD" (that's a UI mode, heads-up). **FUI** is the keyword that unlocks the right references.
+
+**Canonical lineage — where to look for inspiration:**
+
+| Studio / Designer | Work | Notable for |
+|---|---|---|
+| **Perception NYC** (John LePore) | Iron Man's Stark HUDs, Black Panther's Shuri lab, Avengers | Radial geometry, translucent data layers |
+| **Territory Studio** | Blade Runner 2049, The Martian, Ex Machina, Ghost in the Shell (2017) | Analytical overlays, thin-stroke grids, restraint |
+| **Ash Thorp** | Prometheus, Ender's Game, Call of Duty Ghosts | Motion-forward reveals, procedural data |
+| **GMUNK** (Bradley G. Munkowitz) | TRON: Legacy, Oblivion, Prometheus | Radial/polar compositions, shader-driven textures |
+| **Jayse Hansen** | Iron Man 3, Big Hero 6, Star Trek Beyond | Typographic/numeric precision in flight HUDs |
+
+**Visual grammar — the recognizable elements:**
+
+- **Thin strokes** (0.5–1px) arranged in grids, polar coordinates, concentric rings, or parallel rules
+- **Monospace numerics with leading zeros** — `00042`, `0.0384`, `N 40°42'46"`, `T-00:14:22`
+- **Radial / polar elements** — dials, compass overlays, scan arcs, rose diagrams. Psychodeli's 10-ring wordmark border is a well-tempered instance of this grammar.
+- **Grid overlays** — faint CSS Grid lines in accent color, sometimes animated or parallax-scrolling
+- **Leader lines** — thin diagonal strokes from a data point to a typographic callout, like an engineering drawing
+- **Scan lines** — subtle horizontal-line texture across the frame (~3% opacity, 2px period). Optional chromatic aberration for CRT nostalgia.
+- **Data tickers** — live-updating numbers, `requestAnimationFrame`-driven counters that roll or flicker between values
+- **Animated reveals** — elements fade / translate / scale in with staggered 80–200ms delays, not instantly. `cubic-bezier(0.4, 0, 0.2, 1)` for the "precise machinery" feel.
+- **Restrained palette** — one dominant accent hue (cyan, amber, red) on near-black. Matches the universal OLED rule.
+- **Glitch / noise accents** — used as *punctuation*, never as ambient texture
+
+**Technical substrates — what to build it with:**
+
+- **SVG** for thin-stroke geometry (rings, grids, crosshairs, rose diagrams). Animate via `requestAnimationFrame`, `<animate>` elements, or CSS transitions on stroke properties.
+- **CSS Grid** for the underlying layout. HUD blocks are rectangular arrays; let the cascade do the arithmetic.
+- **Canvas2D** for tickers and anything where SVG reflow would be expensive. 60fps number counters, rolling waveforms, heatmap scrubs.
+- **WebGL shaders** for fullscreen post-process — scan lines, chromatic aberration, noise. One fragment shader layered on top of everything else.
+- **Monospace display fonts:**
+  - *Working mono:* IBM Plex Mono, JetBrains Mono, Berkeley Mono (paid, exquisite), Space Mono, Fira Code
+  - *Display FUI mono:* Orbitron, Rajdhani, Exo, Share Tech Mono, Audiowide — drawn specifically for sci-fi interfaces
+- **Animation timing:** 80–200ms stagger between elements on reveal; `ease-out` for entrance, `ease-in` for exit. Use the Web Animations API (`element.animate(...)`) for programmatic sequencing.
+
+**Restraint rules — FUI is shockingly easy to do badly:**
+
+- **One loud element per screen.** Everything else is quiet. A single radial scanner, a single rolling data block, a single reveal animation — surrounded by calm typography.
+- **Information actually present.** Fake data (`Lorem 0923.88.Ipsum`) reads as fake. Either show real data or stylize the placeholder so clearly nobody mistakes it for real (block rectangles, `████`, `XX.XX`).
+- **Motion earns attention.** Don't animate everything simultaneously. Stagger reveals. Let the eye land and re-land.
+- **Accessibility still applies.** 8:1 contrast works here too — thin strokes at low opacity fail the rule. Key information must meet WCAG even in the darkest HUD.
+- **Type is load-bearing.** Most amateur FUI dies from mushy typography. Pick one monospace face, commit to it, track it tight, and let the numbers do the work.
+
+**Reference archives — where to browse when stuck:**
+
+- [fuidesign.com](https://fuidesign.com/) — Ash Thorp's curated showcase
+- [hudsandguis.com](https://www.hudsandguis.com/) — dormant but canonical Tumblr archive; still the best single-site reference
+- [perception.nyc](https://perception.nyc/) / [territorystudio.com](https://territorystudio.com/) — studio portfolios
+- CodePen search for `#fui`, `#hud`, `#sci-fi-ui` — community implementations worth forking
+- Film stills from the lineage above — particularly Blade Runner 2049 (analytical spread), The Martian (orbital mechanics), Ghost in the Shell 2017 (full-screen data overlays)
+
+**Where FUI fits the current project set:**
+
+- **Scrutinizer** — the vision-science overlays (eccentricity rings, PPD calibration, sector explorers) are already proto-FUI. Codifying the vocabulary sharpens future work.
+- **Cartographer Explorer v2** — session timelines, faceted overviews, approach-retreat dashboards are natural HUD territory.
+- **Paper figures** (AdSERP, RecGaze, OSEC) — static gaze-path visualizations can borrow FUI grammar without gimmickry: leader lines, mono numerics, faint grids behind the gaze ribbon.
+- **No Kings / iBlipper** — kinetic typography intersects FUI through Territory Studio's work on motion-forward interfaces.
+- **OSEC phase explorer** — semantic zoom + FUI grammar is the right pairing.
+
 ## When to use
 
 Whenever the user needs a visual artifact for human eyes — store assets, paper figures, blog post explainers, video demos, terminal output, scientific plots, infographics, screenshots, gaze visualizations. Invoke with `/render` followed by what's needed.
@@ -432,6 +498,76 @@ Wrap demos in marginalia callouts for editorial context:
 - **Inside the Math** — shipped WebGL explainer for foveation/cortical magnification. Reference it; don't rebuild it.
 - **Scrutinizer demos** — PermalinkManager pattern for shareable WebGL state.
 - **Psychodeli** — audio-reactive shader pipeline (owned by psychodeli-brand-guide for assets).
+
+### Distribution & hosting
+
+Once a demo exists as a single-file HTML, the next decision is where it lives. Different hosts have sharply different strengths — choose based on audience (private vs public), forkability, and build friction.
+
+| Host | Best for | Trade |
+|---|---|---|
+| **GitHub Pages** | Repo-hosted demos (Scrutinizer, Psychodeli, marginalia, Inside the Math) — canonical, diffable, co-located with source. | Build/push latency; doesn't surface demos for browsing discovery. |
+| **CodePen** | Single-file shareable demos; sci-fi / FUI experiments; "paste this into a Pen" teaching artifacts; fork-to-iterate. | Free Pens are public — don't paste unreleased client or research code. |
+| **Observable** | D3 data-viz figures with reactive cells — the right host for CHI / ETTAC / CIKM paper figures where the reader can move parameters. | Cell-based, not a normal HTML file — different mental model. |
+| **gist** | Minimum-friction single-file distribution; linkable from notes and papers. | No live preview without a third-party renderer (bl.ocks.org went read-only). |
+| **CodeSandbox / StackBlitz** | Full-project demos with npm dependencies; SDK examples. | Overkill for single-file work; heavier iteration loop. |
+| **Local `file://`** | Private iteration, screenshot capture, ffmpeg recording of interactive demos. | Doesn't share without promoting to a host. |
+
+#### CodePen — the Prefill API
+
+CodePen's highest-leverage feature: `POST` a JSON payload of HTML/CSS/JS to `codepen.io/pen/define` and open a new Pen with the code pre-populated, ready for the reader to run or fork. Perfect for "Try this in a Pen" buttons inside blog posts — one click and the reader is in a live editor with your code.
+
+```html
+<form action="https://codepen.io/pen/define" method="POST" target="_blank">
+  <input type="hidden" name="data" value='{
+    "title": "FUI scan overlay",
+    "html": "<canvas id=c></canvas>",
+    "css":  "body{background:#000}",
+    "js":   "/* demo code here */",
+    "tags": ["fui","canvas","webgl"]
+  }'>
+  <button type="submit">Open in CodePen</button>
+</form>
+```
+
+Full docs: [blog.codepen.io/documentation/prefill](https://blog.codepen.io/documentation/prefill/). Tags, titles, descriptions, and external resources (including marginalia CDN) can all be set in the payload. For educational content this is the highest-leverage single feature in the whole skill — don't reach for screenshots when you can reach for a live fork.
+
+#### CodePen — embeds
+
+Two modes, both work inside marginalia pages:
+
+```html
+<!-- Result only -->
+<p class="codepen" data-height="400" data-default-tab="result"
+   data-slug-hash="abcDEF" data-user="andyed">
+  See the Pen on CodePen.
+</p>
+<script src="https://cpwebassets.codepen.io/assets/embed/ei.js" async></script>
+
+<!-- Full editor (html + css + js tabs) -->
+<p class="codepen" data-height="600" data-default-tab="html,result"
+   data-slug-hash="abcDEF" data-user="andyed">...</p>
+```
+
+Wrap the embed in a marginalia callout for editorial framing inside a blog post:
+
+```html
+<aside class="mg-callout" data-type="tip">
+  <h3>Try it</h3>
+  <p class="codepen" data-height="500" data-slug-hash="..." data-user="andyed"></p>
+</aside>
+```
+
+#### Observable — for paper figures
+
+Observable notebooks (`observablehq.com`) are the right host for reactive D3 figures embedded in research papers. Cells are reactive — change one slider and every downstream cell recomputes. The embed runtime (`@observablehq/runtime`) lets you pull specific cells into a marginalia page, so the notebook becomes the source of truth and the blog post is a curated view into it. Ideal for CHI / ETTAC / CIKM figure supplements where the reader should be able to explore parameters.
+
+#### Tag conventions
+
+On CodePen specifically: tag each experiment with both a **technical** tag (`webgl`, `canvas`, `svg`, `d3`) and a **genre** tag (`fui`, `hud`, `generative`, `typography`, `scrollytelling`) so your work surfaces to the right community and theirs surfaces to yours.
+
+#### Privacy caveat
+
+Free CodePen Pens are public. Free Observable notebooks are public. Free gists can be "secret" but are still URL-accessible. Don't paste unreleased Scrutinizer shaders, unpublished research data, or client work into any free tier — use GitHub Pages (private repo + gh-pages) or local files for anything sensitive. When in doubt, ask before pasting.
 
 ### Lessons from past projects
 - **No bare `console.log` in Psychodeli.** Use `window.debugManager`.
