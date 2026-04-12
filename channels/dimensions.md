@@ -235,5 +235,5 @@ python -m render_assets.dimensions
 ## TODO
 
 - [x] **`render_assets/dimensions.py`** — Shipped. `Size` / `Device` / `PaperSize` NamedTuples, 34 registry entries, 17 devices, 5 paper sizes, `figsize_for()` for 7 academic venues, CLI self-test.
-- [ ] **Viewport-sweep capture script** — `render_assets/capture.py` helper that takes a URL and a tier list (`['mobile', 'tablet', 'laptop', 'desktop']`) and produces a set of Playwright screenshots named by the convention above. Pairs with `channels/web.md` static capture recipes. Can now pull from `RESPONSIVE_TIER_LIST` in `dimensions.py` instead of hardcoding.
+- [x] **Viewport-sweep capture script** — Shipped as `render_assets/capture.py`. Takes a URL and a tier list (default `['mobile', 'tablet', 'laptop', 'desktop']`) and produces Playwright screenshots named by this file's convention. Pulls tier data directly from `dimensions.NAMED_TIERS`. Playwright is an optional dependency; module imports cleanly without it and only requires it at capture time.
 - [x] **CHI / IEEE figsize helper** — Shipped as `figsize_for(venue, columns, aspect)` in `render_assets/dimensions.py`. Supports chi, acm, iui, ieee, pnas, nature, lncs.

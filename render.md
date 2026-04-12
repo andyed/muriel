@@ -124,7 +124,8 @@ For a multi-channel task (e.g., a blog post with an interactive demo captured as
 - [ ] **Single-file demo bundler** — Inline CSS/JS/images as data URIs to produce a standalone `.html`.
 
 ### Web rendering & static capture
-- [ ] **Small-multiples capture script** — Loop a demo across parameter values via URL hash, screenshot each, assemble into a grid.
+- [x] **Responsive viewport-sweep capture** — Shipped as `render_assets/capture.py`. `capture_responsive(url, tiers=..., output_dir=...)` writes retina PNGs for every tier in one call. CLI: `python -m render_assets.capture <url>`. Playwright optional dependency.
+- [ ] **Small-multiples capture script** — Loop a demo across parameter values via URL hash, screenshot each, assemble into a grid. (Related to `capture.py` but captures *parameter* sweeps, not *viewport* sweeps.)
 - [ ] **Marginalia + weasyprint paper template** — `@page` rules for A4 + letter, figure captions, bibliography.
 - [ ] **Playwright device-frame compositor** — Replace manual Photoshop mockups with real HTML-rendered device frames.
 

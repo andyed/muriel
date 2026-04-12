@@ -1,7 +1,7 @@
 """
 render_assets — importable Python assets for the Render skill.
 
-Five modules, pulled out of the render channel subfiles so notebooks and
+Six modules, pulled out of the render channel subfiles so notebooks and
 CI checks can import them instead of copy-pasting.
 
   - matplotlibrc_dark  — OLED cream on near-black (default palette)
@@ -11,6 +11,8 @@ CI checks can import them instead of copy-pasting.
   - dimensions         — common screen-size footprints (Size / Device /
                          PaperSize, social cards, video, viewports,
                          academic figsize helper, dotted-name registry)
+  - capture            — Playwright viewport-sweep screenshot helper
+                         (module + CLI, optional Playwright dependency)
 
 Usage
 -----
@@ -70,14 +72,34 @@ Or from the command line (prints the full registry + devices + paper):
 
     python -m render_assets.dimensions
 
+Responsive viewport-sweep screenshot capture:
+
+    from render_assets.capture import capture_responsive
+    paths = capture_responsive(
+        url="https://andyed.github.io/marginalia/",
+        output_dir="captures/",
+    )
+    # → four PNGs named by slug + tier + dimensions
+
+Or from the command line:
+
+    python -m render_assets.capture https://example.com
+    python -m render_assets.capture https://example.com --tiers mobile tablet laptop desktop
+    python -m render_assets.capture https://example.com --dir captures/ --dark --selector main
+
+Requires Playwright (optional install). Module imports cleanly without
+it; capture_responsive() raises ImportError with install instructions
+on first call.
+
 See the module docstrings for the full APIs.
 """
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __all__ = [
     "matplotlibrc_dark",
     "matplotlibrc_light",
     "stats",
     "contrast",
     "dimensions",
+    "capture",
 ]

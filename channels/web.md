@@ -167,6 +167,37 @@ with sync_playwright() as p:
     browser.close()
 ```
 
+### Responsive sweep helper — `render_assets.capture`
+
+For "what does this look like at mobile/tablet/laptop/desktop?" in one command, the paired module [`render_assets/capture.py`](../render_assets/capture.py) wraps Playwright around the tier data in [`render_assets/dimensions.py`](../render_assets/dimensions.py):
+
+```python
+from render_assets.capture import capture_responsive
+
+paths = capture_responsive(
+    url="https://andyed.github.io/marginalia/",
+    output_dir="captures/",
+    color_scheme="dark",
+)
+# Writes four retina PNGs (device_scale_factor=2):
+#   captures/andyed-github-io-marginalia-mobile-390x844.png
+#   captures/andyed-github-io-marginalia-tablet-820x1180.png
+#   captures/andyed-github-io-marginalia-laptop-1280x800.png
+#   captures/andyed-github-io-marginalia-desktop-1920x1080.png
+```
+
+Or from the command line:
+
+```bash
+python -m render_assets.capture https://andyed.github.io/marginalia/
+python -m render_assets.capture https://example.com --dir captures/ --dark
+python -m render_assets.capture https://example.com --selector main --slug hero
+python -m render_assets.capture https://example.com --tiers mobile-large desktop-qhd ultrawide
+python -m render_assets.capture https://example.com --full-page
+```
+
+Defaults: four-tier sweep (`mobile tablet laptop desktop`), `device_scale_factor=2`, wait for `document.fonts.ready`, wait for `networkidle`. Output filenames follow the naming convention in [`channels/dimensions.md`](dimensions.md#naming-convention-for-exported-files). Exit `0` on full success, `1` if any tier failed, `2` on missing Playwright / Chromium or usage error. Playwright is an optional install — the module is importable without it and raises a clean `ImportError` with install instructions on first call to `capture_responsive()`.
+
 ### Example: marginalia HTML → PDF via weasyprint
 ```bash
 weasyprint paper-draft.html paper-draft.pdf
