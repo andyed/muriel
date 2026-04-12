@@ -131,6 +131,12 @@ For a multi-channel task (e.g., a blog post with an interactive demo captured as
 
 ### Science
 - [x] **`channels/science.md` subsection** — rcparams defaults, stats reporting, notebook editorial, LaTeX hooks, worked recipes.
-- [ ] **`render/assets/matplotlibrc_dark.py` + `_light.py`** — Extract the rcparams blocks into importable files.
-- [ ] **Statistical reporting helpers** — Python functions that format effect sizes + CIs + phrasing rules from `feedback_empirical_not_truth.md`.
+- [x] **`render_assets/matplotlibrc_dark.py` + `_light.py`** — Both rcparams blocks shipped as importable modules with graceful fallback when matplotlib is absent. Light variant matches the F explainer warm editorial palette.
+- [x] **Statistical reporting helpers** — `render_assets/stats.py` ships `format_comparison`, `format_null`, `format_correlation`, `format_auc`, `format_chi2`, `format_exploratory`, `cohens_d`, `cohens_d_paired`, `fisher_ci`, `apa_number`, `format_p`, `format_ci`. Standard library only. Enforces U+2212 minus signs, APA leading-zero stripping, detection-limit phrasing for nulls.
 - [ ] **Figure caption template tool** — Generate caption skeletons from a figure spec dict.
+- [ ] **Pre-registration boilerplate generator** — Common methods-section templates with fill-in slots.
+
+### Web (editorial variant)
+- [x] **Light editorial palette documented** — `channels/web.md` now has a section on the F-explainer pattern, with the `.outer-note` / `.stats-detail` / `.has-dropcap` / staged-h2 extensions catalogued.
+- [ ] **Generalize `.outer-note` and `.stats-detail` back into marginalia** — Currently F-explainer-only; worth promoting to the main library if a second project adopts them.
+- [ ] **Build-script variant of the pandoc bridge** — Node script using `marginalia-md.js` for projects that prefer browser-side conversion over pandoc.

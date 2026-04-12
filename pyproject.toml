@@ -1,0 +1,26 @@
+[build-system]
+requires      = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name            = "render-assets"
+version         = "0.1.0"
+description     = "Importable Python assets for the Render skill — matplotlibrc blocks and statistical reporting helpers."
+readme          = "render_assets/README.md"
+requires-python = ">=3.9"
+license         = { text = "MIT" }
+authors         = [{ name = "Andy Edmonds" }]
+keywords        = ["matplotlib", "rcparams", "statistics", "apa", "reporting"]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Programming Language :: Python :: 3",
+]
+
+# No required dependencies. matplotlib is expected to be present in any
+# notebook that imports matplotlibrc_dark / matplotlibrc_light but is not
+# declared here because the stats module works without it.
+dependencies = []
+
+[tool.setuptools]
+packages = ["render_assets"]

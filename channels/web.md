@@ -69,6 +69,61 @@ pandoc draft.md --from markdown+mark+alerts \
 ### Reference example
 `~/Documents/dev/marginalia/pandoc/examples/us-constitution.md` — an annotated US Constitution reader's edition. Exercises every transformation: dropcap, all four callout colors, sidebars, margin notes in the desktop gutter via CSS Grid subgrid, pull quote, inline highlights, badges, footnote popover, fenced code, plus a cursive copperplate dropcap initial and closing signature paragraph. Good starting point for any new marginalia page.
 
+## Light editorial variant — the F explainer pattern
+
+The [Attentional Foraging F-pattern explainer](https://andyed.github.io/attentional-foraging/explainer/) uses marginalia with a set of light-theme editorial extensions that diverge from the default OLED palette. When a project wants a warm, reader-friendly light mode (explainer pages, blog posts, paper drafts), this is the reference exemplar.
+
+Source: `~/Documents/dev/attentional-foraging/site/explainer/index.html` + `docs/drafts/osec-explainer.md` + `scripts/build-explainer.js`.
+
+### Build path
+
+The F explainer uses the browser-side **marginalia-md.js** converter via a Node build script, not pandoc. Markdown lives in `docs/drafts/osec-explainer.md`, build script runs `marginalia-md.js` at build time, output is pre-rendered static HTML at `site/explainer/index.html`. Different path from the pandoc bridge above, same underlying marginalia classes — the build script also post-processes `{dropcap}` into `<p class="has-dropcap">` as a workaround for a marginalia-md rendering quirk.
+
+**When to use each path:**
+- **Pandoc bridge** — for paper-draft round-trips (markdown → HTML → PDF → DOCX), when the same source needs to fan out to multiple output formats
+- **marginalia-md.js + Node build** — for single-target static explainer pages with heavy custom extensions and inline raw HTML
+
+### Extensions beyond core marginalia
+
+The F explainer adds four non-canonical patterns. They're worth knowing by name because they solve gaps marginalia doesn't cover:
+
+| Class / pattern | Purpose | Why it's not in core marginalia |
+|---|---|---|
+| **`.outer-note`** | Short punchy margin labels (0.75em, amber `#b08050`, ~150px wide, `position: absolute; right: -180px`). Hidden at `max-width: 1100px`. | `mg-margin` is for full-sentence annotations; these are one-phrase rubrications that work like Tufte sidenotes. |
+| **`.stats-detail`** | Inline span for numerical details with a dashed amber underline (`ρ = 0.02, p = .30`). Warm cream background, smaller font. | No native inline-stats treatment in marginalia; inline `<code>` is wrong semantically. |
+| **`.has-dropcap`** on `<p>` directly | `{dropcap}` line marker post-processed to `<p class="has-dropcap">`. CSS targets `p.has-dropcap::first-letter`. | Works around a marginalia-md.js rendering quirk; conceptually equivalent to our pandoc filter's `mg-dropcap` div wrap. |
+| **Staged h2 colors via `:nth-of-type`** | `h2:nth-of-type(1..4)` get gold/red/blue/green for the OSEC stages (Orient, Survey, Evaluate, Commit). | Document-structure-driven color. Works because this page's h2s are the OSEC stages in order, so position *is* semantics. |
+
+The F explainer also floats `.mg-margin` and `.mg-sidebar` to the right *inside* the content area (230px width, amber-tinted `#d4a574` border) rather than escaping to the outer gutter the way the US Constitution example does. Reader-friendly on narrower viewports.
+
+### Warm editorial palette
+
+| Token | Value | Role |
+|---|---|---|
+| Background | `#fafaf8` | Warm cream, not pure white |
+| Body text | `#222222` | Near-black on Georgia serif |
+| Accent amber | `#d4a574` | Margin-note borders, legend edges |
+| Note blue | `#f5f8fd` bg + `#2266cc80` border | Info callouts |
+| Tip green | `#f2faf4` bg + `#22883380` border | Positive notes |
+| Warning amber | `#fdf9f0` bg + `#cc880080` border | Cautions |
+| Important red | `#fdf5f5` bg + `#cc444480` border | Emphasis |
+| Stats-detail bg | `#f8f4ee` + dashed `#d4a574` underline | Inline numerical callouts |
+
+Matching matplotlibrc: [`render_assets/matplotlibrc_light.py`](../render_assets/matplotlibrc_light.py). Same Georgia stack, same `#fafaf8` figure facecolor — figures rendered with the light rcparams match the editorial palette 1:1.
+
+### When to use which variant
+
+- **Dark (OLED)** — default. Scrutinizer / Psychodeli assets, blog posts on dark-themed sites, paper figures destined for a dark slide deck, any page using the default `data-mg-theme="dark"`.
+- **Light editorial** — long-form explainers, paper drafts in light review UI, blog posts on light-themed sites. Match to the F explainer when the voice is "reader's edition" not "research console".
+
+**Pick one per document.** Don't mix dark and light callouts in the same paper or post.
+
+### Key Claims / K-ID convention
+
+Related: the attentional-foraging project uses a `[NB##:K##]` citation convention for quantitative findings. Every analysis notebook has a **Key Claims** block at the top with stable K-IDs. Prose cites findings via bracketed references (`[NB14:K3]` means notebook 14, key claim 3). Values must come from executed cell output, never hand-typed. Retired claims get `(retired YYYY-MM-DD: reason)` rather than renumbering.
+
+When working on attentional-foraging or adopting the convention elsewhere: read `~/Documents/dev/attentional-foraging/CLAUDE.md` for the full spec, and if prose disagrees with a Key Claims row, the prose is wrong. Run `notebooks-v2/update_key_claims.py` after modifying a notebook's Key Claims block.
+
 ## Web Rendering & Static Capture
 
 The "DOM is the rendering engine" trick: build the artifact as HTML/CSS/SVG/JS, then capture it with headless Chrome or Playwright. Combines marginalia's editorial chrome, SVG's vector precision, and interactive JS's parameter sliders — then freezes one state into PNG or PDF for distribution.

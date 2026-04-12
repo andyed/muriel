@@ -17,6 +17,26 @@ Part of the [Render](../render.md) skill — see the top-level index for mission
 
 Matplotlib's out-of-the-box defaults are wrong for every constraint Render enforces. Light background, thin sans-serif at default sizes that fail 8:1 contrast, 6×4 figsize too small for a paper, no units on ticks. A rcParams block at the top of every notebook fixes all of it in one place.
 
+### Importable module (preferred)
+
+The dark and light rcparams blocks are shipped as importable Python modules in [`render_assets/`](../render_assets/). Add the render repo to your `PYTHONPATH` (or `pip install -e ~/Documents/dev/render`), then:
+
+```python
+# Auto-apply on import — pick one palette per document
+from render_assets import matplotlibrc_dark    # OLED cream on near-black
+# or
+from render_assets import matplotlibrc_light   # warm editorial (F explainer)
+
+# Scoped to a single figure (no global side effect)
+import matplotlib.pyplot as plt
+from render_assets.matplotlibrc_dark import PARAMS
+with plt.rc_context(PARAMS):
+    fig, ax = plt.subplots()
+    # ...
+```
+
+Prefer the import path so updates to the rcparams stay in one place and propagate to every notebook on the next run. The rest of this section documents the raw blocks as they live in `render_assets/matplotlibrc_dark.py` and `render_assets/matplotlibrc_light.py`.
+
 ### Drop-in dark block (OLED palette)
 
 ```python
@@ -136,6 +156,39 @@ Codified from per-project feedback. Every rule exists because a specific plot fa
 ## Statistical reporting
 
 How to present numerical findings so they are precise, honest, and not over-claimed.
+
+### Importable helpers (preferred)
+
+Every template in this section is shipped as a function in [`render_assets/stats.py`](../render_assets/stats.py). Standard-library only — no numpy, scipy, or pandas required.
+
+```python
+from render_assets.stats import (
+    format_comparison, format_null, format_correlation,
+    format_auc, format_chi2, format_exploratory,
+    cohens_d, cohens_d_paired, fisher_ci,
+    apa_number, format_p, format_ci,
+)
+
+print(format_comparison(
+    "baseline", "treatment",
+    mean_a=1.42, sd_a=0.12, n_a=127,
+    mean_b=0.98, sd_b=0.11, n_b=127,
+))
+# baseline: M = 1.42 (SD = 0.12, n = 127). treatment: M = 0.98 (SD = 0.11,
+# n = 127). Δ = −0.44, 95% CI [−0.47, −0.41], Cohen's d = 3.82, n = 254.
+
+print(format_null(delta=0.03, ci_lo=-0.12, ci_hi=0.18, n=84))
+# Not detected (Δ = 0.03, 95% CI [−0.12, 0.18], n = 84). The 95% CI
+# excludes effects larger than 0.18; smaller effects may exist but cannot
+# be resolved at this sample size.
+
+print(format_correlation(r=0.34, n=62, p=0.007))
+# r = .34, 95% CI [.10, .54], n = 62, p = .007
+```
+
+All formatters enforce: 95% CI paired with every point estimate, minus signs as U+2212 (proper typography), APA leading-zero stripping for probabilities and correlations, `p < .001` for tiny values (never `p = 0.000`), detection-limit phrasing for nulls, explicit exploratory labels.
+
+The raw templates below still apply — they document *why* the formatters say what they say. Use the Python helpers in notebooks; use the templates when writing prose by hand.
 
 ### Effect sizes with confidence intervals
 
