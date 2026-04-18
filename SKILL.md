@@ -82,6 +82,18 @@ Use these as design rationale in figure captions and blog posts — the vocabula
 
 Whenever the user needs a visual artifact for human eyes — store assets, paper figures, blog post explainers, video demos, terminal output, scientific plots, infographics, screenshots, gaze visualizations. Invoke with `/muriel` followed by what's needed.
 
+## First-build critique offer
+
+**On the first render of any new visual artifact, offer to invoke the `muriel-critique` agent before the user reviews by eye.** The agent (see [`agents/muriel-critique.md`](agents/muriel-critique.md)) reads the artifact, checks against universal rules + channel rules + optional brand tokens, and returns PASS / NEEDS REVISION / FAIL with cited evidence — catching the kind of pedantic fixes (double-letters, ornament/letter ratio, text-over-decoration, baseline drift, invisible-against-background) that would otherwise cost an iteration each.
+
+The offer is one line:
+
+> _"Want me to run muriel-critique on this first render? It checks against the universal rules + this artifact's channel rules before you commit."_
+
+Accept → spawn a subagent with `subagent_type: muriel-critique` and pass `artifact: <path>` (plus `channel:` and `brand:` if known). Decline → proceed; user can request critique explicitly later. Only offered on **first renders**, not subsequent iterations on the same artifact.
+
+Keep critique OUT of per-tool generators (`gen_dropcap.py`, `gen_animated_gif.py`, etc.). The agent invocation is a separate step, not a pipeline stage — tools stay single-purpose, the user stays in the loop on when critique fires, and the agent's rubric can evolve independently of the tools it reviews.
+
 ## Channel reference map
 
 When the task lands in a specific channel, read the corresponding subfile *first* before executing:
@@ -236,6 +248,7 @@ Different direction from render engines — these produce files the user can *re
 - [ ] **`muriel/authoring/figma.py`** — Figma Files API to create / update designs. Brand tokens map to Figma variables; muriel writes a starter file the team can iterate on. Free tier has limits; works for individual users and small teams.
 - [ ] **`muriel/authoring/canva.py`** — Canva Connect API. Produces a Canva design with brand palette applied. Useful for marketing collateral workflows where the team continues editing in Canva.
 - [ ] **`muriel/authoring/affinity.py`** — Affinity scripting (.afdesign, .afphoto). Free-to-own alternative to PSD.
+- [ ] **`muriel/authoring/excalidraw.py`** — emit a `.excalidraw` JSON file (Excalidraw's native format — open, diff-able, editable). Brand colors become element fills/strokes; typography maps to Excalidraw's font stack. Pairs with [yctimlin/mcp_excalidraw](https://github.com/yctimlin/mcp_excalidraw) (MIT MCP server) for the refinement loop: muriel emits the source → agent refines in mcp_excalidraw's live canvas → muriel re-audits on re-export. Free-to-own, no subscription gate, natural authoring format for system-architecture diagrams.
 
 Authoring engines are complementary to render engines: render when you want a final PNG; author when you want a source file the user will continue to edit. Brand tokens apply identically across both paths.
 

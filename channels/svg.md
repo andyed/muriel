@@ -15,7 +15,7 @@ Part of the [muriel](../SKILL.md) skill — see the top-level index for mission,
 - **Hand-rolled `<svg>` strings** — zero deps. Fine under 200 lines.
 - **`svgwrite`** or **`drawsvg`** (Python) — fluent API for procedural generation.
 - **`mermaid-cli`** (`mmdc`) — flowcharts from text → SVG.
-- **Excalidraw export** — manual diagrams. Always `roughness: 0`, `fontFamily: 2` (Helvetica), `fillStyle: "solid"` (per past feedback — the hand-drawn aesthetic reads as fake).
+- **Excalidraw export** — manual diagrams. Always `roughness: 0`, `fontFamily: 2` (Helvetica), `fillStyle: "solid"` (per past feedback — the hand-drawn aesthetic reads as fake). For Claude-driven editing of Excalidraw diagrams (create/move/align/distribute shapes in a live canvas), pair with [yctimlin/mcp_excalidraw](https://github.com/yctimlin/mcp_excalidraw) (MIT MCP server, 26 tools over a localhost canvas). muriel generates the `.excalidraw` file deterministically; mcp_excalidraw is the refinement loop.
 - **`cairosvg`** or **`rsvg-convert`** (homebrew) — SVG → PNG/PDF when stores reject vectors. Use full TTF font paths, same rule as Pillow.
 
 ## Patterns
