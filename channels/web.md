@@ -266,3 +266,19 @@ Base64 inflates by ~33%. Stay under ~200 KB per image inside HTML; above that, p
 - **Don't animate layout properties** (`width`, `margin`, `top`, `left`). Use `transform` + `opacity` only; layout animations trigger reflow every frame.
 - **Don't use pure `#000` or `#fff`.** Cream + near-black per the OLED palette; pure black/white is harsh on OLED and pure white flares on cream backgrounds.
 - **Don't chain more than two CSS custom-property fallbacks.** A third fallback means the token system is underspecified — fix the schema, don't paper over it.
+
+## Absolute bans
+
+Five escalated anti-patterns — channel-spanning but most visible in web work. Named so the [`muriel-critique`](../agents/muriel-critique.md) agent can cite them directly and so a human reviewer has a finite list of "stop, don't ship this."
+
+- **`gradient-text`** — `background-clip: text` with a gradient fill. Unreadable at body sizes (the gradient traverses low-contrast hues by construction, failing 8:1 across its span) and telegraphs *designer reached for the default Figma preset*. Vary weight/size for hierarchy; keep text one color.
+
+- **`side-stripe-borders`** — card or alert with `border-left: 4px solid accent` (or any border > 1px on a single side). Identifies the artifact as a Tailwind-CSS-template card at a glance. Use background tint or iconography for the same semantic signal.
+
+- **`rounded-rect-with-drop-shadow`** — default `border-radius: 8–12px` plus `box-shadow: 0 4px 12px rgba(0,0,0,0.1)` is the most-recognizable "AI card" aesthetic. If someone can identify the artifact as AI-generated in the first second, it has no distinctiveness. Make a deliberate choice: square corners + no shadow, a pronounced shadow that commits to elevation, or a different grouping signal entirely (proximity, background tint).
+
+- **`bounce-easing`** — `cubic-bezier` curves with overshoot (elastic, back-out, Material's "playful" namespace). Reads as amateur motion design outside a toy. Use smooth curves — `cubic-bezier(0.2, 0, 0.2, 1)` or your brand's `motion.easing_default` token.
+
+- **`reflex-fonts`** — defaulting to the overused web stack without a reason: **Inter**, **DM Sans**, **Instrument Sans**, **Geist**, **Satoshi**, or `system-ui` chosen because it's safe. Fine tools, but everyone reaches for them because Vercel's starters do, which means the artifact looks like every other 2024–2026 landing page. Choose deliberately; if your brand doesn't have a display typeface, consider Helvetica Neue (restrained), Söhne (licensed), Work Sans, IBM Plex, or a serif/slab your brand is willing to commit to. muriel's `brand.toml` has a `[typography]` block — use it.
+
+*The "absolute bans" escalation and the reflex-fonts concept are borrowed with permission from [pbakaus/impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0), rephrased in muriel's voice. The underlying insight that a short named-ban list is a stronger instrument than a long positive-rule list is theirs.*

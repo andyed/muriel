@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Marginalia drop-cap textures — v3</title>
+<title>Marginalia drop-cap textures — v4</title>
 <style>
   :root {
     --mg-bg: #0a0a0f;
@@ -18,9 +18,6 @@
        letter-spacing: 0.12em; text-transform: uppercase; margin: 3rem 0 1rem 0; }
   p { margin: 0 0 1.2em 0; }
 
-  /* Marginalia base — plain variant still uses ::first-letter because
-     nothing else is competing for the first character. Scoped with
-     :not([data-type]) so it does NOT fire on textured variants. */
   .mg-dropcap:not([data-type])::first-letter {
     float: left;
     font-size: 3.8em;
@@ -31,32 +28,33 @@
     color: var(--mg-accent-ink);
   }
 </style>
-<link rel="stylesheet" href="marginalia-dropcap-textures.css?v=3">
+<link rel="stylesheet" href="marginalia-dropcap-textures.css?v=4">
 </head>
 <body>
 <article>
   <h2>data-type="isotropic"</h2>
   <p class="mg-dropcap" data-type="isotropic">
-    <span class="mg-dropcap-block">I</span>n 2026, Matt Queen asked a question in
-    Boxes &amp; Arrows that stuck: icon designers work at the pixel level, but
-    users encounter icons at the periphery of their attention, where spatial
-    resolution has already collapsed. What would designers do differently if
-    they could see their work the way the visual system actually processes it?
+    <span class="mg-dropcap-letter">I</span>n 2026, Matt Queen asked a question
+    in Boxes &amp; Arrows that stuck: icon designers work at the pixel level,
+    but users encounter icons at the periphery of their attention, where
+    spatial resolution has already collapsed. What would designers do
+    differently if they could see their work the way the visual system
+    actually processes it?
   </p>
 
   <h2>data-type="illuminated"</h2>
   <p class="mg-dropcap" data-type="illuminated">
-    <span class="mg-dropcap-block">I</span>n a manuscript tradition going back
-    to monastic scriptoria, the opening letter of a text was illuminated —
-    given a decorative border, often a rosette or floral flourish. The drop
+    <span class="mg-dropcap-letter">I</span>n a manuscript tradition going
+    back to monastic scriptoria, the opening letter of a text was illuminated
+    — given a decorative border, often a rosette or floral flourish. The drop
     cap signaled that the reader had arrived; it set the register.
   </p>
 
-  <h2>Plain .mg-dropcap (no variant) — uses ::first-letter, no span needed</h2>
+  <h2>Plain .mg-dropcap (no variant)</h2>
   <p class="mg-dropcap">
     In its plainest form, the drop cap is just typographic: a large serif
-    letter floated at the paragraph's opening. Marginalia's base class handles
-    this via ::first-letter. Only textured variants need the wrapped span.
+    letter floated at the paragraph's opening. Only textured variants need
+    the wrapped span.
   </p>
 </article>
 </body>

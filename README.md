@@ -148,6 +148,12 @@ ln -s ~/Documents/dev/muriel/agents/muriel-critique.md ~/.claude/agents/muriel-c
 
 **Regression fixtures:** adversarial and baseline artifacts for the critique agent live at [`examples/critique-fixtures/`](examples/critique-fixtures/) with their expected verdicts. Contribute new attacks there — any CVE for visual-critic systems can be a one-paragraph pull request.
 
+## Related prior art
+
+- **[pbakaus/impeccable](https://github.com/pbakaus/impeccable)** (Apache-2.0) — Anthropic's frontend-design skill as open-sourced by Paul Bakaus. muriel's `Absolute bans` section in `channels/web.md` and the reflex-fonts anti-pattern are rephrased inspirations from that work. Where impeccable is single-surface + design-skill-focused, muriel is multi-channel + Python-native; they complement.
+- **[pixijs/pixijs-skills](https://github.com/pixijs/pixijs-skills)** (MIT) — source of truth for the PixiJS vocabulary. Curated subset documented at [`vocabularies/pixijs.md`](vocabularies/pixijs.md); upstream is where the depth lives.
+- **[matplotlib-venn](https://github.com/konstantint/matplotlib-venn)** — area-proportional Euler renderer that backs [`muriel/tools/venn.py`](muriel/tools/venn.py).
+
 ## License
 
 MIT. See [LICENSE](LICENSE).

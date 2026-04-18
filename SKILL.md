@@ -172,6 +172,10 @@ PERMUTE currently lives as [`docs/PERMUTE.md`](docs/PERMUTE.md) (Tufte/Bertin/Ge
 - [ ] **`## Permutations` section per channel** — enumerate which permutations each channel supports, as testable assertions.
 - [ ] **`muriel-permute` agent (optional)** — given a data artifact, rank alternative presentations against the communicative intent. Complements `muriel-critique`: one names what's wrong, the other proposes what would be better.
 
+### Style guides (brand schema)
+
+- [ ] **OKLCH in `brand.toml`.** Today `colors.accent = "#50b4c8"` only parses hex. Add an OKLCH path so brands can write `colors.accent = "oklch(65% 0.15 220)"` — hex stays supported; OKLCH becomes recommended for palettes where lightness ramps matter (muted → vibrant at constant hue). Same `StyleGuide` object internally; emit via `to_css_vars(color_space='oklch'|'hex')`. Inspiration from [pbakaus/impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0), which recommends OKLCH for perceptual uniformity in brand-palette design.
+
 ### Web (editorial variant)
 - [x] **Light editorial palette documented** — `channels/web.md` now has a section on the F-explainer pattern, with the `.outer-note` / `.stats-detail` / `.has-dropcap` / staged-h2 extensions catalogued.
 - [ ] **Generalize `.outer-note` and `.stats-detail` back into marginalia** — Currently F-explainer-only; worth promoting to the main library if a second project adopts them.
