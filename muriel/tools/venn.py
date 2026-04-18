@@ -239,6 +239,50 @@ def venn_single(
     return str(out_path)
 
 
+def _main(argv=None) -> int:
+    """Minimal CLI — render a 2- or 3-set Venn from a JSON spec file.
+
+    The JSON spec looks like::
+
+        {
+          "labels": ["muriel", "marginalia", "iblipper"],
+          "sets":   {"muriel": 14, "marginalia": 8, "iblipper": 6,
+                     "muriel_marginalia": 3, "all": 2},
+          "title":  "Overlapping scope",
+          "brand":  "examples/muriel-brand.toml"
+        }
+
+    Usage: python -m muriel.tools.venn spec.json output.png
+    """
+    import argparse, json
+
+    ap = argparse.ArgumentParser(
+        prog="python -m muriel.tools.venn",
+        description="Area-proportional Venn / Euler diagram from a JSON spec.",
+    )
+    ap.add_argument("spec", help="Path to a JSON spec file (see module docstring)")
+    ap.add_argument("output", help="Output PNG path")
+    args = ap.parse_args(argv)
+
+    with open(args.spec) as f:
+        spec = json.load(f)
+
+    brand = None
+    if "brand" in spec:
+        from muriel.styleguide import load_styleguide
+        brand = load_styleguide(spec["brand"])
+
+    venn_single(
+        sets=spec["sets"],
+        labels=spec.get("labels"),
+        brand=brand,
+        title=spec.get("title"),
+        out_path=args.output,
+    )
+    print(f"→ {args.output}")
+    return 0
+
+
 def venn_panels(
     panels: List[Dict],
     *,

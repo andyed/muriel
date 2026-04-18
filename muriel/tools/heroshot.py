@@ -297,7 +297,7 @@ def tilt_and_frame(
 
 # ─── CLI ────────────────────────────────────────────────────────────
 
-def _main() -> int:
+def _main(argv=None) -> int:
     import argparse
 
     ap = argparse.ArgumentParser(
@@ -313,7 +313,7 @@ def _main() -> int:
     ap.add_argument("--brand", help="Path to a brand.toml (muriel.styleguide format)")
     ap.add_argument("--target", help="muriel.dimensions named tier (e.g. twitter.instream, og.card)")
     ap.add_argument("--bg", help="Override background color (hex)")
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
 
     brand = None
     if args.brand:

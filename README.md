@@ -95,6 +95,23 @@ from muriel.styleguide import load_styleguide   # brand.toml loader with aliases
 from muriel.dimensions import figsize_for, OG_CARD
 ```
 
+### As a CLI
+
+After `pip install`, the `muriel` command dispatches to every subcommand:
+
+```bash
+muriel                              # list subcommands
+muriel capture https://example.com  # responsive screenshot sweep
+muriel contrast audit page.svg      # WCAG 8:1 audit
+muriel dimensions                   # print the dimensions registry
+muriel heroshot in.png out.png --tilt 12 --brand brand.toml --target og.card
+muriel tilt-shift raw.png hero.png  # fake-lens depth-of-field blur
+muriel venn spec.json out.png       # area-proportional Euler diagram
+muriel styleguide brand.toml --css  # derive CSS :root custom properties
+```
+
+Each subcommand is also callable directly via `python -m muriel.capture`, `python -m muriel.tools.heroshot`, etc.
+
 ### The critique agent
 
 ```bash
@@ -153,6 +170,7 @@ ln -s ~/Documents/dev/muriel/agents/muriel-critique.md ~/.claude/agents/muriel-c
 - **[pbakaus/impeccable](https://github.com/pbakaus/impeccable)** (Apache-2.0) — Anthropic's frontend-design skill as open-sourced by Paul Bakaus. muriel's `Absolute bans` section in `channels/web.md` and the reflex-fonts anti-pattern are rephrased inspirations from that work. Where impeccable is single-surface + design-skill-focused, muriel is multi-channel + Python-native; they complement.
 - **[pixijs/pixijs-skills](https://github.com/pixijs/pixijs-skills)** (MIT) — source of truth for the PixiJS vocabulary. Curated subset documented at [`vocabularies/pixijs.md`](vocabularies/pixijs.md); upstream is where the depth lives.
 - **[matplotlib-venn](https://github.com/konstantint/matplotlib-venn)** — area-proportional Euler renderer that backs [`muriel/tools/venn.py`](muriel/tools/venn.py).
+- **[geraldnguyen/social-media-posters](https://github.com/geraldnguyen/social-media-posters)** (MIT) — Python + GitHub Actions CLI for *posting* to X / LinkedIn / Instagram / Threads / Bluesky / YouTube. Sits downstream of muriel: muriel produces the OG card at the right dimensions, audits contrast, applies brand tokens; social-media-posters sends it. The top-level `muriel` CLI's subcommand-dispatch pattern is borrowed from their `social_cli/`.
 
 ## License
 

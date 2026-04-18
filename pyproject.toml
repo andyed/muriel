@@ -22,5 +22,8 @@ classifiers = [
 # declared here because the stats module works without it.
 dependencies = []
 
+[project.scripts]
+muriel = "muriel.__main__:main"
+
 [tool.setuptools]
-packages = ["muriel", "render_assets"]
+packages = ["muriel", "muriel.tools", "render_assets"]

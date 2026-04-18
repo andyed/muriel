@@ -514,7 +514,7 @@ def lookup(name: str) -> Size:
 
 # ─── CLI self-test ──────────────────────────────────────────────────────
 
-def _main() -> int:
+def _main(argv=None) -> int:
     """Print the full registry + device list as a sanity check."""
     print("\n── muriel.dimensions — registry ──")
     print(f"{'Name':<30} {'Size':<12} {'Aspect'}")
