@@ -238,6 +238,10 @@ python -m muriel.dimensions
 - [x] **Viewport-sweep capture script** — Shipped as `muriel/capture.py`. Takes a URL and a tier list (default `['mobile', 'tablet', 'laptop', 'desktop']`) and produces Playwright screenshots named by this file's convention. Pulls tier data directly from `dimensions.NAMED_TIERS`. Playwright is an optional dependency; module imports cleanly without it and only requires it at capture time.
 - [x] **CHI / IEEE figsize helper** — Shipped as `figsize_for(venue, columns, aspect)` in `muriel/dimensions.py`. Supports chi, acm, iui, ieee, pnas, nature, lncs.
 
+## Downstream — actually posting the artifact
+
+muriel produces the right-sized image; it doesn't upload it. Pair with a downstream dispatcher like [geraldnguyen/social-media-posters](https://github.com/geraldnguyen/social-media-posters) (MIT — Python + GitHub Actions) for the post step: muriel emits `hero-og.png` at `OG_CARD`, `hero-twitter.png` at `TWITTER_INSTREAM`, etc., and social-media-posters sends each to the platform that expects that size. Clean separation: muriel owns *what the artifact looks like and whether it passes 8:1*; the posting tool owns *API credentials, retries, scheduling*.
+
 ## Anti-patterns
 
 - **Don't scale a source image up and call it retina.** Generate at target dimensions; upscaling pixelates.
