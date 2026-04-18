@@ -54,10 +54,3 @@ Part of the [muriel](../SKILL.md) skill, under Aesthetic Vocabularies. See the t
 - CodePen search for `#fui`, `#hud`, `#sci-fi-ui` — community implementations worth forking
 - Film stills from the lineage above — particularly Blade Runner 2049 (analytical spread), The Martian (orbital mechanics), Ghost in the Shell 2017 (full-screen data overlays)
 
-## Where FUI fits the current project set
-
-- **Scrutinizer** — the vision-science overlays (eccentricity rings, PPD calibration, sector explorers) are already proto-FUI. Codifying the vocabulary sharpens future work.
-- **Cartographer Explorer v2** — session timelines, faceted overviews, approach-retreat dashboards are natural HUD territory.
-- **Paper figures** (AdSERP, RecGaze, OSEC) — static gaze-path visualizations can borrow FUI grammar without gimmickry: leader lines, mono numerics, faint grids behind the gaze ribbon.
-- **No Kings / iBlipper** — kinetic typography intersects FUI through Territory Studio's work on motion-forward interfaces.
-- **OSEC phase explorer** — semantic zoom + FUI grammar is the right pairing.

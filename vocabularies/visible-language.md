@@ -16,7 +16,7 @@ Part of the [muriel](../SKILL.md) skill, under Aesthetic Vocabularies. Parallel 
 | **John Maeda** (ACG director, VLW successor) | *Design by Numbers* (MIT Press, 1999); MAEDA@MEDIA; later RISD / eBay / Automattic | Code as design material; "Reactive Books." Directly taught Casey Reas, Ben Fry, Golan Levin. |
 | **Casey Reas + Ben Fry** (ACG → Processing) | [Processing language](https://processing.org/); *Visualizing Data* (Fry) | VLW philosophy made available to millions of students. Processing + p5.js are the teaching substrate of the whole tradition. |
 
-Downstream, the tradition continues through Mike Bostock (D3 — Bostock cites Cooper's influence explicitly), Observable notebooks, Inside the Math, and — as a contemporary text-measurement primitive — chenglou/pretext.
+Downstream, the tradition continues through Mike Bostock (D3 — Bostock cites Cooper's influence explicitly), Observable notebooks, and — as a contemporary text-measurement primitive — chenglou/pretext.
 
 ## The three Small 1996 principles
 
@@ -33,7 +33,7 @@ From David Small's "Navigating Large Bodies of Text" (IBM Systems Journal 35:3&4
 - **Multi-scale typography with graceful degradation.** Full text at close range → greeked line shapes at mid range → filled rectangles at far range → scene-level blocks at overview. *Smooth cross-fades between levels*, not discrete zoom jumps. This is the implementation of semantic zoom for text, forty years ago. (Small 1996 §4.)
 - **Information landscapes.** Data occupies a continuous navigable space with peaks, valleys, paths, and mystery. Readers "fly through" rather than "click between." Cooper's TED 1994 demo is the canonical reference.
 - **Typography as data structure.** Text *is* the interface, not content rendered on top of a separate interface. Type size, weight, color, tracking, and position encode information density and hierarchy.
-- **Dynamic highlighting to reveal structure.** Filtering one dimension of a corpus exposes patterns invisible in the flat text. Small's character-dialogue filter revealed Shakespeare's narrative structure; the same move applied to gaze data is the F-pattern decomposition in AdSERP.
+- **Dynamic highlighting to reveal structure.** Filtering one dimension of a corpus exposes patterns invisible in the flat text. Small's character-dialogue filter revealed Shakespeare's narrative structure; the same move applied to gaze data is phase decomposition.
 - **Perspective as information.** 3D tilt reveals supplementary content at angles — footnotes perpendicular to main text, visible on reorientation. Marginalia's 3D perspective pull quote is a direct descendant.
 - **Thin strokes, spatial composition, 3D depth as organizing axis.** Aesthetic overlaps with FUI but derives from typographic rather than cinematic tradition. Where FUI is HUD grammar, VLW is book-and-map grammar taken to 3D space.
 
@@ -54,19 +54,6 @@ From David Small's "Navigating Large Bodies of Text" (IBM Systems Journal 35:3&4
   - *Poster* — the signature view. Each letter of COACHELLA is sliced into bands, each band into slots; artists sorted by `position_height` (tier) descending, rendered in rich-inline canvas text at weight 500–900; stage color per artist; justified per slot; live performance metrics (letter count, bands, slots, fragments, ms).
   - *Wall* — perspective wall of individually laid-out artist names
   - **Direct descendant of Small 1996**: text as navigable space, multi-scale rendering (tier-based weight instead of Small's greeking), categorical color for structure (stage ⇄ Small's character filter), Canvas at 60fps because pretext measures outside the DOM. Reference implementation for the Interactive JS channel's pretext subsection.
-- **Inside the Math** — Andy's shipped WebGL foveation explainer. VLW principles expressed through interactive parameters.
-- **Scrutinizer** — vision-science peripheral rendering is literally Small's greeking at the *retinal* level, reframed through modern neuroscience instead of typographic intuition.
-- **AdSERP F-pattern explainer** — gaze data filtered by phase reveals structure of attention. Small's character-dialogue filter applied to a different "text."
-- **The attentional-foraging `osec-explainer`** (marginalia + custom `.outer-note` / `.stats-detail` pattern) — editorial web typography in the VLW lineage with 2020s tooling.
-
-## Where VLW fits the current project set
-
-- **Interactive demos generally** — this is the default aesthetic + engineering stance. Pretext for typography, Canvas for performance, marginalia for editorial chrome, pretext-coachella as the reference scaffold.
-- **Paper figures** — small multiples, linked displays, and semantic zoom all descend from this lineage (Small, Ishizaki, Strausfeld). When planning a CHI/ETTAC/CIKM figure, the VLW reading tells you *why* those three patterns are the right ones.
-- **Typographic experiments** — if you're building a text-heavy interactive (scrollytelling, poetry generator, lineup explorer, word-association fingerprint thread), start from a pretext-coachella-style scaffold rather than reinventing text layout.
-- **Cartographer Explorer v2** — session timelines as information landscapes is Cooper's TED 1994 frame directly.
-- **Attentional-foraging explainer** — already uses dynamic highlighting and multi-scale rendering. The VLW lens gives the design choices a justification beyond "it looks nice."
-- **OSEC phase explorer** — semantic zoom + multi-scale typography is the Small Shakespeare pattern, one-for-one.
 
 ## References
 
