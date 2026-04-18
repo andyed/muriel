@@ -285,11 +285,12 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
 
     <div class="fig">
       <a class="thumb-link" href="https://andyed.github.io/scrutinizer-www/blog/2026-03-13-reading-span.html">
-        <img src="reading-span-on-off-comparison.png" alt="Reading Span on/off: two panels of body text with degree markers (-1.3°, 0°, +5°), comparing symmetric fovea vs. fovea shifted right to simulate Rayner asymmetry">
+        <img src="reading-span-on-off-comparison.png" alt="Reading Span on/off: two panels of body text with degree markers (-1.3°, 0°, +5°), comparing symmetric fovea vs. fovea shifted right">
       </a>
       <p class="caption">
-        <span class="channel">Science channel · small multiples</span>
-        <strong>Reading span — on/off A/B.</strong> Two stacked panels render the same passage under symmetric vs. asymmetric foveal assumptions, with explicit degree-of-visual-angle guides. Paired-conditions comparison, the exact pattern <code>muriel.stats.format_comparison()</code> formats into a caption.
+        <span class="channel">Science channel</span>
+        <strong>Reading span — on/off A/B.</strong><br>
+        Tools: matplotlib (figure composition) · <code>muriel.matplotlibrc_dark</code> (palette + rcparams) · <code>muriel.dimensions.figsize_for('chi', columns=2)</code> (paper-safe sizing) · <code>muriel.stats.format_comparison()</code> (the caption format). Paired-conditions A/B — the exact pattern muriel's science channel targets.
         <a href="https://andyed.github.io/scrutinizer-www/blog/2026-03-13-reading-span.html">Live post →</a>
       </p>
     </div>
@@ -304,8 +305,10 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
         </a>
       </div>
       <p class="caption">
-        <span class="channel">Raster channel · before / after composition</span>
-        <strong>Color sprint.</strong> Two Pillow-composited analysis panels documenting a color-processing change — the canonical small-multiples idiom applied to an A/B visual diff. <a href="https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html">Live post →</a>
+        <span class="channel">Raster channel</span>
+        <strong>Color sprint — before / after.</strong><br>
+        Tools: Pillow (image composition + draw) · matplotlib (curve overlay rendered as PNG, composited) · <code>muriel.typeset.py</code> (caption typography) · <code>muriel.contrast.audit_svg()</code> (pre-ship 8:1 check on annotations). Canonical small-multiples A/B.
+        <a href="https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html">Live post →</a>
       </p>
     </div>
 
@@ -319,8 +322,10 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
         </a>
       </div>
       <p class="caption">
-        <span class="channel">Raster channel · same stimulus, two processing modes</span>
-        <strong>Dashboard mode comparison.</strong> Identical source, two foveation algorithms — mode 6 (fovi) and mode 7 (legacy). The pattern reaches for whenever you'd otherwise build a multi-series single chart. <a href="https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html">Live post →</a>
+        <span class="channel">Raster channel — interactive → captured</span>
+        <strong>Dashboard mode comparison.</strong><br>
+        Tools: a WebGL foveation engine (external — Scrutinizer) for the rendering · <code>muriel.capture.capture_responsive()</code> for the retina screenshots · Pillow for side-by-side composition · <code>muriel.dimensions.OG_CARD</code> for final size. Same stimulus, two processing modes.
+        <a href="https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html">Live post →</a>
       </p>
     </div>
 
@@ -385,13 +390,6 @@ cd ~/Documents/dev/muriel && ./install.sh</code></pre>
 <section>
   <h2>The critique agent</h2>
   <p>muriel ships a <a href="https://github.com/andyed/muriel/blob/main/agents/muriel-critique.md">vision-model critique agent</a> with read-only tools, hardened against prompt-injection, authority-laundering, and contrast-claim spoofing embedded in the artifact itself. It names what's wrong — with evidence — and cites the specific framework (Tufte / Bertin / Gestalt / CRAP / Reichle / scanpath) when surfacing issues. Fix is a human call; the agent doesn't try.</p>
-</section>
-
-<section>
-  <h2>Named after</h2>
-  <p>muriel is named after <strong>Muriel Cooper (1925–1994)</strong>. Cooper was the first design director of MIT Press — where she created the "mitp" colophon and shaped the press's visual identity for four decades — and in 1975 co-founded the Visible Language Workshop at MIT with Ron MacNeil. VLW became one of the founding groups of the Media Lab in 1985; her late-career work culminated in <em>Information Landscapes</em>, presented at TED5 in February 1994, three months before her death.</p>
-  <p>The tribute is a credit, not a continuation. What this project inherits is the premise: visual production is a design discipline, the tool is part of the form, and the constraints stay active, together, at render time.</p>
-  <p class="centered"><a href="https://github.com/andyed/muriel#named-after">Full tribute + sources →</a></p>
 </section>
 
 <footer>

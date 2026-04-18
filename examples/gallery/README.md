@@ -1,6 +1,6 @@
 # muriel gallery
 
-Worked examples from shipped projects that exemplify what muriel's channels produce. Each entry is a thumbnail + a caption that names the muriel channel and pattern the artifact demonstrates. The goal is to make the abstract channel categories legible in fifteen seconds.
+Worked examples from shipped projects that exemplify what muriel's channels produce. **Each entry leads with the tool chain** — which muriel helpers (and external libraries) produced the artifact. The goal is to make the abstract channel categories executable: if you want output like this, here's the exact recipe.
 
 ---
 
@@ -13,9 +13,10 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
   </picture>
 </p>
 
-**Channels:** [`raster`](../../channels/raster.md) (Pillow output), [`svg`](../../channels/svg.md) (source composition), [`video`](../../channels/video.md) (animated GIF export path).
-**Vocabularies:** [`visible-language`](../../vocabularies/visible-language.md) (Cooper's mitp colophon reinterpreted), [`kinetic-typography`](../../vocabularies/kinetic-typography.md) (12-pose slideshow with strategic motion, max contrast).
-**Pattern:** same mark, four variants — still + animated, light + dark — served via `<picture>` + `prefers-color-scheme` in the top-level [`README.md`](../../README.md). Demonstrates how muriel's brand-token palette inverts cleanly between OLED dark (`#0a0a0f` ground, cream figures) and cream light (`#e6e4d2` ground, graphite figures). Assets live at [`assets/`](../../assets/).
+**Tools:** Pillow (still frame composition) · a custom 12-pose renderer (iterates frame_0..frame_11.png) · ffmpeg or ImageMagick `convert -delay -loop 0` (GIF assembly) · `muriel.contrast.audit_svg` (8:1 text-rule check before ship).
+**Channels:** [`raster`](../../channels/raster.md), [`svg`](../../channels/svg.md), [`video`](../../channels/video.md).
+**Vocabularies:** [`visible-language`](../../vocabularies/visible-language.md) (Cooper's mitp colophon reinterpreted), [`kinetic-typography`](../../vocabularies/kinetic-typography.md) (strategic motion, max contrast).
+**Pattern:** same mark, four variants — still + animated × light + dark — served via `<picture>` + `prefers-color-scheme`. Assets at [`assets/`](../../assets/).
 
 *The rest of the gallery points at other shipped work that exemplifies each channel in its own right. Source blog posts live under [the Scrutinizer dev log](https://andyed.github.io/scrutinizer-www/blog/); this gallery references them, it doesn't host them.*
 
@@ -25,19 +26,21 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 [![color sprint before](thumbs/color-sprint-before.jpg)](https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html) [![color sprint after](thumbs/color-sprint-after.jpg)](https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html)
 
-**Channel:** [`channels/raster.md`](../../channels/raster.md) — side-by-side raster composition with Pillow.
-**Pattern:** identical framing, variable stimulus — the canonical "small multiples" idiom applied to A/B visual testing.
-**Live post:** [Color sprint (andyed.github.io/scrutinizer-www)](https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html).
+**Tools:** Pillow (image composition + draw) · matplotlib (curve overlay rendered as PNG, then composited) · [`muriel/typeset.py`](../../muriel/typeset.py) (caption typography) · [`muriel/contrast.py`](../../muriel/contrast.py) (pre-ship 8:1 audit).
+**Channel:** [`channels/raster.md`](../../channels/raster.md).
+**Pattern:** canonical small-multiples A/B — identical framing, variable stimulus.
+**Live:** [Color sprint →](https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html)
 
 ---
 
-## 2. Mode comparison — Raster
+## 2. Mode comparison — Raster (interactive → captured)
 
 [![dashboard mode 6 fovi](thumbs/dashboard_center_mode6_fovi.png)](https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html) [![dashboard mode 7 legacy](thumbs/dashboard_center_mode7_legacy.png)](https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html)
 
-**Channel:** [`channels/raster.md`](../../channels/raster.md) — same stimulus, two processing modes.
-**Pattern:** `typeset.py`-style template rendering, repeated across a parameter axis. Reach for this when you'd otherwise build a complex multi-series single chart.
-**Live post:** [v2.6 release notes (andyed.github.io/scrutinizer-www)](https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html).
+**Tools:** a WebGL foveation engine (external, Scrutinizer) for the rendering · [`muriel/capture.py`](../../muriel/capture.py) (`capture_responsive()` for retina screenshots) · Pillow (side-by-side composition) · [`muriel/dimensions.py`](../../muriel/dimensions.py) (`OG_CARD` for final size).
+**Channel:** [`channels/raster.md`](../../channels/raster.md) (captured from [`channels/interactive.md`](../../channels/interactive.md)).
+**Pattern:** same stimulus, two processing modes — small multiples across a parameter axis.
+**Live:** [v2.6 release notes →](https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html)
 
 ---
 
@@ -45,9 +48,10 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 [![reading span on/off](thumbs/reading-span-on-off-comparison.png)](https://andyed.github.io/scrutinizer-www/blog/2026-03-13-reading-span.html)
 
-**Channel:** [`channels/science.md`](../../channels/science.md) — matplotlib figure with APA-style stats, `matplotlibrc_dark` palette.
-**Pattern:** paired-conditions comparison with labeled axes, effect size, and sample size — exactly what `muriel.stats.format_comparison()` formats into a caption.
-**Live post:** [Reading span on/off (andyed.github.io/scrutinizer-www)](https://andyed.github.io/scrutinizer-www/blog/2026-03-13-reading-span.html).
+**Tools:** matplotlib (figure composition with two `subplot` panels, body-text rendering via `ax.text()` or imported image, degree-of-visual-angle guides as `axvline`) · [`muriel/matplotlibrc_dark.py`](../../muriel/matplotlibrc_dark.py) (palette + rcparams) · [`muriel/dimensions.py`](../../muriel/dimensions.py) (`figsize_for('chi', columns=2)`) · [`muriel/stats.py`](../../muriel/stats.py) (`format_comparison()` for the effect-size caption).
+**Channel:** [`channels/science.md`](../../channels/science.md).
+**Pattern:** paired-conditions comparison with labeled axes, effect size, and sample size — exactly what `muriel.stats.format_comparison()` formats into a figure caption.
+**Live:** [Reading span on/off →](https://andyed.github.io/scrutinizer-www/blog/2026-03-13-reading-span.html)
 
 ---
 
@@ -55,19 +59,21 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 [![saliency vs congestion](thumbs/arngren-saliency-vs-congestion.jpg)](https://andyed.github.io/scrutinizer-www/blog/congestion-score.html)
 
-**Channel:** [`channels/science.md`](../../channels/science.md) — dense analytic visualization laying out multiple derived metrics against the source image.
-**Pattern:** stacked small-multiples for visual diagnostic review. `muriel.dimensions.figsize_for('chi', columns=2)` sizes panels like this for academic venues.
-**Live post:** [Congestion score (andyed.github.io/scrutinizer-www)](https://andyed.github.io/scrutinizer-www/blog/congestion-score.html).
+**Tools:** matplotlib (dense small-multiples grid, `GridSpec` or `subplot_mosaic`) · numpy / polars (derived metric computation) · [`muriel/matplotlibrc_dark.py`](../../muriel/matplotlibrc_dark.py) · [`muriel/dimensions.py`](../../muriel/dimensions.py) (`figsize_for('chi', columns=2)` for IEEE/CHI venue width).
+**Channel:** [`channels/science.md`](../../channels/science.md).
+**Pattern:** stacked small-multiples for visual diagnostic review — multiple derived metrics against one source image.
+**Live:** [Congestion score →](https://andyed.github.io/scrutinizer-www/blog/congestion-score.html)
 
 ---
 
-## 5. Color foveation demo — Interactive → Raster
+## 5. Color foveation demo — Interactive captured to Raster
 
 [![color spectrum foveated](thumbs/color-spectrum-foveated.jpg)](https://andyed.github.io/scrutinizer-www/blog/color-search.html)
 
+**Tools:** a live WebGL demo (external) for the interactive itself · [`muriel/capture.py`](../../muriel/capture.py) (`capture_responsive()` with retina scale factor) · Pillow (crop + composite for editorial placement) · [`muriel/contrast.py`](../../muriel/contrast.py) (audit for annotations).
 **Channel:** [`channels/interactive.md`](../../channels/interactive.md) captured into [`channels/raster.md`](../../channels/raster.md).
-**Pattern:** a live WebGL demo screenshotted at publishing-quality for inclusion in a blog post. The interactive version stays live; the raster snapshot goes into social cards and paper figures. `muriel.capture.capture_responsive` is the general form of this.
-**Live post:** [Color search (andyed.github.io/scrutinizer-www)](https://andyed.github.io/scrutinizer-www/blog/color-search.html).
+**Pattern:** the live version stays interactive; the raster snapshot goes into social cards + paper figures.
+**Live:** [Color search →](https://andyed.github.io/scrutinizer-www/blog/color-search.html)
 
 ---
 
@@ -75,8 +81,9 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 [![queen icon](thumbs/icon-analysis-queen-2006.jpg)](https://andyed.github.io/scrutinizer-www/blog/color-search.html) [![queen icon blurred](thumbs/icon-analysis-blur-queen-2006.jpg)](https://andyed.github.io/scrutinizer-www/blog/color-search.html)
 
-**Channel:** [`channels/raster.md`](../../channels/raster.md) for the pair; [`channels/svg.md`](../../channels/svg.md) for the accompanying diagrams in the post.
-**Pattern:** micro-comparison at icon scale — two ~256-px tiles laid out inline in editorial prose. Useful when a full figure is overkill.
+**Tools:** Pillow (thumbnail resize + compositing) · a Gaussian-blur variant (Pillow's `ImageFilter.GaussianBlur`) · [`muriel/typeset.py`](../../muriel/typeset.py) (label typography) · SVG (hand-rolled or `svgwrite`) for accompanying diagrams in the post.
+**Channels:** [`channels/raster.md`](../../channels/raster.md) + [`channels/svg.md`](../../channels/svg.md).
+**Pattern:** micro-comparison at icon scale — two ~256-px tiles laid out inline in editorial prose. When a full figure is overkill.
 
 ---
 
@@ -84,21 +91,22 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 [![F-pattern explainer (screenshot TBD)](thumbs/bender-cutter-diagram.svg)](https://andyed.github.io/attentional-foraging/explainer/)
 
+**Tools:** marginalia (editorial CSS library, external) · `marginalia-md.js` (markdown → marginalia HTML in the browser) · a Node build script · custom CSS for the F-explainer's light palette extensions (`.outer-note`, `.stats-detail`, `.has-dropcap`) · [`muriel/matplotlibrc_light.py`](../../muriel/matplotlibrc_light.py) (for any inline figures to match the warm editorial palette).
 **Channel:** [`channels/web.md`](../../channels/web.md) — marginalia + warm editorial light palette.
-**Pattern:** long-form explainer with pull-quotes, margin notes, inline stats spans, drop-cap. Matches the `muriel.matplotlibrc_light` palette at the figure level.
-**Live page:** [Attentional Foraging F-pattern explainer (andyed.github.io)](https://andyed.github.io/attentional-foraging/explainer/).
-**Note:** live and in active use; some supplementary sections are still in draft — the page ships but treat specific claims as provisional until the corresponding draft is lifted. (Replace this placeholder thumbnail with a real screenshot of the page hero.)
+**Pattern:** long-form explainer with pull-quotes, margin notes, inline stats spans, drop-cap.
+**Live:** [Attentional Foraging F-pattern explainer →](https://andyed.github.io/attentional-foraging/explainer/)
+*Note: live and in active use; some supplementary sections are still in draft. Replace this placeholder thumbnail with a real screenshot of the page hero.*
 
 ---
 
-## Generating the dual-brand variant (TODO)
-
-The gallery above points at shipped examples. The inverse — taking one brief and rendering it through two brand TOMLs to show `muriel.styleguide` in action — is the planned runnable demo. It'll land here as `dual-brand-figure.py` with output PNGs for `example-brand.toml` (OLED) and a second warm-editorial brand, once the schema supports distinguishing text-accent from decorative-accent.
-
 ## Refreshing thumbnails
 
-All thumbnails live in [`thumbs/`](thumbs/). Originals came from `scrutinizer-www/src/blog/images/`; resized to 800px wide max and re-encoded as JPG (85% quality) for files above ~500 KB. If a blog post updates its hero image, re-run:
+All thumbnails live in [`thumbs/`](thumbs/). Resized to 800px wide max and re-encoded as JPG (85% quality) for files above ~500 KB. If a blog post updates its hero image, re-run:
 
 ```bash
 sips -Z 800 -s format jpeg -s formatOptions 85 source.png --out thumbs/source.jpg
 ```
+
+## Upcoming
+
+The dual-brand runnable demo (same brief, two TOMLs, two PNGs side-by-side, exercising `muriel.styleguide` end-to-end) is the missing piece. Unblocked by the two-tier alias schema; scheduled for 0.6.0.
