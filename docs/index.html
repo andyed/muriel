@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>muriel — next-gen visual-production skill for LLMs</title>
+<meta name="description" content="Ten channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+
+<!-- Open Graph / Twitter -->
+<meta property="og:title" content="muriel — next-gen visual-production skill for LLMs">
+<meta property="og:description" content="Ten channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast, a vision-model critique agent. Named after Muriel Cooper.">
+<meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+<meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+<!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+</script>
+
+<style>
+/* ── muriel OLED palette ──────────────────────────────────────────── */
+:root {
+  --bg:       #0a0a0f;
+  --bg-2:     #0f1117;
+  --bg-3:     #1a1a24;
+  --fg:       #e6e4d2;   /* 15.42:1 */
+  --fg-muted: #b0b0c4;   /*  9.27:1 */
+  --accent:   #50b4c8;   /*  8.19:1 — text-safe */
+  --accent-ink: #7dd4e4; /* 11.67:1 — higher contrast */
+  --rule:     #2a2a34;
+  --max:      760px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { color-scheme: dark; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  padding: 4rem 1.25rem 6rem;
+}
+
+main { max-width: var(--max); margin: 0 auto; }
+
+header { text-align: center; margin-bottom: 3rem; }
+header picture img { width: 100%; max-width: 720px; height: auto; display: block; margin: 0 auto; }
+
+h1 {
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--fg);
+}
+
+.tagline {
+  color: var(--accent-ink);
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  font-weight: 400;
+  max-width: 40ch;
+  margin: 0 auto 0.5rem;
+}
+
+.subtag {
+  color: var(--fg-muted);
+  font-size: 0.95rem;
+  font-style: italic;
+  max-width: 50ch;
+  margin: 0 auto;
+}
+
+section { margin-top: 3rem; }
+section h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+p { margin-bottom: 1rem; max-width: 65ch; }
+p.centered { max-width: 60ch; margin-left: auto; margin-right: auto; }
+
+a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--accent); transition: color 120ms; }
+a:hover { color: var(--fg); border-bottom-color: var(--fg); }
+
+code, pre {
+  font-family: "SF Mono", Menlo, Monaco, "DejaVu Sans Mono", monospace;
+  font-size: 0.92em;
+  background: var(--bg-2);
+  color: var(--fg);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+code { padding: 0.1em 0.4em; }
+pre { padding: 1rem 1.25rem; overflow-x: auto; line-height: 1.5; }
+pre code { background: none; border: none; padding: 0; }
+
+ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+ul li { margin-bottom: 0.4rem; max-width: 60ch; }
+
+.cta-row { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: 1.5rem; }
+.cta {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  color: var(--accent-ink);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background 120ms, color 120ms;
+}
+.cta:hover { background: var(--accent); color: var(--bg); border-bottom-color: var(--accent); }
+.cta.primary { background: var(--accent); color: var(--bg); }
+.cta.primary:hover { background: var(--accent-ink); border-color: var(--accent-ink); }
+
+/* ── Motion tuner ─────────────────────────────────────────────────── */
+.tuner {
+  background: var(--bg-2);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+.tuner-stage {
+  background: var(--bg);
+  border-radius: 3px;
+  height: 140px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--rule);
+}
+.tuner-bars { display: flex; height: 100%; align-items: flex-end; gap: 10px; padding: 12px 24px; }
+.tuner-bar {
+  background: var(--fg);
+  width: 28px;
+  transform: translateY(100%);
+  transition: transform 240ms cubic-bezier(0.2, 0, 0.2, 1);
+  transform-origin: bottom center;
+  will-change: transform;
+}
+.tuner-bar.playing { transform: translateY(0); }
+
+.tuner-controls { display: grid; grid-template-columns: max-content 1fr max-content; gap: 0.6rem 1rem; align-items: center; margin-bottom: 1rem; }
+.tuner-controls label { color: var(--fg-muted); font-size: 0.85rem; white-space: nowrap; }
+.tuner-controls input[type=range] { width: 100%; accent-color: var(--accent); }
+.tuner-controls select {
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.3rem 0.5rem;
+  font: inherit;
+}
+.tuner-controls .value { color: var(--accent-ink); font-variant-numeric: tabular-nums; font-size: 0.9rem; min-width: 9ch; text-align: right; }
+
+.tuner-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.tuner-buttons button {
+  background: transparent;
+  color: var(--accent-ink);
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  padding: 0.4rem 0.8rem;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 120ms;
+}
+.tuner-buttons button:hover { background: var(--accent); color: var(--bg); }
+
+.tuner-toml {
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 1rem;
+  font-family: "SF Mono", Menlo, Monaco, monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  margin-top: 1rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+.tuner-toml .k { color: var(--accent-ink); }
+.tuner-toml .s { color: var(--fg); }
+
+/* ── Gallery strip ─────────────────────────────────────────────── */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.gallery a {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 3px;
+  border: 1px solid var(--rule);
+  transition: border-color 120ms, transform 120ms;
+}
+.gallery a:hover { border-color: var(--accent); transform: translateY(-2px); }
+.gallery img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+  color: var(--fg-muted);
+  font-size: 0.85rem;
+}
+footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
+
+.colophon-credit {
+  margin-top: 2rem;
+  color: var(--fg-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+  font-style: italic;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tuner-bar { transition-duration: 0.001ms !important; }
+}
+</style>
+</head>
+
+<body>
+<main>
+
+<header>
+  <picture>
+    <source srcset="https://raw.githubusercontent.com/andyed/muriel/main/assets/logo-animated-dark.gif"
+            media="(prefers-color-scheme: dark)">
+    <img src="https://raw.githubusercontent.com/andyed/muriel/main/assets/logo-animated.gif"
+         alt="muriel — next-gen visual-production skill for LLMs" width="720">
+  </picture>
+  <h1>muriel</h1>
+  <p class="tagline">A next-gen visual-production skill for LLMs.</p>
+  <p class="subtag">Built for the agentic era, grounded in the full design-history lineage.</p>
+  <div class="cta-row">
+    <a class="cta primary" href="https://github.com/andyed/muriel">View on GitHub</a>
+    <a class="cta" href="https://github.com/andyed/muriel/blob/main/SKILL.md">Read the skill</a>
+    <a class="cta" href="https://github.com/andyed/muriel/tree/main/examples/gallery">Gallery</a>
+  </div>
+</header>
+
+<section>
+  <h2>What it is</h2>
+  <p>Ten channels of tool-use recipes — raster, SVG, web, interactive, video, science, gaze, terminal, dimensions, style-guides — each with rules, patterns, and anti-patterns. A two-tier brand-token schema with motion. A multi-constraint solver that enforces 8:1 contrast and the OLED palette at render time. A vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research.</p>
+  <p><strong>Next-gen</strong> means the tools — LLM-native skill format, vision-model critique, brand tokens alive at render time, motion as a first-class schema field, engine adapters for Pillow / Firefly / Flux / pretext / ffmpeg / Playwright. <strong>Grounded</strong> means the principles — Cooper's Visible Language Workshop, Tufte's data-ink discipline, Bertin's retinal variables, Gestalt grouping, CRAP, Reichle's E-Z Reader, scanpath patterns. New tools serve the old principles.</p>
+</section>
+
+<section>
+  <h2>Motion tuner</h2>
+  <p>muriel's <code>brand.toml</code> ships a <code>[motion]</code> block with duration tokens (instant / fast / normal / slow / reveal, in ms) and easing tokens (default / emphasis / snappy / linear). Move the sliders; the animated bars below re-play at every change. Copy the resulting TOML snippet back into any project's <code>brand.toml</code> to apply.</p>
+
+  <div class="tuner" id="tuner">
+    <div class="tuner-stage">
+      <div class="tuner-bars" id="tuner-bars">
+        <div class="tuner-bar" style="height: 80%"></div>
+        <div class="tuner-bar" style="height: 60%"></div>
+        <div class="tuner-bar" style="height: 35%"></div>
+        <div class="tuner-bar" style="height: 25%"></div>
+        <div class="tuner-bar" style="height: 50%"></div>
+        <div class="tuner-bar" style="height: 72%"></div>
+        <div class="tuner-bar" style="height: 88%"></div>
+      </div>
+    </div>
+
+    <div class="tuner-controls">
+      <label for="tuner-duration">Duration</label>
+      <input type="range" id="tuner-duration" min="0" max="1200" step="10" value="240">
+      <span class="value" id="tuner-duration-value">240 ms</span>
+
+      <label for="tuner-easing">Easing</label>
+      <select id="tuner-easing">
+        <option value="cubic-bezier(0.2, 0, 0.2, 1)">default</option>
+        <option value="cubic-bezier(0.4, 0, 0.2, 1)">emphasis</option>
+        <option value="cubic-bezier(0.6, 0, 0.2, 1)">snappy</option>
+        <option value="linear">linear</option>
+      </select>
+      <span class="value" id="tuner-easing-value">default</span>
+
+      <label for="tuner-stagger">Stagger</label>
+      <input type="range" id="tuner-stagger" min="0" max="120" step="5" value="40">
+      <span class="value" id="tuner-stagger-value">40 ms</span>
+    </div>
+
+    <div class="tuner-buttons">
+      <button id="tuner-play">Replay</button>
+      <button id="tuner-copy">Copy as TOML</button>
+      <button id="tuner-preset-fast" title="Set to duration.fast / easing.default">preset: fast</button>
+      <button id="tuner-preset-reveal" title="Set to duration.reveal / easing.emphasis">preset: reveal</button>
+    </div>
+
+    <pre class="tuner-toml" id="tuner-toml"></pre>
+  </div>
+</section>
+
+<section>
+  <h2>Install</h2>
+  <p>As a Claude Code skill:</p>
+  <pre><code>git clone https://github.com/andyed/muriel ~/Documents/dev/muriel
+cd ~/Documents/dev/muriel && ./install.sh</code></pre>
+  <p>Then invoke with <code>/muriel</code> from any Claude Code session. See the <a href="https://github.com/andyed/muriel#install">Install section</a> in the README for Python package and cross-harness instructions.</p>
+</section>
+
+<section>
+  <h2>The critique agent</h2>
+  <p>muriel ships a <a href="https://github.com/andyed/muriel/blob/main/agents/muriel-critique.md">vision-model critique agent</a> with read-only tools, hardened against prompt-injection, authority-laundering, and contrast-claim spoofing embedded in the artifact itself. It names what's wrong — with evidence — and cites the specific framework (Tufte / Bertin / Gestalt / CRAP / Reichle / scanpath) when surfacing issues. Fix is a human call; the agent doesn't try.</p>
+</section>
+
+<section>
+  <h2>Named after</h2>
+  <p>muriel is named after <strong>Muriel Cooper (1925–1994)</strong>. Cooper was the first design director of MIT Press — where she created the "mitp" colophon and shaped the press's visual identity for four decades — and in 1975 co-founded the Visible Language Workshop at MIT with Ron MacNeil. VLW became one of the founding groups of the Media Lab in 1985; her late-career work culminated in <em>Information Landscapes</em>, presented at TED5 in February 1994, three months before her death.</p>
+  <p>The tribute is a credit, not a continuation. What this project inherits is the premise: visual production is a design discipline, the tool is part of the form, and the constraints stay active, together, at render time.</p>
+  <p class="centered"><a href="https://github.com/andyed/muriel#named-after">Full tribute + sources →</a></p>
+</section>
+
+<footer>
+  <p>MIT License. Source at <a href="https://github.com/andyed/muriel">github.com/andyed/muriel</a>. Colophon hero mark after Muriel Cooper's mitp.</p>
+  <p class="colophon-credit">after muriel cooper · live constraint system</p>
+</footer>
+
+</main>
+
+<script>
+(function () {
+  const bars     = Array.from(document.querySelectorAll('#tuner-bars .tuner-bar'));
+  const dur      = document.getElementById('tuner-duration');
+  const durV     = document.getElementById('tuner-duration-value');
+  const eas      = document.getElementById('tuner-easing');
+  const easV     = document.getElementById('tuner-easing-value');
+  const stag     = document.getElementById('tuner-stagger');
+  const stagV    = document.getElementById('tuner-stagger-value');
+  const toml     = document.getElementById('tuner-toml');
+  const playBtn  = document.getElementById('tuner-play');
+  const copyBtn  = document.getElementById('tuner-copy');
+  const pFast    = document.getElementById('tuner-preset-fast');
+  const pReveal  = document.getElementById('tuner-preset-reveal');
+
+  function currentToml() {
+    const d = +dur.value;
+    const e = eas.value;
+    const s = +stag.value;
+    return `[motion]\n<span class="k">duration_normal</span>  = <span class="s">${d}</span>       # ms (slider)\n<span class="k">easing_default</span>   = <span class="s">"${e}"</span>\n<span class="k">stagger</span>          = <span class="s">${s}</span>        # ms (slider; muriel extension)\n<span class="k">motion_preference</span> = <span class="s">"respect-prefers-reduced-motion"</span>`;
+  }
+
+  function render() {
+    const d = +dur.value;
+    const e = eas.value;
+    const s = +stag.value;
+    durV.textContent  = `${d} ms`;
+    easV.textContent  = eas.options[eas.selectedIndex].text;
+    stagV.textContent = `${s} ms`;
+    toml.innerHTML    = currentToml();
+    play(d, e, s);
+  }
+
+  function play(d, e, s) {
+    bars.forEach((b, i) => {
+      b.classList.remove('playing');
+      b.style.transition = 'transform 0ms linear';
+    });
+    // Force reflow before re-adding class
+    void bars[0].offsetWidth;
+    bars.forEach((b, i) => {
+      b.style.transition = `transform ${d}ms ${e} ${i * s}ms`;
+      b.classList.add('playing');
+    });
+  }
+
+  async function copyToml() {
+    const d = +dur.value, e = eas.value, s = +stag.value;
+    const plain = `[motion]\nduration_normal  = ${d}        # ms\neasing_default   = "${e}"\nstagger          = ${s}          # ms (muriel extension)\nmotion_preference = "respect-prefers-reduced-motion"\n`;
+    try {
+      await navigator.clipboard.writeText(plain);
+      copyBtn.textContent = 'Copied ✓';
+      setTimeout(() => copyBtn.textContent = 'Copy as TOML', 1200);
+      if (window.posthog) posthog.capture('muriel.tuner.copy', { duration: d, easing: e, stagger: s });
+    } catch (err) {
+      copyBtn.textContent = 'Copy failed';
+      setTimeout(() => copyBtn.textContent = 'Copy as TOML', 1200);
+    }
+  }
+
+  // Events
+  [dur, eas, stag].forEach(el => el.addEventListener('input', render));
+  playBtn.addEventListener('click', () => { render(); if (window.posthog) posthog.capture('muriel.tuner.replay'); });
+  copyBtn.addEventListener('click', copyToml);
+  pFast.addEventListener('click', () => {
+    dur.value = 120; eas.value = 'cubic-bezier(0.2, 0, 0.2, 1)'; stag.value = 20;
+    render();
+    if (window.posthog) posthog.capture('muriel.tuner.preset', { preset: 'fast' });
+  });
+  pReveal.addEventListener('click', () => {
+    dur.value = 800; eas.value = 'cubic-bezier(0.4, 0, 0.2, 1)'; stag.value = 80;
+    render();
+    if (window.posthog) posthog.capture('muriel.tuner.preset', { preset: 'reveal' });
+  });
+
+  // Initial paint
+  render();
+  // Capture landing
+  if (window.posthog) posthog.capture('muriel.landing.view');
+})();
+</script>
+
+</body>
+</html>
