@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Marginalia drop-cap textures — v7</title>
+<style>
+  :root {
+    --mg-bg: #0a0a0f;
+    --mg-text: #e0e0ec;
+    --mg-accent-ink: #ffffff;
+    --max-prose: 780px;
+    --font-body: -apple-system, 'Inter', 'Segoe UI', system-ui, sans-serif;
+  }
+  html, body { margin: 0; padding: 0; background: var(--mg-bg); color: var(--mg-text); }
+  body { font-family: var(--font-body); font-size: 1.05rem; line-height: 1.8; }
+  article { max-width: var(--max-prose); margin: 3rem auto; padding: 0 2rem; }
+  h2 { font-size: 0.78rem; font-weight: 600; color: var(--mg-accent-ink); opacity: 0.45;
+       letter-spacing: 0.12em; text-transform: uppercase; margin: 3rem 0 1rem 0; }
+  p { margin: 0 0 1.2em 0; overflow: hidden; }
+
+  .mg-dropcap:not([data-type])::first-letter {
+    float: left;
+    font-size: 3.8em;
+    line-height: 0.8;
+    padding-right: 0.08em;
+    margin-top: 0.05em;
+    font-weight: 700;
+    color: var(--mg-accent-ink);
+  }
+</style>
+<link rel="stylesheet" href="marginalia-dropcap-textures.css?v=7">
+</head>
+<body>
+<article>
+  <h2>data-type="isotropic"</h2>
+  <p class="mg-dropcap" data-type="isotropic">
+    <span class="mg-dropcap-frame">
+      <span class="mg-dropcap-letter">I</span>
+    </span>n 2026, Matt Queen asked a question in Boxes &amp; Arrows that stuck:
+    icon designers work at the pixel level, but users encounter icons at the
+    periphery of their attention, where spatial resolution has already
+    collapsed. What would designers do differently if they could see their work
+    the way the visual system actually processes it?
+  </p>
+
+  <h2>data-type="illuminated"</h2>
+  <p class="mg-dropcap" data-type="illuminated">
+    <span class="mg-dropcap-frame">
+      <span class="mg-dropcap-letter">I</span>
+    </span>n a manuscript tradition going back to monastic scriptoria, the
+    opening letter of a text was illuminated — given a decorative border,
+    often a rosette or floral flourish. The drop cap signaled that the reader
+    had arrived; it set the register.
+  </p>
+
+  <h2>Plain .mg-dropcap (no variant)</h2>
+  <p class="mg-dropcap">
+    In its plainest form, the drop cap is just typographic: a large serif
+    letter floated at the paragraph's opening. Only textured variants need
+    the wrapped span.
+  </p>
+</article>
+</body>
+</html>

@@ -172,6 +172,14 @@ PERMUTE currently lives as [`docs/PERMUTE.md`](docs/PERMUTE.md) (Tufte/Bertin/Ge
 - [ ] **`## Permutations` section per channel** — enumerate which permutations each channel supports, as testable assertions.
 - [ ] **`muriel-permute` agent (optional)** — given a data artifact, rank alternative presentations against the communicative intent. Complements `muriel-critique`: one names what's wrong, the other proposes what would be better.
 
+### Diagrams channel (system architecture / UML / agent flows)
+
+muriel doesn't currently cover *technical-architecture diagrams* as a first-class channel. SVG is general; diagrams have their own conventions (lanes, swimlanes, node styles, arrow semantics). [yizhiyanhua-ai/fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) (MIT) is the reference implementation to borrow from.
+
+- [ ] **`channels/diagrams.md`** — UML (class / sequence / state / component / deployment), system-architecture (RAG pipelines, multi-agent orchestration, tool-call flows, data pipelines), flowcharts. Each pattern with muriel-voiced anti-patterns (don't draw boxes-and-arrows without a stated semantic for what the arrow means; don't use more than 3 shape types in one diagram; etc.).
+- [ ] **`muriel/tools/diagram.py`** — input is a YAML/JSON system spec; output is brand-themed SVG via the active `brand.toml` (stroke = `accent`, fill = `background_2`, labels in `typography.body_family`, etc.). Inspiration: fireworks-tech-graph's NL-to-SVG pipeline, rewritten to consume the structured spec directly so it's deterministic and diff-able.
+- [ ] **NL → spec bridge** — optional Claude Code skill or CLI subcommand that converts a prose description into the YAML/JSON spec, then hands off to `muriel.tools.diagram`. Keeps the render step deterministic while allowing prose authoring.
+
 ### Style guides (brand schema)
 
 - [ ] **OKLCH in `brand.toml`.** Today `colors.accent = "#50b4c8"` only parses hex. Add an OKLCH path so brands can write `colors.accent = "oklch(65% 0.15 220)"` — hex stays supported; OKLCH becomes recommended for palettes where lightness ramps matter (muted → vibrant at constant hue). Same `StyleGuide` object internally; emit via `to_css_vars(color_space='oklch'|'hex')`. Inspiration from [pbakaus/impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0), which recommends OKLCH for perceptual uniformity in brand-palette design.
