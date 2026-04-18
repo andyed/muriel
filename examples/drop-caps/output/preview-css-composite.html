@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CSS-composite drop cap preview</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --text: #e0e0ec;
+    --accent: #50b4c8;
+    --max-prose: 820px;
+    --font-body: -apple-system, 'Inter', 'Segoe UI', system-ui, sans-serif;
+  }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+  body { font-family: var(--font-body); font-size: 1.05rem; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  article { max-width: var(--max-prose); margin: 3rem auto; padding: 0 2rem; }
+  h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 2rem; }
+
+  /* CSS-composite drop cap — letter is real text, grid is a CSS bg. */
+  .dropcap {
+    position: relative;
+  }
+  .dropcap::before {
+    content: "";
+    position: absolute;
+    left: -0.6em;
+    top: -0.6em;
+    width: 8em;
+    height: 10em;
+    background: url("dropcap-grid.svg") no-repeat center/contain;
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .dropcap::first-letter {
+    float: left;
+    font-family: "Didot", "Bodoni 72", Georgia, serif;
+    font-weight: 700;
+    font-size: 6.5em;
+    line-height: 0.85;
+    margin: 0.05em 0.35em -0.1em 0;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+  }
+  .dropcap > * { position: relative; z-index: 1; }
+  p { margin: 0 0 1.2em 0; }
+</style>
+</head>
+<body>
+<article>
+  <h1>Isotropic Cortical Sampling</h1>
+  <p class="dropcap">
+    In 2026, Matt Queen asked a question in Boxes &amp; Arrows that stuck: icon
+    designers work at the pixel level, but users encounter icons at the periphery
+    of their attention, where spatial resolution has already collapsed. What would
+    designers do differently if they could see their work the way the visual
+    system actually processes it?
+  </p>
+  <p>
+    Scrutinizer is one answer to that question. It simulates peripheral vision in
+    real time, degrading a live browser frame based on gaze position.
+  </p>
+</article>
+</body>
+</html>

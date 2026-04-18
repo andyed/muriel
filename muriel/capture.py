@@ -405,6 +405,242 @@ def capture_responsive(
     return written
 
 
+# ─── CSS-transform capture (the "product-shot" pipeline) ──────────────────
+
+TRANSFORM_PRESETS: dict[str, str] = {
+    # The signature "photographed-from-a-3D-angle" product shot
+    # popularized on Twitter/X dev-marketing threads and written up in
+    # the Nov 2025 Medium piece by Murat Çimen.
+    "photo-3d":   "perspective(1800px) rotateX(60deg) rotateZ(-45deg)",
+    # Softer variants that still read as 3D without the floor-tile extreme
+    "iso-left":   "perspective(1800px) rotateX(45deg) rotateY(-25deg) rotateZ(-12deg)",
+    "iso-right":  "perspective(1800px) rotateX(45deg) rotateY(25deg) rotateZ(12deg)",
+    # Gentle lean, readable app-store variant
+    "gentle":     "perspective(2000px) rotateY(8deg)",
+    # Book-open / tilted-left, fewer angles so headlines sit naturally
+    "book":       "perspective(1600px) rotateY(-15deg)",
+}
+
+
+def capture_with_transform(
+    url: str,
+    selector: str,
+    transform: str,
+    output: Union[str, Path],
+    *,
+    viewport: tuple[int, int] = (1440, 900),
+    device_scale_factor: int = 2,
+    color_scheme: Optional[str] = None,
+    wait_for_fonts: bool = True,
+    network_idle: bool = True,
+    settle_ms: int = 400,
+    full_page: bool = False,
+    crop_to_element: bool = False,
+    crop_padding: int = 80,
+    timeout_ms: int = 30000,
+    verbose: bool = True,
+) -> Path:
+    """
+    Capture a URL with an arbitrary CSS 3D transform applied to a
+    selected element — the "photographed-product" hero workflow.
+
+    Parameters
+    ----------
+    url : str
+        URL or ``file://`` path.
+    selector : str
+        CSS selector for the element to transform. Typical values:
+        ``'main'``, ``'#app'``, ``'.hero'``. Walking a DevTools element
+        picker's path into this string is the usual authoring flow.
+    transform : str
+        Either a literal CSS transform string (e.g.
+        ``'perspective(1800px) rotateX(60deg) rotateZ(-45deg)'``) or the
+        named preset ``'preset:<name>'``. See ``TRANSFORM_PRESETS``.
+    output : str or Path
+        Where to write the PNG.
+    viewport : (width, height)
+        Viewport size. Default 1440×900 matches the Medium recipe.
+    device_scale_factor : int
+        Retina multiplier for the underlying capture. Default 2; bump to
+        3 for print-grade crispness.
+    color_scheme : {'dark', 'light', None}
+        Force ``prefers-color-scheme`` if the page responds to it.
+    wait_for_fonts : bool
+        Wait for ``document.fonts.ready`` before applying the transform.
+    network_idle : bool
+        Wait for ``networkidle`` on navigation (500 ms silent). Safer
+        for JS-heavy sites; slower.
+    settle_ms : int
+        Milliseconds to wait *after* injecting the transform and
+        *before* screenshotting. Lets CSS transitions settle.
+    full_page : bool
+        If True, capture the scrollable full page. Usually False for
+        hero-shot use — the transformed element extends outside the
+        viewport otherwise.
+    crop_to_element : bool
+        If True, after the viewport screenshot, crop to the selected
+        element's post-transform bounding rect (plus ``crop_padding``).
+        Produces a clean product shot without adjacent un-tilted UI.
+        Mutually exclusive with ``full_page``.
+    crop_padding : int
+        Pixels of padding around the element's transformed bbox when
+        ``crop_to_element`` is True. Default 80. Measured in viewport
+        (CSS) pixels; scales with ``device_scale_factor``.
+    timeout_ms : int
+        Navigation timeout.
+    verbose : bool
+        Print a one-line status to stdout.
+
+    Returns
+    -------
+    Path
+        The written PNG's path.
+
+    Raises
+    ------
+    ImportError
+        Playwright not installed.
+    CaptureError
+        Chromium not installed, or the selector didn't match.
+    ValueError
+        If ``transform`` names an unknown preset.
+    """
+    try:
+        from playwright.sync_api import (
+            Error as PlaywrightError,
+            sync_playwright,
+        )
+    except ImportError as exc:
+        raise ImportError(
+            "Playwright is not installed. Install with:\n"
+            "    pip install playwright\n"
+            "    playwright install chromium"
+        ) from exc
+
+    # Resolve preset
+    if transform.startswith("preset:"):
+        name = transform.split(":", 1)[1]
+        if name not in TRANSFORM_PRESETS:
+            raise ValueError(
+                f"unknown transform preset {name!r}. "
+                f"Available: {', '.join(sorted(TRANSFORM_PRESETS))}"
+            )
+        transform = TRANSFORM_PRESETS[name]
+
+    output = Path(output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    wait_until = "networkidle" if network_idle else "domcontentloaded"
+    vw, vh = viewport
+
+    # Escape the transform string for embedding in JS (single-line, no quotes)
+    # It's plain CSS, so we just need to not double-quote it unsafely.
+    inject_js = f"""
+    (() => {{
+        const el = document.querySelector({_js_str(selector)});
+        if (!el) return {{ok: false, reason: 'selector-not-found'}};
+        // Scroll the element into the viewport center BEFORE applying the
+        // transform so the captured frame actually contains it.
+        el.scrollIntoView({{block: 'center', inline: 'center', behavior: 'instant'}});
+        el.style.transform       = {_js_str(transform)};
+        el.style.transformStyle  = 'preserve-3d';
+        el.style.willChange      = 'transform';
+        el.style.transformOrigin = 'center center';
+        // Parent perspective (in case the transform's own perspective() isn't enough)
+        if (el.parentElement) {{
+            el.parentElement.style.perspective = '1800px';
+        }}
+        // Body perspective as an additional fallback for fixed layouts
+        document.body.style.perspective = document.body.style.perspective || '1800px';
+        return {{ok: true, top: el.getBoundingClientRect().top, height: el.offsetHeight}};
+    }})()
+    """
+
+    try:
+        with sync_playwright() as p:
+            try:
+                browser = p.chromium.launch()
+            except PlaywrightError as exc:
+                msg = str(exc)
+                if "Executable doesn't exist" in msg or "not found" in msg.lower():
+                    raise CaptureError(
+                        "Chromium is not installed for Playwright. Run:\n"
+                        "    playwright install chromium"
+                    ) from exc
+                raise CaptureError(f"Playwright launch error: {exc}") from exc
+
+            try:
+                ctx_kwargs: dict = {
+                    "viewport": {"width": vw, "height": vh},
+                    "device_scale_factor": device_scale_factor,
+                }
+                if color_scheme in ("dark", "light"):
+                    ctx_kwargs["color_scheme"] = color_scheme
+
+                context = browser.new_context(**ctx_kwargs)
+                page = context.new_page()
+                page.set_default_timeout(timeout_ms)
+                page.goto(url, wait_until=wait_until)
+
+                if wait_for_fonts:
+                    try:
+                        page.evaluate("document.fonts && document.fonts.ready")
+                    except PlaywrightError:
+                        pass
+
+                result = page.evaluate(inject_js)
+                if not result or not result.get("ok"):
+                    raise CaptureError(
+                        f"selector {selector!r} did not match any element on {url}"
+                    )
+
+                if settle_ms > 0:
+                    page.wait_for_timeout(settle_ms)
+
+                if crop_to_element and not full_page:
+                    # Measure the element's transformed bounding rect
+                    bbox = page.evaluate(f"""
+                        (() => {{
+                            const el = document.querySelector({_js_str(selector)});
+                            if (!el) return null;
+                            const r = el.getBoundingClientRect();
+                            return {{x: r.left, y: r.top, width: r.width, height: r.height}};
+                        }})()
+                    """)
+                    if bbox is None:
+                        raise CaptureError(
+                            f"element {selector!r} disappeared before measurement"
+                        )
+                    # Pad and clamp to viewport
+                    pad = crop_padding
+                    clip = {
+                        "x":      max(0, bbox["x"] - pad),
+                        "y":      max(0, bbox["y"] - pad),
+                        "width":  min(vw - max(0, bbox["x"] - pad), bbox["width"] + 2 * pad),
+                        "height": min(vh - max(0, bbox["y"] - pad), bbox["height"] + 2 * pad),
+                    }
+                    page.screenshot(path=str(output), clip=clip)
+                    if verbose:
+                        print(f"  → {output}  ({int(clip['width'])}×{int(clip['height'])} @{device_scale_factor}×, element-cropped)")
+                else:
+                    page.screenshot(path=str(output), full_page=full_page)
+                    if verbose:
+                        print(f"  → {output}  ({vw}×{vh} @{device_scale_factor}×, transform applied)")
+            finally:
+                browser.close()
+    except CaptureError:
+        raise
+    except PlaywrightError as exc:
+        raise CaptureError(f"Playwright error: {exc}") from exc
+
+    return output
+
+
+def _js_str(s: str) -> str:
+    """Safely quote a Python string for embedding in a JS source block."""
+    escaped = s.replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n")
+    return f"'{escaped}'"
+
+
 # ─── CLI ─────────────────────────────────────────────────────────────────
 
 def _main(argv: Optional[Sequence[str]] = None) -> int:
