@@ -2,7 +2,7 @@
 
 The industry term for sci-fi UI: the HUDs, consoles, and data overlays you see in Iron Man, Blade Runner 2049, The Martian, Westworld, The Expanse. Not "cyberpunk" (too broad, that's the umbrella aesthetic). Not "HUD" (that's a UI mode, heads-up). **FUI** is the keyword that unlocks the right references.
 
-Part of the [muriel](../muriel.md) skill, under Aesthetic Vocabularies. See the top-level index for mission and universal rules that apply across every vocabulary.
+Part of the [muriel](../SKILL.md) skill, under Aesthetic Vocabularies. See the top-level index for mission and universal rules that apply across every vocabulary.
 
 ## Canonical lineage — where to look for inspiration
 

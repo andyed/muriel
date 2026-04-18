@@ -7,7 +7,7 @@ Contributions are welcome; below is how to make yours land cleanly.
 
 ## Before you start
 
-1. **Read the top-level [`README.md`](README.md) and [`muriel.md`](muriel.md).** The universal rules
+1. **Read the top-level [`README.md`](README.md) and [`SKILL.md`](SKILL.md).** The universal rules
    (8:1 contrast, decorative ≥55/255, OLED palette, one font treatment,
    generated > drawn, reproducible > one-off) apply to every
    contribution. Anti-patterns sections in each channel doc spell out
@@ -53,7 +53,7 @@ A new channel doc should follow this shape:
 
 <One paragraph on what the channel is and why it exists.>
 
-Part of the [muriel](../muriel.md) skill.
+Part of the [muriel](../SKILL.md) skill.
 
 ## When to use
 - …
@@ -68,7 +68,7 @@ Part of the [muriel](../muriel.md) skill.
 - Don't …
 ```
 
-Also add an entry to [`muriel.md`](muriel.md)'s Channel table and the
+Also add an entry to [`SKILL.md`](SKILL.md)'s Channel table and the
 Channel reference map.
 
 ## Adding a vocabulary
@@ -81,7 +81,7 @@ PixiJS, Kinetic Typography. A new one should:
 - Explain how it integrates with existing muriel channels.
 - Name the substrate choices (library / library family) for execution.
 
-Also add an entry to [`muriel.md`](muriel.md)'s Aesthetic vocabularies
+Also add an entry to [`SKILL.md`](SKILL.md)'s Aesthetic vocabularies
 list and the Channel reference map.
 
 ## Python contributions

@@ -2,7 +2,7 @@
 
 Scripted screen recordings with tooltip overlays for YouTube/social. ffmpeg for trim/concat/burn. `desktop-control` MCP for mouse choreography. AppleScript for menu automation.
 
-Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map.
+Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map.
 
 ## Tools available
 

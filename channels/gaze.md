@@ -2,7 +2,7 @@
 
 The vision-science specialty channel. Photoshop has nothing here; matplotlib has primitives but no eye-tracking idioms. muriel keeps the canonical recipes alongside the [heatmap](heatmaps.md) and [science](science.md) channels.
 
-Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map.
+Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map.
 
 ## Plot types
 

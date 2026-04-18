@@ -2,7 +2,7 @@
 
 The research-communication channel. How to produce figures, statistical reports, and notebook prose that meet the standards of publishable research — empirically grounded, honestly framed, reproducibly generated, and readable at the sizes papers actually print.
 
-Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map. Closely related: [channels/gaze.md](gaze.md), [channels/heatmaps.md](heatmaps.md), [channels/svg.md](svg.md).
+Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map. Closely related: [channels/gaze.md](gaze.md), [channels/heatmaps.md](heatmaps.md), [channels/svg.md](svg.md).
 
 ## When to use
 

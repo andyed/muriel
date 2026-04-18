@@ -1,6 +1,12 @@
-# muriel — Multi-channel visual production
+---
+name: muriel
+description: "A multi-constraint solver for visual production — raster, SVG, interactive JS, video, science plots, gaze viz, editorial HTML across ten channels. Brand tokens, 8:1 contrast rule, and dimension constants stay active at render time. Use when the user needs any visual artifact for human eyes."
+user-invocable: true
+---
 
-**Mission: kick Photoshop's llama ass.** Photoshop is a $30/mo static raster editor with menu-driven workflow and zero path to data-driven generation. muriel is a free, scriptable, multi-channel toolkit that produces every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data.
+# muriel — a multi-constraint solver for visual production
+
+muriel is a free, scriptable toolkit that produces every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data. Ten named channels (raster, SVG, web, interactive, video, terminal, heatmaps, gaze, science, dimensions) each with rules and anti-patterns, four aesthetic vocabularies, a brand schema that keeps tokens live at render time, a WCAG contrast audit that enforces 8:1, and a vision-model critique agent that names what's wrong before ship.
 
 ## Channels
 
@@ -20,7 +26,6 @@ Each channel has a dedicated subfile with deep recipes, tooling, and lessons. Th
 | **Dimensions** | *cross-channel reference* | [`channels/dimensions.md`](channels/dimensions.md) — social cards, device footprints, viewport tiers, video, paper/print, favicons, scale factors |
 | **Style guides** | *brand schema* | [`channels/style-guides.md`](channels/style-guides.md) — brand.toml schema, loader, rule enforcement, CSS/matplotlibrc derivation, example brand.toml files |
 
-Photoshop does one of these (raster), badly for the others, and zero of them reproducibly.
 
 ## Aesthetic vocabularies
 
@@ -148,12 +153,21 @@ For a multi-channel task (e.g., a blog post with an interactive demo captured as
 - [ ] **`muriel/contrast.py` inline-fill pass** — Current audit only walks `<style>` CSS; add a second pass that walks `<text fill="…">` attributes for SVGs that set fills inline.
 - [ ] **`muriel/contrast.py` marginalia-token audit** — Add a `audit_marginalia_tokens()` helper that reads `marginalia.css` and verifies every `--mg-*` custom property against both theme backgrounds.
 
+### PERMUTE — elevate from docs/ to a cross-channel operator
+
+PERMUTE currently lives as [`docs/PERMUTE.md`](docs/PERMUTE.md) (Tufte/Bertin/Gestalt/CRAP principles applied as transformation operators). That framing is channel-agnostic, not ASCII-specific — it should sit alongside FUI / Visible Language / PixiJS / Kinetic Typography as a first-class grammar.
+
+- [ ] **Move to `vocabularies/permute.md`** — PERMUTE as a named design grammar: data artifacts iterate through principled transformations (chart-type remap, sort-order remap, small-multiples, linked displays, semantic zoom, categorical ↔ sequential ↔ diverging color, aspect-ratio remap, medium remap).
+- [ ] **`muriel/permute.py`** — Python helper that takes a data spec + permutation axis and emits multiple variants. Channel-agnostic; each channel's renderer is a backend. `permute(data, axis="chart_type")` → one output per viable chart type; `permute(data, axis="medium")` → terminal / raster / SVG / interactive D3.
+- [ ] **`## Permutations` section per channel** — enumerate which permutations each channel supports, as testable assertions.
+- [ ] **`muriel-permute` agent (optional)** — given a data artifact, rank alternative presentations against the communicative intent. Complements `muriel-critique`: one names what's wrong, the other proposes what would be better.
+
 ### Web (editorial variant)
 - [x] **Light editorial palette documented** — `channels/web.md` now has a section on the F-explainer pattern, with the `.outer-note` / `.stats-detail` / `.has-dropcap` / staged-h2 extensions catalogued.
 - [ ] **Generalize `.outer-note` and `.stats-detail` back into marginalia** — Currently F-explainer-only; worth promoting to the main library if a second project adopts them.
 - [ ] **Build-script variant of the pandoc bridge** — Node script using `marginalia-md.js` for projects that prefer browser-side conversion over pandoc.
 
-### Image-production pipeline (LLM imagegen + enhancement)
+### Image-production pipeline (LLM imagegen + enhancement + engines)
 
 The canonical "raster without hand-compositing" path — not built yet; roadmap target. Pipeline shape:
 
@@ -167,6 +181,41 @@ prompt → [imagegen + brand.toml] → PNG → [enhance + target-tier] → [cont
 - [ ] **`muriel/tools/enhance.py`** — upscaling + artifact removal wrapper (Real-ESRGAN or equivalent). Platform-aware via the dimensions registry: `enhance(img, target='twitter.instream')` both resizes *and* enhances in one call. Pairs with `muriel.dimensions` named tiers.
 - [ ] **CLI:** `python -m muriel.imagegen "A foveated gaze heatmap over a SERP" --brand examples/muriel-brand.toml --dims twitter.instream --enhance`
 - [ ] **Recipe in `channels/raster.md`** — full worked pipeline from prompt through ship-ready PNG, citing each step's helper.
+#### Engine adapters
+
+muriel is the constraint layer; the engine that produces pixels is swappable. Each adapter injects the active `brand.toml` into the engine's prompt/config, polls async jobs, and routes the output back through `muriel.contrast.audit` before ship.
+
+**Default engines (free, already part of muriel):**
+- `muriel.typeset` — Pillow compositing with brand tokens. Ships today; no TODO.
+- `muriel.chart` — Unicode terminal charts. Ships today.
+
+**Local / free engine adapters (TODO, high priority):**
+- [ ] **`muriel/engines/flux_local.py`** — Flux via a local runtime (ComfyUI, diffusers, or ollama when supported). Zero cloud cost.
+- [ ] **`muriel/engines/sdxl_local.py`** — Stable Diffusion XL via `diffusers` or ComfyUI. Zero cloud cost.
+- [ ] **`muriel/engines/real_esrgan.py`** — local upscaling (2×/4×) via Real-ESRGAN PyTorch checkpoints. Free alternative to commercial upsamplers.
+- [ ] **`muriel/engines/gemini.py`** — Google Gemini image gen via free tier + pay-as-you-go. Lowest activation energy for a cloud engine.
+
+**Opt-in paid engine adapters (TODO, subscription required):**
+- [ ] **`muriel/engines/firefly.py`** — [Adobe Firefly API](https://developer.adobe.com/firefly-services/docs/firefly-api/). Real capability (image5, creative upsampler, precise/adaptive composite, custom-brand models) but requires Adobe CC + Firefly credits per call. Ships as an optional engine; users without subs fall through to a free engine.
+- [ ] **`muriel/engines/photoshop.py`** — local PS automation (UXP / ExtendScript / batch-actions). Free for users who already have Photoshop; still paid in aggregate (CC subscription).
+- [ ] **`muriel/engines/dalle.py`** / **`muriel/engines/ideogram.py`** — optional commercial alternatives.
+
+**Engine selection in `brand.toml`:**
+- [ ] Add `[engine]` block: `preferred = "pillow"`, `fallback = ["flux_local", "gemini"]`, optional `paid_ok = false`. Let the brand declare its defaults; respect `paid_ok = false` to never call a metered endpoint.
+
+**Positioning:** muriel stays free-first and engine-agnostic. The differentiator is not "we integrate with Firefly" (many will); it's that the brand-tokens + contrast-audit + critique-agent layer is **the same** whether the engine is Pillow locally, Flux in a GPU container, Gemini's free tier, or a paid Firefly custom model. The constraint discipline is the product.
+
+#### Authoring engines (emit editable source files)
+
+Different direction from render engines — these produce files the user can *refine further* in their preferred tool, with muriel's brand tokens already applied to layer names, groups, styles, type properties, and export settings.
+
+- [ ] **`muriel/authoring/psd.py`** — emit a layered `.psd` from a brief + brand.toml. Uses `psd-tools` or a similar library. Standalone (does not require PS to be running). Brand colors become fill layers, type layers use the brand's typography stack, groups follow the brand's semantic taxonomy. Open the output in Photoshop for manual refinement.
+- [ ] **`muriel/authoring/photoshop_live.py`** — script an already-running Photoshop instance via UXP or ExtendScript. Requires PS to be open; useful when the user is actively working and wants muriel to inject a brand-compliant composition into their current document.
+- [ ] **`muriel/authoring/figma.py`** — Figma Files API to create / update designs. Brand tokens map to Figma variables; muriel writes a starter file the team can iterate on. Free tier has limits; works for individual users and small teams.
+- [ ] **`muriel/authoring/canva.py`** — Canva Connect API. Produces a Canva design with brand palette applied. Useful for marketing collateral workflows where the team continues editing in Canva.
+- [ ] **`muriel/authoring/affinity.py`** — Affinity scripting (.afdesign, .afphoto). Free-to-own alternative to PSD.
+
+Authoring engines are complementary to render engines: render when you want a final PNG; author when you want a source file the user will continue to edit. Brand tokens apply identically across both paths.
 
 Reference material (not direct swipes — shape inspiration):
 - [sanjay3290/ai-skills/imagen](https://github.com/sanjay3290/ai-skills/tree/main/skills/imagen) (Apache-2.0) — minimal Gemini image-gen wrapper; informs the provider shape.

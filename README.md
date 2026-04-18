@@ -7,9 +7,9 @@
 
 # muriel
 
-**A multi-constraint solver for visual production.** Mission: kick Photoshop's llama ass.
+**A multi-constraint solver for visual production.**
 
-A single skill file (`muriel.md`) that teaches a Claude Code agent to generate every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data. The rules (8:1 contrast, OLED palette, one font treatment, generated > drawn, reproducible > one-off) stay *live* at render time: brand tokens are parsed, contrast is audited, dimensions are enforced — not as lint after the fact, but as part of the act of making.
+A single skill file (`SKILL.md`) that teaches a Claude Code agent to generate every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data. The rules (8:1 contrast, OLED palette, one font treatment, generated > drawn, reproducible > one-off) stay *live* at render time: brand tokens are parsed, contrast is audited, dimensions are enforced — not as lint after the fact, but as part of the act of making.
 
 ### Built on / integrates with
 
@@ -52,18 +52,52 @@ A single skill file (`muriel.md`) that teaches a Claude Code agent to generate e
 - **Density viz** (`typeset.render_heatmap()`) — Tobii-style fixation heatmaps
 - **Gaze plots** — scanpath, bubble scanpath, AOI timeline, saccade rose
 
-Photoshop does one of these (raster), badly for the others, and zero of them reproducibly.
 
 ## Install
 
-Symlink `muriel.md` into `~/.claude/commands/` so Claude Code picks it up as `/muriel`:
+### As a Claude Code skill
 
 ```bash
 git clone https://github.com/andyed/muriel ~/Documents/dev/muriel
-ln -s ~/Documents/dev/muriel/muriel.md ~/.claude/commands/muriel.md
+ln -s ~/Documents/dev/muriel ~/.claude/skills/muriel
 ```
 
-Invoke from any Claude Code session with `/muriel <what you need>`.
+That's it. `SKILL.md` in the repo root carries the frontmatter Claude Code needs; the symlink exposes the channels, vocabularies, examples, and Python package to any session. Invoke with `/muriel` from any Claude Code session.
+
+Or run the helper script:
+
+```bash
+cd ~/Documents/dev/muriel && ./install.sh
+```
+
+### As a Python package
+
+```bash
+pip install -e ~/Documents/dev/muriel   # source install (editable)
+# pip install muriel                    # PyPI, once 0.5.0 is published
+```
+
+Then, from any script or notebook:
+
+```python
+from muriel import matplotlibrc_dark            # auto-applies an OLED matplotlibrc on import
+from muriel.stats import format_comparison      # APA-style reporting helpers
+from muriel.contrast import audit_svg           # WCAG 8:1 audit, module + CLI
+from muriel.styleguide import load_styleguide   # brand.toml loader with aliases + motion
+from muriel.dimensions import figsize_for, OG_CARD
+```
+
+### The critique agent
+
+```bash
+ln -s ~/Documents/dev/muriel/agents/muriel-critique.md ~/.claude/agents/muriel-critique.md
+```
+
+Then dispatch it from any Claude Code session with the Agent tool, `subagent_type: muriel-critique`. See [Critique agent](#critique-agent) below.
+
+### Other AI harnesses (Cursor, Codex, Windsurf, Gemini CLI)
+
+The `SKILL.md` file uses the [Agent Skills](https://github.com/anthropics/claude-code/blob/main/docs/skills.md) format that's compatible across many agent harnesses. For Cursor, mirror the structure into `.cursor/skills/muriel/`; for others, consult your harness's skill/plugin docs. A future release will ship a `.claude-plugin/` + `.cursor-plugin/` manifest pair following the pixijs-skills precedent.
 
 ## Dependencies (by channel)
 
@@ -79,7 +113,7 @@ Invoke from any Claude Code session with `/muriel <what you need>`.
 
 ## Universal rules
 
-Encoded in `muriel.md` and enforced across every channel:
+Encoded in `SKILL.md` and enforced across every channel:
 
 - **8:1 contrast minimum** on all text (compute WCAG ratio)
 - **Decorative elements ≥55/255** on dark backgrounds
@@ -87,6 +121,24 @@ Encoded in `muriel.md` and enforced across every channel:
 - **OLED palette:** cream on near-black, not pure white
 - **Generated > drawn.** If data can drive it, it should.
 - **Reproducible > one-off.** Save the script alongside the output.
+
+## Critique agent
+
+muriel ships a vision-model critique agent at [`agents/muriel-critique.md`](agents/muriel-critique.md). It reads a rendered artifact and names — with evidence — every way the artifact fails muriel's rules, channel anti-patterns, and (optionally) a `brand.toml`'s tokens. Read-only tools (Read / Glob / Grep), hardened against prompt-injection, badge-laundering, and contrast-claim spoofing embedded in the image itself.
+
+**Install** (once, after cloning):
+
+```bash
+ln -s ~/Documents/dev/muriel/agents/muriel-critique.md ~/.claude/agents/muriel-critique.md
+```
+
+**Invoke** from any Claude Code session:
+
+> "Run muriel-critique on `path/to/artifact.png` with channel `raster` and brand `examples/muriel-brand.toml`."
+
+**Output:** a structured markdown critique with a verdict (`PASS` / `NEEDS REVISION` / `FAIL`), a numbered issue list (rule / evidence / fix, severity-tagged), and a rationale. CRITICAL severity → FAIL; any HIGH → NEEDS REVISION; otherwise PASS.
+
+**Regression fixtures:** adversarial and baseline artifacts for the critique agent live at [`examples/critique-fixtures/`](examples/critique-fixtures/) with their expected verdicts. Contribute new attacks there — any CVE for visual-critic systems can be a one-paragraph pull request.
 
 ## License
 

@@ -2,7 +2,7 @@
 
 Cross-channel reference sheet for output sizing. When the task is "make me a thing for X," this is where you look up how big "a thing" should be.
 
-Part of the [muriel](../muriel.md) skill. Channels that need these values:
+Part of the [muriel](../SKILL.md) skill. Channels that need these values:
 - [`raster.md`](raster.md) — store assets, social cards, paper figures as raster
 - [`interactive.md`](interactive.md) — canvas sizes, viewport tiers for capture
 - [`web.md`](web.md) — Playwright window sizes, `@page` rules

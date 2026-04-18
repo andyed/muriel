@@ -2,7 +2,7 @@
 
 A style guide is a brand's design tokens — colors, typography, assets, ownership rules — serialized so muriel can import them and use them in any channel without reinventing them and without violating "this brand is owned by X repo, don't regenerate here" rules.
 
-Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map. Related: [`raster.md`](raster.md) for asset generation, [`web.md`](web.md) for marginalia CSS tokens, [`science.md`](science.md) for matplotlib rcparams.
+Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map. Related: [`raster.md`](raster.md) for asset generation, [`web.md`](web.md) for marginalia CSS tokens, [`science.md`](science.md) for matplotlib rcparams.
 
 ## Why this exists
 
@@ -173,7 +173,7 @@ python -m muriel.styleguide examples/muriel-brand.toml --contrast
 ## Shipped examples
 
 - [`examples/example-brand.toml`](../examples/example-brand.toml) — the Acme Research brand as captured from `<brand-guide-repo>/templates/shared-styles.css`. Read-only mirror; the canonical source is still the CSS file in the brand-guide repo. Includes the 10-ring gradient, six named section accents, Nunito 900 display typography, wordmark/monogram template paths, export pipeline commands, and the hard ownership rules.
-- [`examples/muriel-brand.toml`](../examples/muriel-brand.toml) — muriel's own cream-on-near-black OLED palette as a style guide. Mirrors the constants baked into `muriel/matplotlibrc_dark.py` and the universal rules in `muriel.md`. Useful as the default brand for any muriel operation not targeting a specific project.
+- [`examples/muriel-brand.toml`](../examples/muriel-brand.toml) — muriel's own cream-on-near-black OLED palette as a style guide. Mirrors the constants baked into `muriel/matplotlibrc_dark.py` and the universal rules in `SKILL.md`. Useful as the default brand for any muriel operation not targeting a specific project.
 
 ## When to write a new brand.toml
 

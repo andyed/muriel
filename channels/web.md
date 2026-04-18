@@ -7,7 +7,7 @@ The editorial-HTML channel and its tooling. Covers:
 - **Web rendering & static capture** — Playwright / weasyprint / headless Chrome for DOM → PNG / PDF
 - **Data-URI embedding** — single-file portability trick for artifacts that must travel self-contained
 
-Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map.
+Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map.
 
 ## Marginalia — Editorial HTML
 

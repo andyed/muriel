@@ -2,7 +2,7 @@
 
 The design lineage that treats typography as a data structure and reading as spatial navigation. Emerged from MIT Media Lab's Visible Language Workshop (VLW) under Muriel Cooper in the 1980s–90s, continued through the Aesthetics & Computation Group (ACG) under John Maeda, and flows downstream into Processing, p5.js, D3, Observable, and contemporary typographic substrates like [chenglou/pretext](https://chenglou.me/pretext/).
 
-Part of the [muriel](../muriel.md) skill, under Aesthetic Vocabularies. Parallel to [FUI](fui.md) but different in register: FUI is fictional interface grammar from screen entertainment. **VLW is the actual design tradition that invented the idea of "information landscape" and multi-scale reading.** Where FUI borrows from cinema, VLW descends from typography, the Bauhaus, and cognitive science.
+Part of the [muriel](../SKILL.md) skill, under Aesthetic Vocabularies. Parallel to [FUI](fui.md) but different in register: FUI is fictional interface grammar from screen entertainment. **VLW is the actual design tradition that invented the idea of "information landscape" and multi-scale reading.** Where FUI borrows from cinema, VLW descends from typography, the Bauhaus, and cognitive science.
 
 ## Canonical lineage
 
@@ -22,7 +22,7 @@ Downstream, the tradition continues through Mike Bostock (D3 — Bostock cites C
 
 From David Small's "Navigating Large Bodies of Text" (IBM Systems Journal 35:3&4). The paper documents a design experiment visualizing Shakespeare's complete plays (~1 million words) at multiple scales, using typography designed for varied viewing distances and three-dimensional space organization. Out of it came three axioms that apply to every interactive figure, demo, and scrollytelling piece built since:
 
-1. **"It is impossible to separate the visual design from the design of the interface. Subtle interactions between the visual design and the physical controls may facilitate many actions but make others more difficult."** — Visual grammar and interaction grammar are the same grammar. Every choice about how text renders is a choice about how people navigate it. Directly echoes the [Interaction design grounding](../muriel.md#interaction-design-grounding) section of the top-level skill.
+1. **"It is impossible to separate the visual design from the design of the interface. Subtle interactions between the visual design and the physical controls may facilitate many actions but make others more difficult."** — Visual grammar and interaction grammar are the same grammar. Every choice about how text renders is a choice about how people navigate it. Directly echoes the [Interaction design grounding](../SKILL.md#interaction-design-grounding) section of the top-level skill.
 
 2. **"Computer displays should not emulate paper. Dynamic, flexible, and adaptive typography enables fundamentally new reading and interaction modes."** — Skeuomorphism is surrender. If your blog post could be a PDF without losing anything, you haven't earned the web. Matches muriel's mission line ("kick Photoshop's llama ass") — Photoshop *is* paper-emulation software.
 

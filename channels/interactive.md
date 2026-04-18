@@ -2,7 +2,7 @@
 
 The biggest win over Photoshop: **parameters the reader can move**. Static images can't be explored; interactive demos let the reader develop intuition by playing with the underlying model.
 
-Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map.
+Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map.
 
 ## When to use
 - Blog post explainers where the reader should move parameters, not just read

@@ -2,7 +2,7 @@
 
 Photoshop can't generate vectors from data. SVG can — and the output diffs in git, scales infinitely, embeds in HTML and LaTeX, and inherits CSS theming from marginalia (`--mg-*` carries through to `<svg>` children).
 
-Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map.
+Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map.
 
 ## When to use
 - Paper figures (round-trip with LaTeX)

@@ -1,8 +1,23 @@
 # muriel gallery
 
-Worked examples from shipped projects that exemplify what muriel's channels produce. Each entry is a thumbnail + a link to the live post, with a one-line mapping to the muriel channel or pattern the image demonstrates. The goal is to make the abstract channel categories (raster, science, web, interactive) legible in fifteen seconds.
+Worked examples from shipped projects that exemplify what muriel's channels produce. Each entry is a thumbnail + a caption that names the muriel channel and pattern the artifact demonstrates. The goal is to make the abstract channel categories legible in fifteen seconds.
 
-All linked sites are publicly published; source blog posts live under [the Scrutinizer dev log](https://andyed.github.io/scrutinizer-www/blog/). This gallery references them, it doesn't host them.
+---
+
+## 0. muriel's own hero mark — Raster + Kinetic Typography + Visible Language
+
+<p align="center">
+  <picture>
+    <source srcset="../../assets/logo-animated-dark.gif" media="(prefers-color-scheme: dark)">
+    <img src="../../assets/logo-animated.gif" alt="muriel colophon — after muriel cooper" width="540">
+  </picture>
+</p>
+
+**Channels:** [`raster`](../../channels/raster.md) (Pillow output), [`svg`](../../channels/svg.md) (source composition), [`video`](../../channels/video.md) (animated GIF export path).
+**Vocabularies:** [`visible-language`](../../vocabularies/visible-language.md) (Cooper's mitp colophon reinterpreted), [`kinetic-typography`](../../vocabularies/kinetic-typography.md) (12-pose slideshow with strategic motion, max contrast).
+**Pattern:** same mark, four variants — still + animated, light + dark — served via `<picture>` + `prefers-color-scheme` in the top-level [`README.md`](../../README.md). Demonstrates how muriel's brand-token palette inverts cleanly between OLED dark (`#0a0a0f` ground, cream figures) and cream light (`#e6e4d2` ground, graphite figures). Assets live at [`assets/`](../../assets/).
+
+*The rest of the gallery points at other shipped work that exemplifies each channel in its own right. Source blog posts live under [the Scrutinizer dev log](https://andyed.github.io/scrutinizer-www/blog/); this gallery references them, it doesn't host them.*
 
 ---
 

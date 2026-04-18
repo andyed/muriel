@@ -1,6 +1,6 @@
 # muriel
 
-Importable Python assets for the [muriel](../muriel.md) skill. matplotlibrc blocks, APA-style reporting helpers, WCAG contrast audit, dimension constants, capture, and brand style guides — extracted from the [`channels/`](../channels/) subfiles so notebooks can `import` them instead of copy-pasting.
+Importable Python assets for the [the skill doc](../SKILL.md) skill. matplotlibrc blocks, APA-style reporting helpers, WCAG contrast audit, dimension constants, capture, and brand style guides — extracted from the [`channels/`](../channels/) subfiles so notebooks can `import` them instead of copy-pasting.
 
 ## Install
 
