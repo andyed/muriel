@@ -1,12 +1,12 @@
 ---
 name: muriel
-description: "A multi-constraint solver for visual production — raster, SVG, interactive JS, video, science plots, gaze viz, editorial HTML across ten channels. Brand tokens, 8:1 contrast rule, and dimension constants stay active at render time. Use when the user needs any visual artifact for human eyes."
+description: "Next-gen visual-production skill for LLMs — ten channels of tool-use recipes (raster, SVG, web, interactive, video, science, gaze, terminal, dimensions, style-guides), a two-tier brand-token schema with motion, anti-patterns per channel, a multi-constraint solver that enforces 8:1 contrast at render time, and a vision-model critique agent grounded in Tufte / Bertin / Gestalt. Use when the user needs any visual artifact for human eyes."
 user-invocable: true
 ---
 
-# muriel — a multi-constraint solver for visual production
+# muriel — next-gen visual-production skill for LLMs
 
-muriel is a free, scriptable toolkit that produces every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data. Ten named channels (raster, SVG, web, interactive, video, terminal, heatmaps, gaze, science, dimensions) each with rules and anti-patterns, four aesthetic vocabularies, a brand schema that keeps tokens live at render time, a WCAG contrast audit that enforces 8:1, and a vision-model critique agent that names what's wrong before ship.
+muriel is a free, scriptable skill that teaches an LLM agent to produce every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data. Ten named channels (raster, SVG, web, interactive, video, terminal, heatmaps, gaze, science, dimensions) each with rules and anti-patterns, four aesthetic vocabularies, a two-tier brand schema with motion tokens, a multi-constraint solver that keeps 8:1 contrast and OLED palette active at render time, and a vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research that names what's wrong before ship.
 
 ## Channels
 

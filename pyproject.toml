@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name            = "muriel"
 version         = "0.5.0"
-description     = "A multi-constraint solver for visual production — brand tokens, WCAG audit, APA-style reporting, dimensions, matplotlibrc blocks, raster/SVG/web/gaze helpers across ten channels."
+description     = "Next-gen visual-production skill for LLMs — ten channels of tool-use recipes, a two-tier brand-token schema with motion, WCAG 8:1 audit, APA-style reporting, dimensions, matplotlibrc blocks, raster/SVG/web/gaze helpers, and a vision-model critique agent."
 readme          = "README.md"
 requires-python = ">=3.9"
 license         = { text = "MIT" }

@@ -1,15 +1,17 @@
 <p align="center">
   <picture>
     <source srcset="assets/logo-animated-dark.gif" media="(prefers-color-scheme: dark)">
-    <img src="assets/logo-animated.gif" alt="muriel — a multi-constraint solver" width="720">
+    <img src="assets/logo-animated.gif" alt="muriel — next-gen visual-production skill for LLMs" width="720">
   </picture>
 </p>
 
 # muriel
 
-**A multi-constraint solver for visual production.**
+**muriel is a next-gen visual-production skill for LLMs** — built for the agentic era and grounded in the full design-history lineage it inherits. Ten channels of tool-use recipes (raster, SVG, web, interactive, video, science, gaze, terminal, dimensions, style-guides), a two-tier brand-token schema with motion, anti-patterns per channel, a multi-constraint solver that enforces 8:1 contrast and OLED palette at render time, and a vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research.
 
-A single skill file (`SKILL.md`) that teaches a Claude Code agent to generate every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data. The rules (8:1 contrast, OLED palette, one font treatment, generated > drawn, reproducible > one-off) stay *live* at render time: brand tokens are parsed, contrast is audited, dimensions are enforced — not as lint after the fact, but as part of the act of making.
+Next-gen means the tools — LLM-native skill format, vision-model critique, brand tokens alive at render time, motion as a first-class schema field, engine adapters for Pillow / Firefly / Flux / pretext / ffmpeg / Playwright. Grounded means the principles — Cooper's Visible Language Workshop (tribute below), Tufte's data-ink discipline, Bertin's retinal variable ranking, Gestalt grouping, CRAP layout, Reichle's E-Z Reader, scanpath patterns from vision science. The new tools serve the old principles; neither replaces the other.
+
+A single skill file (`SKILL.md`) teaches a Claude Code agent to generate every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data. The constraint discipline (8:1 contrast, OLED palette, one font treatment, generated > drawn, reproducible > one-off) stays *live* at render time: brand tokens are parsed, contrast is audited, dimensions are enforced — not as lint after the fact, but as part of the act of making.
 
 ### Heir projects — swap in your favorites
 
