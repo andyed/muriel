@@ -115,8 +115,18 @@ For a multi-channel task (e.g., a blog post with an interactive demo captured as
 - [ ] **Multi-line text layout** — Auto-wrap long text with configurable max-width, line-height, and alignment.
 - [ ] **Curved/arc text** — Text along a circular path for badges, seals, and circular icon borders.
 - [ ] **Gradient text fill** — Linear/radial gradient fills inside letterforms.
-- [ ] **Screenshot compositing** — Place device-framed app screenshots into promotional images.
 - [ ] **Brand color extraction** — Auto-extract dominant colors from a background image.
+
+### Hero-shot compositor (raster)
+
+Device-framed product shots for app stores, blog heroes, social cards, case studies. The "classic marketing hero" channel that Photoshop and tools like Shottr / Xnapper own. muriel's version is brand-token-driven, reproducible, and composable.
+
+- [ ] **`muriel/tools/heroshot.py`** — inputs: source screenshot(s), target dimension (via `muriel.dimensions`), brand.toml, title text. Output: ship-ready PNG that composites: isotropic scaling (no anamorphic distortion), optional 3D CSS-skew for product-at-angle effect, title typography from the brand, device bezel / browser chrome / generic frame, brand-consistent border.
+- [ ] **Title placement rules** — above / below / overlaid, auto-chosen by aspect ratio; respects `brand.toml` typography and 8:1 contrast on the title vs. the hero's dominant luminance.
+- [ ] **Border/frame library** — iPhone 15/16 silhouettes, browser chrome (Chrome / Safari), device-agnostic thin bezel, generous whitespace frame. Contributors add SVG-source bezels to `templates/bezels/`.
+- [ ] **Skew presets** — `skew='none' | 'gentle' | 'aggressive' | 'product-3d'`. Gentle = ±3° rotation; aggressive = perspective transform with vanishing point; product-3d = Mercury-ad-style with drop shadow. All respect `motion_preference` if the hero is animated.
+- [ ] **HTML variant** — generate live HTML with CSS 3D transforms so the hero can be embedded interactively in a blog post *or* captured via `muriel.capture` as a static PNG. Same tokens drive both paths.
+- [ ] **Preset library** — `heroshot.app_store('iphone', screenshot, title, brand)`, `heroshot.blog_hero('browser', screenshot, title, brand)`, `heroshot.social_card('tight', screenshot, caption, brand)`.
 
 ### SVG
 - [ ] **Gaze ribbon primitive** — `typeset.svg.gaze_ribbon(fixations)` reusable across gaze studies.
