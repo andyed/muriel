@@ -11,10 +11,19 @@ Part of the [muriel](../SKILL.md) skill — see the top-level index for mission,
 | `desktop-control` MCP | Move mouse, click, key combos, screenshots | `mcp__desktop-control__move_mouse`, `__click`, `__key_combo` |
 | App-specific skill | Switch modes or toggle features in the app being demoed via AppleScript menus | `/<app> mode <name>` (project-specific) |
 | AppleScript (direct) | Any macOS UI automation — menu clicks, window focus, keystrokes | `osascript -e '...'` |
-| macOS screen recording | Capture video | User starts with `Cmd+Shift+5`, agent controls the app |
+| [**Recordly**](https://github.com/webadderall/Recordly) | Capture + auto-zoom + cursor polish + motion blur + styled frames (the "product-demo video" app) | AGPL-3.0 desktop app; record → export MP4 → hand off to muriel's post-processing |
+| macOS built-in screen recording | Zero-setup capture, no polish | `Cmd+Shift+5` — use when Recordly is overkill or unavailable |
 | ffmpeg (homebrew-ffmpeg tap) | Trim, burn captions, add music, encode | Hard-burn via `subtitles` filter (libass) |
 
 ## Workflow
+
+### With Recordly (recommended for polished product/walkthrough videos)
+
+1. **Record in Recordly** — auto-zoom follows the cursor, cursor polish + motion blur applied in-editor, webcam overlay optional, styled frame around the final composition. Export MP4.
+2. **(Optional) Burn captions via muriel** — if you have a tooltip manifest with precise timecodes, run `burn-tooltips.sh manifest.json recordly-out.mp4 final.mp4` to add hard-burned captions.
+3. **(Optional) Further ffmpeg passes** — trim, concat, encode for YouTube using the recipes below.
+
+### Without Recordly (zero-setup path)
 
 1. **Write a tooltip manifest** — JSON array of `{start, end, text}` objects
 2. **Script the choreography** — `desktop-control` moves the mouse on timed coordinates; AppleScript switches modes
