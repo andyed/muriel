@@ -1,8 +1,8 @@
 # Heatmaps — Smooth Gaussian Density Overlays
 
-Tobii-style topographic heatmaps from fixation data. Used for the attentional-foraging explainer images and most aggregate gaze visualizations.
+Tobii-style topographic heatmaps from fixation data. The aggregate counterpart to scanpath visualization — same data, averaged across trials.
 
-Part of the [Render](../render.md) skill — see the top-level index for mission, universal rules, and channel map. Related: [channels/gaze.md](gaze.md) for individual-trial scanpaths.
+Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map. Related: [channels/gaze.md](gaze.md) for individual-trial scanpaths.
 
 ## `typeset.render_heatmap()`
 
@@ -42,3 +42,10 @@ Fixations are binned into a coarse grid, then large gaussian blobs are stamped a
 ## Generation script
 
 `attentional-foraging/scripts/generate_explainer_heatmaps.py` — loads all 2,776 AdSERP trials, filters by phase/behavior, generates `f-decomposition.png` and `f-dissection.png` for the explainer page. Good starting point for any new aggregate heatmap work.
+
+## Anti-patterns
+
+- **Don't use `jet` or `rainbow` colormaps.** They introduce false discontinuities and fail colorblind tests. Use perceptually-uniform maps (`viridis`, `magma`, `inferno`).
+- **Don't show a heatmap without its colorbar** — the colorbar carries units, N, and the range.
+- **Don't aggregate across trials without stating `N`** in the caption. Heatmap density without N is ambiguous.
+- **Don't apply a Gaussian kernel without recording the σ / bandwidth** in the figure metadata or caption.

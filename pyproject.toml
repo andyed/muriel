@@ -3,14 +3,14 @@ requires      = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name            = "render-assets"
-version         = "0.1.0"
-description     = "Importable Python assets for the Render skill — matplotlibrc blocks and statistical reporting helpers."
-readme          = "render_assets/README.md"
+name            = "muriel"
+version         = "0.5.0"
+description     = "A multi-constraint solver for visual production — brand tokens, WCAG audit, APA-style reporting, dimensions, matplotlibrc blocks, raster/SVG/web/gaze helpers across ten channels."
+readme          = "README.md"
 requires-python = ">=3.9"
 license         = { text = "MIT" }
 authors         = [{ name = "Andy Edmonds" }]
-keywords        = ["matplotlib", "rcparams", "statistics", "apa", "reporting"]
+keywords        = ["matplotlib", "rcparams", "statistics", "apa", "reporting", "wcag", "visualization"]
 classifiers = [
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Visualization",
@@ -23,4 +23,4 @@ classifiers = [
 dependencies = []
 
 [tool.setuptools]
-packages = ["render_assets"]
+packages = ["muriel", "render_assets"]

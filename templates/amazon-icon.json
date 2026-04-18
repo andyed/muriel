@@ -1,0 +1,11 @@
+{
+  "name": "Amazon App Icon",
+  "width": 1280,
+  "height": 720,
+  "format": "PNG",
+  "transparency": false,
+  "text_area": {"x": 0.1, "y": 0.3, "w": 0.8, "h": 0.4},
+  "default_font": {"family": "helvetica", "weight": "bold", "size_ratio": 0.15},
+  "effects": ["glow"],
+  "bg_style": "vignette"
+}

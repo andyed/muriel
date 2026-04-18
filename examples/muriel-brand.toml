@@ -1,0 +1,96 @@
+# muriel brand style guide — the muriel skill's own palette as a StyleGuide.
+#
+# Mirrors the constants baked into muriel/matplotlibrc_dark.py and
+# the universal rules at the top of muriel.md. Useful as the default
+# style guide for any muriel operation that isn't targeting a specific
+# project's brand.
+#
+# Unlike example-brand.toml, this guide has no ownership lock — muriel
+# IS the owner, and operations that generate artifacts in this palette
+# are expected.
+
+[meta]
+name             = "muriel"
+slug             = "muriel"
+version          = "0.4.0"
+owner_repo       = "muriel"
+owner_path       = "~/Documents/dev/muriel"
+canonical_source = "muriel/matplotlibrc_dark.py"
+ownership_rule   = "muriel's own palette — no external owner, free to use for any output"
+
+[colors]
+# ── Neutral ─────────────────────────────────────────────────────────
+background       = "#0a0a0f"   # OLED near-black
+background_2     = "#0f1117"   # legend / inner-panel slightly brighter
+background_3     = "#1a1a24"
+foreground       = "#e6e4d2"   # cream — 15.42:1 on bg
+foreground_muted = "#b0b0c4"   # muted body — 9.27:1 on bg
+
+# ── Brand accent ────────────────────────────────────────────────────
+accent           = "#50b4c8"   # same as marginalia --mg-note, 8.19:1 — text-safe
+accent_ink       = "#7dd4e4"   # brighter ink variant — 11.67:1 on bg
+
+# ── Semantic ────────────────────────────────────────────────────────
+note      = "#50b4c8"   # 8.19:1
+tip       = "#66bb6a"   # 8.35:1 (bumped from Material green 500)
+warning   = "#e6a817"   # 9.38:1
+important = "#ff8282"   # 8.25:1 (bumped from e05252)
+
+# No dedicated decorative accent — muriel's flat palette uses foreground_muted
+# for borders/rules. If a muriel-derived brand needs a decorative-only
+# accent (amber borders, glow), add colors.accent_decorative there.
+
+[colors.aliases]
+# Text roles (subject to 8:1 audit)
+text               = "foreground"
+text-muted         = "foreground_muted"
+text-accent        = "accent_ink"
+text-inverted      = "background"
+
+# Surface roles
+surface-primary    = "background"
+surface-secondary  = "background_2"
+surface-tertiary   = "background_3"
+
+# Decorative roles (exempt from 8:1; must clear ≥55/255)
+decorative         = "accent"
+border-subtle      = "background_3"
+rule               = "background_3"
+
+# Semantic callouts (text-safe)
+semantic-note      = "note"
+semantic-tip       = "tip"
+semantic-warning   = "warning"
+semantic-important = "important"
+
+[motion]
+# muriel's own motion tokens — conservative defaults, respects reduced-motion.
+duration_instant  = 0
+duration_fast     = 120
+duration_normal   = 240
+duration_slow     = 480
+duration_reveal   = 800
+
+easing_default    = "cubic-bezier(0.2, 0.0, 0.2, 1.0)"
+easing_emphasis   = "cubic-bezier(0.4, 0.0, 0.2, 1.0)"
+easing_snappy     = "cubic-bezier(0.6, 0.0, 0.2, 1.0)"
+easing_linear     = "linear"
+
+motion_preference = "respect-prefers-reduced-motion"
+
+[typography]
+display_family              = "Helvetica, 'Arial Black', sans-serif"
+display_weight              = 700
+display_line_height         = 1.2
+body_family                 = "Helvetica, Arial, sans-serif"
+mono_family                 = "'SF Mono', Menlo, Monaco, 'DejaVu Sans Mono', monospace"
+
+[dependencies]
+# No external fonts — all system stacks.
+
+[rules]
+# muriel's own palette has no restrictions. These booleans are defaults
+# but kept explicit so consumers know they can freely generate.
+never_modify_sources                     = false
+never_rebuild_image_generation_elsewhere = false
+brand_owner                              = "muriel"

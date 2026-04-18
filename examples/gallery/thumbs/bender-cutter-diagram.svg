@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220" width="900" height="220">
+  <style>
+    text { font-family: system-ui, -apple-system, sans-serif; }
+    .label { font-size: 12px; fill: #50b4c8; font-weight: 600; text-anchor: middle; }
+    .sublabel { font-size: 9px; fill: #b0b0c0; text-anchor: middle; }
+    .arrow { stroke: #808090; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead); }
+    .letter { font-family: Georgia, serif; font-size: 48px; font-weight: bold; }
+    .cell-grid { stroke: rgba(80,180,200,0.45); stroke-width: 0.75; fill: none; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#808090"/>
+    </marker>
+  </defs>
+
+  <!-- 1. Original -->
+  <g transform="translate(80,100)">
+    <text class="letter" fill="#e0e0ec" text-anchor="middle" dy="16">Ae</text>
+    <text class="label" y="60">Original</text>
+  </g>
+
+  <line x1="140" y1="100" x2="195" y2="100" class="arrow"/>
+
+  <!-- 2. Bender only — baseline held, just subtle position shift -->
+  <g transform="translate(260,100)">
+    <!-- Warped letters — slight nudge but baseline intact -->
+    <text class="letter" fill="#e0e0ec" text-anchor="middle" dy="16">
+      <tspan dx="-1" dy="1">A</tspan><tspan dx="3" dy="-2">e</tspan>
+    </text>
+    <!-- Wavy distortion lines -->
+    <path d="M-40,45 Q-30,40 -20,45 Q-10,50 0,45 Q10,40 20,45 Q30,50 40,45"
+          stroke="rgba(80,180,200,0.4)" stroke-width="1" fill="none"/>
+    <text class="label" y="60">Bender</text>
+    <text class="sublabel" y="73">smooth warp</text>
+  </g>
+
+  <line x1="325" y1="100" x2="400" y2="105" class="arrow"/>
+
+  <!-- 3. Cutter only — scaled up, this is a money shot -->
+  <g transform="translate(480,105)">
+    <!-- Cell grid overlay (larger: 28px cells) -->
+    <rect x="-56" y="-42" width="28" height="28" class="cell-grid"/>
+    <rect x="-28" y="-42" width="28" height="28" class="cell-grid"/>
+    <rect x="0" y="-42" width="28" height="28" class="cell-grid"/>
+    <rect x="28" y="-42" width="28" height="28" class="cell-grid"/>
+    <rect x="-56" y="-14" width="28" height="28" class="cell-grid"/>
+    <rect x="-28" y="-14" width="28" height="28" class="cell-grid"/>
+    <rect x="0" y="-14" width="28" height="28" class="cell-grid"/>
+    <rect x="28" y="-14" width="28" height="28" class="cell-grid"/>
+    <rect x="-56" y="14" width="28" height="28" class="cell-grid"/>
+    <rect x="-28" y="14" width="28" height="28" class="cell-grid"/>
+    <rect x="0" y="14" width="28" height="28" class="cell-grid"/>
+    <rect x="28" y="14" width="28" height="28" class="cell-grid"/>
+    <!-- Displaced letter fragments — sub-letter strokes only, no intact letters -->
+    <text font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#e0e0ec">
+      <tspan x="-38" y="-18">/</tspan>
+      <tspan x="10" y="-24">\</tspan>
+      <tspan x="-42" y="8">|</tspan>
+      <tspan x="-6" y="14">(</tspan>
+      <tspan x="-30" y="34">—</tspan>
+    </text>
+    <text class="label" y="68">Cutter</text>
+    <text class="sublabel" y="81">cell scramble</text>
+  </g>
+
+  <line x1="545" y1="105" x2="620" y2="105" class="arrow"/>
+
+  <!-- 4. Combined — scaled up, the other money shot -->
+  <g transform="translate(710,105)">
+    <!-- Combined result — same strokes from "Ae", warped + displaced, unrecognizable -->
+    <text font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#e0e0ec">
+      <tspan x="-40" y="-24">\</tspan>
+      <tspan x="14" y="-14">/</tspan>
+      <tspan x="-30" y="6">—</tspan>
+      <tspan x="6" y="14">|</tspan>
+      <tspan x="-18" y="36">\</tspan>
+    </text>
+    <!-- Subtle warp lines -->
+    <path d="M-50,48 Q-30,42 -5,50 Q15,56 35,48 Q50,42 55,48"
+          stroke="rgba(80,180,200,0.35)" stroke-width="1" fill="none"/>
+    <text class="label" y="68">Combined</text>
+    <text class="sublabel" y="81">letter identity destroyed</text>
+  </g>
+
+  <!-- Stage labels at top -->
+  <text x="80" y="30" class="sublabel">input</text>
+  <text x="260" y="30" class="sublabel">position shifts</text>
+  <text x="480" y="30" class="sublabel">cells displaced</text>
+  <text x="710" y="30" class="sublabel">identity lost</text>
+</svg>

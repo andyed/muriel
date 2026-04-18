@@ -2,7 +2,7 @@
 
 Photoshop can't generate vectors from data. SVG can — and the output diffs in git, scales infinitely, embeds in HTML and LaTeX, and inherits CSS theming from marginalia (`--mg-*` carries through to `<svg>` children).
 
-Part of the [Render](../render.md) skill — see the top-level index for mission, universal rules, and channel map.
+Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map.
 
 ## When to use
 - Paper figures (round-trip with LaTeX)
@@ -41,9 +41,16 @@ Part of the [Render](../render.md) skill — see the top-level index for mission
 - **Gaze ribbons** — line through fixation points, stroke-width = duration in ms / 10
 - **F-pattern overlay** — colored bands over a SERP screenshot showing survey + evaluate phases (per the F-pattern decomposition work)
 - **OSEC phase diagram** — multi-band horizontal timeline from a gaze sequence
-- **Wordmark generation** — Psychodeli's 10-ring blue gradient border at any size from one source (but defer to psychodeli-brand-guide for actual asset generation)
+- **Wordmark generation** — a branded wordmark border at any size from one source (but defer to acme-brand-guide for actual asset generation)
 
 ## Conversion
 - **SVG → PNG:** `cairosvg input.svg -o out.png -W 1280 -H 720` or `rsvg-convert -w 1280 input.svg > out.png`
 - **SVG → PDF:** `cairosvg input.svg -o out.pdf` (for paper inclusion)
 - **HTML → SVG snapshot:** Playwright `page.locator('svg').screenshot()` for live-rendered figures — see [channels/web.md](web.md) for the static capture pipeline.
+
+## Anti-patterns
+
+- **Don't hardcode `fill="#hex"` on text.** Use CSS classes + `<style>` so a theme switch re-paints the whole diagram.
+- **Don't ship SMIL animations without a CSS fallback.** Browser support has diverged since Firefox 2015.
+- **Don't rely on `<tspan>` alone for multi-line text.** Measure bbox, fall back to multiple `<text>` elements if layout matters.
+- **Don't nest `<g>` beyond two levels without a reason you can state in one sentence.**

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Muriel — animated colophon v2 (M-default, colophon tribute)</title>
+<style>
+  :root {
+    --paper: #E8E2D0;
+    --mark:  #750014;
+    --ink:   #121212;
+    --accent: #750014;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); height: 100%; }
+  body {
+    display: grid; place-items: center;
+    font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+  }
+  .stage { width: 1200px; max-width: 100vw; aspect-ratio: 1200/630; }
+  svg { width: 100%; height: 100%; display: block; }
+  .bar { fill: var(--mark); }
+  .rule { stroke: var(--mark); stroke-width: 2; }
+  .wordmark { font-size: 76px; font-weight: 700; fill: var(--ink); letter-spacing: -0.01em; }
+  .sub1 { font-size: 22px; fill: var(--ink); }
+  .sub2 { font-size: 17px; fill: #5C5852; }
+  .credit { font-size: 11px; fill: var(--accent); fill-opacity: 0.88; }
+  .controls { position: fixed; bottom: 14px; right: 14px; display: flex; gap: 8px; font-size: 11px; }
+  button {
+    background: transparent; border: 1px solid var(--ink); color: var(--ink);
+    padding: 4px 10px; border-radius: 2px; cursor: pointer; font: inherit;
+  }
+  button:hover { background: var(--ink); color: var(--paper); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+    <rect class="bar" id="b0"/>
+    <rect class="bar" id="b1"/>
+    <rect class="bar" id="b2"/>
+    <rect class="bar" id="b3"/>
+    <rect class="bar" id="b4"/>
+    <rect class="bar" id="b5"/>
+
+    <line class="rule" x1="400" y1="410" x2="800" y2="410"/>
+    <text class="wordmark" x="600" y="490" text-anchor="middle">muriel</text>
+    <text class="sub1"     x="600" y="532" text-anchor="middle">scriptable visual production toolkit</text>
+    <text class="sub2"     x="600" y="558" text-anchor="middle">for researcher-designer-engineers</text>
+    <text class="credit"   x="40"  y="612">after muriel cooper · mit press colophon, 1962</text>
+  </svg>
+</div>
+
+<div class="controls">
+  <button id="pauseBtn">pause</button>
+  <button id="speedBtn">speed · 1×</button>
+</div>
+
+<script>
+(() => {
+  // ── Geometry ───────────────────────────────────────────────────────
+  const CX = 600, CY_TOP = 90;
+  const MARK_H = 280;
+  const BAR_GAP = 10;
+  const WIDTHS = [30, 20, 20, 8, 16, 10];
+  const SCALE  = 4.4;
+  const WIDTHS_PX = WIDTHS.map(w => Math.round(w * SCALE));
+  const TOTAL_W = WIDTHS_PX.reduce((a,b) => a+b, 0) + BAR_GAP * (WIDTHS_PX.length - 1);
+  const START_X = CX - TOTAL_W / 2;
+  const BOTTOM_Y = CY_TOP + MARK_H;
+
+  const xs = [];
+  let x = START_X;
+  for (const w of WIDTHS_PX) { xs.push(x); x += w + BAR_GAP; }
+
+  const bars = [0,1,2,3,4,5].map(i => document.getElementById('b' + i));
+  bars.forEach((el, i) => {
+    el.setAttribute('x', xs[i]);
+    el.setAttribute('width', WIDTHS_PX[i]);
+  });
+
+  // ── Default = M silhouette. Animation pays tribute to the colophon:
+  // inner bars briefly rise to full height (flat colophon), then return.
+  // The M is the identity; Cooper's colophon is the homage the mark
+  // periodically performs.
+  //
+  // Phase map over an 8.0s cycle:
+  //   0.00–0.70  M at rest (inner bars dipped into V)   ← most of the time
+  //   0.70–0.82  rising: inner bars lift toward flat colophon
+  //   0.82–0.88  hold at flat colophon (tribute beat)
+  //   0.88–1.00  falling: inner bars descend back to M
+  const CYCLE_SEC = 18.0;
+  const M_V      = [0.62, 0.24, 0.24, 0.62];
+  const COLOPHON = [1.00, 1.00, 1.00, 1.00];
+  // Paired-symmetric breath: bars 1 & 4 share one phase (pair A), bars
+  // 2 & 3 share another (pair B). Left-right mirror is enforced so the
+  // M silhouette never collapses; the two pairs drift relative to each
+  // other on different phases, producing visual complexity.
+  const PAIR_A_PHASE = 0.0,  PAIR_A_PERIOD = 9.2;
+  const PAIR_B_PHASE = 3.8,  PAIR_B_PERIOD = 7.6;
+  const BREATH_AMP   = 0.12;
+
+  function smoothstep(t) { return t * t * (3 - 2 * t); }
+  function clamp01(x) { return Math.max(0, Math.min(1, x)); }
+
+  function tributeAt(tSec) {
+    const u = ((tSec % CYCLE_SEC) + CYCLE_SEC) % CYCLE_SEC / CYCLE_SEC;
+    if (u < 0.70)  return 0;
+    if (u < 0.82)  return smoothstep(clamp01((u - 0.70) / 0.12));
+    if (u < 0.88)  return 1;
+    if (u < 1.00)  return 1 - smoothstep(clamp01((u - 0.88) / 0.12));
+    return 0;
+  }
+
+  function pairBreath(tSec, phaseOff, period, base) {
+    const phase = ((tSec + phaseOff) / period) * Math.PI * 2;
+    const breath = Math.sin(phase) * BREATH_AMP;
+    return Math.max(0.05, Math.min(1.0, base + breath));
+  }
+
+  function heightsAt(tSec) {
+    const t = tributeAt(tSec);
+    // Pair A: bars 1 & 4 (around M_V[0] = 0.62)
+    const a = pairBreath(tSec, PAIR_A_PHASE, PAIR_A_PERIOD, M_V[0]);
+    // Pair B: bars 2 & 3 (around M_V[1] = 0.24)
+    const b = pairBreath(tSec, PAIR_B_PHASE, PAIR_B_PERIOD, M_V[1]);
+    const innerFracs = [a, b, b, a];
+    const inner = innerFracs.map(f => f + (1.00 - f) * t);   // blend toward colophon
+    return [1.00, inner[0], inner[1], inner[2], inner[3], 1.00];
+  }
+
+  // ── Per-bar float (jiggy): inner bars hover, out of phase with each
+  // other; outer bars stay pinned to the baseline. Amplitudes small
+  // enough to not fight the M silhouette — maybe 12–22px.
+  const FLOAT_PHASES    = [0, 1.8, 3.6, 5.4];       // inner bars 1..4
+  const FLOAT_PERIODS   = [3.4, 3.8, 3.2, 3.6];     // seconds
+  const FLOAT_AMPLITUDES = [16, 22, 20, 14];         // px
+
+  function innerFloatY(innerIdx, tSec) {
+    const phase = FLOAT_PHASES[innerIdx]
+                + (tSec / FLOAT_PERIODS[innerIdx]) * Math.PI * 2;
+    return Math.sin(phase) * FLOAT_AMPLITUDES[innerIdx];
+  }
+
+  const FLOAT_FRAC = [0.45, 0.60, 0.60, 0.45];
+  // Reference heights (M silhouette) — bars at this height render at base
+  // widths. As height drifts below, width grows; above, width shrinks.
+  const BASE_H_FRAC = [1.00, 0.62, 0.24, 0.24, 0.62, 1.00];
+  const MIN_W_MULT = 0.88;
+  const MAX_W_MULT = 1.24;
+
+  function widthMultFor(i, heightFrac) {
+    if (i === 0 || i === 5) return 1.0;
+    const base = BASE_H_FRAC[i];
+    const mult = Math.sqrt(base / Math.max(0.05, heightFrac));
+    return Math.max(MIN_W_MULT, Math.min(MAX_W_MULT, mult));
+  }
+
+  const INNER_BASE_TOTAL = WIDTHS_PX[1] + WIDTHS_PX[2] + WIDTHS_PX[3] + WIDTHS_PX[4];
+
+  function apply(hs, tSec) {
+    // Constraint: inner bars redistribute width but their SUM stays fixed.
+    const desired = hs.map((hFrac, i) => WIDTHS_PX[i] * widthMultFor(i, hFrac));
+    const innerDesiredSum = desired[1] + desired[2] + desired[3] + desired[4];
+    const innerScale = INNER_BASE_TOTAL / Math.max(0.01, innerDesiredSum);
+    const widths = desired.map((w, i) =>
+      (i === 0 || i === 5) ? WIDTHS_PX[i] : Math.round(w * innerScale));
+    const postRound = widths[1] + widths[2] + widths[3] + widths[4];
+    widths[2] += INNER_BASE_TOTAL - postRound;
+
+    const totalW = widths.reduce((a,b) => a+b, 0) + BAR_GAP * (widths.length - 1);
+    let x = CX - totalW / 2;
+
+    for (let i = 0; i < bars.length; i++) {
+      const h = Math.round(hs[i] * MARK_H);
+      let lift = 0, yOff = 0;
+      if (i >= 1 && i <= 4) {
+        const drop = MARK_H - h;
+        lift = Math.round(drop * FLOAT_FRAC[i - 1]);
+        yOff = innerFloatY(i - 1, tSec);
+      }
+      const y = BOTTOM_Y - h - lift + yOff;
+      bars[i].setAttribute('x', x);
+      bars[i].setAttribute('y', y);
+      bars[i].setAttribute('width', widths[i]);
+      bars[i].setAttribute('height', h);
+      x += widths[i] + BAR_GAP;
+    }
+  }
+
+  // ── Loop ───────────────────────────────────────────────────────────
+  let startTime = null;
+  let paused = false;
+  let pausedAt = 0;
+  let speed = 1;
+
+  function frame(now) {
+    if (startTime == null) startTime = now;
+    const tSec = paused ? pausedAt : (now - startTime) / 1000 * speed;
+    apply(heightsAt(tSec));
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // Controls
+  const pauseBtn = document.getElementById('pauseBtn');
+  pauseBtn.addEventListener('click', () => {
+    if (!paused) {
+      pausedAt = (performance.now() - startTime) / 1000 * speed;
+      paused = true; pauseBtn.textContent = 'play';
+    } else {
+      startTime = performance.now() - (pausedAt / speed) * 1000;
+      paused = false; pauseBtn.textContent = 'pause';
+    }
+  });
+  const speedBtn = document.getElementById('speedBtn');
+  const speeds = [1, 0.5, 2];
+  let speedIdx = 0;
+  speedBtn.addEventListener('click', () => {
+    const tSec = paused ? pausedAt : (performance.now() - startTime) / 1000 * speed;
+    speedIdx = (speedIdx + 1) % speeds.length;
+    speed = speeds[speedIdx];
+    startTime = performance.now() - (tSec / speed) * 1000;
+    if (paused) pausedAt = tSec;
+    speedBtn.textContent = `speed · ${speed}×`;
+  });
+})();
+</script>
+</body>
+</html>

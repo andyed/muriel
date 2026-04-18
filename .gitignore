@@ -6,3 +6,18 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+
+# Build + venv
+build/
+dist/
+.venv/
+venv/
+.env
+
+# Editor + session state
+.idea/
+.vscode/
+.claude/
+
+# Drafts (private)
+docs/drafts/

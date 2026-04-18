@@ -2,7 +2,7 @@
 
 Cross-channel reference sheet for output sizing. When the task is "make me a thing for X," this is where you look up how big "a thing" should be.
 
-Part of the [Render](../render.md) skill. Channels that need these values:
+Part of the [muriel](../muriel.md) skill. Channels that need these values:
 - [`raster.md`](raster.md) — store assets, social cards, paper figures as raster
 - [`interactive.md`](interactive.md) — canvas sizes, viewport tiers for capture
 - [`web.md`](web.md) — Playwright window sizes, `@page` rules
@@ -210,10 +210,10 @@ Pattern: `{platform}-{role}-{widthXheight}.{ext}` for raster; `{platform}-{role}
 
 ## Code counterpart
 
-All values in this file are also available as importable Python constants in [`render_assets/dimensions.py`](../render_assets/dimensions.py). Mirror of the markdown structure, standard-library-only, with three small classes (`Size`, `Device`, `PaperSize`), a dotted-name `REGISTRY` for programmatic lookup, and a `figsize_for(venue, columns, aspect)` helper so notebooks don't hardcode inch values.
+All values in this file are also available as importable Python constants in [`muriel/dimensions.py`](../muriel/dimensions.py). Mirror of the markdown structure, standard-library-only, with three small classes (`Size`, `Device`, `PaperSize`), a dotted-name `REGISTRY` for programmatic lookup, and a `figsize_for(venue, columns, aspect)` helper so notebooks don't hardcode inch values.
 
 ```python
-from render_assets.dimensions import (
+from muriel.dimensions import (
     TWITTER_INSTREAM, OG_CARD, VIDEO_1080P, A4,
     figsize_for, lookup, device,
 )
@@ -229,11 +229,18 @@ lookup('twitter.instream')            # → Size(1600, 900)
 Run the module directly to print the full registry + device list + paper table + figsize examples:
 
 ```bash
-python -m render_assets.dimensions
+python -m muriel.dimensions
 ```
 
 ## TODO
 
-- [x] **`render_assets/dimensions.py`** — Shipped. `Size` / `Device` / `PaperSize` NamedTuples, 34 registry entries, 17 devices, 5 paper sizes, `figsize_for()` for 7 academic venues, CLI self-test.
-- [x] **Viewport-sweep capture script** — Shipped as `render_assets/capture.py`. Takes a URL and a tier list (default `['mobile', 'tablet', 'laptop', 'desktop']`) and produces Playwright screenshots named by this file's convention. Pulls tier data directly from `dimensions.NAMED_TIERS`. Playwright is an optional dependency; module imports cleanly without it and only requires it at capture time.
-- [x] **CHI / IEEE figsize helper** — Shipped as `figsize_for(venue, columns, aspect)` in `render_assets/dimensions.py`. Supports chi, acm, iui, ieee, pnas, nature, lncs.
+- [x] **`muriel/dimensions.py`** — Shipped. `Size` / `Device` / `PaperSize` NamedTuples, 34 registry entries, 17 devices, 5 paper sizes, `figsize_for()` for 7 academic venues, CLI self-test.
+- [x] **Viewport-sweep capture script** — Shipped as `muriel/capture.py`. Takes a URL and a tier list (default `['mobile', 'tablet', 'laptop', 'desktop']`) and produces Playwright screenshots named by this file's convention. Pulls tier data directly from `dimensions.NAMED_TIERS`. Playwright is an optional dependency; module imports cleanly without it and only requires it at capture time.
+- [x] **CHI / IEEE figsize helper** — Shipped as `figsize_for(venue, columns, aspect)` in `muriel/dimensions.py`. Supports chi, acm, iui, ieee, pnas, nature, lncs.
+
+## Anti-patterns
+
+- **Don't scale a source image up and call it retina.** Generate at target dimensions; upscaling pixelates.
+- **Don't trust platforms' "recommended sizes"** — they drift. Use muriel's dotted-name registry (`muriel.dimensions.TWITTER_INSTREAM` etc.) which pins verified values.
+- **Don't forget `device_scale_factor=2`** for Playwright retina captures.
+- **Don't set print output below 300 DPI.** 72 DPI is screen-only; print wants 300+ for text, 600+ for line art.

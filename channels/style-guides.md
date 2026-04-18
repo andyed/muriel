@@ -1,14 +1,14 @@
 # Style guides — brand tokens as importable schema
 
-A style guide is a brand's design tokens — colors, typography, assets, ownership rules — serialized so Render can import them and use them in any channel without reinventing them and without violating "this brand is owned by X repo, don't regenerate here" rules.
+A style guide is a brand's design tokens — colors, typography, assets, ownership rules — serialized so muriel can import them and use them in any channel without reinventing them and without violating "this brand is owned by X repo, don't regenerate here" rules.
 
-Part of the [Render](../render.md) skill — see the top-level index for mission, universal rules, and channel map. Related: [`raster.md`](raster.md) for asset generation, [`web.md`](web.md) for marginalia CSS tokens, [`science.md`](science.md) for matplotlib rcparams.
+Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map. Related: [`raster.md`](raster.md) for asset generation, [`web.md`](web.md) for marginalia CSS tokens, [`science.md`](science.md) for matplotlib rcparams.
 
 ## Why this exists
 
-Every Andy project that ships visuals has a design voice. Scrutinizer's vision-science overlays, Psychodeli+'s 10-ring copperplate wordmark, marginalia's dark OLED palette, iBlipper's kinetic typography, the F-pattern explainer's warm editorial, render's own cream-on-near-black. Until now, each of those lived in its own ad-hoc form — CSS custom properties here, Python constants there, a CLAUDE.md rule somewhere else — and Render had no principled way to import one.
+Every project that ships visuals has a design voice — OLED dashboard, copperplate wordmark, editorial marginalia, kinetic typography, warm light-mode explainer, cream-on-near-black. Each of those typically lives in its own ad-hoc form — CSS custom properties here, Python constants there, a CLAUDE.md rule somewhere else — and without a schema, muriel has no principled way to import one.
 
-A style guide schema fixes that: one file per brand, one loader, one dataclass-tree in memory. When `/render` gets a task in the context of a brand, it loads the brand.toml, inherits the tokens, and respects the rules.
+A style guide schema fixes that: one file per brand, one loader, one dataclass-tree in memory. When `/muriel` gets a task in the context of a brand, it loads the brand.toml, inherits the tokens, and respects the rules.
 
 ## Schema: `brand.toml`
 
@@ -16,13 +16,13 @@ A brand.toml has six top-level tables. Only `[meta]` (with `name`) and `[colors]
 
 ```toml
 [meta]
-name             = "Psychodeli+"           # required
-slug             = "psychodeli-plus"
+name             = "Acme Research"           # required
+slug             = "acme-research"
 version          = "1.0.0"
-owner_repo       = "psychodeli-brand-guide"
-owner_path       = "~/Documents/dev/psychodeli-brand-guide"
+owner_repo       = "acme-brand-guide"
+owner_path       = "<brand-guide-repo>"
 canonical_source = "templates/shared-styles.css"
-ownership_rule   = "psychodeli-brand-guide owns all Psychodeli image generation. Never rebuild elsewhere."
+ownership_rule   = "acme-brand-guide owns all branded image generation. Never rebuild elsewhere."
 
 [colors]
 background       = "#0a0a0f"              # required
@@ -69,7 +69,7 @@ fractal_fills        = ["sources/bg-wildflowers.jpg", "sources/bg-forcefield.jpg
 google_fonts = ["Nunito:wght@900"]
 
 [export]
-# Commands the owner repo provides; Render invokes these rather than
+# Commands the owner repo provides; muriel invokes these rather than
 # re-implementing asset generation.
 cmd_all      = "npm run export"
 cmd_wordmark = "npm run export:wordmark"
@@ -78,7 +78,7 @@ cmd_wordmark = "npm run export:wordmark"
 # Reserved booleans are enforced by StyleGuide.rules.check(operation).
 never_modify_sources                     = true
 never_rebuild_image_generation_elsewhere = true
-brand_owner                              = "psychodeli-brand-guide"
+brand_owner                              = "acme-brand-guide"
 # Non-reserved extras pass through into rules.custom{}.
 one_font_treatment_per_app               = true
 ```
@@ -86,10 +86,10 @@ one_font_treatment_per_app               = true
 ## Loading a style guide
 
 ```python
-from render_assets.styleguide import load_styleguide
+from muriel.styleguide import load_styleguide
 
-sg = load_styleguide("examples/psychodeli-brand.toml")
-sg.meta.name                      # → 'Psychodeli+'
+sg = load_styleguide("examples/example-brand.toml")
+sg.meta.name                      # → 'Acme Research'
 sg.colors.background              # → '#0a0a0f'
 sg.colors.accent                  # → '#d2b06a'
 sg.colors.rings["r1"].color       # → '#91d7f8'
@@ -111,7 +111,7 @@ try:
 except RuleViolation as exc:
     # Handle the rule: e.g., invoke the owner's export pipeline instead
     print(exc)
-    # → "Operation 'regenerate-wordmark' is owned by psychodeli-brand-guide
+    # → "Operation 'regenerate-wordmark' is owned by acme-brand-guide
     #    and cannot be performed here. Use the owner's export pipeline instead."
 ```
 
@@ -134,7 +134,7 @@ import matplotlib as mpl
 mpl.rcParams.update(sg.to_matplotlibrc())
 ```
 
-Returns a dict identical in shape to [`render_assets/matplotlibrc_dark.py`](../render_assets/matplotlibrc_dark.py)'s `PARAMS`, but populated from the brand's background / foreground / accent tokens instead of Render's hardcoded defaults.
+Returns a dict identical in shape to [`muriel/matplotlibrc_dark.py`](../muriel/matplotlibrc_dark.py)'s `PARAMS`, but populated from the brand's background / foreground / accent tokens instead of muriel's hardcoded defaults.
 
 ### CSS custom properties
 
@@ -152,51 +152,51 @@ for role, ratio, passes in sg.audit_contrast(required=8.0):
     print(f"  {mark} {role:<20} {ratio:5.2f}:1")
 ```
 
-Audits every text role and named accent against `colors.background` using the WCAG 2.1 formula from [`render_assets/contrast.py`](../render_assets/contrast.py). Good pre-flight before shipping a brand.toml.
+Audits every text role and named accent against `colors.background` using the WCAG 2.1 formula from [`muriel/contrast.py`](../muriel/contrast.py). Good pre-flight before shipping a brand.toml.
 
 ## CLI
 
 ```bash
 # Describe a style guide
-python -m render_assets.styleguide examples/psychodeli-brand.toml
+python -m muriel.styleguide examples/example-brand.toml
 
 # Emit CSS custom properties
-python -m render_assets.styleguide examples/render-brand.toml --css
+python -m muriel.styleguide examples/muriel-brand.toml --css
 
 # Emit CSS with a custom prefix (e.g., to override marginalia)
-python -m render_assets.styleguide examples/render-brand.toml --css --css-prefix '--mg-'
+python -m muriel.styleguide examples/muriel-brand.toml --css --css-prefix '--mg-'
 
 # Run a contrast audit (exit 1 if any role fails)
-python -m render_assets.styleguide examples/render-brand.toml --contrast
+python -m muriel.styleguide examples/muriel-brand.toml --contrast
 ```
 
 ## Shipped examples
 
-- [`examples/psychodeli-brand.toml`](../examples/psychodeli-brand.toml) — the Psychodeli+ brand as captured from `~/Documents/dev/psychodeli-brand-guide/templates/shared-styles.css`. Read-only mirror; the canonical source is still the CSS file in the brand-guide repo. Includes the 10-ring gradient, six named section accents, Nunito 900 display typography, wordmark/monogram template paths, export pipeline commands, and the hard ownership rules.
-- [`examples/render-brand.toml`](../examples/render-brand.toml) — Render's own cream-on-near-black OLED palette as a style guide. Mirrors the constants baked into `render_assets/matplotlibrc_dark.py` and the universal rules in `render.md`. Useful as the default brand for any render operation not targeting a specific project.
+- [`examples/example-brand.toml`](../examples/example-brand.toml) — the Acme Research brand as captured from `<brand-guide-repo>/templates/shared-styles.css`. Read-only mirror; the canonical source is still the CSS file in the brand-guide repo. Includes the 10-ring gradient, six named section accents, Nunito 900 display typography, wordmark/monogram template paths, export pipeline commands, and the hard ownership rules.
+- [`examples/muriel-brand.toml`](../examples/muriel-brand.toml) — muriel's own cream-on-near-black OLED palette as a style guide. Mirrors the constants baked into `muriel/matplotlibrc_dark.py` and the universal rules in `muriel.md`. Useful as the default brand for any muriel operation not targeting a specific project.
 
 ## When to write a new brand.toml
 
 - A project has a coherent design voice documented anywhere (CSS custom properties, CLAUDE.md rules, a Figma file, a design spec)
-- Multiple Render operations in a session should inherit the same tokens (blog hero + paper figure + social card, all in brand palette)
+- Multiple muriel operations in a session should inherit the same tokens (blog hero + paper figure + social card, all in brand palette)
 - The brand has ownership rules that should be enforced (e.g., "don't regenerate assets here")
 - You want contrast/a11y auditing on the whole palette with one command
 
 ## When to skip
 
 - One-off operations without a reusable palette
-- The brand's tokens are already available in a form Render natively consumes (e.g., marginalia's `--mg-*` custom properties — those work directly without a style guide wrapper)
+- The brand's tokens are already available in a form muriel natively consumes (e.g., marginalia's `--mg-*` custom properties — those work directly without a style guide wrapper)
 - You're sketching and don't know the final palette yet
 
 ## Where a brand.toml should live
 
 Two patterns:
 
-1. **Inside the owner repo.** The brand.toml lives alongside the canonical source (CSS, CLAUDE.md, Figma exports). Render imports it by absolute path: `load_styleguide("~/Documents/dev/psychodeli-brand-guide/brand.toml")`. One source of truth, no drift risk. Preferred when you have write access to the owner repo.
+1. **Inside the owner repo.** The brand.toml lives alongside the canonical source (CSS, CLAUDE.md, Figma exports). muriel imports it by absolute path: `load_styleguide("<brand-guide-repo>/brand.toml")`. One source of truth, no drift risk. Preferred when you have write access to the owner repo.
 
-2. **Inside the render/examples/ directory.** Read-only mirror committed to the render repo. Fast to iterate, no cross-repo coordination, but requires manual sync when tokens change in the owner repo. Preferred for reference examples or brands whose owner repos you don't control.
+2. **Inside the muriel/examples/ directory.** Read-only mirror committed to the muriel repo. Fast to iterate, no cross-repo coordination, but requires manual sync when tokens change in the owner repo. Preferred for reference examples or brands whose owner repos you don't control.
 
-The shipped Psychodeli example uses pattern 2 — a mirror committed under `render/examples/` because psychodeli-brand-guide already has its own canonical source and we don't want to add files to it unilaterally.
+The shipped Psychodeli example uses pattern 2 — a mirror committed under `muriel/examples/` because acme-brand-guide already has its own canonical source and we don't want to add files to it unilaterally.
 
 ## Schema extensions
 
@@ -207,3 +207,10 @@ The schema is intentionally small. Reserved keys (listed above) have documented 
 - `sg.export` — the whole `[export]` table, free-form
 
 Use these for brand-specific conventions that don't fit the canonical schema. If multiple brands start using the same extension, promote it to a reserved key in a future loader version.
+
+## Anti-patterns
+
+- **Don't put raw hex values at the component level.** Route through `colors.aliases` so a theme switch or brand refresh propagates.
+- **Don't invent ad-hoc role names.** Use the four-layer decomposition: brand / neutral / semantic / extended.
+- **Don't ship a `brand.toml` without an `ownership_rule`** — even "free to use for any output" is a rule worth stating explicitly.
+- **Don't skip the `[motion]` block.** The three consuming channels (kinetic-typography, interactive, video) fall back to defaults silently; defaults drift between projects.

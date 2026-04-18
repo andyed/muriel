@@ -1,8 +1,8 @@
 # Raster — Pillow + typeset.py
 
-PNG/JPG compositing via Python/Pillow for store assets, icons, banners, wordmarks, screenshots, and any bitmap output. Primary tool: `~/Documents/dev/ascii-charts/typeset.py`. Falls back to inline Pillow code for custom layouts.
+PNG/JPG compositing via Python/Pillow for store assets, icons, banners, wordmarks, screenshots, and any bitmap output. Primary tool: [`muriel/typeset.py`](muriel/typeset.py). Falls back to inline Pillow code for custom layouts.
 
-Part of the [Render](../render.md) skill — see the top-level index for mission, universal rules, and channel map.
+Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map.
 
 ## Capabilities
 
@@ -63,7 +63,7 @@ For font index in .ttc files (multiple fonts in one file), use `ImageFont.truety
 
 ## Reusable Module
 
-**`~/Documents/dev/ascii-charts/typeset.py`** extracts the boilerplate below into importable functions. Prefer using it over inline scripts:
+**[`muriel/typeset.py`](muriel/typeset.py)** extracts the boilerplate below into importable functions. Prefer using it over inline scripts:
 
 ```python
 from typeset import find_font, render_asset, generate_from_manifest
@@ -158,13 +158,13 @@ print(f"Contrast ratio: {ratio:.1f}:1 {'PASS' if ratio >= 4.5 else 'FAIL — nee
 These patterns come from real bugs and fixes across projects.
 
 ### Text sizing
-- **Measure before drawing.** Use `textbbox()` to check dimensions BEFORE rendering. Text that overflows the canvas is the most common bug (iblipper `b737a07` — font cropping on "Hurry" emotion).
-- **Short words can be bigger.** 4-7 character words can fill 50%+ more space than the default size (iblipper `5f35f69` — Billboard optimization).
+- **Measure before drawing.** Use `textbbox()` to check dimensions BEFORE rendering. Text that overflows the canvas is the most common bug (kinetic typography projects commonly hit this).
+- **Short words can be bigger.** 4-7 character words can fill 50%+ more space than the default size (general billboard optimization).
 - **Long text needs auto-shrink.** Scale font size proportionally: `new_size = base_size * max_width / text_width`.
 
 ### Line height and spacing
-- **Don't crush line height.** Line height factor of 1.0 is standard — going below causes text overlap on large sizes (iblipper `3f50f62`).
-- **Multi-line: use Golden Ratio.** For text >8 characters that wraps, Golden Ratio (1.618) proportions for text-area-to-whitespace look right (iblipper `7625fc6`).
+- **Don't crush line height.** Line height factor of 1.0 is standard — going below causes text overlap on large sizes (known failure mode at large sizes).
+- **Multi-line: use Golden Ratio.** For text >8 characters that wraps, Golden Ratio (1.618) proportions for text-area-to-whitespace look right (general Golden Ratio layout).
 - **Letter-spacing uses explicit pixel offsets**, not CSS-style `letter-spacing`. Draw each character individually with `x += char_width + spacing`.
 
 ### Contrast and readability
@@ -173,9 +173,9 @@ These patterns come from real bugs and fixes across projects.
 - **Dark theme: cream/olive text on near-black.** `(230, 228, 210)` on `(10, 10, 15)` is the proven palette. Pure white `(255, 255, 255)` is too harsh for OLED.
 
 ### Brand consistency
-- **psychodeli-brand-guide owns all Psychodeli image generation.** Never rebuild that pipeline elsewhere. Nunito 900, 10-ring blue gradient border, fractal fill.
+- **acme-brand-guide owns all branded image generation.** Never rebuild that pipeline elsewhere. Nunito 900, 10-ring blue gradient border, fractal fill.
 - **One font treatment per app.** Vary background, not typography. Same weight + size across all platform sizes for one product.
-- **Optical alignment > mathematical alignment.** Nudge text 2-4px visually when adjacent to UI elements (Psychodeli `d84f2f3` — wordmark nudged 4px for optical alignment with audio button).
+- **Optical alignment > mathematical alignment.** Nudge text 2-4px visually when adjacent to UI elements (wordmarks typically need a 2-4px nudge next to adjacent UI).
 
 ## Naming Convention
 
@@ -204,3 +204,10 @@ This allows multiple platform assets to coexist in the same `assets/` directory.
 5. Show the results inline for approval
 6. Iterate on font size, positioning, effects as needed
 7. Save with platform-prefixed filenames to project's `assets/` directory
+
+## Anti-patterns
+
+- **Don't chain filter effects inline** (blur → brighten → unsharp). Composite via stacked layers; each effect is one image.
+- **Don't use drop shadows as decoration.** Shadows signal elevation; sprinkling them as flavor cheapens them.
+- **Don't generate above target size and downscale in the browser.** Emit at target; browser downscaling is non-deterministic across zoom levels.
+- **Don't embed web fonts by rasterizing text into the output.** Keep text as SVG text so it can be re-themed and searched.

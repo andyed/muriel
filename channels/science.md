@@ -2,7 +2,7 @@
 
 The research-communication channel. How to produce figures, statistical reports, and notebook prose that meet the standards of publishable research — empirically grounded, honestly framed, reproducibly generated, and readable at the sizes papers actually print.
 
-Part of the [Render](../render.md) skill — see the top-level index for mission, universal rules, and channel map. Closely related: [channels/gaze.md](gaze.md), [channels/heatmaps.md](heatmaps.md), [channels/svg.md](svg.md).
+Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map. Closely related: [channels/gaze.md](gaze.md), [channels/heatmaps.md](heatmaps.md), [channels/svg.md](svg.md).
 
 ## When to use
 
@@ -11,31 +11,31 @@ Part of the [Render](../render.md) skill — see the top-level index for mission
 - Statistical reports (effect sizes with confidence intervals, null results framed as detection limits)
 - LaTeX figure round-trip (matplotlib PDF/PGF → paper build)
 - Pre-registration boilerplate and methods sections
-- Blog posts that present empirical results (Adventures in AI Coding, research explainers)
+- Blog posts that present empirical results (research explainers)
 
 ## matplotlib rcparams — OLED-compliant defaults
 
-Matplotlib's out-of-the-box defaults are wrong for every constraint Render enforces. Light background, thin sans-serif at default sizes that fail 8:1 contrast, 6×4 figsize too small for a paper, no units on ticks. A rcParams block at the top of every notebook fixes all of it in one place.
+Matplotlib's out-of-the-box defaults are wrong for every constraint muriel enforces. Light background, thin sans-serif at default sizes that fail 8:1 contrast, 6×4 figsize too small for a paper, no units on ticks. A rcParams block at the top of every notebook fixes all of it in one place.
 
 ### Importable module (preferred)
 
-The dark and light rcparams blocks are shipped as importable Python modules in [`render_assets/`](../render_assets/). Add the render repo to your `PYTHONPATH` (or `pip install -e ~/Documents/dev/render`), then:
+The dark and light rcparams blocks are shipped as importable Python modules in [`muriel/`](../muriel/). Add the muriel repo to your `PYTHONPATH` (or `pip install -e ~/Documents/dev/muriel`), then:
 
 ```python
 # Auto-apply on import — pick one palette per document
-from render_assets import matplotlibrc_dark    # OLED cream on near-black
+from muriel import matplotlibrc_dark    # OLED cream on near-black
 # or
-from render_assets import matplotlibrc_light   # warm editorial (F explainer)
+from muriel import matplotlibrc_light   # warm editorial (F explainer)
 
 # Scoped to a single figure (no global side effect)
 import matplotlib.pyplot as plt
-from render_assets.matplotlibrc_dark import PARAMS
+from muriel.matplotlibrc_dark import PARAMS
 with plt.rc_context(PARAMS):
     fig, ax = plt.subplots()
     # ...
 ```
 
-Prefer the import path so updates to the rcparams stay in one place and propagate to every notebook on the next run. The rest of this section documents the raw blocks as they live in `render_assets/matplotlibrc_dark.py` and `render_assets/matplotlibrc_light.py`.
+Prefer the import path so updates to the rcparams stay in one place and propagate to every notebook on the next run. The rest of this section documents the raw blocks as they live in `muriel/matplotlibrc_dark.py` and `muriel/matplotlibrc_light.py`.
 
 ### Drop-in dark block (OLED palette)
 
@@ -63,7 +63,7 @@ mpl.rcParams.update({
     'figure.titlesize':       18,
     'font.weight':           'regular',
 
-    # OLED palette — matches Render's universal rules
+    # OLED palette — matches muriel's universal rules
     'figure.facecolor':      '#0a0a0f',
     'axes.facecolor':        '#0a0a0f',
     'savefig.facecolor':     '#0a0a0f',
@@ -121,7 +121,7 @@ mpl.rcParams.update({
 })
 ```
 
-Keep every other setting. The palette flip is a two-dozen-line override, not a reset. Save both blocks as `~/Documents/dev/render/assets/matplotlibrc_dark.py` / `_light.py` and `import` whichever one fits the target medium.
+Keep every other setting. The palette flip is a two-dozen-line override, not a reset. Save both blocks as `~/Documents/dev/muriel/assets/matplotlibrc_dark.py` / `_light.py` and `import` whichever one fits the target medium.
 
 ## Plot readability rules
 
@@ -159,10 +159,10 @@ How to present numerical findings so they are precise, honest, and not over-clai
 
 ### Importable helpers (preferred)
 
-Every template in this section is shipped as a function in [`render_assets/stats.py`](../render_assets/stats.py). Standard-library only — no numpy, scipy, or pandas required.
+Every template in this section is shipped as a function in [`muriel/stats.py`](../muriel/stats.py). Standard-library only — no numpy, scipy, or pandas required.
 
 ```python
-from render_assets.stats import (
+from muriel.stats import (
     format_comparison, format_null, format_correlation,
     format_auc, format_chi2, format_exploratory,
     cohens_d, cohens_d_paired, fisher_ci,
@@ -466,7 +466,7 @@ fig.savefig('effect-forest.pdf', bbox_inches='tight')
 
 ## Workflow
 
-1. **Import rcparams** at the top of every figure-producing notebook (`from render_assets.matplotlibrc_dark import *`)
+1. **Import rcparams** at the top of every figure-producing notebook (`from muriel.matplotlibrc_dark import *`)
 2. **Write the figure caption first** — what is this, what's the takeaway — before touching the plotting code
 3. **Code the figure to match the caption claim exactly** — not more, not less
 4. **Print contrast ratio and effective figsize** before saving, to catch silent regressions
@@ -486,3 +486,10 @@ fig.savefig('effect-forest.pdf', bbox_inches='tight')
 - **Alpha-faded gridlines.** Set color directly; alpha fails on PDF re-render.
 - **Figure without caption.** Caption is non-optional for any research artifact.
 - **Prose before metric definition.** Define first, interpret second.
+
+## Anti-patterns
+
+- **Don't report a point estimate without a 95% CI.** Every number paired with an interval.
+- **Don't say "not significant."** Say "not detected at this granularity" and state the CI upper bound that you've excluded.
+- **Don't use gradient fills in bar charts.** Gradients distort perceived value; solid fills are readable.
+- **Don't pluralize "data" both ways in one paper.** Pick "data are" or "data is" once and commit.

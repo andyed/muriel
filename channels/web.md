@@ -7,14 +7,13 @@ The editorial-HTML channel and its tooling. Covers:
 - **Web rendering & static capture** — Playwright / weasyprint / headless Chrome for DOM → PNG / PDF
 - **Data-URI embedding** — single-file portability trick for artifacts that must travel self-contained
 
-Part of the [Render](../render.md) skill — see the top-level index for mission, universal rules, and channel map.
+Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map.
 
 ## Marginalia — Editorial HTML
 
 The editorial layer for blog posts, paper-style web pages, and any prose that needs typographic callouts. 15 components, zero dependencies, dark theme by default. CSS-only — JS is optional.
 
-**Library:** `~/Documents/dev/marginalia/` (CDN: `marginalia@latest`)
-**Reference:** `~/Documents/dev/marginalia/SKILL.md` (full pattern catalog) and `~/Documents/dev/marginalia/llm.md` (LLM cheat sheet)
+**Library:** [`marginalia`](https://www.npmjs.com/package/marginalia) on npm (CDN: `marginalia@latest` via jsDelivr, see below). Source and full pattern catalog in the [`andyed/marginalia`](https://github.com/andyed/marginalia) repo; the repo's `SKILL.md` and `llm.md` are the reference docs when depth is needed.
 
 ### Quick setup
 ```html
@@ -41,15 +40,15 @@ Plain `>` blockquotes become 3D perspective pull quotes — the signature compon
 
 ## Pandoc → Marginalia Bridge
 
-Pandoc 3.2+ recognizes GitHub-style alerts (`> [!NOTE]`) via the `+alerts` extension. A Lua filter at `~/Documents/dev/marginalia/pandoc/marginalia.lua` rewrites pandoc's output to marginalia classes: GitHub alerts → `mg-callout[data-type]`, extended markers (ASIDE/MARGIN/QUOTE) → `mg-sidebar` / `mg-margin` / `mg-pull`, plain blockquotes → `mg-pull`, `==mark==` → `mg-mark`, `{Badge}` and multi-word `{Text: type}` → `mg-badge`, pandoc footnotes → `mg-fn` popover, fenced code → `mg-code`, inline code → `mg-inline-code`, `{dropcap}` line marker → `mg-dropcap` wrap.
+Pandoc 3.2+ recognizes GitHub-style alerts (`> [!NOTE]`) via the `+alerts` extension. A Lua filter at `<marginalia>/pandoc/marginalia.lua` rewrites pandoc's output to marginalia classes: GitHub alerts → `mg-callout[data-type]`, extended markers (ASIDE/MARGIN/QUOTE) → `mg-sidebar` / `mg-margin` / `mg-pull`, plain blockquotes → `mg-pull`, `==mark==` → `mg-mark`, `{Badge}` and multi-word `{Text: type}` → `mg-badge`, pandoc footnotes → `mg-fn` popover, fenced code → `mg-code`, inline code → `mg-inline-code`, `{dropcap}` line marker → `mg-dropcap` wrap.
 
 ### Usage
 
 ```bash
 pandoc draft.md \
   --from markdown+mark+alerts \
-  --lua-filter ~/Documents/dev/marginalia/pandoc/marginalia.lua \
-  --template ~/Documents/dev/marginalia/pandoc/template.html \
+  --lua-filter <marginalia>/pandoc/marginalia.lua \
+  --template <marginalia>/pandoc/template.html \
   --standalone \
   -o draft.html
 ```
@@ -62,22 +61,22 @@ weasyprint draft.html draft.pdf
 
 # Direct to DOCX (filter still applies)
 pandoc draft.md --from markdown+mark+alerts \
-  --lua-filter ~/Documents/dev/marginalia/pandoc/marginalia.lua \
+  --lua-filter <marginalia>/pandoc/marginalia.lua \
   -o draft.docx
 ```
 
 ### Reference example
-`~/Documents/dev/marginalia/pandoc/examples/us-constitution.md` — an annotated US Constitution reader's edition. Exercises every transformation: dropcap, all four callout colors, sidebars, margin notes in the desktop gutter via CSS Grid subgrid, pull quote, inline highlights, badges, footnote popover, fenced code, plus a cursive copperplate dropcap initial and closing signature paragraph. Good starting point for any new marginalia page.
+The `us-constitution.md` example in the marginalia repo — an annotated US Constitution reader's edition. Exercises every transformation: dropcap, all four callout colors, sidebars, margin notes in the desktop gutter via CSS Grid subgrid, pull quote, inline highlights, badges, footnote popover, fenced code, plus a cursive copperplate dropcap initial and closing signature paragraph. Good starting point for any new marginalia page.
 
 ## Light editorial variant — the F explainer pattern
 
-The [Attentional Foraging F-pattern explainer](https://andyed.github.io/attentional-foraging/explainer/) uses marginalia with a set of light-theme editorial extensions that diverge from the default OLED palette. When a project wants a warm, reader-friendly light mode (explainer pages, blog posts, paper drafts), this is the reference exemplar.
+The [Attentional Foraging F-pattern explainer](https://andyed.github.io/attentional-foraging/explainer/) is the reference exemplar for a warm, reader-friendly light mode that extends marginalia beyond its default OLED palette. Reach for this pattern when a project wants explainer pages, blog posts, or paper drafts on a warm cream background instead of dark.
 
-Source: `~/Documents/dev/attentional-foraging/site/explainer/index.html` + `docs/drafts/osec-explainer.md` + `scripts/build-explainer.js`.
+> **Note on status:** the explainer is live and in active use, but some supplementary sections are still in draft; treat specific claims as provisional until the corresponding draft is lifted.
 
 ### Build path
 
-The F explainer uses the browser-side **marginalia-md.js** converter via a Node build script, not pandoc. Markdown lives in `docs/drafts/osec-explainer.md`, build script runs `marginalia-md.js` at build time, output is pre-rendered static HTML at `site/explainer/index.html`. Different path from the pandoc bridge above, same underlying marginalia classes — the build script also post-processes `{dropcap}` into `<p class="has-dropcap">` as a workaround for a marginalia-md rendering quirk.
+The F explainer uses the browser-side **marginalia-md.js** converter via a Node build script, not pandoc. Different path from the pandoc bridge above, same underlying marginalia classes — the build script also post-processes `{dropcap}` into `<p class="has-dropcap">` as a workaround for a marginalia-md rendering quirk.
 
 **When to use each path:**
 - **Pandoc bridge** — for paper-draft round-trips (markdown → HTML → PDF → DOCX), when the same source needs to fan out to multiple output formats
@@ -109,20 +108,14 @@ The F explainer also floats `.mg-margin` and `.mg-sidebar` to the right *inside*
 | Important red | `#fdf5f5` bg + `#cc444480` border | Emphasis |
 | Stats-detail bg | `#f8f4ee` + dashed `#d4a574` underline | Inline numerical callouts |
 
-Matching matplotlibrc: [`render_assets/matplotlibrc_light.py`](../render_assets/matplotlibrc_light.py). Same Georgia stack, same `#fafaf8` figure facecolor — figures rendered with the light rcparams match the editorial palette 1:1.
+Matching matplotlibrc: [`muriel/matplotlibrc_light.py`](../muriel/matplotlibrc_light.py). Same Georgia stack, same `#fafaf8` figure facecolor — figures rendered with the light rcparams match the editorial palette 1:1.
 
 ### When to use which variant
 
-- **Dark (OLED)** — default. Scrutinizer / Psychodeli assets, blog posts on dark-themed sites, paper figures destined for a dark slide deck, any page using the default `data-mg-theme="dark"`.
+- **Dark (OLED)** — default. Blog posts on dark-themed sites, paper figures destined for a dark slide deck, any page using the default `data-mg-theme="dark"`.
 - **Light editorial** — long-form explainers, paper drafts in light review UI, blog posts on light-themed sites. Match to the F explainer when the voice is "reader's edition" not "research console".
 
 **Pick one per document.** Don't mix dark and light callouts in the same paper or post.
-
-### Key Claims / K-ID convention
-
-Related: the attentional-foraging project uses a `[NB##:K##]` citation convention for quantitative findings. Every analysis notebook has a **Key Claims** block at the top with stable K-IDs. Prose cites findings via bracketed references (`[NB14:K3]` means notebook 14, key claim 3). Values must come from executed cell output, never hand-typed. Retired claims get `(retired YYYY-MM-DD: reason)` rather than renumbering.
-
-When working on attentional-foraging or adopting the convention elsewhere: read `~/Documents/dev/attentional-foraging/CLAUDE.md` for the full spec, and if prose disagrees with a Key Claims row, the prose is wrong. Run `notebooks-v2/update_key_claims.py` after modifying a notebook's Key Claims block.
 
 ## Web Rendering & Static Capture
 
@@ -167,33 +160,33 @@ with sync_playwright() as p:
     browser.close()
 ```
 
-### Responsive sweep helper — `render_assets.capture`
+### Responsive sweep helper — `muriel.capture`
 
-For "what does this look like at mobile/tablet/laptop/desktop?" in one command, the paired module [`render_assets/capture.py`](../render_assets/capture.py) wraps Playwright around the tier data in [`render_assets/dimensions.py`](../render_assets/dimensions.py):
+For "what does this look like at mobile/tablet/laptop/desktop?" in one command, the paired module [`muriel/capture.py`](../muriel/capture.py) wraps Playwright around the tier data in [`muriel/dimensions.py`](../muriel/dimensions.py):
 
 ```python
-from render_assets.capture import capture_responsive
+from muriel.capture import capture_responsive
 
 paths = capture_responsive(
-    url="https://andyed.github.io/marginalia/",
+    url="https://example.com/",
     output_dir="captures/",
     color_scheme="dark",
 )
 # Writes four retina PNGs (device_scale_factor=2):
-#   captures/andyed-github-io-marginalia-mobile-390x844.png
-#   captures/andyed-github-io-marginalia-tablet-820x1180.png
-#   captures/andyed-github-io-marginalia-laptop-1280x800.png
-#   captures/andyed-github-io-marginalia-desktop-1920x1080.png
+#   captures/example-com-mobile-390x844.png
+#   captures/example-com-tablet-820x1180.png
+#   captures/example-com-laptop-1280x800.png
+#   captures/example-com-desktop-1920x1080.png
 ```
 
 Or from the command line:
 
 ```bash
-python -m render_assets.capture https://andyed.github.io/marginalia/
-python -m render_assets.capture https://example.com --dir captures/ --dark
-python -m render_assets.capture https://example.com --selector main --slug hero
-python -m render_assets.capture https://example.com --tiers mobile-large desktop-qhd ultrawide
-python -m render_assets.capture https://example.com --full-page
+python -m muriel.capture https://example.com/
+python -m muriel.capture https://example.com --dir captures/ --dark
+python -m muriel.capture https://example.com --selector main --slug hero
+python -m muriel.capture https://example.com --tiers mobile-large desktop-qhd ultrawide
+python -m muriel.capture https://example.com --full-page
 ```
 
 Defaults: four-tier sweep (`mobile tablet laptop desktop`), `device_scale_factor=2`, wait for `document.fonts.ready`, wait for `networkidle`. Output filenames follow the naming convention in [`channels/dimensions.md`](dimensions.md#naming-convention-for-exported-files). Exit `0` on full success, `1` if any tier failed, `2` on missing Playwright / Chromium or usage error. Playwright is an optional install — the module is importable without it and raises a clean `ImportError` with install instructions on first call to `capture_responsive()`.
@@ -266,3 +259,10 @@ Base64 inflates by ~33%. Stay under ~200 KB per image inside HTML; above that, p
 - Data URIs **bypass browser cache**. Don't use for images that repeat across many pages.
 - Some XML parsers reject very long attribute values.
 - Email clients are inconsistent: Gmail strips data URIs in some contexts, Outlook handles them in HTML body but not signatures.
+
+## Anti-patterns
+
+- **Don't exceed ~75 characters per line** of body prose. Reading span research backs the 65–75ch cap.
+- **Don't animate layout properties** (`width`, `margin`, `top`, `left`). Use `transform` + `opacity` only; layout animations trigger reflow every frame.
+- **Don't use pure `#000` or `#fff`.** Cream + near-black per the OLED palette; pure black/white is harsh on OLED and pure white flares on cream backgrounds.
+- **Don't chain more than two CSS custom-property fallbacks.** A third fallback means the token system is underspecified — fix the schema, don't paper over it.

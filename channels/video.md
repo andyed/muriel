@@ -2,14 +2,14 @@
 
 Scripted screen recordings with tooltip overlays for YouTube/social. ffmpeg for trim/concat/burn. `desktop-control` MCP for mouse choreography. AppleScript for menu automation.
 
-Part of the [Render](../render.md) skill — see the top-level index for mission, universal rules, and channel map.
+Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map.
 
 ## Tools available
 
 | Tool | What it does | How to invoke |
 |------|-------------|---------------|
 | `desktop-control` MCP | Move mouse, click, key combos, screenshots | `mcp__desktop-control__move_mouse`, `__click`, `__key_combo` |
-| `/scrutinizer` skill | Switch modes, toggle features via AppleScript menus | `/scrutinizer mode minecraft-eyeball` |
+| App-specific skill | Switch modes or toggle features in the app being demoed via AppleScript menus | `/<app> mode <name>` (project-specific) |
 | AppleScript (direct) | Any macOS UI automation — menu clicks, window focus, keystrokes | `osascript -e '...'` |
 | macOS screen recording | Capture video | User starts with `Cmd+Shift+5`, agent controls the app |
 | ffmpeg (homebrew-ffmpeg tap) | Trim, burn captions, add music, encode | Hard-burn via `subtitles` filter (libass) |
@@ -38,7 +38,7 @@ This includes freetype, libass, fontconfig — enables `drawtext`, `subtitles`, 
 
 ## Tooltip burn script
 
-`scrutinizer2025/scripts/burn-tooltips.sh` — two modes:
+A `burn-tooltips.sh` script (see your app repo or [`muriel/tools/`](../tools/)) — two modes:
 ```bash
 # SRT only (no ffmpeg needed)
 burn-tooltips.sh tooltips.json output.srt
@@ -86,4 +86,11 @@ ffmpeg -i input.mp4 -c copy -f segment -segment_time 60 -reset_timestamps 1 outp
 
 ## Design doc
 
-See `~/Documents/dev/ascii-charts/docs/PERMUTE.md` for the infographic aspiration: Tufte, Bertin, Gestalt, CRAP, semantic zoom, small multiples, linked displays.
+See [`docs/PERMUTE.md`](docs/PERMUTE.md) for the infographic aspiration: Tufte, Bertin, Gestalt, CRAP, semantic zoom, small multiples, linked displays.
+
+## Anti-patterns
+
+- **Don't capture with system audio on** unless narration is intentional. Dogs bark, notifications ding, system alerts leak into shipped reels.
+- **Don't burn subtitles in the default SRT font.** Use the brand's typography so captions feel authored, not tacked on.
+- **Don't edit at 30 fps then upload at 60** (or vice versa). Match the recording's frame rate or re-encode deliberately.
+- **Don't ship a demo whose first 3 seconds don't hook attention.** The opening frame is most of the commitment decision.

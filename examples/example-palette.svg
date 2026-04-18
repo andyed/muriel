@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <defs>
+    <style>
+      .bg       { fill: #0a0a0f; }
+      .title    { fill: #e6e4d2; font: 700 32px Helvetica, sans-serif; }
+      .subtitle { fill: #7dd4e4; font: 400 18px Helvetica, sans-serif; }
+      .body     { fill: #e6e4d2; font: 400 14px Helvetica, sans-serif; }
+      .caption  { fill: #b0b0c4; font: 400 12px Helvetica, sans-serif; }
+      .kicker   { fill: #50b4c8; font: 400 11px Helvetica, sans-serif; letter-spacing: 2px; }
+      .divider  { stroke: #3a3a44; stroke-width: 1; fill: none; }
+      .grid     { stroke: #2a2a33; stroke-width: 0.5; fill: none; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="800" height="400"/>
+  <line class="divider" x1="40" y1="120" x2="760" y2="120"/>
+  <line class="grid" x1="40" y1="200" x2="760" y2="200"/>
+
+  <text class="kicker"   x="40"  y="50">EXAMPLE PALETTE</text>
+  <text class="title"    x="40"  y="85">Muriel contrast audit fixture</text>
+  <text class="subtitle" x="40"  y="110">A small SVG exercising every text role.</text>
+
+  <text class="body"     x="40"  y="160">Body copy at 14px. Cream on near-black clears 8:1 by a wide margin.</text>
+  <text class="caption"  x="40"  y="185">Caption text at 12px with muted foreground — clears 8:1.</text>
+
+  <text class="body"     x="40"  y="260">Use this file as the fixture for</text>
+  <text class="body"     x="40"  y="280">`python -m muriel.contrast examples/example-palette.svg`.</text>
+  <text class="caption"  x="40"  y="310">Replace with your own palette to audit before shipping.</text>
+</svg>

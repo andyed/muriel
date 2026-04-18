@@ -1,0 +1,109 @@
+# Example brand style guide for the muriel.styleguide loader.
+#
+# A fictional "Acme Research" brand demonstrating muriel's two-tier color
+# schema, the four-layer decomposition (brand / neutral / semantic /
+# extended), and the motion token block. Copy as a starting point.
+
+[meta]
+name             = "Acme Research"
+slug             = "acme"
+version          = "0.1.0"
+owner_repo       = "acme-brand-guide"
+owner_path       = "<brand-guide-repo>"
+canonical_source = "tokens.css"
+ownership_rule   = "Acme brand assets are owned by acme-brand-guide; do not regenerate wordmarks or color palettes elsewhere."
+
+# ─────────────────────────────────────────────────────────────────────
+# Colors — two-tier
+#
+# [colors]            : raw palette (hex values, the truth)
+# [colors.aliases]    : semantic layer (text, decorative, background…)
+# Four conceptual layers inside the raw palette: brand, neutral,
+# semantic, extended — labelled in comments so a reader can see the
+# decomposition at a glance.
+# ─────────────────────────────────────────────────────────────────────
+
+[colors]
+# ── Neutral (backgrounds + foregrounds) ──────────────────────────────
+background       = "#0a0a0f"   # OLED near-black — primary surface
+background_2     = "#0f1117"   # panel / inner-card
+background_3     = "#1a1a24"   # divider / rule
+foreground       = "#e6e4d2"   # cream — primary body (15.42:1 on bg)
+foreground_muted = "#b0b0c4"   # muted body (9.27:1 on bg)
+
+# ── Brand accent ────────────────────────────────────────────────────
+accent           = "#50b4c8"   # 8.19:1 on bg — text-safe
+accent_ink       = "#7dd4e4"   # 11.67:1 — higher-contrast variant
+accent_decorative = "#d4a574"  # amber — borders / glow / legend edges (decorative only; fails 8:1)
+
+# ── Semantic ────────────────────────────────────────────────────────
+note      = "#50b4c8"   # 8.19:1
+tip       = "#66bb6a"   # 8.35:1
+warning   = "#e6a817"   # 9.38:1
+important = "#ff8282"   # 8.25:1
+
+# ── Extended (data viz) ─────────────────────────────────────────────
+viz_1 = "#e6e4d2"
+viz_2 = "#50b4c8"
+viz_3 = "#66bb6a"
+viz_4 = "#e6a817"
+viz_5 = "#ff8282"
+
+[colors.aliases]
+# ── Text roles (subject to muriel's 8:1 contrast audit) ─────────────
+text                 = "foreground"
+text-muted           = "foreground_muted"
+text-accent          = "accent_ink"     # text-safe accent, not decorative
+text-inverted        = "background"      # on light surfaces
+
+# ── Surface roles ───────────────────────────────────────────────────
+surface-primary      = "background"
+surface-secondary    = "background_2"
+surface-tertiary     = "background_3"
+
+# ── Decorative roles (exempt from 8:1; must clear ≥55/255) ──────────
+decorative           = "accent_decorative"
+decorative-dim       = "accent"
+border-subtle        = "background_3"
+rule                 = "background_3"
+
+# ── Semantic callouts (text-safe) ───────────────────────────────────
+semantic-note        = "note"
+semantic-tip         = "tip"
+semantic-warning     = "warning"
+semantic-important   = "important"
+
+# ─────────────────────────────────────────────────────────────────────
+# Motion — duration + easing tokens
+# Consumed by kinetic-typography, interactive, and video channels.
+# Durations in milliseconds; easing is a CSS cubic-bezier or keyword.
+# ─────────────────────────────────────────────────────────────────────
+
+[motion]
+duration_instant  = 0
+duration_fast     = 120
+duration_normal   = 240
+duration_slow     = 480
+duration_reveal   = 800
+
+easing_default    = "cubic-bezier(0.2, 0.0, 0.2, 1.0)"   # standard material-like
+easing_emphasis   = "cubic-bezier(0.4, 0.0, 0.2, 1.0)"    # emphasized on enter
+easing_snappy     = "cubic-bezier(0.6, 0.0, 0.2, 1.0)"    # mechanical / FUI
+easing_linear     = "linear"
+
+motion_preference = "respect-prefers-reduced-motion"     # if user has OS-level reduced-motion, durations drop to 0
+
+[typography]
+display_family              = "Helvetica, 'Arial Black', sans-serif"
+display_weight              = 700
+display_line_height         = 1.2
+body_family                 = "Helvetica, Arial, sans-serif"
+mono_family                 = "'SF Mono', Menlo, Monaco, 'DejaVu Sans Mono', monospace"
+
+[dependencies]
+# No external fonts — all system stacks.
+
+[rules]
+never_modify_sources                     = true
+never_rebuild_image_generation_elsewhere = true
+brand_owner                              = "acme-brand-guide"

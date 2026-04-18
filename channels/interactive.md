@@ -2,13 +2,13 @@
 
 The biggest win over Photoshop: **parameters the reader can move**. Static images can't be explored; interactive demos let the reader develop intuition by playing with the underlying model.
 
-Part of the [Render](../render.md) skill — see the top-level index for mission, universal rules, and channel map.
+Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map.
 
 ## When to use
-- Blog post explainers (Adventures in AI Coding, Inside the Math style)
+- Blog post explainers where the reader should move parameters, not just read
 - Paper figures with sliders (CHI / ETTAC / CIKM submissions can include live demo URLs)
 - Worked examples and teaching artifacts
-- Audio-reactive visualizers (Psychodeli lineage)
+- Audio-reactive visualizers
 - Eye-tracking replays with timeline scrubber
 - Anything where "watching it move" matters more than "seeing one frame"
 
@@ -67,7 +67,7 @@ One file. No build. Marginalia handles editorial chrome. Demo lives at `<project
 
 | Need | Library | Why |
 |---|---|---|
-| Shaders / 3D / perf | WebGL2 raw + Three.js for scenes | Andy's primary stack |
+| Shaders / 3D / perf | WebGL2 raw + Three.js for scenes | Primary stack for shader-heavy work |
 | Data binding to DOM/SVG | D3 v7 | Reactive scales, no virtual DOM |
 | 2D sketches / teaching | p5.js | Lowest activation energy |
 | Audio-reactive | Web Audio API + AnalyserNode | Native, zero deps |
@@ -76,7 +76,7 @@ One file. No build. Marginalia handles editorial chrome. Demo lives at `<project
 | Rich typographic layout | [`@chenglou/pretext`](https://chenglou.me/pretext/) | Non-DOM text measurement + multi-line layout + rich inline spans. See [Typographic canvas with pretext](#typographic-canvas-with-pretext). |
 
 ## Permalink convention
-Demos with shareable state should follow the **PermalinkManager** pattern from Scrutinizer/Psychodeli: URL hash encodes parameters, parsed on load, rewritten on change. Read the existing manager class first — don't reinvent it.
+Demos with shareable state should follow a **PermalinkManager** pattern: URL hash encodes parameters, parsed on load, rewritten on change. One utility per project, referenced from every demo — if the project already has one, read it first and don't reinvent it.
 
 ## Marginalia integration
 Wrap demos in marginalia callouts for editorial context:
@@ -88,10 +88,13 @@ Wrap demos in marginalia callouts for editorial context:
 </aside>
 ```
 
-## Reference exemplars (don't rewrite)
-- **Inside the Math** — shipped WebGL explainer for foveation/cortical magnification. Reference it; don't rebuild it.
-- **Scrutinizer demos** — PermalinkManager pattern for shareable WebGL state.
-- **Psychodeli** — audio-reactive shader pipeline (owned by psychodeli-brand-guide for assets).
+## Reference exemplars
+
+Good shapes to borrow rather than rebuild:
+
+- A shipped WebGL explainer for the concept you're teaching (foveation, diffusion, whatever) — reference its URL from your post, don't re-derive the math.
+- A project-local PermalinkManager utility — one implementation per repo, imported by every demo.
+- An audio-reactive shader pipeline elsewhere in the codebase — if a sibling project already solved the AnalyserNode → uniforms plumbing, import or vendor the small hot path instead of starting from scratch.
 
 ## Distribution & hosting
 
@@ -99,7 +102,7 @@ Once a demo exists as a single-file HTML, the next decision is where it lives. D
 
 | Host | Best for | Trade |
 |---|---|---|
-| **GitHub Pages** | Repo-hosted demos (Scrutinizer, Psychodeli, marginalia, Inside the Math) — canonical, diffable, co-located with source. | Build/push latency; doesn't surface demos for browsing discovery. |
+| **GitHub Pages** | Repo-hosted demos — canonical, diffable, co-located with source. | Build/push latency; doesn't surface demos for browsing discovery. |
 | **CodePen** | Single-file shareable demos; sci-fi / FUI experiments; "paste this into a Pen" teaching artifacts; fork-to-iterate. | Free Pens are public — don't paste unreleased client or research code. |
 | **Observable** | D3 data-viz figures with reactive cells — the right host for CHI / ETTAC / CIKM paper figures where the reader can move parameters. | Cell-based, not a normal HTML file — different mental model. |
 | **gist** | Minimum-friction single-file distribution; linkable from notes and papers. | No live preview without a third-party renderer (bl.ocks.org went read-only). |
@@ -132,14 +135,14 @@ Two modes, both work inside marginalia pages:
 ```html
 <!-- Result only -->
 <p class="codepen" data-height="400" data-default-tab="result"
-   data-slug-hash="abcDEF" data-user="andyed">
+   data-slug-hash="abcDEF" data-user="your-handle">
   See the Pen on CodePen.
 </p>
 <script src="https://cpwebassets.codepen.io/assets/embed/ei.js" async></script>
 
 <!-- Full editor (html + css + js tabs) -->
 <p class="codepen" data-height="600" data-default-tab="html,result"
-   data-slug-hash="abcDEF" data-user="andyed">...</p>
+   data-slug-hash="abcDEF" data-user="your-handle">...</p>
 ```
 
 Wrap the embed in a marginalia callout for editorial framing inside a blog post:
@@ -147,7 +150,7 @@ Wrap the embed in a marginalia callout for editorial framing inside a blog post:
 ```html
 <aside class="mg-callout" data-type="tip">
   <h3>Try it</h3>
-  <p class="codepen" data-height="500" data-slug-hash="..." data-user="andyed"></p>
+  <p class="codepen" data-height="500" data-slug-hash="..." data-user="your-handle"></p>
 </aside>
 ```
 
@@ -161,7 +164,7 @@ On CodePen specifically: tag each experiment with both a **technical** tag (`web
 
 ### Privacy caveat
 
-Free CodePen Pens are public. Free Observable notebooks are public. Free gists can be "secret" but are still URL-accessible. Don't paste unreleased Scrutinizer shaders, unpublished research data, or client work into any free tier — use GitHub Pages (private repo + gh-pages) or local files for anything sensitive. When in doubt, ask before pasting.
+Free CodePen Pens are public. Free Observable notebooks are public. Free gists can be "secret" but are still URL-accessible. Don't paste unreleased shaders, unpublished research data, or client work into any free tier — use GitHub Pages (private repo + gh-pages) or local files for anything sensitive. When in doubt, ask before pasting.
 
 ## Typographic canvas with pretext
 
@@ -232,7 +235,7 @@ This is what makes text-in-shape layouts *actually* work: the library takes your
 
 ### ESM direct, no build step
 
-Pretext publishes as [`@chenglou/pretext`](https://www.npmjs.com/package/@chenglou/pretext) on npm and serves via esm.sh. Import in a single-file HTML demo — matches the Render no-bundler doctrine:
+Pretext publishes as [`@chenglou/pretext`](https://www.npmjs.com/package/@chenglou/pretext) on npm and serves via esm.sh. Import in a single-file HTML demo — matches the muriel no-bundler doctrine:
 
 ```html
 <script type="module">
@@ -262,7 +265,7 @@ This is the Interactive JS-channel version of the Web Rendering channel's "wait 
 
 ### Reference exemplar: pretext-coachella
 
-[andyed/pretext-coachella](https://github.com/andyed/pretext-coachella) — the 2026 Coachella lineup typeset *inside* the letterforms of "COACHELLA". Four views over the same 169-artist JSON:
+A publicly available worked example of pretext Tier 2: [andyed/pretext-coachella](https://github.com/andyed/pretext-coachella) — a 2026 Coachella lineup typeset *inside* the letterforms of "COACHELLA". Four views over the same 169-artist JSON exercise the whole API surface:
 
 | View | File | Pretext API | What it does |
 |---|---|---|---|
@@ -271,12 +274,19 @@ This is the Interactive JS-channel version of the Web Rendering channel's "wait 
 | **Poster** | `poster.html` | `prepareRichInline` + `layoutNextRichInlineLineRange` + `materializeRichInlineLineRange` | the signature view: letters of COACHELLA sliced into bands and slots; artists sorted by tier descending, rendered 500–900 weight, stage-color per artist, justified per slot, live perf stats |
 | **Wall** | `wall.html` | `prepareWithSegments` + `layoutWithLines` | perspective wall of individually laid-out artist names |
 
-Reads as a direct descendant of David Small's 1996 Shakespeare navigation: text as navigable space, multi-scale rendering via tier-based weight (instead of Small's greeking), categorical stage color for structure (same role as Small's character-dialogue filter), Canvas2D at 60fps because pretext measures outside the DOM reflow path. Good scaffold for any new typographic-canvas work.
+Reads as a direct descendant of David Small's 1996 Shakespeare navigation: text as navigable space, multi-scale rendering via tier-based weight (instead of Small's greeking), categorical color for structure, Canvas2D at 60fps because pretext measures outside the DOM reflow path. Good scaffold for any new typographic-canvas work.
 
 ## Lessons from past projects
-- **No bare `console.log` in Psychodeli.** Use `window.debugManager`.
-- **Don't dim/fade SERP cards on hover or brush.**
+- **No bare `console.log`.** Route through a debug manager or conditional logger so shipped demos stay clean.
+- **Don't dim/fade search-result cards on hover or brush.** It breaks scanability more than it rewards the hovered row.
 - **WebGL variable names: read the source, don't guess.**
 - **Shader changes need verification.** Run tests or capture a screenshot before claiming a fix is working.
 - **Pretext: always pin `@x.y.z`**, never `@latest`, in shipped demos.
 - **Pretext: always preload fonts** before the first `prepare*` call, or the measurement is against the fallback font.
+
+## Anti-patterns
+
+- **Don't set up listeners or rAF loops without cleanup.** Memory leaks on hot reload; double-fires on navigation.
+- **Don't poll state in a rAF loop when an event listener would do.** Events are cheaper and correct by construction.
+- **Don't use `alert()` inside a demo.** It halts the demo's timing and disrupts screen-capture pipelines.
+- **Don't hardcode parameter defaults outside PermalinkManager.** Shared-state demos silently diverge when defaults live in two places.

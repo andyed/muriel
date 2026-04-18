@@ -1,0 +1,11 @@
+{
+  "name": "Amazon Small Icon",
+  "width": 512,
+  "height": 512,
+  "format": "PNG",
+  "transparency": false,
+  "text_area": {"x": 0.1, "y": 0.35, "w": 0.8, "h": 0.3},
+  "default_font": {"family": "helvetica", "weight": "bold", "size_ratio": 0.18},
+  "effects": ["glow"],
+  "bg_style": "vignette"
+}

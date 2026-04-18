@@ -2,9 +2,9 @@
 
 Unicode bar charts, sparklines, and tables for terminal/markdown/chat output. No images needed — the output diffs in git, pastes into README files, and renders in any monospace context.
 
-Part of the [Render](../render.md) skill — see the top-level index for mission, universal rules, and channel map.
+Part of the [muriel](../muriel.md) skill — see the top-level index for mission, universal rules, and channel map.
 
-**Renderer:** `~/Documents/dev/ascii-charts/chart.py` — Python, zero dependencies.
+**Renderer:** [`muriel/chart.py`](muriel/chart.py) — Python, zero dependencies.
 
 ## Available primitives
 
@@ -38,3 +38,9 @@ Use image viz (raster / SVG) when:
 - The data has >2 dimensions (color, shape, size encoding)
 - The output is a paper figure or store asset
 - Interactivity or animation matters
+
+## Anti-patterns
+
+- **Don't use ASCII when Unicode has better glyphs.** `━` not `-`, `│` not `|`, `▁▂▃▄▅▆▇█` for bars.
+- **Don't show more than ~15 bars horizontally** without a visual break or a scroll region.
+- **Don't use color in terminals whose truecolor support you haven't verified** — fall back to ANSI 8 or named tokens.

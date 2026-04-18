@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Muriel — animated Bauhaus M</title>
+<style>
+  :root {
+    --paper:  #E8E0D0;
+    --slate:  #2D3440;
+    --copper: #B87B4A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); height: 100%; }
+  body {
+    display: grid;
+    place-items: center;
+    font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
+    color: var(--slate);
+  }
+  .stage { width: 1200px; max-width: 100vw; aspect-ratio: 1200/630; }
+  svg { width: 100%; height: 100%; display: block; }
+  .bar, .diag { fill: none; stroke: var(--slate); stroke-width: 3; }
+  .dot { fill: var(--copper); }
+  .rule { stroke: var(--copper); stroke-width: 2; }
+  .wordmark { font-size: 84px; font-weight: 700; letter-spacing: -0.01em; fill: var(--slate); }
+  .sub1 { font-size: 22px; fill: var(--slate); }
+  .sub2 { font-size: 17px; fill: #5C5852; }
+  .credit { font-size: 11px; fill: var(--copper); fill-opacity: 0.85; }
+  .controls {
+    position: fixed; bottom: 14px; right: 14px;
+    display: flex; gap: 8px; font-size: 11px;
+  }
+  button {
+    background: transparent; border: 1px solid var(--slate); color: var(--slate);
+    padding: 4px 10px; border-radius: 2px; cursor: pointer;
+    font: inherit;
+  }
+  button:hover { background: var(--slate); color: var(--paper); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+    <!-- M: 2 vertical bars + 2 diagonals + dot. Geometry computed in JS so
+         we can animate apex_y (V curving) and dot path (pong). -->
+    <rect class="bar" id="barL"/>
+    <rect class="bar" id="barR"/>
+    <polygon class="diag" id="diagL"/>
+    <polygon class="diag" id="diagR"/>
+    <circle class="dot" id="dot" r="16"/>
+
+    <!-- Rule + wordmark below the M -->
+    <line class="rule" x1="390" y1="428" x2="810" y2="428"/>
+    <text class="wordmark" x="600" y="508" text-anchor="middle">muriel</text>
+    <text class="sub1"     x="600" y="552" text-anchor="middle">scriptable visual production toolkit</text>
+    <text class="sub2"     x="600" y="578" text-anchor="middle">for researcher-designer-engineers</text>
+    <text class="credit"   x="40"  y="612">after muriel cooper · bauhaus-bayer construction</text>
+  </svg>
+</div>
+
+<div class="controls">
+  <button id="pauseBtn">pause</button>
+  <button id="speedBtn">speed · 1×</button>
+</div>
+
+<script>
+(() => {
+  // ── M geometry ──────────────────────────────────────────────────────
+  const CX = 600, CY = 220;           // center of the M
+  const M_H = 300;                     // M height
+  const M_W = Math.round(M_H * 0.92);  // roughly square
+  const STROKE = 48;                   // vertical-bar width
+  const DIAG_FRAC = 0.55;              // diagonal width as fraction of stroke
+  const DIAG_W = Math.max(4, Math.round(STROKE * DIAG_FRAC));
+  const L = CX - M_W / 2;
+  const R = CX + M_W / 2;
+  const TOP = CY - M_H / 2;
+  const BOT = CY + M_H / 2;
+
+  const barL = document.getElementById('barL');
+  const barR = document.getElementById('barR');
+  const diagL = document.getElementById('diagL');
+  const diagR = document.getElementById('diagR');
+  const dot = document.getElementById('dot');
+
+  // Static vertical bars
+  barL.setAttribute('x', L);           barL.setAttribute('y', TOP);
+  barL.setAttribute('width', STROKE);  barL.setAttribute('height', M_H);
+  barR.setAttribute('x', R - STROKE);  barR.setAttribute('y', TOP);
+  barR.setAttribute('width', STROKE);  barR.setAttribute('height', M_H);
+
+  // ── Apex curve (V opens and closes) ────────────────────────────────
+  // apex_frac oscillates between SHALLOW and DEEP
+  const APEX_SHALLOW = 0.45;  // apex high = V is shallow
+  const APEX_DEEP    = 0.78;  // apex low = V is deep
+  function apexFracAt(tSec) {
+    // Sinusoid, period 3.2s
+    const phase = (tSec / 3.2) * Math.PI * 2;
+    return (APEX_SHALLOW + APEX_DEEP) / 2 +
+           (APEX_DEEP - APEX_SHALLOW) / 2 * Math.sin(phase);
+  }
+
+  function updateDiagonals(apex_frac) {
+    const apex_y = TOP + apex_frac * M_H;
+    const lx_top_outer = L + STROKE;
+    const lx_top_inner = lx_top_outer + DIAG_W;
+    const rx_top_outer = R - STROKE;
+    const rx_top_inner = rx_top_outer - DIAG_W;
+    const pL = [
+      [lx_top_outer, TOP],
+      [lx_top_inner, TOP],
+      [CX + DIAG_W / 2, apex_y],
+      [CX - DIAG_W / 2, apex_y],
+    ];
+    const pR = [
+      [rx_top_inner, TOP],
+      [rx_top_outer, TOP],
+      [CX + DIAG_W / 2, apex_y],
+      [CX - DIAG_W / 2, apex_y],
+    ];
+    diagL.setAttribute('points', pL.map(p => p.join(',')).join(' '));
+    diagR.setAttribute('points', pR.map(p => p.join(',')).join(' '));
+    return apex_y;
+  }
+
+  // ── Dot path ────────────────────────────────────────────────────────
+  // The dot stays INSIDE the V-notch — the triangular opening at the top
+  // of the M bounded by the two inner diagonal edges and the top edge.
+  // As the V breathes (apex moves up/down), the triangle expands and
+  // contracts; the dot's bounce path co-evolves so it always sits inside.
+  const BEAT_MS = 700;   // time between vertex hops
+  const DOT_R = 16;
+  function dotVerticesAt(apex_y) {
+    // V-notch triangle vertices, with padding so the dot doesn't clip
+    // the stroked outlines of the diagonals.
+    const pad = DOT_R + 6;
+    // Top-left inner corner of the V (where left diag's inner edge meets top)
+    const topL_x = L + STROKE + DIAG_W + 4;
+    // Top-right inner corner
+    const topR_x = R - STROKE - DIAG_W - 4;
+    // Apex (dot sits above the actual apex so it doesn't overlap the V-tip)
+    const apex_dot_y = apex_y - pad;
+    return [
+      {x: topL_x + pad / 2, y: TOP + pad},
+      {x: CX, y: apex_dot_y},
+      {x: topR_x - pad / 2, y: TOP + pad},
+      {x: CX, y: apex_dot_y},
+    ];
+  }
+
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function dotPosition(tSec, apex_y) {
+    const vertices = dotVerticesAt(apex_y);
+    const n = vertices.length;
+    const beatSec = BEAT_MS / 1000;
+    const totalSec = beatSec * n;
+    const cycleT = ((tSec % totalSec) + totalSec) % totalSec;
+    const beatIdx = Math.floor(cycleT / beatSec);
+    const u = (cycleT - beatIdx * beatSec) / beatSec;      // [0..1) within beat
+    const eased = easeOutCubic(u);
+    const a = vertices[beatIdx];
+    const b = vertices[(beatIdx + 1) % n];
+    // Add a slight vertical arc on each hop for playfulness
+    const arcLift = -18 * Math.sin(Math.PI * u);
+    return {
+      x: a.x + (b.x - a.x) * eased,
+      y: a.y + (b.y - a.y) * eased + arcLift,
+    };
+  }
+
+  // ── Animation loop ──────────────────────────────────────────────────
+  let startTime = null;
+  let paused = false;
+  let pausedAt = 0;
+  let speed = 1;
+
+  function frame(now) {
+    if (startTime == null) startTime = now;
+    const tSec = paused ? pausedAt : (now - startTime) / 1000 * speed;
+    const apex_frac = apexFracAt(tSec);
+    const apex_y = updateDiagonals(apex_frac);
+    const p = dotPosition(tSec, apex_y);
+    dot.setAttribute('cx', p.x);
+    dot.setAttribute('cy', p.y);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // ── Controls ────────────────────────────────────────────────────────
+  const pauseBtn = document.getElementById('pauseBtn');
+  pauseBtn.addEventListener('click', () => {
+    if (!paused) {
+      pausedAt = (performance.now() - startTime) / 1000 * speed;
+      paused = true;
+      pauseBtn.textContent = 'play';
+    } else {
+      startTime = performance.now() - (pausedAt / speed) * 1000;
+      paused = false;
+      pauseBtn.textContent = 'pause';
+    }
+  });
+
+  const speedBtn = document.getElementById('speedBtn');
+  const speeds = [1, 0.5, 2];
+  let speedIdx = 0;
+  speedBtn.addEventListener('click', () => {
+    // Preserve current tSec across speed change
+    const tSec = paused ? pausedAt : (performance.now() - startTime) / 1000 * speed;
+    speedIdx = (speedIdx + 1) % speeds.length;
+    speed = speeds[speedIdx];
+    startTime = performance.now() - (tSec / speed) * 1000;
+    if (paused) pausedAt = tSec;
+    speedBtn.textContent = `speed · ${speed}×`;
+  });
+})();
+</script>
+</body>
+</html>
