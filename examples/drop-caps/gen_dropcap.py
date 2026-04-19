@@ -432,7 +432,15 @@ def build_svg(cfg: DropCapConfig) -> str:
     # Letter anchored to canvas TOP (cap-height aligned to y=0) so the
     # drop cap sits flush with the paragraph's first text line. The
     # ornament below extends into the descender region.
-    letter_top_y = cfg.letter_top_px   # absolute px from canvas top
+    # dominant-baseline="text-before-edge" places the em-top (not the
+    # cap-top) at y. Serif display fonts leave ~16% of font-size
+    # between em-top and cap-top — so we pull the letter up by that
+    # amount so the cap visually aligns with letter_top_px. Empirically
+    # tuned against the Didot / Bodoni / Georgia stack at 520px: 83 /
+    # 520 = 0.16.
+    CAP_OFFSET_RATIO = 0.16
+    cap_offset = int(cfg.letter_size_px * CAP_OFFSET_RATIO)
+    letter_top_y = cfg.letter_top_px - cap_offset   # compensate for em-top → cap-top gap
     lines.append(f'  <text x="{W / 2}" y="{letter_top_y}" font-family="{cfg.font_family}" '
                  f'font-weight="{cfg.font_weight}" font-size="{cfg.letter_size_px}" '
                  f'fill="{cfg.accent}" text-anchor="middle" '

@@ -560,5 +560,5 @@
     <line x1="590.25" y1="264.78" x2="669.78" y2="235.84" stroke-opacity="0.405"/>
     <line x1="605.81" y1="322.88" x2="689.16" y2="308.18" stroke-opacity="0.405"/>
   </g>
-  <text x="266.0" y="8" font-family="Didot, 'Bodoni 72', 'Bodoni MT', Georgia, serif" font-weight="700" font-size="520" fill="#C07FA0" text-anchor="middle" dominant-baseline="text-before-edge">M</text>
+  <text x="266.0" y="-75" font-family="Didot, 'Bodoni 72', 'Bodoni MT', Georgia, serif" font-weight="700" font-size="520" fill="#C07FA0" text-anchor="middle" dominant-baseline="text-before-edge">M</text>
 </svg>
