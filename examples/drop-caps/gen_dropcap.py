@@ -295,8 +295,13 @@ class DropCapConfig:
     background: str = "#0A0A0E"
     # Portrait canvas — the decoration extends DOWN into the descender
     # region, like a traditional fancy drop cap's ornamental tail.
-    width: int = 520
+    #
+    # Width/height default to 0 = "measure from the glyph and pad."
+    # Non-zero = explicit override (useful when you need a uniform-sized
+    # caps grid across multiple letters regardless of glyph width).
+    width: int = 0
     height: int = 660
+    padding_x: int = 40          # px of breathing room each side of the glyph
     # Fixation anchored to letter's "eye" — for most caps, this sits in
     # the lower counter. Expressed as fraction of canvas (0,0) = top-left.
     fixation_x_frac: float = 0.50
@@ -317,12 +322,71 @@ class DropCapConfig:
     fixation_radius: float = 7.0
 
 
+# ── Glyph measurement — so canvas width adapts to the letter ─────────
+
+_FONT_CANDIDATES = [
+    "/System/Library/Fonts/Supplemental/Didot.ttc",
+    "/Library/Fonts/Didot.ttc",
+    "/System/Library/Fonts/Supplemental/Bodoni 72.ttc",
+    "/System/Library/Fonts/Supplemental/Georgia.ttf",
+    "/System/Library/Fonts/Times.ttc",
+]
+
+
+def measure_glyph_width(letter: str, size_px: int) -> int:
+    """
+    Return the rendered pixel width of ``letter`` at ``size_px`` in the
+    first available font from _FONT_CANDIDATES (Didot / Bodoni / Georgia
+    / Times — all serif display candidates suitable for drop caps).
+
+    Falls back to a heuristic (size * 0.55) if no font file loads; that
+    approximation is good enough for non-extreme letters but loses the
+    "M is wide, F is narrow" fidelity.
+    """
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        return int(size_px * 0.55)
+
+    import os as _os
+    font = None
+    for path in _FONT_CANDIDATES:
+        if _os.path.exists(path):
+            try:
+                font = ImageFont.truetype(path, size_px)
+                break
+            except Exception:
+                continue
+    if font is None:
+        return int(size_px * 0.55)
+
+    img = Image.new("L", (size_px * 3, size_px * 2))
+    draw = ImageDraw.Draw(img)
+    bbox = draw.textbbox((0, 0), letter, font=font)
+    return max(1, bbox[2] - bbox[0])
+
+
+def resolve_canvas(cfg: "DropCapConfig") -> tuple[int, int]:
+    """
+    Resolve the final (width, height) for a DropCapConfig.
+
+    If ``cfg.width`` is 0 (the default), measure the letter's glyph
+    width at ``cfg.letter_size_px`` and pad ``cfg.padding_x`` on each
+    side. Non-zero ``cfg.width`` is an explicit override (e.g., for
+    uniform-width caps across a grid of multiple letters).
+    """
+    if cfg.width > 0:
+        return cfg.width, cfg.height
+    gw = measure_glyph_width(cfg.letter, cfg.letter_size_px)
+    return gw + 2 * cfg.padding_x, cfg.height
+
+
 def build_grid_only_svg(cfg: "DropCapConfig") -> str:
     """Letterless grid asset — reusable across all posts/letters.
     Designed for use as a CSS background behind a real text letter.
     Background is transparent so the asset works on any surface.
     """
-    W, H = cfg.width, cfg.height
+    W, H = resolve_canvas(cfg)
     cx = W * cfg.fixation_x_frac
     cy = H * cfg.fixation_y_frac
     tex_fn = TEXTURES[cfg.texture]
@@ -335,15 +399,22 @@ def build_grid_only_svg(cfg: "DropCapConfig") -> str:
 
 
 def build_svg(cfg: DropCapConfig) -> str:
-    W, H = cfg.width, cfg.height
+    W, H = resolve_canvas(cfg)
     # Ornament is anchored to the fixation point (which is noise-off by
     # default but still serves as the radial anchor for the texture).
     cx = W * cfg.fixation_x_frac
     cy = H * cfg.fixation_y_frac
 
+    # Scale r_outer so the grid always reaches the canvas corners
+    # regardless of the (now-variable) canvas width. The default
+    # r_outer=420 was tuned for W=520; rescale proportionally so narrow
+    # letters (F) get a smaller grid and wide letters (M) get a larger
+    # grid — both with consistent *visual* margin from the glyph edge.
+    r_outer_effective = cfg.r_outer * (min(W, H) / 520.0)
+
     tex_fn = TEXTURES[cfg.texture]
     tex_cfg = {"accent": cfg.accent, **cfg.texture_params}
-    texture_elements = tex_fn(cx, cy, cfg.r_outer, tex_cfg)
+    texture_elements = tex_fn(cx, cy, r_outer_effective, tex_cfg)
 
     lines = []
     lines.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">')
