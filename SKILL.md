@@ -1,6 +1,6 @@
 ---
 name: muriel
-description: "A multi-constraint solver for visual production — raster, SVG, interactive JS, video, science plots, gaze viz, editorial HTML across ten channels. The brand tokens, 8:1 contrast rule, and dimension constants stay active at render time. Use when the user needs any visual artifact for human eyes."
+description: "A multi-constraint solver for visual production — raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics across ten output channels plus dimensions + style-guides cross-channel references. Brand tokens, 8:1 contrast rule, and dimension constants stay active at render time. Use when the user needs any visual artifact for human eyes."
 user-invocable: true
 ---
 

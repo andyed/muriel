@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>muriel — next-gen visual-production skill for LLMs</title>
-<meta name="description" content="Ten channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+<meta name="description" content="A dozen channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
 
 <!-- Open Graph / Twitter -->
 <meta property="og:title" content="muriel — next-gen visual-production skill for LLMs">
-<meta property="og:description" content="Ten channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast, a vision-model critique agent. Named after Muriel Cooper.">
+<meta property="og:description" content="A dozen channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast, a vision-model critique agent. Named after Muriel Cooper.">
 <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
 <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
 <meta property="og:type" content="website">
@@ -21,6 +21,11 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-dark-16.png" media="(prefers-color-scheme: dark)">
 <link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png">
 <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+
+<!-- Marginalia — editorial typography components (matches muriel's palette out of the box) -->
+<!-- npm package not yet published; served via jsDelivr's GitHub proxy. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andyed/marginalia@main/marginalia.css">
+<script src="https://cdn.jsdelivr.net/gh/andyed/marginalia@main/marginalia.js" defer></script>
 
 <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
 <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
@@ -44,6 +49,17 @@ posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' })
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Marginalia token overrides — muriel enforces 8:1 contrast minimum.
+   Marginalia's defaults ship at ~5.6:1 for muted body text and ~7.9:1 for tip/
+   important on the tinted callout background (#0f1117). These brighter variants
+   all land ≥8.85:1 without changing marginalia's visual character. */
+:root {
+  --mg-text-muted: #b0b0c4;   /* 8.85:1 on #0f1117 */
+  --mg-tip:        #8fd892;   /* 11.15:1 */
+  --mg-important:  #ffa8a8;   /* 10.26:1 */
+  --mg-note:       #7dd4e4;   /* 11.15:1 — matches accent-ink */
+}
 
 html { color-scheme: dark; }
 
@@ -279,9 +295,13 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
   </div>
 </header>
 
-<section>
+<section class="mg-margin-scope">
   <h2>What it is</h2>
-  <p>Ten channels of tool-use recipes — raster, SVG, web, interactive, video, science, gaze, terminal, dimensions, style-guides — each with rules, patterns, and anti-patterns. A two-tier brand-token schema with motion. A multi-constraint solver that enforces 8:1 contrast and the OLED palette at render time. A vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research.</p>
+  <p class="mg-dropcap">A dozen channels of tool-use recipes — ten output channels (raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics) plus two cross-channel references (dimensions, style-guides) — each with rules, patterns, and anti-patterns. A two-tier brand-token schema with motion. A multi-constraint solver that enforces 8:1 contrast and the OLED palette at render time. A vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research.</p>
+  <aside class="mg-pull">
+    It is impossible to separate the visual design from the design of the interface.
+    <small>— David Small, <em>Navigating Large Bodies of Text</em> (IBM Systems Journal, 1996)</small>
+  </aside>
   <p><strong>Next-gen</strong> means the tools — LLM-native skill format, vision-model critique, brand tokens alive at render time, motion as a first-class schema field, engine adapters for Pillow / Flux / pretext / ffmpeg / Playwright. <strong>Grounded</strong> means the principles — Cooper's Visible Language Workshop, Tufte's data-ink discipline, Bertin's retinal variables, Gestalt grouping, CRAP, Reichle's E-Z Reader, scanpath patterns. New tools serve the old principles.</p>
 </section>
 
@@ -398,6 +418,9 @@ cd ~/Documents/dev/muriel && ./install.sh</code></pre>
 <section>
   <h2>The critique agent</h2>
   <p>muriel ships a <a href="https://github.com/andyed/muriel/blob/main/agents/muriel-critique.md">vision-model critique agent</a> with read-only tools, hardened against prompt-injection, authority-laundering, and contrast-claim spoofing embedded in the artifact itself. It names what's wrong — with evidence — and cites the specific framework (Tufte / Bertin / Gestalt / CRAP / Reichle / scanpath) when surfacing issues. Fix is a human call; the agent doesn't try.</p>
+  <div class="mg-callout" data-type="tip">
+    <strong>How to invoke:</strong> from any Claude Code session, dispatch the <code>muriel-critique</code> subagent on a rendered artifact. It returns a structured verdict — <code>PASS</code> / <code>NEEDS REVISION</code> / <code>FAIL</code> — with a numbered issue list (rule · evidence · fix · severity). Any <span class="mg-badge" data-type="important">CRITICAL</span> → FAIL; any <span class="mg-badge" data-type="warning">HIGH</span> → NEEDS REVISION; otherwise PASS.
+  </div>
 </section>
 
 <footer>

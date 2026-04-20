@@ -7,7 +7,7 @@
 
 # muriel
 
-**muriel is a next-gen visual-production skill for LLMs** — built for the agentic era and grounded in the full design-history lineage it inherits. Ten channels of tool-use recipes (raster, SVG, web, interactive, video, science, gaze, terminal, dimensions, style-guides), a two-tier brand-token schema with motion, anti-patterns per channel, a multi-constraint solver that enforces 8:1 contrast and OLED palette at render time, and a vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research.
+**muriel is a next-gen visual-production skill for LLMs** — built for the agentic era and grounded in the full design-history lineage it inherits. A dozen channels of tool-use recipes — ten output channels (raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics) plus two cross-channel references (dimensions, style-guides) — a two-tier brand-token schema with motion, anti-patterns per channel, a multi-constraint solver that enforces 8:1 contrast and OLED palette at render time, and a vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research.
 
 Next-gen means the tools — LLM-native skill format, vision-model critique, brand tokens alive at render time, motion as a first-class schema field, engine adapters for Pillow / Flux / pretext / ffmpeg / Playwright. Grounded means the principles — Cooper's Visible Language Workshop (tribute below), Tufte's data-ink discipline, Bertin's retinal variable ranking, Gestalt grouping, CRAP layout, Reichle's E-Z Reader, scanpath patterns from vision science. The new tools serve the old principles; neither replaces the other.
 
@@ -50,15 +50,23 @@ muriel is the grandmother to [marginalia](https://github.com/andyed/marginalia) 
 
 ## Channels
 
-- **Raster** (Pillow + `typeset.py`) — store assets, icons, banners, wordmarks
-- **Vector** (SVG, `svgwrite`, `cairosvg`) — paper figures, data-driven diagrams, scalable icons
-- **Editorial HTML** (marginalia) — blog posts, callouts, magazine layouts
-- **Interactive** (WebGL / Canvas / D3) — live demos with parameter sliders
-- **Web → static** (Playwright, weasyprint) — capture DOM to PNG/PDF
-- **Video** (ffmpeg + `desktop-control`) — product demos, GIFs, talk recordings
-- **Terminal** (Unicode charts) — sparklines, bar charts, tables
+Ten output channels, each with its own subfile under [`channels/`](channels/):
+
+- **Raster** (Pillow + `typeset.py`) — store assets, icons, banners, wordmarks, screenshot designs
+- **Vector / SVG** (`svgwrite`, `cairosvg`, Mermaid, Excalidraw) — paper figures, data-driven diagrams, scalable icons, flowcharts
+- **Web** (marginalia + Playwright + weasyprint) — blog posts, callouts, magazine layouts, DOM → PNG/PDF capture
+- **Interactive** (WebGL / Canvas / D3 / PixiJS) — live demos with parameter sliders
+- **Video** (ffmpeg + `desktop-control` + hyperframes) — product demos, GIFs, HTML → MP4 compositions
+- **Terminal** (Unicode charts via `chart.py`) — sparklines, bar charts, tables
 - **Density viz** (`typeset.render_heatmap()`) — Tobii-style fixation heatmaps
-- **Gaze plots** — scanpath, bubble scanpath, AOI timeline, saccade rose
+- **Gaze plots** — scanpath, bubble scanpath, AOI timeline, saccade rose, approach-retreat
+- **Science** (matplotlib + LaTeX + `muriel.stats`) — paper figures, notebook editorial, APA reporting
+- **Infographics** (deterministic SVG) — single-image explainers, 10 types × layout patterns × colorblind-safe palettes
+
+Plus two cross-channel references used by every channel:
+
+- **Dimensions** ([`channels/dimensions.md`](channels/dimensions.md)) — social cards, device footprints, viewport tiers, paper sizes, video resolutions
+- **Style guides** ([`channels/style-guides.md`](channels/style-guides.md)) — `brand.toml` schema, motion tokens, CSS / matplotlibrc derivation, ownership rules
 
 
 ## Install
@@ -129,12 +137,17 @@ The `SKILL.md` file uses the [Agent Skills](https://github.com/anthropics/claude
 | Channel | Required | Optional |
 |---|---|---|
 | Raster | Python 3, Pillow | [`muriel/typeset.py`](muriel/typeset.py) for templates |
-| SVG | none (hand-rolled) | `svgwrite`, `drawsvg`, `cairosvg`, `rsvg-convert`, Mermaid CLI |
-| Editorial HTML | marginalia (CDN) | pandoc 3.x for markdown → HTML |
-| Interactive | modern browser | D3, Three.js, p5.js (CDN) |
-| Web → static | Playwright *or* weasyprint | headless Chrome |
-| Video | ffmpeg (full build: `brew tap homebrew-ffmpeg/ffmpeg`) | — |
+| SVG | none (hand-rolled) | `svgwrite`, `drawsvg`, `cairosvg`, `rsvg-convert`, Mermaid CLI, [mcp_excalidraw](https://github.com/yctimlin/mcp_excalidraw) for live-canvas refinement |
+| Web (editorial) | marginalia (CDN) | pandoc 3.x for markdown → HTML |
+| Web (static capture) | Playwright *or* weasyprint | headless Chrome |
+| Interactive | modern browser | D3, Three.js, p5.js, PixiJS v8 (CDN) |
+| Video | ffmpeg (full build: `brew tap homebrew-ffmpeg/ffmpeg`) | hyperframes for HTML → MP4; `desktop-control` for automated capture |
 | Terminal | Python 3 | [`muriel/chart.py`](muriel/chart.py) |
+| Density viz / Gaze | Python 3, Pillow | [`muriel/typeset.py`](muriel/typeset.py) `render_heatmap()` |
+| Science | Python 3 | matplotlib, NumPy (for figures); `muriel.stats` / `muriel.matplotlibrc_{dark,light}` / `muriel.dimensions` ship stdlib-only |
+| Infographics | Python 3 | `svgwrite`, `cairosvg` for raster export |
+| Dimensions | Python 3 | — (stdlib-only reference module) |
+| Style guides | Python 3 | `tomli` on 3.10 (3.11+ has `tomllib`); optional matplotlib for rcparams derivation |
 
 ## Universal rules
 
