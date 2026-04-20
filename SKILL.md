@@ -120,8 +120,45 @@ For a multi-channel task (e.g., a blog post with an interactive demo captured as
 - [ ] **Multi-line text layout** — Auto-wrap long text with configurable max-width, line-height, and alignment.
 - [ ] **Curved/arc text** — Text along a circular path for badges, seals, and circular icon borders.
 - [ ] **Gradient text fill** — Linear/radial gradient fills inside letterforms.
-- [ ] **Screenshot compositing** — Place device-framed app screenshots into promotional images.
+- [ ] **Screenshot compositing** — Place device-framed app screenshots into promotional images. See expanded roadmap below.
 - [ ] **Brand color extraction** — Auto-extract dominant colors from a background image.
+
+#### Screenshot designer features — roadmap
+
+> The screenshot-beautifier category (Pika, Shots.so, CleanShot X, Screely, BrandBird, Canva screenshot editor, Screen Studio, Rotato, Previewed, Mockdrop, Screenshot.rocks, BrowserFrame, Figma mockup plugins) has converged on a fairly standard feature set. Port the useful ones into muriel's raster channel as opinionated presets. We're stealing the feature menu, not the products.
+
+**P0 — table stakes (ship first):**
+- [ ] **`drop_shadow(offset, blur, color, spread)`** — multi-layer ambient + key shadows, Material-3 style. Existing `render_text()` shadow handles text only; this is for composited screenshots/images.
+- [ ] **`fade_edge(side, ramp_px, curve="linear"|"ease")`** — progressive alpha ramp on any side (top/right/bottom/left) or radial. Andy's seed feature; rare as a preset outside Pika + Screen Studio.
+- [ ] **`border_radius(r)`** — rounded corners on the screenshot/image before compositing.
+- [ ] **`background(kind, …)`** — unified API with kinds: `solid`, `linear_gradient`, `radial_gradient`, `mesh_gradient` (3–5 color blobs), `image_blur`, `noise_overlay`, `transparent`.
+- [ ] **`caption(text, position, style_token)`** — bound to brand tokens; enforces 8:1 contrast at render time, not as lint pass.
+- [ ] **App Store + social dimension presets** — named constants already in [`channels/dimensions.md`](channels/dimensions.md); confirm coverage: `IPHONE_69_PORTRAIT` 1290×2796, `IPAD_13_PORTRAIT` 2064×2752, `OG_IMAGE` 1200×630, `X_CARD` 1200×675, `IG_SQUARE` 1080×1080, `IG_STORY` 1080×1920, `PRODUCT_HUNT` 1270×760.
+
+**P1 — distinctive, low effort:**
+- [ ] **`tilt(angle_deg, axis)`** — 2D affine shear (cheap fake-3D). Real perspective later.
+- [ ] **`device_frame(kind)`** — PNG overlay library. Minimum kit: `iphone_15_pro_dynamic_island`, `macbook_pro`, `browser_chrome_light`, `browser_chrome_dark`, `browser_safari_mac`, `ipad`.
+- [ ] **`browser_url_bar(url, title)`** — editable text rendered into the chrome asset (the URL is half the joke).
+- [ ] **`spotlight(x, y, radius, falloff)`** — radial bright spot for "look here" emphasis.
+- [ ] **`vignette(strength, shape="oval"|"rect")`** — classic framing effect.
+- [ ] **`noise(amount)`** — post-filter; fights banding on gradients.
+- [ ] **`glow(color, blur, intensity)`** — outer glow (Psychodeli audio-reactive aesthetic).
+
+**P2 — differentiators:**
+- [ ] **`glass_panel(rect, blur, tint)`** — frosted backdrop card behind device (2023–2026 aesthetic).
+- [ ] **`numbered_callout(x, y, n, leader_to=(x,y))`** — step markers 1…n with leader line (BrandBird / CleanShot).
+- [ ] **`reflection(height_frac, opacity)`** — iPod-style mirror under device.
+- [ ] **`bento_grid(cells)`** — template compositor for N screenshots + brand palette (Pika).
+- [ ] **`glass_reflection_overlay(asset)`** — pre-baked highlight PNG multiplied over screen for fake HDRI (Rotato lite).
+- [ ] **`auto_blur_regions(detector)`** — heuristic blur for emails/tokens in debug captures. Scrutinizer-relevant when publishing validation screenshots.
+- [ ] **`magnifier(x, y, radius, zoom)`** — BrandBird's "Highlight Product Feature" tool. Circular zoom-in lens on a specific UI region.
+- [ ] **`annotation(arrow|rect|circle|emoji, x, y, …)`** — BrandBird/CleanShot annotation primitives.
+
+**P3 — out of channel (skip or defer elsewhere):**
+- Animated MP4 / GIF export → [`channels/video.md`](channels/video.md).
+- Ray-traced 3D device renders → pre-render pipeline; muriel just ships the baked PNGs.
+- Scene compositing (flat-lay, in-hand) → defer; not on brand for Scrutinizer/Psychodeli.
+- AI screenshot editing (Magic Edit / Magic Grab / Magic Eraser from Canva; Uizard Screenshot Scanner reverse-engineering to mockups) → different skill; muriel is deterministic.
 
 ### SVG
 - [ ] **Gaze ribbon primitive** — `typeset.svg.gaze_ribbon(fixations)` reusable across AdSERP / RecGaze work.
