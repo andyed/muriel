@@ -97,6 +97,70 @@ ffmpeg -i input.mp4 -c copy -f segment -segment_time 60 -reset_timestamps 1 outp
 
 See [`docs/PERMUTE.md`](docs/PERMUTE.md) for the infographic aspiration: Tufte, Bertin, Gestalt, CRAP, semantic zoom, small multiples, linked displays.
 
+## HTML → MP4 via hyperframes
+
+For videos whose source of truth is HTML (release announcements, feature explainers, animated data viz, kinetic-typography compositions, website-to-video), use [**hyperframes**](https://github.com/heygen-com/hyperframes) (HeyGen, Apache 2.0). Puppeteer + FFmpeg + GSAP rendering; deterministic (same input → same output). Explicitly built for agent-driven authoring.
+
+Installed globally via `npx skills add heygen-com/hyperframes -y -g`. Registers five Claude Code slash commands:
+
+| Skill | What it does |
+|---|---|
+| `/hyperframes` | HTML composition authoring — captions, TTS, audio-reactive animation, transitions |
+| `/hyperframes-cli` | CLI commands — `init`, `lint`, `preview`, `render`, `transcribe`, `tts`, `doctor` |
+| `/hyperframes-registry` | Block and component installation via `hyperframes add <block>` |
+| `/website-to-hyperframes` | Capture a URL → turn it into a video (Scrutinizer.app promo candidate) |
+| `/gsap` | GSAP timelines, easing, ScrollTrigger, framework integration, performance |
+
+### When to pick what
+
+| If the source of truth is… | Use |
+|---|---|
+| A running macOS app (Scrutinizer mode sweeps, Psychodeli visualizer playback) | **Recordly** |
+| An HTML composition (release demo, explainer, animated chart) | **hyperframes** |
+| A scripted walkthrough driving a real app via the mouse | **desktop-control + ffmpeg** |
+| A static screenshot pipeline that needs motion frosting (zoom-pan, fade-in caption) | **ffmpeg filters directly** |
+
+### Quickstart
+
+```bash
+npx hyperframes init my-video      # scaffolds HTML composition
+cd my-video
+npx hyperframes preview            # live-reload in browser
+npx hyperframes render             # MP4 out
+```
+
+Compose in HTML with data attributes:
+
+```html
+<div id="stage" data-composition-id="release" data-start="0" data-width="1920" data-height="1080">
+  <video src="scrutinizer-demo.mp4" data-start="0" data-duration="8" data-track-index="0" muted playsinline></video>
+  <div class="caption" data-start="1" data-duration="4" data-track-index="1">
+    Only 2° of your vision is sharp.
+  </div>
+  <audio src="music.wav" data-start="0" data-duration="8" data-track-index="2" data-volume="0.5"></audio>
+</div>
+```
+
+### Catalog blocks worth knowing
+
+50+ prebuilt blocks at [hyperframes.heygen.com/catalog](https://hyperframes.heygen.com/catalog/blocks/data-chart):
+
+- **Social overlays** — `instagram-follow`, lower thirds, subscribe animations
+- **Shader transitions** — `flash-through-white`, WebGL dissolves
+- **Data viz** — `data-chart` (animated bar/line), counters
+- **Captions + TTS** — synced text over video, auto-narration
+- **Audio-reactive** — shaders or CSS animations driven by waveform analysis
+
+Install blocks via `npx hyperframes add <block-name>`.
+
+### Frame Adapter pattern
+
+Bring your own animation runtime (GSAP, Lottie, CSS, Three.js). PixiJS ([`vocabularies/pixijs.md`](../vocabularies/pixijs.md)) and kinetic-typography compositions should drop in via a custom adapter.
+
+### Not a replacement
+
+hyperframes sits alongside the ffmpeg + Recordly + desktop-control recipes above, not instead of them. Pick the substrate by where the truth lives. A Scrutinizer feature demo video has three parts — a screen recording of the running app (Recordly), title cards and captions (hyperframes), and final encoding (ffmpeg). Stack them.
+
 ## Anti-patterns
 
 - **Don't capture with system audio on** unless narration is intentional. Dogs bark, notifications ding, system alerts leak into shipped reels.

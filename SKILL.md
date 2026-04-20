@@ -200,6 +200,13 @@ For a multi-channel task (e.g., a blog post with an interactive demo captured as
 - [ ] **Generalize `.outer-note` and `.stats-detail` back into marginalia** — Currently F-explainer-only; worth promoting to the main library if a second project adopts them.
 - [ ] **Build-script variant of the pandoc bridge** — Node script using `marginalia-md.js` for projects that prefer browser-side conversion over pandoc.
 
+### Video
+- [x] **`channels/video.md`** — Recordly + desktop-control + ffmpeg + `burn-tooltips.sh` recipes shipped.
+- [x] **hyperframes integration** — HeyGen's Apache-2.0 HTML → MP4 tool wired into the video channel. Installed via `npx skills add heygen-com/hyperframes -y -g` — registers `/hyperframes`, `/hyperframes-cli`, `/hyperframes-registry`, `/website-to-hyperframes`, `/gsap` as slash commands. Documented in [`channels/video.md`](channels/video.md) with pick-the-substrate-by-source-of-truth decision table.
+- [ ] **Scrutinizer release-video prototype** — port `scrutinizer-www/src/blog/drafts/video-script-v2.6.md` and `video-script-minecraft-fast-demo.md` into hyperframes compositions. First proof that the HTML → MP4 path works for Scrutinizer release announcements. Bonus: the scripts already have precise timecodes + tooltip text.
+- [ ] **`scrutinizer.app` → promo video** — invoke `/website-to-hyperframes` against scrutinizer.app and produce a 30–60s promo. Benchmark auto-generated quality vs hand-authored compositions.
+- [ ] **PixiJS Frame Adapter** — bring muriel's PixiJS vocabulary (shader-driven gaze overlays, audio-reactive visuals) into hyperframes as a custom renderer. Unlocks Scrutinizer/Psychodeli WebGL demos as composable video blocks.
+
 ### Upstream ports — K-Dense scientific-agent-skills
 
 > [K-Dense AI's `scientific-agent-skills`](https://github.com/K-Dense-AI/scientific-agent-skills) is an MIT-licensed family of research skills. Several overlap muriel's territory enough to borrow structure, templates, or tooling from. These are ports / adaptations, not wholesale adoption — muriel has its own brand rules and palette commitments.
