@@ -20,10 +20,32 @@ classifiers = [
 # No required dependencies. matplotlib is expected to be present in any
 # notebook that imports matplotlibrc_dark / matplotlibrc_light but is not
 # declared here because the stats module works without it.
+#
+# Pillow + numpy are soft-required by the raster-channel tools (heroshot,
+# tilt_shift, smartcrop). They're imported lazily inside functions so the
+# core install stays empty and ``muriel doctor``/``dimensions`` work on a
+# bare Python.
 dependencies = []
+
+[project.optional-dependencies]
+# Each extra adds exactly one backend. Pins are to versions with prebuilt
+# wheels on macOS + Linux + Windows (x86_64 + arm64). Never trigger a
+# source build.
+faces    = ["mediapipe>=0.10.9"]
+text     = ["easyocr>=1.7.1"]
+saliency = ["onnxruntime>=1.16.0"]
+raster   = ["Pillow>=10.0", "numpy>=1.24"]  # what the tools actually need at runtime
+# Convenience: everything at once.
+all      = [
+  "mediapipe>=0.10.9",
+  "easyocr>=1.7.1",
+  "onnxruntime>=1.16.0",
+  "Pillow>=10.0",
+  "numpy>=1.24",
+]
 
 [project.scripts]
 muriel = "muriel.__main__:main"
 
 [tool.setuptools]
-packages = ["muriel", "muriel.tools", "render_assets"]
+packages = ["muriel", "muriel.detectors", "muriel.tools", "render_assets"]

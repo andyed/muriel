@@ -46,10 +46,13 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     "capture":        ("muriel.capture",                    "Responsive viewport-sweep screenshot via Playwright"),
     "contrast":       ("muriel.contrast",                   "WCAG 8:1 contrast audit on SVG / CSS / color pairs"),
     "dimensions":     ("muriel.dimensions",                 "Print the dimensions registry (sizes, devices, paper)"),
+    "doctor":         ("muriel.doctor",                     "Report muriel install state, extras, and model caches"),
     "heroshot":       ("muriel.tools.heroshot",             "Tilted + bordered + shadowed hero-shot from a PNG"),
+    "smartcrop":      ("muriel.tools.smartcrop",            "Saliency-aware crop solver (edges + optional faces / text / saliency)"),
+    "styleguide":     ("muriel.styleguide",                 "Load a brand.toml; print / derive CSS / matplotlibrc / contrast audit"),
     "tilt-shift":     ("muriel.tools.tilt_shift",           "Fake-lens depth-of-field blur on a PNG"),
     "venn":           ("muriel.tools.venn",                 "Area-proportional Venn / Euler diagram from a JSON spec"),
-    "styleguide":     ("muriel.styleguide",                 "Load a brand.toml; print / derive CSS / matplotlibrc / contrast audit"),
+    "warmup":         ("muriel.warmup",                     "Prefetch detector model weights for installed extras"),
 }
 
 
