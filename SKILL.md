@@ -1,12 +1,11 @@
 ---
 name: muriel
-description: "Next-gen visual-production skill for LLMs — ten channels of tool-use recipes (raster, SVG, web, interactive, video, science, gaze, terminal, dimensions, style-guides), a two-tier brand-token schema with motion, anti-patterns per channel, a multi-constraint solver that enforces 8:1 contrast at render time, and a vision-model critique agent grounded in Tufte / Bertin / Gestalt. Use when the user needs any visual artifact for human eyes."
+description: "A multi-constraint solver for visual production — raster, SVG, interactive JS, video, science plots, gaze viz, editorial HTML across ten channels. The brand tokens, 8:1 contrast rule, and dimension constants stay active at render time. Use when the user needs any visual artifact for human eyes."
 user-invocable: true
 ---
 
-# muriel — next-gen visual-production skill for LLMs
+# muriel — Multi-channel visual production
 
-muriel is a free, scriptable skill that teaches an LLM agent to produce every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data. Ten named channels (raster, SVG, web, interactive, video, terminal, heatmaps, gaze, science, dimensions) each with rules and anti-patterns, four aesthetic vocabularies, a two-tier brand schema with motion tokens, a multi-constraint solver that keeps 8:1 contrast and OLED palette active at render time, and a vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research that names what's wrong before ship.
 
 ## Channels
 
@@ -25,6 +24,7 @@ Each channel has a dedicated subfile with deep recipes, tooling, and lessons. Th
 | **Science** | matplotlib + LaTeX | [`channels/science.md`](channels/science.md) — rcparams, stats reporting, notebook editorial, paper figures |
 | **Dimensions** | *cross-channel reference* | [`channels/dimensions.md`](channels/dimensions.md) — social cards, device footprints, viewport tiers, video, paper/print, favicons, scale factors |
 | **Style guides** | *brand schema* | [`channels/style-guides.md`](channels/style-guides.md) — brand.toml schema, loader, rule enforcement, CSS/matplotlibrc derivation, example brand.toml files |
+| **Infographics** | SVG → PNG | [`channels/infographics.md`](channels/infographics.md) — 10 types × layout patterns × colorblind-safe palettes, deterministic SVG (not AI), 60-30-10 color / 60-40 viz:text rule, 5-point quality rubric at 8:1 |
 
 
 ## Aesthetic vocabularies
@@ -33,6 +33,8 @@ Design grammars worth naming explicitly when a project's visual register calls f
 
 - [`vocabularies/fui.md`](vocabularies/fui.md) — **Fantasy / Fictional User Interface.** Sci-fi HUDs. Perception NYC, Territory Studio, Ash Thorp, GMUNK lineage. Thin strokes, mono numerics, staggered reveals, radial geometry, restrained palettes.
 - [`vocabularies/visible-language.md`](vocabularies/visible-language.md) — **Visible Language Workshop.** The MIT Media Lab design tradition (Cooper, Small, Ishizaki, Maeda → Processing → pretext). Information landscapes, multi-scale typography, typography as data structure. Contemporary substrate: [`@chenglou/pretext`](https://chenglou.me/pretext/). See also `channels/interactive.md` for the pretext API and the `pretext-coachella` reference exemplar.
+- [`vocabularies/pixijs.md`](vocabularies/pixijs.md) — **PixiJS 2D WebGL/WebGPU substrate.** When Canvas/D3 runs out of headroom and Three.js is overkill. Particle-dense gaze overlays, shader-driven foveation demos, audio-reactive visuals. Pin to `^8.18`. **Lifted from [pixijs/pixijs-skills](https://github.com/pixijs/pixijs-skills) (MIT)** — they did the documentation work; we curated the relevant subset. Read upstream for depth.
+- [`vocabularies/kinetic-typography.md`](vocabularies/kinetic-typography.md) — **Letters that move with intent.** Saul Bass → Kyle Cooper → Territory Studio lineage. Max contrast, strategic motion, rehearsed emotional vocabulary, SDF alpha rule. Substrate options: pretext for typographic Canvas2D animation, iblipper for a full animation-as-language pipeline, Troika SDF for 3D scenes. Invoke `/iblipper` when the output itself is the animated artifact.
 
 Additional vocabularies (Swiss grid, editorial, brutalist, newsprint) can be added here without restructuring the skill.
 
@@ -58,10 +60,10 @@ Codified from per-project bug fixes — apply to **every** channel:
 For data-driven channels (raster plots, SVG, interactive JS, science), apply Tufte/Bertin/CRAP via three high-leverage patterns:
 
 - **Small multiples** — same chart, repeated, with one variable changing. Lets the eye compare without re-anchoring. Reach for this whenever you'd otherwise build a complex multi-series single chart.
-- **Linked displays / brushing** — selecting in one view highlights the corresponding marks in every other view. D3's strength. Perfect for exploratory dashboards, phase-segmented timeline explorers, and any "facets that share a record set" interface.
-- **Semantic zoom** — representation *changes* by zoom level, not just scale. Overview shows aggregate; mid zoom shows clusters; deep zoom shows individual records. Different from optical zoom. Pairs with linked displays for sector-explorer interfaces.
+- **Linked displays / brushing** — selecting in one view highlights the corresponding marks in every other view. D3's strength. Perfect for exploratory dashboards, OSEC phase explorers, and any "facets that share a record set" interface.
+- **Semantic zoom** — representation *changes* by zoom level, not just scale. Overview shows aggregate; mid zoom shows clusters; deep zoom shows individual records. Different from optical zoom. Pairs with linked displays for the OSEC sector explorer pattern.
 
-Reference: [`docs/PERMUTE.md`](docs/PERMUTE.md) — full Tufte/Bertin/Gestalt/CRAP framing.
+Reference: `~/Documents/dev/ascii-charts/docs/PERMUTE.md` — full Tufte/Bertin/Gestalt/CRAP framing.
 
 ## Interaction design grounding
 
@@ -71,7 +73,7 @@ When building interactive demos or UI affordances around the visuals, the design
 - **Hick's Law** — choice time = `a + b·log₂(n + 1)`. Decision time grows logarithmically with options. Implication: collapse n>7 options into hierarchy or progressive disclosure.
 - **Fisheye menus** — focus+context lens that expands the item under the cursor while compressing peripheral items (the user's own MS Human Factors thesis, Clemson). The trick: each item gets a *guaranteed minimum size* below the lens floor so distant items remain clickable, not just visible.
 - **Marginalia callouts** — typographic affordances (pull quotes, asides, margin notes) are the editorial equivalent of fisheye: they create a visual hierarchy that lets the eye sample without losing the through-line.
-- **Cortical magnification & foveation** — the retinal-side reason fisheye works at all. Cite primary sources (Curcio 1990, Freeman & Simoncelli 2011) when explaining *why* focus+context isn't a UI gimmick.
+- **Cortical magnification & foveation** — the retinal-side reason fisheye works at all. Inside the Math is the canonical explainer; reference it when explaining *why* focus+context isn't a UI gimmick.
 - **"It is impossible to separate the visual design from the design of the interface."** — David Small, [*Navigating Large Bodies of Text*](https://smg.media.mit.edu/library/small1996.html) (IBM Systems Journal, 1996). Visual grammar and interaction grammar are the same grammar. Every choice about how text renders is a choice about how people navigate it — and vice versa. See [`vocabularies/visible-language.md`](vocabularies/visible-language.md) for the full MIT Media Lab lineage this is drawn from.
 
 Use these as design rationale in figure captions and blog posts — the vocabulary is precise, the laws are quantified, and the lineage runs from psychophysics through typography to interaction design.
@@ -81,18 +83,6 @@ Use these as design rationale in figure captions and blog posts — the vocabula
 ## When to use
 
 Whenever the user needs a visual artifact for human eyes — store assets, paper figures, blog post explainers, video demos, terminal output, scientific plots, infographics, screenshots, gaze visualizations. Invoke with `/muriel` followed by what's needed.
-
-## First-build critique offer
-
-**On the first render of any new visual artifact, offer to invoke the `muriel-critique` agent before the user reviews by eye.** The agent (see [`agents/muriel-critique.md`](agents/muriel-critique.md)) reads the artifact, checks against universal rules + channel rules + optional brand tokens, and returns PASS / NEEDS REVISION / FAIL with cited evidence — catching the kind of pedantic fixes (double-letters, ornament/letter ratio, text-over-decoration, baseline drift, invisible-against-background) that would otherwise cost an iteration each.
-
-The offer is one line:
-
-> _"Want me to run muriel-critique on this first render? It checks against the universal rules + this artifact's channel rules before you commit."_
-
-Accept → spawn a subagent with `subagent_type: muriel-critique` and pass `artifact: <path>` (plus `channel:` and `brand:` if known). Decline → proceed; user can request critique explicitly later. Only offered on **first renders**, not subsequent iterations on the same artifact.
-
-Keep critique OUT of per-tool generators (`gen_dropcap.py`, `gen_animated_gif.py`, etc.). The agent invocation is a separate step, not a pipeline stage — tools stay single-purpose, the user stays in the loop on when critique fires, and the agent's rubric can evolve independently of the tools it reviews.
 
 ## Channel reference map
 
@@ -111,8 +101,11 @@ When the task lands in a specific channel, read the corresponding subfile *first
 | matplotlib figures, stats reporting, notebook editorial, LaTeX hooks | `channels/science.md` |
 | "What size should this be?" — social card / device / viewport / paper / video dimensions | `channels/dimensions.md` |
 | Loading a brand's design tokens, enforcing brand ownership rules, deriving CSS / rcparams from a brand | `channels/style-guides.md` |
+| Social-shareable explainers, LinkedIn/X cards, README hero images, single-image infographics | `channels/infographics.md` |
 | Sci-fi HUD aesthetic, FUI grammar, Territory/Perception lineage | `vocabularies/fui.md` |
 | Multi-scale typography, information landscapes, pretext, Cooper/Small lineage | `vocabularies/visible-language.md` |
+| Particle-dense gaze overlays, shader filters, PixiJS v8 patterns | `vocabularies/pixijs.md` |
+| Animated typography, emotional motion vocabulary, Bass/Cooper/Territory lineage | `vocabularies/kinetic-typography.md` |
 
 For a multi-channel task (e.g., a blog post with an interactive demo captured as a paper figure), read the relevant subfiles in order of primary channel first.
 
@@ -122,33 +115,23 @@ For a multi-channel task (e.g., a blog post with an interactive demo captured as
 
 ### Raster
 - [x] **Drop shadow with blur** — Implemented via `ImageFilter.GaussianBlur` in `render_text()` shadow effect.
-- [x] **Template system** — [`muriel/typeset.py`](muriel/typeset.py) ships `amazon-icon`, `amazon-small-icon`, `tvos-topshelf`, `play-feature` templates via `render_asset(template=...)`.
+- [x] **Template system** — `ascii-charts/typeset.py` ships `amazon-icon`, `amazon-small-icon`, `tvos-topshelf`, `play-feature` templates via `render_asset(template=...)`.
 - [x] **Batch from JSON** — `generate_from_manifest("assets.json")` in `typeset.py`.
 - [ ] **Multi-line text layout** — Auto-wrap long text with configurable max-width, line-height, and alignment.
 - [ ] **Curved/arc text** — Text along a circular path for badges, seals, and circular icon borders.
 - [ ] **Gradient text fill** — Linear/radial gradient fills inside letterforms.
+- [ ] **Screenshot compositing** — Place device-framed app screenshots into promotional images.
 - [ ] **Brand color extraction** — Auto-extract dominant colors from a background image.
 
-### Hero-shot compositor (raster)
-
-Device-framed product shots for app stores, blog heroes, social cards, case studies. The "classic marketing hero" channel that Photoshop and tools like Shottr / Xnapper own. muriel's version is brand-token-driven, reproducible, and composable.
-
-- [ ] **`muriel/tools/heroshot.py`** — inputs: source screenshot(s), target dimension (via `muriel.dimensions`), brand.toml, title text. Output: ship-ready PNG that composites: isotropic scaling (no anamorphic distortion), optional 3D CSS-skew for product-at-angle effect, title typography from the brand, device bezel / browser chrome / generic frame, brand-consistent border.
-- [ ] **Title placement rules** — above / below / overlaid, auto-chosen by aspect ratio; respects `brand.toml` typography and 8:1 contrast on the title vs. the hero's dominant luminance.
-- [ ] **Border/frame library** — iPhone 15/16 silhouettes, browser chrome (Chrome / Safari), device-agnostic thin bezel, generous whitespace frame. Contributors add SVG-source bezels to `templates/bezels/`.
-- [ ] **Skew presets** — `skew='none' | 'gentle' | 'aggressive' | 'product-3d'`. Gentle = ±3° rotation; aggressive = perspective transform with vanishing point; product-3d = Mercury-ad-style with drop shadow. All respect `motion_preference` if the hero is animated.
-- [ ] **HTML variant** — generate live HTML with CSS 3D transforms so the hero can be embedded interactively in a blog post *or* captured via `muriel.capture` as a static PNG. Same tokens drive both paths.
-- [ ] **Preset library** — `heroshot.app_store('iphone', screenshot, title, brand)`, `heroshot.blog_hero('browser', screenshot, title, brand)`, `heroshot.social_card('tight', screenshot, caption, brand)`.
-
 ### SVG
-- [ ] **Gaze ribbon primitive** — `typeset.svg.gaze_ribbon(fixations)` reusable across gaze studies.
-- [ ] **Phase overlay primitive** — Colored band generator from phase-segmented gaze data.
-- [ ] **Phase-timeline diagram primitive** — Multi-band horizontal timeline.
+- [ ] **Gaze ribbon primitive** — `typeset.svg.gaze_ribbon(fixations)` reusable across AdSERP / RecGaze work.
+- [ ] **F-pattern overlay primitive** — Colored band generator from phase-segmented gaze data.
+- [ ] **OSEC phase diagram primitive** — Multi-band horizontal timeline.
 - [ ] **Excalidraw → clean-export pipeline** — Batch re-export with `roughness:0`, Helvetica, solid fills.
 - [ ] **Mermaid CLI wrapper** — Themed output matching marginalia `--mg-*` palette.
 
 ### Interactive JS
-- [ ] **Extract shared `permalink.js`** — Standalone PermalinkManager implementation for demos (URL hash ↔ parameter state).
+- [ ] **Extract shared `permalink.js`** — Pull the PermalinkManager pattern out of Scrutinizer/Psychodeli for demos outside those repos.
 - [ ] **Demo loader snippet for marginalia** — `<mg-demo src="...">` custom element that lazy-loads an iframe.
 - [ ] **Single-file demo bundler** — Inline CSS/JS/images as data URIs to produce a standalone `.html`.
 
@@ -175,83 +158,18 @@ Device-framed product shots for app stores, blog heroes, social cards, case stud
 - [ ] **`muriel/contrast.py` inline-fill pass** — Current audit only walks `<style>` CSS; add a second pass that walks `<text fill="…">` attributes for SVGs that set fills inline.
 - [ ] **`muriel/contrast.py` marginalia-token audit** — Add a `audit_marginalia_tokens()` helper that reads `marginalia.css` and verifies every `--mg-*` custom property against both theme backgrounds.
 
-### PERMUTE — elevate from docs/ to a cross-channel operator
-
-PERMUTE currently lives as [`docs/PERMUTE.md`](docs/PERMUTE.md) (Tufte/Bertin/Gestalt/CRAP principles applied as transformation operators). That framing is channel-agnostic, not ASCII-specific — it should sit alongside FUI / Visible Language / PixiJS / Kinetic Typography as a first-class grammar.
-
-- [ ] **Move to `vocabularies/permute.md`** — PERMUTE as a named design grammar: data artifacts iterate through principled transformations (chart-type remap, sort-order remap, small-multiples, linked displays, semantic zoom, categorical ↔ sequential ↔ diverging color, aspect-ratio remap, medium remap).
-- [ ] **`muriel/permute.py`** — Python helper that takes a data spec + permutation axis and emits multiple variants. Channel-agnostic; each channel's renderer is a backend. `permute(data, axis="chart_type")` → one output per viable chart type; `permute(data, axis="medium")` → terminal / raster / SVG / interactive D3.
-- [ ] **`## Permutations` section per channel** — enumerate which permutations each channel supports, as testable assertions.
-- [ ] **`muriel-permute` agent (optional)** — given a data artifact, rank alternative presentations against the communicative intent. Complements `muriel-critique`: one names what's wrong, the other proposes what would be better.
-
-### Diagrams channel (system architecture / UML / agent flows)
-
-muriel doesn't currently cover *technical-architecture diagrams* as a first-class channel. SVG is general; diagrams have their own conventions (lanes, swimlanes, node styles, arrow semantics). [yizhiyanhua-ai/fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph) (MIT) is the reference implementation to borrow from.
-
-- [ ] **`channels/diagrams.md`** — UML (class / sequence / state / component / deployment), system-architecture (RAG pipelines, multi-agent orchestration, tool-call flows, data pipelines), flowcharts. Each pattern with muriel-voiced anti-patterns (don't draw boxes-and-arrows without a stated semantic for what the arrow means; don't use more than 3 shape types in one diagram; etc.).
-- [ ] **`muriel/tools/diagram.py`** — input is a YAML/JSON system spec; output is brand-themed SVG via the active `brand.toml` (stroke = `accent`, fill = `background_2`, labels in `typography.body_family`, etc.). Inspiration: fireworks-tech-graph's NL-to-SVG pipeline, rewritten to consume the structured spec directly so it's deterministic and diff-able.
-- [ ] **NL → spec bridge** — optional Claude Code skill or CLI subcommand that converts a prose description into the YAML/JSON spec, then hands off to `muriel.tools.diagram`. Keeps the render step deterministic while allowing prose authoring.
-
-### Style guides (brand schema)
-
-- [ ] **OKLCH in `brand.toml`.** Today `colors.accent = "#50b4c8"` only parses hex. Add an OKLCH path so brands can write `colors.accent = "oklch(65% 0.15 220)"` — hex stays supported; OKLCH becomes recommended for palettes where lightness ramps matter (muted → vibrant at constant hue). Same `StyleGuide` object internally; emit via `to_css_vars(color_space='oklch'|'hex')`. Inspiration from [pbakaus/impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0), which recommends OKLCH for perceptual uniformity in brand-palette design.
-
 ### Web (editorial variant)
 - [x] **Light editorial palette documented** — `channels/web.md` now has a section on the F-explainer pattern, with the `.outer-note` / `.stats-detail` / `.has-dropcap` / staged-h2 extensions catalogued.
 - [ ] **Generalize `.outer-note` and `.stats-detail` back into marginalia** — Currently F-explainer-only; worth promoting to the main library if a second project adopts them.
 - [ ] **Build-script variant of the pandoc bridge** — Node script using `marginalia-md.js` for projects that prefer browser-side conversion over pandoc.
 
-### Image-production pipeline (LLM imagegen + enhancement + engines)
+### Upstream ports — K-Dense scientific-agent-skills
 
-The canonical "raster without hand-compositing" path — not built yet; roadmap target. Pipeline shape:
+> [K-Dense AI's `scientific-agent-skills`](https://github.com/K-Dense-AI/scientific-agent-skills) is an MIT-licensed family of research skills. Several overlap muriel's territory enough to borrow structure, templates, or tooling from. These are ports / adaptations, not wholesale adoption — muriel has its own brand rules and palette commitments.
 
-```
-prompt → [imagegen + brand.toml] → PNG → [enhance + target-tier] → [contrast.audit] → ship
-```
-
-- [ ] **`channels/imagegen.md`** — dedicated channel for LLM-generated raster: multi-provider wrapper (Gemini, DALL-E, Flux, Nano Banana, Ideogram), brand-constraint-aware prompting, contrast validation on output, reproducibility (prompt+seed stored alongside PNG).
-- [ ] **`muriel/imagegen.py`** — provider abstraction behind one API. Injects the active `brand.toml` tokens (palette, typography, rules) into the system prompt as generation constraints. Returns a dataclass with `path`, `prompt`, `seed`, `provider`, `model`, `timestamp` so every output is fully reproducible.
-- [ ] **Post-generation audit hook** — auto-run `muriel.contrast.audit_svg`-equivalent on raster outputs (LLM imagegen rarely clears 8:1 without prompting); surface a "regenerate or accept" decision to the caller.
-- [ ] **`muriel/tools/enhance.py`** — upscaling + artifact removal wrapper (Real-ESRGAN or equivalent). Platform-aware via the dimensions registry: `enhance(img, target='twitter.instream')` both resizes *and* enhances in one call. Pairs with `muriel.dimensions` named tiers.
-- [ ] **CLI:** `python -m muriel.imagegen "A foveated gaze heatmap over a SERP" --brand examples/muriel-brand.toml --dims twitter.instream --enhance`
-- [ ] **Recipe in `channels/raster.md`** — full worked pipeline from prompt through ship-ready PNG, citing each step's helper.
-#### Engine adapters
-
-muriel is the constraint layer; the engine that produces pixels is swappable. Each adapter injects the active `brand.toml` into the engine's prompt/config, polls async jobs, and routes the output back through `muriel.contrast.audit` before ship.
-
-**Default engines (free, already part of muriel):**
-- `muriel.typeset` — Pillow compositing with brand tokens. Ships today; no TODO.
-- `muriel.chart` — Unicode terminal charts. Ships today.
-
-**Local / free engine adapters (TODO, high priority):**
-- [ ] **`muriel/engines/flux_local.py`** — Flux via a local runtime (ComfyUI, diffusers, or ollama when supported). Zero cloud cost.
-- [ ] **`muriel/engines/sdxl_local.py`** — Stable Diffusion XL via `diffusers` or ComfyUI. Zero cloud cost.
-- [ ] **`muriel/engines/real_esrgan.py`** — local upscaling (2×/4×) via Real-ESRGAN PyTorch checkpoints. Free alternative to commercial upsamplers.
-- [ ] **`muriel/engines/gemini.py`** — Google Gemini image gen via free tier + pay-as-you-go. Lowest activation energy for a cloud engine.
-
-**Opt-in paid engine adapters (TODO, subscription required):**
-- [ ] **`muriel/engines/firefly.py`** — [Adobe Firefly API](https://developer.adobe.com/firefly-services/docs/firefly-api/). Real capability (image5, creative upsampler, precise/adaptive composite, custom-brand models) but requires Adobe CC + Firefly credits per call. Ships as an optional engine; users without subs fall through to a free engine.
-- [ ] **`muriel/engines/photoshop.py`** — local PS automation (UXP / ExtendScript / batch-actions). Free for users who already have Photoshop; still paid in aggregate (CC subscription).
-- [ ] **`muriel/engines/dalle.py`** / **`muriel/engines/ideogram.py`** — optional commercial alternatives.
-
-**Engine selection in `brand.toml`:**
-- [ ] Add `[engine]` block: `preferred = "pillow"`, `fallback = ["flux_local", "gemini"]`, optional `paid_ok = false`. Let the brand declare its defaults; respect `paid_ok = false` to never call a metered endpoint.
-
-**Positioning:** muriel stays free-first and engine-agnostic. The differentiator is not "we integrate with Firefly" (many will); it's that the brand-tokens + contrast-audit + critique-agent layer is **the same** whether the engine is Pillow locally, Flux in a GPU container, Gemini's free tier, or a paid Firefly custom model. The constraint discipline is the product.
-
-#### Authoring engines (emit editable source files)
-
-Different direction from render engines — these produce files the user can *refine further* in their preferred tool, with muriel's brand tokens already applied to layer names, groups, styles, type properties, and export settings.
-
-- [ ] **`muriel/authoring/psd.py`** — emit a layered `.psd` from a brief + brand.toml. Uses `psd-tools` or a similar library. Standalone (does not require PS to be running). Brand colors become fill layers, type layers use the brand's typography stack, groups follow the brand's semantic taxonomy. Open the output in Photoshop for manual refinement.
-- [ ] **`muriel/authoring/photoshop_live.py`** — script an already-running Photoshop instance via UXP or ExtendScript. Requires PS to be open; useful when the user is actively working and wants muriel to inject a brand-compliant composition into their current document.
-- [ ] **`muriel/authoring/figma.py`** — Figma Files API to create / update designs. Brand tokens map to Figma variables; muriel writes a starter file the team can iterate on. Free tier has limits; works for individual users and small teams.
-- [ ] **`muriel/authoring/canva.py`** — Canva Connect API. Produces a Canva design with brand palette applied. Useful for marketing collateral workflows where the team continues editing in Canva.
-- [ ] **`muriel/authoring/affinity.py`** — Affinity scripting (.afdesign, .afphoto). Free-to-own alternative to PSD.
-- [ ] **`muriel/authoring/excalidraw.py`** — emit a `.excalidraw` JSON file (Excalidraw's native format — open, diff-able, editable). Brand colors become element fills/strokes; typography maps to Excalidraw's font stack. Pairs with [yctimlin/mcp_excalidraw](https://github.com/yctimlin/mcp_excalidraw) (MIT MCP server) for the refinement loop: muriel emits the source → agent refines in mcp_excalidraw's live canvas → muriel re-audits on re-export. Free-to-own, no subscription gate, natural authoring format for system-architecture diagrams.
-
-Authoring engines are complementary to render engines: render when you want a final PNG; author when you want a source file the user will continue to edit. Brand tokens apply identically across both paths.
-
-Reference material (not direct swipes — shape inspiration):
-- [sanjay3290/ai-skills/imagen](https://github.com/sanjay3290/ai-skills/tree/main/skills/imagen) (Apache-2.0) — minimal Gemini image-gen wrapper; informs the provider shape.
-- [ComposioHQ/awesome-claude-skills/image-enhancer](https://github.com/ComposioHQ/awesome-claude-skills/tree/master/image-enhancer) — enhancement-plus-platform-tier pattern.
+- [x] **Infographics type × style matrix** — Shipped as [`channels/infographics.md`](channels/infographics.md). 10 types × layout patterns × 8:1-strict rubric, Wong/IBM/Tol colorblind-safe palettes named. Deterministic SVG (not AI image generation) — muriel's lane. K-Dense's AI pipeline explicitly not adopted. First exemplar: Scrutinizer foveation explainer at `scrutinizer-www/src/img/explainers/foveation.{svg,png,py}` — portrait 1080×1920, Anatomical + Statistical + Comparison hybrid, passes `muriel/contrast.py` at 8:1 across all 9 text roles.
+- [ ] **Market-research long-form PDF channel** — New `channels/market-research.md`. 50+ page templated report: Front matter (5pp) → Core analysis (35pp: market definition, TAM/SAM/SOM sizing, PESTLE, Porter's Five Forces, segmentation, technology trends, regulatory, risk) → Strategic section (10pp: recommendations, roadmap, financials) → Back matter (5pp). LaTeX + `market_research.sty` or weasyprint+marginalia. 5–6 core visuals minimum at 300 DPI. Directly relevant to PM work (Quora/Poe, future roles). Source: [K-Dense market-research-reports](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/market-research-reports/SKILL.md).
+- [ ] **PPTX visual-QA pipeline** — New `channels/pptx.md`. Swipe the infrastructure (not the rigid templates): `pptxgenjs` (JS, muriel-native) for generation → LibreOffice `soffice` for PDF conversion → `pdftoppm` for per-slide PNG → Pillow thumbnail grid for visual inspection. This is the real gold: the generate → render → inspect → fix loop. Include K-Dense's 10 palettes + font pairings + the "no accent lines under titles" AI-tell heuristic as brand defaults. Skip K-Dense's fixed templates — they converge to sameness, which fights muriel's multi-constraint-solver ethos. Source: [K-Dense pptx](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/pptx/SKILL.md).
+- [ ] **Colorblind-safe palette commitment** — Wong, IBM, Tol as named palettes in `channels/style-guides.md` alongside the OLED/editorial palettes. Ship as importable constants in `muriel/palettes.py` (or extend `muriel/matplotlibrc_*.py` with `CATEGORICAL_WONG`, `CATEGORICAL_IBM`, `CATEGORICAL_TOL`). Cross-reference from [`channels/science.md`](channels/science.md) color section.
+- [ ] **scientific-schematics compatibility shim** — K-Dense's [literature-review](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/literature-review/SKILL.md) and hypothesis-generation skills require a [`scientific-schematics`](https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/scientific-skills/scientific-schematics) skill as a mandatory dependency for figures (PRISMA diagrams, flowcharts, synthesis maps). If muriel wants to interoperate with the K-Dense workflow, expose a compatible interface (Python entry point that matches their expected call signature) that delegates to muriel's SVG + raster channels. Low-priority until a project actually needs it.
+- [ ] **Markitdown → marginalia post-processor** — Separate tool (not a muriel channel). Microsoft's [`markitdown`](https://github.com/microsoft/markitdown) converts 15+ formats to markdown. K-Dense [wraps it](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/markitdown/SKILL.md) with AI image descriptions. Build a thin pipe: `markitdown file.pdf | marginalia-inject > out.md` that adds marginalia callout syntax (`.outer-note`, pull-quotes, sidenotes) to markdown output. If it proves useful, propose upstream as a markitdown plugin rather than forking.
