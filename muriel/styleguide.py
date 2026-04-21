@@ -1,15 +1,39 @@
 """
-muriel.styleguide — brand style guide schema, loader, and token tools.
+muriel.styleguide — brand style guide schema v2, loader, and token tools.
 
 Style guides are a **schema** for brand design tokens — colors, typography,
-assets, ownership rules — serialized as TOML and importable into any
-muriel operation. Lets a muriel task pick up a brand's tokens without
-reinventing them and without violating ownership rules like "this brand
-is owned elsewhere, don't regenerate here."
+spacing, radii, elevation, motion, iconography, imagery, logo lockups,
+voice, and accessibility floors — serialized as TOML and importable into
+any muriel operation.
 
-The schema is a superset of what marginalia's ``--mg-*`` custom
-properties cover, with room for brand-specific extras (ring gradients,
-fractal fills, section accents, logo template paths, export commands).
+v2 scope
+--------
+
+Beyond v1's colors + typography families + motion + assets + rules:
+
+- **Structural tokens** — `[spacing]`, `[radii]`, `[elevation]` scales.
+- **Type scale** — `[typography.scale]` with named roles (display, h1–h6,
+  body, body_small, caption, label, mono), each with size / weight /
+  line-height / tracking.
+- **Semantic states** — `[semantic]` replaces the ad-hoc note/tip/warning/
+  important fields in colors with proper {text, surface, border} trios
+  for success / error / warning / info / neutral.
+- **Data-viz palette** — `[viz]` with categorical / sequential / diverging
+  ordered color lists for the science and heatmaps channels.
+- **Logo variants** — `[logo]` with wordmark / monogram / stacked /
+  horizontal sub-tables, each a template + svg + png path trio, plus
+  clear-space and minimum-size rules.
+- **Iconography** — `[iconography]` with family, stroke width, default
+  size, and available sizes list.
+- **Imagery** — `[imagery]` with free-form style descriptor, treatments
+  list, and a crop-policy hook that smartcrop consumes
+  (`preserve-faces`, `preserve-text`, `energy-only`).
+- **Voice** — `[voice]` with adjectives, say-yes / say-no examples for
+  the editorial channels.
+- **Accessibility floors** — `[a11y]` with min_contrast_ratio,
+  min_hit_target_px, focus_ring_color, focus_ring_width_px,
+  motion_reduce_policy. Overrides muriel's universal 8:1 default when
+  a brand wants to tighten (or relax).
 
 Usage
 -----
@@ -18,73 +42,37 @@ Usage
 
     from muriel.styleguide import load_styleguide
 
-    sg = load_styleguide("examples/example-brand.toml")
-    sg.meta.name                      # → 'Acme Research'
-    sg.colors.background              # → '#0a0a0f'
-    sg.colors.accent                  # → '#d2b06a'
-    sg.colors.rings["r1"].color       # → '#91d7f8'
-    sg.typography.display_family      # → 'Nunito'
-    sg.assets.wordmark_template       # → 'templates/logo-wordmark.html'
-    sg.rules.never_rebuild_image_generation_elsewhere  # → True
+    sg = load_styleguide("examples/muriel-brand.toml")
+    sg.meta.name                              # → 'muriel'
+    sg.colors.background                      # → '#0a0a0f'
+    sg.semantic["success"].text               # → '#66bb6a'
+    sg.viz.categorical                        # → ('#e6e4d2', '#50b4c8', ...)
+    sg.typography.scale["h1"].size            # → 40
+    sg.spacing["md"]                          # → 16
+    sg.radii["lg"]                            # → 16
+    sg.logo.wordmark.svg                      # → 'templates/logo-wordmark.svg'
+    sg.voice.adjectives                       # → ('precise', 'unhurried', ...)
+    sg.a11y.min_contrast_ratio                # → 8.0
 
-    # Contrast audit of the whole palette against the brand background
-    for name, ratio, passes in sg.audit_contrast(required=8.0):
-        mark = '✓' if passes else '✗'
-        print(f'  {mark} {name:<20} {ratio:5.2f}:1')
+Contrast audit honours the brand's own ``a11y.min_contrast_ratio`` when
+unset by the caller::
 
-    # Generate a matplotlib rcparams dict from the brand
-    rc = sg.to_matplotlibrc()
-    import matplotlib as mpl
-    mpl.rcParams.update(rc)
-
-    # Generate a CSS custom-property block
-    print(sg.to_css_vars(prefix='--brand-'))
-
-    # Respect ownership rules — raises if an operation is forbidden
-    sg.rules.check('regenerate-wordmark')   # raises RuleViolation
+    for name, ratio, passes in sg.audit_contrast():
+        ...
 
 CLI
 ---
 
 ::
 
-    python -m muriel.styleguide examples/example-brand.toml
-    python -m muriel.styleguide examples/example-brand.toml --css
-    python -m muriel.styleguide examples/example-brand.toml --contrast
-
-Schema
-------
-
-A brand.toml has six top-level tables. Only ``[meta]`` (name) and
-``[colors]`` (background, foreground) are required; everything else is
-optional.
-
-- ``[meta]``: ``name``, ``slug``, ``version``, ``owner_repo``,
-  ``owner_path``, ``canonical_source``, ``ownership_rule``
-- ``[colors]``: ``background``, ``foreground``, plus any of
-  ``background_2``, ``background_3``, ``foreground_muted``, ``accent``,
-  ``accent_ink``, ``note``, ``tip``, ``warning``, ``important``
-- ``[colors.rings]``: ring gradient as ``{r1 = { color, width_px }, …}``
-- ``[colors.accents]``: named brand accents as ``{name = hex, …}``
-- ``[typography]``: ``display_family``, ``display_weight``,
-  ``display_line_height``, ``display_letter_spacing_em``,
-  ``body_family``, ``mono_family``, ``paint_order``
-- ``[assets]``: ``wordmark_template``, ``monogram_template``,
-  ``fractal_fill_default``, ``fractal_fills = [...]``
-- ``[dependencies]``: free-form, e.g. ``google_fonts = [...]``
-- ``[export]``: free-form string commands, e.g. ``cmd_all = "npm run export"``
-- ``[rules]``: boolean invariants. Reserved: ``never_modify_sources``,
-  ``never_rebuild_image_generation_elsewhere``, ``brand_owner``. Extra
-  keys are allowed and stored in ``rules.custom``.
-
-See ``muriel/examples/example-brand.toml`` and
-``muriel/examples/muriel-brand.toml`` for worked examples.
+    muriel styleguide examples/muriel-brand.toml
+    muriel styleguide examples/muriel-brand.toml --css
+    muriel styleguide examples/muriel-brand.toml --contrast
 
 Dependencies
 ------------
 
-Uses ``tomllib`` from the Python 3.11+ standard library. No external
-dependencies.
+``tomllib`` from the Python 3.11+ standard library. No external deps.
 """
 
 from __future__ import annotations
@@ -97,14 +85,22 @@ from typing import Any, Optional, Union
 
 __all__ = [
     # Types
-    "Ring", "Colors", "Typography", "Motion", "Meta", "Assets", "Rules",
+    "Ring", "Colors",
+    "TextRole", "Typography",
+    "Motion", "Meta",
+    "LogoVariant", "Logo",
+    "Iconography", "Imagery",
+    "Voice", "A11y",
+    "SemanticState",
+    "Viz",
+    "Assets", "Rules",
     "StyleGuide", "RuleViolation",
     # Loader
     "load_styleguide",
 ]
 
 
-# ─── Types ───────────────────────────────────────────────────────────────
+# ─── Colors ──────────────────────────────────────────────────────────────
 
 @dataclass(frozen=True)
 class Ring:
@@ -116,75 +112,62 @@ class Ring:
 @dataclass(frozen=True)
 class Colors:
     """
-    Brand color tokens. Only ``background`` and ``foreground`` are
-    required. Everything else is optional and may be None.
-
-    The rings + accents dicts are brand-specific extras — any number of
-    named entries for complex palettes.
-
-    Two-tier schema
-    ---------------
-    Raw colors live at the top level (``background``, ``foreground``,
-    ``accent``, etc.). The semantic layer lives in ``aliases`` — a dict
-    mapping role names (``text``, ``decorative``, ``surface-primary``,
-    ``semantic-note``) to either a raw-color name or a direct hex value.
-    The alias layer is what contrast audits should consult for text
-    roles; raw colors can be used directly but don't declare intent.
+    Raw color palette + aliases. Semantic states live in ``StyleGuide.semantic``
+    (separate dataclass); this layer is for the raw neutrals + brand accents
+    plus an aliases table mapping role names to raw-color names or hex values.
     """
     background: str
     foreground: str
-    # Optional marginalia/matplotlib-compatible extras
     background_2: Optional[str] = None
     background_3: Optional[str] = None
     foreground_muted: Optional[str] = None
     accent: Optional[str] = None
     accent_ink: Optional[str] = None
-    accent_decorative: Optional[str] = None  # decorative-only (exempt from 8:1 text rule)
-    note: Optional[str] = None
-    tip: Optional[str] = None
-    warning: Optional[str] = None
-    important: Optional[str] = None
-    # Brand-specific
+    accent_decorative: Optional[str] = None
     rings: dict[str, Ring] = field(default_factory=dict)
-    accents: dict[str, str] = field(default_factory=dict)
-    # Semantic alias layer — {role: raw-name-or-hex}
-    aliases: dict[str, str] = field(default_factory=dict)
+    named: dict[str, str] = field(default_factory=dict)   # free-form brand accents
+    aliases: dict[str, str] = field(default_factory=dict) # role → raw-name-or-hex
 
     def resolve_alias(self, role: str) -> Optional[str]:
-        """
-        Resolve a semantic role (e.g. 'text', 'decorative') to a hex color.
-
-        Looks up ``role`` in ``aliases``. If the value matches a raw-color
-        field name on this dataclass, returns that field's value. If the
-        value starts with ``#``, returns it as-is. Returns ``None`` if
-        the role isn't defined.
-        """
+        """Resolve a semantic role to a hex color. Returns None if unknown."""
         target = self.aliases.get(role)
         if target is None:
             return None
         if target.startswith("#"):
             return target
-        # Treat as a raw-color name
         if hasattr(self, target):
-            return getattr(self, target)
+            v = getattr(self, target)
+            if isinstance(v, str):
+                return v
+        if target in self.named:
+            return self.named[target]
         return None
 
     def text_roles(self) -> dict[str, str]:
-        """Return a dict of {role_name: color} for roles meant as body text."""
+        """Raw-color roles that should clear the text contrast floor."""
         result: dict[str, str] = {"foreground": self.foreground}
-        for name in (
-            "foreground_muted", "accent", "accent_ink",
-            "note", "tip", "warning", "important",
-        ):
+        for name in ("foreground_muted", "accent", "accent_ink"):
             value = getattr(self, name)
             if value is not None:
                 result[name] = value
         return result
 
 
+# ─── Typography ──────────────────────────────────────────────────────────
+
+@dataclass(frozen=True)
+class TextRole:
+    """A named slot in the type scale (display, h1, body, caption, …)."""
+    size: float
+    weight: int = 400
+    line_height: float = 1.4
+    tracking_em: float = 0.0
+    upper: bool = False
+
+
 @dataclass(frozen=True)
 class Typography:
-    """Brand typography tokens."""
+    """Font stacks + a named type scale."""
     display_family: Optional[str] = None
     display_weight: Optional[int] = None
     display_line_height: Optional[float] = None
@@ -192,35 +175,14 @@ class Typography:
     body_family: Optional[str] = None
     mono_family: Optional[str] = None
     paint_order: Optional[str] = None
+    scale: dict[str, TextRole] = field(default_factory=dict)
 
 
-@dataclass(frozen=True)
-class Meta:
-    """Brand identity and provenance."""
-    name: str
-    slug: Optional[str] = None
-    version: Optional[str] = None
-    owner_repo: Optional[str] = None
-    owner_path: Optional[str] = None
-    canonical_source: Optional[str] = None
-    ownership_rule: Optional[str] = None
-
+# ─── Motion ──────────────────────────────────────────────────────────────
 
 @dataclass(frozen=True)
 class Motion:
-    """
-    Brand motion tokens — durations (ms) and easing curves.
-
-    Durations are integers in milliseconds; 0 means "no animation."
-    Easings are either CSS cubic-bezier strings or keywords (``linear``,
-    ``ease``, ``ease-in``, etc.). Consumed by the kinetic-typography,
-    interactive, and video channels.
-
-    ``motion_preference`` is a string flag. The canonical value
-    ``"respect-prefers-reduced-motion"`` signals that consumers should
-    collapse all durations to 0 when the OS-level reduced-motion
-    preference is set.
-    """
+    """Duration tokens (ms) + easing curves. Consumed by kinetic/interactive/video."""
     duration_instant: int = 0
     duration_fast:    int = 120
     duration_normal:  int = 240
@@ -233,11 +195,118 @@ class Motion:
     motion_preference: str = "respect-prefers-reduced-motion"
 
 
+# ─── Iconography + Imagery ───────────────────────────────────────────────
+
+@dataclass(frozen=True)
+class Iconography:
+    """Icon family / style tokens."""
+    family: Optional[str] = None            # 'custom', 'phosphor', 'heroicons', ...
+    stroke_px: Optional[float] = None
+    default_size: Optional[int] = None
+    sizes: tuple[int, ...] = ()
+
+
+@dataclass(frozen=True)
+class Imagery:
+    """
+    Photography / illustration style tokens.
+
+    ``crop_policy`` is consumed by smartcrop: 'preserve-faces',
+    'preserve-text', 'preserve-both', or 'energy-only'.
+    """
+    style: Optional[str] = None             # free-form style descriptor
+    treatments: tuple[str, ...] = ()        # e.g. 'muted-duotone', 'cream-wash'
+    crop_policy: str = "energy-only"
+
+
+# ─── Logo ────────────────────────────────────────────────────────────────
+
+@dataclass(frozen=True)
+class LogoVariant:
+    """A single lockup (wordmark / monogram / stacked / horizontal)."""
+    template: Optional[str] = None
+    svg: Optional[str] = None
+    png: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class Logo:
+    """Logo variants + clear-space and minimum-size rules."""
+    clear_space_em: float = 1.0
+    min_width_px: int = 64
+    wordmark:   LogoVariant = field(default_factory=LogoVariant)
+    monogram:   LogoVariant = field(default_factory=LogoVariant)
+    stacked:    LogoVariant = field(default_factory=LogoVariant)
+    horizontal: LogoVariant = field(default_factory=LogoVariant)
+
+
+# ─── Voice ───────────────────────────────────────────────────────────────
+
+@dataclass(frozen=True)
+class Voice:
+    """Editorial voice — adjectives + do/don't examples for marginalia + prose."""
+    adjectives: tuple[str, ...] = ()
+    say_yes: tuple[str, ...] = ()
+    say_no:  tuple[str, ...] = ()
+
+
+# ─── Semantic states ─────────────────────────────────────────────────────
+
+@dataclass(frozen=True)
+class SemanticState:
+    """A UI-feedback state expressed as a {text, surface, border} trio."""
+    text: str
+    surface: Optional[str] = None
+    border: Optional[str] = None
+
+
+# ─── Viz ─────────────────────────────────────────────────────────────────
+
+@dataclass(frozen=True)
+class Viz:
+    """Data-viz palettes for the science and heatmaps channels."""
+    categorical: tuple[str, ...] = ()
+    sequential:  tuple[str, ...] = ()
+    diverging:   tuple[str, ...] = ()
+
+
+# ─── A11y ────────────────────────────────────────────────────────────────
+
+@dataclass(frozen=True)
+class A11y:
+    """
+    Per-brand accessibility floors.
+
+    ``motion_reduce_policy`` values: ``'collapse-to-zero'``, ``'keep-fast'``,
+    ``'keep-linear'``.
+
+    ``focus_ring_color`` may be a hex value, a raw-color name from
+    ``[colors]``, or a named accent from ``[colors.named]``.
+    """
+    min_contrast_ratio: float = 8.0
+    min_hit_target_px: int = 44
+    focus_ring_color: Optional[str] = None
+    focus_ring_width_px: int = 3
+    motion_reduce_policy: str = "collapse-to-zero"
+
+
+# ─── Meta / Assets / Rules ───────────────────────────────────────────────
+
+@dataclass(frozen=True)
+class Meta:
+    """Brand identity + provenance."""
+    name: str
+    slug: Optional[str] = None
+    version: Optional[str] = None
+    owner_repo: Optional[str] = None
+    owner_path: Optional[str] = None
+    canonical_source: Optional[str] = None
+    ownership_rule: Optional[str] = None
+
+
 @dataclass(frozen=True)
 class Assets:
-    """File paths (relative to the brand guide's owner_path) for brand assets."""
-    wordmark_template: Optional[str] = None
-    monogram_template: Optional[str] = None
+    """Non-logo asset paths (relative to owner_path)."""
     fractal_fill_default: Optional[str] = None
     fractal_fills: tuple[str, ...] = ()
 
@@ -250,7 +319,7 @@ class RuleViolation(RuntimeError):
 class Rules:
     """
     Brand invariants. Reserved booleans are enforced by ``check()``;
-    any extra keys are stored in ``custom`` without enforcement.
+    extras are stored in ``custom`` without enforcement.
     """
     never_modify_sources: bool = False
     never_rebuild_image_generation_elsewhere: bool = False
@@ -258,21 +327,6 @@ class Rules:
     custom: dict[str, Any] = field(default_factory=dict)
 
     def check(self, operation: str) -> None:
-        """
-        Raise ``RuleViolation`` if ``operation`` is forbidden by a rule.
-
-        Operations that trigger ``never_rebuild_image_generation_elsewhere``:
-        anything containing ``'wordmark'``, ``'monogram'``, ``'logo'``,
-        ``'favicon'``, or ``'brand-asset'`` in the name.
-
-        Operations that trigger ``never_modify_sources``: anything containing
-        ``'modify-source'``, ``'filter-source'``, or ``'blur-source'``.
-
-        Parameters
-        ----------
-        operation : str
-            A short identifier for the operation being attempted.
-        """
         op = operation.lower()
         image_gen_ops = (
             "wordmark", "monogram", "logo", "favicon", "brand-asset",
@@ -299,16 +353,22 @@ class Rules:
 
 @dataclass(frozen=True)
 class StyleGuide:
-    """
-    A parsed brand style guide. Load via ``load_styleguide(path)``.
+    """A parsed brand style guide. Load via ``load_styleguide(path)``."""
 
-    Immutable so the same StyleGuide can be safely passed between
-    functions without anyone mutating its tokens mid-operation.
-    """
     meta: Meta
     colors: Colors
+    semantic: dict[str, SemanticState]
+    viz: Viz
     typography: Typography
+    spacing: dict[str, int]
+    radii: dict[str, int]
+    elevation: dict[str, str]
     motion: Motion
+    iconography: Iconography
+    imagery: Imagery
+    logo: Logo
+    voice: Voice
+    a11y: A11y
     assets: Assets
     rules: Rules
     dependencies: dict[str, Any]
@@ -318,39 +378,31 @@ class StyleGuide:
     # ─── Derived outputs ────────────────────────────────────────────────
 
     def to_matplotlibrc(self) -> dict[str, Any]:
-        """
-        Generate a matplotlib rcparams dict from brand colors.
-
-        Mirrors the structure of ``muriel.matplotlibrc_dark.PARAMS``
-        so the output can be passed directly to ``mpl.rcParams.update()``
-        or ``plt.rc_context()``.
-
-        Fonts default to the brand's ``body_family`` for ``font.family``
-        if defined. Sizes follow the same conservative defaults as
-        matplotlibrc_dark (14pt body, 16pt title, 10×6 figsize).
-        """
+        """Generate a matplotlib rcparams dict from brand tokens."""
         bg = self.colors.background
         fg = self.colors.foreground
         grid = self.colors.foreground_muted or self.colors.background_2 or "#3a3a4a"
 
+        body_size = (self.typography.scale.get("body").size
+                     if "body" in self.typography.scale else 14)
+        title_size = (self.typography.scale.get("h2").size
+                      if "h2" in self.typography.scale else 16)
+
         params: dict[str, Any] = {
-            # Figure sizing
             "figure.figsize":       (10, 6),
             "figure.dpi":            120,
             "savefig.dpi":           300,
             "savefig.bbox":         "tight",
             "savefig.transparent":   False,
-            # Typography
             "font.family":          "sans-serif",
-            "font.size":             14,
-            "axes.titlesize":        16,
-            "axes.labelsize":        14,
-            "xtick.labelsize":       12,
-            "ytick.labelsize":       12,
-            "legend.fontsize":       12,
-            "figure.titlesize":      18,
+            "font.size":             body_size,
+            "axes.titlesize":        title_size,
+            "axes.labelsize":        body_size,
+            "xtick.labelsize":       body_size - 2,
+            "ytick.labelsize":       body_size - 2,
+            "legend.fontsize":       body_size - 2,
+            "figure.titlesize":      title_size + 2,
             "font.weight":          "regular",
-            # Palette
             "figure.facecolor":     bg,
             "axes.facecolor":       bg,
             "savefig.facecolor":    bg,
@@ -362,25 +414,21 @@ class StyleGuide:
             "grid.color":           grid,
             "grid.linewidth":        0.6,
             "grid.alpha":            1.0,
-            # Axes
             "axes.linewidth":        1.2,
             "axes.grid":             True,
             "axes.grid.axis":       "y",
             "axes.axisbelow":        True,
             "axes.spines.top":       False,
             "axes.spines.right":     False,
-            # Ticks
             "xtick.direction":      "out",
             "ytick.direction":      "out",
             "xtick.major.size":      5,
             "ytick.major.size":      5,
             "xtick.major.width":     1.2,
             "ytick.major.width":     1.2,
-            # Lines
             "lines.linewidth":       2.0,
             "lines.markersize":      7,
             "patch.linewidth":       1.0,
-            # Legend
             "legend.frameon":        True,
             "legend.framealpha":     0.9,
             "legend.edgecolor":     grid,
@@ -390,91 +438,120 @@ class StyleGuide:
             params["font.family"] = self.typography.body_family.split(",")[0].strip("'\" ")
         if self.typography.mono_family:
             params["font.monospace"] = self.typography.mono_family
+        # Brand-bound viz palette — matplotlib's default color cycle.
+        # ``cycler`` ships with matplotlib; guard so the rest of the rc
+        # dict is usable even when matplotlib isn't installed.
+        if self.viz.categorical:
+            try:
+                from matplotlib import cycler
+                params["axes.prop_cycle"] = cycler(color=list(self.viz.categorical))
+            except ImportError:
+                params["axes.prop_cycle_colors"] = list(self.viz.categorical)
         return params
 
     def to_css_vars(self, prefix: str = "--brand-") -> str:
-        """
-        Generate a CSS ``:root`` block with custom properties for every
-        defined brand color. Ring stops render as ``--brand-ring-{name}``
-        and accents as ``--brand-accent-{name}``.
-
-        Parameters
-        ----------
-        prefix : str
-            The custom-property prefix. Defaults to ``'--brand-'``. Use
-            ``'--mg-'`` to target marginalia overrides, though colors may
-            not map 1:1.
-        """
+        """Emit a CSS ``:root`` block covering every brand token."""
         lines = [":root {"]
         c = self.colors
-        mapping = [
-            ("bg",               c.background),
-            ("bg2",              c.background_2),
-            ("bg3",              c.background_3),
-            ("fg",               c.foreground),
-            ("fg-muted",         c.foreground_muted),
-            ("accent",           c.accent),
-            ("accent-ink",       c.accent_ink),
-            ("note",             c.note),
-            ("tip",              c.tip),
-            ("warning",          c.warning),
-            ("important",        c.important),
-        ]
-        for key, value in mapping:
+
+        # Raw colors
+        for key, value in (
+            ("bg", c.background), ("bg2", c.background_2), ("bg3", c.background_3),
+            ("fg", c.foreground), ("fg-muted", c.foreground_muted),
+            ("accent", c.accent), ("accent-ink", c.accent_ink),
+            ("accent-decorative", c.accent_decorative),
+        ):
             if value is not None:
                 lines.append(f"  {prefix}{key}: {value};")
+        for name, value in c.named.items():
+            lines.append(f"  {prefix}named-{name}: {value};")
         for name, ring in c.rings.items():
             lines.append(f"  {prefix}ring-{name}: {ring.color};")
             lines.append(f"  {prefix}ring-{name}-width: {ring.width_px}px;")
-        for name, value in c.accents.items():
-            lines.append(f"  {prefix}accent-{name}: {value};")
+
+        # Semantic states
+        for state_name, state in self.semantic.items():
+            lines.append(f"  {prefix}{state_name}-text: {state.text};")
+            if state.surface is not None:
+                lines.append(f"  {prefix}{state_name}-surface: {state.surface};")
+            if state.border is not None:
+                lines.append(f"  {prefix}{state_name}-border: {state.border};")
+
+        # Spacing / radii / elevation
+        for k, v in self.spacing.items():
+            lines.append(f"  {prefix}space-{k}: {v}px;")
+        for k, v in self.radii.items():
+            lines.append(f"  {prefix}radius-{k}: {v}px;")
+        for k, v in self.elevation.items():
+            lines.append(f"  {prefix}shadow-{k}: {v};")
+
+        # Motion
+        m = self.motion
+        for k in ("instant", "fast", "normal", "slow", "reveal"):
+            lines.append(f"  {prefix}duration-{k}: {getattr(m, f'duration_{k}')}ms;")
+        for k in ("default", "emphasis", "snappy", "linear"):
+            lines.append(f"  {prefix}ease-{k}: {getattr(m, f'easing_{k}')};")
+
+        # Type scale
+        for role_name, role in self.typography.scale.items():
+            size = int(role.size) if role.size == int(role.size) else role.size
+            lines.append(f"  {prefix}type-{role_name}-size: {size}px;")
+            lines.append(f"  {prefix}type-{role_name}-weight: {role.weight};")
+            lines.append(f"  {prefix}type-{role_name}-line-height: {role.line_height};")
+            if role.tracking_em:
+                lines.append(f"  {prefix}type-{role_name}-tracking: {role.tracking_em}em;")
+
+        # A11y hooks
+        a = self.a11y
+        if a.focus_ring_color:
+            lines.append(f"  {prefix}focus-ring: {a.focus_ring_color};")
+        lines.append(f"  {prefix}focus-ring-width: {a.focus_ring_width_px}px;")
+        lines.append(f"  {prefix}min-hit-target: {a.min_hit_target_px}px;")
+
         lines.append("}")
         return "\n".join(lines)
 
     def audit_contrast(
-        self, required: float = 8.0,
+        self, required: Optional[float] = None,
     ) -> list[tuple[str, float, bool]]:
         """
-        Check every text-role color against ``colors.background`` using
-        WCAG 2.1 contrast ratio. Returns a list of ``(role, ratio, passes)``
-        tuples.
-
-        Parameters
-        ----------
-        required : float
-            Minimum contrast ratio. Default 8.0 (muriel's universal rule).
-
-        Returns
-        -------
-        list[tuple[str, float, bool]]
-            One entry per text role that's defined on the brand. Use for
-            both programmatic checks and human-readable audits.
+        WCAG-2.1 contrast audit of every text-bearing role against
+        ``colors.background``. If ``required`` is None, falls back to
+        ``a11y.min_contrast_ratio`` (the per-brand floor).
         """
         from .contrast import contrast_ratio
 
+        threshold = required if required is not None else self.a11y.min_contrast_ratio
         results: list[tuple[str, float, bool]] = []
         bg = self.colors.background
+
         for role, color in self.colors.text_roles().items():
-            if role == "foreground":
-                # The foreground color IS the text baseline; still worth
-                # reporting its ratio
-                pass
             try:
                 ratio = contrast_ratio(color, bg)
             except Exception:
                 continue
-            results.append((role, ratio, ratio >= required))
-        # Also audit named accents if present
-        for name, color in self.colors.accents.items():
+            results.append((role, ratio, ratio >= threshold))
+
+        # Named brand accents (often used as text)
+        for name, color in self.colors.named.items():
             try:
                 ratio = contrast_ratio(color, bg)
             except Exception:
                 continue
-            results.append((f"accent.{name}", ratio, ratio >= required))
+            results.append((f"named.{name}", ratio, ratio >= threshold))
+
+        # Semantic state text colors — the canonical "will users read this?" check.
+        for state_name, state in self.semantic.items():
+            try:
+                ratio = contrast_ratio(state.text, bg)
+            except Exception:
+                continue
+            results.append((f"semantic.{state_name}", ratio, ratio >= threshold))
+
         return results
 
     def describe(self) -> str:
-        """Return a short human-readable summary of the style guide."""
+        """Human-readable summary of the style guide."""
         lines = [
             f"Style Guide: {self.meta.name}"
             + (f" v{self.meta.version}" if self.meta.version else ""),
@@ -488,35 +565,80 @@ class StyleGuide:
         lines.append("")
         lines.append("  Colors:")
         lines.append(f"    bg={self.colors.background}  fg={self.colors.foreground}")
-        for field_name in ("accent", "accent_ink", "note", "tip", "warning", "important"):
-            value = getattr(self.colors, field_name)
-            if value:
-                lines.append(f"    {field_name:<14} {value}")
+        for name in ("accent", "accent_ink", "accent_decorative"):
+            v = getattr(self.colors, name)
+            if v:
+                lines.append(f"    {name:<18} {v}")
         if self.colors.rings:
             lines.append(f"    rings: {len(self.colors.rings)} stops")
-        if self.colors.accents:
-            lines.append(f"    accents: {len(self.colors.accents)} named — "
-                         f"{', '.join(sorted(self.colors.accents))}")
+        if self.colors.named:
+            lines.append(f"    named: {len(self.colors.named)} — "
+                         f"{', '.join(sorted(self.colors.named))}")
 
-        if self.typography.display_family:
+        if self.semantic:
+            lines.append("")
+            lines.append("  Semantic states:")
+            for name, state in self.semantic.items():
+                lines.append(f"    {name:<10} text={state.text}")
+
+        if self.viz.categorical or self.viz.sequential or self.viz.diverging:
+            lines.append("")
+            lines.append("  Data viz:")
+            if self.viz.categorical:
+                lines.append(f"    categorical: {len(self.viz.categorical)} colors")
+            if self.viz.sequential:
+                lines.append(f"    sequential:  {len(self.viz.sequential)} stops")
+            if self.viz.diverging:
+                lines.append(f"    diverging:   {len(self.viz.diverging)} stops")
+
+        if self.typography.display_family or self.typography.scale:
             lines.append("")
             lines.append("  Typography:")
-            lines.append(
-                f"    display: {self.typography.display_family} "
-                f"{self.typography.display_weight or ''}"
-            )
+            if self.typography.display_family:
+                lines.append(
+                    f"    display: {self.typography.display_family} "
+                    f"{self.typography.display_weight or ''}"
+                )
             if self.typography.body_family:
                 lines.append(f"    body:    {self.typography.body_family}")
+            if self.typography.scale:
+                lines.append(f"    scale:   {len(self.typography.scale)} roles — "
+                             f"{', '.join(self.typography.scale)}")
 
-        if self.assets.wordmark_template or self.assets.monogram_template:
+        if self.spacing or self.radii or self.elevation:
             lines.append("")
-            lines.append("  Assets:")
-            if self.assets.wordmark_template:
-                lines.append(f"    wordmark: {self.assets.wordmark_template}")
-            if self.assets.monogram_template:
-                lines.append(f"    monogram: {self.assets.monogram_template}")
-            if self.assets.fractal_fills:
-                lines.append(f"    fills:    {len(self.assets.fractal_fills)} available")
+            lines.append("  Structural tokens:")
+            if self.spacing:
+                lines.append(f"    spacing:   {len(self.spacing)} steps")
+            if self.radii:
+                lines.append(f"    radii:     {len(self.radii)} steps")
+            if self.elevation:
+                lines.append(f"    elevation: {len(self.elevation)} levels")
+
+        if any((self.logo.wordmark.template, self.logo.monogram.template,
+                self.logo.stacked.template, self.logo.horizontal.template)):
+            lines.append("")
+            lines.append("  Logo:")
+            for vname in ("wordmark", "monogram", "stacked", "horizontal"):
+                v: LogoVariant = getattr(self.logo, vname)
+                if v.template or v.svg or v.png:
+                    lines.append(
+                        f"    {vname:<11} template={v.template or '—'}  "
+                        f"svg={v.svg or '—'}"
+                    )
+            lines.append(f"    clear_space_em={self.logo.clear_space_em}  "
+                         f"min_width_px={self.logo.min_width_px}")
+
+        if self.voice.adjectives:
+            lines.append("")
+            lines.append(f"  Voice: {', '.join(self.voice.adjectives)}")
+
+        lines.append("")
+        lines.append("  A11y:")
+        lines.append(f"    min_contrast_ratio: {self.a11y.min_contrast_ratio}:1")
+        lines.append(f"    min_hit_target_px:  {self.a11y.min_hit_target_px}")
+        if self.a11y.focus_ring_color:
+            lines.append(f"    focus_ring:         {self.a11y.focus_ring_color}")
 
         if self.rules.never_rebuild_image_generation_elsewhere:
             lines.append("")
@@ -528,29 +650,33 @@ class StyleGuide:
 
 # ─── Loader ──────────────────────────────────────────────────────────────
 
+def _text_role(d: dict[str, Any]) -> TextRole:
+    return TextRole(
+        size=float(d["size"]),
+        weight=int(d.get("weight", 400)),
+        line_height=float(d.get("line_height", 1.4)),
+        tracking_em=float(d.get("tracking_em", 0.0)),
+        upper=bool(d.get("upper", False)),
+    )
+
+
+def _logo_variant(d: dict[str, Any]) -> LogoVariant:
+    return LogoVariant(
+        template=d.get("template"),
+        svg=d.get("svg"),
+        png=d.get("png"),
+    )
+
+
 def load_styleguide(path: Union[str, Path]) -> StyleGuide:
     """
     Load a brand.toml style guide from disk into a frozen ``StyleGuide``.
 
-    Parameters
-    ----------
-    path : str or Path
-        Path to the TOML file.
-
-    Returns
-    -------
-    StyleGuide
-        A fully parsed, immutable style guide.
-
     Raises
     ------
-    FileNotFoundError
-        If the path doesn't exist.
-    ValueError
-        If required fields are missing (``meta.name``,
-        ``colors.background``, ``colors.foreground``).
-    tomllib.TOMLDecodeError
-        If the file is not valid TOML.
+    FileNotFoundError          — path missing
+    ValueError                 — required fields missing
+    tomllib.TOMLDecodeError    — invalid TOML
     """
     p = Path(path).expanduser().resolve()
     if not p.exists():
@@ -559,123 +685,173 @@ def load_styleguide(path: Union[str, Path]) -> StyleGuide:
         data = tomllib.load(f)
 
     # ── meta ────────────────────────────────────────────────────────────
-    meta_data = data.get("meta", {})
-    if "name" not in meta_data:
+    m = data.get("meta", {})
+    if "name" not in m:
         raise ValueError(f"{p}: [meta] is missing required field 'name'")
     meta = Meta(
-        name=meta_data["name"],
-        slug=meta_data.get("slug"),
-        version=meta_data.get("version"),
-        owner_repo=meta_data.get("owner_repo"),
-        owner_path=meta_data.get("owner_path"),
-        canonical_source=meta_data.get("canonical_source"),
-        ownership_rule=meta_data.get("ownership_rule"),
+        name=m["name"],
+        slug=m.get("slug"),
+        version=m.get("version"),
+        owner_repo=m.get("owner_repo"),
+        owner_path=m.get("owner_path"),
+        canonical_source=m.get("canonical_source"),
+        ownership_rule=m.get("ownership_rule"),
     )
 
     # ── colors ──────────────────────────────────────────────────────────
-    colors_data = data.get("colors", {})
-    for required in ("background", "foreground"):
-        if required not in colors_data:
-            raise ValueError(
-                f"{p}: [colors] is missing required field {required!r}"
-            )
-    rings_raw = colors_data.get("rings", {})
-    rings: dict[str, Ring] = {}
-    for key, value in rings_raw.items():
-        if isinstance(value, dict) and "color" in value and "width_px" in value:
-            rings[key] = Ring(color=value["color"], width_px=int(value["width_px"]))
-    accents_raw = colors_data.get("accents", {})
-    accents: dict[str, str] = {
-        k: v for k, v in accents_raw.items() if isinstance(v, str)
+    cd = data.get("colors", {})
+    for req in ("background", "foreground"):
+        if req not in cd:
+            raise ValueError(f"{p}: [colors] is missing required field {req!r}")
+    rings = {
+        k: Ring(color=v["color"], width_px=int(v["width_px"]))
+        for k, v in cd.get("rings", {}).items()
+        if isinstance(v, dict) and "color" in v and "width_px" in v
     }
-    aliases_raw = colors_data.get("aliases", {})
-    aliases: dict[str, str] = {
-        k: v for k, v in aliases_raw.items() if isinstance(v, str)
-    }
-
+    named   = {k: v for k, v in cd.get("named",   {}).items() if isinstance(v, str)}
+    aliases = {k: v for k, v in cd.get("aliases", {}).items() if isinstance(v, str)}
     colors = Colors(
-        background=colors_data["background"],
-        foreground=colors_data["foreground"],
-        background_2=colors_data.get("background_2"),
-        background_3=colors_data.get("background_3"),
-        foreground_muted=colors_data.get("foreground_muted"),
-        accent=colors_data.get("accent"),
-        accent_ink=colors_data.get("accent_ink"),
-        accent_decorative=colors_data.get("accent_decorative"),
-        note=colors_data.get("note"),
-        tip=colors_data.get("tip"),
-        warning=colors_data.get("warning"),
-        important=colors_data.get("important"),
-        rings=rings,
-        accents=accents,
-        aliases=aliases,
+        background=cd["background"],
+        foreground=cd["foreground"],
+        background_2=cd.get("background_2"),
+        background_3=cd.get("background_3"),
+        foreground_muted=cd.get("foreground_muted"),
+        accent=cd.get("accent"),
+        accent_ink=cd.get("accent_ink"),
+        accent_decorative=cd.get("accent_decorative"),
+        rings=rings, named=named, aliases=aliases,
+    )
+
+    # ── semantic ────────────────────────────────────────────────────────
+    sem_raw = data.get("semantic", {})
+    semantic: dict[str, SemanticState] = {}
+    for name, v in sem_raw.items():
+        if isinstance(v, dict) and "text" in v:
+            semantic[name] = SemanticState(
+                text=v["text"],
+                surface=v.get("surface"),
+                border=v.get("border"),
+            )
+
+    # ── viz ─────────────────────────────────────────────────────────────
+    vd = data.get("viz", {})
+    viz = Viz(
+        categorical=tuple(vd.get("categorical", ())),
+        sequential=tuple(vd.get("sequential", ())),
+        diverging=tuple(vd.get("diverging", ())),
     )
 
     # ── typography ──────────────────────────────────────────────────────
-    typo_data = data.get("typography", {})
+    td = data.get("typography", {})
+    scale_raw = td.get("scale", {})
+    scale = {
+        k: _text_role(v) for k, v in scale_raw.items()
+        if isinstance(v, dict) and "size" in v
+    }
     typography = Typography(
-        display_family=typo_data.get("display_family"),
-        display_weight=typo_data.get("display_weight"),
-        display_line_height=typo_data.get("display_line_height"),
-        display_letter_spacing_em=typo_data.get("display_letter_spacing_em"),
-        body_family=typo_data.get("body_family"),
-        mono_family=typo_data.get("mono_family"),
-        paint_order=typo_data.get("paint_order"),
+        display_family=td.get("display_family"),
+        display_weight=td.get("display_weight"),
+        display_line_height=td.get("display_line_height"),
+        display_letter_spacing_em=td.get("display_letter_spacing_em"),
+        body_family=td.get("body_family"),
+        mono_family=td.get("mono_family"),
+        paint_order=td.get("paint_order"),
+        scale=scale,
     )
 
+    # ── spacing / radii / elevation ─────────────────────────────────────
+    spacing   = {k: int(v) for k, v in data.get("spacing",   {}).items()}
+    radii     = {k: int(v) for k, v in data.get("radii",     {}).items()}
+    elevation = {k: str(v) for k, v in data.get("elevation", {}).items()}
+
     # ── motion ──────────────────────────────────────────────────────────
-    motion_data = data.get("motion", {})
+    md = data.get("motion", {})
     motion = Motion(
-        duration_instant=int(motion_data.get("duration_instant", 0)),
-        duration_fast=int(motion_data.get("duration_fast", 120)),
-        duration_normal=int(motion_data.get("duration_normal", 240)),
-        duration_slow=int(motion_data.get("duration_slow", 480)),
-        duration_reveal=int(motion_data.get("duration_reveal", 800)),
-        easing_default=motion_data.get("easing_default", "cubic-bezier(0.2, 0.0, 0.2, 1.0)"),
-        easing_emphasis=motion_data.get("easing_emphasis", "cubic-bezier(0.4, 0.0, 0.2, 1.0)"),
-        easing_snappy=motion_data.get("easing_snappy", "cubic-bezier(0.6, 0.0, 0.2, 1.0)"),
-        easing_linear=motion_data.get("easing_linear", "linear"),
-        motion_preference=motion_data.get("motion_preference", "respect-prefers-reduced-motion"),
+        duration_instant=int(md.get("duration_instant", 0)),
+        duration_fast=int(md.get("duration_fast", 120)),
+        duration_normal=int(md.get("duration_normal", 240)),
+        duration_slow=int(md.get("duration_slow", 480)),
+        duration_reveal=int(md.get("duration_reveal", 800)),
+        easing_default=md.get("easing_default", "cubic-bezier(0.2, 0.0, 0.2, 1.0)"),
+        easing_emphasis=md.get("easing_emphasis", "cubic-bezier(0.4, 0.0, 0.2, 1.0)"),
+        easing_snappy=md.get("easing_snappy", "cubic-bezier(0.6, 0.0, 0.2, 1.0)"),
+        easing_linear=md.get("easing_linear", "linear"),
+        motion_preference=md.get("motion_preference", "respect-prefers-reduced-motion"),
+    )
+
+    # ── iconography / imagery ───────────────────────────────────────────
+    id_ = data.get("iconography", {})
+    iconography = Iconography(
+        family=id_.get("family"),
+        stroke_px=id_.get("stroke_px"),
+        default_size=id_.get("default_size"),
+        sizes=tuple(id_.get("sizes", ())),
+    )
+    im = data.get("imagery", {})
+    imagery = Imagery(
+        style=im.get("style"),
+        treatments=tuple(im.get("treatments", ())),
+        crop_policy=im.get("crop_policy", "energy-only"),
+    )
+
+    # ── logo ────────────────────────────────────────────────────────────
+    ld = data.get("logo", {})
+    logo = Logo(
+        clear_space_em=float(ld.get("clear_space_em", 1.0)),
+        min_width_px=int(ld.get("min_width_px", 64)),
+        wordmark=_logo_variant(ld.get("wordmark", {})),
+        monogram=_logo_variant(ld.get("monogram", {})),
+        stacked=_logo_variant(ld.get("stacked", {})),
+        horizontal=_logo_variant(ld.get("horizontal", {})),
+    )
+
+    # ── voice ───────────────────────────────────────────────────────────
+    vd_ = data.get("voice", {})
+    voice = Voice(
+        adjectives=tuple(vd_.get("adjectives", ())),
+        say_yes=tuple(vd_.get("say_yes", ())),
+        say_no=tuple(vd_.get("say_no", ())),
+    )
+
+    # ── a11y ────────────────────────────────────────────────────────────
+    ad = data.get("a11y", {})
+    a11y = A11y(
+        min_contrast_ratio=float(ad.get("min_contrast_ratio", 8.0)),
+        min_hit_target_px=int(ad.get("min_hit_target_px", 44)),
+        focus_ring_color=ad.get("focus_ring_color"),
+        focus_ring_width_px=int(ad.get("focus_ring_width_px", 3)),
+        motion_reduce_policy=ad.get("motion_reduce_policy", "collapse-to-zero"),
     )
 
     # ── assets ──────────────────────────────────────────────────────────
-    assets_data = data.get("assets", {})
+    ad2 = data.get("assets", {})
     assets = Assets(
-        wordmark_template=assets_data.get("wordmark_template"),
-        monogram_template=assets_data.get("monogram_template"),
-        fractal_fill_default=assets_data.get("fractal_fill_default"),
-        fractal_fills=tuple(assets_data.get("fractal_fills", [])),
+        fractal_fill_default=ad2.get("fractal_fill_default"),
+        fractal_fills=tuple(ad2.get("fractal_fills", ())),
     )
 
     # ── rules ───────────────────────────────────────────────────────────
-    rules_data = data.get("rules", {})
-    reserved = {
-        "never_modify_sources",
-        "never_rebuild_image_generation_elsewhere",
-        "brand_owner",
-    }
-    custom = {k: v for k, v in rules_data.items() if k not in reserved}
+    rd = data.get("rules", {})
+    reserved = {"never_modify_sources",
+                "never_rebuild_image_generation_elsewhere",
+                "brand_owner"}
     rules = Rules(
-        never_modify_sources=bool(rules_data.get("never_modify_sources", False)),
+        never_modify_sources=bool(rd.get("never_modify_sources", False)),
         never_rebuild_image_generation_elsewhere=bool(
-            rules_data.get("never_rebuild_image_generation_elsewhere", False)
-        ),
-        brand_owner=rules_data.get("brand_owner"),
-        custom=custom,
+            rd.get("never_rebuild_image_generation_elsewhere", False)),
+        brand_owner=rd.get("brand_owner"),
+        custom={k: v for k, v in rd.items() if k not in reserved},
     )
 
-    dependencies = dict(data.get("dependencies", {}))
-    export = {k: str(v) for k, v in data.get("export", {}).items()}
-
     return StyleGuide(
-        meta=meta,
-        colors=colors,
+        meta=meta, colors=colors, semantic=semantic, viz=viz,
         typography=typography,
-        motion=motion,
-        assets=assets,
-        rules=rules,
-        dependencies=dependencies,
-        export=export,
+        spacing=spacing, radii=radii, elevation=elevation,
+        motion=motion, iconography=iconography, imagery=imagery,
+        logo=logo, voice=voice, a11y=a11y,
+        assets=assets, rules=rules,
+        dependencies=dict(data.get("dependencies", {})),
+        export={k: str(v) for k, v in data.get("export", {}).items()},
         source_path=p,
     )
 
@@ -687,41 +863,27 @@ def _main(argv: Optional[list[str]] = None) -> int:
 
     parser = argparse.ArgumentParser(
         prog="python -m muriel.styleguide",
-        description=(
-            "Load a brand.toml style guide and inspect its tokens, or "
-            "generate derivative outputs (CSS, matplotlibrc) from it."
-        ),
+        description="Load a brand.toml; describe / emit CSS / audit contrast.",
     )
     parser.add_argument("path", type=Path, help="Path to a brand.toml file")
-    parser.add_argument(
-        "--css", action="store_true",
-        help="Print the brand as a CSS :root custom-property block.",
-    )
-    parser.add_argument(
-        "--css-prefix", default="--brand-",
-        help="Prefix for CSS custom properties. Default: --brand-",
-    )
-    parser.add_argument(
-        "--contrast", action="store_true",
-        help="Run a WCAG contrast audit of every color against the background.",
-    )
-    parser.add_argument(
-        "--required", type=float, default=8.0,
-        help="Contrast threshold for --contrast. Default: 8.0 (muriel's rule)",
-    )
+    parser.add_argument("--css", action="store_true",
+                        help="Emit a CSS :root custom-property block.")
+    parser.add_argument("--css-prefix", default="--brand-",
+                        help="Prefix for CSS variables. Default: --brand-")
+    parser.add_argument("--contrast", action="store_true",
+                        help="Audit every color role against the background.")
+    parser.add_argument("--required", type=float, default=None,
+                        help="Override the brand's own a11y.min_contrast_ratio.")
     args = parser.parse_args(argv)
 
     try:
         sg = load_styleguide(args.path)
     except FileNotFoundError as exc:
-        print(f"error: {exc}", file=sys.stderr)
-        return 2
+        print(f"error: {exc}", file=sys.stderr); return 2
     except ValueError as exc:
-        print(f"error: {exc}", file=sys.stderr)
-        return 2
+        print(f"error: {exc}", file=sys.stderr); return 2
     except tomllib.TOMLDecodeError as exc:
-        print(f"error: invalid TOML in {args.path}: {exc}", file=sys.stderr)
-        return 2
+        print(f"error: invalid TOML in {args.path}: {exc}", file=sys.stderr); return 2
 
     print()
     print(sg.describe())
@@ -732,19 +894,20 @@ def _main(argv: Optional[list[str]] = None) -> int:
         print(sg.to_css_vars(prefix=args.css_prefix))
 
     if args.contrast:
+        threshold = args.required if args.required is not None else sg.a11y.min_contrast_ratio
         print()
-        print(f"── WCAG contrast audit (required: {args.required:.1f}:1) ──")
+        print(f"── WCAG contrast audit (required: {threshold:.1f}:1) ──")
         results = sg.audit_contrast(required=args.required)
         fail_count = 0
         for role, ratio, passes in results:
             mark = "✓" if passes else "✗"
             status = "PASS" if passes else "FAIL"
-            print(f"  {mark} {status}  {role:<22} {ratio:6.2f}:1")
+            print(f"  {mark} {status}  {role:<24} {ratio:6.2f}:1")
             if not passes:
                 fail_count += 1
         if fail_count:
             print()
-            print(f"  {fail_count} role(s) failed the {args.required:.1f}:1 rule")
+            print(f"  {fail_count} role(s) failed the {threshold:.1f}:1 rule")
             return 1
 
     print()

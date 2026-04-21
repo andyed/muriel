@@ -1,83 +1,145 @@
-# Example brand style guide for the muriel.styleguide loader.
+# Example brand style guide for the muriel.styleguide loader (schema v2).
 #
-# A fictional "Acme Research" brand demonstrating muriel's two-tier color
-# schema, the four-layer decomposition (brand / neutral / semantic /
-# extended), and the motion token block. Copy as a starting point.
+# A fictional "Acme Research" brand. Demonstrates the full v2 schema:
+# structural tokens (spacing / radii / elevation), named type scale,
+# semantic states, data-viz palettes, four logo variants with clear-space
+# rules, iconography + imagery tokens, voice examples, accessibility
+# floors, and hard ownership rules.
+#
+# Copy as a starting point. Only [meta.name] and [colors.background] +
+# [colors.foreground] are strictly required; everything else is optional.
 
 [meta]
 name             = "Acme Research"
 slug             = "acme"
-version          = "0.1.0"
+version          = "2.0.0"
 owner_repo       = "acme-brand-guide"
 owner_path       = "<brand-guide-repo>"
 canonical_source = "tokens.css"
-ownership_rule   = "Acme brand assets are owned by acme-brand-guide; do not regenerate wordmarks or color palettes elsewhere."
+ownership_rule   = "Acme brand assets are owned by acme-brand-guide; do not regenerate wordmarks, monograms, or color palettes elsewhere."
 
-# ─────────────────────────────────────────────────────────────────────
-# Colors — two-tier
-#
-# [colors]            : raw palette (hex values, the truth)
-# [colors.aliases]    : semantic layer (text, decorative, background…)
-# Four conceptual layers inside the raw palette: brand, neutral,
-# semantic, extended — labelled in comments so a reader can see the
-# decomposition at a glance.
-# ─────────────────────────────────────────────────────────────────────
 
 [colors]
-# ── Neutral (backgrounds + foregrounds) ──────────────────────────────
-background       = "#0a0a0f"   # OLED near-black — primary surface
-background_2     = "#0f1117"   # panel / inner-card
-background_3     = "#1a1a24"   # divider / rule
-foreground       = "#e6e4d2"   # cream — primary body (15.42:1 on bg)
-foreground_muted = "#b0b0c4"   # muted body (9.27:1 on bg)
+# ── Neutral ──────────────────────────────────────────────────────────
+background        = "#0a0a0f"
+background_2      = "#0f1117"
+background_3      = "#1a1a24"
+foreground        = "#e6e4d2"      # 15.42:1 on bg
+foreground_muted  = "#b0b0c4"      # 9.27:1 on bg
 
-# ── Brand accent ────────────────────────────────────────────────────
-accent           = "#50b4c8"   # 8.19:1 on bg — text-safe
-accent_ink       = "#7dd4e4"   # 11.67:1 — higher-contrast variant
-accent_decorative = "#d4a574"  # amber — borders / glow / legend edges (decorative only; fails 8:1)
+# ── Brand accents ────────────────────────────────────────────────────
+accent            = "#50b4c8"      # 8.19:1 — text-safe
+accent_ink        = "#7dd4e4"      # 11.67:1
+accent_decorative = "#b88952"      # 6.34:1 — decorative only, exempt from 8:1
 
-# ── Semantic ────────────────────────────────────────────────────────
-note      = "#50b4c8"   # 8.19:1
-tip       = "#66bb6a"   # 8.35:1
-warning   = "#e6a817"   # 9.38:1
-important = "#ff8282"   # 8.25:1
+[colors.named]
+# Free-form brand accent palette. Audited against 8:1 because named
+# accents frequently end up in body text or chart labels.
+deepsea     = "#50b4c8"   # 8.19:1
+wildflowers = "#ff8fc8"   # 9.42:1
+tiedye      = "#ff9240"   # 8.88:1
+copper      = "#d4a574"   # 8.87:1
 
-# ── Extended (data viz) ─────────────────────────────────────────────
-viz_1 = "#e6e4d2"
-viz_2 = "#50b4c8"
-viz_3 = "#66bb6a"
-viz_4 = "#e6a817"
-viz_5 = "#ff8282"
+[colors.rings]
+# A ring gradient used for the Acme "layered border" motif.
+r1 = { color = "#91d7f8", width_px = 6  }
+r2 = { color = "#50b4c8", width_px = 14 }
+r3 = { color = "#3a7a90", width_px = 28 }
 
 [colors.aliases]
-# ── Text roles (subject to muriel's 8:1 contrast audit) ─────────────
 text                 = "foreground"
 text-muted           = "foreground_muted"
-text-accent          = "accent_ink"     # text-safe accent, not decorative
-text-inverted        = "background"      # on light surfaces
-
-# ── Surface roles ───────────────────────────────────────────────────
+text-accent          = "accent_ink"
+text-inverted        = "background"
 surface-primary      = "background"
 surface-secondary    = "background_2"
 surface-tertiary     = "background_3"
-
-# ── Decorative roles (exempt from 8:1; must clear ≥55/255) ──────────
 decorative           = "accent_decorative"
 decorative-dim       = "accent"
 border-subtle        = "background_3"
 rule                 = "background_3"
 
-# ── Semantic callouts (text-safe) ───────────────────────────────────
-semantic-note        = "note"
-semantic-tip         = "tip"
-semantic-warning     = "warning"
-semantic-important   = "important"
 
-# ─────────────────────────────────────────────────────────────────────
-# Motion — duration + easing tokens
-# Consumed by kinetic-typography, interactive, and video channels.
-# Durations in milliseconds; easing is a CSS cubic-bezier or keyword.
-# ─────────────────────────────────────────────────────────────────────
+[semantic.success]
+text    = "#66bb6a"
+surface = "#0f1a10"
+border  = "#66bb6a"
+
+[semantic.warning]
+text    = "#e6a817"
+surface = "#1a1408"
+border  = "#e6a817"
+
+[semantic.error]
+text    = "#ff8282"
+surface = "#1a0f0f"
+border  = "#ff8282"
+
+[semantic.info]
+text    = "#50b4c8"
+surface = "#0a1517"
+border  = "#50b4c8"
+
+
+[viz]
+categorical = [
+  "#e6e4d2", "#50b4c8", "#66bb6a", "#e6a817",
+  "#ff8282", "#ff8fc8", "#c0a4ff", "#d4a574",
+]
+sequential = [
+  "#0a0a0f", "#1a1a2e", "#2a3a5a", "#4a6aa0",
+  "#7ba2c8", "#b0d0e0", "#e6e4d2",
+]
+diverging = [
+  "#ff8282", "#e6a817", "#f0e0c0",
+  "#e6e4d2",
+  "#c0e0d0", "#66bb6a", "#50b4c8",
+]
+
+
+[typography]
+display_family              = "Nunito, Helvetica, sans-serif"
+display_weight              = 900
+display_line_height         = 1.2
+display_letter_spacing_em   = -0.04
+body_family                 = "Helvetica, Arial, sans-serif"
+mono_family                 = "'SF Mono', Menlo, Monaco, monospace"
+paint_order                 = "stroke fill"
+
+[typography.scale]
+display    = { size = 72, weight = 900, line_height = 0.95, tracking_em = -0.04 }
+h1         = { size = 48, weight = 900, line_height = 1.05, tracking_em = -0.03 }
+h2         = { size = 32, weight = 700, line_height = 1.1  }
+h3         = { size = 24, weight = 700, line_height = 1.2  }
+h4         = { size = 20, weight = 600, line_height = 1.25 }
+body       = { size = 17, weight = 400, line_height = 1.6  }
+body_small = { size = 15, weight = 400, line_height = 1.5  }
+caption    = { size = 13, weight = 400, line_height = 1.4  }
+label      = { size = 12, weight = 700, line_height = 1.2, tracking_em = 0.08, upper = true }
+mono       = { size = 14, weight = 400, line_height = 1.6  }
+
+
+[spacing]
+xxs  = 2
+xs   = 4
+sm   = 8
+md   = 16
+lg   = 24
+xl   = 40
+xxl  = 64
+huge = 96
+
+[radii]
+sm   = 6
+md   = 12
+lg   = 20
+pill = 9999
+
+[elevation]
+low  = "0 1px 3px rgba(0,0,0,0.35)"
+mid  = "0 6px 18px rgba(0,0,0,0.45)"
+high = "0 18px 56px rgba(0,0,0,0.60)"
+
 
 [motion]
 duration_instant  = 0
@@ -85,25 +147,89 @@ duration_fast     = 120
 duration_normal   = 240
 duration_slow     = 480
 duration_reveal   = 800
-
-easing_default    = "cubic-bezier(0.2, 0.0, 0.2, 1.0)"   # standard material-like
-easing_emphasis   = "cubic-bezier(0.4, 0.0, 0.2, 1.0)"    # emphasized on enter
-easing_snappy     = "cubic-bezier(0.6, 0.0, 0.2, 1.0)"    # mechanical / FUI
+easing_default    = "cubic-bezier(0.2, 0.0, 0.2, 1.0)"
+easing_emphasis   = "cubic-bezier(0.4, 0.0, 0.2, 1.0)"
+easing_snappy     = "cubic-bezier(0.6, 0.0, 0.2, 1.0)"
 easing_linear     = "linear"
+motion_preference = "respect-prefers-reduced-motion"
 
-motion_preference = "respect-prefers-reduced-motion"     # if user has OS-level reduced-motion, durations drop to 0
 
-[typography]
-display_family              = "Helvetica, 'Arial Black', sans-serif"
-display_weight              = 700
-display_line_height         = 1.2
-body_family                 = "Helvetica, Arial, sans-serif"
-mono_family                 = "'SF Mono', Menlo, Monaco, 'DejaVu Sans Mono', monospace"
+[iconography]
+family        = "phosphor"
+stroke_px     = 1.5
+default_size  = 20
+sizes         = [16, 20, 24, 32, 48]
+
+
+[imagery]
+# crop_policy tells smartcrop which hard-avoids to enable by default for
+# this brand's raster pipeline. 'preserve-faces' requires muriel[faces];
+# 'preserve-text' requires muriel[text]; 'preserve-both' requires both.
+style       = "muted-duotone"
+treatments  = ["cream-wash", "amber-tint", "neutral-overlay"]
+crop_policy = "preserve-faces"
+
+
+[logo]
+clear_space_em = 1.5
+min_width_px   = 120
+
+[logo.wordmark]
+template = "templates/logo-wordmark.html"
+svg      = "sources/logo-wordmark.svg"
+png      = "renders/logo-wordmark.png"
+
+[logo.monogram]
+template = "templates/monogram.html"
+svg      = "sources/monogram.svg"
+png      = "renders/monogram.png"
+
+[logo.horizontal]
+template = "templates/logo-horizontal.html"
+svg      = "sources/logo-horizontal.svg"
+
+[logo.stacked]
+template = "templates/logo-stacked.html"
+svg      = "sources/logo-stacked.svg"
+
+
+[voice]
+adjectives = ["technical", "warm", "cited", "restrained"]
+say_yes = [
+  "Lead with the data. Follow with the interpretation.",
+  "Cite primary sources when a claim is empirical.",
+  "Acronyms defined on first use.",
+]
+say_no = [
+  "No exclamation points outside error messages.",
+  "No hype language ('game-changing', 'revolutionary').",
+  "No 'we think' — state the thing, let readers attribute.",
+]
+
+
+[a11y]
+min_contrast_ratio   = 8.0
+min_hit_target_px    = 44
+focus_ring_color     = "accent_ink"
+focus_ring_width_px  = 3
+motion_reduce_policy = "collapse-to-zero"
+
 
 [dependencies]
-# No external fonts — all system stacks.
+google_fonts = ["Nunito:wght@900"]
+
+
+[export]
+# Commands the owner repo provides. muriel invokes these rather than
+# re-implementing asset generation.
+cmd_all      = "npm run export"
+cmd_wordmark = "npm run export:wordmark"
+cmd_monogram = "npm run export:monogram"
+
 
 [rules]
 never_modify_sources                     = true
 never_rebuild_image_generation_elsewhere = true
 brand_owner                              = "acme-brand-guide"
+# Non-reserved extras pass through into rules.custom.
+one_font_treatment_per_app               = true

@@ -112,13 +112,17 @@ def _normalize_venn2(sets: Dict[str, int], labels: Sequence[str]) -> Dict[str, f
 
 def _region_colors(brand) -> List[str]:
     """Pick three distinct brand-aware fill colors."""
+    fallback = ["#66bb6a", "#e6a817", "#ff8282"]
     if brand is None:
-        return ["#66bb6a", "#e6a817", "#ff8282"]  # muriel semantic tokens
-    c = brand.colors
+        return fallback
+    viz = brand.viz.categorical
+    if len(viz) >= 3:
+        return [viz[2], viz[3], viz[4]] if len(viz) >= 5 else list(viz[:3])
+    sem = brand.semantic
     return [
-        c.tip or "#66bb6a",
-        c.warning or "#e6a817",
-        c.important or "#ff8282",
+        (sem["success"].text if "success" in sem else fallback[0]),
+        (sem["warning"].text if "warning" in sem else fallback[1]),
+        (sem["error"].text if "error" in sem else fallback[2]),
     ]
 
 

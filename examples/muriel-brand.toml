@@ -1,70 +1,177 @@
-# muriel brand style guide — the muriel skill's own palette as a StyleGuide.
+# muriel brand style guide — the muriel skill's own palette as a StyleGuide v2.
 #
-# Mirrors the constants baked into muriel/matplotlibrc_dark.py and
-# the universal rules at the top of muriel.md. Useful as the default
-# style guide for any muriel operation that isn't targeting a specific
-# project's brand.
+# Mirrors the constants baked into muriel/matplotlibrc_dark.py and the
+# universal rules at the top of SKILL.md. The canonical example of the v2
+# schema — every optional block is populated so other brands can copy
+# structure from here.
 #
-# Unlike example-brand.toml, this guide has no ownership lock — muriel
-# IS the owner, and operations that generate artifacts in this palette
-# are expected.
+# Unlike example-brand.toml, this guide has no ownership lock. muriel IS
+# the owner and operations in this palette are expected.
 
 [meta]
 name             = "muriel"
 slug             = "muriel"
-version          = "0.4.0"
+version          = "2.0.0"
 owner_repo       = "muriel"
 owner_path       = "~/Documents/dev/muriel"
 canonical_source = "muriel/matplotlibrc_dark.py"
 ownership_rule   = "muriel's own palette — no external owner, free to use for any output"
 
+
+# ─────────────────────────────────────────────────────────────────────
+# Colors — raw palette + semantic aliases.
+# Raw hex lives under [colors]; role→raw mapping lives under [colors.aliases].
+# Semantic UI states (success / error / warning / info) live in [semantic].
+# ─────────────────────────────────────────────────────────────────────
+
 [colors]
-# ── Neutral ─────────────────────────────────────────────────────────
-background       = "#0a0a0f"   # OLED near-black
-background_2     = "#0f1117"   # legend / inner-panel slightly brighter
-background_3     = "#1a1a24"
-foreground       = "#e6e4d2"   # cream — 15.42:1 on bg
-foreground_muted = "#b0b0c4"   # muted body — 9.27:1 on bg
+# ── Neutral ──────────────────────────────────────────────────────────
+background        = "#0a0a0f"   # OLED near-black
+background_2      = "#0f1117"   # inner-panel / legend bg
+background_3      = "#1a1a24"   # divider / rule
 
-# ── Brand accent ────────────────────────────────────────────────────
-accent           = "#50b4c8"   # same as marginalia --mg-note, 8.19:1 — text-safe
-accent_ink       = "#7dd4e4"   # brighter ink variant — 11.67:1 on bg
+foreground        = "#e6e4d2"   # cream — 15.42:1 on bg
+foreground_muted  = "#b0b0c4"   # muted body — 9.27:1 on bg
 
-# ── Semantic ────────────────────────────────────────────────────────
-note      = "#50b4c8"   # 8.19:1
-tip       = "#66bb6a"   # 8.35:1 (bumped from Material green 500)
-warning   = "#e6a817"   # 9.38:1
-important = "#ff8282"   # 8.25:1 (bumped from e05252)
-
-# No dedicated decorative accent — muriel's flat palette uses foreground_muted
-# for borders/rules. If a muriel-derived brand needs a decorative-only
-# accent (amber borders, glow), add colors.accent_decorative there.
+# ── Brand accent ─────────────────────────────────────────────────────
+accent            = "#50b4c8"   # 8.19:1 — text-safe
+accent_ink        = "#7dd4e4"   # 11.67:1 — higher-contrast ink
+# No dedicated decorative accent in muriel's flat palette.
 
 [colors.aliases]
-# Text roles (subject to 8:1 audit)
-text               = "foreground"
-text-muted         = "foreground_muted"
-text-accent        = "accent_ink"
-text-inverted      = "background"
+text                 = "foreground"
+text-muted           = "foreground_muted"
+text-accent          = "accent_ink"
+text-inverted        = "background"
+surface-primary      = "background"
+surface-secondary    = "background_2"
+surface-tertiary     = "background_3"
+decorative           = "accent"
+border-subtle        = "background_3"
+rule                 = "background_3"
 
-# Surface roles
-surface-primary    = "background"
-surface-secondary  = "background_2"
-surface-tertiary   = "background_3"
 
-# Decorative roles (exempt from 8:1; must clear ≥55/255)
-decorative         = "accent"
-border-subtle      = "background_3"
-rule               = "background_3"
+# ─────────────────────────────────────────────────────────────────────
+# Semantic states — UI feedback as {text, surface, border} trios.
+# Each state's `text` color must clear a11y.min_contrast_ratio on bg.
+# Surface / border are optional and used for banners, badges, chips.
+# ─────────────────────────────────────────────────────────────────────
 
-# Semantic callouts (text-safe)
-semantic-note      = "note"
-semantic-tip       = "tip"
-semantic-warning   = "warning"
-semantic-important = "important"
+[semantic.success]
+text    = "#66bb6a"      # 8.35:1
+surface = "#0f1a10"
+border  = "#66bb6a"
+
+[semantic.warning]
+text    = "#e6a817"      # 9.38:1
+surface = "#1a1408"
+border  = "#e6a817"
+
+[semantic.error]
+text    = "#ff8282"      # 8.25:1
+surface = "#1a0f0f"
+border  = "#ff8282"
+
+[semantic.info]
+text    = "#50b4c8"      # 8.19:1
+surface = "#0a1517"
+border  = "#50b4c8"
+
+
+# ─────────────────────────────────────────────────────────────────────
+# Data-viz palette — for science/heatmaps/infographics channels.
+# Categorical: up to 10 qualitatively distinct colors, all clear 8:1 on bg.
+# Sequential: perceptually uniform, dark→cream (fits OLED baseline).
+# Diverging: coral ↔ teal, anchored at cream midpoint.
+# ─────────────────────────────────────────────────────────────────────
+
+[viz]
+categorical = [
+  "#e6e4d2",   # cream        15.42:1
+  "#50b4c8",   # teal          8.19:1
+  "#66bb6a",   # green         8.35:1
+  "#e6a817",   # amber         9.38:1
+  "#ff8282",   # coral         8.25:1
+  "#c0a4ff",   # violet        9.40:1
+  "#7dd4e4",   # ink teal     11.67:1
+  "#d4a574",   # sand          8.87:1
+]
+sequential = [
+  "#0a0a0f",   # bg
+  "#1a1a2e",
+  "#2a3a5a",
+  "#4a6aa0",
+  "#7ba2c8",
+  "#b0d0e0",
+  "#e6e4d2",   # fg
+]
+diverging = [
+  "#ff8282", "#e6a817", "#f0e0c0",
+  "#e6e4d2",
+  "#c0e0d0", "#66bb6a", "#50b4c8",
+]
+
+
+# ─────────────────────────────────────────────────────────────────────
+# Typography — font stacks plus a named type scale.
+# Sizes are px (web units); the matplotlib emitter treats them as pt.
+# ─────────────────────────────────────────────────────────────────────
+
+[typography]
+display_family              = "Helvetica, 'Arial Black', sans-serif"
+display_weight              = 700
+display_line_height         = 1.2
+display_letter_spacing_em   = -0.02
+body_family                 = "Helvetica, Arial, sans-serif"
+mono_family                 = "'SF Mono', Menlo, Monaco, 'DejaVu Sans Mono', monospace"
+
+[typography.scale]
+display    = { size = 56, weight = 800, line_height = 0.95, tracking_em = -0.03 }
+h1         = { size = 40, weight = 700, line_height = 1.05, tracking_em = -0.02 }
+h2         = { size = 32, weight = 700, line_height = 1.1  }
+h3         = { size = 24, weight = 700, line_height = 1.2  }
+h4         = { size = 20, weight = 600, line_height = 1.25 }
+body       = { size = 16, weight = 400, line_height = 1.55 }
+body_small = { size = 14, weight = 400, line_height = 1.5  }
+caption    = { size = 12, weight = 400, line_height = 1.4  }
+label      = { size = 12, weight = 600, line_height = 1.2, tracking_em = 0.05, upper = true }
+mono       = { size = 14, weight = 400, line_height = 1.6  }
+
+
+# ─────────────────────────────────────────────────────────────────────
+# Structural tokens — 4px-based spacing grid, radii ramp, elevation ramp.
+# Spacing / radii in pixels. Elevation is a CSS box-shadow string.
+# ─────────────────────────────────────────────────────────────────────
+
+[spacing]
+xxs  = 2
+xs   = 4
+sm   = 8
+md   = 16
+lg   = 24
+xl   = 32
+xxl  = 48
+huge = 72
+
+[radii]
+sm   = 4
+md   = 8
+lg   = 16
+pill = 9999
+
+[elevation]
+low  = "0 1px 2px rgba(0,0,0,0.30)"
+mid  = "0 4px 12px rgba(0,0,0,0.40)"
+high = "0 12px 48px rgba(0,0,0,0.55)"
+
+
+# ─────────────────────────────────────────────────────────────────────
+# Motion — duration + easing tokens.
+# Consumed by kinetic-typography, interactive, and video channels.
+# Durations in milliseconds; easing is a CSS cubic-bezier or keyword.
+# ─────────────────────────────────────────────────────────────────────
 
 [motion]
-# muriel's own motion tokens — conservative defaults, respects reduced-motion.
 duration_instant  = 0
 duration_fast     = 120
 duration_normal   = 240
@@ -78,19 +185,85 @@ easing_linear     = "linear"
 
 motion_preference = "respect-prefers-reduced-motion"
 
-[typography]
-display_family              = "Helvetica, 'Arial Black', sans-serif"
-display_weight              = 700
-display_line_height         = 1.2
-body_family                 = "Helvetica, Arial, sans-serif"
-mono_family                 = "'SF Mono', Menlo, Monaco, 'DejaVu Sans Mono', monospace"
+
+# ─────────────────────────────────────────────────────────────────────
+# Iconography — muriel uses a custom-drawn line set. Stroke 1.5px at 16.
+# ─────────────────────────────────────────────────────────────────────
+
+[iconography]
+family        = "custom"
+stroke_px     = 1.5
+default_size  = 16
+sizes         = [12, 16, 20, 24, 32]
+
+
+# ─────────────────────────────────────────────────────────────────────
+# Imagery — how raster assets should be treated. crop_policy wires into
+# smartcrop: a brand with 'preserve-text' will have text-veto turned on
+# by default when smartcrop is invoked with this guide.
+# ─────────────────────────────────────────────────────────────────────
+
+[imagery]
+style       = "schematic"
+treatments  = ["none"]
+crop_policy = "energy-only"
+
+
+# ─────────────────────────────────────────────────────────────────────
+# Logo — variants + clear-space + minimum-size rules.
+# muriel ships a single wordmark today; monogram / stacked / horizontal
+# are reserved for future renders.
+# ─────────────────────────────────────────────────────────────────────
+
+[logo]
+clear_space_em = 1.0
+min_width_px   = 80
+
+[logo.wordmark]
+svg = "docs/favicon-512.png"
+png = "docs/favicon-512.png"
+
+
+# ─────────────────────────────────────────────────────────────────────
+# Voice — muriel's tone as an import.
+# See SKILL.md's universal rules for the source.
+# ─────────────────────────────────────────────────────────────────────
+
+[voice]
+adjectives = ["precise", "unhurried", "researcher", "schematic"]
+say_yes = [
+  "State the claim, show the evidence, move on.",
+  "Every number gets units and context.",
+  "Reproducible > one-off — save the script alongside the output.",
+  "Measure before drawing.",
+]
+say_no = [
+  "No 'remarkably', 'surprisingly', 'fascinatingly'.",
+  "No false profundity.",
+  "No centered body paragraphs.",
+  "No accent lines under titles (AI-deck tell).",
+]
+
+
+# ─────────────────────────────────────────────────────────────────────
+# A11y — muriel's universal 8:1 rule expressed per-brand.
+# ─────────────────────────────────────────────────────────────────────
+
+[a11y]
+min_contrast_ratio   = 8.0
+min_hit_target_px    = 44
+focus_ring_color     = "accent_ink"
+focus_ring_width_px  = 3
+motion_reduce_policy = "collapse-to-zero"
+
 
 [dependencies]
 # No external fonts — all system stacks.
 
+
 [rules]
-# muriel's own palette has no restrictions. These booleans are defaults
-# but kept explicit so consumers know they can freely generate.
+# muriel's own palette has no restrictions. Booleans kept explicit so
+# consumers know they can freely generate.
 never_modify_sources                     = false
 never_rebuild_image_generation_elsewhere = false
 brand_owner                              = "muriel"

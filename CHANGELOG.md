@@ -4,6 +4,39 @@ All notable changes to muriel are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
 version numbers follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- **`brand.toml` schema v2** covering the full design-token surface:
+  `[spacing]`, `[radii]`, `[elevation]` structural ramps;
+  `[typography.scale]` named type scale (display, h1–h4, body, body_small,
+  caption, label, mono); `[semantic.*]` `{text, surface, border}` trios
+  replacing the ad-hoc `note/tip/warning/important` fields;
+  `[viz]` categorical / sequential / diverging palettes;
+  `[iconography]` + `[imagery]` (with `crop_policy` hook into smartcrop);
+  `[logo]` variants (wordmark / monogram / stacked / horizontal) with
+  clear-space and min-width rules; `[voice]` adjectives + say-yes /
+  say-no; `[a11y]` floors (`min_contrast_ratio`, `min_hit_target_px`,
+  `focus_ring_*`, `motion_reduce_policy`).
+- **Brand-driven contrast floor.** `StyleGuide.audit_contrast()` now
+  defaults to the brand's own `a11y.min_contrast_ratio` (falls back to
+  muriel's universal 8.0) instead of requiring an explicit argument.
+- **CSS vars emitter expansion.** `to_css_vars()` now emits the full
+  token surface: semantic-state trios, spacing / radii / elevation
+  ramps, motion durations + easings, the full type scale (size / weight
+  / line-height / tracking per role), and a11y hooks.
+
+### Changed
+- `examples/muriel-brand.toml` and `examples/example-brand.toml`
+  rewritten against v2, each populating every optional block.
+- `examples/example-brand.toml` `named` and `viz.categorical` entries
+  bumped to clear muriel's 8:1 floor (`wildflowers`, `tiedye`,
+  `violet`); `accent_decorative` now actually fails 8:1 to match its
+  role.
+- `muriel/tools/venn.py` `_region_colors` ported off the v1
+  `colors.{tip,warning,important}` fields to the v2
+  `viz.categorical` palette with `semantic.*` fallback.
+
 ## [0.5.0] — 2026-04-18
 
 First public release. The project was previously named `render`; this
