@@ -64,7 +64,7 @@ from __future__ import annotations
 
 import re
 import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, Sequence, Union
 import xml.etree.ElementTree as ET
@@ -157,8 +157,14 @@ _RGB_FN_RE = re.compile(
 def parse_color(value: ColorInput) -> Optional[tuple[int, int, int]]:
     """
     Parse a color value as hex (``#abc``, ``#abcdef``), ``rgb()``/``rgba()``,
-    named color, or ``(R, G, B)`` tuple. Returns ``(R, G, B)`` in 0–255,
-    or ``None`` if the value is transparent / ``currentColor`` / ``none``.
+    ``oklch(...)``, named color, or ``(R, G, B)`` tuple. Returns
+    ``(R, G, B)`` in 0–255, or ``None`` if the value is transparent /
+    ``currentColor`` / ``none``.
+
+    OKLCH inputs are routed through ``muriel.oklch`` (lazy import).
+    Out-of-gamut OKLCH colors are clamped via chroma reduction so the
+    returned sRGB triple is faithful to the intended hue/lightness
+    rather than hard-clipped.
 
     Raises ``ValueError`` on genuinely unparseable input.
     """
@@ -172,6 +178,9 @@ def parse_color(value: ColorInput) -> Optional[tuple[int, int, int]]:
         return None
     if s.startswith("#"):
         return hex_to_rgb(s)
+    if s[:6].lower() == "oklch(":
+        from muriel.oklch import clamp_to_srgb, oklch_to_rgb, parse_oklch
+        return oklch_to_rgb(clamp_to_srgb(parse_oklch(s)))
     m = _RGB_FN_RE.match(s)
     if m:
         return (

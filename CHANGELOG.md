@@ -6,7 +6,25 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.0] — 2026-04-23
+
 ### Added
+- **`muriel.oklch` module.** Stdlib-only OKLCH / OKLab conversion
+  (Ottosson 2020 / CSS Color Module Level 4), CSS `oklch()` parser
+  covering the full CSS 4 grammar (percentages, angle units, `none`,
+  legacy commas, alpha tolerated-and-discarded), sRGB gamut check, and
+  chroma-bisection clamp that preserves L and h. Roundtrip is
+  bit-exact on sRGB integer channels; primaries match Ottosson's
+  reference values to four decimals.
+- **`contrast.parse_color` accepts `oklch(...)`.** Every existing
+  contrast helper — `contrast_ratio`, `check_text_pair`, `audit_svg`
+  — now accepts OKLCH inputs transparently via a lazy import.
+  Out-of-gamut OKLCH is auto-clamped so hue and lightness are
+  preserved instead of hard-clipping the channel.
+- **CLI.** `python -m muriel.oklch <color>` inspects any color
+  (hex / `rgb()` / named / `oklch()`) and reports hex, sRGB, OKLCH,
+  and gamut status; `--clamp` additionally reports the chroma-clamped
+  OKLCH and ΔC for out-of-gamut OKLCH inputs.
 - **`brand.toml` schema v2** covering the full design-token surface:
   `[spacing]`, `[radii]`, `[elevation]` structural ramps;
   `[typography.scale]` named type scale (display, h1–h4, body, body_small,

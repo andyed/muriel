@@ -1,13 +1,16 @@
 """
 muriel — multi-channel visual production toolkit, Python side.
 
-Seven modules, pulled out of the channel subfiles so notebooks and CI
+Eight modules, pulled out of the channel subfiles so notebooks and CI
 checks can import them instead of copy-pasting.
 
   - matplotlibrc_dark  — OLED cream on near-black (default palette)
   - matplotlibrc_light — warm editorial palette (matches F explainer)
   - stats              — APA-style effect size / CI / phrasing helpers
-  - contrast           — WCAG contrast audit (module + CLI)
+  - contrast           — WCAG contrast audit (module + CLI). Accepts
+                         hex, rgb(), named colors, and oklch().
+  - oklch              — OKLCH / OKLab parse + convert + gamut check /
+                         chroma clamp (module + CLI)
   - dimensions         — common screen-size footprints (Size / Device /
                          PaperSize, social cards, video, viewports,
                          academic figsize helper, dotted-name registry)
@@ -50,12 +53,28 @@ Contrast auditing:
         contrast_ratio, check_text_pair, audit_svg, RENDER_8,
     )
     contrast_ratio("#e6e4d2", "#0a0a0f")     # → 15.42
+    contrast_ratio("oklch(92% 0.02 95)", "#0a0a0f")  # oklch() accepted
     audit_svg("examples/example-palette.svg")  # prints an audit table
 
 Or from the command line:
 
     python -m muriel.contrast examples/*.svg
     python -m muriel.contrast file.svg --required 4.5 --background '#fff'
+
+OKLCH / OKLab conversion + gamut:
+
+    from muriel.oklch import (
+        rgb_to_oklch, oklch_to_rgb, parse_oklch, format_oklch,
+        in_srgb_gamut, clamp_to_srgb, Oklch,
+    )
+    rgb_to_oklch((230, 228, 210))            # → Oklch(L=0.906, …)
+    parse_oklch("oklch(62% 0.15 258)")       # → Oklch(L=0.62, …)
+    clamp_to_srgb(Oklch(0.7, 0.3, 30))       # in-gamut chroma-clamped
+
+Or from the command line:
+
+    python -m muriel.oklch "#e6e4d2"
+    python -m muriel.oklch "oklch(70% 0.30 30)" --clamp
 
 Dimension lookups and academic figsize helpers:
 
@@ -114,12 +133,13 @@ Or from the command line:
 See the module docstrings for the full APIs.
 """
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 __all__ = [
     "matplotlibrc_dark",
     "matplotlibrc_light",
     "stats",
     "contrast",
+    "oklch",
     "dimensions",
     "capture",
     "styleguide",
