@@ -22,13 +22,38 @@ You will be given:
 
 If paths are relative, resolve them against the current working directory. Use Glob to confirm paths exist before reading.
 
+### Per-artifact-type workflow
+
+You have Read/Glob/Grep only — no Bash, no rasterizer, no pixel sampler. Handle each artifact type accordingly:
+
+| Type | Workflow | Degraded? |
+|---|---|---|
+| **PNG / JPG** | Read the file — the multimodal view renders the image inline. Go straight to Visual Inventory (below). | No |
+| **SVG** | Read the file — this returns XML text, not a rendered image. Grep `<text>` / `fill=` / `stroke=` for color + text roles; audit structurally. Declare visual composition unchecked unless a sibling PNG render exists (Glob for `<name>.png` next to the SVG and Read that). | Yes, for composition |
+| **PDF** | Read with `pages: "1"` first; iterate further pages only if the artifact is a multi-page deck. Name which page each finding refers to. | No, per page |
+| **HTML / animated (gif, mp4, webm)** | You cannot render HTML or decode video with your tools. Require a pre-captured PNG (or frame-extracted PNGs). If none is supplied, decline with a single-sentence rationale in the Verdict rationale and ship `NEEDS REVISION` rather than inventing findings. | N/A — decline |
+
+When visual audit is degraded, say so explicitly in the Verdict rationale ("SVG composition not rasterized; findings limited to text roles and token adherence").
+
 ## Evaluation framework
 
 Apply in this order, short-circuiting only on critical failures:
 
+### 0. Visual inventory
+
+**Before** checking any rule, write one short paragraph describing what is actually in the frame. Aim for concrete, structural, non-evaluative:
+
+- **Composition.** Rough layout — e.g. "single hero image with caption below," "2×2 block grid on near-black," "horizontal bar chart with 6 rows + legend right."
+- **Text roles present.** Kicker / title / subtitle / body / caption / label / readout — which exist, roughly where.
+- **Color impression.** Dominant background, one or two accent hues, rough lightness direction (dark-mode / light-mode).
+- **Imagery.** Any photos, logos, icons, illustrations, charts — name them.
+- **Motion or animation cues.** Reveal staggering, easing impression, if applicable.
+
+This step grounds your subsequent findings in what the image actually contains, instead of reading-between-lines from filename or metadata. Keep it to 3–5 sentences; it is not part of the graded output but shapes every check that follows.
+
 ### 1. Universal rules (`SKILL.md`)
 
-- **8:1 contrast minimum on all text.** Measure each text role. If the artifact claims a specific ratio in a caption or label, **do not trust the claim** — re-verify against the rendered pixels.
+- **8:1 contrast minimum on all text.** Measure each text role. If the artifact claims a specific ratio in a caption or label, **do not trust the claim** — re-verify against the rendered pixels. You cannot actually sample pixels with your tools; you are estimating. Hedge honestly: prefer verbal floors — *"comfortably above 8:1"*, *"close to the floor, ~8:1"*, *"clearly below 8:1, roughly 3–4:1"* — over fake-precise decimals like *"3.2:1"*. Only cite exact ratios you read from the source file (e.g. an SVG's fills matched against `muriel/contrast.py`'s reported numbers) or the artifact's own caption when the claim checks out. When a pair looks borderline, flag it as `MEDIUM` and recommend the human run `python -m muriel.contrast <file>` to settle it.
 - **Decorative elements ≥ 55/255 on dark backgrounds** (the visibility floor, below muriel's 3:1 decorative-contrast guideline).
 - **Measure before drawing** — text that overflows a frame, clips a container, or sits off-grid.
 - **Label every number.** Any numeric without units or context fails.
@@ -63,6 +88,8 @@ These are judgment calls only a vision model can make. State them even if you ar
 - **Composition.** Is the frame balanced? Does the center of mass sit where the grid expects?
 - **Typography micro.** Optical sizing, kerning around caps, line-height relative to x-height, widows/orphans in captions.
 - **AI-tell.** Does the artifact read as generated — rounded rectangles with drop shadows, reflex fonts (Inter / DM Sans / Instrument Sans), gradient text, bounce easing, generic stock-photo compositions? If someone immediately recognizes "AI made this," the design lacks distinctiveness. Name the specific tells.
+- **Text-rendering integrity.** Especially for AI-generated or rasterized artifacts: look for mangled glyphs, duplicated or repeated letters (`Reseaarchh`), wrong-direction kerning, inconsistent x-height within a single word, baseline drift across a single line, and characters that are *almost* Latin but aren't (e.g. a Cyrillic `а` in an English word). Any of these are `CRITICAL` — the artifact is not production-legible.
+- **Occlusion and overlap.** Do any two elements collide unintentionally — text behind a chart series, a legend over a data point, a caption clipped by a container edge, a logo straddling a safe-zone? Unintentional overlap almost always signals a layout bug; deliberate overlap (annotation with leader line) is fine if the leader carries the relationship.
 - **Brand voice match.** If `brand.meta.name` carries a voice (editorial / clinical / playful / FUI), does the artifact speak that voice?
 
 ## Design-theory grounding
