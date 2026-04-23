@@ -111,7 +111,7 @@ Once a demo exists as a single-file HTML, the next decision is where it lives. D
 
 ### CodePen — the Prefill API
 
-CodePen's highest-leverage feature: `POST` a JSON payload of HTML/CSS/JS to `codepen.io/pen/define` and open a new Pen with the code pre-populated, ready for the reader to run or fork. Perfect for "Try this in a Pen" buttons inside blog posts — one click and the reader is in a live editor with your code.
+`POST` a JSON payload of HTML/CSS/JS to `codepen.io/pen/define` and open a new Pen with the code pre-populated, ready for the reader to run or fork. Good for "Try this in a Pen" buttons inside blog posts — one click and the reader is in a live editor with your code.
 
 ```html
 <form action="https://codepen.io/pen/define" method="POST" target="_blank">
@@ -126,7 +126,7 @@ CodePen's highest-leverage feature: `POST` a JSON payload of HTML/CSS/JS to `cod
 </form>
 ```
 
-Full docs: [blog.codepen.io/documentation/prefill](https://blog.codepen.io/documentation/prefill/). Tags, titles, descriptions, and external resources (including marginalia CDN) can all be set in the payload. For educational content this is the highest-leverage single feature in the whole skill — don't reach for screenshots when you can reach for a live fork.
+Full docs: [blog.codepen.io/documentation/prefill](https://blog.codepen.io/documentation/prefill/). Tags, titles, descriptions, and external resources (including marginalia CDN) can all be set in the payload. For educational content, reach for a live fork before a screenshot.
 
 ### CodePen — embeds
 

@@ -14,16 +14,16 @@ Part of the [muriel](../SKILL.md) skill — see the top-level index for mission,
 
 If the target is a paper figure with a caption, use [`channels/science.md`](science.md) instead — different constraints, different substrate.
 
-## Muriel's lane: deterministic, editable, audit-able
+## Deterministic, editable, auditable
 
-The K-Dense `infographics` skill (which this channel borrows structure from) generates images via Nano Banana Pro AI and scores them via Gemini 3 Pro. **That is not muriel's lane.** Muriel ships reproducible SVG (with optional raster export) because:
+This channel ships reproducible SVG (with optional raster export). The K-Dense `infographics` skill (which this channel borrows structure from) generates raster via Nano Banana Pro and scores via Gemini 3 Pro — a different path, kept separate.
 
-- **Editable.** One wrong number, one font swap — edit the source, re-render. AI regeneration is a different artifact every time.
+- **Editable.** One wrong number or font swap — edit the source, re-render. AI regeneration produces a different artifact every time.
 - **Auditable.** Every color and text element runs through `muriel/contrast.py` for 8:1 WCAG compliance. Raster AI output is opaque to that check.
-- **Reproducible.** Saves the generator script alongside the artifact. Six months from now you can re-render at a new size with updated numbers.
-- **On-brand.** Brand tokens apply at render time, not as a post-hoc prompt engineering problem.
+- **Reproducible.** The generator script ships alongside the artifact. Re-render at a new size or with updated numbers months later.
+- **On-brand.** Brand tokens apply at render time, not as a post-hoc prompt-engineering problem.
 
-Keep AI image generation in a different skill (iblipper for animated typography, muriel's raster channel for static AI-as-tool workflows). The infographics channel is the deterministic lane.
+AI image generation lives in other skills (iblipper for animated typography, muriel's raster channel for static AI-as-tool workflows).
 
 ## The ten types
 

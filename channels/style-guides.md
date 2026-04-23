@@ -4,11 +4,9 @@ A style guide is a brand's design tokens — colors, typography, spacing, radii,
 
 Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map. Related: [`raster.md`](raster.md) for asset generation, [`web.md`](web.md) for marginalia CSS tokens, [`science.md`](science.md) for matplotlib rcparams.
 
-## Why this exists
+## When to use
 
-Every project that ships visuals has a design voice — OLED dashboard, copperplate wordmark, editorial marginalia, kinetic typography, warm light-mode explainer, cream-on-near-black. Each of those typically lives in its own ad-hoc form — CSS custom properties here, Python constants there, a CLAUDE.md rule somewhere else — and without a schema, muriel has no principled way to import one.
-
-A style guide schema fixes that: one file per brand, one loader, one dataclass-tree in memory. When muriel gets a task in the context of a brand, it loads the brand.toml, inherits the tokens, and respects the rules.
+Brands usually ship tokens in ad-hoc form: CSS custom properties here, Python constants there, a CLAUDE.md rule somewhere else. A brand.toml serializes them into one file that muriel can load once and apply across every channel. One loader, one dataclass tree in memory. When muriel gets a task in the context of a brand, it reads the brand.toml, inherits the tokens, and respects the rules.
 
 ## Schema v2
 

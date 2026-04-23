@@ -1,15 +1,15 @@
 <p align="center">
   <picture>
     <source srcset="assets/logo-animated-dark.gif" media="(prefers-color-scheme: dark)">
-    <img src="assets/logo-animated.gif" alt="muriel — next-gen visual-production skill for LLMs" width="720">
+    <img src="assets/logo-animated.gif" alt="muriel — multi-channel visual production for LLM agents" width="720">
   </picture>
 </p>
 
 # muriel
 
-**muriel is a next-gen visual-production skill for LLMs** — built for the agentic era and grounded in the full design-history lineage it inherits. A dozen channels of tool-use recipes — ten output channels (raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics) plus two cross-channel references (dimensions, style-guides) — a two-tier brand-token schema with motion, anti-patterns per channel, a multi-constraint solver that enforces 8:1 contrast and OLED palette at render time, and a vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research.
+**muriel is a multi-constraint solver for visual production** — a dozen channels of tool-use recipes for LLM agents, grounded in the design-history lineage they inherit. Ten output channels (raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics) plus two cross-channel references (dimensions, style-guides), a two-tier brand-token schema with motion, anti-patterns per channel, live 8:1 contrast and OLED-palette enforcement at render time, and a vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research.
 
-Next-gen means the tools — LLM-native skill format, vision-model critique, brand tokens alive at render time, motion as a first-class schema field, engine adapters for Pillow / Flux / pretext / ffmpeg / Playwright. Grounded means the principles — Cooper's Visible Language Workshop (tribute below), Tufte's data-ink discipline, Bertin's retinal variable ranking, Gestalt grouping, CRAP layout, Reichle's E-Z Reader, scanpath patterns from vision science. The new tools serve the old principles; neither replaces the other.
+The tooling is LLM-native: skill format, vision-model critique, brand tokens alive at render time, motion as a first-class schema field, engine adapters for Pillow / Flux / pretext / ffmpeg / Playwright. The principles are older: Cooper's Visible Language Workshop (tribute below), Tufte's data-ink discipline, Bertin's retinal variable ranking, Gestalt grouping, CRAP layout, Reichle's E-Z Reader, scanpath patterns from vision science. The tools serve the principles.
 
 A single skill file (`SKILL.md`) teaches a Claude Code agent to generate every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data. The constraint discipline (8:1 contrast, OLED palette, one font treatment, generated > drawn, reproducible > one-off) stays *live* at render time: brand tokens are parsed, contrast is audited, dimensions are enforced — not as lint after the fact, but as part of the act of making.
 

@@ -14,9 +14,7 @@ Or as a library:
 """
 
 import json
-import math
 import os
-import sys
 import argparse
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter

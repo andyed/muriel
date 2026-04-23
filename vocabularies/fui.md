@@ -1,6 +1,6 @@
 # FUI — Fantasy / Fictional User Interface
 
-The industry term for sci-fi UI: the HUDs, consoles, and data overlays you see in Iron Man, Blade Runner 2049, The Martian, Westworld, The Expanse. Not "cyberpunk" (too broad, that's the umbrella aesthetic). Not "HUD" (that's a UI mode, heads-up). **FUI** is the keyword that unlocks the right references.
+The industry term for sci-fi UI: the HUDs, consoles, and data overlays in Iron Man, Blade Runner 2049, The Martian, Westworld, The Expanse. Not "cyberpunk" (too broad — that's the umbrella aesthetic). Not "HUD" (that's a UI mode — heads-up). **FUI** is what to search when looking for references.
 
 Part of the [muriel](../SKILL.md) skill, under Aesthetic Vocabularies. See the top-level index for mission and universal rules that apply across every vocabulary.
 
