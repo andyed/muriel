@@ -35,6 +35,7 @@ faces    = ["mediapipe>=0.10.9"]
 text     = ["easyocr>=1.7.1"]
 saliency = ["onnxruntime>=1.16.0"]
 raster   = ["Pillow>=10.0", "numpy>=1.24"]  # what the tools actually need at runtime
+critique = ["cairosvg>=2.7"]                 # SVG → PNG rasterization for muriel-critique
 # Convenience: everything at once.
 all      = [
   "mediapipe>=0.10.9",
@@ -42,6 +43,7 @@ all      = [
   "onnxruntime>=1.16.0",
   "Pillow>=10.0",
   "numpy>=1.24",
+  "cairosvg>=2.7",
 ]
 
 [project.scripts]

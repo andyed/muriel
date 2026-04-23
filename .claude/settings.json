@@ -1,0 +1,21 @@
+{
+  "$comment": "Project-scoped permissions for muriel development and for the muriel-critique agent's compute calls. Users installing the skill in other repos should mirror these patterns in their own .claude/settings.json (or user settings).",
+  "permissions": {
+    "allow": [
+      "Bash(python -m muriel.contrast:*)",
+      "Bash(python3 -m muriel.contrast:*)",
+      "Bash(.venv/bin/python -m muriel.contrast:*)",
+      "Bash(uv run python -m muriel.contrast:*)",
+      "Bash(python -m muriel.oklch:*)",
+      "Bash(python3 -m muriel.oklch:*)",
+      "Bash(.venv/bin/python -m muriel.oklch:*)",
+      "Bash(uv run python -m muriel.oklch:*)",
+      "Bash(cairosvg:*)",
+      "Bash(.venv/bin/cairosvg:*)",
+      "Bash(python -m cairosvg:*)",
+      "Bash(python3 -m cairosvg:*)",
+      "Bash(.venv/bin/python -m cairosvg:*)",
+      "Bash(uv run cairosvg:*)"
+    ]
+  }
+}

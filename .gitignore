@@ -17,7 +17,8 @@ venv/
 # Editor + session state
 .idea/
 .vscode/
-.claude/
+.claude/*
+!.claude/settings.json
 
 # Drafts (private)
 docs/drafts/
