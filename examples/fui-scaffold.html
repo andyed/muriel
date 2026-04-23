@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en" data-mg-theme="dark">
+<head>
+<meta charset="utf-8">
+<title>muriel — FUI scaffold</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  /* muriel motion tokens (brand-loaded in production; fallbacks inline) */
+  :root {
+    --mg-bg:              #0a0a0f;
+    --mg-accent:          #7dd4e4;   /* 11.67:1 on bg — text-safe */
+    --mg-dim:             #50b4c8;   /* 8.19:1  on bg — text-safe */
+    --mg-ink:             #e6e4d2;   /* 15.42:1 on bg */
+    --mg-decorative:      rgba(125, 212, 228, 0.28);  /* grid/strokes only */
+    --mg-duration-reveal: 800ms;
+    --mg-ease-emphasis:   cubic-bezier(0.4, 0, 0.2, 1);
+    --mg-stagger:         120ms;     /* 80–200ms per fui.md */
+  }
+
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--mg-bg);
+    color: var(--mg-ink);
+    font-family: "IBM Plex Mono", "JetBrains Mono", "Share Tech Mono", ui-monospace, monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  /* --- layout: 2×2 grid of HUD blocks over a shared scan-line overlay --- */
+  .hud {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 24px;
+    padding: 24px;
+    height: 100vh;
+    position: relative;
+    isolation: isolate;  /* contain the overlay */
+  }
+
+  .block {
+    border: 1px solid var(--mg-decorative);
+    padding: 18px 20px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: reveal var(--mg-duration-reveal) var(--mg-ease-emphasis) forwards;
+  }
+  .block:nth-child(1) { animation-delay: calc(0 * var(--mg-stagger)); }
+  .block:nth-child(2) { animation-delay: calc(1 * var(--mg-stagger)); }
+  .block:nth-child(3) { animation-delay: calc(2 * var(--mg-stagger)); }
+  .block:nth-child(4) { animation-delay: calc(3 * var(--mg-stagger)); }
+
+  @keyframes reveal {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* corner brackets — FUI signature */
+  .block::before, .block::after {
+    content: "";
+    position: absolute;
+    width: 14px; height: 14px;
+    border: 1px solid var(--mg-accent);
+  }
+  .block::before { top: -1px; left: -1px;  border-right: 0; border-bottom: 0; }
+  .block::after  { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+  .label {
+    color: var(--mg-dim);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+  }
+  .readout {
+    color: var(--mg-accent);
+    font-size: 38px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+  .subreadout {
+    color: var(--mg-ink);
+    font-size: 12px;
+    opacity: 0.78;
+    margin-top: 12px;
+  }
+
+  /* --- scan-line overlay (fullscreen, behind blocks is fine visually) --- */
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        rgba(125, 212, 228, 0.035) 0px,
+        rgba(125, 212, 228, 0.035) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+    mix-blend-mode: screen;
+  }
+
+  /* --- canvas/svg fills block --- */
+  .fill { width: 100%; height: 120px; display: block; }
+
+  /* respect user motion prefs */
+  @media (prefers-reduced-motion: reduce) {
+    .block { opacity: 1; transform: none; animation: none; }
+    .scanlines { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<main class="hud" aria-label="FUI scaffold — four demo blocks">
+
+  <!-- 1. Data ticker — rAF-driven counter with leading zeros -->
+  <section class="block">
+    <p class="label">Downlink · kbps</p>
+    <div class="readout" id="ticker">00000</div>
+    <p class="subreadout">T-<span id="clock">00:00:00</span> · packet 0x<span id="pkt">000000</span></p>
+  </section>
+
+  <!-- 2. Radial compass — SVG thin-stroke geometry -->
+  <section class="block">
+    <p class="label">Bearing</p>
+    <svg class="fill" viewBox="-100 -60 200 120" aria-hidden="true">
+      <!-- outer ring -->
+      <circle cx="0" cy="0" r="52" fill="none" stroke="var(--mg-decorative)" stroke-width="1"/>
+      <!-- inner ring -->
+      <circle cx="0" cy="0" r="36" fill="none" stroke="var(--mg-decorative)" stroke-width="0.5"/>
+      <!-- 36 tick marks, 10° apart -->
+      <g id="compass-ticks"></g>
+      <!-- cardinals -->
+      <text x="0"   y="-56" text-anchor="middle" fill="var(--mg-dim)" font-size="6" font-family="inherit">N</text>
+      <text x="56"  y="2"   text-anchor="middle" fill="var(--mg-dim)" font-size="6" font-family="inherit">E</text>
+      <text x="0"   y="60"  text-anchor="middle" fill="var(--mg-dim)" font-size="6" font-family="inherit">S</text>
+      <text x="-56" y="2"   text-anchor="middle" fill="var(--mg-dim)" font-size="6" font-family="inherit">W</text>
+      <!-- needle -->
+      <g id="compass-needle">
+        <line x1="0" y1="4" x2="0" y2="-48" stroke="var(--mg-accent)" stroke-width="1.25"/>
+        <circle cx="0" cy="0" r="2" fill="var(--mg-accent)"/>
+      </g>
+    </svg>
+    <p class="subreadout">Heading <span id="bearing">000</span>°</p>
+  </section>
+
+  <!-- 3. Canvas waveform — 60fps data sweep -->
+  <section class="block">
+    <p class="label">Signal · telemetry</p>
+    <canvas class="fill" id="waveform" width="800" height="120" aria-hidden="true"></canvas>
+    <p class="subreadout">rms <span id="rms">0.000</span> · peak <span id="peak">0.000</span></p>
+  </section>
+
+  <!-- 4. Status stack — staggered reveal of structured readouts -->
+  <section class="block">
+    <p class="label">Status</p>
+    <div style="display:grid; grid-template-columns:1fr auto; gap:6px 18px; font-size:13px;">
+      <span>POWER</span><span style="color:var(--mg-accent); font-variant-numeric:tabular-nums;" id="pwr">98.4%</span>
+      <span>THERMAL</span><span style="color:var(--mg-accent); font-variant-numeric:tabular-nums;" id="therm">42.1°C</span>
+      <span>COMMS</span><span style="color:var(--mg-accent); font-variant-numeric:tabular-nums;" id="comms">LOCK</span>
+      <span>UPTIME</span><span style="color:var(--mg-accent); font-variant-numeric:tabular-nums;" id="uptime">0d 00:00</span>
+    </div>
+  </section>
+
+</main>
+
+<div class="scanlines" aria-hidden="true"></div>
+
+<script>
+/* ---- compass ticks: draw 36, every 9th gets a longer stroke ---- */
+(function () {
+  const g = document.getElementById("compass-ticks");
+  for (let i = 0; i < 36; i++) {
+    const angle = (i * 10 - 90) * Math.PI / 180;
+    const r0 = 48, r1 = (i % 9 === 0) ? 40 : 45;
+    const x0 = Math.cos(angle) * r0, y0 = Math.sin(angle) * r0;
+    const x1 = Math.cos(angle) * r1, y1 = Math.sin(angle) * r1;
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", x0.toFixed(2));
+    line.setAttribute("y1", y0.toFixed(2));
+    line.setAttribute("x2", x1.toFixed(2));
+    line.setAttribute("y2", y1.toFixed(2));
+    line.setAttribute("stroke", "var(--mg-decorative)");
+    line.setAttribute("stroke-width", i % 9 === 0 ? "1" : "0.5");
+    g.appendChild(line);
+  }
+})();
+
+/* ---- data ticker + compass needle + waveform + status, rAF driven ---- */
+const pad = (n, w) => String(n).padStart(w, "0");
+const $ = id => document.getElementById(id);
+
+const t0 = performance.now();
+let lastSample = 0;
+
+function frame(now) {
+  const t = (now - t0) / 1000;
+
+  // 1. downlink ticker — smoothed random walk
+  const kbps = Math.round(42000 + Math.sin(t * 0.7) * 12000 + Math.sin(t * 3.1) * 1800);
+  $("ticker").textContent = pad(kbps, 5);
+
+  // mission clock
+  const hh = pad(Math.floor(t / 3600), 2);
+  const mm = pad(Math.floor(t / 60) % 60, 2);
+  const ss = pad(Math.floor(t) % 60, 2);
+  $("clock").textContent = `${hh}:${mm}:${ss}`;
+  $("pkt").textContent = pad((Math.floor(t * 37) & 0xffffff).toString(16), 6).toUpperCase();
+
+  // 2. compass needle — rotates slowly, ~6°/s
+  const bearing = (t * 6) % 360;
+  $("compass-needle").setAttribute("transform", `rotate(${bearing.toFixed(1)})`);
+  $("bearing").textContent = pad(Math.round(bearing), 3);
+
+  // 3. waveform — scrolling sweep
+  drawWaveform(t);
+
+  // 4. status — slower updates so the eye can read
+  if (now - lastSample > 250) {
+    lastSample = now;
+    $("pwr").textContent = (98 + Math.sin(t * 0.3) * 0.6).toFixed(1) + "%";
+    $("therm").textContent = (42 + Math.sin(t * 0.4) * 1.1).toFixed(1) + "°C";
+    $("uptime").textContent = `0d ${hh}:${mm}`;
+  }
+
+  requestAnimationFrame(frame);
+}
+
+const cv = $("waveform");
+const ctx = cv.getContext("2d");
+// device pixel ratio for crisp strokes on hidpi
+const dpr = Math.max(1, window.devicePixelRatio || 1);
+cv.width = cv.clientWidth * dpr;
+cv.height = cv.clientHeight * dpr;
+ctx.scale(dpr, dpr);
+
+function drawWaveform(t) {
+  const w = cv.clientWidth, h = cv.clientHeight;
+  ctx.clearRect(0, 0, w, h);
+
+  // center gridline
+  ctx.strokeStyle = "rgba(125, 212, 228, 0.15)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, h / 2);
+  ctx.lineTo(w, h / 2);
+  ctx.stroke();
+
+  // sampled sine+noise, read-left-to-right
+  ctx.strokeStyle = "#7dd4e4";  // var(--mg-accent)
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  let rms = 0, peak = 0;
+  for (let x = 0; x < w; x++) {
+    const phase = t * 2 + x * 0.03;
+    const y = h / 2 + Math.sin(phase) * 22 + Math.sin(phase * 3.7) * 6 + (Math.random() - 0.5) * 2;
+    const amp = Math.abs(y - h / 2);
+    rms += amp * amp;
+    if (amp > peak) peak = amp;
+    if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  rms = Math.sqrt(rms / w) / (h / 2);
+  peak = peak / (h / 2);
+  $("rms").textContent = rms.toFixed(3);
+  $("peak").textContent = peak.toFixed(3);
+}
+
+requestAnimationFrame(frame);
+</script>
+
+</body>
+</html>

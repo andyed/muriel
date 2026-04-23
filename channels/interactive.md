@@ -276,6 +276,29 @@ A publicly available worked example of pretext Tier 2: [andyed/pretext-coachella
 
 Reads as a direct descendant of David Small's 1996 Shakespeare navigation: text as navigable space, multi-scale rendering via tier-based weight (instead of Small's greeking), categorical color for structure, Canvas2D at 60fps because pretext measures outside the DOM reflow path. Good scaffold for any new typographic-canvas work.
 
+## Sci-fi UI (FUI) patterns
+
+When the output wants to feel like telemetry — live stats, mission clocks, bearing readouts, signal traces — reach for the FUI vocabulary. The full grammar, substrate decision table, and common-failure list live in [`vocabularies/fui.md`](../vocabularies/fui.md); this section is the interactive-channel seam.
+
+**Canonical stack** (lifted from the vocabulary's substrate decision):
+
+- **HTML + CSS Grid** for layout and text, with `font-variant-numeric: tabular-nums` on any changing digits.
+- **SVG** for thin-stroke geometry — compass rings, corner brackets, grid overlays, leader lines.
+- **Canvas2D + rAF** for tickers, waveforms, and anything that re-draws per frame.
+- **CSS `repeating-linear-gradient`** for scan-line overlays; **WebGL2 fragment shader** if the post-process needs to vary spatially (glitch, chromatic aberration).
+- Motion from muriel's brand tokens: `--mg-duration-reveal`, `--mg-ease-emphasis`, plus a project-local `--mg-stagger` (80–200ms).
+
+**Runnable scaffold: [`examples/fui-scaffold.html`](../examples/fui-scaffold.html).** Open in a browser. Single file, no build. Four primitives on one screen:
+
+1. **Data ticker** — rAF counter with leading zeros, mission clock, packet hex.
+2. **Radial compass** — SVG rings + 36 tick marks + rotating needle.
+3. **Canvas waveform** — scrolling signal trace with RMS/peak readouts.
+4. **Staggered reveal** — CSS animation across the four blocks at 120ms intervals.
+
+Corner brackets via `::before` / `::after`. Scan-line overlay via `repeating-linear-gradient`. `prefers-reduced-motion` fallback baked in. Every text element clears 8:1 against `#0a0a0f`. Swap the four CSS custom properties at the top for a brand's palette and the composition inherits.
+
+**CodePen Prefill the scaffold** to hand readers a live fork — see the Prefill API section above. Useful when a blog post describes a FUI primitive; one click and the reader is in a live editor.
+
 ## Lessons from past projects
 - **No bare `console.log`.** Route through a debug manager or conditional logger so shipped demos stay clean.
 - **Don't dim/fade search-result cards on hover or brush.** It breaks scanability more than it rewards the hovered row.
