@@ -48,6 +48,7 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     "dimensions":     ("muriel.dimensions",                 "Print the dimensions registry (sizes, devices, paper)"),
     "doctor":         ("muriel.doctor",                     "Report muriel install state, extras, and model caches"),
     "heroshot":       ("muriel.tools.heroshot",             "Tilted + bordered + shadowed hero-shot from a PNG"),
+    "import":         ("muriel.design_md_import",            "Convert a Google Stitch design.md into a muriel brand.toml"),
     "smartcrop":      ("muriel.tools.smartcrop",            "Saliency-aware crop solver (edges + optional faces / text / saliency)"),
     "styleguide":     ("muriel.styleguide",                 "Load a brand.toml; print / derive CSS / matplotlibrc / contrast audit"),
     "tilt-shift":     ("muriel.tools.tilt_shift",           "Fake-lens depth-of-field blur on a PNG"),
