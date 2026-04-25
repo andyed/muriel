@@ -357,6 +357,42 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
       </p>
     </div>
 
+    <div class="fig">
+      <a class="thumb-link" href="https://github.com/andyed/attentional-foraging">
+        <img src="timescale-map.png" alt="Measurement timescales — OSEC lives in the 1–30 s band, between fixation-level reading research and session-level search research">
+      </a>
+      <p class="caption">
+        <span class="channel">Science channel</span>
+        <strong>OSEC measurement timescales.</strong><br>
+        Tools: matplotlib (horizontal Gantt-style bars on log-scale x-axis) · <code>muriel.matplotlibrc_light</code> (warm editorial palette) · <code>muriel.dimensions.figsize_for('cikm')</code> (paper-safe sizing) · annotated with notebook-K-claim references from the project's Key Claims aggregate. Maps each measurement primitive (saccade, fixation, pupil micro-fluctuation, OSEC orient/survey/evaluate phases, LHIPA window, regression loop, full trial, multi-query session) onto seconds-log space with the OSEC operating band highlighted. The figure that situates a research program in one frame.
+        <a href="https://github.com/andyed/attentional-foraging">Live post →</a>
+      </p>
+    </div>
+
+    <div class="fig">
+      <a class="thumb-link" href="https://github.com/andyed/attentional-foraging">
+        <img src="cursor_gaze_array.png" alt="3×3 small-multiples grid of cursor + gaze trajectories on SERP results, color-coded by outcome class — clicked (green, top), deferred (orange, middle), evaluated-rejected (red, bottom). Each panel shows the result AOI rectangle, blue cursor path with start-square and end-diamond markers, and numbered fixation circles sized by duration.">
+      </a>
+      <p class="caption">
+        <span class="channel">Gaze channel — small multiples</span>
+        <strong>Cursor + gaze trajectories by outcome class.</strong><br>
+        Tools: matplotlib subplot grid (3×3) · <code>muriel.gaze</code> primitives (numbered fixations sized by duration, start-square / end-diamond cursor markers, AOI rectangles) · <code>muriel.matplotlibrc_light</code> palette · class-coded color (green clicked / orange deferred / red eval-rejected). The small-multiples principle made literal: identical axes and encoding, only the outcome class varies row-by-row. Reading the rows reveals the behavioral signature (tight tracking → late return → never return).
+        <a href="https://github.com/andyed/attentional-foraging">Live post →</a>
+      </p>
+    </div>
+
+    <div class="fig">
+      <a class="thumb-link" href="https://github.com/andyed/attentional-foraging">
+        <img src="gaze_density_class.png" alt="Three-panel pooled gaze density heatmaps showing cursor-gaze coupling regimes for evaluated-rejected, deferred, and clicked outcome classes. Fire colormap, each panel normalized to its own peak, with 200px scale bar and cursor anchor at center.">
+      </a>
+      <p class="caption">
+        <span class="channel">Density viz channel</span>
+        <strong>Pooled gaze density around the parked cursor — three coupling regimes.</strong><br>
+        Tools: numpy 2D histogram for the density estimation · matplotlib <code>imshow</code> with the <code>inferno</code>-family fire colormap · per-panel peak normalization · <code>muriel.heatmaps</code> conventions (Tobii-style Gaussian-pooled overlay, scale-bar annotation, normalized luminance against ground-truth landmarks). Pools every fixation in each outcome class, recentered on its episode's cursor median: tight coupling (eval-rejected, ~220 px) → cursor parked at offset while gaze revisits (deferred, ~300 px) → cursor held far from gaze throughout approach (clicked, ~390 px). The figure that makes a population statistic visible as a shape.
+        <a href="https://github.com/andyed/attentional-foraging">Live post →</a>
+      </p>
+    </div>
+
   </div>
 </section>
 
