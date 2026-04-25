@@ -6,6 +6,20 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- **`vocabularies/muriel-brand.md`.** Canonical brand-identity spec for
+  muriel itself — closes the irony gap of theming every other project
+  from a documented brand while running on vibes for our own. Defines
+  the six-bar mark with exact rect coordinates for full (with bar-6
+  ascender) and inline (capped, no ascender) variants; lineage to
+  Müller-Brockmann + Cooper VLW; color tokens matching
+  `examples/muriel-brand.toml`; subpixel rendering floor at ~28-30px
+  display width; wordmark conventions (`muriel` always lowercase,
+  `built with muriel` as canonical attribution, Inter regular + semibold,
+  no italic); drop-in HTML/SVG snippets for inline credit, block credit,
+  and wordmark-only fallback. First production deployment of the inline
+  form is the `inside_the_math` footer credit (psychodeli-webgl-port).
+
 ## [0.7.0] — 2026-04-25
 
 ### Added
