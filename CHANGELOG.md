@@ -6,7 +6,23 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-04-25
+
 ### Added
+- **`vocabularies/katex.md`.** Names KaTeX as muriel's web math engine
+  — MIT, CDN-clean, no bundler, pin `^0.16`. Documents the `.eq-block`
+  pattern, `auto-render` configuration, color/emphasis with
+  `\textcolor`, server-side rendering for stills, and integration with
+  the marginalia channel and `channels/science.md` (KaTeX is for web,
+  matplotlib + LaTeX is for paper). Reference exemplar: `inside_the_math`
+  (psychodeli-webgl-port, shipped). Cross-referenced from `SKILL.md`'s
+  vocabulary index and a new "Math — KaTeX" subsection in
+  `channels/web.md`.
+- **iblipper substrate role broadened.** `vocabularies/kinetic-typography.md`
+  iblipper entry now covers both animated kinetic-type artifacts *and*
+  single-frame social-media graphic stills where slogan-scale
+  rhetorical typography is the work. Edit Message → export PNG covers
+  the still path without IAP. SKILL.md vocab index updated to match.
 - **`muriel import <design.md>`.** New subcommand ingests a Google
   Stitch [design.md](https://stitch.withgoogle.com/docs/design-md/)
   and produces a muriel `brand.toml`. Zero-dep: hand-rolled YAML
