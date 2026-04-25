@@ -1,0 +1,138 @@
+# Scrutinizer brand style guide — StyleGuide v2.
+#
+# Stub for the muriel + Scrutinizer brand-mark experiment. The canonical
+# version should eventually live in scrutinizer-www (likely at
+# `scrutinizer-www/brand/scrutinizer-brand.toml`); this copy is here so
+# muriel's foveal-overlay primitive can render against the brand without
+# a cross-repo dependency during iteration.
+#
+# Contrast values measured against background `#0a0a0f`.
+
+[meta]
+name             = "Scrutinizer"
+slug             = "scrutinizer"
+version          = "0.1.0"
+owner_repo       = "scrutinizer-www"
+owner_path       = "~/Documents/dev/scrutinizer-repo/scrutinizer-www"
+canonical_source = "muriel/examples/scrutinizer-brand.toml (stub)"
+ownership_rule   = "Scrutinizer brand assets — owned by scrutinizer-www, edited there once promoted"
+
+
+# ─── Colors ──────────────────────────────────────────────────────────
+[colors]
+background        = "#0a0a0f"   # OLED near-black, matches in-app
+background_2      = "#0f1117"   # inner-panel
+background_3      = "#161822"
+
+foreground        = "#e0e0ec"   # cool ink — 14.42:1 on bg
+foreground_muted  = "#b0b0c8"   #            8.93:1 on bg
+
+# Long-wavelength visibility orange — distinct from the in-page section
+# accents (#c8a050 LGN gold, #dc6450 V1 red-orange). Reads at avatar
+# scale, evokes peripheral-color "what survives."
+accent            = "#ff9933"   # 9.28:1
+accent_ink        = "#ffb366"   # 11.19:1 — higher-contrast orange
+
+
+# ─── Semantic states ─────────────────────────────────────────────────
+[semantic.success]
+text    = "#66bb6a"             # 8.35:1
+surface = "#0f1a10"
+border  = "#66bb6a"
+
+[semantic.warning]
+text    = "#e6a817"             # 9.38:1
+surface = "#1a1408"
+border  = "#e6a817"
+
+[semantic.error]
+text    = "#ff8282"             # 8.25:1
+surface = "#1a0f0f"
+border  = "#ff8282"
+
+[semantic.info]
+text    = "#7dd4e4"             # 11.67:1 (teal — used for in-app gaze + cursor overlays)
+surface = "#0a1517"
+border  = "#7dd4e4"
+
+
+# ─── Data-viz palette ────────────────────────────────────────────────
+# Orange anchors position 0 so legacy diagrams that pull viz.categorical[0]
+# also get the brand identity colour. The remainder mirrors muriel's safe set.
+[viz]
+categorical = [
+  "#ff9933",    # brand orange   9.28:1
+  "#7dd4e4",    # gaze teal     11.67:1
+  "#66bb6a",    # green          8.35:1
+  "#e6a817",    # amber          9.38:1
+  "#ff8282",    # coral          8.25:1
+  "#c0a4ff",    # violet         9.40:1
+  "#e0e0ec",    # ink cool      14.42:1
+  "#d4a574",    # sand           8.87:1
+]
+sequential = [
+  "#0a0a0f",
+  "#241408",
+  "#5a3010",
+  "#a05a18",
+  "#d49044",
+  "#f0c890",
+  "#e0e0ec",
+]
+diverging = [
+  "#ff8282", "#e6a817", "#f0c890",
+  "#e0e0ec",
+  "#a8d8e8", "#7dd4e4", "#50b4c8",
+]
+
+
+# ─── Typography ──────────────────────────────────────────────────────
+[typography]
+display_family             = "-apple-system, 'Inter', 'Segoe UI', system-ui, sans-serif"
+display_weight             = 800
+display_line_height        = 1.15
+display_letter_spacing_em  = -0.02
+body_family                = "-apple-system, 'Inter', 'Segoe UI', system-ui, sans-serif"
+mono_family                = "'JetBrains Mono', 'Fira Code', ui-monospace, monospace"
+
+[typography.scale]
+display    = { size = 56, weight = 800, line_height = 1.05, tracking_em = -0.03 }
+h1         = { size = 40, weight = 800, line_height = 1.15, tracking_em = -0.02 }
+h2         = { size = 26, weight = 700, line_height = 1.2  }
+h3         = { size = 18, weight = 600, line_height = 1.3  }
+body       = { size = 16, weight = 400, line_height = 1.7  }
+body_small = { size = 14, weight = 400, line_height = 1.6  }
+caption    = { size = 12, weight = 400, line_height = 1.4  }
+mono       = { size = 13, weight = 400, line_height = 1.6  }
+
+
+# ─── Structural tokens ───────────────────────────────────────────────
+[spacing]
+xxs  = 2
+xs   = 4
+sm   = 8
+md   = 16
+lg   = 24
+xl   = 32
+xxl  = 48
+
+[radii]
+sm   = 4
+md   = 6
+lg   = 12
+pill = 9999
+
+
+# ─── A11y ────────────────────────────────────────────────────────────
+[a11y]
+min_contrast_ratio   = 8.0
+min_hit_target_px    = 44
+focus_ring_color     = "accent_ink"
+focus_ring_width_px  = 3
+
+
+# ─── Rules ───────────────────────────────────────────────────────────
+[rules]
+brand_owner                              = "scrutinizer-www"
+never_modify_sources                     = false
+never_rebuild_image_generation_elsewhere = false

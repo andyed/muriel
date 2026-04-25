@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif" shape-rendering="geometricPrecision">
+<defs><filter id="halo-shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="rgba(0,0,0,0.9)"/></filter></defs>
+<rect width="256" height="256" fill="#0a0a0f"/>
+<g filter="url(#halo-shadow)">
+<circle cx="128.00" cy="128.00" r="10.67" fill="none" stroke="#ffffff" opacity="0.6" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+<line x1="138.67" y1="128.00" x2="146.17" y2="128.00" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+<line x1="137.24" y1="133.33" x2="143.73" y2="137.08" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+<line x1="133.33" y1="137.24" x2="137.08" y2="143.73" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+<line x1="128.00" y1="138.67" x2="128.00" y2="146.17" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+<line x1="122.67" y1="137.24" x2="118.92" y2="143.73" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+<line x1="118.76" y1="133.33" x2="112.27" y2="137.08" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+<line x1="117.33" y1="128.00" x2="109.83" y2="128.00" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+<line x1="118.76" y1="122.67" x2="112.27" y2="118.92" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+<line x1="122.67" y1="118.76" x2="118.92" y2="112.27" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+<line x1="128.00" y1="117.33" x2="128.00" y2="109.83" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+<line x1="133.33" y1="118.76" x2="137.08" y2="112.27" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+<line x1="137.24" y1="122.67" x2="143.73" y2="118.92" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+</g>
+</svg>

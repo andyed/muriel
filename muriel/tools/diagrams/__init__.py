@@ -8,10 +8,13 @@ for that structure misleads.
 
 Catalog (MVP):
 
-    matrix(quadrants, *, axes, ...) → 2×2 categorical decomposition.
-    cycle(steps, *, center, ...)    → N-step iterative process (3–8).
+    matrix(quadrants, *, axes, ...)   → 2×2 categorical decomposition.
+    cycle(steps, *, center, ...)      → N-step iterative process (3–8).
+    foveal_overlay(*, verbosity, ...) → eccentricity falloff (V1 cortical
+                                        magnification). Three verbosity
+                                        tiers: mark / wordmark / diagram.
 
-Both write self-contained SVG, accept an optional ``StyleGuide``, and
+All write self-contained SVG, accept an optional ``StyleGuide``, and
 fall back to muriel's OLED palette. Output is hand-rolled SVG (no
 ``svgwrite`` dependency) for transparency: the file you ship is the
 file the agent wrote.
@@ -19,5 +22,6 @@ file the agent wrote.
 
 from muriel.tools.diagrams.matrix import matrix
 from muriel.tools.diagrams.cycle import cycle
+from muriel.tools.diagrams.foveal_overlay import foveal_overlay
 
-__all__ = ["matrix", "cycle"]
+__all__ = ["matrix", "cycle", "foveal_overlay"]
