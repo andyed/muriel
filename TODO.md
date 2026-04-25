@@ -11,6 +11,8 @@ Consolidated from `CHANGELOG.md`, `SKILL.md`, commit messages, and per-channel r
 ## Queued
 
 - [ ] **design.md export** — counterpart to the just-shipped `muriel import` (commit pending). Take a brand.toml, produce a Stitch-compatible design.md (frontmatter + Markdown prose) so brands round-trip through the open format. Lossy back-direction: muriel-specific fields (semantic state trios, ring gradients, viz palettes, voice, iconography) get lifted into prose sections rather than dropped, so they survive a future re-import. Add a round-trip test that confirms imported→exported→re-imported preserves the Stitch-native fields exactly.
+- [ ] **Diagrams catalog — continuation.** MVP shipped (`matrix`, `cycle`); see [`channels/diagrams.md`](channels/diagrams.md) for the prioritized list. Remaining presets, in order: comparison pair, phase / funnel, layered stack, causal DAG, spectrum, pyramid, comparison heat-grid. Each ships with an epistemic precondition + anti-prescription in its docstring.
+- [ ] **Diagrams icon-library decision.** The cycle generator has an `icon` slot per step that accepts raw SVG inner markup. Pick a substrate before adding icon helpers: lucide-static (MIT, ~1500 24×24 stroke icons), phosphor (MIT, multi-weight), or a hand-curated set of ~30 covering the diagram-relevant verbs. Settle this before extending past the matrix+cycle MVP.
 - [ ] **Screenshot designer P1.** Distinctive moves: `tilt()` (2D affine), `device_frame()`, `browser_url_bar()`, `spotlight()`, `vignette()`, `noise()`, `glow()`.
 - [ ] **Saliency detector wiring.** `muriel/detectors/saliency.py:53` is a v0.2 placeholder; fetch logic is stubbed at `muriel/warmup.py:87`. Ship the ONNX backend.
 - [ ] **SVG primitives reused across research repos.**

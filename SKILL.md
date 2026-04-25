@@ -25,6 +25,7 @@ Each channel has a dedicated subfile with deep recipes, tooling, and lessons. Th
 | **Dimensions** | *cross-channel reference* | [`channels/dimensions.md`](channels/dimensions.md) — social cards, device footprints, viewport tiers, video, paper/print, favicons, scale factors |
 | **Style guides** | *brand schema* | [`channels/style-guides.md`](channels/style-guides.md) — brand.toml schema, loader, rule enforcement, CSS/matplotlibrc derivation, example brand.toml files |
 | **Infographics** | SVG → PNG | [`channels/infographics.md`](channels/infographics.md) — 10 types × layout patterns × colorblind-safe palettes, deterministic SVG (not AI), 60-30-10 color / 60-40 viz:text rule, 5-point quality rubric at 8:1 |
+| **Diagrams** | SVG | [`channels/diagrams.md`](channels/diagrams.md) — rhetorical primitives (2×2 matrix, N-step cycle, Venn shipped; comparison pair, funnel, stack, DAG, spectrum, pyramid, heat-grid queued). Each preset carries an epistemic precondition and an anti-prescription. |
 
 
 ## Aesthetic vocabularies
