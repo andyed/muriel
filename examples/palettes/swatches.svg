@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1106 660" width="1106" height="660" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
+<rect width="1106" height="660" fill="#0a0a0f"/>
+<text x="8" y="43.0" fill="#e6e4d2" font-size="14" font-weight="600">wong</text>
+<rect x="130" y="8" width="80" height="60" fill="#000000" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="170.0" y="84" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#000000</text>
+<rect x="218" y="8" width="80" height="60" fill="#E69F00" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="258.0" y="84" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#E69F00</text>
+<rect x="306" y="8" width="80" height="60" fill="#56B4E9" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="346.0" y="84" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#56B4E9</text>
+<rect x="394" y="8" width="80" height="60" fill="#009E73" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="434.0" y="84" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#009E73</text>
+<rect x="482" y="8" width="80" height="60" fill="#F0E442" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="522.0" y="84" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#F0E442</text>
+<rect x="570" y="8" width="80" height="60" fill="#0072B2" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="610.0" y="84" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#0072B2</text>
+<rect x="658" y="8" width="80" height="60" fill="#D55E00" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="698.0" y="84" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#D55E00</text>
+<rect x="746" y="8" width="80" height="60" fill="#CC79A7" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="786.0" y="84" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#CC79A7</text>
+<text x="8" y="135.0" fill="#e6e4d2" font-size="14" font-weight="600">ibm</text>
+<rect x="130" y="100" width="80" height="60" fill="#648FFF" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="170.0" y="176" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#648FFF</text>
+<rect x="218" y="100" width="80" height="60" fill="#785EF0" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="258.0" y="176" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#785EF0</text>
+<rect x="306" y="100" width="80" height="60" fill="#DC267F" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="346.0" y="176" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#DC267F</text>
+<rect x="394" y="100" width="80" height="60" fill="#FE6100" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="434.0" y="176" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#FE6100</text>
+<rect x="482" y="100" width="80" height="60" fill="#FFB000" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="522.0" y="176" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#FFB000</text>
+<text x="8" y="227.0" fill="#e6e4d2" font-size="14" font-weight="600">tol_bright</text>
+<rect x="130" y="192" width="80" height="60" fill="#4477AA" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="170.0" y="268" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#4477AA</text>
+<rect x="218" y="192" width="80" height="60" fill="#66CCEE" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="258.0" y="268" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#66CCEE</text>
+<rect x="306" y="192" width="80" height="60" fill="#228833" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="346.0" y="268" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#228833</text>
+<rect x="394" y="192" width="80" height="60" fill="#CCBB44" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="434.0" y="268" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#CCBB44</text>
+<rect x="482" y="192" width="80" height="60" fill="#EE6677" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="522.0" y="268" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#EE6677</text>
+<rect x="570" y="192" width="80" height="60" fill="#AA3377" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="610.0" y="268" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#AA3377</text>
+<rect x="658" y="192" width="80" height="60" fill="#BBBBBB" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="698.0" y="268" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#BBBBBB</text>
+<text x="8" y="319.0" fill="#e6e4d2" font-size="14" font-weight="600">tol_vibrant</text>
+<rect x="130" y="284" width="80" height="60" fill="#EE7733" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="170.0" y="360" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#EE7733</text>
+<rect x="218" y="284" width="80" height="60" fill="#0077BB" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="258.0" y="360" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#0077BB</text>
+<rect x="306" y="284" width="80" height="60" fill="#33BBEE" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="346.0" y="360" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#33BBEE</text>
+<rect x="394" y="284" width="80" height="60" fill="#EE3377" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="434.0" y="360" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#EE3377</text>
+<rect x="482" y="284" width="80" height="60" fill="#CC3311" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="522.0" y="360" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#CC3311</text>
+<rect x="570" y="284" width="80" height="60" fill="#009988" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="610.0" y="360" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#009988</text>
+<rect x="658" y="284" width="80" height="60" fill="#BBBBBB" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="698.0" y="360" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#BBBBBB</text>
+<text x="8" y="411.0" fill="#e6e4d2" font-size="14" font-weight="600">tol_muted</text>
+<rect x="130" y="376" width="80" height="60" fill="#332288" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="170.0" y="452" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#332288</text>
+<rect x="218" y="376" width="80" height="60" fill="#88CCEE" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="258.0" y="452" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#88CCEE</text>
+<rect x="306" y="376" width="80" height="60" fill="#44AA99" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="346.0" y="452" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#44AA99</text>
+<rect x="394" y="376" width="80" height="60" fill="#117733" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="434.0" y="452" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#117733</text>
+<rect x="482" y="376" width="80" height="60" fill="#999933" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="522.0" y="452" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#999933</text>
+<rect x="570" y="376" width="80" height="60" fill="#DDCC77" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="610.0" y="452" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#DDCC77</text>
+<rect x="658" y="376" width="80" height="60" fill="#CC6677" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="698.0" y="452" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#CC6677</text>
+<rect x="746" y="376" width="80" height="60" fill="#882255" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="786.0" y="452" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#882255</text>
+<rect x="834" y="376" width="80" height="60" fill="#AA4499" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="874.0" y="452" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#AA4499</text>
+<rect x="922" y="376" width="80" height="60" fill="#DDDDDD" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="962.0" y="452" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#DDDDDD</text>
+<text x="8" y="503.0" fill="#e6e4d2" font-size="14" font-weight="600">tol_hc</text>
+<rect x="130" y="468" width="80" height="60" fill="#DDAA33" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="170.0" y="544" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#DDAA33</text>
+<rect x="218" y="468" width="80" height="60" fill="#BB5566" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="258.0" y="544" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#BB5566</text>
+<rect x="306" y="468" width="80" height="60" fill="#004488" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="346.0" y="544" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#004488</text>
+<text x="8" y="595.0" fill="#e6e4d2" font-size="14" font-weight="600">tol_sunset</text>
+<rect x="130" y="560" width="80" height="60" fill="#364B9A" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="170.0" y="636" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#364B9A</text>
+<rect x="218" y="560" width="80" height="60" fill="#4A7BB7" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="258.0" y="636" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#4A7BB7</text>
+<rect x="306" y="560" width="80" height="60" fill="#6EA6CD" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="346.0" y="636" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#6EA6CD</text>
+<rect x="394" y="560" width="80" height="60" fill="#98CAE1" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="434.0" y="636" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#98CAE1</text>
+<rect x="482" y="560" width="80" height="60" fill="#C2E4EF" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="522.0" y="636" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#C2E4EF</text>
+<rect x="570" y="560" width="80" height="60" fill="#EAECCC" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="610.0" y="636" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#EAECCC</text>
+<rect x="658" y="560" width="80" height="60" fill="#FEDA8B" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="698.0" y="636" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#FEDA8B</text>
+<rect x="746" y="560" width="80" height="60" fill="#FDB366" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="786.0" y="636" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#FDB366</text>
+<rect x="834" y="560" width="80" height="60" fill="#F67E4B" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="874.0" y="636" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#F67E4B</text>
+<rect x="922" y="560" width="80" height="60" fill="#DD3D2D" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="962.0" y="636" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#DD3D2D</text>
+<rect x="1010" y="560" width="80" height="60" fill="#A50026" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+<text x="1050.0" y="636" fill="#e6e4d2" font-size="10" font-family="ui-monospace, monospace" text-anchor="middle">#A50026</text>
+</svg>

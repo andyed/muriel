@@ -143,4 +143,5 @@ __all__ = [
     "dimensions",
     "capture",
     "styleguide",
+    "palettes",
 ]
