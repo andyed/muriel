@@ -38,6 +38,14 @@ Plain `>` blockquotes become 3D perspective pull quotes — the signature compon
 - **All text 8:1 minimum.**
 - All marginalia classes use `mg-` prefix. Theme via `--mg-*` CSS custom properties — these inherit into child SVGs, so a single theme switch repaints the whole page including embedded vector graphics.
 
+### Math — KaTeX
+
+Marginalia essays with math drop **KaTeX** in via CDN + auto-render. MIT, no bundler, no MathJax-style runtime overhead. Pin to `^0.16`. Display math is `$$…$$`, inline is `$…$`. Wrap display equations in a `.eq-block` container themed from `--mg-*` variables so equations participate in the marginalia palette.
+
+Reference exemplar: [`inside_the_math`](https://github.com/andyed/psychodeli-webgl-port/blob/main/inside_the_math/index-marginalia.html) — math-heavy essay, marginalia + KaTeX + WebGL demos. Full vocabulary in [`vocabularies/katex.md`](../vocabularies/katex.md): setup, the `.eq-block` pattern, color/emphasis with `\textcolor`, server-side rendering for stills.
+
+Do not use KaTeX for paper figures — see [`channels/science.md`](science.md), where matplotlib + `usetex=True` keeps math inside the same TeX pass as the rest of the figure. KaTeX is the web answer; LaTeX is the paper answer.
+
 ## Pandoc → Marginalia Bridge
 
 Pandoc 3.2+ recognizes GitHub-style alerts (`> [!NOTE]`) via the `+alerts` extension. A Lua filter at `<marginalia>/pandoc/marginalia.lua` rewrites pandoc's output to marginalia classes: GitHub alerts → `mg-callout[data-type]`, extended markers (ASIDE/MARGIN/QUOTE) → `mg-sidebar` / `mg-margin` / `mg-pull`, plain blockquotes → `mg-pull`, `==mark==` → `mg-mark`, `{Badge}` and multi-word `{Text: type}` → `mg-badge`, pandoc footnotes → `mg-fn` popover, fenced code → `mg-code`, inline code → `mg-inline-code`, `{dropcap}` line marker → `mg-dropcap` wrap.
