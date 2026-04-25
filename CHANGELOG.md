@@ -6,6 +6,80 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- **`muriel import <design.md>`.** New subcommand ingests a Google
+  Stitch [design.md](https://stitch.withgoogle.com/docs/design-md/)
+  and produces a muriel `brand.toml`. Zero-dep: hand-rolled YAML
+  frontmatter parser + TOML emitter for the subset muriel's
+  brand.toml uses. Stitch colors → `[colors]` (accent /
+  accent_decorative / background / foreground) plus unmapped roles
+  into `[colors.named]` + `[colors.aliases]`; Stitch typography →
+  `[typography.scale]` + family at body/mono/display level; Stitch
+  rounded → `[radii]`; elevation/motion preserved; Stitch
+  `contrast.minimum < 8.0` warns to stderr and is recorded under
+  `[a11y.imported_min_contrast_ratio]` while muriel's 8.0 floor
+  stays the gate; prose Components / Do's-and-Don'ts preserved as
+  `[rules.imported_*]` strings. Export direction (toml → design.md)
+  queued.
+- **`channels/diagrams.md` + `muriel.tools.diagrams`.** Eleventh channel.
+  Rhetorical-primitive diagrams as deterministic SVG. MVP ships
+  `matrix(quadrants, axes, …)` (2×2 categorical decomposition) and
+  `cycle(steps, …)` (3–8 step iterative process). Each generator
+  writes hand-rolled SVG with brand-aware fallback to the OLED
+  palette and carries an explicit *epistemic precondition* +
+  *anti-prescription* in its docstring. JSON-spec CLIs at
+  `python -m muriel.tools.diagrams.{matrix,cycle}`. Worked examples
+  in `examples/diagrams/`. Catalog table in the channel doc names
+  the queued primitives (comparison pair, funnel, stack, DAG,
+  spectrum, pyramid, heat-grid).
+- **FUI vocabulary expanded to peer parity.** `vocabularies/fui.md`
+  now carries a substrate decision table, common-failures list,
+  cross-vocabulary SDF alpha rule, and integration points across
+  channels. New runnable single-file scaffold at
+  `examples/fui-scaffold.html` demonstrates four primitives (data
+  ticker, radial compass, Canvas waveform, staggered reveal),
+  corner brackets, scan-line overlay, and `prefers-reduced-motion`
+  fallback — all on the known-safe 8:1 palette and driven by
+  `--mg-duration-reveal` / `--mg-ease-emphasis`. New "Sci-fi UI
+  patterns" subsection in `channels/interactive.md` names the
+  canonical stack and points at the scaffold.
+- **`muriel-critique` agent: vision-model sharpening.** Adds a
+  Visual Inventory step 0 (3–5 sentence structural describe-before-
+  judge pass), a per-artifact-type workflow table (PNG/JPG → look;
+  SVG → grep + rasterize; PDF → pages; HTML/animated → decline),
+  honest-hedging rule on contrast (verbal floors over fake decimals
+  unless computed), and two new cross-channel checks: text-rendering
+  integrity (mangled glyphs, duplicated letters, Cyrillic-in-Latin)
+  as `CRITICAL`, and occlusion/overlap as a layout-bug tell.
+- **`muriel-critique` agent: scoped Bash for compute calls.** Agent
+  now has `Bash` in its `tools` list, scoped via project
+  `.claude/settings.json` (committed; `.gitignore` negated) to
+  read-only invocations of `muriel.contrast`, `muriel.oklch`, and
+  `cairosvg` across `python` / `python3` / `.venv/bin/python` /
+  `uv run` prefixes. Lets the agent cite exact WCAG ratios on SVG
+  artifacts and rasterize SVG → PNG for real visual audits instead
+  of eyeballing XML.
+- **`critique` extra in pyproject.toml.** New optional dependency
+  group declaring `cairosvg>=2.7` for the rasterizer path. Rolled
+  into the `all` convenience extra.
+- **Top-level `TODO.md`** consolidating the previously-scattered
+  roadmap (CHANGELOG, SKILL.md, commit messages, per-channel
+  hints) into Active / Queued / Someday / Won't-do sections.
+
+### Changed
+- **Tone pass across `README.md`, `channels/interactive.md`,
+  `channels/style-guides.md`, `channels/infographics.md`, and
+  `vocabularies/fui.md`.** Removed "next-gen" / "highest-leverage" /
+  "unlocks" softening; tightened explainer-mode openings on
+  style-guides and infographics; replaced the territory-marking
+  framing in infographics with direct positioning. Channel-doc
+  headings remain mixed pending a later standardization pass.
+- **`muriel/__init__.py` docstring** updated for the OKLCH module
+  and lists eight modules (was seven).
+- **Unused imports removed** from `muriel/contrast.py`,
+  `muriel/typeset.py`, and `muriel/oklch.py` (`field`, `math`,
+  `sys`, `Union` respectively).
+
 ## [0.6.0] — 2026-04-23
 
 ### Added

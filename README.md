@@ -50,18 +50,19 @@ muriel is the grandmother to [marginalia](https://github.com/andyed/marginalia) 
 
 ## Channels
 
-Ten output channels, each with its own subfile under [`channels/`](channels/):
+Eleven output channels, each with its own subfile under [`channels/`](channels/):
 
 - **Raster** (Pillow + `typeset.py`) — store assets, icons, banners, wordmarks, screenshot designs
 - **Vector / SVG** (`svgwrite`, `cairosvg`, Mermaid, Excalidraw) — paper figures, data-driven diagrams, scalable icons, flowcharts
 - **Web** (marginalia + Playwright + weasyprint) — blog posts, callouts, magazine layouts, DOM → PNG/PDF capture
-- **Interactive** (WebGL / Canvas / D3 / PixiJS) — live demos with parameter sliders
+- **Interactive** (WebGL / Canvas / D3 / PixiJS) — live demos with parameter sliders, sci-fi UI scaffolds
 - **Video** (ffmpeg + `desktop-control` + hyperframes) — product demos, GIFs, HTML → MP4 compositions
 - **Terminal** (Unicode charts via `chart.py`) — sparklines, bar charts, tables
 - **Density viz** (`typeset.render_heatmap()`) — Tobii-style fixation heatmaps
 - **Gaze plots** — scanpath, bubble scanpath, AOI timeline, saccade rose, approach-retreat
 - **Science** (matplotlib + LaTeX + `muriel.stats`) — paper figures, notebook editorial, APA reporting
 - **Infographics** (deterministic SVG) — single-image explainers, 10 types × layout patterns × colorblind-safe palettes
+- **Diagrams** (deterministic SVG) — rhetorical primitives: 2×2 matrix, N-step cycle, Venn shipped; comparison pair, funnel, stack, DAG, spectrum, pyramid, heat-grid queued. Each preset carries an epistemic precondition + anti-prescription
 
 Plus two cross-channel references used by every channel:
 
@@ -184,7 +185,7 @@ ln -s ~/Documents/dev/muriel/agents/muriel-critique.md ~/.claude/agents/muriel-c
 - **[pixijs/pixijs-skills](https://github.com/pixijs/pixijs-skills)** (MIT) — source of truth for the PixiJS vocabulary. Curated subset documented at [`vocabularies/pixijs.md`](vocabularies/pixijs.md); upstream is where the depth lives.
 - **[matplotlib-venn](https://github.com/konstantint/matplotlib-venn)** — area-proportional Euler renderer that backs [`muriel/tools/venn.py`](muriel/tools/venn.py).
 - **[geraldnguyen/social-media-posters](https://github.com/geraldnguyen/social-media-posters)** (MIT) — Python + GitHub Actions CLI for *posting* to X / LinkedIn / Instagram / Threads / Bluesky / YouTube. Sits downstream of muriel: muriel produces the OG card at the right dimensions, audits contrast, applies brand tokens; social-media-posters sends it. The top-level `muriel` CLI's subcommand-dispatch pattern is borrowed from their `social_cli/`.
-- **[yizhiyanhua-ai/fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph)** (MIT) — Claude Code skill that renders SVG technical-architecture diagrams (14 UML types + AI/agent-system diagrams like RAG pipelines, multi-agent orchestration, tool-call flows) from natural-language descriptions. The closest living example of a "system-architecture channel" for muriel; reference implementation when muriel grows `channels/diagrams.md`.
+- **[yizhiyanhua-ai/fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph)** (MIT) — Claude Code skill that renders SVG technical-architecture diagrams (14 UML types + AI/agent-system diagrams like RAG pipelines, multi-agent orchestration, tool-call flows) from natural-language descriptions. The closest living example of system-architecture diagram generation; useful reference as muriel's [`channels/diagrams.md`](channels/diagrams.md) catalog grows past the matrix + cycle MVP toward causal DAG and stack primitives.
 - **[webadderall/Recordly](https://github.com/webadderall/Recordly)** (AGPL-3.0, desktop app — **not vendored**, integrated only) — macOS/Windows/Linux screen-recording app with auto-zoom cursor following, cursor polish, motion-blur regions, webcam overlay, and styled frames, built on PixiJS. Recommended upstream of muriel's `channels/video.md` tooltip-burn + ffmpeg recipes for product-demo / walkthrough videos. AGPL means muriel never embeds or imports Recordly; the integration is purely filesystem/MP4 hand-off.
 - **[yctimlin/mcp_excalidraw](https://github.com/yctimlin/mcp_excalidraw)** (MIT) — MCP server + Claude Code skill that exposes 26 programmatic tools over Excalidraw (create/move/align/distribute/group shapes, export/import `.excalidraw` JSON, Mermaid convert, live canvas at `localhost:3000`). Complementary to muriel: muriel *generates* SVG/raster artifacts deterministically from specs; mcp_excalidraw lets a Claude Code agent *manipulate* diagrams in a live canvas with the draw-observe-adjust loop. Pairs cleanly with the planned `muriel.authoring.excalidraw` emitter — muriel writes the `.excalidraw` source file, mcp_excalidraw opens it for iterative refinement, muriel re-audits on re-export.
 
