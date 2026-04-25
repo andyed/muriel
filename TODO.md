@@ -2,6 +2,13 @@
 
 Consolidated from `CHANGELOG.md`, `SKILL.md`, commit messages, and per-channel roadmap hints. Source of truth for what's next; `CHANGELOG.md` is source of truth for what's shipped.
 
+## Canonical scenarios
+
+Multi-channel narrative artifacts that compose several queued channels into one coherent demo. Each scenario forces the channel work it depends on; if the scenario ships, the channels worked. See `scenarios/`.
+
+- [`scenarios/photons-to-recognition.md`](scenarios/photons-to-recognition.md) — Five-panel arc binding 3D (cone density on retina), brain (visual pathway through cortex), and diagrams (Sankey + sunburst) into one Scrutinizer talk-deck-as-explainer. Forces the build order: 3D → diagrams → brain. Reusable as deck slides, single composed infographic, blog post, or paper figure.
+
+
 ## Active
 
 - [ ] **Cut 0.6.0.** `[Unreleased]` block in `CHANGELOG.md` is ready: OKLCH module + brand.toml schema v2. Commit the uncommitted OKLCH changes, move the block, tag.
