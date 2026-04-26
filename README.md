@@ -179,6 +179,10 @@ ln -s ~/Documents/dev/muriel/agents/muriel-critique.md ~/.claude/agents/muriel-c
 
 **Regression fixtures:** adversarial and baseline artifacts for the critique agent live at [`examples/critique-fixtures/`](examples/critique-fixtures/) with their expected verdicts. Contribute new attacks there — any CVE for visual-critic systems can be a one-paragraph pull request.
 
+## Showcase
+
+- **[Scrutinizer — Brand & Perceptual Tokens](https://andyed.github.io/scrutinizer-www/tokens/)** — Live page that uses muriel end-to-end: the [`scrutinizer-brand.toml`](examples/scrutinizer-brand.toml) StyleGuide, the [`foveal_overlay`](muriel/tools/diagrams/foveal_overlay.py) primitive (port of the in-app overlay), the [`engine_sectors_overlay`](muriel/tools/diagrams/engine_sectors_overlay.py) primitive (Blauch et al. 2026 isotropic cortical sectors), the [`palettes`](muriel/palettes.py) module (Wong / IBM / Tol), and the contrast/dimension constants. The page also exposes Scrutinizer's perceptual decay constants (SIGMA_LM, SIGMA_BY, CMF_A, etc.) for designers building peripheral-aware UI. First public artifact of the muriel + Scrutinizer integration.
+
 ## Related prior art
 
 - **[pbakaus/impeccable](https://github.com/pbakaus/impeccable)** (Apache-2.0) — Anthropic's frontend-design skill as open-sourced by Paul Bakaus. muriel's `Absolute bans` section in `channels/web.md` and the reflex-fonts anti-pattern are rephrased inspirations from that work. Where impeccable is single-surface + design-skill-focused, muriel is multi-channel + Python-native; they complement.
