@@ -23,9 +23,9 @@
 <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
 
 <!-- Marginalia — editorial typography components (matches muriel's palette out of the box) -->
-<!-- npm package not yet published; served via jsDelivr's GitHub proxy. -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andyed/marginalia@main/marginalia.css">
-<script src="https://cdn.jsdelivr.net/gh/andyed/marginalia@main/marginalia.js" defer></script>
+<!-- Published as @andyed/marginalia on npm; served via jsDelivr's npm CDN. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@andyed/marginalia@0.1.0/marginalia.css">
+<script src="https://cdn.jsdelivr.net/npm/@andyed/marginalia@0.1.0/marginalia.js" defer></script>
 
 <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
 <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
@@ -310,6 +310,42 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
   <p>Shipped examples from a vision-science dev log that exemplify what muriel's channels produce. Each figure links to the live post; the repo <a href="https://github.com/andyed/muriel/tree/main/examples/gallery">gallery</a> has the full set.</p>
 
   <div class="featured">
+
+    <div class="fig">
+      <a class="thumb-link" href="https://andyed.github.io/scrutinizer-www/">
+        <img src="foveation-explainer.svg" alt="Scrutinizer foveation explainer infographic — three stacked panels: anatomical (fovea ~2° wide vs periphery ~200° wide), statistical (acuity falls off fast — at 15° you see ~3× less detail), and 'what your users actually see' (small-multiples grid at 0°/5°/15°/30°). Hero stat reads '2° is sharp. The rest is inferred.'">
+      </a>
+      <p class="caption">
+        <span class="channel">Infographic channel — three-panel single-page</span>
+        <strong>Foveation explainer — Scrutinizer brand asset.</strong><br>
+        Tools: hand-rolled <code>build_foveation.py</code> emitting deterministic SVG (no D3, no template engine) · OLED palette (cream-on-near-black) for portfolio coherence · 8:1 contrast on every text node verified at build time · <code>rsvg-convert</code> for PNG raster. Single-page LinkedIn-shareable infographic stacking anatomical / statistical / "what users see" panels — the channel that turns a research thesis into one shareable artifact. Lives on the Scrutinizer brand page.
+        <a href="https://andyed.github.io/scrutinizer-www/">Live page →</a>
+      </p>
+    </div>
+
+    <div class="fig">
+      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/examples/gallery/v1-orientation-columns-demo.py">
+        <img src="v1-orientation-columns.svg" alt="Orientation columns in V1 — deterministic SVG showing a hex grid of teal oriented strokes whose angles vary smoothly across the cortical surface, with five pinwheel singularities marked as dots where every orientation meets. Title 'Orientation columns in V1' on near-black, footer notes the multi-pinwheel orientation field generation method.">
+      </a>
+      <p class="caption">
+        <span class="channel">SVG channel — deterministic scientific illustration</span>
+        <strong>V1 orientation columns — pinwheel topology.</strong><br>
+        Tools: hand-rolled <code>v1-orientation-columns-demo.py</code> emitting deterministic SVG (no D3, no template engine) · multi-pinwheel orientation field (vector averaging on doubled angles to preserve V1's 180° periodicity) over a hex grid · muriel OLED palette · 8:1 contrast on every text node. Replaces an AI-generated illustration of the same concept — muriel's whole point: <em>generated</em>, not <em>guessed</em>. Topology after Bonhoeffer &amp; Grinvald, <em>Nature</em> 1991.
+        <a href="https://github.com/andyed/muriel/blob/main/examples/gallery/v1-orientation-columns-demo.py">Source →</a>
+      </p>
+    </div>
+
+    <div class="fig">
+      <a class="thumb-link" href="https://andyed.github.io/scrutinizer-www/">
+        <img src="scrutinizer-browser-figma.jpg" alt="Scrutinizer product hero — diagonal split composition showing the browser overlay (left) with a real-time congestion score badge over a Wired-style article, and the Figma plugin (right) running a foveation simulation on the same article excerpt with peripheral blur and a centered fixation heatmap. A thin teal accent stripe runs along the diagonal seam.">
+      </a>
+      <p class="caption">
+        <span class="channel">Product-shot channel — diagonal split composition</span>
+        <strong>Scrutinizer browser + Figma — the product shot.</strong><br>
+        Tools: two real product UI screenshots (browser overlay + Figma plugin) captured from running Scrutinizer · diagonal-split mask + brand-token teal accent stripe applied in compositing · OLED background floor preserved across both halves. The "two deployment modes in one frame" pattern — communicates "same engine, two surfaces" without a caption. The hero asset on the Scrutinizer brand page.
+        <a href="https://andyed.github.io/scrutinizer-www/">Live page →</a>
+      </p>
+    </div>
 
     <div class="fig">
       <a class="thumb-link" href="https://andyed.github.io/scrutinizer-www/blog/2026-03-13-reading-span.html">

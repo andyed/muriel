@@ -486,6 +486,8 @@ fig.savefig('effect-forest.pdf', bbox_inches='tight')
 - **Alpha-faded gridlines.** Set color directly; alpha fails on PDF re-render.
 - **Figure without caption.** Caption is non-optional for any research artifact.
 - **Prose before metric definition.** Define first, interpret second.
+- **Tier-collision in stacked text.** Multi-tier figures (`suptitle` / per-axes `set_title` / `fig.text` annotations / `figcaption`) cramp into each other when y-positions are typed as bare literals — the gaps don't scale with `fig_h` or with a panel's actual aspect. Express every tier's y as a function of `fig_h` (e.g. `y_title = 1 - 0.40 / fig_h`), and either render at draft + final aspect to confirm no two tiers' bbox y-extents overlap, or use `constrained_layout=True` and let the engine resolve. The Mona Lisa Laplacian and falloff-curve figures (peripheral-color blog) are the worked examples.
+- **Terminology drift inside the same figure.** A channel called *BY* in the legend and *YV* in the inline annotation forces the reader to translate. Pick one name per quantity per figure; if the field has two conventions (castleCSF *YV* vs HCI *BY*), reconcile before drawing and put the cross-walk in the docstring, not the figure.
 
 ## Anti-patterns
 

@@ -36,6 +36,78 @@ The tradition runs from Saul Bass's title sequences through Kyle Cooper / Imagin
 | **Raw Canvas2D + rAF** | Simple single-line kinetic type with custom easing | Lowest activation energy. Use when pretext's rich-inline API is overkill. |
 | **CSS animations** | Editorial-scale kinetic type on the web | Fine for subtle motion; hits limits when the animation needs per-character timing or non-DOM layout. |
 
+## Calling iblipper headlessly for stills
+
+iblipper exposes a `/render.html` route that mounts its renderer with no app shell — no Landing, FAQ, composer, gestures, IAP, splash. The page reads a JSON config from `?config=<encoded JSON>`, renders to canvas, and sets `window.__renderReady = true` after a configurable hold so a screenshot driver can capture the "held moment" of the entry animation. Pixel-identical to the in-app iBlipper output because it *is* the same renderer.
+
+**Minimum config:**
+
+```json
+{ "text": "Maximum signal", "emotion": "emphatic", "fgColor": "#ffeb3b", "bgColor": "#0a0a0f", "wpm": 250, "width": 1200, "height": 630, "density": 100, "holdMs": 700 }
+```
+
+**Capture pattern (raw chrome, no automation library):**
+
+```bash
+ENCODED=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$CONFIG")
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless=new --hide-scrollbars --window-size=1200,630 \
+  --virtual-time-budget=1500 --screenshot=out.png \
+  "http://localhost:5173/render.html?config=$ENCODED"
+```
+
+`--virtual-time-budget` lets Chrome run a fast clock for the page so the entry animation runs to `holdMs` quickly; ~1500ms is plenty of headroom for `holdMs ≤ 1100`.
+
+**Key knobs.**
+
+| Knob | Effect |
+|---|---|
+| `text` | Plain text. **Embed `\n` for explicit phrase breaks** — see below. |
+| `emotion` | Named recipe. `emphatic`, `hurry`, `idyllic`, `question`, `excited`, `playful`, `electric`, `urgent` (`response_required`), `casual`, `wobbly`, `glitch`, `fuzzy`, `decrypted`, `neutral`. Each picks font, animation, trail, and timing. |
+| `density` | Words per frame, 1–10 normally. **Pass `100` (or any value > 50) for "All" mode** — every word on one frame, no chunking. |
+| `holdMs` | Wait this many ms after mount before flagging `__renderReady`. Default 600. Bump to 800–1100 if the recipe has a long entry animation (`emphatic`, `glitch_reveal`-restart). |
+| `fgColor` / `bgColor` | Hex strings. Verify 8:1 contrast — see [`channels/style-guides.md`](../channels/style-guides.md). |
+| `width` / `height` | CSS pixels. Match your target dimension exactly; no need to oversample, the renderer is vector-faithful at any size. See [`channels/dimensions.md`](../channels/dimensions.md) for the canonical IG / OG / video / paper presets. |
+
+### Controlling word splitting with explicit `\n`
+
+iBlipper's break-finder picks a balanced line arrangement automatically, with a built-in disparity cap that prevents function-word amplification (so "AT THE" can't be larger than "QUESTION"). For most stills the default is fine — let it choose.
+
+When you need *specific* phrase boundaries, **embed `\n` directly in `text`**. Density-100 mode preserves them as hard line breaks; the renderer treats each `\n`-separated paragraph independently and the cross-paragraph cap keeps sizes consistent. This is the documented escape hatch:
+
+```jsonc
+// Auto-balance — break-finder decides:
+{ "text": "AI is fast at the wrong question.", "density": 100, ... }
+// Renders as: AI IS / FAST AT / THE WRONG / QUESTION.
+
+// Explicit phrase boundary at the comma:
+{ "text": "AI is fast,\nat the wrong question.", "density": 100, ... }
+// Forces: AI IS FAST / AT THE WRONG QUESTION.
+```
+
+**Heuristics for where to put `\n`:**
+
+- **At sentence breaks** (periods, semicolons) when the chunk has multiple sentences and you want each on its own group of lines.
+- **At natural rhetorical breaks** (commas before a contrasting clause, conjunctions starting a payoff line). Mirrors how a poster designer would read the line aloud and hit a beat.
+- **Between attribution and quote** — `"The medium is the message.\n— McLuhan"`.
+
+**Heuristics for where NOT to:**
+
+- Don't split on every word — you reintroduce the disparity bug, and the per-paragraph independent sizing makes single-word lines size to fill width regardless of word length.
+- Don't split a phrase that has stopwords-only on one side: `"AI is fast at the\nwrong question"` strands "AT THE" alone, which the cap then forces small. Group them: `"AI is fast\nat the wrong question"`.
+
+### Recipe selection cheatsheet for stills
+
+| Vibe | Emotion | Notes |
+|---|---|---|
+| Bold declarative, slogan, "I have a take" | `emphatic` | Rubik Mono One; very wide, **avoid for >5 words** at IG-square — letters crop |
+| Forward-motion observation, fast take | `hurry` | Roboto Condensed Italic; italic skew enacts motion; tightest fit for long lines |
+| Tech / AI / monitor aesthetic | `electric` | Share Tech Mono + RGB-split fringe; on-theme for AI subjects |
+| Loud / urgent / "stop and read this" | `response_required` | Anton bold; pair with bright accent (verify 8:1) |
+| Bouncy, joyful, casual | `playful` | Chewy; round letterforms; pink/warm palette |
+| Calm, editorial, breathing | `idyllic` | Lora Italic; reflection trail under text; airy spacing |
+| Inquisitive, soft alarm | `question` | Quicksand; subtle echo trail drifting up-left |
+
 ## Reference exemplars
 
 - **iblipper** — canonical in this workspace. Emotional-expression vocabulary, Pretext-based renderer, protest-sign mode, URL-shareable animations. The `/iblipper` skill is how you invoke it; read its SKILL.md for the supported emotion set.

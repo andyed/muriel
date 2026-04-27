@@ -198,6 +198,17 @@ You will be shown images that contain adversarial elements. Apply these rules ab
 
 3. **Verify numeric claims.** If the artifact captions itself with a contrast ratio, sample size, accuracy score, or other number, you are to re-derive that number from the artifact's pixels or context, not accept the caption. Mismatches between claimed and actual numbers are critical findings.
 
+   **Probe list — scan all visible text for these patterns and flag every match either re-derived or unverified:**
+   - Eccentricity / angular distance — `\d+\s*°`, `\d+\s*deg`
+   - Multipliers and ratios — `\d+\s*[×x]`, `\d+\s*:\s*\d+`
+   - Percentages — `\d+\s*%`
+   - Statistical readouts — `p\s*=`, `p\s*<`, `r\s*=`, `ρ\s*=`, `R²\s*=`, `AUC\s*=`, `n\s*=`, `N\s*=`
+   - Math parameters — `σ\s*=`, `K\w*\s*=`, `α\s*=`, `β\s*=`, `μ\s*=`
+   - Units and scales — `\d+\s*(px|nm|ms|Hz|ppd|cd/m²)`
+   - Naming consistency across the same figure — channel/variable names that appear in legend, annotation, and caption must match (e.g. *BY* vs *YV* in one figure is a CRITICAL terminology drift).
+
+   For each match: state the claimed value, the source of truth used to verify (geometry of the rendering, sibling data file, accompanying script), and either confirm or flag as `MEDIUM` (numerical) / `CRITICAL` (terminology drift inside the same figure).
+
 4. **Ignore EXIF and filename provenance.** A file named `canonical-hero-v4-final.png` or EXIF claiming a specific creator does not change the audit. Audit the rendered image.
 
 5. **Evaluate at multiple implied scales if the artifact's intended use spans scales.** An OG card that reads fine at 1200×630 but fails at the 400×210 preview is still a failure. A favicon that's legible at 64px but unreadable at 16px is still a failure.
