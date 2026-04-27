@@ -48,6 +48,7 @@ Additional vocabularies (Swiss grid, editorial, brutalist, newsprint) can be add
 Codified from per-project bug fixes — apply to **every** channel:
 
 - **8:1 contrast minimum** on all text. Compute the WCAG ratio. No exceptions.
+- **Contrast is necessary, not sufficient.** Size, weight, and opacity compound on legibility. At small sizes (≤14 px / ≤10 pt), regular weight + muted color + 9:1 contrast still reads thin and dim — even when the math passes. Floors that pair with the 8:1 rule: **body weight ≥ 500 (medium)**, **footer/caption text ≥ 16 px**, **no `opacity` on text** (it composites the effective ratio below the raw value and erodes glyph thickness). When in doubt, promote color, bump size, add weight — in that order. (See `channels/science.md` for the matplotlib version.)
 - **Decorative elements ≥55/255** on a dark background, or they vanish on small screens.
 - **Measure before drawing.** Bbox / `viewBox` / `getBoundingClientRect` first; auto-shrink on overflow.
 - **Label every number.** Units and context required.
@@ -195,7 +196,7 @@ For a multi-channel task (e.g., a blog post with an interactive demo captured as
 - [x] **`muriel/dimensions.py` screen-size constants** — `Size` / `Device` / `PaperSize` NamedTuples with aspect labels and scale methods. 34 dotted-name registry entries (social cards, video, viewports), 17 device footprints with physical + CSS + scale factor, 5 paper sizes with DPI-aware pixel conversion, `figsize_for()` helper for 7 academic venues (CHI/ACM/IUI/IEEE/PNAS/Nature/LNCS), CLI self-test. Paired with `channels/dimensions.md`.
 - [ ] **Figure caption template tool** — Generate caption skeletons from a figure spec dict.
 - [ ] **Pre-registration boilerplate generator** — Common methods-section templates with fill-in slots.
-- [ ] **`muriel/contrast.py` inline-fill pass** — Current audit only walks `<style>` CSS; add a second pass that walks `<text fill="…">` attributes for SVGs that set fills inline.
+- [ ] **`muriel/contrast.py` inline-fill + legibility pass** — Current audit only walks `<style>` CSS; add a second pass that walks `<text fill="…">` attributes for SVGs that set fills inline (silent-PASS bug surfaced 2026-04-26 on `docs/v1-orientation-columns.svg` — audit reported 0 text rules on a file with five `<text>` elements). Same pass should detect the legibility floor: `font-size` ≤ 14 + `font-weight` < 500 + `opacity` < 1 → warn even when ratio passes (rule from universal-rules section, currently only enforced verbally in `channels/science.md`).
 - [ ] **`muriel/contrast.py` marginalia-token audit** — Add a `audit_marginalia_tokens()` helper that reads `marginalia.css` and verifies every `--mg-*` custom property against both theme backgrounds.
 
 ### Web (editorial variant)
