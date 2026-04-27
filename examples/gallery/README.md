@@ -87,7 +87,19 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 ---
 
-## 7. Warm editorial web page — Web
+## 7. V1 orientation columns — Diagrams + SVG (runnable)
+
+[![v1 orientation columns](thumbs/v1-orientation-columns.jpg)](../../docs/v1-orientation-columns.svg)
+
+**Tools:** pure Python stdlib (`math`) emitting SVG directly — a multi-pinwheel orientation field over a hex grid, hand-rolled `<line>` + `<circle>` elements with brand tokens inlined from `examples/muriel-brand.toml` (OLED palette, 8:1+ contrast on every text element).
+**Channels:** [`channels/diagrams.md`](../../channels/diagrams.md) + [`channels/svg.md`](../../channels/svg.md), with [`channels/science.md`](../../channels/science.md) sensibility (cited primary literature in the footer).
+**Pattern:** deterministic SVG diagram replacing an AI-generated raster — every stroke is a function of position, the topology is reproducible, the file diff-able. Pinwheel singularities marked; one is annotated as a worked-example legend.
+**Run:** `python examples/gallery/v1-orientation-columns-demo.py` → writes `docs/v1-orientation-columns.svg`.
+**Why it's here:** the deterministic-SVG ethos in one file. Scientific basis: Hubel & Wiesel (1962) orientation selectivity; Bonhoeffer & Grinvald (*Nature* 1991) pinwheel topology.
+
+---
+
+## 8. Warm editorial web page — Web
 
 [![F-pattern explainer (screenshot TBD)](thumbs/bender-cutter-diagram.svg)](https://andyed.github.io/attentional-foraging/explainer/)
 
