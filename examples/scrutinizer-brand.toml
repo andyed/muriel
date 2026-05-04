@@ -18,6 +18,19 @@ canonical_source = "muriel/examples/scrutinizer-brand.toml (stub)"
 ownership_rule   = "Scrutinizer brand assets — owned by scrutinizer-www, edited there once promoted"
 
 
+# ─── Provenance ──────────────────────────────────────────────────────
+# Where these tokens came from, when, and how. See
+# `channels/style-guides.md` § "[provenance] — snapshot date and drift
+# discipline" for the schema.
+[provenance]
+source            = "scrutinizer-repo/scrutinizer-www (in-tree CSS variables + design ops)"
+sample_date       = "2026-04-15"
+sample_method     = "Hand-translated from in-app CSS custom-property declarations and brand-mark SVG inspection."
+not_auto_synced   = true
+revisit_after     = "2026-10-15"
+notes             = "Stub copy for muriel iteration; canonical brand.toml will live in scrutinizer-www once the foveal-overlay primitive ships."
+
+
 # ─── Colors ──────────────────────────────────────────────────────────
 [colors]
 background        = "#0a0a0f"   # OLED near-black, matches in-app

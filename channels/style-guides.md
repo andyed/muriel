@@ -227,6 +227,33 @@ Operations that trip `never_modify_sources`:
 
 Call `sg.rules.check(operation)` at the top of any handler that might generate brand-owned artifacts. Catch `RuleViolation` and redirect to the brand's `[export]` commands instead.
 
+## `[provenance]` — snapshot date and drift discipline
+
+Brand tokens captured from a live source (a public website, a Figma library, an internal tokens repo) drift over time. The source updates; the local `brand.toml` doesn't, unless someone re-samples. The result: a chart rendered against month-old tokens that no longer match the brand it claims to represent.
+
+The fix is small: every `brand.toml` carrying tokens sampled from somewhere else should declare a `[provenance]` table that names the source, the date of sampling, the method, and an explicit "not auto-synced" flag.
+
+```toml
+[provenance]
+source            = "https://www.acme-research.com/brand"   # where tokens came from
+sample_date       = "2026-04-29"                            # ISO 8601 — when sampled
+sample_method     = "ImageMagick color-pick on PNG screenshots; DevTools for type metrics"
+not_auto_synced   = true                                     # drift is expected; re-sample on schedule
+revisit_after     = "2026-10-29"                            # soft expiration; flag stale tokens
+notes             = "Tokens cover marketing site only; product surface uses a separate library."
+```
+
+| Key | Type | Purpose |
+|---|---|---|
+| `source` | string | URL, repo path, or "internal" — where the tokens were drawn from. Required when tokens were sampled externally. |
+| `sample_date` | ISO date | When the sampling actually happened. Use `YYYY-MM-DD`. |
+| `sample_method` | string | One sentence on *how* the tokens were captured. Reproducibility hook. |
+| `not_auto_synced` | bool | `true` if drift between the source and this file is expected and not automatically reconciled. |
+| `revisit_after` | ISO date | Optional soft expiration. A future `muriel doctor` pass can warn when this date passes. |
+| `notes` | string | Anything a future re-sampler needs to know — scoping caveats, sub-brand boundaries, manual overrides. |
+
+When the brand is muriel's own — i.e. there is no external source — `[provenance]` is optional. The owning repo's git history *is* the provenance. Add the table only when tokens come from outside the repo that owns the file.
+
 ## Derived outputs
 
 ### matplotlib rcparams
