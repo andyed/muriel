@@ -327,6 +327,154 @@ The schema is intentionally bounded. Reserved keys (the ones listed in this docu
 
 Use these for brand-specific conventions that don't fit the canonical schema. If multiple brands start using the same extension, promote it to a reserved key in a future loader version.
 
+## Audience profiles — vocabulary as a parameter
+
+A brand serializes the *visual* tokens. An audience profile serializes the *vocabulary* tokens — the words a chart is allowed to use, the words it must filter out, the field-standard conventions the reader expects. Two artifacts can share a brand and still need different audience profiles.
+
+The recurring failure pattern: internal project shorthand leaks into chart labels because methodology docs use it constantly. The author's brain reaches for the term it sees most often. A chart for an external audience should be vocabulary-audited the same way it's contrast-audited — automatic, before render.
+
+### Schema
+
+Audience profiles live as TOML tables, parallel to brand tokens. Suggested location: a sibling `audiences.toml` in the same brand-owning repo, or an `[audiences.*]` section appended to `brand.toml` for projects without separate audience targeting.
+
+```toml
+[audiences.eye-tracking-researcher]
+description    = "PhD-level researchers in reading / search behavior who use eye trackers daily."
+reading_level  = "field-specialist"
+charts_register = "scientific-paper"
+
+# Whitelist — terms the reader will recognize without translation.
+# Need not be exhaustive; covers the field-standard vocabulary.
+whitelist = [
+    "fixation", "saccade", "regression", "scanpath", "AOI",
+    "dwell time", "first-pass dwell", "revisit",
+    "gaze-cursor coupling", "scroll behavior", "pupil dilation",
+    "ocular drift", "saccade amplitude", "Reichle", "Rayner",
+]
+
+# Denylist — project-internal jargon that must not appear in chart text.
+# This is the load-bearing field. Chart text passes through a denylist
+# audit before render; matches block the artifact at the critique gate.
+denylist = [
+    "HWM", "high-water-mark", "regress-scan-regress cycle",
+    "anchor return", "rank-type-N/A", "rank-type-organic", "rank-type-hybrid",
+    "K-bbox-*", "organic_hybrid", "dd_top", "native_ad",
+    "n_epochs", "multi-cycle", "M3", "M4", "M5",
+    "approached non-click", "deferred", "evaluated-rejected",
+    "regression-episode tension",
+]
+
+# Conventions the audience expects.
+conventions = [
+    "Reichle/Rayner reading-time framework for fixation timing",
+    "iMotions / Tobii / Gazepoint terminology for tracker specs",
+    "MIDAS-style scanpath notation (numbered fixation circles + saccade vectors)",
+    "Confidence intervals reported alongside p-values",
+]
+```
+
+### Starter audience profiles
+
+Four starter profiles to seed the registry. Use as templates; customize per project.
+
+#### `internal-collab`
+
+Internal team. Full project vocabulary OK. No denylist. Use this for working-group artifacts that won't leave the team.
+
+```toml
+[audiences.internal-collab]
+description    = "Internal collaborators with full project context."
+reading_level  = "team-vocabulary"
+charts_register = "working-draft"
+whitelist = []   # all permitted
+denylist = []
+conventions = ["project K-IDs and stable identifiers OK"]
+```
+
+#### `eye-tracking-researcher`
+
+See schema example above. Apply when the audience is Reichle/Rayner-tradition reading or HCI-tracker-tradition (Gwizdka, Duchowski, Jayawardena lineage) researchers.
+
+#### `general-LinkedIn`
+
+Public, jargon-stripped, story-led. Headlines lead; methodology follows. Numbers must be intuitable in 5 seconds.
+
+```toml
+[audiences.general-LinkedIn]
+description    = "Mixed professional audience on social media."
+reading_level  = "popular-science"
+charts_register = "infographic-light"
+whitelist = ["users", "search results", "ads", "scrolling", "going back"]
+denylist = [
+    # Field jargon
+    "saccade", "fixation", "dwell", "AOI", "scanpath",
+    # Project shorthand
+    "HWM", "regress-scan-regress", "anchor return", "rank-type-*",
+    "M3", "M4", "K-bbox-*",
+    # Statistical jargon
+    "Wilcoxon", "Mann-Whitney", "Spearman", "p < 0.001",
+]
+conventions = [
+    "Headlines first; methodology in caption only",
+    "Single hero number per chart",
+    "Plain-English verbs ('went back to', 'looked at') over technical verbs",
+]
+```
+
+#### `acm-conference-paper`
+
+Technical, field-anchored, peer-review-grade. Statistical jargon expected; project jargon must translate to community-standard terms or get a glossary.
+
+```toml
+[audiences.acm-conference-paper]
+description    = "ACM SIG conference reviewer (CIKM/CHI/CHIIR/SIGIR/IUI)."
+reading_level  = "field-PhD"
+charts_register = "scientific-paper"
+whitelist = [
+    "fixation", "saccade", "regression", "AOI", "scanpath", "dwell",
+    "p-value", "confidence interval", "Wilcoxon", "Mann-Whitney",
+    "Spearman", "Pearson", "Cohen's d", "AUC", "ROC", "LOSO",
+    "click model", "cascade model", "DBN", "UBM", "LambdaRank",
+]
+denylist = [
+    # Project-internal not yet translated to community terms
+    "HWM", "rank-type-N/A", "K-bbox-*", "regress-scan-regress",
+]
+conventions = [
+    "ACM CHI/CIKM stats reporting style",
+    "Figure caption ≤ 80 words, take-away first sentence",
+    "Sample sizes and CIs in every quantitative claim",
+]
+```
+
+### How a chart consumes an audience profile
+
+Three integration points:
+
+1. **At render time** — chart-text generation routes through a translate pass. `audience.denylist` matches → reject and surface alternate phrasings from the whitelist.
+2. **At critique time** — `python -m muriel.critique --audience eye-tracking-researcher` flags any chart text matching the denylist (manual checklist item: "Audience vocabulary check"). v1 is checklist-only; v2 can lint extracted text strings automatically.
+3. **At documentation time** — the artifact's caption / accompanying prose should reference the audience profile so reviewers know the framing. Optional: emit it in chart metadata for downstream auditors.
+
+### When to write a new audience profile
+
+Write a new profile when the artifact will reach an audience that:
+- Has a recognized vocabulary you don't already have a profile for (e.g., `medical-imaging-researcher`, `policy-analyst`, `b2b-product-manager`)
+- Has a known *denylist* — words the audience won't tolerate or won't recognize
+- Will see > 3 artifacts under the same framing (justifies the profile-authoring cost)
+
+A one-off artifact for an unfamiliar audience can be served by an ad-hoc denylist passed to critique without a saved profile.
+
+### When to skip audience profiling
+
+For internal team work where everyone shares context, skip the explicit audience profile. The `internal-collab` profile exists as a no-op default. Use it explicitly when an artifact's destination is the team itself; this signals to future readers "this was scoped to insiders" and prevents cargo-culting the absent jargon-audit into a public-facing piece.
+
+### Anti-patterns for audience profiles
+
+- **Don't have one giant denylist for "everyone external."** Each external audience has different jargon tolerance; the eye-tracking-researcher denylist looks different from the LinkedIn denylist. Profile granularity matters.
+- **Don't put statistical terms on the LinkedIn denylist if the artifact is a methodology demo.** The denylist should reflect the *charitable expectations* of the audience, not the highest-friction reading.
+- **Don't leave the audience choice to render time.** It's a design-time decision — pick the audience first, then design.
+- **Don't audit only your own first draft.** Run the denylist against revisions too — jargon creeps back in during iteration.
+
 ## Anti-patterns
 
 - **Don't put raw hex values at the component level.** Route through `colors.aliases` so a theme switch or brand refresh propagates.
