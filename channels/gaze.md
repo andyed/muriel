@@ -1,3 +1,21 @@
+---
+channel: gaze
+status: active
+requires:
+  brand: optional
+  audience: required
+  reads:
+    - muriel.matplotlibrc_light
+    - muriel.matplotlibrc_dark
+    - muriel.dimensions
+output:
+  kinds: [pdf, svg, png]
+  registers: [paper, editorial]
+peer_channels:
+  - heatmaps
+  - science
+---
+
 # Gaze Plots — Scanpath / Fixation Visualization
 
 The vision-science specialty channel. Photoshop has nothing here; matplotlib has primitives but no eye-tracking idioms. muriel keeps the canonical recipes alongside the [heatmap](heatmaps.md) and [science](science.md) channels.

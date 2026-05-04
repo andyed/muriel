@@ -1,3 +1,20 @@
+---
+channel: diagrams
+status: partial-mvp
+requires:
+  brand: optional
+  audience: optional
+  reads:
+    - muriel.contrast
+    - muriel.dimensions
+output:
+  kinds: [svg, pdf]
+  registers: [paper, blog, presentation]
+peer_channels:
+  - infographics
+  - svg
+---
+
 # Diagrams — rhetorical primitives, not SmartArt
 
 A small library of named diagram structures, each one carrying a specific argument shape. Reach for these when prose can't hold the structure of the claim — when the data is shaped like a 2×2, a cycle, a comparison pair, a phase decomposition, a hierarchy. **Don't reach for them when the data is shaped like a list.**

@@ -1,3 +1,25 @@
+---
+channel: science
+status: active
+requires:
+  brand: optional
+  audience: required
+  reads:
+    - muriel.matplotlibrc_light
+    - muriel.matplotlibrc_dark
+    - muriel.stats
+    - muriel.dimensions
+    - muriel.contrast
+output:
+  kinds: [pdf, svg, png]
+  registers: [paper, editorial]
+peer_channels:
+  - gaze
+  - heatmaps
+  - svg
+  - diagrams
+---
+
 # Science — Paper Figures, Stats Reporting, Notebook Editorial
 
 The research-communication channel. How to produce figures, statistical reports, and notebook prose that meet the standards of publishable research — empirically grounded, honestly framed, reproducibly generated, and readable at the sizes papers actually print.
