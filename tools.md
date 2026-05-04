@@ -41,7 +41,7 @@ When you're about to reinvent something. Before writing your own contrast helper
 
 | Tool | Import | CLI | Use when |
 |---|---|---|---|
-| **Critique gate** | `from muriel.critique import critique_artifact, CritiqueReport` | `python -m muriel.critique path/to/figure.{svg,png,pdf} [--audience eye-tracking-researcher --channel science]` | Pre-ship verification of any rendered artifact. Runs automated checks (contrast for SVG, dimension target match), produces a Markdown critique report with the muriel manual checklist, and exits with a status code that slots into pre-commit hooks. **The recurring `/muriel critique` pattern, codified.** |
+| **Critique gate** | `from muriel.critique import critique_artifact, CritiqueReport` | `python -m muriel.critique path/to/figure.{svg,png,pdf} [--audience eye-tracking-researcher --channel science]` | Pre-ship verification of any rendered artifact. Runs automated checks (8:1 contrast for SVG, dimension target match, P0 honesty probe — flags stock-emoji and unattributed narrative numeric claims), reads channel front-matter ([`channels/SCHEMA.md`](channels/SCHEMA.md)) to enforce `requires.audience: required` per channel, produces a Markdown critique report with the muriel manual checklist, and exits with a status code that slots into pre-commit hooks. **The recurring `/muriel critique` pattern, codified.** |
 
 ### Generation & rendering
 

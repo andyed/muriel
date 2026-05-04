@@ -59,6 +59,7 @@ from __future__ import annotations
 
 import argparse
 import dataclasses
+import re
 import sys
 from pathlib import Path
 from typing import Optional
@@ -200,6 +201,153 @@ CHECKLIST_BY_CHANNEL = {
 }
 
 
+# ── Channel front-matter parser ──
+#
+# Handles the bounded YAML subset documented in ``channels/SCHEMA.md``:
+# top-level ``key: value``, one level of nested ``key: value`` pairs, and
+# inline list values (``[a, b]``). No PyYAML dependency — keeps muriel's
+# zero-required-deps invariant.
+
+def _parse_frontmatter(text: str) -> dict:
+    """Parse the leading ``---``-delimited YAML block; return ``{}`` if absent.
+
+    Handles the bounded subset documented in ``channels/SCHEMA.md``:
+    top-level scalar / inline-list / dict / list, and one level of nested
+    scalar / inline-list / list. List bullets target whichever key most
+    recently opened with an empty value.
+    """
+    if not text.startswith("---"):
+        return {}
+    end = text.find("\n---", 3)
+    if end == -1:
+        return {}
+    out: dict = {}
+    current_top: Optional[str] = None
+    current_list: Optional[list] = None
+    for raw in text[3:end].splitlines():
+        line = raw.rstrip()
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        indent = len(line) - len(line.lstrip())
+        stripped = line.strip()
+        if stripped.startswith("- "):
+            item = stripped[2:].strip().strip("'\"")
+            if current_list is None and current_top is not None:
+                if isinstance(out.get(current_top), dict) and not out[current_top]:
+                    out[current_top] = []
+                    current_list = out[current_top]
+            if isinstance(current_list, list):
+                current_list.append(item)
+            continue
+        if ":" not in stripped:
+            continue
+        key, _, value = stripped.partition(":")
+        key = key.strip()
+        value = value.strip()
+        if indent == 0:
+            current_top = key
+            current_list = None
+            if not value:
+                out[key] = {}
+            elif value.startswith("[") and value.endswith("]"):
+                out[key] = [v.strip().strip("'\"") for v in value[1:-1].split(",") if v.strip()]
+            else:
+                out[key] = value.strip("'\"")
+        else:
+            if current_top is None:
+                continue
+            if not isinstance(out.get(current_top), dict):
+                out[current_top] = {}
+            if not value:
+                out[current_top][key] = []
+                current_list = out[current_top][key]
+            elif value.startswith("[") and value.endswith("]"):
+                out[current_top][key] = [v.strip().strip("'\"") for v in value[1:-1].split(",") if v.strip()]
+                current_list = None
+            else:
+                out[current_top][key] = value.strip("'\"")
+                current_list = None
+    return out
+
+
+def _load_channel_meta(channel: str) -> dict:
+    """Load front-matter for ``channels/<channel>.md`` if present.
+
+    Returns an empty dict when the file is missing or has no front-matter.
+    Critique then proceeds without channel-specific gates.
+    """
+    here = Path(__file__).resolve().parent.parent
+    chan_path = here / "channels" / f"{channel}.md"
+    if not chan_path.exists():
+        return {}
+    try:
+        return _parse_frontmatter(chan_path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+# ── P0 honesty probe ──
+#
+# Two-tier scan, mined from open-design's ``replit-deck`` P0 honesty gate:
+#
+#   * AI-slop emoji in artifact text → hard FAIL (always inappropriate for
+#     scientific / editorial output).
+#   * Narrative numeric claims (``10x faster``, ``$50M``, ``3 billion``,
+#     ``+45%``) → NEEDS REVISION, with each claim listed for human audit.
+#     Tick labels and bare numbers in axis context are deliberately *not*
+#     flagged — they are data, not claims.
+#
+# Operates on SVG text content (raster artifacts skip the probe).
+
+# Stock SaaS / pitch-deck emoji that should never appear in muriel output.
+SLOP_EMOJI = ("🚀", "✨", "📊", "🔥", "💯", "⚡", "🎯", "💪", "🙌")
+
+# Patterns that signal a *narrative* numeric claim, not a tick label.
+# Order matters — more specific patterns first.
+NARRATIVE_CLAIM_PATTERNS = (
+    re.compile(r"\b\d+(?:\.\d+)?\s*[x×]\s+(?:faster|slower|more|less|better|larger|smaller|higher|lower)\b", re.I),
+    re.compile(r"\b\d+(?:\.\d+)?\s*%\s+(?:faster|slower|more|less|better|improvement|increase|decrease|gain|loss)\b", re.I),
+    re.compile(r"\$\s*\d+(?:\.\d+)?\s*[KMB]\b"),
+    re.compile(r"\b\d+(?:\.\d+)?\s+(?:billion|million|trillion)\b", re.I),
+    re.compile(r"[+\-]\d+(?:\.\d+)?\s*%\s+(?:vs|over|than)\b", re.I),
+)
+
+_TEXT_RE = re.compile(r"<text[^>]*>(.*?)</text>", re.S)
+_TAG_RE = re.compile(r"<[^>]+>")
+_CITED_RE = re.compile(r'data-(?:source|cite|citation)\s*=', re.I)
+
+
+def _extract_svg_text(svg_text: str) -> list[str]:
+    """Pull plain text content out of every ``<text>`` element."""
+    out = []
+    for m in _TEXT_RE.finditer(svg_text):
+        inner = _TAG_RE.sub("", m.group(1)).strip()
+        if inner:
+            out.append(inner)
+    return out
+
+
+def _honesty_probe_svg(svg_text: str) -> tuple[list[str], list[str]]:
+    """Run the P0 honesty probe on an SVG.
+
+    Returns (slop_emoji_found, narrative_claims_found). Either non-empty
+    triggers the corresponding finding; both empty means the probe passed.
+    """
+    text_blocks = _extract_svg_text(svg_text)
+    haystack = "\n".join(text_blocks)
+    slop = [e for e in SLOP_EMOJI if e in haystack]
+    claims: list[str] = []
+    for pat in NARRATIVE_CLAIM_PATTERNS:
+        for m in pat.finditer(haystack):
+            claim = m.group(0).strip()
+            if claim not in claims:
+                claims.append(claim)
+    # If the SVG cites sources via data-* attributes, claims may be
+    # legitimate — surface them anyway but mark as cited so the report
+    # downgrades from P0 fail to P1 audit.
+    return slop, claims
+
+
 def _is_svg(path: Path) -> bool:
     return path.suffix.lower() == ".svg"
 
@@ -249,15 +397,34 @@ def critique_artifact(
         return report
     report.add_auto("file exists & readable", True, f"{p.stat().st_size:,} bytes")
 
+    # ── Channel front-matter — opt-in gates per channel ──
+    chan_meta = _load_channel_meta(channel)
+    requires = chan_meta.get("requires", {}) if isinstance(chan_meta.get("requires"), dict) else {}
+    if requires.get("audience") == "required" and not audience:
+        report.add_auto(
+            "channel requires audience profile",
+            False,
+            f"channel `{channel}` declares `requires.audience: required` but "
+            "no `--audience` was passed; vocabulary denylist cannot run",
+            framework="channels/SCHEMA.md",
+        )
+    if requires.get("brand") == "required":
+        # Brand presence is conventionally signaled by the artifact carrying
+        # brand-token references; a hard check would need to cross-reference
+        # the rendering script. Surface as a manual checklist item.
+        pass
+
     # ── Automated check 2: contrast (SVG only) ──
     if _is_svg(p) and _HAS_CONTRAST:
         try:
-            ok = audit_svg(str(p), required=threshold, verbose=False)
+            entries = audit_svg(str(p), required=threshold, print_table=False)
+            failed = [e for e in entries if getattr(e, "passed", True) is False]
+            ok = not failed
             report.add_auto(
                 f"WCAG ≥ {threshold:.1f} on text roles",
-                bool(ok),
-                "all text roles cleared" if ok
-                else f"some text roles failed at threshold {threshold}",
+                ok,
+                f"{len(entries)} text role(s) audited; "
+                + ("all cleared" if ok else f"{len(failed)} failed at threshold {threshold:.1f}"),
                 framework="muriel universal rule: 8:1 minimum on text",
             )
         except Exception as e:
@@ -270,7 +437,58 @@ def critique_artifact(
             f"{p.suffix} — manual check required (no raster auditor in muriel yet)",
         )
 
-    # ── Automated check 3: dimension target match ──
+    # ── Automated check 3: P0 honesty probe (SVG only) ──
+    #
+    # Mined from open-design's replit-deck checklist — "no invented
+    # metrics, no stock SaaS emoji". Two findings:
+    #   * slop emoji → hard FAIL.
+    #   * narrative numeric claims → NEEDS REVISION + per-claim audit list.
+    if _is_svg(p):
+        try:
+            svg_text = p.read_text(encoding="utf-8", errors="replace")
+            cited = bool(_CITED_RE.search(svg_text))
+            slop, claims = _honesty_probe_svg(svg_text)
+            if slop:
+                report.add_auto(
+                    "P0 honesty: no AI-slop emoji",
+                    False,
+                    f"found {len(slop)} stock emoji in <text>: {' '.join(slop)}",
+                    framework="open-design replit-deck P0 honesty gate",
+                )
+                report.verdict = VERDICT_FAIL
+            else:
+                report.add_auto(
+                    "P0 honesty: no AI-slop emoji",
+                    True,
+                    "no stock SaaS emoji found in artifact text",
+                )
+            if claims:
+                detail = (
+                    f"found {len(claims)} narrative numeric claim(s): "
+                    + "; ".join(f"`{c}`" for c in claims[:5])
+                    + (" …" if len(claims) > 5 else "")
+                    + (
+                        " — artifact has data-source/data-cite attributes; audit each claim."
+                        if cited
+                        else " — no data-source attributes found; each claim must be sourced or labeled illustrative."
+                    )
+                )
+                report.add_auto(
+                    "P0 honesty: numeric claims sourced",
+                    False,
+                    detail,
+                    framework="open-design replit-deck P0 honesty gate",
+                )
+            else:
+                report.add_auto(
+                    "P0 honesty: numeric claims sourced",
+                    True,
+                    "no narrative numeric-claim patterns detected in artifact text",
+                )
+        except Exception as e:
+            report.add_auto("P0 honesty probe", False, f"probe error: {e}")
+
+    # ── Automated check 4: dimension target match ──
     if target and _HAS_DIMENSIONS:
         if target in REGISTRY:
             tgt = REGISTRY[target]

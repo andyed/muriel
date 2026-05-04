@@ -52,6 +52,9 @@ Multi-channel narrative artifacts that compose several queued channels into one 
 - [ ] **Multi-line raster text layout.** Configurable max-width, line-height, alignment in `muriel.typeset`. Blocks some infographics.
 - [ ] **Constraint-elicitation SKILL.md rule.** Queued per memory: ask 4–5 sharp constraint questions before first composite build (trial pending).
 - [ ] **Tests.** No `tests/` directory exists. Highest-risk untested modules: `oklch.py` (roundtrip correctness), `contrast.py`, `dimensions.py`.
+- [ ] **Channel front-matter rollout.** Schema lives in [`channels/SCHEMA.md`](channels/SCHEMA.md); exemplars on `diagrams.md`, `science.md`, `gaze.md`. Remaining channels without front-matter: `dimensions`, `heatmaps`, `infographics`, `interactive`, `raster`, `style-guides`, `svg`, `terminal`, `video`, `web`. Add front-matter as each channel is touched; do not bulk-rewrite. Critique runs without it — front-matter is opt-in.
+- [ ] **5-dimension critique scoring** (mined from `nexu-io/open-design` `skills/critique`). Re-shape `muriel.critique` to score on 5 named dimensions with evidence-required: Direction consistency / Visual hierarchy / Detail execution / Functionality / **Veracity** (replacing open-design's "Innovation" — the wrong axis for science output; Veracity = chart supports the prose claim, nulls framed as detection limits, no extrapolated values labeled as measured). Today's automated checks become P0; the 5-dim scoring is a P1 layer with Keep/Fix/Quick-wins triple-list output. Optional SVG radar chart artifact mode.
+- [ ] **`channels/decision-tree.md`.** "Which channel for which job" disambiguation page (mined from open-design's "When to pick X vs peer-skill Y" tables). Tree by *artifact destination* (paper / blog / social / app / talk) → channel → primitive. Today the choice is implicit; reader has to remember which channel exists.
 
 ## Someday
 
