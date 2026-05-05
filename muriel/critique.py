@@ -548,8 +548,9 @@ def main():
     ap.add_argument("--audience", default=None,
                     help="audience profile tag (see style-guides.md)")
     ap.add_argument("--channel", default="science",
-                    choices=("science", "infographic", "paper-figure", "social-card"),
-                    help="channel context for per-channel checklist additions")
+                    help="channel slug; matches a `channels/<slug>.md` front-matter "
+                         "block when present (see channels/SCHEMA.md). Unknown "
+                         "channels skip the front-matter gate and run universal checks only.")
     ap.add_argument("--output", "-o", default=None,
                     help="write Markdown report to this path "
                          "(default: stdout)")

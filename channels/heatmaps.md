@@ -1,3 +1,21 @@
+---
+channel: heatmaps
+status: active
+requires:
+  brand: optional
+  audience: required
+  reads:
+    - muriel.matplotlibrc_light
+    - muriel.matplotlibrc_dark
+    - muriel.dimensions
+output:
+  kinds: [png, svg, pdf]
+  registers: [paper, editorial]
+peer_channels:
+  - gaze
+  - science
+---
+
 # Heatmaps — Smooth Gaussian Density Overlays
 
 Tobii-style topographic heatmaps from fixation data. The aggregate counterpart to scanpath visualization — same data, averaged across trials.

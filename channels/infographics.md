@@ -1,3 +1,22 @@
+---
+channel: infographics
+status: active
+requires:
+  brand: optional
+  audience: required
+  reads:
+    - muriel.contrast
+    - muriel.dimensions
+    - muriel.palettes
+output:
+  kinds: [svg, png]
+  registers: [social, blog, editorial]
+peer_channels:
+  - diagrams
+  - raster
+  - svg
+---
+
 # Infographics — Scannable Visual Storytelling
 
 The social-shareable, blog-embed, single-image explainer channel. Designed to survive thumbnail rendering, LinkedIn timelines, X cards, and README READMEs — where the viewer gets ~2 seconds to decide whether to engage.

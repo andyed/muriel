@@ -1,3 +1,24 @@
+---
+channel: svg
+status: active
+requires:
+  brand: optional
+  audience: optional
+  reads:
+    - muriel.contrast
+    - muriel.dimensions
+    - muriel.oklch
+output:
+  kinds: [svg]
+  registers: [paper, blog, social, editorial, presentation]
+peer_channels:
+  - diagrams
+  - gaze
+  - heatmaps
+  - science
+  - infographics
+---
+
 # SVG — Vector Channel
 
 Photoshop can't generate vectors from data. SVG can — and the output diffs in git, scales infinitely, embeds in HTML and LaTeX, and inherits CSS theming from marginalia (`--mg-*` carries through to `<svg>` children).

@@ -1,3 +1,21 @@
+---
+channel: web
+status: active
+requires:
+  brand: optional
+  audience: required
+  reads:
+    - muriel.contrast
+    - muriel.dimensions
+output:
+  kinds: [html]
+  registers: [blog, editorial]
+peer_channels:
+  - interactive
+  - svg
+  - infographics
+---
+
 # Web — Marginalia, Pandoc, Static Capture, Data-URI
 
 The editorial-HTML channel and its tooling. Covers:
