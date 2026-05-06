@@ -72,20 +72,27 @@ Plus two cross-channel references used by every channel:
 
 ## Install
 
-### As a Claude Code skill
+### As a Claude Code plugin (recommended)
+
+From any Claude Code session:
+
+```text
+/plugin marketplace add andyed/muriel
+/plugin install muriel@andyed-muriel
+```
+
+That's it — no clone, no symlinks. `/plugin uninstall` reverses cleanly. Invoke with `/muriel:compose` (plugin skills are namespaced; the `muriel:` prefix prevents collisions with other plugins). The `muriel-critique` subagent loads alongside the skill.
+
+### As a Claude Code skill (developer install)
+
+If you're working on the muriel repo itself, install from a checkout so edits show up live:
 
 ```bash
 git clone https://github.com/andyed/muriel ~/Documents/dev/muriel
-ln -s ~/Documents/dev/muriel ~/.claude/skills/muriel
-```
-
-That's it. `SKILL.md` in the repo root carries the frontmatter Claude Code needs; the symlink exposes the channels, vocabularies, examples, and Python package to any session. Invoke with `/muriel` from any Claude Code session.
-
-Or run the helper script:
-
-```bash
 cd ~/Documents/dev/muriel && ./install.sh
 ```
+
+The script symlinks `plugins/muriel/skills/compose/` into `~/.claude/skills/muriel/` (so the bare `/muriel` invocation continues to work) and the critique agent into `~/.claude/agents/`. It refuses if the plugin install is already present, to avoid double-loading.
 
 ### As a Python package
 
@@ -123,15 +130,11 @@ Each subcommand is also callable directly via `python -m muriel.capture`, `pytho
 
 ### The critique agent
 
-```bash
-ln -s ~/Documents/dev/muriel/agents/muriel-critique.md ~/.claude/agents/muriel-critique.md
-```
-
-Then dispatch it from any Claude Code session with the Agent tool, `subagent_type: muriel-critique`. See [Critique agent](#critique-agent) below.
+The `muriel-critique` subagent ships with the plugin and is loaded automatically by both install paths above (plugin install and `install.sh`). Dispatch it from any Claude Code session with the Agent tool, `subagent_type: muriel-critique`. See [Critique agent](#critique-agent) below.
 
 ### Other AI harnesses (Cursor, Codex, Windsurf, Gemini CLI)
 
-The `SKILL.md` file uses the [Agent Skills](https://github.com/anthropics/claude-code/blob/main/docs/skills.md) format that's compatible across many agent harnesses. For Cursor, mirror the structure into `.cursor/skills/muriel/`; for others, consult your harness's skill/plugin docs. A future release will ship a `.claude-plugin/` + `.cursor-plugin/` manifest pair following the pixijs-skills precedent.
+The `SKILL.md` file at `plugins/muriel/skills/compose/SKILL.md` uses the [Agent Skills](https://github.com/anthropics/claude-code/blob/main/docs/skills.md) format that's compatible across many agent harnesses. For Cursor, mirror the structure into `.cursor/skills/muriel/`; for others, consult your harness's skill/plugin docs. A future release will ship a `.cursor-plugin/` manifest sibling to the existing `.claude-plugin/`.
 
 ## Dependencies (by channel)
 

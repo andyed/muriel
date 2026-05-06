@@ -2,7 +2,7 @@
 
 The canonical spec for muriel's own visual mark, wordmark, color tokens, and credit conventions. Inward-facing: this is muriel's `brand.toml` for itself.
 
-Until this doc existed, muriel theme'd every other project from a documented brand and ran on vibes for its own. The favicon at [`docs/favicon-512.png`](../docs/favicon-512.png) was the only canonical artifact, and every "built with muriel" credit anywhere had to be reverse-engineered from the rendered PNG. That's the exact failure muriel exists to prevent. This file fixes it.
+Until this doc existed, muriel theme'd every other project from a documented brand and ran on vibes for its own. The favicon at [`docs/favicon-512.png`](https://github.com/andyed/muriel/blob/main/docs/favicon-512.png) was the only canonical artifact, and every "built with muriel" credit anywhere had to be reverse-engineered from the rendered PNG. That's the exact failure muriel exists to prevent. This file fixes it.
 
 ## Lineage and grammar
 
@@ -175,7 +175,7 @@ Use when display constraints rule out even the inline form (extreme micro-scale:
 
 ## Reference exemplars
 
-- **Favicon set:** [`docs/favicon-{16,32,180,512}.png`](../docs/) — light variant (cream background); [`docs/favicon-dark-{16,32,180,512}.png`](../docs/) — dark variant (cream bars on near-black).
+- **Favicon set:** [`docs/favicon-{16,32,180,512}.png`](https://github.com/andyed/muriel/tree/main/docs/) — light variant (cream background); [`docs/favicon-dark-{16,32,180,512}.png`](https://github.com/andyed/muriel/tree/main/docs/) — dark variant (cream bars on near-black).
 - **Inside the Math footer credit:** `psychodeli-webgl-port/inside_the_math/index.html` — first production deployment of the inline form; landed the canonical inline coordinates after several iterations.
 
 ## Versioning

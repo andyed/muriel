@@ -134,7 +134,7 @@ The F explainer also floats `.mg-margin` and `.mg-sidebar` to the right *inside*
 | Important red | `#fdf5f5` bg + `#cc444480` border | Emphasis |
 | Stats-detail bg | `#f8f4ee` + dashed `#d4a574` underline | Inline numerical callouts |
 
-Matching matplotlibrc: [`muriel/matplotlibrc_light.py`](../muriel/matplotlibrc_light.py). Same Georgia stack, same `#fafaf8` figure facecolor — figures rendered with the light rcparams match the editorial palette 1:1.
+Matching matplotlibrc: [`muriel/matplotlibrc_light.py`](https://github.com/andyed/muriel/blob/main/muriel/matplotlibrc_light.py). Same Georgia stack, same `#fafaf8` figure facecolor — figures rendered with the light rcparams match the editorial palette 1:1.
 
 ### When to use which variant
 
@@ -188,7 +188,7 @@ with sync_playwright() as p:
 
 ### Responsive sweep helper — `muriel.capture`
 
-For "what does this look like at mobile/tablet/laptop/desktop?" in one command, the paired module [`muriel/capture.py`](../muriel/capture.py) wraps Playwright around the tier data in [`muriel/dimensions.py`](../muriel/dimensions.py):
+For "what does this look like at mobile/tablet/laptop/desktop?" in one command, the paired module [`muriel/capture.py`](https://github.com/andyed/muriel/blob/main/muriel/capture.py) wraps Playwright around the tier data in [`muriel/dimensions.py`](https://github.com/andyed/muriel/blob/main/muriel/dimensions.py):
 
 ```python
 from muriel.capture import capture_responsive
@@ -295,7 +295,7 @@ Base64 inflates by ~33%. Stay under ~200 KB per image inside HTML; above that, p
 
 ## Absolute bans
 
-Five escalated anti-patterns — channel-spanning but most visible in web work. Named so the [`muriel-critique`](../agents/muriel-critique.md) agent can cite them directly and so a human reviewer has a finite list of "stop, don't ship this."
+Five escalated anti-patterns — channel-spanning but most visible in web work. Named so the [`muriel-critique`](../../../agents/muriel-critique.md) agent can cite them directly and so a human reviewer has a finite list of "stop, don't ship this."
 
 - **`gradient-text`** — `background-clip: text` with a gradient fill. Unreadable at body sizes (the gradient traverses low-contrast hues by construction, failing 8:1 across its span) and telegraphs *designer reached for the default Figma preset*. Vary weight/size for hierarchy; keep text one color.
 

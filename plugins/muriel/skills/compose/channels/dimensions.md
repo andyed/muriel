@@ -210,7 +210,7 @@ Pattern: `{platform}-{role}-{widthXheight}.{ext}` for raster; `{platform}-{role}
 
 ## Code counterpart
 
-All values in this file are also available as importable Python constants in [`muriel/dimensions.py`](../muriel/dimensions.py). Mirror of the markdown structure, standard-library-only, with three small classes (`Size`, `Device`, `PaperSize`), a dotted-name `REGISTRY` for programmatic lookup, and a `figsize_for(venue, columns, aspect)` helper so notebooks don't hardcode inch values.
+All values in this file are also available as importable Python constants in [`muriel/dimensions.py`](https://github.com/andyed/muriel/blob/main/muriel/dimensions.py). Mirror of the markdown structure, standard-library-only, with three small classes (`Size`, `Device`, `PaperSize`), a dotted-name `REGISTRY` for programmatic lookup, and a `figsize_for(venue, columns, aspect)` helper so notebooks don't hardcode inch values.
 
 ```python
 from muriel.dimensions import (

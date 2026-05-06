@@ -1,0 +1,18 @@
+{
+  "name": "andyed-muriel",
+  "owner": {
+    "name": "Andy Edmonds"
+  },
+  "description": "Andy Edmonds' Claude Code plugins.",
+  "plugins": [
+    {
+      "name": "muriel",
+      "source": "./plugins/muriel",
+      "description": "Multi-channel visual production skill — raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics, diagrams. 8:1 contrast minimum enforced; brand tokens active at render time.",
+      "homepage": "https://github.com/andyed/muriel",
+      "license": "MIT",
+      "category": "design",
+      "keywords": ["visual", "design", "svg", "infographic", "science", "gaze", "brand", "contrast"]
+    }
+  ]
+}

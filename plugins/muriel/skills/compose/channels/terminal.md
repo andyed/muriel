@@ -4,7 +4,7 @@ Unicode bar charts, sparklines, and tables for terminal/markdown/chat output. No
 
 Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map.
 
-**Renderer:** [`muriel/chart.py`](muriel/chart.py) — Python, zero dependencies.
+**Renderer:** [`muriel/chart.py`](https://github.com/andyed/muriel/blob/main/muriel/chart.py) — Python, zero dependencies.
 
 ## Available primitives
 

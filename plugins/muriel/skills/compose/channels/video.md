@@ -95,7 +95,7 @@ ffmpeg -i input.mp4 -c copy -f segment -segment_time 60 -reset_timestamps 1 outp
 
 ## Design doc
 
-See [`docs/PERMUTE.md`](docs/PERMUTE.md) for the infographic aspiration: Tufte, Bertin, Gestalt, CRAP, semantic zoom, small multiples, linked displays.
+See [`docs/PERMUTE.md`](https://github.com/andyed/muriel/blob/main/docs/PERMUTE.md) for the infographic aspiration: Tufte, Bertin, Gestalt, CRAP, semantic zoom, small multiples, linked displays.
 
 ## HTML → MP4 via hyperframes
 

@@ -26,7 +26,7 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 [![color sprint before](thumbs/color-sprint-before.jpg)](https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html) [![color sprint after](thumbs/color-sprint-after.jpg)](https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html)
 
-**Tools:** Pillow (image composition + draw) · matplotlib (curve overlay rendered as PNG, then composited) · [`muriel/typeset.py`](../../muriel/typeset.py) (caption typography) · [`muriel/contrast.py`](../../muriel/contrast.py) (pre-ship 8:1 audit).
+**Tools:** Pillow (image composition + draw) · matplotlib (curve overlay rendered as PNG, then composited) · [`muriel/typeset.py`](https://github.com/andyed/muriel/blob/main/muriel/typeset.py) (caption typography) · [`muriel/contrast.py`](https://github.com/andyed/muriel/blob/main/muriel/contrast.py) (pre-ship 8:1 audit).
 **Channel:** [`channels/raster.md`](../../channels/raster.md).
 **Pattern:** canonical small-multiples A/B — identical framing, variable stimulus.
 **Live:** [Color sprint →](https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html)
@@ -37,7 +37,7 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 [![dashboard mode 6 fovi](thumbs/dashboard_center_mode6_fovi.png)](https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html) [![dashboard mode 7 legacy](thumbs/dashboard_center_mode7_legacy.png)](https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html)
 
-**Tools:** a WebGL foveation engine (external, Scrutinizer) for the rendering · [`muriel/capture.py`](../../muriel/capture.py) (`capture_responsive()` for retina screenshots) · Pillow (side-by-side composition) · [`muriel/dimensions.py`](../../muriel/dimensions.py) (`OG_CARD` for final size).
+**Tools:** a WebGL foveation engine (external, Scrutinizer) for the rendering · [`muriel/capture.py`](https://github.com/andyed/muriel/blob/main/muriel/capture.py) (`capture_responsive()` for retina screenshots) · Pillow (side-by-side composition) · [`muriel/dimensions.py`](https://github.com/andyed/muriel/blob/main/muriel/dimensions.py) (`OG_CARD` for final size).
 **Channel:** [`channels/raster.md`](../../channels/raster.md) (captured from [`channels/interactive.md`](../../channels/interactive.md)).
 **Pattern:** same stimulus, two processing modes — small multiples across a parameter axis.
 **Live:** [v2.6 release notes →](https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html)
@@ -48,7 +48,7 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 [![reading span on/off](thumbs/reading-span-on-off-comparison.png)](https://andyed.github.io/scrutinizer-www/blog/2026-03-13-reading-span.html)
 
-**Tools:** matplotlib (figure composition with two `subplot` panels, body-text rendering via `ax.text()` or imported image, degree-of-visual-angle guides as `axvline`) · [`muriel/matplotlibrc_dark.py`](../../muriel/matplotlibrc_dark.py) (palette + rcparams) · [`muriel/dimensions.py`](../../muriel/dimensions.py) (`figsize_for('chi', columns=2)`) · [`muriel/stats.py`](../../muriel/stats.py) (`format_comparison()` for the effect-size caption).
+**Tools:** matplotlib (figure composition with two `subplot` panels, body-text rendering via `ax.text()` or imported image, degree-of-visual-angle guides as `axvline`) · [`muriel/matplotlibrc_dark.py`](https://github.com/andyed/muriel/blob/main/muriel/matplotlibrc_dark.py) (palette + rcparams) · [`muriel/dimensions.py`](https://github.com/andyed/muriel/blob/main/muriel/dimensions.py) (`figsize_for('chi', columns=2)`) · [`muriel/stats.py`](https://github.com/andyed/muriel/blob/main/muriel/stats.py) (`format_comparison()` for the effect-size caption).
 **Channel:** [`channels/science.md`](../../channels/science.md).
 **Pattern:** paired-conditions comparison with labeled axes, effect size, and sample size — exactly what `muriel.stats.format_comparison()` formats into a figure caption.
 **Live:** [Reading span on/off →](https://andyed.github.io/scrutinizer-www/blog/2026-03-13-reading-span.html)
@@ -59,7 +59,7 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 [![saliency vs congestion](thumbs/arngren-saliency-vs-congestion.jpg)](https://andyed.github.io/scrutinizer-www/blog/congestion-score.html)
 
-**Tools:** matplotlib (dense small-multiples grid, `GridSpec` or `subplot_mosaic`) · numpy / polars (derived metric computation) · [`muriel/matplotlibrc_dark.py`](../../muriel/matplotlibrc_dark.py) · [`muriel/dimensions.py`](../../muriel/dimensions.py) (`figsize_for('chi', columns=2)` for IEEE/CHI venue width).
+**Tools:** matplotlib (dense small-multiples grid, `GridSpec` or `subplot_mosaic`) · numpy / polars (derived metric computation) · [`muriel/matplotlibrc_dark.py`](https://github.com/andyed/muriel/blob/main/muriel/matplotlibrc_dark.py) · [`muriel/dimensions.py`](https://github.com/andyed/muriel/blob/main/muriel/dimensions.py) (`figsize_for('chi', columns=2)` for IEEE/CHI venue width).
 **Channel:** [`channels/science.md`](../../channels/science.md).
 **Pattern:** stacked small-multiples for visual diagnostic review — multiple derived metrics against one source image.
 **Live:** [Congestion score →](https://andyed.github.io/scrutinizer-www/blog/congestion-score.html)
@@ -70,7 +70,7 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 [![color spectrum foveated](thumbs/color-spectrum-foveated.jpg)](https://andyed.github.io/scrutinizer-www/blog/color-search.html)
 
-**Tools:** a live WebGL demo (external) for the interactive itself · [`muriel/capture.py`](../../muriel/capture.py) (`capture_responsive()` with retina scale factor) · Pillow (crop + composite for editorial placement) · [`muriel/contrast.py`](../../muriel/contrast.py) (audit for annotations).
+**Tools:** a live WebGL demo (external) for the interactive itself · [`muriel/capture.py`](https://github.com/andyed/muriel/blob/main/muriel/capture.py) (`capture_responsive()` with retina scale factor) · Pillow (crop + composite for editorial placement) · [`muriel/contrast.py`](https://github.com/andyed/muriel/blob/main/muriel/contrast.py) (audit for annotations).
 **Channel:** [`channels/interactive.md`](../../channels/interactive.md) captured into [`channels/raster.md`](../../channels/raster.md).
 **Pattern:** the live version stays interactive; the raster snapshot goes into social cards + paper figures.
 **Live:** [Color search →](https://andyed.github.io/scrutinizer-www/blog/color-search.html)
@@ -81,7 +81,7 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 [![queen icon](thumbs/icon-analysis-queen-2006.jpg)](https://andyed.github.io/scrutinizer-www/blog/color-search.html) [![queen icon blurred](thumbs/icon-analysis-blur-queen-2006.jpg)](https://andyed.github.io/scrutinizer-www/blog/color-search.html)
 
-**Tools:** Pillow (thumbnail resize + compositing) · a Gaussian-blur variant (Pillow's `ImageFilter.GaussianBlur`) · [`muriel/typeset.py`](../../muriel/typeset.py) (label typography) · SVG (hand-rolled or `svgwrite`) for accompanying diagrams in the post.
+**Tools:** Pillow (thumbnail resize + compositing) · a Gaussian-blur variant (Pillow's `ImageFilter.GaussianBlur`) · [`muriel/typeset.py`](https://github.com/andyed/muriel/blob/main/muriel/typeset.py) (label typography) · SVG (hand-rolled or `svgwrite`) for accompanying diagrams in the post.
 **Channels:** [`channels/raster.md`](../../channels/raster.md) + [`channels/svg.md`](../../channels/svg.md).
 **Pattern:** micro-comparison at icon scale — two ~256-px tiles laid out inline in editorial prose. When a full figure is overkill.
 
@@ -89,7 +89,7 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 ## 7. V1 orientation columns — Diagrams + SVG (runnable)
 
-[![v1 orientation columns](thumbs/v1-orientation-columns.jpg)](../../docs/v1-orientation-columns.svg)
+[![v1 orientation columns](thumbs/v1-orientation-columns.jpg)](https://github.com/andyed/muriel/blob/main/docs/v1-orientation-columns.svg)
 
 **Tools:** pure Python stdlib (`math`) emitting SVG directly — a multi-pinwheel orientation field over a hex grid, hand-rolled `<line>` + `<circle>` elements with brand tokens inlined from `examples/muriel-brand.toml` (OLED palette, 8:1+ contrast on every text element).
 **Channels:** [`channels/diagrams.md`](../../channels/diagrams.md) + [`channels/svg.md`](../../channels/svg.md), with [`channels/science.md`](../../channels/science.md) sensibility (cited primary literature in the footer).
@@ -103,7 +103,7 @@ Worked examples from shipped projects that exemplify what muriel's channels prod
 
 [![F-pattern explainer (screenshot TBD)](thumbs/bender-cutter-diagram.svg)](https://andyed.github.io/attentional-foraging/explainer/)
 
-**Tools:** marginalia (editorial CSS library, external) · `marginalia-md.js` (markdown → marginalia HTML in the browser) · a Node build script · custom CSS for the F-explainer's light palette extensions (`.outer-note`, `.stats-detail`, `.has-dropcap`) · [`muriel/matplotlibrc_light.py`](../../muriel/matplotlibrc_light.py) (for any inline figures to match the warm editorial palette).
+**Tools:** marginalia (editorial CSS library, external) · `marginalia-md.js` (markdown → marginalia HTML in the browser) · a Node build script · custom CSS for the F-explainer's light palette extensions (`.outer-note`, `.stats-detail`, `.has-dropcap`) · [`muriel/matplotlibrc_light.py`](https://github.com/andyed/muriel/blob/main/muriel/matplotlibrc_light.py) (for any inline figures to match the warm editorial palette).
 **Channel:** [`channels/web.md`](../../channels/web.md) — marginalia + warm editorial light palette.
 **Pattern:** long-form explainer with pull-quotes, margin notes, inline stats spans, drop-cap.
 **Live:** [Attentional Foraging F-pattern explainer →](https://andyed.github.io/attentional-foraging/explainer/)

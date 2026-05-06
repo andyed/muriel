@@ -55,7 +55,7 @@ Ordered by how often each structure carries a real argument in research, product
 
 ## API conventions
 
-Every generator follows the same signature shape, same as [`muriel.tools.venn`](../muriel/tools/venn.py):
+Every generator follows the same signature shape, same as [`muriel.tools.venn`](https://github.com/andyed/muriel/blob/main/muriel/tools/venn.py):
 
 ```python
 generator(data, *, brand=None, title=None, out_path="...svg", **structure_specific) -> str
@@ -136,7 +136,7 @@ Both examples below render to `examples/diagrams/`:
 
 ## Auditing diagrams
 
-Every diagram should pass `python -m muriel.contrast <file.svg>`. The included generators write fills inline (not via class selectors), so the audit currently reports zero text rules unless your selectors match marginalia conventions; rasterize via `cairosvg <file.svg> -o <file.png>` and inspect with the [muriel-critique](../agents/muriel-critique.md) agent for the visual-judgment pass.
+Every diagram should pass `python -m muriel.contrast <file.svg>`. The included generators write fills inline (not via class selectors), so the audit currently reports zero text rules unless your selectors match marginalia conventions; rasterize via `cairosvg <file.svg> -o <file.png>` and inspect with the [muriel-critique](../../../agents/muriel-critique.md) agent for the visual-judgment pass.
 
 For a rhetorical-fit pass: feed the diagram and the prose claim it accompanies to muriel-critique with the channel set to `diagrams`. The agent will check whether the structure earns its geometry.
 

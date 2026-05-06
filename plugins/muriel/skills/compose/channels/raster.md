@@ -1,6 +1,6 @@
 # Raster — Pillow + typeset.py
 
-PNG/JPG compositing via Python/Pillow for store assets, icons, banners, wordmarks, screenshots, and any bitmap output. Primary tool: [`muriel/typeset.py`](muriel/typeset.py). Falls back to inline Pillow code for custom layouts.
+PNG/JPG compositing via Python/Pillow for store assets, icons, banners, wordmarks, screenshots, and any bitmap output. Primary tool: [`muriel/typeset.py`](https://github.com/andyed/muriel/blob/main/muriel/typeset.py). Falls back to inline Pillow code for custom layouts.
 
 Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map.
 
@@ -63,7 +63,7 @@ For font index in .ttc files (multiple fonts in one file), use `ImageFont.truety
 
 ## Reusable Module
 
-**[`muriel/typeset.py`](muriel/typeset.py)** extracts the boilerplate below into importable functions. Prefer using it over inline scripts:
+**[`muriel/typeset.py`](https://github.com/andyed/muriel/blob/main/muriel/typeset.py)** extracts the boilerplate below into importable functions. Prefer using it over inline scripts:
 
 ```python
 from typeset import find_font, render_asset, generate_from_manifest

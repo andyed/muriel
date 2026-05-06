@@ -41,7 +41,7 @@ Matplotlib's out-of-the-box defaults are wrong for every constraint muriel enfor
 
 ### Importable module (preferred)
 
-The dark and light rcparams blocks are shipped as importable Python modules in [`muriel/`](../muriel/). Add the muriel repo to your `PYTHONPATH` (or `pip install -e ~/Documents/dev/muriel`), then:
+The dark and light rcparams blocks are shipped as importable Python modules in [`muriel/`](https://github.com/andyed/muriel/tree/main/muriel/). Add the muriel repo to your `PYTHONPATH` (or `pip install -e ~/Documents/dev/muriel`), then:
 
 ```python
 # Auto-apply on import — pick one palette per document
@@ -181,7 +181,7 @@ How to present numerical findings so they are precise, honest, and not over-clai
 
 ### Importable helpers (preferred)
 
-Every template in this section is shipped as a function in [`muriel/stats.py`](../muriel/stats.py). Standard-library only — no numpy, scipy, or pandas required.
+Every template in this section is shipped as a function in [`muriel/stats.py`](https://github.com/andyed/muriel/blob/main/muriel/stats.py). Standard-library only — no numpy, scipy, or pandas required.
 
 ```python
 from muriel.stats import (
@@ -521,5 +521,5 @@ fig.savefig('effect-forest.pdf', bbox_inches='tight')
 ## Prior art / upstream
 
 - [K-Dense scientific-agent-skills — matplotlib](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/matplotlib/SKILL.md) (MIT). Pure guidance doc: OO interface default, `constrained_layout=True`, viridis/cividis, ban rainbow/jet, 72/150/300 DPI by medium. Muriel's rcparams and figures already enforce the same principles with project-specific palettes and importable helpers. Worth skimming before adding new recipes — if it's conventional matplotlib opinion, check there first to avoid reinventing. One alternative worth knowing: K-Dense prefers `constrained_layout=True` over `tight_layout()`; both work, `constrained_layout` handles suptitle / colorbar edges more gracefully on multi-panel figures.
-- [K-Dense — statistical-analysis](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/statistical-analysis/SKILL.md) (MIT). Test-selection guide, assumption checks via `scipy.stats` + `statsmodels` + `pingouin` + `pymc`, APA reporting. Overlaps [`muriel/stats.py`](../muriel/stats.py) on output formatting but goes deeper on test selection. Read when the question is "which test?" not "how do I report the number?"
+- [K-Dense — statistical-analysis](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/statistical-analysis/SKILL.md) (MIT). Test-selection guide, assumption checks via `scipy.stats` + `statsmodels` + `pingouin` + `pymc`, APA reporting. Overlaps [`muriel/stats.py`](https://github.com/andyed/muriel/blob/main/muriel/stats.py) on output formatting but goes deeper on test selection. Read when the question is "which test?" not "how do I report the number?"
 - [K-Dense — scientific-critical-thinking](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/scientific-critical-thinking/SKILL.md) (MIT). GRADE system, Cochrane Risk of Bias, bias taxonomy (Cognitive / Selection / Measurement / Analysis / Confounding). Useful vocabulary when an editorial pass needs to name *why* a claim is weak, not just flag it.

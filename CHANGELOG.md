@@ -6,6 +6,24 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+- **Repackage as a Claude Code plugin.** `/plugin marketplace add andyed/muriel`
+  + `/plugin install muriel@andyed-muriel` is now the canonical end-user
+  install — no clone, no symlinks, `/plugin uninstall` reverses cleanly.
+  `SKILL.md`, `channels/`, `vocabularies/`, `examples/` moved under
+  `plugins/muriel/skills/compose/`; `agents/muriel-critique.md` moved under
+  `plugins/muriel/agents/`. `.claude-plugin/marketplace.json` at repo root
+  catalogs the single plugin. Cross-references inside the skill tree that
+  pointed at the Python package or top-level `docs/` were rewritten to
+  GitHub URLs (the plugin cache only copies the plugin root subtree, so
+  `../muriel/...` no longer resolves at runtime). `install.sh` retained as
+  the developer-checkout install path; symlinks now target the new
+  `plugins/muriel/skills/compose/` location and the script refuses if the
+  plugin install is already present, to avoid double-loading. Plugin
+  invocation is namespaced `/muriel:compose`; the standalone install via
+  `install.sh` continues to give the bare `/muriel`. Spec at
+  [`docs/spec-plugin-packaging.md`](docs/spec-plugin-packaging.md).
+
 ### Added
 - **`vocabularies/muriel-brand.md`.** Canonical brand-identity spec for
   muriel itself — closes the irony gap of theming every other project

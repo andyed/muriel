@@ -1,0 +1,9 @@
+{
+  "name": "muriel",
+  "description": "Multi-channel visual production skill with brand-token enforcement and 8:1 contrast minimum.",
+  "author": {
+    "name": "Andy Edmonds"
+  },
+  "homepage": "https://github.com/andyed/muriel",
+  "license": "MIT"
+}
