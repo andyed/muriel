@@ -184,6 +184,10 @@ SINGLE_PHRASE_RULES: list[tuple[str, str, str, str]] = [
     # --- En-dash escalation tic ---
     ("phrase-not-just-but", r"\bnot\s+just\s+\S+(?:\s+\S+){0,5}?\s+[—–-]\s+\S+", "warn",
      "'This is not just X — it's Y' escalation. Tell of LLM rhetoric. Convert to plain claim."),
+
+    # --- Loaded-vocabulary in current usage ---
+    ("phrase-regime", r"\bregime[s]?\b", "warn",
+     "'Regime' carries political connotations in current usage; for technical contexts prefer 'phase', 'mode', or 'state'."),
 ]
 
 # Phrases that repeat. Allow up to `max_count` occurrences before flagging.
