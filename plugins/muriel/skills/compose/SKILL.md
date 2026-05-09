@@ -83,6 +83,24 @@ Use these as design rationale in figure captions and blog posts — the vocabula
 
 ---
 
+## Shipping a social card — validation pass
+
+Exporting the PNG isn't shipping it. Cards live or die in the platforms' preview crawlers, which cache aggressively and silently. After every social-card export — OG, X/Twitter, LinkedIn, GitHub repo preview — run the validators before declaring done:
+
+- **LinkedIn:** [Post Inspector](https://www.linkedin.com/post-inspector/) — paste the public URL where the card is referenced. Force-refreshes the LinkedIn cache on each request, so it's the cheapest re-check.
+- **X / Twitter:** paste the URL into a draft tweet/post (most reliable). The classic [Twitter Card Validator](https://cards-dev.twitter.com/validator) has been intermittently retired; treat it as best-effort.
+- **Facebook / Meta / WhatsApp / Slack / iMessage:** [Sharing Debugger](https://developers.facebook.com/tools/debug/) covers Facebook + Messenger. Slack/iMessage unfurl from OG meta directly — if Facebook resolves correctly, those usually do too. Re-scrape via the debugger to bust cache.
+- **GitHub repo "Social preview":** committing `assets/og.png` does **not** attach it. The image must be uploaded via repo *Settings → General → Social preview → Edit*. Filesystem assets are decoration only; the live preview is a separate uploaded blob.
+
+Common failure modes the validators catch:
+- Stale cache showing the previous card — re-scrape via each tool to invalidate.
+- Wrong dimensions cropped (1200×630 OG vs 1200×675 X — different aspect ratios; X crops OG-shaped images).
+- Missing/incorrect `<meta property="og:image" content="…">` absolute URL (must be absolute, not relative).
+- Mixed-content blocks (HTTP image referenced from an HTTPS page).
+- Image > 5 MB triggers fallback on some platforms; recompress if so.
+
+---
+
 ## When to use
 
 Whenever the user needs a visual artifact for human eyes — store assets, paper figures, blog post explainers, video demos, terminal output, scientific plots, infographics, screenshots, gaze visualizations. Invoke with `/muriel` followed by what's needed.
