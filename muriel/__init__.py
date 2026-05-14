@@ -130,10 +130,30 @@ Or from the command line:
     python -m muriel.styleguide brand.toml --css --css-prefix '--mg-'
     python -m muriel.styleguide brand.toml --contrast --required 8.0
 
+Bbox-aware annotation placement:
+
+    from muriel.layout import place_label, Anchor, BBox, sample_polyline
+
+    obstacles = sample_polyline(curve_points, n=200)
+    p = place_label(
+        "v̄ = mean approach velocity", font_size=13,
+        candidates=[Anchor(240, 80, "middle"), Anchor(120, 150, "start")],
+        obstacles=obstacles, plot_bbox=BBox(60, 20, 480, 300),
+    )
+    p.zone          # 'in-plot' | 'left-margin' | 'right-margin' | 'caption'
+    p.svg_text(...) # ready-to-drop <text> element — no halo, no shrink
+
+Returns the first collision-free candidate; falls back to
+safe-by-construction zones (margin, caption) when every in-plot anchor
+collides, and logs every rejection. Or from the command line:
+
+    python -m muriel.layout --demo
+    python -m muriel.layout --selftest
+
 See the module docstrings for the full APIs.
 """
 
-__version__ = "0.6.0"
+__version__ = "0.7.1"
 __all__ = [
     "matplotlibrc_dark",
     "matplotlibrc_light",
@@ -143,5 +163,7 @@ __all__ = [
     "dimensions",
     "capture",
     "styleguide",
+    "layout",
     "palettes",
+    "provenance",
 ]

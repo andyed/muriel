@@ -6,6 +6,65 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.7.1] — 2026-05-14
+
+### Added
+- **`muriel.layout` — bbox-aware annotation placement.** `place_label()`
+  closes a catalogued 100%-fail-rate pattern: hand-coded inline label
+  placement produced an overlap on *every* iteration of *every*
+  figure-with-annotations task, and the cover-up — white-stroke halos
+  behind text — was worse than the original sin (occlusion-as-priority,
+  data falsified to make the label fit). The helper takes the text, its
+  font size, an ordered list of candidate in-plot anchors, and an
+  obstacle point-cloud (or bbox list), and returns the first
+  collision-free placement. When every in-plot candidate collides it
+  falls back, in order, to **safe-by-construction zones**: the nearer
+  left/right margin (a label outside `plot_bbox` cannot overlap data by
+  construction), then the caption. Every rejected candidate is recorded
+  on the result with the reason. It never shrinks text and never emits a
+  halo. Ships with `BBox` / `Anchor` / `Rejection` / `Placement`
+  dataclasses, a `text_bbox()` metric estimator, `sample_polyline()` for
+  densifying curves into obstacle clouds, a `Placement.svg_text()`
+  emitter (stroke-free by contract), `python -m muriel.layout --demo`
+  (renders the bbox-vs-geometry check as a worked SVG) and `--selftest`.
+- **`vocabularies/declassified.md`.** The visual register of the
+  document-not-meant-for-the-reader — FBI Vault / FOIA reading-room /
+  Wikileaks / Stasi-files lineage. Six provenance values, two redaction
+  grammars (gov-at-creation vs view-time censorship), exemption-code
+  system, classification banners, decl stamps, case-file paratext,
+  aging-as-era-distance, and a four-handed marginalia vocabulary. For
+  fiction documents framed as released, worldbuilding bibles, or
+  editorial pieces *about* secrecy.
+- **`muriel.provenance` module + `[provenance]` brand.toml schema.**
+  Records where a brand's tokens came from so a derived artifact can
+  cite its source.
+- **`muriel.aiism` — anti-AI-tell prose audit module.** Flags AI-tell
+  vocabulary and constructions in prose; `regime` added to the loaded-
+  vocabulary list.
+- **`muriel.palettes` — colorblind-safe categorical palettes.** Wong /
+  IBM / Tol ramps as an importable module.
+- **Audience profiles for style guides.** Vocabulary becomes a brand
+  parameter, so a guide can target a reader profile.
+- **Typed front-matter schema across channels** (heatmaps,
+  infographics, web, svg, diagrams, science, gaze) with worked
+  exemplars; **`muriel-critique` channel-aware gates + P0 honesty
+  probe**, codified as a CLI gate with a tools index; **diagrams**
+  `engine_sectors_overlay` (Blauch isotropic-sectors cobweb) and
+  `foveal_overlay` (Scrutinizer brand mark) primitives; social-card
+  validation pass in the skill.
+- **`vocabularies/muriel-brand.md`.** Canonical brand-identity spec for
+  muriel itself — closes the irony gap of theming every other project
+  from a documented brand while running on vibes for our own. Defines
+  the six-bar mark with exact rect coordinates for full (with bar-6
+  ascender) and inline (capped, no ascender) variants; lineage to
+  Müller-Brockmann + Cooper VLW; color tokens matching
+  `examples/muriel-brand.toml`; subpixel rendering floor at ~28-30px
+  display width; wordmark conventions (`muriel` always lowercase,
+  `built with muriel` as canonical attribution, Inter regular + semibold,
+  no italic); drop-in HTML/SVG snippets for inline credit, block credit,
+  and wordmark-only fallback. First production deployment of the inline
+  form is the `inside_the_math` footer credit (psychodeli-webgl-port).
+
 ### Changed
 - **Repackage as a Claude Code plugin.** `/plugin marketplace add andyed/muriel`
   + `/plugin install muriel@andyed-muriel` is now the canonical end-user
@@ -23,20 +82,6 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   invocation is namespaced `/muriel:compose`; the standalone install via
   `install.sh` continues to give the bare `/muriel`. Spec at
   [`docs/spec-plugin-packaging.md`](docs/spec-plugin-packaging.md).
-
-### Added
-- **`vocabularies/muriel-brand.md`.** Canonical brand-identity spec for
-  muriel itself — closes the irony gap of theming every other project
-  from a documented brand while running on vibes for our own. Defines
-  the six-bar mark with exact rect coordinates for full (with bar-6
-  ascender) and inline (capped, no ascender) variants; lineage to
-  Müller-Brockmann + Cooper VLW; color tokens matching
-  `examples/muriel-brand.toml`; subpixel rendering floor at ~28-30px
-  display width; wordmark conventions (`muriel` always lowercase,
-  `built with muriel` as canonical attribution, Inter regular + semibold,
-  no italic); drop-in HTML/SVG snippets for inline credit, block credit,
-  and wordmark-only fallback. First production deployment of the inline
-  form is the `inside_the_math` footer credit (psychodeli-webgl-port).
 
 ## [0.7.0] — 2026-04-25
 
