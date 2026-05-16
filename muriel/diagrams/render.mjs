@@ -94,7 +94,15 @@ async function main() {
     return;
   }
 
-  emit({ svg, width, height });
+  // Surface the resolved bg/fg so Python-side flatteners can substitute
+  // var() / color-mix() with concrete hex values when rasterizing.
+  emit({
+    svg,
+    width,
+    height,
+    bg: opts.bg || "#FFFFFF",
+    fg: opts.fg || "#27272A",
+  });
 }
 
 main().catch((e) => {

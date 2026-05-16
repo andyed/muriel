@@ -77,6 +77,7 @@ __all__ = [
     "render",
     "render_ascii",
     "cache_clear",
+    "flatten_css_vars",
     "THEMES",
 ]
 
@@ -274,6 +275,92 @@ def _invoke_bridge(payload: dict) -> dict:
     return result
 
 
+# ─── CSS variable flattening for rasterizer compatibility ──────────
+#
+# beautiful-mermaid emits CSS custom properties + color-mix() so themes
+# can be swapped live in a browser. That breaks every static rasterizer
+# (librsvg, cairo, ImageMagick, LaTeX) — they don't resolve var() /
+# color-mix. For paper figures we need concrete hex values baked in.
+
+def _hex_to_rgb(h: str) -> tuple[int, int, int]:
+    h = h.lstrip("#")
+    if len(h) == 3:
+        h = "".join(c + c for c in h)
+    return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+
+
+def _rgb_to_hex(rgb: tuple[float, float, float]) -> str:
+    return "#" + "".join(
+        f"{max(0, min(255, int(round(c)))):02x}" for c in rgb
+    )
+
+
+def _mix_srgb(a_hex: str, b_hex: str, pct: float) -> str:
+    """color-mix(in srgb, A pct%, B) — sRGB-space linear blend."""
+    a = _hex_to_rgb(a_hex)
+    b = _hex_to_rgb(b_hex)
+    p = pct / 100.0
+    return _rgb_to_hex(tuple(p * a[i] + (1 - p) * b[i] for i in range(3)))
+
+
+# Mirrors beautiful-mermaid's MIX table in src/theme.ts. Keep in sync.
+def _resolved_palette(bg: str, fg: str) -> dict[str, str]:
+    return {
+        "--bg": bg,
+        "--fg": fg,
+        "--line": _mix_srgb(fg, bg, 50),
+        "--accent": _mix_srgb(fg, bg, 85),
+        "--muted": _mix_srgb(fg, bg, 40),
+        "--surface": _mix_srgb(fg, bg, 3),
+        "--border": _mix_srgb(fg, bg, 20),
+        "--_text": fg,
+        "--_text-sec": _mix_srgb(fg, bg, 60),
+        "--_text-muted": _mix_srgb(fg, bg, 40),
+        "--_text-faint": _mix_srgb(fg, bg, 25),
+        "--_line": _mix_srgb(fg, bg, 50),
+        "--_arrow": _mix_srgb(fg, bg, 85),
+        "--_node-fill": _mix_srgb(fg, bg, 3),
+        "--_node-stroke": _mix_srgb(fg, bg, 20),
+        "--_group-fill": bg,
+        "--_group-hdr": _mix_srgb(fg, bg, 5),
+        "--_inner-stroke": _mix_srgb(fg, bg, 12),
+        "--_key-badge": _mix_srgb(fg, bg, 10),
+    }
+
+
+_VAR_RE = re.compile(r"var\(\s*(--[A-Za-z0-9_-]+(?:\s*,[^)]*)?)\s*\)")
+_STYLE_BLOCK_RE = re.compile(r"<style>.*?</style>", flags=re.DOTALL)
+_INLINE_VARS_RE = re.compile(r'\sstyle="[^"]*--[^"]*"')
+
+
+def flatten_css_vars(
+    svg: str, *, bg: str = "#FFFFFF", fg: str = "#27272A"
+) -> str:
+    """Replace every ``var(--X)`` reference in ``svg`` with a concrete hex.
+
+    beautiful-mermaid's output uses CSS custom properties so themes can
+    swap live in a browser. Static rasterizers (librsvg, cairo, LaTeX)
+    cannot resolve those references and render every fill as black.
+    This helper bakes the resolved palette into the SVG using the same
+    MIX weights beautiful-mermaid ships with — the flattened output is
+    byte-equivalent to a browser render with the given ``bg``/``fg``.
+
+    Also strips the embedded ``<style>`` block (now redundant) and the
+    inline ``style="--bg:…;--fg:…"`` attribute on the root ``<svg>``.
+    """
+    resolved = _resolved_palette(bg, fg)
+
+    def replace(match: re.Match[str]) -> str:
+        body = match.group(1).strip()
+        name = body.split(",", 1)[0].strip()
+        return resolved.get(name, match.group(0))
+
+    svg = _VAR_RE.sub(replace, svg)
+    svg = _STYLE_BLOCK_RE.sub("", svg)
+    svg = _INLINE_VARS_RE.sub("", svg)
+    return svg
+
+
 def _split_kwargs(kwargs: dict) -> tuple[dict, dict]:
     """Partition kwargs into (colors, options). Reject unknown keys."""
     colors: dict = {}
@@ -293,7 +380,13 @@ def _split_kwargs(kwargs: dict) -> tuple[dict, dict]:
     return colors, options
 
 
-def render(source: str, *, theme: Optional[str] = None, **kwargs: Any) -> Diagram:
+def render(
+    source: str,
+    *,
+    theme: Optional[str] = None,
+    flatten: bool = False,
+    **kwargs: Any,
+) -> Diagram:
     """Render Mermaid ``source`` to a self-contained SVG.
 
     ``theme`` is a built-in theme name (see :data:`THEMES`). Override
@@ -301,6 +394,13 @@ def render(source: str, *, theme: Optional[str] = None, **kwargs: Any) -> Diagra
     ``line``, ``accent``, ``muted``, ``surface``, ``border``). Layout
     options: ``font``, ``padding``, ``nodeSpacing``, ``layerSpacing``,
     ``componentSpacing``, ``transparent``.
+
+    Pass ``flatten=True`` to bake the CSS custom properties into
+    concrete hex values. The default (``False``) emits the upstream
+    var()-driven SVG, which renders correctly in browsers and supports
+    live theme switching but renders as solid-black rectangles in
+    librsvg, cairo, ImageMagick, and LaTeX. Use ``flatten=True`` for
+    paper figures, README assets, and any downstream rasterization.
     """
     if not source or not source.strip():
         raise ValueError("source must be a non-empty Mermaid string")
@@ -316,10 +416,13 @@ def render(source: str, *, theme: Optional[str] = None, **kwargs: Any) -> Diagra
 
     key = _cache_key(payload)
     cached = _cache_load(key)
-    if cached is not None:
+    if cached is not None and "bg" in cached:
+        svg = cached["svg"]
+        if flatten:
+            svg = flatten_css_vars(svg, bg=cached["bg"], fg=cached["fg"])
         return Diagram(
             source=source,
-            svg=cached["svg"],
+            svg=svg,
             width=float(cached["width"]),
             height=float(cached["height"]),
             theme=theme,
@@ -332,11 +435,20 @@ def render(source: str, *, theme: Optional[str] = None, **kwargs: Any) -> Diagra
             "svg": result["svg"],
             "width": result["width"],
             "height": result["height"],
+            "bg": result.get("bg", "#FFFFFF"),
+            "fg": result.get("fg", "#27272A"),
         },
     )
+    svg = result["svg"]
+    if flatten:
+        svg = flatten_css_vars(
+            svg,
+            bg=result.get("bg", "#FFFFFF"),
+            fg=result.get("fg", "#27272A"),
+        )
     return Diagram(
         source=source,
-        svg=result["svg"],
+        svg=svg,
         width=float(result["width"]),
         height=float(result["height"]),
         theme=theme,
@@ -426,6 +538,16 @@ def _selftest() -> int:
         check("sequence svg non-empty", len(seq.svg) > 0)
     except DiagramError as e:
         check("sequence render", False, str(e))
+
+    # flatten=True must produce an SVG free of var() and color-mix(),
+    # so it renders correctly in static rasterizers (librsvg, cairo).
+    flat = render(
+        "graph TD\nA[Start] --> B[End]", theme="zinc-light", flatten=True
+    )
+    check("flattened svg non-empty", len(flat.svg) > 0)
+    check("flattened svg has no var()", "var(--" not in flat.svg)
+    check("flattened svg has no color-mix", "color-mix" not in flat.svg)
+    check("flattened svg has hex colors", "#" in flat.svg)
 
     # Empty input raises.
     try:

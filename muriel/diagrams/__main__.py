@@ -41,6 +41,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--fg", help="Override foreground / primary text color.")
     parser.add_argument("--accent", help="Override accent color (arrowheads, highlights).")
     parser.add_argument(
+        "--flatten",
+        action="store_true",
+        help=(
+            "Bake CSS custom properties into concrete hex values so the "
+            "SVG renders in librsvg / cairo / LaTeX (default emits var()-"
+            "driven SVG for browser theming)."
+        ),
+    )
+    parser.add_argument(
         "--selftest",
         action="store_true",
         help="Run the bridge smoke-test instead of rendering.",
@@ -81,7 +90,12 @@ def main(argv: list[str] | None = None) -> int:
             if not text.endswith("\n"):
                 sys.stdout.write("\n")
         else:
-            d = render(args.source, theme=args.theme, **color_kwargs)
+            d = render(
+                args.source,
+                theme=args.theme,
+                flatten=args.flatten,
+                **color_kwargs,
+            )
             sys.stdout.write(d.svg + "\n")
             if args.bbox:
                 print(f"width={d.width:.2f} height={d.height:.2f}", file=sys.stderr)
