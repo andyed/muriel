@@ -164,6 +164,24 @@ Cached at ~/.cache/muriel/math/. Requires Node + ``npm install`` in
     python -m muriel.math --selftest
     python -m muriel.math 'E = mc^2' --display
 
+Mermaid → SVG / ASCII (beautiful-mermaid, Node bridge):
+
+    from muriel.diagrams import render, render_ascii
+    d = render("graph TD\\nA[Start] --> B[End]", theme="tokyo-night")
+    d.svg            # self-contained <svg>, no DOM round-trip
+    d.bbox           # BBox(0, 0, w, h) — drop into place_label
+    d.svg_at(120, 80)
+
+    text = render_ascii("graph LR; A --> B --> C")
+    print(text)
+
+Cached at ~/.cache/muriel/diagrams/. Requires Node + ``npm install`` in
+``muriel/diagrams/``. From the command line:
+
+    python -m muriel.diagrams --selftest
+    python -m muriel.diagrams 'graph TD; A --> B' --theme zinc-dark
+    python -m muriel.diagrams 'graph LR; A --> B' --ascii
+
 See the module docstrings for the full APIs.
 """
 
@@ -179,6 +197,7 @@ __all__ = [
     "styleguide",
     "layout",
     "math",
+    "diagrams",
     "palettes",
     "provenance",
 ]

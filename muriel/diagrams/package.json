@@ -1,0 +1,10 @@
+{
+  "name": "muriel-diagrams-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Node-side Mermaid renderer bridge for muriel.diagrams (called via subprocess from Python).",
+  "main": "render.mjs",
+  "dependencies": {
+    "beautiful-mermaid": "^1.1.3"
+  }
+}

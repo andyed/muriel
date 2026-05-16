@@ -50,10 +50,12 @@ all      = [
 muriel = "muriel.__main__:main"
 
 [tool.setuptools]
-packages = ["muriel", "muriel.detectors", "muriel.math", "muriel.tools", "render_assets"]
+packages = ["muriel", "muriel.detectors", "muriel.diagrams", "muriel.math", "muriel.tools", "render_assets"]
 
 [tool.setuptools.package-data]
-# Ship the Node bridge + npm manifest with the package. mathjax-full
-# itself is installed by the user via `cd muriel/math && npm install`
-# (intentionally not bundled — 50MB+ and version-sensitive).
+# Ship the Node bridges + npm manifests with the package. The npm
+# dependencies themselves (mathjax-full, beautiful-mermaid) are installed
+# by the user via `cd muriel/<module> && npm install` — intentionally
+# not bundled (size + version-sensitive).
 "muriel.math" = ["tex2svg.js", "package.json"]
+"muriel.diagrams" = ["render.mjs", "package.json"]
