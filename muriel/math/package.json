@@ -1,0 +1,10 @@
+{
+  "name": "muriel-math-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Node-side TeX→SVG bridge for muriel.math (called via subprocess from Python).",
+  "main": "tex2svg.js",
+  "dependencies": {
+    "mathjax-full": "^3.2.2"
+  }
+}

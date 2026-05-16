@@ -150,6 +150,20 @@ collides, and logs every rejection. Or from the command line:
     python -m muriel.layout --demo
     python -m muriel.layout --selftest
 
+TeX → SVG (MathJax v3, Node bridge):
+
+    from muriel.math import inline, display
+    m = inline(r"d_{\\min}", font_size_px=13)
+    m.svg            # self-contained <svg>, glyphs inlined as <path>
+    m.bbox           # BBox(0, 0, w, h) in CSS px — drop into place_label
+    m.svg_at(120, 80)
+
+Cached at ~/.cache/muriel/math/. Requires Node + ``npm install`` in
+``muriel/math/``. From the command line:
+
+    python -m muriel.math --selftest
+    python -m muriel.math 'E = mc^2' --display
+
 See the module docstrings for the full APIs.
 """
 
@@ -164,6 +178,7 @@ __all__ = [
     "capture",
     "styleguide",
     "layout",
+    "math",
     "palettes",
     "provenance",
 ]
