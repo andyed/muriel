@@ -182,6 +182,30 @@ Cached at ~/.cache/muriel/diagrams/. Requires Node + ``npm install`` in
     python -m muriel.diagrams 'graph TD; A --> B' --theme zinc-dark
     python -m muriel.diagrams 'graph LR; A --> B' --ascii
 
+Five canonical style archetypes — compose with channels:
+
+    from muriel.archetypes import get, ARCHETYPES
+    a = get("swiss")
+    a.typography      # 'neutral_sans'
+    a.palette         # 'monochrome_one_accent'
+    a.serves_channels # ('science', 'web', 'svg', 'infographic', ...)
+
+The five: ``minimalist_monochrome`` / ``bauhaus`` / ``luxury_editorial``
+/ ``terminal_cli`` / ``swiss``. From the command line:
+
+    python -m muriel.archetypes           # print catalog
+    python -m muriel.archetypes swiss     # detail one
+
+Motion policy (forced binary — utility or cinematic, nothing in between):
+
+    from muriel.motion import validate_duration, UTILITY_MS, CINEMATIC_MS
+    validate_duration(80)     # OK — utility (≤ 100ms, snappy)
+    validate_duration(2000)   # OK — cinematic (≥ 1500ms, narrative)
+    validate_duration(300)    # raises MotionPolicyError — uncanny zone
+
+    python -m muriel.motion              # print the policy
+    python -m muriel.motion 250          # classify a candidate
+
 See the module docstrings for the full APIs.
 """
 
@@ -198,6 +222,8 @@ __all__ = [
     "layout",
     "math",
     "diagrams",
+    "archetypes",
+    "motion",
     "palettes",
     "provenance",
 ]
