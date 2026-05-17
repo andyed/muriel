@@ -290,8 +290,8 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
   <p class="subtag">Built for the agentic era, grounded in the full design-history lineage.</p>
   <div class="cta-row">
     <a class="cta primary" href="https://github.com/andyed/muriel">View on GitHub</a>
-    <a class="cta" href="https://github.com/andyed/muriel/blob/main/SKILL.md">Read the skill</a>
-    <a class="cta" href="https://github.com/andyed/muriel/tree/main/examples/gallery">Gallery</a>
+    <a class="cta" href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/SKILL.md">Read the skill</a>
+    <a class="cta" href="https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/examples/gallery">Gallery</a>
   </div>
 </header>
 
@@ -307,7 +307,7 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
 
 <section>
   <h2>Featured work</h2>
-  <p>Shipped examples from a vision-science dev log that exemplify what muriel's channels produce. Each figure links to the live post; the repo <a href="https://github.com/andyed/muriel/tree/main/examples/gallery">gallery</a> has the full set.</p>
+  <p>Shipped examples from a vision-science dev log that exemplify what muriel's channels produce. Each figure links to the live post; the repo <a href="https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/examples/gallery">gallery</a> has the full set.</p>
 
   <div class="featured">
 
@@ -324,14 +324,14 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
     </div>
 
     <div class="fig">
-      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/examples/gallery/v1-orientation-columns-demo.py">
+      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/examples/gallery/v1-orientation-columns-demo.py">
         <img src="v1-orientation-columns.svg" alt="Orientation columns in V1 — deterministic SVG showing a hex grid of teal oriented strokes whose angles vary smoothly across the cortical surface, with five pinwheel singularities marked as dots where every orientation meets. Title 'Orientation columns in V1' on near-black, footer notes the multi-pinwheel orientation field generation method.">
       </a>
       <p class="caption">
         <span class="channel">SVG channel — deterministic scientific illustration</span>
         <strong>V1 orientation columns — pinwheel topology.</strong><br>
         Tools: hand-rolled <code>v1-orientation-columns-demo.py</code> emitting deterministic SVG (no D3, no template engine) · multi-pinwheel orientation field (vector averaging on doubled angles to preserve V1's 180° periodicity) over a hex grid · muriel OLED palette · 8:1 contrast on every text node. Replaces an AI-generated illustration of the same concept — muriel's whole point: <em>generated</em>, not <em>guessed</em>. Topology after Bonhoeffer &amp; Grinvald, <em>Nature</em> 1991.
-        <a href="https://github.com/andyed/muriel/blob/main/examples/gallery/v1-orientation-columns-demo.py">Source →</a>
+        <a href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/examples/gallery/v1-orientation-columns-demo.py">Source →</a>
       </p>
     </div>
 
@@ -441,6 +441,42 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
       </p>
     </div>
 
+    <div class="fig">
+      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/muriel/spatial.py">
+        <img src="spatial-demo.svg" alt="Spatial — 2x2 panel of perspective grids on near-black: one-point (Tron corridor with single vanishing point on the horizon), two-point (architectural cube corner with two horizon vanishing points and vertical lines), three-point (looking-up tower with three vanishing points), and isometric (three parallel axes at 30°/150°/90°). Cyan grid lines with magenta horizon, fading toward the vanishing points.">
+      </a>
+      <p class="caption">
+        <span class="channel">Spatial channel — depth scaffolding</span>
+        <strong>Perspective grids — 1pt / 2pt / 3pt / iso.</strong><br>
+        Tools: <code>muriel.spatial.grid()</code> emitting deterministic SVG · pure Python, zero deps · Liang-Barsky line clipping · fade-to-horizon depth weighting on transversals · OLED palette throughout. The static side of the spatial channel — pairs with five Three.js + CSS3DRenderer exemplars under <a href="https://github.com/andyed/muriel/tree/main/render_assets"><code>render_assets/</code></a> (Cooper VLW · Data Mountain · Perspective Wall) that share the same coordinate space by design. Channel doc names the full lineage: Alberti 1435 → Dürer 1525 → Cooper VLW 1980s → Mackinlay-Robertson-Card 1991 → Dumais Data Mountain 2001 → Tron.
+        <a href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/channels/spatial.md">Channel doc →</a>
+      </p>
+    </div>
+
+    <div class="fig">
+      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/muriel/patterns.py">
+        <img src="patterns-demo.svg" alt="Patterns — three deterministic background primitives side by side on near-black: dots (Bridson Poisson-disk sampling — evenly-spaced cream dots with no obvious tiling), flow (value-noise streamlines traced as cyan curves following a smooth vector field, LIC-style), and grain (value-noise raster as a small SVG pattern tile of cream rects with varying opacity, repeating like film grain).">
+      </a>
+      <p class="caption">
+        <span class="channel">Raster / SVG channels — generative backgrounds</span>
+        <strong>Patterns — dots, flow, grain.</strong><br>
+        Tools: <code>muriel.patterns</code> · pure Python, zero deps · Bridson (2007) fast Poisson-disk sampling for <code>dots</code> · value-noise vector field traced as polyline streamlines (LIC-style after Cabral &amp; Leedom 1993) for <code>flow</code> · value-noise raster sampled into a small SVG <code>&lt;pattern&gt;</code> tile for <code>grain</code> (file size stays O(tile_cells²) regardless of canvas). All randomness routes through <code>hashlib.blake2b</code> — same seed produces byte-identical SVG across platforms. The workhorse-background layer the screenshot-designer P0 plugs into.
+        <a href="https://github.com/andyed/muriel/blob/main/muriel/patterns.py">Source →</a>
+      </p>
+    </div>
+
+    <div class="fig">
+      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/RELEASE_NOTES_v0.8.0.md">
+        <img src="round-trip-flow.svg" alt="Round-trip flow — three columns on near-black: SOURCE (design.md frontmatter from Google Stitch / awesome-design-md with canvas, ink, body, primary color keys) on the left, HUB (brand.toml in muriel's v2 schema with [colors] and [colors.aliases] blocks) cyan-bordered in the middle, DOWNSTREAM (W3C DTCG tokens.json with $value / $type pairs and alias references) on the right. Two coral arrows labeled 'muriel import' and 'muriel export-dtcg' connect the columns.">
+      </a>
+      <p class="caption">
+        <span class="channel">v0.8.0 headline — brand-token round-trip</span>
+        <strong>design.md ↔ brand.toml ↔ W3C DTCG.</strong><br>
+        Tools: <code>muriel import</code> (Google Stitch design.md → brand.toml) · <code>muriel export-dtcg</code> (brand.toml → W3C Design Tokens Community Group JSON) · pure Python, no DTCG-validator dependency. All 61 import-parseable brands in <a href="https://github.com/VoltAgent/awesome-design-md">VoltAgent/awesome-design-md</a> round-trip cleanly through both halves with zero failures. The exported JSON drops straight into <code>style-dictionary</code>, theo, Figma tokens-studio, or token-css — and from there into iOS / Android / Tailwind / CSS-vars pipelines. With v0.8.0 muriel is the rigorous offline cousin of DESIGN.md: imports the corpus, exports out to the W3C standard, holds the 8:1 floor honestly through all of it.
+        <a href="https://github.com/andyed/muriel/blob/main/RELEASE_NOTES_v0.8.0.md">Release notes →</a>
+      </p>
+    </div>
+
   </div>
 </section>
 
@@ -493,15 +529,21 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
 
 <section>
   <h2>Install</h2>
-  <p>As a Claude Code skill:</p>
+  <p>As a Claude Code plugin (recommended — no clone, no symlinks):</p>
+  <pre><code>/plugin marketplace add andyed/muriel
+/plugin install muriel@andyed-muriel</code></pre>
+  <p>Invoke with <code>/muriel:compose</code>. The <code>muriel-critique</code> subagent loads alongside the skill automatically.</p>
+  <p>As a Python package (current release: v0.8.0 wheel attached to the <a href="https://github.com/andyed/muriel/releases/tag/v0.8.0">GitHub Release</a> — not on PyPI yet):</p>
+  <pre><code>pip install https://github.com/andyed/muriel/releases/download/v0.8.0/muriel-0.8.0-py3-none-any.whl</code></pre>
+  <p>As a developer install from a clone (edits go live):</p>
   <pre><code>git clone https://github.com/andyed/muriel ~/Documents/dev/muriel
 cd ~/Documents/dev/muriel && ./install.sh</code></pre>
-  <p>Then invoke with <code>/muriel</code> from any Claude Code session. See the <a href="https://github.com/andyed/muriel#install">Install section</a> in the README for Python package and cross-harness instructions.</p>
+  <p>See the <a href="https://github.com/andyed/muriel#install">Install section</a> in the README for full options and cross-harness (Cursor, Codex, Windsurf, Gemini CLI) instructions.</p>
 </section>
 
 <section>
   <h2>The critique agent</h2>
-  <p>muriel ships a <a href="https://github.com/andyed/muriel/blob/main/agents/muriel-critique.md">vision-model critique agent</a> with read-only tools, hardened against prompt-injection, authority-laundering, and contrast-claim spoofing embedded in the artifact itself. It names what's wrong — with evidence — and cites the specific framework (Tufte / Bertin / Gestalt / CRAP / Reichle / scanpath) when surfacing issues. Fix is a human call; the agent doesn't try.</p>
+  <p>muriel ships a <a href="https://github.com/andyed/muriel/blob/main/plugins/muriel/agents/muriel-critique.md">vision-model critique agent</a> with read-only tools, hardened against prompt-injection, authority-laundering, and contrast-claim spoofing embedded in the artifact itself. It names what's wrong — with evidence — and cites the specific framework (Tufte / Bertin / Gestalt / CRAP / Reichle / scanpath) when surfacing issues. Fix is a human call; the agent doesn't try.</p>
   <div class="mg-callout" data-type="tip">
     <strong>How to invoke:</strong> from any Claude Code session, dispatch the <code>muriel-critique</code> subagent on a rendered artifact. It returns a structured verdict — <code>PASS</code> / <code>NEEDS REVISION</code> / <code>FAIL</code> — with a numbered issue list (rule · evidence · fix · severity). Any <span class="mg-badge" data-type="important">CRITICAL</span> → FAIL; any <span class="mg-badge" data-type="warning">HIGH</span> → NEEDS REVISION; otherwise PASS.
   </div>

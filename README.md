@@ -15,7 +15,7 @@ A single skill file (`SKILL.md`) teaches a Claude Code agent to generate every v
 
 ### Heir projects — swap in your favorites
 
-muriel is the grandmother to [marginalia](https://github.com/andyed/marginalia) (editorial callouts and magazine layouts, cited throughout [`channels/web.md`](channels/web.md)) and [iblipper](https://github.com/andyed/iblipper2025) (kinetic typography and emotional-vocabulary animation, cited in [`vocabularies/kinetic-typography.md`](vocabularies/kinetic-typography.md)). Both grew from the same constraint discipline and ship as the defaults here because they're tuned to pass muriel's rules out of the box.
+muriel is the grandmother to [marginalia](https://github.com/andyed/marginalia) (editorial callouts and magazine layouts, cited throughout [`channels/web.md`](plugins/muriel/skills/compose/channels/web.md)) and [iblipper](https://github.com/andyed/iblipper2025) (kinetic typography and emotional-vocabulary animation, cited in [`vocabularies/kinetic-typography.md`](plugins/muriel/skills/compose/vocabularies/kinetic-typography.md)). Both grew from the same constraint discipline and ship as the defaults here because they're tuned to pass muriel's rules out of the box.
 
 **They're defaults, not requirements.** The constraint discipline — 8:1 contrast, OLED palette, one font treatment, brand tokens live at render time — is the backbone. The specific libraries are preferences. Swap in your favorite editorial library, kinetic-typography engine, chart renderer, style-guide loader, imagegen provider, or rasterizer; muriel's opinions are about *what* constraints hold, not *which* library enforces them. Every channel doc names which library it assumes, and none of those assumptions are load-bearing against a sensible substitute.
 
@@ -50,7 +50,7 @@ muriel is the grandmother to [marginalia](https://github.com/andyed/marginalia) 
 
 ## Channels
 
-Twelve output channels, each with its own subfile under [`channels/`](channels/):
+Twelve output channels, each with its own subfile under [`channels/`](plugins/muriel/skills/compose/channels/):
 
 - **Raster** (Pillow + `typeset.py`) — store assets, icons, banners, wordmarks, screenshot designs
 - **Vector / SVG** (`svgwrite`, `cairosvg`, Mermaid, Excalidraw) — paper figures, data-driven diagrams, scalable icons, flowcharts
@@ -63,12 +63,12 @@ Twelve output channels, each with its own subfile under [`channels/`](channels/)
 - **Science** (matplotlib + LaTeX + `muriel.stats`) — paper figures, notebook editorial, APA reporting
 - **Infographics** (deterministic SVG) — single-image explainers, 10 types × layout patterns × colorblind-safe palettes
 - **Diagrams** (deterministic SVG) — rhetorical primitives: 2×2 matrix, N-step cycle, Venn shipped, plus Mermaid → SVG/ASCII and TeX → SVG (MathJax) Node-bridges; comparison pair, funnel, stack, DAG, spectrum, pyramid, heat-grid queued. Each preset carries an epistemic precondition + anti-prescription
-- **Spatial** (`muriel.spatial` + `render_assets/`) — depth scaffolding for layered typography. Static SVG perspective grids (1pt / 2pt / 3pt / iso) plus Three.js + CSS3DRenderer exemplars sharing one helper lib. Cooper VLW / Mackinlay-Robertson-Card / Dumais Data Mountain lineage. See [`channels/spatial.md`](channels/spatial.md).
+- **Spatial** (`muriel.spatial` + `render_assets/`) — depth scaffolding for layered typography. Static SVG perspective grids (1pt / 2pt / 3pt / iso) plus Three.js + CSS3DRenderer exemplars sharing one helper lib. Cooper VLW / Mackinlay-Robertson-Card / Dumais Data Mountain lineage. See [`channels/spatial.md`](plugins/muriel/skills/compose/channels/spatial.md).
 
 Plus two cross-channel references used by every channel:
 
-- **Dimensions** ([`channels/dimensions.md`](channels/dimensions.md)) — social cards, device footprints, viewport tiers, paper sizes, video resolutions
-- **Style guides** ([`channels/style-guides.md`](channels/style-guides.md)) — `brand.toml` schema, motion tokens, CSS / matplotlibrc derivation, ownership rules. Round-trips through Google Stitch `design.md` import (`muriel import`) and W3C Design Tokens (DTCG) export (`muriel export-dtcg`), so brand.toml plugs into `style-dictionary`, theo, Figma tokens-studio, token-css, and the iOS / Android / Tailwind pipelines downstream.
+- **Dimensions** ([`channels/dimensions.md`](plugins/muriel/skills/compose/channels/dimensions.md)) — social cards, device footprints, viewport tiers, paper sizes, video resolutions
+- **Style guides** ([`channels/style-guides.md`](plugins/muriel/skills/compose/channels/style-guides.md)) — `brand.toml` schema, motion tokens, CSS / matplotlibrc derivation, ownership rules. Round-trips through Google Stitch `design.md` import (`muriel import`) and W3C Design Tokens (DTCG) export (`muriel export-dtcg`), so brand.toml plugs into `style-dictionary`, theo, Figma tokens-studio, token-css, and the iOS / Android / Tailwind pipelines downstream.
 
 
 ## Install
@@ -99,7 +99,8 @@ The script symlinks `plugins/muriel/skills/compose/` into `~/.claude/skills/muri
 
 ```bash
 pip install -e ~/Documents/dev/muriel   # source install (editable)
-# pip install muriel                    # PyPI, once 0.5.0 is published
+# pip install muriel                    # PyPI — not yet published; track via GitHub Releases
+pip install https://github.com/andyed/muriel/releases/download/v0.8.0/muriel-0.8.0-py3-none-any.whl
 ```
 
 Then, from any script or notebook:
@@ -167,13 +168,9 @@ Encoded in `SKILL.md` and enforced across every channel:
 
 ## Critique agent
 
-muriel ships a vision-model critique agent at [`agents/muriel-critique.md`](agents/muriel-critique.md). It reads a rendered artifact and names — with evidence — every way the artifact fails muriel's rules, channel anti-patterns, and (optionally) a `brand.toml`'s tokens. Read-only tools (Read / Glob / Grep), hardened against prompt-injection, badge-laundering, and contrast-claim spoofing embedded in the image itself.
+muriel ships a vision-model critique agent at [`plugins/muriel/agents/muriel-critique.md`](plugins/muriel/agents/muriel-critique.md). It reads a rendered artifact and names — with evidence — every way the artifact fails muriel's rules, channel anti-patterns, and (optionally) a `brand.toml`'s tokens. Read-only tools (Read / Glob / Grep), hardened against prompt-injection, badge-laundering, and contrast-claim spoofing embedded in the image itself.
 
-**Install** (once, after cloning):
-
-```bash
-ln -s ~/Documents/dev/muriel/agents/muriel-critique.md ~/.claude/agents/muriel-critique.md
-```
+**Install:** the subagent ships with the muriel plugin and is loaded automatically by both install paths in [Install](#install) above (plugin install via `/plugin install muriel@andyed-muriel` and the developer `install.sh` route). No manual symlinks required.
 
 **Invoke** from any Claude Code session:
 
@@ -181,19 +178,20 @@ ln -s ~/Documents/dev/muriel/agents/muriel-critique.md ~/.claude/agents/muriel-c
 
 **Output:** a structured markdown critique with a verdict (`PASS` / `NEEDS REVISION` / `FAIL`), a numbered issue list (rule / evidence / fix, severity-tagged), and a rationale. CRITICAL severity → FAIL; any HIGH → NEEDS REVISION; otherwise PASS.
 
-**Regression fixtures:** adversarial and baseline artifacts for the critique agent live at [`examples/critique-fixtures/`](examples/critique-fixtures/) with their expected verdicts. Contribute new attacks there — any CVE for visual-critic systems can be a one-paragraph pull request.
+**Regression fixtures:** adversarial and baseline artifacts for the critique agent live at [`examples/critique-fixtures/`](plugins/muriel/skills/compose/examples/critique-fixtures/) with their expected verdicts. Contribute new attacks there — any CVE for visual-critic systems can be a one-paragraph pull request.
 
 ## Showcase
 
-- **[Scrutinizer — Brand & Perceptual Tokens](https://andyed.github.io/scrutinizer-www/tokens/)** — Live page that uses muriel end-to-end: the [`scrutinizer-brand.toml`](examples/scrutinizer-brand.toml) StyleGuide, the [`foveal_overlay`](muriel/tools/diagrams/foveal_overlay.py) primitive (port of the in-app overlay), the [`engine_sectors_overlay`](muriel/tools/diagrams/engine_sectors_overlay.py) primitive (Blauch et al. 2026 isotropic cortical sectors), the [`palettes`](muriel/palettes.py) module (Wong / IBM / Tol), and the contrast/dimension constants. The page also exposes Scrutinizer's perceptual decay constants (SIGMA_LM, SIGMA_BY, CMF_A, etc.) for designers building peripheral-aware UI. First public artifact of the muriel + Scrutinizer integration.
+- **[muriel.mindbendingpixels.com](https://muriel.mindbendingpixels.com)** — muriel's own landing page and gallery. Six "Featured work" exhibits spanning science, infographics, gaze plots, and dashboard registers; an interactive motion-tuner for the brand's duration + easing tokens; install + critique-agent docs in condensed form. Built with muriel, hosted on the mindbendingpixels subdomain. OLED palette throughout, clearing the 8:1 floor every channel doc enforces.
+- **[Scrutinizer — Brand & Perceptual Tokens](https://andyed.github.io/scrutinizer-www/tokens/)** — Live page that uses muriel end-to-end: the [`scrutinizer-brand.toml`](plugins/muriel/skills/compose/examples/scrutinizer-brand.toml) StyleGuide, the [`foveal_overlay`](muriel/tools/diagrams/foveal_overlay.py) primitive (port of the in-app overlay), the [`engine_sectors_overlay`](muriel/tools/diagrams/engine_sectors_overlay.py) primitive (Blauch et al. 2026 isotropic cortical sectors), the [`palettes`](muriel/palettes.py) module (Wong / IBM / Tol), and the contrast/dimension constants. The page also exposes Scrutinizer's perceptual decay constants (SIGMA_LM, SIGMA_BY, CMF_A, etc.) for designers building peripheral-aware UI. First public artifact of the muriel + Scrutinizer integration.
 
 ## Related prior art
 
 - **[pbakaus/impeccable](https://github.com/pbakaus/impeccable)** (Apache-2.0) — Anthropic's frontend-design skill as open-sourced by Paul Bakaus. muriel's `Absolute bans` section in `channels/web.md` and the reflex-fonts anti-pattern are rephrased inspirations from that work. Where impeccable is single-surface + design-skill-focused, muriel is multi-channel + Python-native; they complement.
-- **[pixijs/pixijs-skills](https://github.com/pixijs/pixijs-skills)** (MIT) — source of truth for the PixiJS vocabulary. Curated subset documented at [`vocabularies/pixijs.md`](vocabularies/pixijs.md); upstream is where the depth lives.
+- **[pixijs/pixijs-skills](https://github.com/pixijs/pixijs-skills)** (MIT) — source of truth for the PixiJS vocabulary. Curated subset documented at [`vocabularies/pixijs.md`](plugins/muriel/skills/compose/vocabularies/pixijs.md); upstream is where the depth lives.
 - **[matplotlib-venn](https://github.com/konstantint/matplotlib-venn)** — area-proportional Euler renderer that backs [`muriel/tools/venn.py`](muriel/tools/venn.py).
 - **[geraldnguyen/social-media-posters](https://github.com/geraldnguyen/social-media-posters)** (MIT) — Python + GitHub Actions CLI for *posting* to X / LinkedIn / Instagram / Threads / Bluesky / YouTube. Sits downstream of muriel: muriel produces the OG card at the right dimensions, audits contrast, applies brand tokens; social-media-posters sends it. The top-level `muriel` CLI's subcommand-dispatch pattern is borrowed from their `social_cli/`.
-- **[yizhiyanhua-ai/fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph)** (MIT) — Claude Code skill that renders SVG technical-architecture diagrams (14 UML types + AI/agent-system diagrams like RAG pipelines, multi-agent orchestration, tool-call flows) from natural-language descriptions. The closest living example of system-architecture diagram generation; useful reference as muriel's [`channels/diagrams.md`](channels/diagrams.md) catalog grows past the matrix + cycle MVP toward causal DAG and stack primitives.
+- **[yizhiyanhua-ai/fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph)** (MIT) — Claude Code skill that renders SVG technical-architecture diagrams (14 UML types + AI/agent-system diagrams like RAG pipelines, multi-agent orchestration, tool-call flows) from natural-language descriptions. The closest living example of system-architecture diagram generation; useful reference as muriel's [`channels/diagrams.md`](plugins/muriel/skills/compose/channels/diagrams.md) catalog grows past the matrix + cycle MVP toward causal DAG and stack primitives.
 - **[webadderall/Recordly](https://github.com/webadderall/Recordly)** (AGPL-3.0, desktop app — **not vendored**, integrated only) — macOS/Windows/Linux screen-recording app with auto-zoom cursor following, cursor polish, motion-blur regions, webcam overlay, and styled frames, built on PixiJS. Recommended upstream of muriel's `channels/video.md` tooltip-burn + ffmpeg recipes for product-demo / walkthrough videos. AGPL means muriel never embeds or imports Recordly; the integration is purely filesystem/MP4 hand-off.
 - **[yctimlin/mcp_excalidraw](https://github.com/yctimlin/mcp_excalidraw)** (MIT) — MCP server + Claude Code skill that exposes 26 programmatic tools over Excalidraw (create/move/align/distribute/group shapes, export/import `.excalidraw` JSON, Mermaid convert, live canvas at `localhost:3000`). Complementary to muriel: muriel *generates* SVG/raster artifacts deterministically from specs; mcp_excalidraw lets a Claude Code agent *manipulate* diagrams in a live canvas with the draw-observe-adjust loop. Pairs cleanly with the planned `muriel.authoring.excalidraw` emitter — muriel writes the `.excalidraw` source file, mcp_excalidraw opens it for iterative refinement, muriel re-audits on re-export.
 
