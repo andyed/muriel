@@ -28,8 +28,8 @@ anchor space for DOM-text-in-3D via CSS3DRenderer — so the same
 mean the same place in both the printed figure and the interactive
 fly-through.
 
-Core idea
----------
+Core ideas
+----------
 ``grid(mode, canvas, ...)`` returns a ``PerspectiveGrid`` carrying
 its vanishing points plus a flat list of canvas-clipped grid lines.
 The result emits a complete SVG document via ``.svg()``. Supported
@@ -41,6 +41,14 @@ modes:
   tower, or down into a pit).
 * ``"iso"`` — parallel isometric, three axes at 30° / 150° / 90°,
   no convergence.
+
+``ridgemap(field, canvas, ...)`` is the sibling primitive: where
+``grid()`` scaffolds *space*, ``ridgemap()`` scaffolds *scalar
+fields*. Each row of a 2D iterable becomes a horizontal polyline,
+rows stack top-to-bottom, front ridges occlude back ridges via a
+baseline-closed polygon fill — the Joy Division *Unknown Pleasures*
+look (Harold Craft's 1970 PSR B1919+21 successive-period plot;
+Wilke's *ggridges* in 2016 for the statistical-density version).
 
 Defaults are tuned so ``grid("1pt", BBox(0, 0, 1200, 700)).svg()``
 produces a readable Tron-style grid out of the box — horizon at
@@ -72,9 +80,10 @@ CLI
 from __future__ import annotations
 
 import math
+import random
 import sys
 from dataclasses import dataclass
-from typing import Optional, Sequence, Tuple
+from typing import Iterable, Optional, Sequence, Tuple
 
 from muriel.layout import BBox
 
@@ -83,8 +92,11 @@ __all__ = [
     "VanishingPoint",
     "GridLine",
     "PerspectiveGrid",
+    "Ridge",
+    "RidgeMap",
     "SpatialError",
     "grid",
+    "ridgemap",
 ]
 
 
@@ -578,6 +590,316 @@ def _iso_lines(
     return out
 
 
+# ─── Ridgemap — stacked 1D slices of a 2D scalar field ─────────────
+#
+# Each row of the input field becomes a horizontal polyline; rows are
+# stacked top-to-bottom and emitted in row order so front (lower)
+# ridges occlude back (upper) ones — the Joy Division *Unknown
+# Pleasures* aesthetic, originally Harold Craft's 1970 successive-
+# period plot of pulsar PSR B1919+21 for his Cornell PhD. Wilke's
+# *ggridges* (2016) is the same primitive ported to statistical
+# density plots. Sibling of `grid()`: where the perspective grid is a
+# scaffold for *space*, the ridgemap is a scaffold for *scalar fields*
+# — a stack of slices through whatever you've got one value per (x, y)
+# of (terrain DEM, gaze density, image luminance, attention map, audio
+# spectrogram, …). Pre-flight question: *do the row order and the
+# stacking direction carry meaning?* If no, you want a heatmap, not a
+# ridgemap.
+
+
+@dataclass(frozen=True)
+class Ridge:
+    """One row of the field as a polyline at a fixed baseline.
+
+    ``points`` are (x, y) in canvas user units, y increasing downward
+    (SVG convention). ``baseline_y`` is the y the curve sits on when
+    the sample value equals ``vmin`` — the polygon close-line for the
+    occlusion fill runs along it.
+    """
+
+    row_index: int
+    baseline_y: float
+    points: Tuple[Tuple[float, float], ...]
+
+
+@dataclass(frozen=True)
+class RidgeMap:
+    """Result of ``ridgemap(...)`` — a back-to-front stack of ridges
+    that renders to a single self-contained SVG document."""
+
+    canvas: BBox
+    ridges: Tuple[Ridge, ...]
+    field_shape: Tuple[int, int]
+    value_range: Tuple[float, float]
+    row_spacing: float
+    amplitude: float
+
+    def svg(
+        self,
+        stroke: str = "#e6e4d2",
+        stroke_width: float = 1.1,
+        bg: Optional[str] = "#0a0a14",
+        fill: Optional[str] = "#0a0a14",
+    ) -> str:
+        """Render as a standalone SVG document.
+
+        Defaults: cream stroke (#e6e4d2, 15.42:1 on #0a0a14, clears
+        muriel's 8:1 floor), near-black background, and a fill the
+        same colour as the background so each ridge paints over the
+        ones behind it — the occlusion that makes the stack read as
+        layered rather than transparent. Set ``fill=None`` for pure
+        line art (every ridge visible top-to-bottom); set ``bg=None``
+        to omit the background rect (composable into a larger SVG).
+        """
+        cv = self.canvas
+        out: list[str] = [
+            '<svg xmlns="http://www.w3.org/2000/svg" '
+            f'viewBox="{_fmt(cv.x0)} {_fmt(cv.y0)} '
+            f'{_fmt(cv.width)} {_fmt(cv.height)}" '
+            'preserveAspectRatio="xMidYMid meet">'
+        ]
+        if bg:
+            out.append(
+                f'  <rect x="{_fmt(cv.x0)}" y="{_fmt(cv.y0)}" '
+                f'width="{_fmt(cv.width)}" height="{_fmt(cv.height)}" '
+                f'fill="{bg}"/>'
+            )
+        out.append('  <g stroke-linejoin="round" stroke-linecap="round">')
+        for r in self.ridges:
+            poly = " ".join(f"{_fmt(x)},{_fmt(y)}" for x, y in r.points)
+            if fill:
+                x0_pt, _ = r.points[0]
+                x1_pt, _ = r.points[-1]
+                close = (
+                    f" {_fmt(x1_pt)},{_fmt(r.baseline_y)}"
+                    f" {_fmt(x0_pt)},{_fmt(r.baseline_y)}"
+                )
+                out.append(
+                    f'    <polygon points="{poly}{close}" '
+                    f'fill="{fill}" stroke="none" '
+                    f'data-row="{r.row_index}"/>'
+                )
+            out.append(
+                f'    <polyline points="{poly}" fill="none" '
+                f'stroke="{stroke}" stroke-width="{_fmt(stroke_width)}" '
+                f'data-row="{r.row_index}"/>'
+            )
+        out.append("  </g>")
+        out.append("</svg>")
+        return "\n".join(out) + "\n"
+
+
+def ridgemap(
+    field: Iterable[Iterable[float]],
+    canvas: BBox,
+    *,
+    amplitude: Optional[float] = None,
+    row_spacing: Optional[float] = None,
+    vmin: Optional[float] = None,
+    vmax: Optional[float] = None,
+    margin: float = 0.06,
+) -> RidgeMap:
+    """Stack 1D slices of a 2D scalar field as ridgeline polylines.
+
+    Parameters
+    ----------
+    field : 2D iterable of floats (numpy.ndarray works via duck typing)
+        Shape ``(n_rows, n_cols)``. All rows must have the same length
+        and at least 2 samples.
+    canvas : BBox
+        Output viewport in SVG user units.
+    amplitude : float, optional
+        Peak excursion (canvas units) above baseline for a sample at
+        ``vmax``. Default: ``1.6 * row_spacing``, which makes the
+        tallest peaks rise past the next row's baseline — that overlap
+        is what creates the stacked / occluded look.
+    row_spacing : float, optional
+        Vertical distance between consecutive row baselines. Default:
+        usable canvas height divided by ``(n_rows - 1)``.
+    vmin, vmax : float, optional
+        Value range for normalisation. Default: data min / max.
+    margin : float
+        Fraction of canvas reserved as padding on every side.
+
+    Returns
+    -------
+    RidgeMap
+        Back-to-front: ``ridges[0]`` is the topmost (drawn first),
+        ``ridges[-1]`` the bottommost (drawn last, occludes all).
+    """
+    row_lists: list[list[float]] = []
+    flat: list[float] = []
+    for ri, row in enumerate(field):
+        try:
+            r = [float(v) for v in row]
+        except TypeError as exc:
+            raise SpatialError(
+                f"ridgemap: row {ri} is not iterable — field must be 2D"
+            ) from exc
+        row_lists.append(r)
+        flat.extend(r)
+
+    n_rows = len(row_lists)
+    if n_rows == 0:
+        raise SpatialError("ridgemap: field has 0 rows")
+    cols0 = len(row_lists[0])
+    if cols0 < 2:
+        raise SpatialError("ridgemap: rows must have at least 2 samples")
+    for ri, r in enumerate(row_lists):
+        if len(r) != cols0:
+            raise SpatialError(
+                f"ridgemap: row {ri} has length {len(r)}, expected {cols0}"
+            )
+
+    lo = float(min(flat) if vmin is None else vmin)
+    hi = float(max(flat) if vmax is None else vmax)
+    span = hi - lo
+    if span <= 0:
+        span = 1.0
+
+    pad = canvas.height * margin
+    usable_h = canvas.height - 2 * pad
+    if n_rows == 1:
+        rs = usable_h
+        baselines = [canvas.y0 + canvas.height * 0.5]
+    else:
+        rs = row_spacing if row_spacing is not None else usable_h / (n_rows - 1)
+        top = canvas.y0 + pad
+        baselines = [top + i * rs for i in range(n_rows)]
+
+    amp = amplitude
+    if amp is None:
+        amp = rs * 1.6 if n_rows > 1 else usable_h * 0.4
+
+    x_left = canvas.x0 + pad
+    x_right = canvas.x1 - pad
+    x_span = x_right - x_left
+
+    ridges: list[Ridge] = []
+    for ri, row in enumerate(row_lists):
+        baseline = baselines[ri]
+        pts: list[Tuple[float, float]] = []
+        for ci, v in enumerate(row):
+            x = x_left + (ci / (cols0 - 1)) * x_span
+            n = (v - lo) / span
+            if n < 0:
+                n = 0.0
+            elif n > 1:
+                n = 1.0
+            y = baseline - n * amp
+            pts.append((x, y))
+        ridges.append(
+            Ridge(row_index=ri, baseline_y=baseline, points=tuple(pts))
+        )
+
+    return RidgeMap(
+        canvas=canvas,
+        ridges=tuple(ridges),
+        field_shape=(n_rows, cols0),
+        value_range=(lo, hi),
+        row_spacing=rs,
+        amplitude=amp,
+    )
+
+
+def _pulsar_field(
+    n_rows: int = 80, n_cols: int = 240, seed: int = 1919
+) -> list[list[float]]:
+    """Synthetic pulsar-pulse field for the ridgemap demo.
+
+    Broadly mimics Harold Craft's 1970 PSR B1919+21 successive-period
+    plot: a primary pulse near the centre with per-row lateral jitter,
+    a secondary pulse appearing in a subset of rows, low-amplitude
+    noise floor. Seeded so the demo is byte-identical run to run.
+    """
+    rng = random.Random(seed)
+    field: list[list[float]] = []
+    jitter_amp = 0.025 * n_cols
+    pri_sigma = 0.045 * n_cols
+    pri_amp_base = 1.6
+    sec_sigma = 0.06 * n_cols
+    for _ in range(n_rows):
+        pri_center = n_cols * 0.5 + (rng.random() - 0.5) * 2 * jitter_amp
+        pri_amp = pri_amp_base * (0.85 + rng.random() * 0.35)
+        has_sec = rng.random() < 0.55
+        sec_amp = (0.45 + rng.random() * 0.45) if has_sec else 0.0
+        sec_center = n_cols * (0.66 + (rng.random() - 0.5) * 0.16)
+        row: list[float] = []
+        for ci in range(n_cols):
+            d_pri = (ci - pri_center) / pri_sigma
+            v = pri_amp * math.exp(-d_pri * d_pri)
+            if sec_amp:
+                d_sec = (ci - sec_center) / sec_sigma
+                v += sec_amp * math.exp(-d_sec * d_sec)
+            v += (rng.random() - 0.5) * 0.05
+            row.append(v)
+        field.append(row)
+    return field
+
+
+def _ridgemap_demo_svg(
+    width: float = 800.0, height: float = 600.0
+) -> str:
+    """Standalone pulsar-style ridgemap demo, captioned to match the
+    perspective-grid demo's chrome."""
+    cv = BBox(0, 0, width, height)
+    field = _pulsar_field(n_rows=60, n_cols=220, seed=1919)
+    # Inset so caption chrome has room without overlapping the stack.
+    inner = BBox(24, 78, width - 24, height - 56)
+    rm = ridgemap(field, canvas=inner, margin=0.04)
+    parts: list[str] = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" '
+        f'viewBox="0 0 {_fmt(width)} {_fmt(height)}" '
+        f'preserveAspectRatio="xMidYMid meet">',
+        f'  <rect x="0" y="0" width="{_fmt(width)}" '
+        f'height="{_fmt(height)}" fill="#0a0a14"/>',
+        f'  <text x="24" y="40" fill="#e6e4d2" '
+        f'font-family="ui-sans-serif,system-ui,sans-serif" '
+        f'font-size="22" font-weight="600">'
+        f'muriel.spatial — ridgemap</text>',
+        f'  <text x="24" y="62" fill="#7fdfff" '
+        f'font-family="ui-sans-serif,system-ui,sans-serif" '
+        f'font-size="12" opacity="0.75">'
+        f'Stacked 1D slices of a 2D scalar field · Harold Craft '
+        f'PSR B1919+21 (1970) · Saville / Joy Division (1979) · '
+        f'Wilke ggridges (2016)</text>',
+    ]
+    # Inline the ridgemap SVG group instead of nesting <svg>s.
+    for r in rm.ridges:
+        poly = " ".join(f"{_fmt(x)},{_fmt(y)}" for x, y in r.points)
+        x0_pt = r.points[0][0]
+        x1_pt = r.points[-1][0]
+        close = (
+            f" {_fmt(x1_pt)},{_fmt(r.baseline_y)}"
+            f" {_fmt(x0_pt)},{_fmt(r.baseline_y)}"
+        )
+        parts.append(
+            f'  <polygon points="{poly}{close}" fill="#0a0a14" '
+            f'stroke="none"/>'
+        )
+        parts.append(
+            f'  <polyline points="{poly}" fill="none" '
+            f'stroke="#e6e4d2" stroke-width="1.1" '
+            f'stroke-linejoin="round" stroke-linecap="round"/>'
+        )
+    parts.append(
+        f'  <text x="24" y="{_fmt(height - 22)}" fill="#e6e4d2" '
+        f'font-family="ui-sans-serif,system-ui,sans-serif" '
+        f'font-size="12" opacity="0.92">'
+        f'60 rows × 220 cols, synthetic pulsar profile '
+        f'(seed=1919)</text>'
+    )
+    parts.append(
+        f'  <text x="24" y="{_fmt(height - 6)}" fill="#7fdfff" '
+        f'font-family="ui-monospace,monospace" font-size="11" '
+        f'opacity="0.65">'
+        f'ridgemap(field, BBox(0, 0, {_fmt(inner.width)}, '
+        f'{_fmt(inner.height)}))</text>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n"
+
+
 # ─── Demo / CLI ─────────────────────────────────────────────────────
 
 
@@ -723,6 +1045,65 @@ def _selftest() -> int:
     assert demo.startswith("<svg")
     assert "1pt" in demo and "iso" in demo
 
+    # Ridgemap — basic shape + bounds + ordering
+    field = [[math.sin(c * 0.1 + r * 0.3) for c in range(40)] for r in range(12)]
+    rm = ridgemap(field, BBox(0, 0, 600, 400))
+    assert rm.field_shape == (12, 40)
+    assert len(rm.ridges) == 12
+    assert all(len(r.points) == 40 for r in rm.ridges)
+    # Baselines monotonically descend (row 0 at top).
+    bls = [r.baseline_y for r in rm.ridges]
+    assert all(b1 < b2 for b1, b2 in zip(bls, bls[1:]))
+    # Every plotted point sits at or above its baseline (y grows downward).
+    for r in rm.ridges:
+        for _, y in r.points:
+            assert y <= r.baseline_y + 1e-6
+    # vmin/vmax bracket data
+    assert rm.value_range[0] <= rm.value_range[1]
+
+    # Ridgemap SVG basics
+    svg = rm.svg()
+    assert svg.startswith("<svg")
+    assert svg.rstrip().endswith("</svg>")
+    assert "polyline" in svg
+    # Occlusion fill on by default
+    assert "polygon" in svg
+    # fill=None removes the occlusion polygons
+    svg_lines = rm.svg(fill=None)
+    assert "polygon" not in svg_lines
+    assert "polyline" in svg_lines
+
+    # Bad inputs
+    try:
+        ridgemap([], BBox(0, 0, 100, 100))
+    except SpatialError:
+        pass
+    else:
+        raise AssertionError("expected SpatialError for empty field")
+    try:
+        ridgemap([[1.0, 2.0], [3.0]], BBox(0, 0, 100, 100))
+    except SpatialError:
+        pass
+    else:
+        raise AssertionError("expected SpatialError for ragged field")
+    try:
+        ridgemap([[1.0]], BBox(0, 0, 100, 100))
+    except SpatialError:
+        pass
+    else:
+        raise AssertionError("expected SpatialError for cols<2")
+    try:
+        ridgemap([1.0, 2.0, 3.0], BBox(0, 0, 100, 100))  # 1D
+    except SpatialError:
+        pass
+    else:
+        raise AssertionError("expected SpatialError for 1D field")
+
+    # Ridgemap demo renders without crashing
+    rdemo = _ridgemap_demo_svg()
+    assert rdemo.startswith("<svg")
+    assert "ridgemap" in rdemo
+
     return 0
 
 
@@ -734,15 +1115,17 @@ def _main(argv: Sequence[str]) -> int:
         description="Perspective-grid generator for depth scaffolding.",
     )
     p.add_argument("--demo", action="store_true",
-                   help="render the 2x2 demo SVG")
+                   help="render the 2x2 perspective-grid demo SVG")
+    p.add_argument("--ridgemap", action="store_true",
+                   help="render the pulsar-style ridgemap demo SVG")
     p.add_argument("--mode", choices=["1pt", "2pt", "3pt", "iso"],
                    help="with --demo: render a single mode at full canvas")
     p.add_argument("--selftest", action="store_true",
                    help="run the assertion suite")
     p.add_argument("--width", type=float, default=1200.0,
-                   help="canvas width for --mode (default 1200)")
+                   help="canvas width for --mode / --ridgemap (default 1200)")
     p.add_argument("--height", type=float, default=700.0,
-                   help="canvas height for --mode (default 700)")
+                   help="canvas height for --mode / --ridgemap (default 700)")
     p.add_argument("--show-vps", action="store_true",
                    help="annotate the vanishing points")
     p.add_argument("-o", "--output", default="-",
@@ -752,6 +1135,16 @@ def _main(argv: Sequence[str]) -> int:
     if args.selftest:
         _selftest()
         print("muriel.spatial: selftest passed", file=sys.stderr)
+        return 0
+
+    if args.ridgemap:
+        svg = _ridgemap_demo_svg(width=args.width, height=args.height)
+        if args.output == "-":
+            sys.stdout.write(svg)
+        else:
+            with open(args.output, "w", encoding="utf-8") as f:
+                f.write(svg)
+            print(f"wrote {args.output}", file=sys.stderr)
         return 0
 
     if args.demo:

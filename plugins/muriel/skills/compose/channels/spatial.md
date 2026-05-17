@@ -35,11 +35,12 @@ Pre-flight question for any spatial composition: *if I flattened the scene to a 
 | # | Surface | Module / file | What it does |
 |---|---|---|---|
 | 1 | Static SVG perspective grids | `muriel.spatial` | `grid("1pt"|"2pt"|"3pt"|"iso", BBox)` → `PerspectiveGrid` with `.svg()`. Tron-style cyan-on-near-black defaults; horizon anchor, fade-to-horizon depth weighting, VP annotation toggle. |
-| 2 | Shared 3D runtime helpers | `render_assets/_lib/spatial.{css,js}` | `createScene`, `Mountain`, `addFloorGrid`, `addHorizon`, `makePlane` (CSS3D), `FocusController`, `startRenderLoop`. WebGL + CSS3DRenderer stacked so DOM text gets composited in 3D without losing selectability or accessibility. |
-| 3 | Layered DOM × perspective grid | `render_assets/spatial-typography/` | Cooper VLW homage — receding planes of DOM type, navigable, on a horizon-anchored grid. Base exemplar for the lib. |
-| 4 | Data Mountain (MSR) | `render_assets/mindbendingpixels-mountain/` + `render_assets/sciprogfi-agentchan-mountain/` | Dumais et al. (2001) spatial-memory index — tilted plane group with click-to-focus zones; cards arranged on the slope so spatial position carries identity. Two brand skins (psychodeli + sciprogfi/agentchan). |
-| 5 | Perspective Wall | `render_assets/perspective-wall/` + `render_assets/sciprogfi-lux-mesh-wall/` | Mackinlay / Robertson / Card (1991) focus + context — central card readable, peripheral cards foreshortened against the receding wall. Two brand skins (psychodeli + sciprogfi/OHC mesh). |
-| 6 | Demo gallery | `render_assets/index.html` | Single page indexing every exemplar with kicker / tag / lineage / source link. |
+| 2 | Ridgemap (stacked 1D slices) | `muriel.spatial.ridgemap` | `ridgemap(field, BBox)` → `RidgeMap` with `.svg()`. Joy Division *Unknown Pleasures* / Harold Craft 1970 pulsar plot — each row of a 2D scalar field becomes a polyline, rows stacked top-to-bottom, front ridges occlude back ridges via a baseline-closed polygon fill. Sibling primitive to `grid()`: where the perspective grid is a scaffold for *space*, the ridgemap is a scaffold for *scalar fields*. Zero-dep (duck-types numpy ndarray). |
+| 3 | Shared 3D runtime helpers | `render_assets/_lib/spatial.{css,js}` | `createScene`, `Mountain`, `addFloorGrid`, `addHorizon`, `makePlane` (CSS3D), `FocusController`, `startRenderLoop`. WebGL + CSS3DRenderer stacked so DOM text gets composited in 3D without losing selectability or accessibility. |
+| 4 | Layered DOM × perspective grid | `render_assets/spatial-typography/` | Cooper VLW homage — receding planes of DOM type, navigable, on a horizon-anchored grid. Base exemplar for the lib. |
+| 5 | Data Mountain (MSR) | `render_assets/mindbendingpixels-mountain/` + `render_assets/sciprogfi-agentchan-mountain/` | Dumais et al. (2001) spatial-memory index — tilted plane group with click-to-focus zones; cards arranged on the slope so spatial position carries identity. Two brand skins (psychodeli + sciprogfi/agentchan). |
+| 6 | Perspective Wall | `render_assets/perspective-wall/` + `render_assets/sciprogfi-lux-mesh-wall/` | Mackinlay / Robertson / Card (1991) focus + context — central card readable, peripheral cards foreshortened against the receding wall. Two brand skins (psychodeli + sciprogfi/OHC mesh). |
+| 7 | Demo gallery | `render_assets/index.html` | Single page indexing every exemplar with kicker / tag / lineage / source link. |
 
 **Queued.** `muriel.spatial.typeset_scene()` — Python emitter that consumes a `PerspectiveGrid` and a list of DOM blocks and writes a `.html` artifact ready to drop into `render_assets/<name>/index.html`. Closes the design.md → brand.toml → CSS-3D-typography loop so the static SVG grid and the interactive scene share their coordinate system by construction, not by hand-port.
 
@@ -69,10 +70,44 @@ Four modes, each carrying a different argument shape:
 ```bash
 python -m muriel.spatial --demo                # 2×2 panel of all four modes
 python -m muriel.spatial --demo --mode 1pt     # one mode, full canvas
+python -m muriel.spatial --ridgemap            # pulsar-style ridgemap demo
 python -m muriel.spatial --selftest            # assertion suite
 ```
 
 The result objects (`PerspectiveGrid`, `VanishingPoint`, `GridLine`) are frozen dataclasses you can inspect before emit — the `lines` tuple carries every clipped segment with its `role` (`horizon`, `orthogonal-floor`, `transversal-ceiling`, `from-vp-z`, …) and `weight` (depth-driven opacity). That makes the grid composable into a larger SVG composition rather than only viewable as a standalone document.
+
+## The ridgemap path — `muriel.spatial.ridgemap`
+
+Sibling primitive to `grid()`. Where the perspective grid scaffolds *space*, the ridgemap scaffolds *scalar fields*: any source that yields one value per (x, y) — terrain DEM, gaze density, image luminance, attention map, audio spectrogram, weather front — feeds the same emitter, and the rendering is just *which projection of the field you draw*. First shipped projection is the stacked 1D-slice form (Harold Craft's 1970 PSR B1919+21 successive-period chart, popularised by Peter Saville's 1979 Joy Division *Unknown Pleasures* sleeve, ported to statistical density plots by Wilke's *ggridges* in 2016). Filled-isoline, wireframe-protrusion, and hachured-relief projections are queued under the same module.
+
+```python
+from muriel.spatial import ridgemap
+from muriel.layout import BBox
+
+# field is any 2D iterable — list-of-lists, tuple-of-tuples,
+# numpy.ndarray. Each row becomes one ridge polyline.
+field = [[...], [...], ...]                        # shape (rows, cols)
+rm = ridgemap(field, canvas=BBox(0, 0, 800, 600))
+open("ridges.svg", "w").write(rm.svg())             # cream-on-near-black default
+open("ridges-lineart.svg", "w").write(rm.svg(fill=None))  # no occlusion, every ridge visible
+```
+
+The default `.svg()` paints each ridge with a `fill` that matches the background colour, closed down to the row's baseline — that is the occlusion that makes the stack read as layered rather than transparent. Set `fill=None` to drop the occlusion and let every ridge show through, useful when the back-to-front semantics are not what you're arguing.
+
+Key knobs on `ridgemap(...)`:
+
+- **`amplitude`** — peak excursion (canvas units) for a sample at `vmax`. Default `1.6 × row_spacing`, which makes the tallest peaks rise past the next row's baseline (the overlap that creates the iconic stacked look).
+- **`row_spacing`** — vertical distance between baselines. Default fills the canvas: `(canvas.height - 2×pad) / (n_rows - 1)`.
+- **`vmin` / `vmax`** — clamp the normalisation range. Default: data min / max.
+- **`margin`** — fraction of canvas reserved as padding on every side (default 0.06).
+
+The result object (`RidgeMap`, frozen, with a `ridges` tuple of `Ridge` frozen dataclasses) is composable: read each ridge's `points` and `baseline_y` to drop the geometry into a larger SVG — annotate the strongest peak, overlay a vertical reference axis, etc.
+
+When to reach for ridgemap vs the existing channels:
+
+- **Reach for ridgemap** when the row ordering and stacking direction carry meaning (time-series of successive periods, depth profiles down a core, frequency-over-time spectrogram). The eye reads the stack as *evolution* — that semantics is the whole argument.
+- **Reach for [`heatmaps.md`](heatmaps.md) (`render_heatmap`)** when row order doesn't matter and you want value→colour with no occlusion. Better for quantitative comparison across the whole field.
+- **Reach for [`science.md`](science.md) (matplotlib `pcolormesh` / `contourf`)** when you need axis labels, value scale legend, and a peer-reviewable figure.
 
 ## The interactive path — `render_assets/_lib/spatial.{css,js}`
 
@@ -137,8 +172,11 @@ Each piece of geometry in this channel has prior art that earned it. Cite when y
 | 1980s | Cooper, MIT Visible Language Workshop | Receding planes of type as an information environment |
 | 1991 | Mackinlay, Robertson, Card (Xerox PARC) — *The Perspective Wall: Detail and Context Smoothly Integrated* (CHI '91) | Focus + context; central detail readable, peripheral context foreshortened |
 | 1993 | Robertson, Mackinlay, Card — *Information Visualizer* | Cone trees; perspective as navigation primitive |
+| 1970 | Harold Craft, Cornell PhD — successive-period plot of pulsar PSR B1919+21 | Stacked 1D slices of a 2D scalar field; row order = time, x = phase, height = amplitude |
+| 1979 | Peter Saville for Joy Division, *Unknown Pleasures* | Same plot, restyled into the most reproduced ridge-plot in graphic design; established back-to-front occlusion as the readable form |
 | 1998 | Tron / synthwave / vaporwave | One-point perspective as cultural shorthand for "computer space" |
 | 2001 | Dumais, Cuthbertson, Czerwinski, Robertson, van Dantzich (MSR) — *Data Mountain* | Spatial memory as an indexing primitive; cards arranged by location on a tilted plane |
+| 2016 | Claus O. Wilke — *ggridges* (R package) | Ridge plot ported to statistical density visualisation; established stack-as-distribution-comparison vocabulary |
 
 ## Anti-prescription — when not to reach for this channel
 
@@ -146,12 +184,14 @@ Each piece of geometry in this channel has prior art that earned it. Cite when y
 - **Forms / data entry / chrome.** Tilted text impairs reading speed. Don't tilt anything the user needs to fill in.
 - **Tiny screens.** Under ~720px wide, perspective scenes lose their cues and read as visual noise. Fall back to a flat composition.
 - **Accessibility-critical surfaces.** CSS3DRenderer preserves DOM text, but screen-reader navigation through a 3D scene is non-trivial; pair every demo with a flat fallback at `prefers-reduced-motion: reduce` and (where the artifact is reference, not exploration) a linked flat-HTML companion.
-- **Generic 'add depth' decoration.** If you can't name which lineage (Cooper / Perspective Wall / Data Mountain / Tron) the composition belongs to, you're decorating, not arguing.
+- **Generic 'add depth' decoration.** If you can't name which lineage (Cooper / Perspective Wall / Data Mountain / Tron / Unknown Pleasures) the composition belongs to, you're decorating, not arguing.
+- **Ridgemap when row order is arbitrary.** Stacking implies sequence (time / depth / index). If the rows could be shuffled without losing meaning, the visual is making an argument the data does not support — use a heatmap.
+- **Ridgemap for precise peak comparison.** Front ridges occlude back ridges by construction. If the reader needs to compare row maxima quantitatively, switch to `fill=None` (line-art mode), a heatmap, or small multiples.
 
 ## Files this channel owns
 
 ```
-muriel/spatial.py                                  # static SVG perspective grids
+muriel/spatial.py                                  # static SVG perspective grids + ridgemap
 render_assets/_lib/spatial.css                     # shared base palette + HUD
 render_assets/_lib/spatial.js                      # createScene / Mountain / FocusController / planeToWorld
 render_assets/index.html                           # gallery
@@ -167,5 +207,7 @@ render_assets/sciprogfi-lux-mesh-wall/             # Perspective Wall (sciprogfi
 - **`muriel.spatial.typeset_scene()`** — Python emitter that takes a `PerspectiveGrid` + a list of DOM blocks (HTML strings + `("vp", "left", 3)` / `("grid", row, col, depth)` anchor names) and writes a runnable `<scene>/index.html` that wires the same coordinates into the JS lib. Closes the static-↔-interactive loop so a paper figure and a fly-through share their geometry by construction.
 - **Reduced-motion fallback emitter.** When a demo loads under `prefers-reduced-motion: reduce`, the lib should swap to a flat composition (the static SVG grid plus the cards laid out by row/col in the document order). One opt-in flag on `startRenderLoop`.
 - **`muriel.spatial.cone_tree()`** — Robertson-Mackinlay-Card (1993) hierarchical cone-tree primitive, both as static SVG and as a JS scene. Pairs with the [`diagrams.md`](diagrams.md) dendrogram / pyramid entries when the hierarchy is large enough that a flat tree falls off the page.
+- **Further ridgemap projections.** The `ridgemap` MVP ships only the stacked-1D-slice form. The same `(field, canvas, …)` signature should grow siblings that render the same scalar field as: filled isoline bands (USGS / Imhof quadrangle), wireframe protrusion from a grid (BYTE-cover / Tinney 3D mesh), and hachured / halftone relief. One extractor stage, several emitters — the unifier is *scalar field → topology*. Documenting the taxonomy in a `channels/topography.md` companion before the next emitter lands.
+- **Field ingestion from pixels.** Today `ridgemap` takes a 2D numeric array. A small `muriel.spatial.field_from_image(path, downsample=N, channel="luma")` helper would let raster sources (image luminance, video frame Δ, attention/saliency maps) feed the same primitive without callers needing to roll their own resampling. Crosses the channel's first input-is-pixels line — defer until a real artifact needs it.
 
 See [`TODO.md`](../TODO.md) for cross-channel queue context.
