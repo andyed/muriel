@@ -73,6 +73,16 @@ def eye_field(n_rows: int = 100, n_cols: int = 320) -> list[list[float]]:
     d = (half_w * half_w - half_h * half_h) / eye_h
     R = d + half_h
 
+    # Pupil / iris — sized off lens dimensions. Amplitudes are kept
+    # well below the lens-peak post-normalisation (~0.16 at mid-row
+    # centre) so they read as wrinkles on the central rows rather
+    # than swamping the lens outline.
+    iris_r = min(eye_w, eye_h) * 0.18
+    iris_sigma = iris_r * 0.45
+    pupil_sigma = min(eye_w, eye_h) * 0.06
+    iris_amp = 0.025
+    pupil_amp = 0.080
+
     field: list[list[float]] = []
     for ri in range(n_rows):
         y = ri
@@ -88,8 +98,19 @@ def eye_field(n_rows: int = 100, n_cols: int = 320) -> list[list[float]]:
             row_depth_center = R - math.hypot(0.0, y - (cy + d))
             row_depth_center = max(row_depth_center, 1e-6)
             t = depth / row_depth_center           # 0 at edge, 1 at row centre
-            v = math.exp(-((1.0 - t) * 1.7) ** 2)  # smooth crown per row
-            v *= row_depth_center / R              # taller in middle rows
+            # Flat-top crown so each lens row bulges by ~full amplitude
+            # across most of its width and tapers only at the lens
+            # boundary. The eye outline then comes from the horizontal
+            # extent of each row's bulge — narrow at top/bottom rows,
+            # wide at mid rows — tracing a real almond.
+            v = math.exp(-((1.0 - t) * 0.9) ** 4)
+            r_polar = math.hypot(x - cx, y - cy)
+            v += iris_amp * math.exp(
+                -((r_polar - iris_r) / iris_sigma) ** 2
+            )
+            v += pupil_amp * math.exp(
+                -(r_polar / pupil_sigma) ** 2
+            )
             row.append(v)
         field.append(row)
     return field
@@ -135,23 +156,28 @@ def compose() -> str:
     r_max = min(WIDTH, HEIGHT) * 0.46
     rings = circle_grid(cx, cy, r_max, color=ACCENT, n_rings=12)
 
-    # Layer 2 — ridgemap of the eye field. Line-art mode (fill=None)
-    # so every row reads, including the ones above and below the
-    # vesica where the field is zero (they stay as straight baselines
-    # and visually frame the eye).
-    field = eye_field(n_rows=80, n_cols=320)
+    # Layer 2 — ridgemap of the eye field, with a mirror twist: every
+    # row's bulge points TOWARD the canvas vertical midline (rows
+    # above mid bulge down, rows below mid bulge up). The bulges
+    # cross over each other near the middle and the lens fills as a
+    # closed almond — no horizontal slit where opposing halves meet.
+    # The pupil/iris bumps ride along and contribute a faint inner
+    # figure (the eyeball) near the centre.
+    field = eye_field(n_rows=110, n_cols=360)
     ridge_cv = BBox(72, 132, WIDTH - 72, HEIGHT - 112)
-    # Bigger amplitude than the default 1.6 × row_spacing so the
-    # middle ridges rise dramatically and trace the eye; outer rows
-    # remain straight baselines (zero-valued field) and visually
-    # frame the figure.
-    rm = ridgemap(field, canvas=ridge_cv, margin=0.02, amplitude=32.0)
+    rm = ridgemap(field, canvas=ridge_cv, margin=0.02, amplitude=14.0)
+    mid_y = (ridge_cv.y0 + ridge_cv.y1) / 2.0
     ridges: list[str] = []
     for r in rm.ridges:
-        poly = " ".join(f"{x:.2f},{y:.2f}" for x, y in r.points)
+        sign = +1.0 if r.baseline_y < mid_y else -1.0
+        pts: list[str] = []
+        for x, y in r.points:
+            disp = r.baseline_y - y          # ≥ 0 (upward by construction)
+            new_y = r.baseline_y + sign * disp
+            pts.append(f"{x:.2f},{new_y:.2f}")
         ridges.append(
-            f'  <polyline points="{poly}" fill="none" '
-            f'stroke="{ACCENT}" stroke-width="1.05" '
+            f'  <polyline points="{" ".join(pts)}" fill="none" '
+            f'stroke="{ACCENT}" stroke-width="0.95" '
             f'stroke-linejoin="round" stroke-linecap="round" '
             f'opacity="0.96"/>'
         )
@@ -167,8 +193,9 @@ def compose() -> str:
         f'  <text x="48" y="84" fill="{ACCENT_HI}" '
         f'font-family="ui-sans-serif,system-ui,sans-serif" '
         f'font-size="13" opacity="0.92">'
-        f'80 rows &#215; 320 cols &#183; vesica-piscis lens field, '
-        f'ridgemap line-art on Blauch log-spaced ring scaffold</text>'
+        f'110 rows &#215; 360 cols &#183; vesica-piscis lens with '
+        f'pupil + iris core &#183; bottom half mirrored to close '
+        f'the almond</text>'
     )
     footer_l = (
         f'  <text x="48" y="{HEIGHT - 28}" fill="{DIM}" '
