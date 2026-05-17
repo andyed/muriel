@@ -6,6 +6,10 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.9.0] — 2026-05-17
+
+**Generate the palette, don't audit it.** Adds `muriel.palettes.generate_for_floor()` — an Adobe-Leonardo-style contrast-driven palette generator that produces 8:1-by-construction palettes against any brand background. Four theme palettes (Catppuccin Mocha + Latte, Nord Aurora + Frost) join the registry under a new "theme tier"; the terminal channel gains an animated-effects section (TerminalTextEffects); the v0.8.0 surfaces (README, SKILL.md, demo gallery) got synced, link-audited, and reorganized. README lede rewritten per independent review. Long-form notes: [`RELEASE_NOTES_v0.9.0.md`](RELEASE_NOTES_v0.9.0.md).
+
 ### Added
 - **`muriel.palettes.generate_for_floor()` — contrast-floor-driven
   palette generation.** The named palettes above (Wong / IBM / Tol)

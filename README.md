@@ -7,11 +7,9 @@
 
 # muriel
 
-**muriel is a multi-constraint solver for visual production** — fourteen channels of tool-use recipes for LLM agents, grounded in the design-history lineage they inherit. Twelve output channels (raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics, diagrams, spatial) plus two cross-channel references (dimensions, style-guides), a two-tier brand-token schema with motion, anti-patterns per channel, live 8:1 contrast and OLED-palette enforcement at render time, and a vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research.
+**muriel is a Claude Code skill that produces visual artifacts across fourteen channels — twelve output + two cross-channel references — enforcing an 8:1 contrast floor and brand-token discipline at render time.** Design tokens import from `design.md` and export to W3C DTCG; a vision-model critique agent audits the output; the floor never bends.
 
-The tooling is LLM-native: skill format, vision-model critique, brand tokens alive at render time, motion as a first-class schema field, engine adapters for Pillow / Flux / pretext / ffmpeg / Playwright. The principles are older: Cooper's Visible Language Workshop (tribute below), Tufte's data-ink discipline, Bertin's retinal variable ranking, Gestalt grouping, CRAP layout, Reichle's E-Z Reader, scanpath patterns from vision science. The tools serve the principles.
-
-A single skill file (`SKILL.md`) teaches a Claude Code agent to generate every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data. The constraint discipline (8:1 contrast, OLED palette, one font treatment, generated > drawn, reproducible > one-off) stays *live* at render time: brand tokens are parsed, contrast is audited, dimensions are enforced — not as lint after the fact, but as part of the act of making.
+A single skill file (`SKILL.md`) teaches the agent to generate every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data. The constraint discipline (8:1 contrast, OLED palette, one font treatment, generated > drawn, reproducible > one-off) stays *live* at render time: brand tokens are parsed, contrast is audited, dimensions are enforced — not as lint after the fact, but as part of the act of making.
 
 ### Heir projects — swap in your favorites
 
@@ -69,6 +67,11 @@ Plus two cross-channel references used by every channel:
 
 - **Dimensions** ([`channels/dimensions.md`](plugins/muriel/skills/compose/channels/dimensions.md)) — social cards, device footprints, viewport tiers, paper sizes, video resolutions
 - **Style guides** ([`channels/style-guides.md`](plugins/muriel/skills/compose/channels/style-guides.md)) — `brand.toml` schema, motion tokens, CSS / matplotlibrc derivation, ownership rules. Round-trips through Google Stitch `design.md` import (`muriel import`) and W3C Design Tokens (DTCG) export (`muriel export-dtcg`), so brand.toml plugs into `style-dictionary`, theo, Figma tokens-studio, token-css, and the iOS / Android / Tailwind pipelines downstream.
+
+
+## Philosophy — multi-constraint solving
+
+muriel is a multi-constraint solver for visual production. The tooling is LLM-native (skill format, vision-model critique, brand tokens alive at render time, motion as a first-class schema field, engine adapters for Pillow / Flux / pretext / ffmpeg / Playwright). The principles are older: Cooper's Visible Language Workshop, Tufte's data-ink discipline, Bertin's retinal variable ranking, Gestalt grouping, CRAP layout, Reichle's E-Z Reader, scanpath patterns from vision science. The tools serve the principles.
 
 
 ## Install
