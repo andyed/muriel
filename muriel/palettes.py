@@ -1,7 +1,10 @@
 """
-muriel.palettes — colorblind-safe categorical palettes.
+muriel.palettes — categorical palettes for data viz + theme registers.
 
-Three name families, all designed and tested for protan, deutan, and
+Two tiers — **data-viz** (colorblind-safe, audited) and **theme**
+(aesthetic-first, NOT colorblind-tested).
+
+Data-viz palettes — designed and tested for protan, deutan, and
 tritan deficiencies:
 
   - **Wong** (8 colors). Wong, B. (2011). "Color blindness." *Nature
@@ -20,33 +23,49 @@ tritan deficiencies:
     pair well together at different lightness ranges.
     https://personal.sron.nl/~pault/
 
-Why three rather than one
-------------------------
-Each family makes a different tradeoff:
+Theme palettes — aesthetic-first, brand register, NOT colorblind-
+tested and NOT all 8:1 on muriel's universal floor (they're designed
+against the theme's own bg, not muriel's). Use them for editorial /
+UI register where coherence and recognisability matter more than
+colorblind separation:
 
-  - **Wong** maximizes hue separation in deutan space; saturated and
-    high-energy. Use when figures will be small or printed.
-  - **IBM** is dashboard-tuned: roughly equal lightness, designed to
-    avoid any one series visually dominating. Use for ongoing UI.
-  - **Tol** gives you matched families at multiple lightnesses
-    (Bright/Vibrant/Muted) so multi-panel figures can vary palette
-    by panel without breaking visual coherence. Use for paper figures.
+  - **Catppuccin** (Mocha — dark, 14 accents; Latte — light, 14
+    accents). Soothing pastels designed for syntax-highlighting + UI
+    theming. MIT. https://github.com/catppuccin/catppuccin
 
-When in doubt, use Wong. It's the citation a reviewer expects.
+  - **Nord** (Aurora — 5 warm accents; Frost — 4 cool blues). The
+    Arctic, north-bluish palette. Aurora reads as muted-editorial;
+    Frost as tech-cool. MIT. https://github.com/nordtheme/nord
+
+When you need a guaranteed-8:1 categorical set against a specific
+brand background, use ``generate_for_floor()`` below — it generates
+the palette at the target contrast ratio by construction.
+
+When in doubt for a scientific figure, use Wong. It's the citation a
+reviewer expects.
 
 Usage
 -----
 
-    from muriel.palettes import WONG, palette, register_matplotlib
+    from muriel.palettes import (
+        WONG, CATPPUCCIN_MOCHA, NORD_AURORA,
+        palette, generate_for_floor, register_matplotlib,
+    )
 
-    WONG[0]                            # → '#000000' (Wong starts with black)
+    WONG[0]                            # → '#000000'
     palette('tol_bright', n=4)         # → first 4 Tol Bright colors
-    register_matplotlib('wong')        # set matplotlib default cycle
+    palette('catppuccin_mocha', n=6)   # → first 6 Mocha accents
+    register_matplotlib('nord_aurora') # set matplotlib default cycle
+    generate_for_floor('#0a0a0f',      # → 6 hues guaranteed 8:1 on bg
+                       floor=8.0, n=6)
 
 CLI:
 
     python -m muriel.palettes              # print all palettes as a table
-    python -m muriel.palettes --swatches   # render an SVG swatch sheet
+    python -m muriel.palettes --swatches OUT.svg
+                                            # render an SVG swatch sheet
+    python -m muriel.palettes --generate --bg "#0a0a0f" --floor 8 --n 6
+                                            # contrast-floor palette
 
 Cross-references: ``channels/science.md`` (palette section),
 ``channels/infographics.md`` (named palette use), ``channels/style-guides.md``
@@ -153,6 +172,79 @@ TOL_SUNSET_DIVERGING = [
 ]
 
 
+# ─── Theme palettes — Catppuccin + Nord ────────────────────────────
+#
+# Theme palettes (vs the data-viz palettes above): designed for
+# editorial / brand / UI register where aesthetic coherence matters
+# more than colorblind separation. NOT all 8:1 on muriel's universal
+# floor — these are paint-chip palettes, not data-vis ones. When you
+# need a guaranteed-8:1 categorical set, use ``generate_for_floor()``
+# below; when you want a recognisable brand register, reach here.
+
+# Catppuccin Mocha — the dark flavor, 14 accent colors.
+# https://github.com/catppuccin/catppuccin · MIT
+# Designed against the Catppuccin Mocha base (#1e1e2e). Reorder favours
+# putting warm pastels first (most common reach for highlight + accent
+# UI roles); blues/lavenders cluster at the end.
+CATPPUCCIN_MOCHA = [
+    "#f5c2e7",   # pink
+    "#cba6f7",   # mauve
+    "#f38ba8",   # red
+    "#eba0ac",   # maroon
+    "#fab387",   # peach
+    "#f9e2af",   # yellow
+    "#a6e3a1",   # green
+    "#94e2d5",   # teal
+    "#89dceb",   # sky
+    "#74c7ec",   # sapphire
+    "#89b4fa",   # blue
+    "#b4befe",   # lavender
+    "#f5e0dc",   # rosewater
+    "#f2cdcd",   # flamingo
+]
+
+# Catppuccin Latte — the light flavor, 14 accent colors at deeper
+# saturation suited for paper/white-canvas register.
+CATPPUCCIN_LATTE = [
+    "#ea76cb",   # pink
+    "#8839ef",   # mauve
+    "#d20f39",   # red
+    "#e64553",   # maroon
+    "#fe640b",   # peach
+    "#df8e1d",   # yellow
+    "#40a02b",   # green
+    "#179299",   # teal
+    "#04a5e5",   # sky
+    "#209fb5",   # sapphire
+    "#1e66f5",   # blue
+    "#7287fd",   # lavender
+    "#dc8a78",   # rosewater
+    "#dd7878",   # flamingo
+]
+
+# Nord Aurora — the Arctic palette's 5-color categorical "Aurora"
+# accent set. https://github.com/nordtheme/nord · MIT
+# Designed against Nord's Polar Night (#2e3440); read as muted-warm
+# editorial. The five colors map onto the typical {error, warn, info,
+# success, ?} semantic roles though the project doesn't bind them.
+NORD_AURORA = [
+    "#bf616a",   # nord11 — red (aurora 1)
+    "#d08770",   # nord12 — orange (aurora 2)
+    "#ebcb8b",   # nord13 — yellow (aurora 3)
+    "#a3be8c",   # nord14 — green (aurora 4)
+    "#b48ead",   # nord15 — purple (aurora 5)
+]
+
+# Nord Frost — the four cool blues of Nord, suited for axis chrome,
+# decorative rules, or any "tech-cool" UI register.
+NORD_FROST = [
+    "#8fbcbb",   # nord7 — pale teal
+    "#88c0d0",   # nord8 — frost light
+    "#81a1c1",   # nord9 — frost medium
+    "#5e81ac",   # nord10 — frost deep
+]
+
+
 # ─── Unified registry ──────────────────────────────────────────────
 
 PALETTES = {
@@ -163,16 +255,24 @@ PALETTES = {
     "tol_muted":         TOL_MUTED,
     "tol_hc":            TOL_HIGH_CONTRAST,
     "tol_sunset":        TOL_SUNSET_DIVERGING,
+    "catppuccin_mocha":  CATPPUCCIN_MOCHA,
+    "catppuccin_latte":  CATPPUCCIN_LATTE,
+    "nord_aurora":       NORD_AURORA,
+    "nord_frost":        NORD_FROST,
 }
 
 CITATIONS = {
-    "wong":       "Wong, B. (2011). Color blindness. Nature Methods 8, 441.",
-    "ibm":        "IBM Carbon Design System — data-vis colorblind palette.",
-    "tol_bright": "Tol, P. (SRON tech note) — Bright qualitative scheme.",
-    "tol_vibrant":"Tol, P. (SRON tech note) — Vibrant qualitative scheme.",
-    "tol_muted":  "Tol, P. (SRON tech note) — Muted qualitative scheme.",
-    "tol_hc":     "Tol, P. (SRON tech note) — High-Contrast scheme.",
-    "tol_sunset": "Tol, P. (SRON tech note) — Sunset diverging scheme.",
+    "wong":              "Wong, B. (2011). Color blindness. Nature Methods 8, 441.",
+    "ibm":               "IBM Carbon Design System — data-vis colorblind palette.",
+    "tol_bright":        "Tol, P. (SRON tech note) — Bright qualitative scheme.",
+    "tol_vibrant":       "Tol, P. (SRON tech note) — Vibrant qualitative scheme.",
+    "tol_muted":         "Tol, P. (SRON tech note) — Muted qualitative scheme.",
+    "tol_hc":            "Tol, P. (SRON tech note) — High-Contrast scheme.",
+    "tol_sunset":        "Tol, P. (SRON tech note) — Sunset diverging scheme.",
+    "catppuccin_mocha":  "Catppuccin — Mocha (dark) flavor (MIT). 14/14 clear 8:1 on #0a0a0f; designed for the Catppuccin Mocha base #1e1e2e. https://github.com/catppuccin/catppuccin",
+    "catppuccin_latte":  "Catppuccin — Latte (light) flavor (MIT). Saturated mid-tones; 0/14 clear muriel's 8:1 on standard #fafafa — use as fills, markers, or decorative chrome, NOT text. Designed for Latte's own #eff1f5 base. https://github.com/catppuccin/catppuccin",
+    "nord_aurora":       "Nord — Aurora accent set (MIT). 2/5 clear 8:1 on #0a0a0f (red + orange); the muted yellow, green, purple are decorative-only. https://github.com/nordtheme/nord",
+    "nord_frost":        "Nord — Frost cool-blue set (MIT). 2/4 clear 8:1 on #0a0a0f (the two lighter teals). https://github.com/nordtheme/nord",
 }
 
 

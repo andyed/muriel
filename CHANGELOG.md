@@ -32,6 +32,22 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   Verified output (light bg `#fafafa`, floor 8, n=6): all six hit
   8.05–9.16:1.
 
+- **Catppuccin + Nord palettes added to `muriel.palettes`** as four
+  new entries in the unified registry:
+  `catppuccin_mocha` (14 accents, dark register — 14/14 clear 8:1 on
+  `#0a0a0f`), `catppuccin_latte` (14 accents, light register —
+  decorative-only, 0/14 clear muriel's 8:1 since they're designed
+  for Latte's own `#eff1f5` base), `nord_aurora` (5 Aurora accents —
+  2/5 clear 8:1 on dark), `nord_frost` (4 cool blues — 2/4 clear
+  8:1 on dark). Both MIT. Both are *theme* palettes (aesthetic
+  coherence + brand recognisability) versus the *data-viz* tier
+  above (Wong / IBM / Tol — colorblind-tested, audited). Citations
+  now honest about which colors actually clear muriel's floor, so
+  agents pick the right tool: theme for fills + chrome + markers,
+  data-viz for series, `generate_for_floor()` for guaranteed-8:1
+  brand palettes against a specific bg. Module docstring rewritten
+  to split into a two-tier framing.
+
 - **`channels/terminal.md` — animated-effects section.** Cross-pollinates
   the terminal channel with the kinetic-typography vocabulary by
   documenting [`TerminalTextEffects`](https://github.com/ChrisBuilds/terminaltexteffects)
