@@ -6,6 +6,136 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- **`muriel.dtcg_export` + `muriel export-dtcg` — emit a brand.toml as
+  W3C Design Tokens Community Group JSON.** Third leg of the muriel
+  round-trip: `design.md → brand.toml → tokens.json`. With both
+  halves a brand.toml pivots into the entire
+  [style-dictionary](https://amzn.github.io/style-dictionary/)
+  ecosystem (style-dictionary, theo, Figma tokens-studio, token-css,
+  iOS / Android / Tailwind / CSS-vars pipelines downstream) without
+  writing any downstream transformer.
+
+  Maps every brand.toml v2 block onto its DTCG-canonical type group:
+  `[colors]` → `color`, `[colors.aliases]` → DTCG alias tokens with
+  `{color.foreground}` reference syntax, `[semantic.{state}]` →
+  nested `color.semantic.{state}.{text|surface|border}`,
+  `[viz.{categorical,sequential,diverging}]` → indexed
+  `color.viz.{series}.{1,2,…}` (DTCG has no native array type),
+  `[typography.scale.{role}]` → composite `typography` tokens with
+  `fontFamily` / `fontWeight` / `fontSize` / `lineHeight` /
+  `letterSpacing` fields, `[spacing]` + `[radii]` → `dimension`,
+  `[motion.duration_*]` → `duration`, `[motion.easing_*]` →
+  `cubicBezier` (parses both `cubic-bezier(a,b,c,d)` and CSS keywords
+  `linear` / `ease` / `ease-in` / `ease-out` / `ease-in-out`),
+  `[elevation]` → best-effort `shadow` parse with the raw CSS string
+  preserved under `$extensions.muriel.elevation_raw`.
+
+  Muriel-specific fields that DTCG doesn't model natively
+  (`iconography`, `imagery`, `logo`, `voice`, `rules`,
+  `provenance`, `a11y`, `motion.motion_preference`, typography
+  `upper: true`) are preserved under `$extensions.muriel.*` so a
+  future brand.toml round-trip importer can recover them.
+
+  Pure Python — no jsonschema or DTCG validator dependency. Lazy
+  `tomllib` import so the in-memory `to_dtcg(dict) → dict` mapper
+  works on Python 3.10 too (file-based `export_dtcg(path)` requires
+  3.11+ for stdlib `tomllib`). Ships with `DTCGError`, public
+  `to_dtcg` + `export_dtcg`, comprehensive `--selftest`, and CLI
+  via `muriel export-dtcg brand.toml [-o tokens.json]`. **End-to-end
+  verified**: all 61 parseable awesome-design-md brands round-trip
+  cleanly through `import → export` with zero failures.
+
+### Fixed
+- **`muriel.design_md_import` — three bugs surfaced by the new corpus
+  audit, each lifting clean-parse rate against the 71-brand
+  awesome-design-md corpus.** Before/after on the harness:
+  parsed cleanly 48/71 → **61/71** (85%), parse errors 13 → **0**,
+  brands with REAL bg/fg from source 6/48 → **61/61**, pass 8:1 on
+  stated colours 0 → **48**, total WARNs 90 → **0**.
+  - **Color-key mapping rewritten as a priority list
+    (`STITCH_COLOR_PRIORITY`).** Old flat `STITCH_COLOR_TO_MURIEL`
+    dict made the winner iteration-order-dependent and missed the
+    most common keys in the actual corpus (`canvas` / `ink` / `body` /
+    `primary`). New list is ordered — first stitch key found in
+    priority order wins for each muriel role. Adds Anthropic-style
+    canonical keys (`canvas`, `body`, `ink`), variants (`canvas-light`,
+    `canvas-cream`, `canvas-night`, `surface-canvas-light`,
+    `surface-canvas-dark`), and obvious synonyms (`bg`, `paper`,
+    `text`, `text-primary`, `brand`). Fixes 42 brands that previously
+    had BOTH bg and fg silently defaulted to muriel's `#0a0a0f` /
+    `#e6e4d2`. Legacy flat-dict mirror retained for any external
+    consumer.
+  - **YAML anchor / ref detection scoped to value-start
+    (`_ANCHOR_REF_RE`).** Old whole-line substring check matched
+    `" *"` and `"& "` inside prose strings (Ferrari's
+    `**near-black** (...)`, several others), false-positiving as
+    unsupported YAML. Check moved into `_coerce_scalar` against an
+    actual `^[&*]\\w[\\w-]*\\b` pattern at value-start, after quote
+    stripping. Fixes ~4 parse errors.
+  - **YAML block scalars (`|` / `>`) now supported via
+    `_expand_block_scalars` preprocessing.** ~1/6 of corpus brands
+    (Nike, NVIDIA, Ollama, opencode.ai, Renault, Replicate, Resend,
+    Revolut, …) carry their brand summary as
+    `description: |` followed by an indented continuation. Old parser
+    bailed with "unexpected indent" on the continuation. New
+    preprocessor inlines the block into a single synthetic
+    `key: "..."` row with newlines round-tripped through a Private
+    Use Area sentinel (U+E000 — chosen because `str.splitlines()` does
+    not split on PUA codepoints, whereas U+2028 / U+2029 would).
+    Handles literal (`|`) and folded (`>`) styles. Fixes ~9 parse
+    errors.
+
+### Added
+- **`muriel.tools.corpus_audit` + `muriel import-corpus` — bulk-import
+  a DESIGN.md corpus and report.** Runs the entire
+  [awesome-design-md](https://github.com/VoltAgent/awesome-design-md)
+  corpus (71 brands incl. Stripe, Linear, Notion, Anthropic, OpenAI,
+  Cohere, Webflow, Vercel, Figma, …) through
+  `muriel.design_md_import.parse_design_md` and emits a per-brand
+  report. Three output shapes: `--format summary` (terminal headline
+  numbers + top WARN categories), `--format md` (release-blog
+  markdown table — brand × bg × fg × contrast × 8:1 pass/fail), and
+  `--format json` (machine-readable per-brand record for CI diff).
+  Honest accounting: when the importer fills in muriel's defaults
+  because the source spec lacks usable surface keys, the brand's
+  bg/fg are marked `*` and contrast is reported `n/a` rather than
+  pretending muriel's defaults are the brand's contrast. A
+  `--fail-on {never,any-error,any-contrast-fail}` gate turns the
+  harness into a CI check.
+- **`muriel.design_md_import.parse_design_md(text, source=None)`.**
+  Non-IO counterpart of `import_design_md` — parses a design.md
+  string into the brand.toml dict shape without writing anything.
+  Lets `corpus_audit` iterate 71 brands without spraying 71
+  brand.toml files into the filesystem, and lets tests assert on
+  parser output without temp-file scaffolding.
+- **`muriel.patterns` — generative pattern primitives for backgrounds
+  and texture.** Three deterministic primitives that cover the
+  workhorse background surface (and unblock the queued
+  `channels/raster.md` screenshot-designer `background()` arg):
+  - **`dots`** — Bridson (2007) fast Poisson-disk sampling. Even visual
+    density, no obvious tiling. For dot-grid meshes, scatter texture,
+    particle carriers.
+  - **`flow`** — value-noise vector field traced as short polyline
+    streamlines, LIC-style (Cabral & Leedom 1993). For directional
+    backgrounds and contour-suggestion texture.
+  - **`grain`** — value-noise raster sampled at cell granularity into a
+    small SVG `<pattern>` tile that repeats across the canvas. File
+    size stays O(tile_cells²) regardless of canvas dimensions. For
+    film-grain, paper-texture, subtle non-flat fill.
+
+  Pure Python — no numpy, scipy, or Pillow. All randomness routes
+  through `hashlib.blake2b` so same seed → byte-identical SVG across
+  platforms and Python versions. Each primitive ships `bg` + `fg`
+  parameters; overlay text validates against `bg` (the contrast
+  anchor) through `muriel.contrast`. Ships with `DotField` /
+  `FlowField` / `Grain` frozen dataclasses, `_value_noise2` /
+  `_bridson` / `_trace_streamline` internals, `python -m
+  muriel.patterns --demo` (1×3 panel of all three primitives),
+  `--kind {dots,flow,grain}` for single-primitive render, and
+  `--selftest`. Lineage: `css-doodle`, `glisp`, `curv`, `nannou`,
+  `noc-book-2`.
+
 ## [0.7.1] — 2026-05-14
 
 ### Added

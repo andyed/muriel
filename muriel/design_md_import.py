@@ -57,15 +57,50 @@ def _split_frontmatter(text: str) -> tuple[str, str]:
 
 _NUM_RE = re.compile(r"^-?\d+(?:\.\d+)?$")
 
+# Sentinel for newlines inside block-scalar values, used to round-trip a
+# multi-line `key: |` / `key: >` block through the single-line cleaned-line
+# representation that ``_parse_yaml_frontmatter`` operates on. Private Use
+# Area U+E000 — chosen because ``str.splitlines()`` does NOT recognise PUA
+# codepoints as line terminators (whereas U+2028 LINE SEPARATOR and U+2029
+# PARAGRAPH SEPARATOR ARE silently split, which would resplit our synthetic
+# single-line row right back into many).
+_BLOCK_NL = ""
+
+# Detector for true YAML anchor / reference syntax: `&name` or `*name` at
+# value start, identifier characters only. Replaces the old whole-line
+# substring check that false-positived on string content containing
+# `**bold**` or `& ` (e.g. Ferrari's `**near-black** (...)` and similar
+# brand-description prose).
+_ANCHOR_REF_RE = re.compile(r"^[&*][\w][\w\-]*\b")
+
 
 def _coerce_scalar(s: str) -> Any:
     """Cast a YAML-ish scalar string to int / float / bool / None / str."""
     s = s.strip()
     if not s:
         return ""
-    # Strip matching quotes
-    if (s.startswith('"') and s.endswith('"')) or (s.startswith("'") and s.endswith("'")):
-        return s[1:-1]
+    # Quoted scalars: anchors/refs cannot appear inside quotes, so safe.
+    # Process minimal escape set (\\, \", \n via _BLOCK_NL) so synthetic
+    # one-line emits from `_expand_block_scalars` round-trip cleanly.
+    if s.startswith('"') and s.endswith('"') and len(s) >= 2:
+        inner = s[1:-1]
+        # Order matters: protect literal `\\` with a sentinel before
+        # unescaping `\"` so we don't unescape `\\"` as `\"`.
+        inner = inner.replace("\\\\", "\x00")
+        inner = inner.replace('\\"', '"')
+        inner = inner.replace("\x00", "\\")
+        if _BLOCK_NL in inner:
+            inner = inner.replace(_BLOCK_NL, "\n")
+        return inner
+    if s.startswith("'") and s.endswith("'") and len(s) >= 2:
+        inner = s[1:-1]
+        if _BLOCK_NL in inner:
+            inner = inner.replace(_BLOCK_NL, "\n")
+        return inner
+    # Unquoted: check for anchor / ref at value start. Scoped to value-start
+    # so prose tokens like `**near-black**` and `& ` don't false-positive.
+    if _ANCHOR_REF_RE.match(s):
+        raise ValueError(f"unsupported YAML feature (anchor/ref): {s!r}")
     if s in ("true", "True", "TRUE"):
         return True
     if s in ("false", "False", "FALSE"):
@@ -75,6 +110,94 @@ def _coerce_scalar(s: str) -> Any:
     if _NUM_RE.match(s):
         return float(s) if "." in s else int(s)
     return s
+
+
+_BLOCK_HEADER_RE = re.compile(
+    r"^(\s*)([^:#\s][^:#]*):\s*([|>])([+-]?\d?)\s*$"
+)
+
+
+def _expand_block_scalars(text: str) -> str:
+    """
+    Pre-process YAML text to inline ``key: |`` / ``key: >`` block scalars.
+
+    Replaces a block-scalar header + its indented continuation with a
+    synthetic single-line ``key: "..."`` where newlines are encoded as
+    ``_BLOCK_NL`` (LINE SEPARATOR) so the main line-oriented parser can
+    treat the value as one row. ``_coerce_scalar`` decodes the sentinel
+    back to ``\\n`` on the way out.
+
+    Supports the two YAML block styles:
+
+      * ``|`` literal — newlines preserved verbatim.
+      * ``>`` folded — interior newlines fold to single spaces;
+        blank-line-separated paragraphs become double newlines.
+
+    Chomping indicators (``|+``, ``|-``, ``>+``, ``>-``) are parsed
+    (so the header still matches) but not honoured beyond a final
+    ``rstrip("\\n")``.
+
+    Why exist: roughly 1/6 of awesome-design-md brands (Nike, NVIDIA,
+    Ollama, opencode.ai, …) use ``description: |`` to carry a multi-line
+    brand summary at the head of the frontmatter. Without this pass the
+    parser bails on the indented continuation lines with "unexpected
+    indent".
+    """
+    lines = text.splitlines()
+    out_lines: list[str] = []
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        m = _BLOCK_HEADER_RE.match(line)
+        if not m:
+            out_lines.append(line)
+            i += 1
+            continue
+        indent_str = m.group(1)
+        key = m.group(2).strip()
+        style = m.group(3)
+        key_indent = len(indent_str)
+        i += 1
+        block_indent: Optional[int] = None
+        block_lines: list[str] = []
+        while i < len(lines):
+            cont = lines[i]
+            if cont.strip() == "":
+                block_lines.append("")
+                i += 1
+                continue
+            line_indent = len(cont) - len(cont.lstrip(" "))
+            if line_indent <= key_indent:
+                break
+            if block_indent is None:
+                block_indent = line_indent
+            content = cont[block_indent:] if line_indent >= block_indent else cont.lstrip()
+            block_lines.append(content)
+            i += 1
+        # Trim trailing blank lines.
+        while block_lines and block_lines[-1] == "":
+            block_lines.pop()
+        if style == "|":
+            joined = "\n".join(block_lines)
+        else:  # ">" — folded
+            paragraphs: list[str] = []
+            current: list[str] = []
+            for bl in block_lines:
+                if bl.strip() == "":
+                    if current:
+                        paragraphs.append(" ".join(current))
+                        current = []
+                else:
+                    current.append(bl.strip())
+            if current:
+                paragraphs.append(" ".join(current))
+            joined = "\n\n".join(paragraphs)
+        # Quote and escape for one-line emit. Order: backslash first so
+        # later double-quote and newline escapes don't get re-escaped.
+        escaped = joined.replace("\\", "\\\\").replace('"', '\\"')
+        escaped = escaped.replace("\n", _BLOCK_NL)
+        out_lines.append(f'{indent_str}{key}: "{escaped}"')
+    return "\n".join(out_lines)
 
 
 def _parse_yaml_frontmatter(text: str) -> dict[str, Any]:
@@ -91,12 +214,18 @@ def _parse_yaml_frontmatter(text: str) -> dict[str, Any]:
 
     Rejects (raises ValueError):
       - Tabs in indentation (mix-detection is fragile)
-      - YAML anchors/refs (``&``/``*``)
+      - YAML anchors/refs (``&``/``*``) — checked at value-start in
+        ``_coerce_scalar``, not by whole-line substring (which used
+        to false-positive on prose like ``**near-black** (...)``).
       - Tags (``!str`` etc.)
       - Multi-doc separators after the first
     """
     if not text.strip():
         return {}
+
+    # Inline `key: |` / `key: >` block scalars into single-line synthetic
+    # rows so the line-oriented walker below sees one row per key.
+    text = _expand_block_scalars(text)
 
     lines = text.splitlines()
     # Strip blank + comment lines for the iteration; preserve indentation.
@@ -121,14 +250,9 @@ def _parse_yaml_frontmatter(text: str) -> dict[str, Any]:
         stripped = raw[:cut].rstrip()
         if not stripped.strip():
             continue
-        # Anchor / ref / tag detection runs on the still-quoted content
+        # Tag detection — runs on whole line (rare and unambiguous).
         if stripped.lstrip().startswith("!"):
             raise ValueError(f"unsupported YAML feature (tag) in: {raw!r}")
-        # Anchors and refs use & and * but only at the value position; reject
-        # unconditionally to keep the parser scope tight.
-        for marker in ("& ", "&\n", "&  ", " *"):
-            if marker in stripped:
-                raise ValueError(f"unsupported YAML feature (anchor/ref) in: {raw!r}")
         indent = len(stripped) - len(stripped.lstrip(" "))
         cleaned.append((indent, stripped.lstrip(" ")))
 
@@ -234,18 +358,64 @@ def _parse_prose_sections(body: str) -> dict[str, str]:
 
 
 # Map Stitch frontmatter color role names to muriel brand.toml [colors] keys.
-# Stitch keys on the left, muriel keys on the right. Unmapped Stitch keys
-# fall through into [colors.named] as free-form brand accents.
-STITCH_COLOR_TO_MURIEL: dict[str, str] = {
-    "primary":      "accent",
-    "accent":       "accent",
-    "secondary":    "accent_decorative",
-    "surface":      "background",
-    "background":   "background",
-    "on-surface":   "foreground",
-    "onSurface":    "foreground",
-    "on_surface":   "foreground",
-}
+#
+# Priority-ordered: for each muriel key, the FIRST stitch key in this list
+# that appears in the source wins. Later entries become fallbacks. Stitch
+# keys not in this list fall through into [colors.named] + [colors.aliases]
+# as free-form brand accents.
+#
+# Why a priority list (not a dict): the awesome-design-md corpus and the
+# Stitch spec disagree on canonical names — the corpus uses `canvas`/`ink`/
+# `body` (Anthropic-style), Stitch uses `surface`/`on-surface`/`primary`,
+# and many brands carry both. A flat dict made the winner iteration-order-
+# dependent; a priority list makes it explicit.
+#
+# Why `body` beats `ink` for foreground: 8:1 is evaluated against body text,
+# not display headings. `body` is the body-text colour; `ink` is the
+# slightly darker accent for emphasis. When both exist, body wins.
+STITCH_COLOR_PRIORITY: list[tuple[str, str]] = [
+    # background
+    ("background",          "background"),
+    ("bg",                  "background"),
+    ("surface",             "background"),
+    ("canvas",              "background"),  # Anthropic / awesome-design-md
+    # Variant family — light first so light-default brands pick a sane pair;
+    # dark variants fall through as fallback for dark-first brands (SpaceX,
+    # Lamborghini). Shopify uses `canvas-light/-cream/-night`; Sentry uses
+    # `surface-canvas-light/-dark`.
+    ("canvas-light",        "background"),
+    ("canvas-cream",        "background"),
+    ("surface-canvas-light", "background"),
+    ("canvas-night",        "background"),
+    ("canvas-dark",         "background"),
+    ("surface-canvas-dark", "background"),
+    ("paper",               "background"),
+    ("surface-soft",        "background"),
+    ("surface-card",        "background"),
+    ("surface-cream",       "background"),
+    # foreground
+    ("foreground",          "foreground"),
+    ("on-surface",          "foreground"),
+    ("onSurface",           "foreground"),
+    ("on_surface",          "foreground"),
+    ("body",                "foreground"),  # Anthropic / awesome-design-md
+    ("ink",                 "foreground"),
+    ("body-strong",         "foreground"),
+    ("text",                "foreground"),
+    ("text-primary",        "foreground"),
+    # accent
+    ("accent",              "accent"),
+    ("primary",             "accent"),
+    ("brand",               "accent"),
+    # accent-decorative
+    ("secondary",           "accent_decorative"),
+    ("primary-decorative",  "accent_decorative"),
+]
+
+# Legacy flat-dict mirror — exposed for any external consumer that imported
+# the dict before the priority refactor. New code should consult
+# ``STITCH_COLOR_PRIORITY`` directly.
+STITCH_COLOR_TO_MURIEL: dict[str, str] = dict(STITCH_COLOR_PRIORITY)
 
 
 # Stitch typography role → muriel typography.scale role
@@ -304,19 +474,33 @@ def _stitch_to_muriel_dict(
     aliases: dict[str, str] = {}
     named: dict[str, str] = {}
 
+    # First pass: priority-ordered assignment. For each muriel role, pick the
+    # first stitch key (in priority order) that the source supplies. Earlier
+    # winners block later candidates from claiming the same muriel role.
+    consumed: set[str] = set()
+    for stitch_key, muriel_key in STITCH_COLOR_PRIORITY:
+        if muriel_key in colors_out:
+            continue
+        value = colors_in.get(stitch_key)
+        if isinstance(value, str):
+            colors_out[muriel_key] = value
+            consumed.add(stitch_key)
+
+    # Second pass: everything else (priority-list losers AND keys not in the
+    # priority list at all) becomes a free-form alias so the brand author
+    # can still reach `colors.surface-soft` etc. by their original names.
     for stitch_key, value in colors_in.items():
+        if stitch_key in consumed:
+            continue
         if not isinstance(value, str):
             warnings.append(f"colors.{stitch_key} is not a string ({value!r}); skipping")
             continue
-        muriel_key = STITCH_COLOR_TO_MURIEL.get(stitch_key)
-        if muriel_key:
-            colors_out[muriel_key] = value
-        else:
-            named[stitch_key] = value
-            # Also expose as an alias by the original Stitch role name
-            aliases[stitch_key] = value
+        named[stitch_key] = value
+        aliases[stitch_key] = value
 
     # muriel.colors REQUIRES background + foreground; default if missing.
+    # WARN messages remain stable so corpus_audit can detect default-injection
+    # by string match (see ``muriel.tools.corpus_audit.audit_file``).
     if "background" not in colors_out:
         colors_out["background"] = "#0a0a0f"
         warnings.append("colors.surface (background) missing in source — defaulted to #0a0a0f")
@@ -538,21 +722,36 @@ def _emit_toml(data: dict[str, Any]) -> str:
 # ─── Public API ───────────────────────────────────────────────────────────
 
 
+def parse_design_md(
+    text: str,
+    source: Optional[Path] = None,
+) -> tuple[dict[str, Any], list[str]]:
+    """
+    Parse a design.md *string* into the brand.toml dict structure.
+
+    Non-IO counterpart of :func:`import_design_md` — for in-memory work
+    (corpus audits, batch ingest, tests). Returns ``(toml_dict, warnings)``.
+    Raises ``ValueError`` if frontmatter is missing.
+    """
+    fm_text, body = _split_frontmatter(text)
+    if not fm_text:
+        suffix = f" in {source}" if source else ""
+        raise ValueError(
+            f"no YAML frontmatter found between --- markers{suffix}; "
+            "design.md import requires the Stitch frontmatter shape."
+        )
+    frontmatter = _parse_yaml_frontmatter(fm_text)
+    prose = _parse_prose_sections(body)
+    return _stitch_to_muriel_dict(frontmatter, prose, source or Path("<memory>"))
+
+
 def import_design_md(input_path: Path, output_path: Optional[Path] = None) -> tuple[Path, list[str]]:
     """
     Read a design.md file, translate to a muriel brand.toml, write to
     ``output_path`` (default: ./brand.toml). Returns (output_path, warnings).
     """
     text = input_path.read_text()
-    fm_text, body = _split_frontmatter(text)
-    if not fm_text:
-        raise ValueError(
-            f"{input_path}: no YAML frontmatter found between --- markers; "
-            "design.md import requires the Stitch frontmatter shape."
-        )
-    frontmatter = _parse_yaml_frontmatter(fm_text)
-    prose = _parse_prose_sections(body)
-    toml_dict, warnings = _stitch_to_muriel_dict(frontmatter, prose, input_path)
+    toml_dict, warnings = parse_design_md(text, source=input_path)
 
     output = output_path or Path("brand.toml")
     output.parent.mkdir(parents=True, exist_ok=True)
