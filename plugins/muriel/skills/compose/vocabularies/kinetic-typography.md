@@ -35,6 +35,7 @@ The tradition runs from Saul Bass's title sequences through Kyle Cooper / Imagin
 | **Troika three.js SDF text** | 3D scenes with kinetic type inside | Respect the SDF alpha rule. Scale / position animations are safe; alpha fades are not. |
 | **Raw Canvas2D + rAF** | Simple single-line kinetic type with custom easing | Lowest activation energy. Use when pretext's rich-inline API is overkill. |
 | **CSS animations** | Editorial-scale kinetic type on the web | Fine for subtle motion; hits limits when the animation needs per-character timing or non-DOM layout. |
+| **[TerminalTextEffects](https://github.com/ChrisBuilds/terminaltexteffects)** (MIT) | When the runtime is a terminal cell grid — installer ceremonies, deploy banners, README hero GIFs | Python, `pip install terminaltexteffects`; ~100 named effects (`decrypt`, `matrix`, `scattered`, `vhsTape`, `sweep`, …). Same kinetic-typography rules apply (max contrast, strategic motion, no ambient noise), just the substrate is ANSI escapes instead of canvas. Pairs with [`channels/terminal.md`](../channels/terminal.md#animated-effects--when-the-terminal-is-the-artifact). Capture to GIF via `asciinema` + `agg` for README embed. |
 
 ## Calling iblipper headlessly for stills
 

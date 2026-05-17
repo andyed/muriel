@@ -25,6 +25,24 @@ Part of the [muriel](../SKILL.md) skill — see the top-level index for mission,
 - **Cartographer README** — session activity sparklines and summary tables
 - **Research logs** — polars DataFrames printed via `table()` in JSONL entries
 
+## Animated effects — when the terminal IS the artifact
+
+Static primitives above cover the common case (numbers in prose, README badges, log summaries). When the terminal output *is* the artifact — installer ceremonies, demo openings, deploy banners, README captures shown as GIFs — animation is what carries the message, and the substrate is **[TerminalTextEffects](https://github.com/ChrisBuilds/terminaltexteffects) (TTE)** (MIT, Python, `pip install terminaltexteffects`). A library of ~100 named effects (matrix, decrypt, scattered, rain, sweep, vhsTape, …) that take a string and play it into the terminal as a single composed animation. ANSI-escape backend; no curses, no ncurses dependency.
+
+```python
+from terminaltexteffects.effects.effect_decrypt import Decrypt
+effect = Decrypt("muriel v0.8.0 — the rigorous round-trip")
+with effect.terminal_output() as out:
+    for frame in effect:
+        out.print(frame)
+```
+
+This is the natural cross-pollination point with [`vocabularies/kinetic-typography.md`](../vocabularies/kinetic-typography.md): the kinetic-typography rules apply (max contrast, strategic motion, no ambient noise, rehearsed emotional vocabulary) but now the runtime is a terminal cell grid instead of pretext / iblipper. Same rules, new substrate.
+
+**Capture** as MP4 / GIF (for README hero or video channel hand-off) via [`asciinema`](https://github.com/asciinema/asciinema) record → `agg` render, or by piping into [`muriel.capture`](../../../../../muriel/capture.py)'s terminal-emulator shot when that ships.
+
+**Anti-prescription specific to this substrate.** Don't animate text that the reader will need to re-read — animation in a static-replay context is decoration. Reserve TTE for moments where the *first* reveal carries the entire weight (install completion, deploy success, scene-opener captions). Once captured as a GIF for a README, the GIF replays on every page load; if it's still saying something on the third replay, you over-animated.
+
 ## When to reach for terminal viz vs image
 
 Use terminal viz when:

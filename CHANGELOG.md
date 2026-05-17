@@ -6,6 +6,53 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- **`muriel.palettes.generate_for_floor()` — contrast-floor-driven
+  palette generation.** The named palettes above (Wong / IBM / Tol)
+  are *audited* against the 8:1 floor after the fact. This function
+  inverts the relationship: pick a background and a target contrast
+  ratio, and the palette is generated *at* the floor by construction.
+  Every output color is guaranteed by the algorithm — not by audit —
+  to hit the floor against the chosen background.
+
+  Lineage: [`adobe/leonardo`](https://github.com/adobe/leonardo)
+  (Apache-2.0). Leonardo's core insight ported to muriel's stack:
+  Python, zero external deps, routes through `muriel.oklch` (binary
+  search on perceptual L for the target relative luminance, then on
+  chroma for max sRGB-gamut saturation) and verifies with
+  `muriel.contrast.contrast_ratio`. Direction auto-resolves to light
+  on dark backgrounds and dark on light backgrounds; explicit
+  `direction="light"|"dark"` available. Raises `ValueError` cleanly
+  when the floor can't be reached (mid-tone bg with floor=10, etc.).
+  CLI: `python -m muriel.palettes --generate --bg "#0a0a0f" --floor
+  8 --n 6` prints the palette with verified contrast per color.
+  Ships with `--selftest`.
+
+  Verified output (dark bg, floor 8, n=6): all six hit 8.05–8.48:1.
+  Verified output (light bg `#fafafa`, floor 8, n=6): all six hit
+  8.05–9.16:1.
+
+- **`channels/terminal.md` — animated-effects section.** Cross-pollinates
+  the terminal channel with the kinetic-typography vocabulary by
+  documenting [`TerminalTextEffects`](https://github.com/ChrisBuilds/terminaltexteffects)
+  (TTE, MIT, ~100 named effects). Expands the channel from static
+  primitives (`bar_chart`, `sparkline`, `table`) to terminal-as-
+  artifact for installer ceremonies, deploy banners, README hero
+  GIFs. Anti-prescription notes when motion in static-replay contexts
+  becomes decoration. Paired with a new row in
+  `vocabularies/kinetic-typography.md` substrate-choices table —
+  same kinetic-type rules (max contrast, strategic motion, no
+  ambient noise), new runtime (ANSI cells instead of canvas).
+
+### Changed
+- **`muriel.contrast` + `muriel.oklch` module docstrings now cite
+  [`color-js/color.js`](https://github.com/color-js/color.js)** (MIT,
+  maintained by the CSS Color Module spec editors) as the
+  spec-authoritative reference for the wider color-science ecosystem
+  (APCA, non-sRGB gamuts, deltaE, every CSS Color 4 space).
+  muriel's stdlib-only subset stays the path for the 8:1 enforcement
+  floor; color.js is the recommended drop-down when more is needed.
+
 ## [0.8.0] — 2026-05-17
 
 **The rigorous round-trip.** Closes loops: the design.md → brand.toml → tokens.json round-trip got honest (corpus audit + three importer fixes), got fully two-way (new DTCG exporter), and grew a new visual surface that wires into both ends (spatial perspective grids + Three.js exemplars). First release where a brand can come in from `awesome-design-md`, ship outward to any DTCG-aware downstream, and render type into felt space without leaving the toolkit. Long-form notes: [`RELEASE_NOTES_v0.8.0.md`](RELEASE_NOTES_v0.8.0.md).

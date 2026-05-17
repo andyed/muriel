@@ -14,6 +14,14 @@ Math reference: Björn Ottosson, "A perceptual color space for image
 processing" (2020). Matrix constants match the reference implementation
 and the CSS Color 4 spec.
 
+For a full-featured color-science library — every CSS Color Module
+space (Lab, Lch, OKLab, OKLch, Display-P3, Rec.2020, …), advanced
+gamut mapping, interpolation, deltaE — see `color-js/color.js`
+(`https://github.com/color-js/color.js`, MIT). Maintained by the CSS
+Color Module spec editors; the authoritative implementation of what
+this module covers a Python subset of. Drop down to it when muriel's
+zero-dep subset isn't enough.
+
 Usage
 -----
 

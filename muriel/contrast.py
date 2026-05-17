@@ -12,6 +12,14 @@ failed the rule and only got caught when a sharp collaborator asked
 "is that really 8:1?" This module exists so that question has a
 one-command answer.
 
+For the broader contrast / WCAG / APCA ecosystem and a spec-authoritative
+implementation, see ``color-js/color.js``
+(https://github.com/color-js/color.js, MIT) — by the CSS Color Module
+editors; ships WCAG 2.x and APCA (WCAG 3 draft) ratios in one API.
+This module covers muriel's enforcement floor (WCAG 2.1 8:1 on text);
+drop down to color.js when you need APCA, non-sRGB gamuts, or fancy
+delta-E.
+
 Usage
 -----
 
