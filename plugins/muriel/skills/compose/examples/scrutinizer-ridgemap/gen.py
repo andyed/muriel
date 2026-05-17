@@ -119,10 +119,10 @@ def circle_grid(
         if r < 3.0 or r > r_max + 0.5:
             continue
         # Slight outward fade so the inner rings carry more weight.
-        op = 0.60 - (i / max(1, n_rings - 1)) * 0.28
+        op = 0.20 - (i / max(1, n_rings - 1)) * 0.10
         out.append(
             f'    <circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.2f}" '
-            f'fill="none" stroke="{color}" stroke-width="0.85" '
+            f'fill="none" stroke="{color}" stroke-width="0.5" '
             f'opacity="{op:.3f}"/>'
         )
     return out
