@@ -307,16 +307,82 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
 
 <section>
   <h2>Featured work</h2>
-  <p>Shipped examples from a vision-science dev log that exemplify what muriel's channels produce. Each figure links to the live post; the repo <a href="https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/examples/gallery">gallery</a> has the full set.</p>
+  <p>One shipped example per channel, organized by the surface it produces. Each card links to source or live post; the repo <a href="https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/examples/gallery">gallery</a> has the full set, and per-channel deep dives live under <a href="https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/channels"><code>channels/</code></a>.</p>
 
   <div class="featured">
+
+    <!-- ─── Lead pair: spatial + typography ────────────────────────── -->
+
+    <div class="fig">
+      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/muriel/spatial.py">
+        <img src="spatial-demo.svg" alt="Spatial — 2x2 panel of perspective grids on near-black: one-point (Tron corridor with single vanishing point on the horizon), two-point (architectural cube corner with two horizon vanishing points and vertical lines), three-point (looking-up tower with three vanishing points), and isometric (three parallel axes at 30°/150°/90°). Cyan grid lines with magenta horizon, fading toward the vanishing points.">
+      </a>
+      <p class="caption">
+        <span class="channel">Spatial channel — depth scaffolding</span>
+        <strong>Perspective grids — 1pt / 2pt / 3pt / iso.</strong><br>
+        Tools: <code>muriel.spatial.grid()</code> emitting deterministic SVG · pure Python, zero deps · Liang-Barsky line clipping · fade-to-horizon depth weighting on transversals · OLED palette throughout. The static side of the spatial channel — pairs with five Three.js + CSS3DRenderer exemplars under <a href="https://github.com/andyed/muriel/tree/main/render_assets"><code>render_assets/</code></a> (Cooper VLW · Data Mountain · Perspective Wall) that share the same coordinate space by design. Channel doc names the full lineage: Alberti 1435 → Dürer 1525 → Cooper VLW 1980s → Mackinlay-Robertson-Card 1991 → Dumais Data Mountain 2001 → Tron.
+        <a href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/channels/spatial.md">Channel doc →</a>
+      </p>
+    </div>
+
+    <div class="fig">
+      <a class="thumb-link" href="https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/examples/drop-caps">
+        <img src="typography-dropcap.svg" alt="Typography — a giant serif drop-cap 'H' in muriel's anatomical pink (#c07fa0) sitting on a log-polar cortical-magnification grid: concentric rings expanding from a foveal singularity at center, crossed by radial spokes, all on near-black. Type rendered on the cortical substrate it'll be read with.">
+      </a>
+      <p class="caption">
+        <span class="channel">Typography — type as structure</span>
+        <strong>Drop cap H × log-polar cortical grid.</strong><br>
+        Tools: <code>muriel.typeset</code> drop-cap generator emitting deterministic SVG · log-polar grid backdrop (Schwartz 1977 cortical-magnification mapping — concentric rings + radial spokes traced outward from a foveal singularity) · serif glyph rendered as a filled vector path so it scales to any column width · OLED palette with the anatomical-pink (<code>#c07fa0</code>) accent muriel uses for cortical / retinal annotations. Pairs with the spatial channel — type rendered on the substrate it'll be read with, not floating in an abstract layout box.
+        <a href="https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/examples/drop-caps">Drop-caps gallery →</a>
+      </p>
+    </div>
+
+    <!-- ─── Generative + structural primitives ─────────────────────── -->
+
+    <div class="fig">
+      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/muriel/patterns.py">
+        <img src="patterns-demo.svg" alt="Patterns — three deterministic background primitives side by side on near-black: dots (Bridson Poisson-disk sampling — evenly-spaced cream dots with no obvious tiling), flow (value-noise streamlines traced as cyan curves following a smooth vector field, LIC-style), and grain (value-noise raster as a small SVG pattern tile of cream rects with varying opacity, repeating like film grain).">
+      </a>
+      <p class="caption">
+        <span class="channel">Raster / SVG channels — generative backgrounds</span>
+        <strong>Patterns — dots, flow, grain.</strong><br>
+        Tools: <code>muriel.patterns</code> · pure Python, zero deps · Bridson (2007) fast Poisson-disk sampling for <code>dots</code> · value-noise vector field traced as polyline streamlines (LIC-style after Cabral &amp; Leedom 1993) for <code>flow</code> · value-noise raster sampled into a small SVG <code>&lt;pattern&gt;</code> tile for <code>grain</code> (file size stays O(tile_cells²) regardless of canvas). All randomness routes through <code>hashlib.blake2b</code> — same seed produces byte-identical SVG across platforms. The workhorse-background layer the screenshot-designer P0 plugs into.
+        <a href="https://github.com/andyed/muriel/blob/main/muriel/patterns.py">Source →</a>
+      </p>
+    </div>
+
+    <div class="fig">
+      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/channels/diagrams.md">
+        <img src="diagrams-cycle.svg" alt="Diagrams — a 5-step cycle diagram on near-black titled 'Evolver's improvement cycle': five cyan-circled numbered nodes (1 Learns, 2 Executes, 3 Evaluates, 4 Hypothesizes, 5 Tests) arranged evenly on a circle, connected by curved cyan arrows running clockwise, with each label margin-placed outside its node.">
+      </a>
+      <p class="caption">
+        <span class="channel">Diagrams channel — rhetorical primitives</span>
+        <strong>N-step cycle — Evolver's improvement loop.</strong><br>
+        Tools: <code>muriel.tools.diagrams.cycle()</code> emitting deterministic SVG · five nodes evenly spaced on a circle, curved cyan arrows with auto-derived endpoint tangents · auto-placed labels (margin-aware, never overlapping the nodes — uses the same bbox-aware placement as <code>muriel.layout.place_label</code>) · OLED palette · 8:1 on every text node. One of the shipped rhetorical primitives (alongside 2×2 matrix and Venn). Each preset carries an epistemic precondition + anti-prescription — don't use a cycle when your process has an exit.
+        <a href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/channels/diagrams.md">Channel doc →</a>
+      </p>
+    </div>
+
+    <div class="fig">
+      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/RELEASE_NOTES_v0.8.0.md">
+        <img src="round-trip-flow.svg" alt="Round-trip flow — three columns on near-black: SOURCE (design.md frontmatter from Google Stitch / awesome-design-md with canvas, ink, body, primary color keys) on the left, HUB (brand.toml in muriel's v2 schema with [colors] and [colors.aliases] blocks) cyan-bordered in the middle, DOWNSTREAM (W3C DTCG tokens.json with $value / $type pairs and alias references) on the right. Two coral arrows labeled 'import' and 'export-dtcg' connect the columns.">
+      </a>
+      <p class="caption">
+        <span class="channel">v0.8.0 headline — brand-token round-trip</span>
+        <strong>design.md ↔ brand.toml ↔ W3C DTCG.</strong><br>
+        Tools: <code>muriel import</code> (Google Stitch design.md → brand.toml) · <code>muriel export-dtcg</code> (brand.toml → W3C Design Tokens Community Group JSON) · pure Python, no DTCG-validator dependency. All 61 import-parseable brands in <a href="https://github.com/VoltAgent/awesome-design-md">VoltAgent/awesome-design-md</a> round-trip cleanly through both halves with zero failures. The exported JSON drops straight into <code>style-dictionary</code>, theo, Figma tokens-studio, or token-css — and from there into iOS / Android / Tailwind / CSS-vars pipelines. With v0.8.0 muriel is the rigorous offline cousin of DESIGN.md: imports the corpus, exports out to the W3C standard, holds the 8:1 floor honestly through all of it.
+        <a href="https://github.com/andyed/muriel/blob/main/RELEASE_NOTES_v0.8.0.md">Release notes →</a>
+      </p>
+    </div>
+
+    <!-- ─── Vision-science flagships (one per channel) ─────────────── -->
 
     <div class="fig">
       <a class="thumb-link" href="https://andyed.github.io/scrutinizer-www/">
         <img src="foveation-explainer.svg" alt="Scrutinizer foveation explainer infographic — three stacked panels: anatomical (fovea ~2° wide vs periphery ~200° wide), statistical (acuity falls off fast — at 15° you see ~3× less detail), and 'what your users actually see' (small-multiples grid at 0°/5°/15°/30°). Hero stat reads '2° is sharp. The rest is inferred.'">
       </a>
       <p class="caption">
-        <span class="channel">Infographic channel — three-panel single-page</span>
+        <span class="channel">Infographics channel — three-panel single-page</span>
         <strong>Foveation explainer — Scrutinizer brand asset.</strong><br>
         Tools: hand-rolled <code>build_foveation.py</code> emitting deterministic SVG (no D3, no template engine) · OLED palette (cream-on-near-black) for portfolio coherence · 8:1 contrast on every text node verified at build time · <code>rsvg-convert</code> for PNG raster. Single-page LinkedIn-shareable infographic stacking anatomical / statistical / "what users see" panels — the channel that turns a research thesis into one shareable artifact. Lives on the Scrutinizer brand page.
         <a href="https://andyed.github.io/scrutinizer-www/">Live page →</a>
@@ -328,80 +394,10 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
         <img src="v1-orientation-columns.svg" alt="Orientation columns in V1 — deterministic SVG showing a hex grid of teal oriented strokes whose angles vary smoothly across the cortical surface, with five pinwheel singularities marked as dots where every orientation meets. Title 'Orientation columns in V1' on near-black, footer notes the multi-pinwheel orientation field generation method.">
       </a>
       <p class="caption">
-        <span class="channel">SVG channel — deterministic scientific illustration</span>
+        <span class="channel">SVG / Science channels — deterministic illustration</span>
         <strong>V1 orientation columns — pinwheel topology.</strong><br>
         Tools: hand-rolled <code>v1-orientation-columns-demo.py</code> emitting deterministic SVG (no D3, no template engine) · multi-pinwheel orientation field (vector averaging on doubled angles to preserve V1's 180° periodicity) over a hex grid · muriel OLED palette · 8:1 contrast on every text node. Replaces an AI-generated illustration of the same concept — muriel's whole point: <em>generated</em>, not <em>guessed</em>. Topology after Bonhoeffer &amp; Grinvald, <em>Nature</em> 1991.
         <a href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/examples/gallery/v1-orientation-columns-demo.py">Source →</a>
-      </p>
-    </div>
-
-    <div class="fig">
-      <a class="thumb-link" href="https://andyed.github.io/scrutinizer-www/">
-        <img src="scrutinizer-browser-figma.jpg" alt="Scrutinizer product hero — diagonal split composition showing the browser overlay (left) with a real-time congestion score badge over a Wired-style article, and the Figma plugin (right) running a foveation simulation on the same article excerpt with peripheral blur and a centered fixation heatmap. A thin teal accent stripe runs along the diagonal seam.">
-      </a>
-      <p class="caption">
-        <span class="channel">Product-shot channel — diagonal split composition</span>
-        <strong>Scrutinizer browser + Figma — the product shot.</strong><br>
-        Tools: two real product UI screenshots (browser overlay + Figma plugin) captured from running Scrutinizer · diagonal-split mask + brand-token teal accent stripe applied in compositing · OLED background floor preserved across both halves. The "two deployment modes in one frame" pattern — communicates "same engine, two surfaces" without a caption. The hero asset on the Scrutinizer brand page.
-        <a href="https://andyed.github.io/scrutinizer-www/">Live page →</a>
-      </p>
-    </div>
-
-    <div class="fig">
-      <a class="thumb-link" href="https://andyed.github.io/scrutinizer-www/blog/2026-03-13-reading-span.html">
-        <img src="reading-span-on-off-comparison.png" alt="Reading Span on/off: two panels of body text with degree markers (-1.3°, 0°, +5°), comparing symmetric fovea vs. fovea shifted right">
-      </a>
-      <p class="caption">
-        <span class="channel">Science channel</span>
-        <strong>Reading span — on/off A/B.</strong><br>
-        Tools: matplotlib (figure composition) · <code>muriel.matplotlibrc_dark</code> (palette + rcparams) · <code>muriel.dimensions.figsize_for('chi', columns=2)</code> (paper-safe sizing) · <code>muriel.stats.format_comparison()</code> (the caption format). Paired-conditions A/B — the exact pattern muriel's science channel targets.
-        <a href="https://andyed.github.io/scrutinizer-www/blog/2026-03-13-reading-span.html">Live post →</a>
-      </p>
-    </div>
-
-    <div class="fig">
-      <div class="pair">
-        <a class="thumb-link" href="https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html">
-          <img src="color-sprint-before.jpg" alt="Color sprint — before: analytical overlay of color spectrum and palette strip on a source image">
-        </a>
-        <a class="thumb-link" href="https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html">
-          <img src="color-sprint-after.jpg" alt="Color sprint — after: refined overlay showing the sprint's output">
-        </a>
-      </div>
-      <p class="caption">
-        <span class="channel">Raster channel</span>
-        <strong>Color sprint — before / after.</strong><br>
-        Tools: Pillow (image composition + draw) · matplotlib (curve overlay rendered as PNG, composited) · <code>muriel.typeset.py</code> (caption typography) · <code>muriel.contrast.audit_svg()</code> (pre-ship 8:1 check on annotations). Canonical small-multiples A/B.
-        <a href="https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html">Live post →</a>
-      </p>
-    </div>
-
-    <div class="fig">
-      <div class="pair">
-        <a class="thumb-link" href="https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html">
-          <img src="dashboard_center_mode6_fovi.png" alt="Dashboard with subtle foveation mode 6 applied">
-        </a>
-        <a class="thumb-link" href="https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html">
-          <img src="dashboard_center_mode7_legacy.png" alt="Dashboard with legacy mode 7 applied">
-        </a>
-      </div>
-      <p class="caption">
-        <span class="channel">Raster channel — interactive → captured</span>
-        <strong>Dashboard mode comparison.</strong><br>
-        Tools: a WebGL foveation engine (external — Scrutinizer) for the rendering · <code>muriel.capture.capture_responsive()</code> for the retina screenshots · Pillow for side-by-side composition · <code>muriel.dimensions.OG_CARD</code> for final size. Same stimulus, two processing modes.
-        <a href="https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html">Live post →</a>
-      </p>
-    </div>
-
-    <div class="fig">
-      <a class="thumb-link" href="https://github.com/andyed/attentional-foraging">
-        <img src="timescale-map.png" alt="Measurement timescales — OSEC lives in the 1–30 s band, between fixation-level reading research and session-level search research">
-      </a>
-      <p class="caption">
-        <span class="channel">Science channel</span>
-        <strong>OSEC measurement timescales.</strong><br>
-        Tools: matplotlib (horizontal Gantt-style bars on log-scale x-axis) · <code>muriel.matplotlibrc_light</code> (warm editorial palette) · <code>muriel.dimensions.figsize_for('cikm')</code> (paper-safe sizing) · annotated with notebook-K-claim references from the project's Key Claims aggregate. Maps each measurement primitive (saccade, fixation, pupil micro-fluctuation, OSEC orient/survey/evaluate phases, LHIPA window, regression loop, full trial, multi-query session) onto seconds-log space with the OSEC operating band highlighted. The figure that situates a research program in one frame.
-        <a href="https://github.com/andyed/attentional-foraging">Live post →</a>
       </p>
     </div>
 
@@ -438,42 +434,6 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
         <strong>Cortical grid comparison — orientation energy revealed by foveation.</strong><br>
         Tools: a WebGL grid-comparison demo (external — Scrutinizer's <code>reference-pages/grid-comparison.html</code>, four orientation tiles + foveated spotlight, isotropic-cortical sampling) for the rendering · <code>muriel.capture.capture_responsive()</code> for the retina screenshot · the OLED palette (cream-on-near-black) preserved through capture. Pairs the live interactive substrate with muriel's static-capture pipeline — a demonstration that "the figure" and "the demo" can share a source.
         <a href="https://andyed.github.io/scrutinizer-www/blog/2026-03-09-v2.2.html">Live post →</a>
-      </p>
-    </div>
-
-    <div class="fig">
-      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/muriel/spatial.py">
-        <img src="spatial-demo.svg" alt="Spatial — 2x2 panel of perspective grids on near-black: one-point (Tron corridor with single vanishing point on the horizon), two-point (architectural cube corner with two horizon vanishing points and vertical lines), three-point (looking-up tower with three vanishing points), and isometric (three parallel axes at 30°/150°/90°). Cyan grid lines with magenta horizon, fading toward the vanishing points.">
-      </a>
-      <p class="caption">
-        <span class="channel">Spatial channel — depth scaffolding</span>
-        <strong>Perspective grids — 1pt / 2pt / 3pt / iso.</strong><br>
-        Tools: <code>muriel.spatial.grid()</code> emitting deterministic SVG · pure Python, zero deps · Liang-Barsky line clipping · fade-to-horizon depth weighting on transversals · OLED palette throughout. The static side of the spatial channel — pairs with five Three.js + CSS3DRenderer exemplars under <a href="https://github.com/andyed/muriel/tree/main/render_assets"><code>render_assets/</code></a> (Cooper VLW · Data Mountain · Perspective Wall) that share the same coordinate space by design. Channel doc names the full lineage: Alberti 1435 → Dürer 1525 → Cooper VLW 1980s → Mackinlay-Robertson-Card 1991 → Dumais Data Mountain 2001 → Tron.
-        <a href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/channels/spatial.md">Channel doc →</a>
-      </p>
-    </div>
-
-    <div class="fig">
-      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/muriel/patterns.py">
-        <img src="patterns-demo.svg" alt="Patterns — three deterministic background primitives side by side on near-black: dots (Bridson Poisson-disk sampling — evenly-spaced cream dots with no obvious tiling), flow (value-noise streamlines traced as cyan curves following a smooth vector field, LIC-style), and grain (value-noise raster as a small SVG pattern tile of cream rects with varying opacity, repeating like film grain).">
-      </a>
-      <p class="caption">
-        <span class="channel">Raster / SVG channels — generative backgrounds</span>
-        <strong>Patterns — dots, flow, grain.</strong><br>
-        Tools: <code>muriel.patterns</code> · pure Python, zero deps · Bridson (2007) fast Poisson-disk sampling for <code>dots</code> · value-noise vector field traced as polyline streamlines (LIC-style after Cabral &amp; Leedom 1993) for <code>flow</code> · value-noise raster sampled into a small SVG <code>&lt;pattern&gt;</code> tile for <code>grain</code> (file size stays O(tile_cells²) regardless of canvas). All randomness routes through <code>hashlib.blake2b</code> — same seed produces byte-identical SVG across platforms. The workhorse-background layer the screenshot-designer P0 plugs into.
-        <a href="https://github.com/andyed/muriel/blob/main/muriel/patterns.py">Source →</a>
-      </p>
-    </div>
-
-    <div class="fig">
-      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/RELEASE_NOTES_v0.8.0.md">
-        <img src="round-trip-flow.svg" alt="Round-trip flow — three columns on near-black: SOURCE (design.md frontmatter from Google Stitch / awesome-design-md with canvas, ink, body, primary color keys) on the left, HUB (brand.toml in muriel's v2 schema with [colors] and [colors.aliases] blocks) cyan-bordered in the middle, DOWNSTREAM (W3C DTCG tokens.json with $value / $type pairs and alias references) on the right. Two coral arrows labeled 'muriel import' and 'muriel export-dtcg' connect the columns.">
-      </a>
-      <p class="caption">
-        <span class="channel">v0.8.0 headline — brand-token round-trip</span>
-        <strong>design.md ↔ brand.toml ↔ W3C DTCG.</strong><br>
-        Tools: <code>muriel import</code> (Google Stitch design.md → brand.toml) · <code>muriel export-dtcg</code> (brand.toml → W3C Design Tokens Community Group JSON) · pure Python, no DTCG-validator dependency. All 61 import-parseable brands in <a href="https://github.com/VoltAgent/awesome-design-md">VoltAgent/awesome-design-md</a> round-trip cleanly through both halves with zero failures. The exported JSON drops straight into <code>style-dictionary</code>, theo, Figma tokens-studio, or token-css — and from there into iOS / Android / Tailwind / CSS-vars pipelines. With v0.8.0 muriel is the rigorous offline cousin of DESIGN.md: imports the corpus, exports out to the W3C standard, holds the 8:1 floor honestly through all of it.
-        <a href="https://github.com/andyed/muriel/blob/main/RELEASE_NOTES_v0.8.0.md">Release notes →</a>
       </p>
     </div>
 
