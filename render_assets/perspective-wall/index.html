@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Perspective Wall — Mackinlay · Robertson · Card (1991), via muriel.spatial</title>
+<link rel="stylesheet" href="../_lib/spatial.css">
+<style>
+  /* Demo-specific: subtle ambient glow + wall-specific card styling.
+     Base palette + HUD layout come from _lib/spatial.css. */
+  body {
+    background:
+      radial-gradient(ellipse 90% 50% at 50% 50%,
+        rgba(127, 223, 255, 0.06) 0%, transparent 70%),
+      var(--bg);
+  }
+
+  #hud .brand {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--ink);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  #hud .brand .pink { color: var(--magenta); }
+  #hud .brand .sub {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+
+  #hud .focus {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    text-align: right;
+    letter-spacing: 0.04em;
+  }
+  #hud .focus .y { color: var(--cyan); }
+  #hud .focus .n { color: var(--ink); }
+
+  .card {
+    background: rgba(7, 7, 13, 0.92);
+    border: 1px solid rgba(127, 223, 255, 0.30);
+    padding: 12px 12px 10px;
+    width: 170px;
+    height: 220px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    box-shadow:
+      0 0 0 1px rgba(7, 7, 13, 0.6) inset,
+      0 0 24px rgba(127, 223, 255, 0.14);
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 200ms, box-shadow 200ms, background 200ms,
+                opacity 250ms;
+  }
+  .card:hover {
+    border-color: var(--magenta);
+    box-shadow:
+      0 0 0 1px rgba(7, 7, 13, 0.6) inset,
+      0 0 36px rgba(255, 95, 162, 0.32);
+  }
+  .card .year {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 34px;
+    color: var(--cyan);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .card .name {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-top: 5px;
+  }
+  .card .desc {
+    font-family: var(--serif);
+    font-size: 11px;
+    color: var(--ink-dim);
+    line-height: 1.32;
+    margin-top: auto;
+  }
+  .card .desc em { color: var(--gold); font-style: italic; }
+  .card .tag {
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(127, 223, 255, 0.18);
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .card.focus {
+    border-color: var(--magenta);
+    background: rgba(20, 7, 18, 0.85);
+    box-shadow:
+      0 0 0 1px rgba(7, 7, 13, 0.8) inset,
+      0 0 48px rgba(255, 95, 162, 0.40);
+  }
+  .card.focus .year { color: var(--magenta); }
+  /* Distance fade: opacity + brightness drop so distant cyan year
+     labels don't strand as floating titles. */
+  .card.dim-1 { opacity: 0.60; filter: brightness(0.80) saturate(0.85); }
+  .card.dim-2 { opacity: 0.32; filter: brightness(0.55) saturate(0.60); }
+  .card.dim-3 { opacity: 0.14; filter: brightness(0.40) saturate(0.40); }
+  .card.dim-4 { opacity: 0.05; filter: brightness(0.30) saturate(0.30); }
+</style>
+</head>
+<body>
+
+<div id="webgl"></div>
+<div id="css3d"></div>
+
+<div id="hud">
+  <div class="row">
+    <div class="brand">
+      PERSPECTIVE <span class="pink">WALL</span>
+      <span class="sub">focus + context · bent three-panel ribbon</span>
+    </div>
+    <div class="focus">
+      <div><span class="y">focused:</span>
+           <span class="n" id="focus-name">—</span></div>
+      <div><span class="y">index:</span>
+           <span class="n" id="focus-idx">—</span> /
+           <span class="n" id="focus-count">—</span></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="hint">
+      <kbd>←</kbd> <kbd>→</kbd> shift focus &nbsp;·&nbsp;
+      <kbd>click</kbd> a side card to bring it forward &nbsp;·&nbsp;
+      <kbd>scroll</kbd> dolly &nbsp;·&nbsp;
+      <kbd>move</kbd> for parallax
+    </div>
+    <div class="cite">
+      Mackinlay · Robertson · Card — <em>Perspective Wall: Detail and
+      Context Smoothly Integrated</em>, CHI '91 (Xerox PARC).
+    </div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import {
+  createScene, addFloorGrid, startRenderLoop,
+  CSS3DObject, THREE,
+} from '../_lib/spatial.js';
+
+// ─── Scene ──────────────────────────────────────────────────────────
+const { scene, camera, webglRenderer, cssRenderer } = createScene({
+  fov: 48,
+  cameraPos: [0, 70, 1050],
+  lookAt:    [0, 30, -120],
+});
+
+// ─── Wall geometry (demo-specific — three hinged panels) ────────────
+// Bent ribbon: a frontal centre panel + two side panels that fold back
+// at HINGE_ANGLE. Cards live ON the wall and slide along it as focus
+// shifts. The fold maps to focus+context — centre = detail, sides =
+// context that's still readable, far ends = peripheral awareness.
+const HINGE_ANGLE = Math.PI * 0.20;       // ~36°
+const sinT = Math.sin(HINGE_ANGLE);
+const cosT = Math.cos(HINGE_ANGLE);
+const CENTER_HALF_W = 300;
+const CENTER_HALF_H = 170;
+const SIDE_LEN = 1700;
+
+function buildWallLines() {
+  const positions = [];
+  const h = CENTER_HALF_H;
+  const centerVerts = 9;
+  for (let i = 0; i <= centerVerts; i++) {
+    const x = -CENTER_HALF_W + i * (2 * CENTER_HALF_W / centerVerts);
+    positions.push(x, -h, 0,  x, h, 0);
+  }
+  const centerHoriz = 5;
+  for (let i = 0; i <= centerHoriz; i++) {
+    const y = -h + i * (2 * h / centerHoriz);
+    positions.push(-CENTER_HALF_W, y, 0,  CENTER_HALF_W, y, 0);
+  }
+  function sideLines(hingeX, dirX) {
+    const sideDiv = 14;
+    const step = SIDE_LEN / sideDiv;
+    for (let i = 0; i <= sideDiv; i++) {
+      const d = i * step;
+      const x = hingeX + dirX * d * cosT;
+      const z = -d * sinT;
+      positions.push(x, -h, z,  x, h, z);
+    }
+    for (let i = 0; i <= centerHoriz; i++) {
+      const y = -h + i * (2 * h / centerHoriz);
+      positions.push(hingeX, y, 0,
+                     hingeX + dirX * SIDE_LEN * cosT, y, -SIDE_LEN * sinT);
+    }
+  }
+  sideLines(-CENTER_HALF_W, -1);
+  sideLines( CENTER_HALF_W, +1);
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position',
+    new THREE.Float32BufferAttribute(positions, 3));
+  const mat = new THREE.LineBasicMaterial({
+    color: 0x7fdfff, transparent: true, opacity: 0.38,
+  });
+  return new THREE.LineSegments(geo, mat);
+}
+scene.add(buildWallLines());
+
+// Magenta hinge markers — the visible fold lines.
+{
+  const positions = [
+    -CENTER_HALF_W, -CENTER_HALF_H, 0,  -CENTER_HALF_W, CENTER_HALF_H, 0,
+     CENTER_HALF_W, -CENTER_HALF_H, 0,   CENTER_HALF_W, CENTER_HALF_H, 0,
+  ];
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position',
+    new THREE.Float32BufferAttribute(positions, 3));
+  const mat = new THREE.LineBasicMaterial({
+    color: 0xff5fa2, transparent: true, opacity: 0.7,
+  });
+  scene.add(new THREE.LineSegments(geo, mat));
+}
+
+// Floor grid below the wall for spatial anchoring.
+addFloorGrid(scene, {
+  halfWidth: 1600, divisions: 24,
+  y: -CENTER_HALF_H - 4, opacity: 0.10,
+});
+
+// ─── Content: lineage of spatial-typography ─────────────────────────
+const items = [
+  { year: 1425, name: 'Brunelleschi',
+    desc: 'Perspective demonstration at the Florence Baptistery — the visual proof.',
+    tag: 'Florence' },
+  { year: 1435, name: 'L. B. Alberti',
+    desc: 'De Pictura formalises the costruzione legittima — a recipe for VPs.',
+    tag: 'Treatise' },
+  { year: 1525, name: 'A. Dürer',
+    desc: 'Underweysung der Messung — the perspective machine and grid sights.',
+    tag: 'Engraving' },
+  { year: 1659, name: 'J. Vermeer',
+    desc: 'Interior compositions: perspective as carrier of light and stillness.',
+    tag: 'Painting' },
+  { year: 1839, name: 'L. Daguerre',
+    desc: 'Photographic perspective at scale — frozen geometry, mass distribution.',
+    tag: 'Photo' },
+  { year: 1969, name: 'I. Sutherland',
+    desc: 'Head-mounted 3D wireframe — Sword of Damocles, the first VR.',
+    tag: 'HMD' },
+  { year: 1982, name: 'Tron',
+    desc: 'Synthwave horizon-to-VP grid re-enters popular visual culture.',
+    tag: 'Cinema' },
+  { year: 1985, name: 'B. Bederson',
+    desc: 'Pad — zoomable UI; multi-scale interaction precedes 3D widgets.',
+    tag: 'ZUI' },
+  { year: 1991, name: 'Mackinlay · Robertson · Card',
+    desc: 'Perspective Wall — <em>this widget</em>: detail + context smoothly integrated.',
+    tag: 'CHI \'91' },
+  { year: 1993, name: 'M. Cooper / MIT VLW',
+    desc: 'Information Landscapes — type as terrain, fly-through publishing.',
+    tag: 'MediaLab' },
+  { year: 1996, name: 'Robertson · Mackinlay · Card',
+    desc: 'Information Visualizer — cone trees, hyperbolic browsing.',
+    tag: 'PARC' },
+  { year: 1998, name: 'Robertson · Dumais et al.',
+    desc: 'Data Mountain (MSR-TR-98-18) — spatial memory as filesystem index.',
+    tag: 'MSR' },
+  { year: 2003, name: 'Agarawala · Balakrishnan',
+    desc: 'BumpTop — physical desktop with piles, gravity, sweeping.',
+    tag: 'UIST \'03' },
+  { year: 2007, name: 'iPhone parallax',
+    desc: 'Accelerometer parallax brings spatial UI to commodity hardware.',
+    tag: 'Mobile' },
+  { year: 2014, name: 'WebGL ubiquitous',
+    desc: 'Browser-native 3D as a baseline assumption, not a plugin.',
+    tag: 'Web' },
+  { year: 2026, name: 'muriel.spatial',
+    desc: 'Perspective grids + CSS3D typography — this demo\'s authoring layer.',
+    tag: 'NOW' },
+];
+
+document.getElementById('focus-count').textContent = items.length;
+
+function makeCard(item, index) {
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.dataset.index = String(index);
+  el.innerHTML = `
+    <div>
+      <div class="year">${item.year}</div>
+      <div class="name">${item.name}</div>
+    </div>
+    <div>
+      <div class="desc">${item.desc}</div>
+      <div class="tag">${item.tag}</div>
+    </div>`;
+  const obj = new CSS3DObject(el);
+  obj.userData = { item, index };
+  return obj;
+}
+
+const cards = items.map((it, i) => {
+  const c = makeCard(it, i);
+  scene.add(c);
+  return c;
+});
+
+const CENTER_SPAN = 1;
+const STEP = 190;
+const CARD_Y = 0;
+
+// Compute target position+rotation; if snap, also set immediately.
+function placeCard(card, offset, snap = false) {
+  let tx, ty, tz, trotY;
+  if (offset >= -CENTER_SPAN && offset <= CENTER_SPAN) {
+    tx = offset * STEP;        ty = CARD_Y;  tz = 0.5;  trotY = 0;
+  } else if (offset < -CENTER_SPAN) {
+    const d = (Math.abs(offset) - CENTER_SPAN) * STEP - STEP * 0.5;
+    tx = -CENTER_HALF_W - d * cosT;
+    ty = CARD_Y;
+    tz = -d * sinT + 1;
+    trotY = HINGE_ANGLE;
+  } else {
+    const d = (offset - CENTER_SPAN) * STEP - STEP * 0.5;
+    tx =  CENTER_HALF_W + d * cosT;
+    ty = CARD_Y;
+    tz = -d * sinT + 1;
+    trotY = -HINGE_ANGLE;
+  }
+  card.userData.targetPos = new THREE.Vector3(tx, ty, tz);
+  card.userData.targetRotY = trotY;
+  if (snap) {
+    card.position.set(tx, ty, tz);
+    card.rotation.set(0, trotY, 0);
+  }
+}
+
+let focusIdx = 8;
+const focusNameEl = document.getElementById('focus-name');
+const focusIdxEl  = document.getElementById('focus-idx');
+
+function applyLayout(snap = false) {
+  cards.forEach((card, i) => {
+    const offset = i - focusIdx;
+    placeCard(card, offset, snap);
+    const el = card.element;
+    el.classList.toggle('focus', i === focusIdx);
+    el.classList.remove('dim-1', 'dim-2', 'dim-3', 'dim-4');
+    const beyondCentre = Math.max(0, Math.abs(offset) - CENTER_SPAN);
+    if      (beyondCentre === 1) el.classList.add('dim-1');
+    else if (beyondCentre === 2) el.classList.add('dim-2');
+    else if (beyondCentre === 3) el.classList.add('dim-3');
+    else if (beyondCentre >= 4)  el.classList.add('dim-4');
+  });
+  focusNameEl.textContent = items[focusIdx].name + ' · ' + items[focusIdx].year;
+  focusIdxEl.textContent  = String(focusIdx + 1);
+}
+applyLayout(true);
+
+function shiftFocus(delta) {
+  const next = Math.max(0, Math.min(items.length - 1, focusIdx + delta));
+  if (next === focusIdx) return;
+  focusIdx = next;
+  applyLayout();
+}
+
+for (const card of cards) {
+  card.element.addEventListener('click', () => {
+    focusIdx = card.userData.index;
+    applyLayout();
+  });
+}
+
+// ─── Parallax + per-card lerp ───────────────────────────────────────
+// CARD_LERP: 0.08 slow ribbon · 0.18 punchy · 0.12 ribbon-y default.
+const CARD_LERP = 0.12;
+
+startRenderLoop({
+  scene, camera, webglRenderer, cssRenderer,
+  basePos:        new THREE.Vector3(0, 70, 1050),
+  lookTarget:     new THREE.Vector3(0, 30, -120),
+  fovParallax:    { x: 90, y: 45 },
+  lookXAmount:    30,
+  lookYAmount:    20,
+  dollyRange:     [-280, 500],
+  autoOrbit:      { radius: 140, yAmp: 24, speed: 0.0010 },
+  beforeRender: () => {
+    // Wall scrolls smoothly: each card lerps toward its current
+    // target pose. When focus shifts, targets jump; cards take
+    // ~400ms to catch up — that's the wall sliding past, with
+    // side-panel cards folding into the centre as they cross the hinge.
+    for (const card of cards) {
+      const tp = card.userData.targetPos;
+      if (!tp) continue;
+      card.position.lerp(tp, CARD_LERP);
+      const tr = card.userData.targetRotY;
+      card.rotation.y += (tr - card.rotation.y) * CARD_LERP;
+    }
+  },
+  onKeydown: (e) => {
+    if (e.code === 'ArrowLeft')  { shiftFocus(-1); e.preventDefault(); }
+    if (e.code === 'ArrowRight') { shiftFocus(+1); e.preventDefault(); }
+    if (e.code === 'Home')       { focusIdx = 0; applyLayout(); }
+    if (e.code === 'End')        { focusIdx = items.length - 1; applyLayout(); }
+  },
+});
+</script>
+
+</body>
+</html>

@@ -7,6 +7,48 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- **`muriel.spatial` + `render_assets/` exemplars + `channels/spatial.md`
+  — depth scaffolding for layered typography.** Closes a long-standing
+  gap: muriel rendered figures and brand chrome well, but had no
+  primitive for type-in-space — the Cooper VLW / Perspective Wall /
+  Data Mountain lineage. Two coupled surfaces:
+  - **Static side: `muriel.spatial`** — pure-Python SVG perspective
+    grids. `grid("1pt"|"2pt"|"3pt"|"iso", BBox(...))` returns a
+    `PerspectiveGrid` (frozen dataclass with `vanishing_points` and
+    canvas-clipped `GridLine` tuples) with `.svg()` emit. Tron-style
+    cyan-on-near-black defaults; Liang-Barsky line clipping;
+    fade-to-horizon depth weighting on transversals;
+    isometric branch for parallel axonometric. CLI: `python -m
+    muriel.spatial --demo` (2×2 panel of all four modes), `--mode
+    {1pt,2pt,3pt,iso}` for single mode at full canvas, `--selftest`.
+  - **Interactive side: `render_assets/`** — Three.js + CSS3DRenderer
+    exemplars sharing one helper lib (`_lib/spatial.js`,
+    `_lib/spatial.css`). The two-renderer stack keeps WebGL grid /
+    horizon / atmosphere on the GPU while DOM cards composite on top
+    via CSS3D, so text stays selectable, copyable, and screen-reader
+    addressable. Helpers: `createScene`, `Mountain`,
+    `addFloorGrid`, `addHorizon`, `makePlane`, `FocusController`
+    (click-to-focus animation), `startRenderLoop` (parallax +
+    auto-orbit). Five exemplars across two brand families:
+    `spatial-typography/` (Cooper VLW homage),
+    `mindbendingpixels-mountain/` + `sciprogfi-agentchan-mountain/`
+    (Data Mountain — Dumais et al. 2001), `perspective-wall/` +
+    `sciprogfi-lux-mesh-wall/` (Mackinlay-Robertson-Card 1991). Single
+    gallery page at `render_assets/index.html`.
+  - **`channels/spatial.md`** — channel doc with the full lineage
+    (Alberti 1435 → Dürer 1525 → Cooper VLW 1980s → Mackinlay 1991
+    → Robertson 1993 → Dumais 2001 → Tron), the four-mode anti-
+    prescription (when *not* to reach for perspective), palette-token
+    table showing the demo defaults pass 8:1 on `#e6e4d2` × `#07070d`
+    (15.42:1), and a worked example wiring the JS lib into an exemplar.
+  Coordinate system is shared between the static and interactive sides
+  by design — the queued `muriel.spatial.typeset_scene()` (in TODO)
+  will close the loop: take a `PerspectiveGrid` plus a list of DOM
+  blocks with anchor names (`("vp", "left", 3)` /
+  `("grid", row, col, depth)`) and emit a runnable
+  `<scene>/index.html` so a paper figure and a fly-through share their
+  geometry by construction, not by hand-port.
+
 - **`muriel.dtcg_export` + `muriel export-dtcg` — emit a brand.toml as
   W3C Design Tokens Community Group JSON.** Third leg of the muriel
   round-trip: `design.md → brand.toml → tokens.json`. With both

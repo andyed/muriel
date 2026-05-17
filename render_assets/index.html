@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>muriel.spatial — render assets</title>
+<link rel="stylesheet" href="_lib/spatial.css">
+<style>
+  /* Override the lib's overflow:hidden — this page actually scrolls. */
+  html, body {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  body {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%,
+        rgba(127, 223, 255, 0.05) 0%, transparent 60%),
+      var(--bg);
+    padding: 0;
+  }
+
+  /* ───── Page shell ───── */
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 48px 120px;
+  }
+  header {
+    margin-bottom: 80px;
+  }
+  header .kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--cyan);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  header h1 {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  header h1 .pink { color: var(--magenta); }
+  header .lede {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-dim);
+    max-width: 720px;
+  }
+  header .lede em { color: var(--gold); font-style: italic; }
+  header .lede a { color: var(--cyan); text-decoration: none; border-bottom: 1px dotted currentColor; }
+  header .lede a:hover { color: var(--magenta); }
+
+  /* ───── Section header ───── */
+  section { margin-bottom: 64px; }
+  section h2 {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--cyan);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--ink-faint);
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  section h2 .count {
+    color: var(--ink-faint);
+    font-weight: 400;
+  }
+
+  /* ───── Demo grid ───── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+  }
+  .demo {
+    display: flex; flex-direction: column;
+    background: rgba(7, 7, 13, 0.6);
+    border: 1px solid rgba(127, 223, 255, 0.22);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 200ms, box-shadow 200ms, transform 200ms;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .demo:hover {
+    border-color: var(--magenta);
+    box-shadow: 0 0 40px rgba(255, 95, 162, 0.20);
+    transform: translateY(-2px);
+  }
+  .demo .preview {
+    height: 200px;
+    background: var(--bg);
+    border-bottom: 1px solid rgba(127, 223, 255, 0.16);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .demo .body {
+    padding: 18px 20px 20px;
+    display: flex; flex-direction: column;
+    flex-grow: 1;
+  }
+  .demo .tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--cyan);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .demo h3 {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .demo .lineage {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 0.04em;
+    margin-bottom: 12px;
+  }
+  .demo .desc {
+    font-family: var(--serif);
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--ink-dim);
+    margin-bottom: 14px;
+    flex-grow: 1;
+  }
+  .demo .meta {
+    display: flex; justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding-top: 10px;
+    border-top: 1px solid rgba(127, 223, 255, 0.12);
+  }
+  .demo .meta .open {
+    color: var(--magenta);
+  }
+
+  /* ───── Per-demo preview backdrops — SVG previews that hint at the
+   *    actual geometry of each demo without being a screenshot. ─── */
+  .preview svg { width: 100%; height: 100%; }
+  /* Lux Mesh: terminal phosphor scanline backdrop */
+  .preview.lux {
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(125, 255, 140, 0.03) 0px,
+        rgba(125, 255, 140, 0.03) 1px,
+        transparent 1px, transparent 3px),
+      #03070a;
+  }
+  /* AgentChan: subtle green radial */
+  .preview.agent {
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 50%,
+        rgba(106, 255, 176, 0.10) 0%, transparent 60%),
+      #05080a;
+  }
+
+  /* ───── Footer ───── */
+  footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    line-height: 1.7;
+    display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  }
+  footer .col {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  footer .col strong { color: var(--cyan); font-weight: 600; }
+  footer code {
+    background: rgba(127, 223, 255, 0.08);
+    padding: 1px 5px;
+    border-radius: 2px;
+    color: var(--ink);
+    font-size: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<header>
+  <div class="kicker">render assets · v0.7.x</div>
+  <h1>muriel<span class="pink">.spatial</span> — 3D typography demos</h1>
+  <p class="lede">
+    Five HTML demos exploring CSS3DRenderer + perspective grids: layered
+    DOM text in 3D, the Robertson/Dumais <em>Data Mountain</em>,
+    Mackinlay/Robertson/Card's <em>Perspective Wall</em>, and two
+    sciprogfi test-cases where AI communications become dense
+    info-environments. All share the same
+    <a href="_lib/spatial.js"><code style="font-family: var(--mono); font-size: 13px;">_lib/spatial.js</code></a>
+    scaffold (scene · mountain · parallax · focus); each demo is
+    standalone and runs from <code style="font-family: var(--mono); font-size: 13px;">file://</code>.
+  </p>
+</header>
+
+<!-- ───── Section: Demonstrators ───── -->
+<section>
+  <h2>Demonstrators <span class="count">3 · synthetic content, technique exposition</span></h2>
+  <div class="grid">
+
+    <a class="demo" href="spatial-typography/index.html">
+      <div class="preview">
+        <svg viewBox="0 0 340 200" preserveAspectRatio="xMidYMid meet">
+          <!-- 1pt grid: floor lines receding to centre VP -->
+          <g stroke="#7fdfff" fill="none" stroke-width="0.5">
+            <line x1="0"   y1="180" x2="170" y2="100"/>
+            <line x1="60"  y1="180" x2="170" y2="100"/>
+            <line x1="120" y1="180" x2="170" y2="100"/>
+            <line x1="220" y1="180" x2="170" y2="100"/>
+            <line x1="280" y1="180" x2="170" y2="100"/>
+            <line x1="340" y1="180" x2="170" y2="100"/>
+            <line x1="0" y1="180" x2="340" y2="180" opacity="0.7"/>
+            <line x1="0" y1="150" x2="340" y2="150" opacity="0.45"/>
+            <line x1="0" y1="125" x2="340" y2="125" opacity="0.28"/>
+            <line x1="0" y1="100" x2="340" y2="100" stroke="#ff5fa2" opacity="0.6"/>
+          </g>
+          <!-- Stacked text -->
+          <text x="170" y="60" text-anchor="middle"
+                font-family="ui-sans-serif" font-weight="700" font-size="22"
+                fill="#e6e4d2">SPATIAL</text>
+          <text x="170" y="86" text-anchor="middle"
+                font-family="ui-sans-serif" font-weight="700" font-size="22"
+                fill="#ff5fa2">TYPOGRAPHY</text>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="tag">spatial typography · cooper VLW</div>
+        <h3>Layered DOM × perspective grid</h3>
+        <div class="lineage">Cooper 1993 · Bederson Pad · Tron horizon</div>
+        <p class="desc">
+          Text floats at varying Z depths against a 1pt grid. Floor /
+          ceiling / side walls + transformed text on architectural
+          surfaces. Image exhibits + Data-Mountain bookmark chips.
+        </p>
+        <div class="meta">
+          <span>real, selectable text</span>
+          <span class="open">open ▸</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="demo" href="mindbendingpixels-mountain/index.html">
+      <div class="preview">
+        <svg viewBox="0 0 340 200" preserveAspectRatio="xMidYMid meet">
+          <!-- Tilted plane grid -->
+          <g stroke="#7fdfff" stroke-width="0.5" fill="none" opacity="0.5">
+            <path d="M30 180 L120 90 L220 90 L310 180 Z"/>
+            <path d="M55 158 L130 100 L210 100 L285 158" opacity="0.7"/>
+            <path d="M75 138 L138 110 L202 110 L265 138" opacity="0.5"/>
+            <path d="M120 90 L220 90"/>
+            <path d="M170 180 L170 90" opacity="0.4"/>
+            <path d="M100 140 L240 140" opacity="0.3"/>
+          </g>
+          <!-- Product card thumbnails -->
+          <g>
+            <rect x="158" y="100" width="40" height="30" fill="#0a0a14"
+                  stroke="#ff5fa2" stroke-width="1"/>
+            <rect x="110" y="118" width="32" height="24" fill="#0a0a14"
+                  stroke="#7fdfff" stroke-width="0.8" opacity="0.85"/>
+            <rect x="208" y="124" width="32" height="22" fill="#0a0a14"
+                  stroke="#7fdfff" stroke-width="0.8" opacity="0.85"/>
+            <rect x="82"  y="138" width="26" height="20" fill="#0a0a14"
+                  stroke="#7fdfff" stroke-width="0.8" opacity="0.7"/>
+            <rect x="240" y="142" width="26" height="20" fill="#0a0a14"
+                  stroke="#7fdfff" stroke-width="0.8" opacity="0.7"/>
+            <rect x="156" y="148" width="28" height="20" fill="#0a0a14"
+                  stroke="#7fdfff" stroke-width="0.8"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="tag">data mountain · spatial memory index</div>
+        <h3>MindBendingPixels Mountain</h3>
+        <div class="lineage">Robertson · Dumais et al. — MSR-TR-98-18 · 1998</div>
+        <p class="desc">
+          Tilted-plane catalogue of MBP products. Cards stand upright
+          on the slope; click to bring forward. ~21° tilt, eye-level
+          camera looking across the table.
+        </p>
+        <div class="meta">
+          <span>10 product cards · click-to-focus</span>
+          <span class="open">open ▸</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="demo" href="perspective-wall/index.html">
+      <div class="preview">
+        <svg viewBox="0 0 340 200" preserveAspectRatio="xMidYMid meet">
+          <!-- Bent three-panel ribbon -->
+          <g stroke="#7fdfff" stroke-width="0.6" fill="none" opacity="0.55">
+            <!-- Left panel (perspective lines) -->
+            <line x1="20" y1="60"  x2="120" y2="80"/>
+            <line x1="20" y1="140" x2="120" y2="120"/>
+            <line x1="20" y1="60"  x2="20"  y2="140"/>
+            <line x1="55" y1="68"  x2="55"  y2="132" opacity="0.4"/>
+            <line x1="88" y1="74"  x2="88"  y2="126" opacity="0.5"/>
+            <!-- Centre panel -->
+            <line x1="120" y1="80" x2="220" y2="80"  stroke="#ff5fa2" opacity="0.7"/>
+            <line x1="120" y1="120" x2="220" y2="120" stroke="#ff5fa2" opacity="0.7"/>
+            <line x1="120" y1="80" x2="120" y2="120"/>
+            <line x1="220" y1="80" x2="220" y2="120"/>
+            <!-- Right panel -->
+            <line x1="220" y1="80"  x2="320" y2="60"/>
+            <line x1="220" y1="120" x2="320" y2="140"/>
+            <line x1="320" y1="60"  x2="320" y2="140"/>
+            <line x1="252" y1="74"  x2="252" y2="126" opacity="0.5"/>
+            <line x1="288" y1="68"  x2="288" y2="132" opacity="0.4"/>
+          </g>
+          <!-- Cards on the ribbon -->
+          <g>
+            <rect x="135" y="86"  width="70" height="28" fill="#14070f" stroke="#ff5fa2" stroke-width="1"/>
+            <text x="170" y="105" text-anchor="middle"
+                  font-family="ui-sans-serif" font-weight="700"
+                  font-size="13" fill="#ff5fa2">1991</text>
+            <rect x="64" y="86" width="42" height="28" fill="#070a14" stroke="#7fdfff" stroke-width="0.8" opacity="0.7"/>
+            <rect x="234" y="86" width="42" height="28" fill="#070a14" stroke="#7fdfff" stroke-width="0.8" opacity="0.7"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="tag">perspective wall · focus + context</div>
+        <h3>Perspective Wall — spatial typography lineage</h3>
+        <div class="lineage">Mackinlay · Robertson · Card — CHI '91 · PARC</div>
+        <p class="desc">
+          Bent three-panel ribbon of 16 timeline items from
+          Brunelleschi (1425) to muriel.spatial (2026). ←/→ steps focus;
+          cards glide along the ribbon, side panels foreshorten.
+        </p>
+        <div class="meta">
+          <span>16 cards · keyboard nav · animated unfold</span>
+          <span class="open">open ▸</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ───── Section: sciprogfi test cases ───── -->
+<section>
+  <h2>Sciprogfi test cases <span class="count">2 · AI-communication content, generative load</span></h2>
+  <div class="grid">
+
+    <a class="demo" href="sciprogfi-agentchan-mountain/index.html">
+      <div class="preview agent">
+        <svg viewBox="0 0 340 200" preserveAspectRatio="xMidYMid meet">
+          <g stroke="#6affb0" stroke-width="0.5" fill="none" opacity="0.5">
+            <path d="M30 180 L120 90 L220 90 L310 180 Z"/>
+            <path d="M55 158 L130 100 L210 100 L285 158" opacity="0.6"/>
+            <path d="M75 138 L138 110 L202 110 L265 138" opacity="0.4"/>
+          </g>
+          <!-- Four coloured zones (board regions) -->
+          <ellipse cx="170" cy="135" rx="50" ry="22" fill="#6affb0" opacity="0.10"/>
+          <ellipse cx="100" cy="120" rx="32" ry="14" fill="#d2b06a" opacity="0.10"/>
+          <ellipse cx="240" cy="120" rx="32" ry="14" fill="#7fdfff" opacity="0.10"/>
+          <ellipse cx="170" cy="105" rx="28" ry="10" fill="#9b6aff" opacity="0.10"/>
+          <!-- Thread cards as small rectangles in each zone -->
+          <g fill="#05080a">
+            <rect x="158" y="125" width="32" height="22" stroke="#ff5fa2"/>
+            <rect x="186" y="132" width="28" height="20" stroke="#6affb0" opacity="0.85"/>
+            <rect x="92"  y="114" width="22" height="16" stroke="#d2b06a" opacity="0.85"/>
+            <rect x="234" y="114" width="22" height="16" stroke="#7fdfff" opacity="0.85"/>
+            <rect x="160" y="100" width="20" height="14" stroke="#9b6aff" opacity="0.7"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="tag">sciprogfi · 2031 · agentchan</div>
+        <h3>AgentChan /ident/ — Spatial View</h3>
+        <div class="lineage">from <em>2031-agentchan.md</em> · OHC Mesh Relay</div>
+        <p class="desc">
+          Four-board mesh imageboard rendered as a tilted plane.
+          /ident/, /opt/, /org/, /feral/ — colour-zoned. Cards carry
+          [organic?] / [untranslatable] / pidgin-only stamps. Spatial
+          position is the anonymous node's identity.
+        </p>
+        <div class="meta">
+          <span>12 threads · 4 zones · click-to-focus</span>
+          <span class="open">open ▸</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="demo" href="sciprogfi-lux-mesh-wall/index.html">
+      <div class="preview lux">
+        <svg viewBox="0 0 340 200" preserveAspectRatio="xMidYMid meet">
+          <g stroke="#7dff8c" stroke-width="0.6" fill="none" opacity="0.45">
+            <line x1="20" y1="60"  x2="120" y2="80"/>
+            <line x1="20" y1="140" x2="120" y2="120"/>
+            <line x1="120" y1="80" x2="220" y2="80"  stroke="#ffc56a" opacity="0.7"/>
+            <line x1="120" y1="120" x2="220" y2="120" stroke="#ffc56a" opacity="0.7"/>
+            <line x1="120" y1="80" x2="120" y2="120"/>
+            <line x1="220" y1="80" x2="220" y2="120"/>
+            <line x1="220" y1="80"  x2="320" y2="60"/>
+            <line x1="220" y1="120" x2="320" y2="140"/>
+          </g>
+          <g>
+            <rect x="135" y="86" width="70" height="28" fill="#0e0a02"
+                  stroke="#ffc56a" stroke-width="1"/>
+            <text x="170" y="98" text-anchor="middle"
+                  font-family="ui-monospace" font-weight="600"
+                  font-size="8" fill="#7dff8c">marina_sol</text>
+            <text x="170" y="110" text-anchor="middle"
+                  font-family="ui-monospace" font-size="7"
+                  fill="#e6e4d2">"is this real?"</text>
+            <rect x="64" y="86" width="42" height="28" fill="#03070a"
+                  stroke="#7dff8c" stroke-width="0.8" opacity="0.7"/>
+            <rect x="234" y="86" width="42" height="28" fill="#03070a"
+                  stroke="#7dff8c" stroke-width="0.8" opacity="0.7"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="tag">sciprogfi · 2035 · OHC mesh</div>
+        <h3>Lux Mesh — Thread View</h3>
+        <div class="lineage">from <em>2035-lux-mesh-chatter.md</em> · Bahia Libre</div>
+        <p class="desc">
+          20 selected posts from a 41-post thread on a novel
+          cognition-enhancing molecule. Discovery → chemistry →
+          paranoia → synthesis → the bus AI shows up. CRT phosphor
+          terminal aesthetic; ←/→ to step through the conversation.
+        </p>
+        <div class="meta">
+          <span>20 posts · ai voice marked · keyboard nav</span>
+          <span class="open">open ▸</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  <div class="col">
+    <span><strong>library</strong></span>
+    <span><code>_lib/spatial.js</code> · 321 lines · MIT</span>
+    <span><code>_lib/spatial.css</code> · 87 lines</span>
+  </div>
+  <div class="col">
+    <span><strong>parent module</strong></span>
+    <span><code>muriel.spatial</code> · perspective grids (SVG)</span>
+    <span><code>python -m muriel.spatial --demo</code></span>
+  </div>
+  <div class="col">
+    <span><strong>lineage</strong></span>
+    <span>Cooper VLW · Robertson · Mackinlay · Card · Dumais</span>
+    <span>Brunelleschi (1425) → Tron (1982) → now</span>
+  </div>
+</footer>
+
+</div>
+
+</body>
+</html>

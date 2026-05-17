@@ -1,0 +1,94 @@
+/* muriel.spatial — shared base CSS for the 3D-typography demos.
+ *
+ * Each demo overrides --bg / accent colours at :root (or layered
+ * on body) and adds its own card class selectors. This file is the
+ * floor: reset, layout, palette tokens, HUD grid, kbd chip.
+ */
+
+:root {
+  --bg: #07070d;
+  --ink: #e6e4d2;
+  --ink-dim: rgba(230, 228, 210, 0.62);
+  --ink-faint: rgba(230, 228, 210, 0.28);
+  --cyan: #7fdfff;
+  --magenta: #ff5fa2;
+  --gold: #d2b06a;
+  --mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
+  --sans: ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  --serif: ui-serif, "Iowan Old Style", "Apple Garamond", Georgia, serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%; width: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Two stacked renderers — WebGL underneath, CSS3D on top. */
+#webgl, #css3d {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+}
+#webgl { z-index: 1; }
+#css3d { z-index: 2; pointer-events: none; }
+#css3d * { pointer-events: auto; }
+
+/* HUD — fixed 2D overlay. Demos populate .brand / .meta / .hint / .cite.
+ *
+ * Important: pointer-events doesn't cascade, so we must explicitly
+ * disable clicks on every descendant — otherwise HUD text and chips
+ * end up absorbing clicks intended for CSS3D cards that overlap them
+ * in screen space (mountains push cards into the upper corners). */
+#hud, #hud * {
+  pointer-events: none;
+}
+#hud {
+  position: fixed; inset: 0;
+  z-index: 10;
+  padding: 22px 28px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+#hud .row {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 24px;
+}
+#hud .meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--ink-dim);
+  text-align: right;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+#hud .meta .acc { color: var(--cyan); }
+#hud .hint {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-dim);
+}
+#hud .hint kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid var(--ink-faint);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.04);
+  margin: 0 2px;
+}
+#hud .cite {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  max-width: 380px;
+  text-align: right;
+}
+#hud .cite em { color: var(--ink-dim); font-style: normal; }
