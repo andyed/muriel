@@ -6,6 +6,10 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.8.0] — 2026-05-17
+
+**The rigorous round-trip.** Closes loops: the design.md → brand.toml → tokens.json round-trip got honest (corpus audit + three importer fixes), got fully two-way (new DTCG exporter), and grew a new visual surface that wires into both ends (spatial perspective grids + Three.js exemplars). First release where a brand can come in from `awesome-design-md`, ship outward to any DTCG-aware downstream, and render type into felt space without leaving the toolkit. Long-form notes: [`RELEASE_NOTES_v0.8.0.md`](RELEASE_NOTES_v0.8.0.md).
+
 ### Added
 - **`muriel.spatial` + `render_assets/` exemplars + `channels/spatial.md`
   — depth scaffolding for layered typography.** Closes a long-standing
