@@ -1,6 +1,6 @@
 ---
 name: muriel
-description: "A multi-constraint solver for visual production — raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics, diagrams across eleven output channels plus dimensions + style-guides cross-channel references. Brand tokens, 8:1 contrast rule, and dimension constants stay active at render time. Use when the user needs any visual artifact for human eyes."
+description: "A multi-constraint solver for visual production — raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics, diagrams, spatial across twelve output channels plus dimensions + style-guides cross-channel references. Brand tokens, 8:1 contrast rule, and dimension constants stay active at render time. Use when the user needs any visual artifact for human eyes."
 ---
 
 # muriel — Multi-channel visual production
@@ -24,7 +24,8 @@ Each channel has a dedicated subfile with deep recipes, tooling, and lessons. Th
 | **Dimensions** | *cross-channel reference* | [`channels/dimensions.md`](channels/dimensions.md) — social cards, device footprints, viewport tiers, video, paper/print, favicons, scale factors |
 | **Style guides** | *brand schema* | [`channels/style-guides.md`](channels/style-guides.md) — brand.toml schema, loader, rule enforcement, CSS/matplotlibrc derivation, example brand.toml files |
 | **Infographics** | SVG → PNG | [`channels/infographics.md`](channels/infographics.md) — 10 types × layout patterns × colorblind-safe palettes, deterministic SVG (not AI), 60-30-10 color / 60-40 viz:text rule, 5-point quality rubric at 8:1 |
-| **Diagrams** | SVG | [`channels/diagrams.md`](channels/diagrams.md) — rhetorical primitives (2×2 matrix, N-step cycle, Venn shipped; comparison pair, funnel, stack, DAG, spectrum, pyramid, heat-grid queued). Each preset carries an epistemic precondition and an anti-prescription. |
+| **Diagrams** | SVG | [`channels/diagrams.md`](channels/diagrams.md) — rhetorical primitives (2×2 matrix, N-step cycle, Venn shipped; comparison pair, funnel, stack, DAG, spectrum, pyramid, heat-grid queued); plus Mermaid → SVG/ASCII and TeX → SVG (MathJax) Node-bridges. Each preset carries an epistemic precondition and an anti-prescription. |
+| **Spatial** | SVG + HTML/WebGL | [`channels/spatial.md`](channels/spatial.md) — depth scaffolding for layered typography. `muriel.spatial` perspective grids (1pt / 2pt / 3pt / iso) + `render_assets/` Three.js + CSS3DRenderer exemplars sharing one helper lib. Cooper VLW / Mackinlay-Robertson-Card / Dumais Data Mountain lineage. |
 
 
 ## Aesthetic vocabularies

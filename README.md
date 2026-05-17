@@ -7,7 +7,7 @@
 
 # muriel
 
-**muriel is a multi-constraint solver for visual production** — a dozen channels of tool-use recipes for LLM agents, grounded in the design-history lineage they inherit. Ten output channels (raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics) plus two cross-channel references (dimensions, style-guides), a two-tier brand-token schema with motion, anti-patterns per channel, live 8:1 contrast and OLED-palette enforcement at render time, and a vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research.
+**muriel is a multi-constraint solver for visual production** — fourteen channels of tool-use recipes for LLM agents, grounded in the design-history lineage they inherit. Twelve output channels (raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics, diagrams, spatial) plus two cross-channel references (dimensions, style-guides), a two-tier brand-token schema with motion, anti-patterns per channel, live 8:1 contrast and OLED-palette enforcement at render time, and a vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research.
 
 The tooling is LLM-native: skill format, vision-model critique, brand tokens alive at render time, motion as a first-class schema field, engine adapters for Pillow / Flux / pretext / ffmpeg / Playwright. The principles are older: Cooper's Visible Language Workshop (tribute below), Tufte's data-ink discipline, Bertin's retinal variable ranking, Gestalt grouping, CRAP layout, Reichle's E-Z Reader, scanpath patterns from vision science. The tools serve the principles.
 
@@ -24,7 +24,7 @@ muriel is the grandmother to [marginalia](https://github.com/andyed/marginalia) 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-3776ab?logo=python&logoColor=white)
 ![Claude Code skill](https://img.shields.io/badge/Claude_Code-skill-d97757)
-![PyPI: muriel](https://img.shields.io/badge/PyPI-muriel-3775a9?logo=pypi&logoColor=white)
+![GitHub Release](https://img.shields.io/github/v/release/andyed/muriel?logo=github&color=181717)
 
 **Python channels**
 ![Pillow](https://img.shields.io/badge/Pillow-raster-informational)
@@ -50,7 +50,7 @@ muriel is the grandmother to [marginalia](https://github.com/andyed/marginalia) 
 
 ## Channels
 
-Eleven output channels, each with its own subfile under [`channels/`](channels/):
+Twelve output channels, each with its own subfile under [`channels/`](channels/):
 
 - **Raster** (Pillow + `typeset.py`) — store assets, icons, banners, wordmarks, screenshot designs
 - **Vector / SVG** (`svgwrite`, `cairosvg`, Mermaid, Excalidraw) — paper figures, data-driven diagrams, scalable icons, flowcharts
@@ -62,12 +62,13 @@ Eleven output channels, each with its own subfile under [`channels/`](channels/)
 - **Gaze plots** — scanpath, bubble scanpath, AOI timeline, saccade rose, approach-retreat
 - **Science** (matplotlib + LaTeX + `muriel.stats`) — paper figures, notebook editorial, APA reporting
 - **Infographics** (deterministic SVG) — single-image explainers, 10 types × layout patterns × colorblind-safe palettes
-- **Diagrams** (deterministic SVG) — rhetorical primitives: 2×2 matrix, N-step cycle, Venn shipped; comparison pair, funnel, stack, DAG, spectrum, pyramid, heat-grid queued. Each preset carries an epistemic precondition + anti-prescription
+- **Diagrams** (deterministic SVG) — rhetorical primitives: 2×2 matrix, N-step cycle, Venn shipped, plus Mermaid → SVG/ASCII and TeX → SVG (MathJax) Node-bridges; comparison pair, funnel, stack, DAG, spectrum, pyramid, heat-grid queued. Each preset carries an epistemic precondition + anti-prescription
+- **Spatial** (`muriel.spatial` + `render_assets/`) — depth scaffolding for layered typography. Static SVG perspective grids (1pt / 2pt / 3pt / iso) plus Three.js + CSS3DRenderer exemplars sharing one helper lib. Cooper VLW / Mackinlay-Robertson-Card / Dumais Data Mountain lineage. See [`channels/spatial.md`](channels/spatial.md).
 
 Plus two cross-channel references used by every channel:
 
 - **Dimensions** ([`channels/dimensions.md`](channels/dimensions.md)) — social cards, device footprints, viewport tiers, paper sizes, video resolutions
-- **Style guides** ([`channels/style-guides.md`](channels/style-guides.md)) — `brand.toml` schema, motion tokens, CSS / matplotlibrc derivation, ownership rules
+- **Style guides** ([`channels/style-guides.md`](channels/style-guides.md)) — `brand.toml` schema, motion tokens, CSS / matplotlibrc derivation, ownership rules. Round-trips through Google Stitch `design.md` import (`muriel import`) and W3C Design Tokens (DTCG) export (`muriel export-dtcg`), so brand.toml plugs into `style-dictionary`, theo, Figma tokens-studio, token-css, and the iOS / Android / Tailwind pipelines downstream.
 
 
 ## Install
