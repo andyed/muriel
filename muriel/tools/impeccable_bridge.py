@@ -165,19 +165,30 @@ def _extract_findings(parsed: Any) -> list[dict[str, Any]]:
 
 
 def format_markdown(
-    result: BridgeResult, *, attribution: bool = True
+    result: BridgeResult,
+    *,
+    attribution: bool = True,
+    verbose: bool = False,
 ) -> str:
     """Format a bridge result for inclusion in a critique report.
 
     Three shapes:
 
-    - **unavailable** — one-line italic note explaining why; the caller
-      should proceed with vision-only critique.
+    - **unavailable** — empty string by default, so callers can paste
+      the output unconditionally and the section silently disappears
+      when the bridge can't run. Pass ``verbose=True`` to instead emit
+      a one-line italic diagnostic.
     - **available, no findings** — one-line italic "clean" note.
     - **available, findings** — a ``### Deterministic pre-scan`` heading
       and a Markdown table of (rule, severity, where, what).
+
+    The silent-when-unavailable default is intentional: impeccable is
+    optional, not a dependency of muriel-critique. A missing Node /
+    impeccable / network should leave no trace in the agent's output.
     """
     if not result.available:
+        if not verbose:
+            return ""
         return (
             f"_impeccable bridge unavailable: {result.error}_  \n"
             f"_(deterministic pre-scan skipped; vision-model rules only)_\n"
@@ -268,7 +279,11 @@ def _selftest() -> int:
     md = format_markdown(
         BridgeResult(available=False, error="x", target="t")
     )
-    assert "unavailable" in md and "vision-model" in md
+    assert md == ""  # silent by default when unavailable
+    md_verbose = format_markdown(
+        BridgeResult(available=False, error="x", target="t"), verbose=True
+    )
+    assert "unavailable" in md_verbose and "vision-model" in md_verbose
 
     md = format_markdown(
         BridgeResult(available=True, findings=[], target="t.html")
@@ -325,6 +340,9 @@ def _main(argv: list[str]) -> int:
                    help="emit raw parsed JSON instead of Markdown")
     p.add_argument("--no-attribution", action="store_true",
                    help="omit the impeccable attribution line")
+    p.add_argument("--verbose", action="store_true",
+                   help="emit the diagnostic line when the bridge is "
+                        "unavailable (default: silent)")
     p.add_argument("--timeout", type=float, default=120.0,
                    help="seconds before giving up (default 120)")
     p.add_argument("--selftest", action="store_true",
@@ -354,7 +372,11 @@ def _main(argv: list[str]) -> int:
         print(json.dumps(out, indent=2))
     else:
         sys.stdout.write(
-            format_markdown(result, attribution=not args.no_attribution)
+            format_markdown(
+                result,
+                attribution=not args.no_attribution,
+                verbose=args.verbose,
+            )
         )
     return 0 if result.available else 1
 
