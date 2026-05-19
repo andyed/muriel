@@ -6,6 +6,34 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.10.0] — 2026-05-19
+
+**`muriel.aiism` rule cleanup: removed CC-BY-SA-4.0 content for commercial-use clarity.** Drops the 25 inline phrase/cluster/repeated-phrase rules that were attributed to Wikipedia "Signs of AI writing" and `ammil-industries/vale-signs-of-ai-writing` (both CC-BY-SA-4.0). Share-alike on those rules would have required any redistribution of muriel.aiism to remain CC-BY-SA-4.0, constraining commercial use of muriel and downstream consumers (science-agent, plugin shipments, etc.). Mirrors the parallel cleanup that landed in `science-agent` 0.4.0 ([commit 9574fd5](https://github.com/andyed/science-agent/commit/9574fd5)).
+
+### Removed
+
+- **9 significance-inflation phrases**: `phrase-testament-to`, `phrase-reminder-of`, `phrase-plays-a-role`, `phrase-underscores`, `phrase-stands-as`, `phrase-serves-as`, `phrase-rich-heritage`, `phrase-indelible-mark`, `phrase-contributes-to`.
+- **4 prescriptive-narrator phrases**: `phrase-it-is-important`, `phrase-one-must`, `phrase-needless-to-say`, `phrase-worth-mentioning`.
+- **4 throat-clearing temporal openers**: `phrase-recent-years`, `phrase-past-decade`, `phrase-todays-world`, `phrase-modern-era`.
+- **1 anthropomorphized-research-verb**: `phrase-research-unveiled`.
+- **1 sourceless-authority hedge**: `phrase-vague-attribution`.
+- **4 cluster rules**: `cluster-padded-vocab`, `cluster-hedges`, `cluster-firstly-thirdly`, `cluster-significance-verbs`. `CLUSTER_RULES` is now empty.
+- **2 Vale-style repeated-phrase rules**: `repeat-not-x-but-y`, `repeat-what-x-cleft`.
+
+### Retained
+
+- All 8 `HARD_ARTIFACT_RULES` (project-specific LLM-tooling residue detectors: `oaicite`, sandbox paths, ChatGPT URLs, knowledge-cutoff disclaimers, etc.).
+- 12 project-specific `SINGLE_PHRASE_RULES`: `phrase-earn-their-keep`, `phrase-locus-of`, `phrase-unit-at-which`, `phrase-substrate-licenses`, `phrase-doing-its-share`, `phrase-observational-register`, `phrase-names-the-same-observation`, `phrase-the-hope-is-that`, `phrase-looking-into-the-corners`, `phrase-leaky-cursor-aside`, `phrase-not-just-but`, `phrase-regime`.
+- 5 project-specific `REPEATED_PHRASE_RULES`: `repeat-load-bearing`, `repeat-structurally`, `repeat-materially`, `repeat-meaningfully`, `repeat-already-compound`.
+- 1 `PROXIMITY_RULES` entry: `doubled-cleft`.
+- All engine-level detectors (long-sentence, bold-density, em-dash-per-line).
+
+### Migration notes
+
+- Total rule count: 51 → 26.
+- Module docstring updated to remove the CC-BY-SA-4.0 attribution claim. The remaining phrase tables are project-specific and inherit muriel's parent license.
+- For users who want the Wikipedia/Vale patterns back, they're available under their original CC-BY-SA-4.0 terms at the upstream sources cited in earlier muriel versions; clone those lists directly into your own configuration if you can accept share-alike for your distribution.
+
 ## [0.9.0] — 2026-05-17
 
 **Generate the palette, don't audit it.** Adds `muriel.palettes.generate_for_floor()` — an Adobe-Leonardo-style contrast-driven palette generator that produces 8:1-by-construction palettes against any brand background. Four theme palettes (Catppuccin Mocha + Latte, Nord Aurora + Frost) join the registry under a new "theme tier"; the terminal channel gains an animated-effects section (TerminalTextEffects); the v0.8.0 surfaces (README, SKILL.md, demo gallery) got synced, link-audited, and reorganized. README lede rewritten per independent review. Long-form notes: [`RELEASE_NOTES_v0.9.0.md`](RELEASE_NOTES_v0.9.0.md).
