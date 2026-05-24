@@ -2,7 +2,7 @@
 
 > **What this vocabulary is.** A short survey of the major platform charting guides that muriel can cite when a figure leaves the paper-figure register: when a chart will live in an iOS app, a Material-themed admin panel, an enterprise Carbon dashboard, an Observable notebook, or a newsroom data-story. None of these guides are *muriel's* opinion — muriel's opinion is encoded in `channels/science.md`, `channels/infographics.md`, and the universal rules — but a cited platform precedent is often the right way to settle a discussion that muriel doesn't have a hard rule for.
 >
-> **What this vocabulary is not.** Not a chart-type taxonomy (that's `channels/infographics.md`'s 10-type table). Not a colour-palette reference (that's `muriel.palettes`). Not a "which library" recommendation (that's `channels/interactive.md`).
+> **What this vocabulary is not.** Not a chart-type taxonomy (that's `channels/infographics.md`'s 10-type table). Not a colour-palette reference (that's `muriel.palettes`). Not a "which JS chart library" recommendation (that's [`channels/charts.md`](../channels/charts.md), which covers Recharts / ECharts / Chart.js / Plotly / D3 with 22 numbered rules and a per-library config table). **`channels/charts.md` is the sibling channel here** — it covers chart *libraries*, this vocab covers platform design *guides*. Reach for that channel when picking an implementation; reach for this vocab when defending a principle to a reviewer.
 
 Part of the [muriel](../SKILL.md) skill. Sibling vocabs: [`vocabularies/visible-language.md`](visible-language.md) (MIT Cooper VLW), [`vocabularies/fui.md`](fui.md), [`vocabularies/pixijs.md`](pixijs.md).
 

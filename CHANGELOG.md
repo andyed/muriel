@@ -6,16 +6,16 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-## [0.10.0] — 2026-05-24
+## [0.11.0] — 2026-05-24
 
-**Sibling, not subordinate.** Three new surfaces, each a sibling of something already in muriel rather than a new top-level concern. [`muriel.spatial.ridgemap`](muriel/spatial.py) is a sibling primitive to `grid()` — same module, same conventions, same brand floor — that scaffolds *scalar fields* the way `grid()` scaffolds *space*. The new [`.agents/skills/muriel`](.agents/skills/) broadcast symlink is a sibling install path to `.claude/skills/`, read natively by Codex CLI and as an alternate by Cursor / Gemini CLI / GitHub Copilot / OpenCode / Pi — one symlink, six harnesses. [`muriel.tools.impeccable_bridge`](muriel/tools/impeccable_bridge.py) wraps pbakaus/impeccable's 27-rule deterministic detector as an *optional* pre-scan for `muriel-critique`; it stays silent when Node / impeccable / network are missing, so the critique agent works identically with or without it. None of the three is a dependency; each is a peer. Long-form notes: [`RELEASE_NOTES_v0.10.0.md`](RELEASE_NOTES_v0.10.0.md).
+**Sibling, not subordinate.** Three new surfaces, each a sibling of something already in muriel rather than a new top-level concern. [`muriel.spatial.ridgemap`](muriel/spatial.py) is a sibling primitive to `grid()` — same module, same conventions, same brand floor — that scaffolds *scalar fields* the way `grid()` scaffolds *space*. The new [`.agents/skills/muriel`](.agents/skills/) broadcast symlink is a sibling install path to `.claude/skills/`, read natively by Codex CLI and as an alternate by Cursor / Gemini CLI / GitHub Copilot / OpenCode / Pi — one symlink, six harnesses. [`muriel.tools.impeccable_bridge`](muriel/tools/impeccable_bridge.py) wraps pbakaus/impeccable's 27-rule deterministic detector as an *optional* pre-scan for `muriel-critique`; it stays silent when Node / impeccable / network are missing, so the critique agent works identically with or without it. None of the three is a dependency; each is a peer. Long-form notes: [`RELEASE_NOTES_v0.11.0.md`](RELEASE_NOTES_v0.11.0.md).
 
 ### Added
 - **`muriel.spatial.ridgemap(field, canvas, …)`** — stacked 1D slices of a 2D scalar field. Joy Division *Unknown Pleasures* / Harold Craft 1970 PSR B1919+21 lineage; sibling primitive to `grid()`. Zero-dep, duck-types numpy ndarray, brand defaults clear the 8:1 floor, occlusion fill on by default with `fill=None` for line-art mode. `python -m muriel.spatial --ridgemap` renders a deterministic pulsar-style demo.
 - **`.agents/skills/muriel` broadcast symlink** — one symlink pointing to the canonical `plugins/muriel/skills/compose/` directory. Read natively by Codex CLI and as an alternate path by Cursor, Gemini CLI, GitHub Copilot, OpenCode, and Pi. Per-harness verification still TBD; rollout plan in [`HARNESSES.md`](HARNESSES.md).
 - **`muriel.tools.impeccable_bridge`** — optional Python wrapper around `npx impeccable detect <target>` (pbakaus/impeccable's 27-rule deterministic anti-pattern detector, regex + Puppeteer, no LLM). Defensive JSON-shape normalisation; `format_markdown(result)` returns `""` when unavailable so callers paste it unconditionally and the section silently disappears.
 - **`HARNESSES.md`** — top-level plan for cross-harness packaging across eleven AI agent harnesses (Claude Code, Codex CLI, Cursor, Gemini CLI, GitHub Copilot, Kiro, OpenCode, Pi, Qoder, Rovo Dev, Trae). Mirrors [pbakaus/impeccable](https://github.com/pbakaus/impeccable)'s packaging matrix. P0 landed (the symlink); P1 (per-harness manifests + `./install.sh --harness`) and P2 (frontmatter universalism, marketplace submissions, critique-agent portability) queued.
-- **`vocabularies/data-viz-platforms.md`** — survey of seven platform charting guides (Apple HIG, Google Material 3, IBM Carbon Charts, Vega-Lite, Observable Plot, FT Visual Vocabulary, Datawrapper Academy) with license posture spelled out for each (Apple proprietary, Material CC BY 4.0, Carbon Apache 2.0, Vega-Lite BSD-3, Plot ISC, FT MIT, Datawrapper per-page). Five-rule cross-platform consensus + divergence list.
+- **`vocabularies/data-viz-platforms.md`** — survey of seven platform charting guides (Apple HIG, Google Material 3, IBM Carbon Charts, Vega-Lite, Observable Plot, FT Visual Vocabulary, Datawrapper Academy) with license posture spelled out for each (Apple proprietary, Material CC BY 4.0, Carbon Apache 2.0, Vega-Lite BSD-3, Plot ISC, FT MIT, Datawrapper per-page). Five-rule cross-platform consensus + divergence list. Sibling to v0.10.0's `channels/charts.md` (which covers JS chart libraries) — the vocab covers platform design *guides*, the channel covers chart *libraries*.
 - **`examples/scrutinizer-ridgemap/`** — branded composition exemplar. A vesica-piscis scalar field whose row-wise ridges trace an eye outline; bottom half mirrored so the almond closes; pupil + iris core for the eyeball; rendered in Scrutinizer orange on a Blauch log-spaced concentric-ring scaffold.
 
 ### Changed
@@ -24,6 +24,34 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 - **`channels/web.md` impeccable footnote** updated to reflect impeccable Skill 3.1.1 (May 2026), its 27-rule deterministic detector, and the `muriel capture → npx impeccable detect → muriel-critique` pipeline.
 - **`channels/spatial.md`** documents the ridgemap path alongside the existing perspective-grid path; queued: filled-iso-line, wireframe-protrusion, hachured-relief projections of the same scalar-field primitive.
 - **`channels/science.md`** "Prior art / upstream" entry for Apple HIG — *Charting data*, cited by link + paraphrase per scholarly discipline (Apple-proprietary docs). Calls out Swift Charts' audio-graph accessibility as a distinctive contribution.
+
+## [0.10.0] — 2026-05-19
+
+**`muriel.aiism` rule cleanup: removed CC-BY-SA-4.0 content for commercial-use clarity.** Drops the 25 inline phrase/cluster/repeated-phrase rules that were attributed to Wikipedia "Signs of AI writing" and `ammil-industries/vale-signs-of-ai-writing` (both CC-BY-SA-4.0). Share-alike on those rules would have required any redistribution of muriel.aiism to remain CC-BY-SA-4.0, constraining commercial use of muriel and downstream consumers (science-agent, plugin shipments, etc.). Mirrors the parallel cleanup that landed in `science-agent` 0.4.0 ([commit 9574fd5](https://github.com/andyed/science-agent/commit/9574fd5)).
+
+### Removed
+
+- **9 significance-inflation phrases**: `phrase-testament-to`, `phrase-reminder-of`, `phrase-plays-a-role`, `phrase-underscores`, `phrase-stands-as`, `phrase-serves-as`, `phrase-rich-heritage`, `phrase-indelible-mark`, `phrase-contributes-to`.
+- **4 prescriptive-narrator phrases**: `phrase-it-is-important`, `phrase-one-must`, `phrase-needless-to-say`, `phrase-worth-mentioning`.
+- **4 throat-clearing temporal openers**: `phrase-recent-years`, `phrase-past-decade`, `phrase-todays-world`, `phrase-modern-era`.
+- **1 anthropomorphized-research-verb**: `phrase-research-unveiled`.
+- **1 sourceless-authority hedge**: `phrase-vague-attribution`.
+- **4 cluster rules**: `cluster-padded-vocab`, `cluster-hedges`, `cluster-firstly-thirdly`, `cluster-significance-verbs`. `CLUSTER_RULES` is now empty.
+- **2 Vale-style repeated-phrase rules**: `repeat-not-x-but-y`, `repeat-what-x-cleft`.
+
+### Retained
+
+- All 8 `HARD_ARTIFACT_RULES` (project-specific LLM-tooling residue detectors: `oaicite`, sandbox paths, ChatGPT URLs, knowledge-cutoff disclaimers, etc.).
+- 12 project-specific `SINGLE_PHRASE_RULES`: `phrase-earn-their-keep`, `phrase-locus-of`, `phrase-unit-at-which`, `phrase-substrate-licenses`, `phrase-doing-its-share`, `phrase-observational-register`, `phrase-names-the-same-observation`, `phrase-the-hope-is-that`, `phrase-looking-into-the-corners`, `phrase-leaky-cursor-aside`, `phrase-not-just-but`, `phrase-regime`.
+- 5 project-specific `REPEATED_PHRASE_RULES`: `repeat-load-bearing`, `repeat-structurally`, `repeat-materially`, `repeat-meaningfully`, `repeat-already-compound`.
+- 1 `PROXIMITY_RULES` entry: `doubled-cleft`.
+- All engine-level detectors (long-sentence, bold-density, em-dash-per-line).
+
+### Migration notes
+
+- Total rule count: 51 → 26.
+- Module docstring updated to remove the CC-BY-SA-4.0 attribution claim. The remaining phrase tables are project-specific and inherit muriel's parent license.
+- For users who want the Wikipedia/Vale patterns back, they're available under their original CC-BY-SA-4.0 terms at the upstream sources cited in earlier muriel versions; clone those lists directly into your own configuration if you can accept share-alike for your distribution.
 
 ## [0.9.0] — 2026-05-17
 

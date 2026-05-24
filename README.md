@@ -7,7 +7,7 @@
 
 # muriel
 
-**muriel is a Claude Code skill that produces visual artifacts across fourteen channels — twelve output + two cross-channel references — enforcing an 8:1 contrast floor and brand-token discipline at render time.** Design tokens import from `design.md` and export to W3C DTCG; a vision-model critique agent audits the output; the floor never bends.
+**muriel is a Claude Code skill that produces visual artifacts across fifteen channels — thirteen output + two cross-channel references — enforcing an 8:1 contrast floor and brand-token discipline at render time.** Design tokens import from `design.md` and export to W3C DTCG; a vision-model critique agent audits the output; the floor never bends.
 
 A single skill file (`SKILL.md`) teaches the agent to generate every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data. The constraint discipline (8:1 contrast, OLED palette, one font treatment, generated > drawn, reproducible > one-off) stays *live* at render time: brand tokens are parsed, contrast is audited, dimensions are enforced — not as lint after the fact, but as part of the act of making.
 
@@ -48,7 +48,7 @@ muriel is the grandmother to [marginalia](https://github.com/andyed/marginalia) 
 
 ## Channels
 
-Twelve output channels, each with its own subfile under [`channels/`](plugins/muriel/skills/compose/channels/):
+Thirteen output channels, each with its own subfile under [`channels/`](plugins/muriel/skills/compose/channels/):
 
 - **Raster** (Pillow + `typeset.py`) — store assets, icons, banners, wordmarks, screenshot designs
 - **Vector / SVG** (`svgwrite`, `cairosvg`, Mermaid, Excalidraw) — paper figures, data-driven diagrams, scalable icons, flowcharts
@@ -59,6 +59,7 @@ Twelve output channels, each with its own subfile under [`channels/`](plugins/mu
 - **Density viz** (`typeset.render_heatmap()`) — Tobii-style fixation heatmaps
 - **Gaze plots** — scanpath, bubble scanpath, AOI timeline, saccade rose, approach-retreat
 - **Science** (matplotlib + LaTeX + `muriel.stats`) — paper figures, notebook editorial, APA reporting
+- **Charts** (Recharts / ECharts / Chart.js / Plotly / D3) — JS chart-library guidance with 22 numbered rules, anti-pattern detection, and muriel-strict 8:1 color tokens. matplotlib lives in **Science**. See [`channels/charts.md`](plugins/muriel/skills/compose/channels/charts.md).
 - **Infographics** (deterministic SVG) — single-image explainers, 10 types × layout patterns × colorblind-safe palettes
 - **Diagrams** (deterministic SVG) — rhetorical primitives: 2×2 matrix, N-step cycle, Venn shipped, plus Mermaid → SVG/ASCII and TeX → SVG (MathJax) Node-bridges; comparison pair, funnel, stack, DAG, spectrum, pyramid, heat-grid queued. Each preset carries an epistemic precondition + anti-prescription
 - **Spatial** (`muriel.spatial` + `render_assets/`) — depth scaffolding for layered typography + scalar-field topology. Static SVG perspective grids (1pt / 2pt / 3pt / iso) where `grid()` scaffolds *space*, plus `ridgemap()` — a sibling primitive that scaffolds *scalar fields* as stacked 1D slices (Joy Division / Harold Craft 1970 pulsar plot lineage). Three.js + CSS3DRenderer exemplars share one helper lib. Cooper VLW / Mackinlay-Robertson-Card / Dumais Data Mountain lineage. See [`channels/spatial.md`](plugins/muriel/skills/compose/channels/spatial.md).
@@ -103,7 +104,7 @@ The script symlinks `plugins/muriel/skills/compose/` into `~/.claude/skills/muri
 ```bash
 pip install -e ~/Documents/dev/muriel   # source install (editable)
 # pip install muriel                    # PyPI — not yet published; track via GitHub Releases
-pip install https://github.com/andyed/muriel/releases/download/v0.10.0/muriel-0.10.0-py3-none-any.whl
+pip install https://github.com/andyed/muriel/releases/download/v0.11.0/muriel-0.11.0-py3-none-any.whl
 ```
 
 Then, from any script or notebook:
@@ -191,7 +192,10 @@ muriel ships a vision-model critique agent at [`plugins/muriel/agents/muriel-cri
 ## Related prior art
 
 - **[pbakaus/impeccable](https://github.com/pbakaus/impeccable)** (Apache-2.0, **Skill 3.1.1**, May 2026) — Paul Bakaus' open-source design skill for AI coding harnesses, extended from Anthropic's original frontend-design skill. Now ships seven domain reference files (Typography, Color & Contrast, Spatial, Motion, Interaction, Responsive, UX Writing), twenty-three `/impeccable:*` commands (`craft`, `critique`, `audit`, `polish`, `bolder`, `quieter`, `distill`, `harden`, `animate`, `colorize`, `typeset`, `layout`, …), twenty-seven deterministic anti-pattern rules plus twelve LLM-critique rules, and a standalone `npx impeccable detect` CLI (regex + Puppeteer screenshot scan, no API key required) that emits JSON for twenty-four detectable issues. Packaged across eleven harnesses (Claude Code, Cursor, Codex CLI, Gemini CLI, GitHub Copilot, Kiro, OpenCode, Pi, Qoder, Rovo Dev, Trae). muriel's `Absolute bans` section in `channels/web.md` and the reflex-fonts anti-pattern are rephrased from impeccable. Where impeccable is single-surface + JS-side and ships its own detector, muriel is multi-channel + Python-native with a vision-model critique agent; they complement — chaining `muriel capture` → `npx impeccable detect` → `muriel-critique` is the strongest pipeline for "render → static-rule scan → vision-critic" on a web surface. muriel's cross-harness rollout in [`HARNESSES.md`](HARNESSES.md) mirrors impeccable's packaging matrix.
+- **[nexu-io/html-anything](https://github.com/nexu-io/html-anything)** (Apache-2.0) — agentic HTML editor with 75 skills × 9 surfaces (magazine, deck, poster, XHS / tweet, prototype, data report, Hyperframes), one-click export to HTML / PNG / WeChat / X / Zhihu. Closest contemporary in the multi-surface composition space; particularly strong on East Asian social-graphic surfaces muriel doesn't currently target. Different audience, parallel multi-channel philosophy — worth tracking for surface conventions muriel may want to mirror.
 - **[pixijs/pixijs-skills](https://github.com/pixijs/pixijs-skills)** (MIT) — source of truth for the PixiJS vocabulary. Curated subset documented at [`vocabularies/pixijs.md`](plugins/muriel/skills/compose/vocabularies/pixijs.md); upstream is where the depth lives.
+- **[caylent/tufte-data-viz](https://github.com/caylent/tufte-data-viz)** (MIT) — Edward Tufte's data-viz principles as an agent skill: 22 numbered rules + per-library quick-reference for Recharts, ECharts, Chart.js, matplotlib, Plotly, D3/SVG. The structural model behind muriel's [`channels/charts.md`](plugins/muriel/skills/compose/channels/charts.md) — we ported the rule structure, per-library config tables, and anti-pattern PATTERN→FIX detection format, then overrode the color tokens because Tufte's published palette fails muriel's 8:1 floor (their `#666` series and `#e41a1c` accent score 5.7 and 4.7). Specific divergences logged in the [Sibling skills](plugins/muriel/skills/compose/SKILL.md#sibling-skills--what-we-borrow-from-each) table.
+- **[K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills)** (MIT) — research-skill family covering matplotlib, statistical-analysis, scientific-critical-thinking, market-research, pptx, markitdown, literature-review, hypothesis-generation, scientific-schematics. Several modules overlap muriel's `channels/science.md` and queued channels (market-research, pptx). muriel borrows test-selection vocabulary, the generate→render→inspect PPTX inspection loop, and the GRADE/Cochrane bias taxonomy; we keep our standard-library-only `muriel.stats` (no scipy/pingouin) and 8:1 audit on every figure. Take/keep-ours mapping in the [Sibling skills](plugins/muriel/skills/compose/SKILL.md#sibling-skills--what-we-borrow-from-each) table.
 - **[matplotlib-venn](https://github.com/konstantint/matplotlib-venn)** — area-proportional Euler renderer that backs [`muriel/tools/venn.py`](muriel/tools/venn.py).
 - **[geraldnguyen/social-media-posters](https://github.com/geraldnguyen/social-media-posters)** (MIT) — Python + GitHub Actions CLI for *posting* to X / LinkedIn / Instagram / Threads / Bluesky / YouTube. Sits downstream of muriel: muriel produces the OG card at the right dimensions, audits contrast, applies brand tokens; social-media-posters sends it. The top-level `muriel` CLI's subcommand-dispatch pattern is borrowed from their `social_cli/`.
 - **[yizhiyanhua-ai/fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph)** (MIT) — Claude Code skill that renders SVG technical-architecture diagrams (14 UML types + AI/agent-system diagrams like RAG pipelines, multi-agent orchestration, tool-call flows) from natural-language descriptions. The closest living example of system-architecture diagram generation; useful reference as muriel's [`channels/diagrams.md`](plugins/muriel/skills/compose/channels/diagrams.md) catalog grows past the matrix + cycle MVP toward causal DAG and stack primitives.

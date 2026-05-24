@@ -1,8 +1,8 @@
-# muriel v0.10.0 — sibling, not subordinate
+# muriel v0.11.0 — sibling, not subordinate
 
 *Released 2026-05-24.*
 
-v0.9.0 made palette generation honest (8:1-by-construction). v0.10.0 adds three new surfaces, and each one is a **sibling** of something already in muriel rather than a new top-level concern. `muriel.spatial.ridgemap` joins `grid()` inside the spatial module under the same conventions. The `.agents/skills/muriel` broadcast symlink is a sibling install path to `.claude/skills/`. The new `muriel.tools.impeccable_bridge` wraps pbakaus/impeccable's deterministic detector as an *optional* pre-scan for `muriel-critique` — silent when absent, so the critique agent works identically with or without it. None of the three is a dependency; each is a peer. The rule running through the release is: **when an idea fits next to something already shipped, ship it as a sibling, not as a subordinate.**
+v0.9.0 made palette generation honest (8:1-by-construction). v0.11.0 adds three new surfaces, and each one is a **sibling** of something already in muriel rather than a new top-level concern. `muriel.spatial.ridgemap` joins `grid()` inside the spatial module under the same conventions. The `.agents/skills/muriel` broadcast symlink is a sibling install path to `.claude/skills/`. The new `muriel.tools.impeccable_bridge` wraps pbakaus/impeccable's deterministic detector as an *optional* pre-scan for `muriel-critique` — silent when absent, so the critique agent works identically with or without it. None of the three is a dependency; each is a peer. The rule running through the release is: **when an idea fits next to something already shipped, ship it as a sibling, not as a subordinate.**
 
 ---
 
@@ -110,8 +110,8 @@ Pin against `muriel >= 0.10.0` if you depend on `muriel.spatial.ridgemap` or `mu
 
 ```bash
 pip install --upgrade muriel
-# or the v0.10.0 wheel directly:
-pip install https://github.com/andyed/muriel/releases/download/v0.10.0/muriel-0.10.0-py3-none-any.whl
+# or the v0.11.0 wheel directly:
+pip install https://github.com/andyed/muriel/releases/download/v0.11.0/muriel-0.11.0-py3-none-any.whl
 ```
 
 The `.agents/skills/muriel` symlink is part of the repo; it doesn't ship in the Python wheel. Non-Claude-Code users who want the cross-harness install path should clone the repo (or download a release tarball) and let their harness discover the `.agents/skills/` tree from a project-local checkout — same model as the existing `install.sh` developer path for Claude Code.

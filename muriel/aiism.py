@@ -13,12 +13,17 @@ note"), padded-vocabulary clusters, and hard artifacts of LLM tooling
 (oaicite tokens, knowledge-cutoff disclaimers, sandbox paths).
 
 Sources for phrase lists:
-- Wikipedia: Signs of AI writing (CC-BY-SA-4.0)
-- ammil-industries/vale-signs-of-ai-writing (CC-BY-SA-4.0) —
-  https://github.com/ammil-industries/vale-signs-of-ai-writing
 - Local critique of paper-v4 (project-specific tics)
-The phrase tables here are derivative of the Wikipedia / Vale lists and
-remain CC-BY-SA-4.0 compatible. The Python rule engine is muriel-licensed.
+- Hard LLM-tooling artifact detectors (oaicite tokens, sandbox paths,
+  knowledge-cutoff disclaimers, etc.) — project-specific.
+
+As of v0.10.0, all phrase tables previously derivative of Wikipedia
+"Signs of AI writing" and ammil-industries/vale-signs-of-ai-writing
+(CC-BY-SA-4.0) were removed to make muriel commercial-use-clean. The
+former list of 25 removed rules (significance-inflation, prescriptive-
+narrator framing, throat-clearing temporal openers, anthropomorphized
+research verbs, sourceless-authority hedges, four cluster detectors,
+two repeated-phrase patterns) is documented in CHANGELOG.
 
 Usage
 -----
@@ -133,53 +138,12 @@ SINGLE_PHRASE_RULES: list[tuple[str, str, str, str]] = [
     ("phrase-leaky-cursor-aside", r"\bleaky\s+cursor.{0,40}observational\s+register\b", "warn",
      "Title aside is overwrought. Trust the title or unpack plainly."),
 
-    # --- Significance-inflation phrases (Vale/Wikipedia-derived, CC-BY-SA-4.0) ---
-    ("phrase-testament-to", r"\ba\s+(?:true\s+)?testament\s+to\b", "warn",
-     "Significance-inflation cliché. Almost never appears in unedited human technical prose."),
-    ("phrase-reminder-of", r"\ba\s+(?:stark|powerful|sobering|striking)\s+reminder\s+of\b", "warn",
-     "Significance-inflation cliché. Cut or replace with the specific point."),
-    ("phrase-plays-a-role", r"\bplays?\s+a\s+(?:vital|crucial|pivotal|central|key|critical|fundamental)\s+role\b", "warn",
-     "Formula phrase. Either say what it does, or say nothing."),
-    ("phrase-underscores", r"\bunderscor(?:es|ing|ed)\s+the\s+(?:significance|importance|need|value)\b", "warn",
-     "LLM tic. Replace with 'shows', 'demonstrates', or just state the claim."),
-    ("phrase-stands-as", r"\bstands?\s+as\s+(?:a\s+|an\s+)", "warn",
-     "Copula-avoidance via weighty linking verb. Use plain 'is'."),
-    ("phrase-serves-as", r"\bserves?\s+as\s+(?:a\s+|an\s+|the\s+)", "info",
-     "Copula-avoidance via weighty linking verb. Often 'is' is cleaner."),
-    ("phrase-rich-heritage", r"\b(?:rich|profound|deep|enduring)\s+(?:heritage|legacy|tradition)\b", "warn",
-     "Encyclopedic-flavor cliché. Rare in real domain writing."),
-    ("phrase-indelible-mark", r"\b(?:indelible\s+mark|lasting\s+impact|enduring\s+impact|deeply\s+rooted|steadfast\s+dedication)\b",
-     "warn", "Encyclopedic-flavor cliché. Cut."),
-    ("phrase-contributes-to", r"\bcontributes?\s+to\s+(?:the\s+)?(?:overall|broader|wider|larger)\s+", "warn",
-     "Vacuous abstraction. State what the contribution is."),
-
-    # --- Prescriptive-narrator framing ---
-    ("phrase-it-is-important", r"\bit\s+is\s+(?:important|crucial|essential|vital|necessary)\s+to\s+(?:note|recognize|understand|remember|consider|acknowledge)\b",
-     "warn", "Prescriptive-narrator frame. State the point directly."),
-    ("phrase-one-must", r"\b(?:one\s+must|we\s+must)\s+(?:consider|acknowledge|recognize|understand)\b", "warn",
-     "Lecturing the reader. Cut or convert to plain statement."),
-    ("phrase-needless-to-say", r"\b(?:needless\s+to\s+say|it\s+goes\s+without\s+saying)\b", "warn",
-     "If it's needless, cut it."),
-    ("phrase-worth-mentioning", r"\bit'?s?\s+worth\s+(?:mentioning|noting|pointing\s+out)\s+that\b", "warn",
-     "Throat-clearing. State the thing."),
-
-    # --- Throat-clearing temporal openers ---
-    ("phrase-recent-years", r"^\s*In\s+recent\s+years,", "warn",
-     "Temporal-frame opener. Lead with the claim."),
-    ("phrase-past-decade", r"^\s*Over\s+the\s+(?:past|last)\s+(?:decade|few\s+years)", "warn",
-     "Temporal-frame opener. Lead with the claim."),
-    ("phrase-todays-world", r"\bIn\s+today'?s\s+(?:fast-paced\s+)?(?:world|era|landscape)\b", "warn",
-     "Cliché opener. Cut entirely."),
-    ("phrase-modern-era", r"\bIn\s+(?:the\s+)?(?:modern\s+era|an\s+increasingly\s+\w+\s+world)\b", "warn",
-     "Cliché opener. Cut."),
-
-    # --- Anthropomorphized research verbs ---
-    ("phrase-research-unveiled", r"\b(?:research|the\s+study|the\s+paper)\s+(?:unveiled|revealed|discovered|uncovered)\b",
-     "warn", "Anthropomorphized research verb. Use 'found', 'observed', 'reported'."),
-
-    # --- Sourceless-authority hedges ---
-    ("phrase-vague-attribution", r"\b(?:industry\s+reports\s+suggest|observers\s+have\s+noted|experts\s+(?:argue|contend|suggest)|critics\s+contend)\b",
-     "warn", "Sourceless-authority frame. Name the source or drop the claim."),
+    # --- 19 Vale/Wikipedia-derived phrase rules removed in muriel 0.10.0
+    # (significance-inflation, prescriptive-narrator framing, throat-clearing
+    # temporal openers, anthropomorphized research verbs, sourceless-authority
+    # hedges). These carried CC-BY-SA-4.0 share-alike obligations that
+    # constrained commercial use of muriel and downstream consumers. See
+    # CHANGELOG entry for full list.
 
     # --- En-dash escalation tic ---
     ("phrase-not-just-but", r"\bnot\s+just\s+\S+(?:\s+\S+){0,5}?\s+[—–-]\s+\S+", "warn",
@@ -202,11 +166,8 @@ REPEATED_PHRASE_RULES: list[tuple[str, str, int, str, str]] = [
      "Empty intensifier. Either give the number or drop the adverb."),
     ("repeat-already-compound", r"\balready-\w+", 5, "info",
      "Already-Y compound used many times. Vary phrasing; 'previously', 'prior', plain past tense work too."),
-    ("repeat-not-x-but-y", r"\bis\s+not\s+[^.\n]{1,80}?\s+but\s+\w", 3, "warn",
-     "'Not X but Y' parallelism is a tell when stacked. Spread out or convert to 'Y, not X'."),
-    ("repeat-what-x-cleft", r"^\s*What\s+\w+(?:\s+\w+){0,4}?\s+(?:makes|is|carries|needs|does|matters|changes|survives)\b",
-     2, "warn",
-     "'What X is Y' cleft. Composed-not-written. Convert to direct subject-verb."),
+    # repeat-not-x-but-y and repeat-what-x-cleft removed in 0.10.0
+    # (CC-BY-SA-4.0 Vale/Wikipedia-derived patterns).
 ]
 
 # Cluster rules — fire when ≥threshold tokens from a list appear within a
@@ -215,22 +176,10 @@ REPEATED_PHRASE_RULES: list[tuple[str, str, int, str, str]] = [
 # (rule_id, token_regex, threshold, scope, severity, message)
 # scope ∈ {"paragraph", "200w"}
 CLUSTER_RULES: list[tuple[str, str, int, str, str, str]] = [
-    ("cluster-padded-vocab",
-     r"\b(?:showcasing|highlighting|emphasizing|enhance(?:s|d|ment)?|fostering|leverag(?:e|es|ed|ing)|harness(?:es|ed|ing)?|robust|seamless|cutting-edge|pivotal|vibrant|meticulous|intricate|comprehensive|holistic|nuanced|profound|paramount)\b",
-     3, "200w", "warn",
-     "Padded-vocabulary cluster (≥3 in 200-word span). Mid-2024+ LLM residue. Replace with plain words."),
-    ("cluster-hedges",
-     r"\b(?:notably|obviously|clearly|undoubtedly|of\s+course|importantly|crucially|essentially|fundamentally)\b",
-     3, "paragraph", "warn",
-     "Hedge/booster cluster (≥3 in one paragraph). Empty intensifiers; drop most."),
-    ("cluster-firstly-thirdly",
-     r"\b(?:[Ff]irstly|[Ss]econdly|[Tt]hirdly|[Ll]astly)\b",
-     3, "paragraph", "warn",
-     "Sequenced 'firstly/secondly/thirdly' in one paragraph. Humans usually mix transitions."),
-    ("cluster-significance-verbs",
-     r"\b(?:underscores?|highlights?|emphasi[sz]es?|illustrates?|exemplifies?)\s+(?:the\s+)?(?:significance|importance|need|value|crucial)\b",
-     2, "paragraph", "warn",
-     "Multiple significance-verb constructions in one paragraph. State the point."),
+    # All four cluster rules (cluster-padded-vocab, cluster-hedges,
+    # cluster-firstly-thirdly, cluster-significance-verbs) removed in 0.10.0
+    # because they relied on Vale/Wikipedia-derived word lists carrying
+    # CC-BY-SA-4.0 share-alike obligations. See CHANGELOG entry.
 ]
 
 
