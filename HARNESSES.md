@@ -7,7 +7,9 @@ Plan for shipping muriel as a skill on every major AI coding harness, not just C
 | Harness | Status | Install path |
 |---|---|---|
 | Claude Code | **shipped** | `/plugin install muriel@andyed-muriel` (plugin marketplace) or `./install.sh` (dev) |
-| Everything else | **manual copy** | one-paragraph hint in `README.md` saying "mirror into `.<harness>/skills/muriel/`" |
+| Codex CLI | **broadcast landed, unverified** | reads `.agents/skills/muriel/` natively (symlink to canonical, in-repo) |
+| Cursor / Gemini CLI / GitHub Copilot / OpenCode / Pi | **broadcast landed, unverified** | each reads `.agents/skills/muriel/` as an alternate path; native dir (`.cursor/skills/muriel/` etc.) is a P1 task |
+| Kiro / Qoder / Rovo Dev / Trae | **not yet** | no convergent broadcast path; per-harness manifests in P1 |
 
 The canonical SKILL.md at `plugins/muriel/skills/compose/SKILL.md` already uses the [Agent Skills](https://github.com/anthropics/claude-code/blob/main/docs/skills.md) format — it's portable, the question is purely packaging.
 
@@ -37,24 +39,34 @@ Eleven harnesses, three install patterns. The `.agents/skills/` convention is th
 plugins/muriel/skills/compose/   ← canonical SKILL.md + channels/ + vocabularies/ + examples/
 plugins/muriel/agents/           ← muriel-critique.md
 .claude-plugin/marketplace.json  ← Claude Code plugin manifest (exists)
-.agents/skills/muriel/           ← (P0, NEW) broadcast directory — symlinks to canonical
+.agents/skills/muriel  ──→ plugins/muriel/skills/compose  (P0, LANDED — symlink)
 .cursor-plugin/                  ← (P1, NEW) Cursor-specific manifest
 .gemini-plugin/                  ← (P1, NEW) Gemini-specific manifest
 …
 ```
 
-### P0 — `.agents/skills/muriel/` broadcast (one symlink, six harnesses)
+### P0 — `.agents/skills/muriel/` broadcast (landed)
 
-Add a single symlink:
+The repo now ships a symlink at `.agents/skills/muriel` pointing to `plugins/muriel/skills/compose` (the canonical SKILL.md + channels/ + vocabularies/ + examples/). Git tracks it as a symlink (mode `120000`), not as a copy — one source of truth, no duplication.
 
 ```
-.agents/skills/muriel  →  plugins/muriel/skills/compose
-.agents/skills/muriel-critique.md  →  plugins/muriel/agents/muriel-critique.md
+.agents/skills/muriel  →  ../../plugins/muriel/skills/compose
 ```
 
-That single directory is read natively by **Codex CLI** and as an alternate by **Cursor, Gemini CLI, GitHub Copilot, OpenCode, Pi** — six of the ten non-Claude harnesses, zero new content.
+That single path is read **natively** by Codex CLI and as an **alternate** by Cursor, Gemini CLI, GitHub Copilot, OpenCode, and Pi — six of the ten non-Claude harnesses gain a working install with zero additional packaging.
 
-Verify each harness actually picks the skill up from `.agents/skills/muriel/` (some require a config flag; document per-harness in `HARNESSES.md` after testing). Add a `Get muriel running on <harness>` recipe block to this file for each verified harness.
+**Per-harness verification — TBD.** The symlink is in place; whether each harness actually loads muriel through it is unverified. Verification needs each harness installed and exercised once:
+
+- [ ] **Codex CLI** — `.agents/skills/` is the native skills dir; expect zero-config pickup.
+- [ ] **Cursor** — needs the `agents.skills.paths` config or equivalent to add `.agents/skills` as an alternate. Document the config snippet here once tested.
+- [ ] **Gemini CLI** — same pattern; verify alternate-path config.
+- [ ] **GitHub Copilot** — agent mode reads `.github/skills/` natively; verify `.agents/skills/` is also discovered (impeccable's HARNESSES.md says yes, but verify).
+- [ ] **OpenCode** — verify the alternate path is picked up.
+- [ ] **Pi** — verify the alternate path is picked up.
+
+For each verified harness, add a `## Get muriel running on <harness>` recipe block below: the exact config snippet (if any), how to invoke muriel from a session, and any caveats. Until verified, treat the broadcast as best-effort.
+
+**Critique-agent placement is deferred to P1.** The plan originally had `.agents/skills/muriel-critique.md` (a single file inside `skills/`), but no harness has a documented convention for sub-agent definitions inside the skills dir. Claude Code reads agents from `.claude/agents/` (already covered by the plugin install); other harnesses' sub-agent surfaces vary. Document per-harness in P1 once we know what each accepts.
 
 ### P1 — per-harness manifests (Cursor, Gemini, Kiro, Qoder, Rovo Dev, Trae)
 

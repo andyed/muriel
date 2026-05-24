@@ -6,6 +6,21 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- **`.agents/skills/muriel` broadcast symlink** — one symlink pointing to the canonical `plugins/muriel/skills/compose/` directory. Read natively by Codex CLI and as an alternate path by Cursor, Gemini CLI, GitHub Copilot, OpenCode, and Pi. Per-harness verification still TBD; rollout plan in [`HARNESSES.md`](HARNESSES.md).
+- **`muriel.spatial.ridgemap`** — stacked 1D slices of a 2D scalar field (Joy Division / Harold Craft 1970 pulsar plot lineage); sibling primitive to `grid()`. Zero-dep, duck-types numpy ndarray, brand defaults clear the 8:1 floor.
+- **`muriel.tools.impeccable_bridge`** — optional Python wrapper around `npx impeccable detect <target>` (pbakaus/impeccable's 27-rule deterministic anti-pattern detector). Silent / no-op when Node + impeccable are absent, so it never becomes a requirement.
+
+### Changed
+- **`muriel-critique` agent** can optionally invoke the impeccable bridge as a deterministic pre-scan on web artifacts. Silent and non-blocking when impeccable / Node are absent — `muriel-critique` works identically with or without it.
+- **README "Other AI harnesses" section** and **`channels/web.md` impeccable footnote** updated to reflect impeccable Skill 3.1.1 (May 2026), its 27-rule deterministic detector, and the `muriel capture → npx impeccable detect → muriel-critique` pipeline.
+
+### Documentation
+- **`HARNESSES.md`** — new top-level plan for cross-harness packaging, mirroring pbakaus/impeccable's eleven-harness matrix.
+- **`vocabularies/data-viz-platforms.md`** — survey of Apple HIG / Google Material 3 / IBM Carbon / Vega-Lite / Observable Plot / FT Visual Vocabulary / Datawrapper Academy charting guidance, with license posture spelled out for each.
+- **`channels/spatial.md`** — adds the ridgemap path section and the scalar-field-to-topology lineage / queued projections.
+- **`examples/scrutinizer-ridgemap/`** — branded composition exemplar (Scrutinizer-coloured eye drawn by ridgemap rows on a Blauch log-spaced ring scaffold).
+
 ## [0.9.0] — 2026-05-17
 
 **Generate the palette, don't audit it.** Adds `muriel.palettes.generate_for_floor()` — an Adobe-Leonardo-style contrast-driven palette generator that produces 8:1-by-construction palettes against any brand background. Four theme palettes (Catppuccin Mocha + Latte, Nord Aurora + Frost) join the registry under a new "theme tier"; the terminal channel gains an animated-effects section (TerminalTextEffects); the v0.8.0 surfaces (README, SKILL.md, demo gallery) got synced, link-audited, and reorganized. README lede rewritten per independent review. Long-form notes: [`RELEASE_NOTES_v0.9.0.md`](RELEASE_NOTES_v0.9.0.md).

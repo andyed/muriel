@@ -139,7 +139,7 @@ The `muriel-critique` subagent ships with the plugin and is loaded automatically
 
 ### Other AI harnesses (Cursor, Codex, Gemini CLI, GitHub Copilot, Kiro, OpenCode, Pi, Qoder, Rovo Dev, Trae, …)
 
-The canonical `SKILL.md` at `plugins/muriel/skills/compose/SKILL.md` uses the [Agent Skills](https://github.com/anthropics/claude-code/blob/main/docs/skills.md) format that's portable across most agent harnesses. Cross-harness packaging is in flight — see [`HARNESSES.md`](HARNESSES.md) for the rollout plan (canonical source → `.agents/skills/muriel/` broadcast directory → per-harness manifest shims). The `.agents/skills/` convention is already readable by Codex CLI natively and by Cursor / Gemini CLI / GitHub Copilot / OpenCode / Pi as an alternate path, which closes most of the gap with one symlink.
+The canonical `SKILL.md` at `plugins/muriel/skills/compose/SKILL.md` uses the [Agent Skills](https://github.com/anthropics/claude-code/blob/main/docs/skills.md) format that's portable across most agent harnesses. The repo ships a `.agents/skills/muriel` symlink to the canonical source — read **natively** by Codex CLI and as an **alternate path** by Cursor, Gemini CLI, GitHub Copilot, OpenCode, and Pi. Per-harness verification is unfinished; see [`HARNESSES.md`](HARNESSES.md) for the rollout plan and the verification checklist. Kiro, Qoder, Rovo Dev, and Trae need per-harness manifest shims (P1, not yet landed).
 
 ## Dependencies (by channel)
 
