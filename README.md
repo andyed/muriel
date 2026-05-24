@@ -7,7 +7,7 @@
 
 # muriel
 
-**muriel is a Claude Code skill that produces visual artifacts across fifteen channels — thirteen output + two cross-channel references — enforcing an 8:1 contrast floor and brand-token discipline at render time.** Design tokens import from `design.md` and export to W3C DTCG; a vision-model critique agent audits the output; the floor never bends.
+**muriel is a Claude Code skill that produces visual artifacts across sixteen channels — fourteen output + two cross-channel references — enforcing an 8:1 contrast floor and brand-token discipline at render time.** Design tokens import from `design.md` and export to W3C DTCG; a vision-model critique agent audits the output; the floor never bends.
 
 A single skill file (`SKILL.md`) teaches the agent to generate every visual artifact a researcher-designer-engineer ships — from text source files that diff in git and regenerate from data. The constraint discipline (8:1 contrast, OLED palette, one font treatment, generated > drawn, reproducible > one-off) stays *live* at render time: brand tokens are parsed, contrast is audited, dimensions are enforced — not as lint after the fact, but as part of the act of making.
 
@@ -48,7 +48,7 @@ muriel is the grandmother to [marginalia](https://github.com/andyed/marginalia) 
 
 ## Channels
 
-Thirteen output channels, each with its own subfile under [`channels/`](plugins/muriel/skills/compose/channels/):
+Fourteen output channels, each with its own subfile under [`channels/`](plugins/muriel/skills/compose/channels/):
 
 - **Raster** (Pillow + `typeset.py`) — store assets, icons, banners, wordmarks, screenshot designs
 - **Vector / SVG** (`svgwrite`, `cairosvg`, Mermaid, Excalidraw) — paper figures, data-driven diagrams, scalable icons, flowcharts
@@ -63,6 +63,7 @@ Thirteen output channels, each with its own subfile under [`channels/`](plugins/
 - **Infographics** (deterministic SVG) — single-image explainers, 10 types × layout patterns × colorblind-safe palettes
 - **Diagrams** (deterministic SVG) — rhetorical primitives: 2×2 matrix, N-step cycle, Venn shipped, plus Mermaid → SVG/ASCII and TeX → SVG (MathJax) Node-bridges; comparison pair, funnel, stack, DAG, spectrum, pyramid, heat-grid queued. Each preset carries an epistemic precondition + anti-prescription
 - **Spatial** (`muriel.spatial` + `render_assets/`) — depth scaffolding for layered typography + scalar-field topology. Static SVG perspective grids (1pt / 2pt / 3pt / iso) where `grid()` scaffolds *space*, plus `ridgemap()` — a sibling primitive that scaffolds *scalar fields* as stacked 1D slices (Joy Division / Harold Craft 1970 pulsar plot lineage). Three.js + CSS3DRenderer exemplars share one helper lib. Cooper VLW / Mackinlay-Robertson-Card / Dumais Data Mountain lineage. See [`channels/spatial.md`](plugins/muriel/skills/compose/channels/spatial.md).
+- **Polish** (CSS / TSX / HTML micro-interaction discipline) — UI polish + visual-detail rules: concentric border radius (`outer = inner + padding`), optical alignment, shadows-over-borders, scale-on-press (`0.96`, never below `0.95`), contextual icon animations (`scale 0.25→1` + `blur 4px→0` + `bounce: 0`), 40×40px hit area, no `transition: all`, tabular nums, `text-wrap: balance` / `pretty`, macOS font smoothing. 16 numbered rules, mined from [thedavidmurray/claude-make-interfaces-feel-better](https://github.com/thedavidmurray/claude-make-interfaces-feel-better) (MIT, archived) with muriel's 8:1 contrast floor still binding. See [`channels/polish.md`](plugins/muriel/skills/compose/channels/polish.md).
 
 Plus two cross-channel references used by every channel:
 
@@ -201,6 +202,7 @@ muriel ships a vision-model critique agent at [`plugins/muriel/agents/muriel-cri
 - **[yizhiyanhua-ai/fireworks-tech-graph](https://github.com/yizhiyanhua-ai/fireworks-tech-graph)** (MIT) — Claude Code skill that renders SVG technical-architecture diagrams (14 UML types + AI/agent-system diagrams like RAG pipelines, multi-agent orchestration, tool-call flows) from natural-language descriptions. The closest living example of system-architecture diagram generation; useful reference as muriel's [`channels/diagrams.md`](plugins/muriel/skills/compose/channels/diagrams.md) catalog grows past the matrix + cycle MVP toward causal DAG and stack primitives.
 - **[webadderall/Recordly](https://github.com/webadderall/Recordly)** (AGPL-3.0, desktop app — **not vendored**, integrated only) — macOS/Windows/Linux screen-recording app with auto-zoom cursor following, cursor polish, motion-blur regions, webcam overlay, and styled frames, built on PixiJS. Recommended upstream of muriel's `channels/video.md` tooltip-burn + ffmpeg recipes for product-demo / walkthrough videos. AGPL means muriel never embeds or imports Recordly; the integration is purely filesystem/MP4 hand-off.
 - **[yctimlin/mcp_excalidraw](https://github.com/yctimlin/mcp_excalidraw)** (MIT) — MCP server + Claude Code skill that exposes 26 programmatic tools over Excalidraw (create/move/align/distribute/group shapes, export/import `.excalidraw` JSON, Mermaid convert, live canvas at `localhost:3000`). Complementary to muriel: muriel *generates* SVG/raster artifacts deterministically from specs; mcp_excalidraw lets a Claude Code agent *manipulate* diagrams in a live canvas with the draw-observe-adjust loop. Pairs cleanly with the planned `muriel.authoring.excalidraw` emitter — muriel writes the `.excalidraw` source file, mcp_excalidraw opens it for iterative refinement, muriel re-audits on re-export.
+- **[thedavidmurray/claude-make-interfaces-feel-better](https://github.com/thedavidmurray/claude-make-interfaces-feel-better)** (MIT, archived May 2026) — Design-engineering principles for UI polish: typography / surfaces / animations / performance split into four reference files plus a `skill.md` index. The structural model + 16 numbered rules behind muriel's [`channels/polish.md`](plugins/muriel/skills/compose/channels/polish.md) — we ported the whole rule set verbatim because the values are *tuned* (concentric `outer = inner + padding`, exact `scale(0.96)` press never below `0.95`, exact `scale 0.25→1` + `bounce: 0` for contextual icon swaps, 40×40px hit area, ~100ms stagger between semantic chunks) and overrode by adding the 8:1 contrast floor as a binding gate on top of the polish layer. Sits in a different lane from `impeccable` — impeccable runs deterministic anti-pattern detection over a rendered page; this codifies the design-engineering *recipes* you reach for when authoring the page.
 
 ## License
 

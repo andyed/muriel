@@ -1,6 +1,6 @@
 ---
 name: muriel
-description: "A multi-constraint solver for visual production — raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics, diagrams, spatial, charts across thirteen output channels plus dimensions + style-guides cross-channel references. Brand tokens, 8:1 contrast rule, and dimension constants stay active at render time. Use when the user needs any visual artifact for human eyes."
+description: "A multi-constraint solver for visual production — raster, SVG, web, interactive, polish, video, terminal, density viz, gaze, science, infographics, diagrams, spatial, charts across fourteen output channels plus dimensions + style-guides cross-channel references. Brand tokens, 8:1 contrast rule, and dimension constants stay active at render time. Use when the user needs any visual artifact for human eyes."
 ---
 
 # muriel — Multi-channel visual production
@@ -27,6 +27,7 @@ Each channel has a dedicated subfile with deep recipes, tooling, and lessons. Th
 | **Diagrams** | SVG | [`channels/diagrams.md`](channels/diagrams.md) — rhetorical primitives (2×2 matrix, N-step cycle, Venn shipped; comparison pair, funnel, stack, DAG, spectrum, pyramid, heat-grid queued); plus Mermaid → SVG/ASCII and TeX → SVG (MathJax) Node-bridges. Each preset carries an epistemic precondition and an anti-prescription. |
 | **Spatial** | SVG + HTML/WebGL | [`channels/spatial.md`](channels/spatial.md) — depth scaffolding for layered typography. `muriel.spatial` perspective grids (1pt / 2pt / 3pt / iso) + `render_assets/` Three.js + CSS3DRenderer exemplars sharing one helper lib. Cooper VLW / Mackinlay-Robertson-Card / Dumais Data Mountain lineage. |
 | **Charts** | JS chart libraries | [`channels/charts.md`](channels/charts.md) — Recharts, ECharts, Chart.js, Plotly, D3/SVG. 22 numbered rules, per-library quick-ref, anti-pattern PATTERN→FIX tables, can-I-remove test, chart-type guide, validation checklist. muriel-strict 8:1 color tokens override the Tufte palette. (matplotlib lives in `channels/science.md`.) |
+| **Polish** | CSS / TSX / HTML | [`channels/polish.md`](channels/polish.md) — UI micro-interaction + visual-detail discipline. 16 numbered rules: concentric border radius, optical alignment, shadows-over-borders, image outlines, 40×40px hit area, interruptible transitions, split-and-stagger enters, subtle exits, contextual icon animations (`scale 0.25→1` + `blur 4px→0` + `bounce: 0`), `scale(0.96)` on press, no `transition: all`, `will-change` only on compositor-friendly properties, tabular nums, macOS font smoothing, `text-wrap: balance` / `pretty`. Mined from [thedavidmurray/claude-make-interfaces-feel-better](https://github.com/thedavidmurray/claude-make-interfaces-feel-better) (MIT, archived). |
 
 
 ## Aesthetic vocabularies
@@ -59,6 +60,7 @@ muriel is a curator before it is an originator. When a third-party skill overlap
 | [K-Dense AI — market-research-reports](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/market-research-reports/SKILL.md) | (queued) 50+ page report template structure · PESTLE / Porter / TAM-SAM-SOM section conventions | Will use marginalia + weasyprint (or LaTeX) over their proprietary `.sty` · 300 DPI visuals · 8:1 contrast pass on every figure | queued — `channels/market-research.md` (see TODO) |
 | [K-Dense AI — pptx](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/pptx/SKILL.md) | (queued) `pptxgenjs` (JS) → `soffice` PDF → `pdftoppm` per-slide PNG → Pillow thumbnail grid generate→render→inspect loop · 10 named palettes · "no accent lines under titles" AI-tell heuristic | Skip their fixed templates (converge to sameness, fight multi-constraint-solver ethos) · use muriel brand tokens · 8:1 audit on slide text | queued — `channels/pptx.md` (see TODO) |
 | [heygen-com/hyperframes](https://github.com/heygen-com/hyperframes) | HTML → MP4 video pipeline · GSAP timeline conventions · transcribe/tts/preview/render CLI · registry block + component system · website-to-video capture | Slot into video channel as a substrate option (not a replacement for desktop-control/ffmpeg) · use muriel brand tokens · audio-reactive PixiJS frames via custom renderer (queued) | [`channels/video.md`](channels/video.md) |
+| [thedavidmurray/claude-make-interfaces-feel-better](https://github.com/thedavidmurray/claude-make-interfaces-feel-better) | 16 numbered UI-polish rules with **mathematical-precision framing** (`outer = inner + padding`, exact `scale(0.96)` press, exact `scale 0.25→1` + `bounce: 0` for icon swaps, ~100ms stagger between semantic chunks, 40×40px hit area minimum) · split-doc structure (typography / surfaces / animations / performance) · canonical recipes (shadow-as-border three-layer composition, cross-fade icon pattern without motion dependency) | 8:1 brand floor still binds for any text-bearing UI · `muriel.contrast` audit step required on hover + focus states · explicit anti-pattern table format (PATTERN→FIX) instead of prose-only rationale | [`channels/polish.md`](channels/polish.md) — full port; archived MIT upstream so the lineage citation is the documentation |
 
 ### Curator workflow
 
@@ -168,6 +170,7 @@ When the task lands in a specific channel, read the corresponding subfile *first
 | Loading a brand's design tokens, enforcing brand ownership rules, deriving CSS / rcparams from a brand | `channels/style-guides.md` |
 | Social-shareable explainers, LinkedIn/X cards, README hero images, single-image infographics | `channels/infographics.md` |
 | Charts in a web app or blog post (Recharts/ECharts/Chart.js/Plotly/D3), chart code review | `channels/charts.md` |
+| UI polish, micro-interactions, "make it feel better", animations, hover states, border radius math, optical alignment | `channels/polish.md` |
 | Sci-fi HUD aesthetic, FUI grammar, Territory/Perception lineage | `vocabularies/fui.md` |
 | Multi-scale typography, information landscapes, pretext, Cooper/Small lineage | `vocabularies/visible-language.md` |
 | Particle-dense gaze overlays, shader filters, PixiJS v8 patterns | `vocabularies/pixijs.md` |

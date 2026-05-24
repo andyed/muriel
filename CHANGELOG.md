@@ -6,6 +6,10 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **`channels/polish.md` — fourteenth output channel.** UI micro-interaction + visual-detail discipline: 16 numbered rules covering concentric border radius (`outer = inner + padding`), optical alignment, shadows-over-borders, image outlines, 40×40px hit area minimum, interruptible CSS transitions vs keyframe one-shots, split-and-stagger enter animations (~100ms between semantic chunks), subtle exit animations, contextual icon animations (exact `scale 0.25→1` + `opacity 0→1` + `blur 4px→0` with `bounce: 0`), `scale(0.96)` on press (never below `0.95`), skip-animation-on-page-load, never `transition: all`, `will-change` only on compositor-friendly properties, macOS font smoothing at root, `font-variant-numeric: tabular-nums` for dynamic numbers, `text-wrap: balance` for headings + `text-wrap: pretty` for body. Mined from [thedavidmurray/claude-make-interfaces-feel-better](https://github.com/thedavidmurray/claude-make-interfaces-feel-better) (MIT, archived 2026-05); rule values preserved verbatim because they're *tuned* (not arbitrary), with muriel's 8:1 contrast floor added as a binding gate on top — polish is additive, never a contrast excuse. Channel count: 13 → 14. Sibling-skills table in SKILL.md gains the davidmurray entry.
+
 ## [0.11.1] — 2026-05-24
 
 **ECharts vocabulary + aiism cross-repo sync.** Two small additions that were authored in a parallel session alongside the v0.11.0 cut: a deep [`vocabularies/echarts.md`](plugins/muriel/skills/compose/vocabularies/echarts.md) covering ECharts dashboard / dark-theme work that doesn't fit the per-library quick-reference row in `channels/charts.md`, and `scripts/extract_aiism_rules.py` — a one-shot helper that lets `science-agent` consume muriel's `*_RULES` tables in its own JSON shape without forking the rule definitions. Sibling to v0.11.0's [`vocabularies/data-viz-platforms.md`](plugins/muriel/skills/compose/vocabularies/data-viz-platforms.md): platforms vocab surveys design *guides*, ECharts vocab covers a specific *library* deeply.
