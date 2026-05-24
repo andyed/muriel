@@ -1,6 +1,6 @@
 ---
 name: muriel
-description: "A multi-constraint solver for visual production — raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics, diagrams, spatial across twelve output channels plus dimensions + style-guides cross-channel references. Brand tokens, 8:1 contrast rule, and dimension constants stay active at render time. Use when the user needs any visual artifact for human eyes."
+description: "A multi-constraint solver for visual production — raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics, diagrams, spatial, charts across thirteen output channels plus dimensions + style-guides cross-channel references. Brand tokens, 8:1 contrast rule, and dimension constants stay active at render time. Use when the user needs any visual artifact for human eyes."
 ---
 
 # muriel — Multi-channel visual production
@@ -26,6 +26,7 @@ Each channel has a dedicated subfile with deep recipes, tooling, and lessons. Th
 | **Infographics** | SVG → PNG | [`channels/infographics.md`](channels/infographics.md) — 10 types × layout patterns × colorblind-safe palettes, deterministic SVG (not AI), 60-30-10 color / 60-40 viz:text rule, 5-point quality rubric at 8:1 |
 | **Diagrams** | SVG | [`channels/diagrams.md`](channels/diagrams.md) — rhetorical primitives (2×2 matrix, N-step cycle, Venn shipped; comparison pair, funnel, stack, DAG, spectrum, pyramid, heat-grid queued); plus Mermaid → SVG/ASCII and TeX → SVG (MathJax) Node-bridges. Each preset carries an epistemic precondition and an anti-prescription. |
 | **Spatial** | SVG + HTML/WebGL | [`channels/spatial.md`](channels/spatial.md) — depth scaffolding for layered typography. `muriel.spatial` perspective grids (1pt / 2pt / 3pt / iso) + `render_assets/` Three.js + CSS3DRenderer exemplars sharing one helper lib. Cooper VLW / Mackinlay-Robertson-Card / Dumais Data Mountain lineage. |
+| **Charts** | JS chart libraries | [`channels/charts.md`](channels/charts.md) — Recharts, ECharts, Chart.js, Plotly, D3/SVG. 22 numbered rules, per-library quick-ref, anti-pattern PATTERN→FIX tables, can-I-remove test, chart-type guide, validation checklist. muriel-strict 8:1 color tokens override the Tufte palette. (matplotlib lives in `channels/science.md`.) |
 
 
 ## Aesthetic vocabularies
@@ -41,6 +42,39 @@ Design grammars worth naming explicitly when a project's visual register calls f
 - [`vocabularies/muriel-brand.md`](vocabularies/muriel-brand.md) — **muriel's own brand identity.** Inward-facing — canonical spec for the six-bar mark (Müller-Brockmann grid + Cooper VLW lineage), color tokens (`#e6e4d2` cream, `#0a0a0f` near-black, `#50b4c8` cyan accent), wordmark conventions (`muriel` always lowercase, `built with muriel` as canonical attribution), sizing rules including the subpixel rendering floor, and drop-in HTML/SVG snippets for inline + block "built with muriel" credits. Reach for this any time a project wants to attribute muriel — never trace the favicon.
 
 Additional vocabularies (Swiss grid, editorial, brutalist, newsprint) can be added here without restructuring the skill.
+
+---
+
+## Sibling skills — what we borrow from each
+
+muriel is a curator before it is an originator. When a third-party skill overlaps muriel's territory, the move is: lift the structural patterns and rule names worth quoting, port the agent-actionable detection tables, attribute the lineage, and override anything that fights our universal rules (8:1 contrast, weight/size/opacity floors, brand tokens, reproducibility). The table below records what we've taken and from where, so future overlap-discoveries don't restart the same audit.
+
+| Sibling skill | What we took | What we kept ours | Where it lives in muriel |
+|---|---|---|---|
+| [caylent/tufte-data-viz](https://github.com/caylent/tufte-data-viz) | 22 numbered rule structure · per-library quick-ref tables (Recharts/ECharts/Chart.js/Plotly/D3) · anti-pattern PATTERN→FIX detection format · can-I-remove test · chart-type guidance table · validation checklist · "titles assert findings" / "compared to what?" / "don't chart what a sentence can say" as universal rules | 8:1 text floor (their default `#666`/`#e41a1c` fail at 5.7/4.7) · weight × size × opacity floor · OLED palette · brand-token system · `muriel.contrast` audit step · reproducibility ("save the script alongside the output") | [`channels/charts.md`](channels/charts.md) — full port with muriel-strict tokens; back-ported rules into the per-chart rules above |
+| [pixijs/pixijs-skills](https://github.com/pixijs/pixijs-skills) | Curated PixiJS v8 documentation subset (Application setup, Sprite, Container, Filter, particle patterns) | Pinned to `^8.18`; framed around muriel's particle-dense gaze overlays / shader-driven foveation / audio-reactive use cases | [`vocabularies/pixijs.md`](vocabularies/pixijs.md) |
+| [K-Dense AI scientific-agent-skills — matplotlib](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/matplotlib/SKILL.md) | OO interface as default · `constrained_layout=True` over `tight_layout()` for multi-panel · viridis/cividis preference · 72/150/300 DPI by medium framing | OLED rcparams · 8:1 audit · figsize ≥ 10×6 · paper-channel statistical reporting helpers · LaTeX/PGF bridge | [`channels/science.md`](channels/science.md) "Prior art / upstream" section |
+| [K-Dense AI — statistical-analysis](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/statistical-analysis/SKILL.md) | Test-selection vocabulary (assumption checks, when to use which test) | Standard-library-only reporting helpers (`muriel.stats`) — no `scipy`/`pingouin` dependency · APA leading-zero stripping · null-as-detection-limit framing · pre-committed vs. exploratory labels | [`channels/science.md`](channels/science.md) "Statistical reporting" |
+| [K-Dense AI — scientific-critical-thinking](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/scientific-critical-thinking/SKILL.md) | GRADE system · Cochrane Risk of Bias vocabulary · bias taxonomy (Cognitive/Selection/Measurement/Analysis/Confounding) — useful for naming *why* a claim is weak in editorial passes | n/a — pure vocabulary import | referenced inline when editorial passes need bias-naming |
+| [K-Dense AI — market-research-reports](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/market-research-reports/SKILL.md) | (queued) 50+ page report template structure · PESTLE / Porter / TAM-SAM-SOM section conventions | Will use marginalia + weasyprint (or LaTeX) over their proprietary `.sty` · 300 DPI visuals · 8:1 contrast pass on every figure | queued — `channels/market-research.md` (see TODO) |
+| [K-Dense AI — pptx](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/pptx/SKILL.md) | (queued) `pptxgenjs` (JS) → `soffice` PDF → `pdftoppm` per-slide PNG → Pillow thumbnail grid generate→render→inspect loop · 10 named palettes · "no accent lines under titles" AI-tell heuristic | Skip their fixed templates (converge to sameness, fight multi-constraint-solver ethos) · use muriel brand tokens · 8:1 audit on slide text | queued — `channels/pptx.md` (see TODO) |
+| [heygen-com/hyperframes](https://github.com/heygen-com/hyperframes) | HTML → MP4 video pipeline · GSAP timeline conventions · transcribe/tts/preview/render CLI · registry block + component system · website-to-video capture | Slot into video channel as a substrate option (not a replacement for desktop-control/ffmpeg) · use muriel brand tokens · audio-reactive PixiJS frames via custom renderer (queued) | [`channels/video.md`](channels/video.md) |
+
+### Curator workflow
+
+When a new skill is suggested as overlapping muriel:
+
+1. **Read it fully** — SKILL.md, every rule file, the README, the live demo if there is one. Don't form an opinion from the description alone.
+2. **Diff against muriel's existing coverage.** What does it have that we don't? What do we have that it doesn't? Look for structural patterns (numbering, naming, table formats) separately from content.
+3. **Score against muriel's universal rules.** Does its color palette pass 8:1? Does it respect weight × size × opacity? Does it ship importable code or pure docs? Flag every divergence.
+4. **Decide the borrow shape:**
+   - **Lift structure** when their format (numbered rules, PATTERN→FIX tables, validation checklists) is sharper than ours.
+   - **Port content** when they cover something we don't (a chart library, a chart type, a report template).
+   - **Quote vocabulary** when their naming sticks (GRADE, range-frame, slopegraph) — use their names so cross-references stay legible.
+   - **Override tokens** when their palette/contrast/typography rules are weaker than ours. Note the divergence explicitly in the channel doc.
+   - **Skip wholesale adoption** when their conventions converge to sameness (fixed templates, AI-image generation, single brand voice) — those fight muriel's multi-constraint-solver ethos.
+5. **Attribute** in the channel's "Prior art / upstream" section. Link to the source, name the license, note specific divergences.
+6. **Record the take** in this table so the next overlap discovery starts from the curated diff, not from scratch.
 
 ---
 
@@ -62,13 +96,21 @@ Codified from per-project bug fixes — apply to **every** channel:
 
 ## Visualization principles
 
-For data-driven channels (raster plots, SVG, interactive JS, science), apply Tufte/Bertin/CRAP via three high-leverage patterns:
+For data-driven channels (raster plots, SVG, interactive JS, science, charts), apply Tufte/Bertin/CRAP via these high-leverage patterns. The first three are composition patterns; the next three are per-chart rules that catch ~80% of agent-generated chart problems before they ship.
+
+### Composition patterns
 
 - **Small multiples** — same chart, repeated, with one variable changing. Lets the eye compare without re-anchoring. Reach for this whenever you'd otherwise build a complex multi-series single chart.
 - **Linked displays / brushing** — selecting in one view highlights the corresponding marks in every other view. D3's strength. Perfect for exploratory dashboards, OSEC phase explorers, and any "facets that share a record set" interface.
 - **Semantic zoom** — representation *changes* by zoom level, not just scale. Overview shows aggregate; mid zoom shows clusters; deep zoom shows individual records. Different from optical zoom. Pairs with linked displays for the OSEC sector explorer pattern.
 
-Reference: `~/Documents/dev/ascii-charts/docs/PERMUTE.md` — full Tufte/Bertin/Gestalt/CRAP framing.
+### Per-chart rules (universal)
+
+- **Titles assert findings.** The chart title states the insight, not the axis description. "Revenue Surged 23% in Q3" — not "Revenue by Quarter, 2024". The subtitle adds context ("vs. prior year, USD millions"). If the data has no clear finding, the chart may not be needed (see the next rule).
+- **Compared to what?** Every chart includes at least one reference element — a baseline line, target band, prior-period series, or peer group. A solitary line with no comparison fails the "compared to what?" test and should be rebuilt with context.
+- **Don't chart what a sentence can say.** 1–2 numbers → write a sentence with inline context ("Revenue was $4.2M, up 23% from Q2"). A simple ranking of 3–5 items → consider a table. Charts earn their space by revealing patterns, trends, or distributions that prose and tables cannot. A chart of two bars is almost always worse than a sentence.
+
+Reference: `~/Documents/dev/ascii-charts/docs/PERMUTE.md` — full Tufte/Bertin/Gestalt/CRAP framing. For 22-rule chart-library guidance (Recharts/ECharts/Chart.js/Plotly/D3), see [`channels/charts.md`](channels/charts.md). For matplotlib + paper figures, [`channels/science.md`](channels/science.md).
 
 ## Interaction design grounding
 
@@ -125,6 +167,7 @@ When the task lands in a specific channel, read the corresponding subfile *first
 | "What size should this be?" — social card / device / viewport / paper / video dimensions | `channels/dimensions.md` |
 | Loading a brand's design tokens, enforcing brand ownership rules, deriving CSS / rcparams from a brand | `channels/style-guides.md` |
 | Social-shareable explainers, LinkedIn/X cards, README hero images, single-image infographics | `channels/infographics.md` |
+| Charts in a web app or blog post (Recharts/ECharts/Chart.js/Plotly/D3), chart code review | `channels/charts.md` |
 | Sci-fi HUD aesthetic, FUI grammar, Territory/Perception lineage | `vocabularies/fui.md` |
 | Multi-scale typography, information landscapes, pretext, Cooper/Small lineage | `vocabularies/visible-language.md` |
 | Particle-dense gaze overlays, shader filters, PixiJS v8 patterns | `vocabularies/pixijs.md` |
