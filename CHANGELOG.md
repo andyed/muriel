@@ -6,20 +6,24 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.10.0] — 2026-05-24
+
+**Sibling, not subordinate.** Three new surfaces, each a sibling of something already in muriel rather than a new top-level concern. [`muriel.spatial.ridgemap`](muriel/spatial.py) is a sibling primitive to `grid()` — same module, same conventions, same brand floor — that scaffolds *scalar fields* the way `grid()` scaffolds *space*. The new [`.agents/skills/muriel`](.agents/skills/) broadcast symlink is a sibling install path to `.claude/skills/`, read natively by Codex CLI and as an alternate by Cursor / Gemini CLI / GitHub Copilot / OpenCode / Pi — one symlink, six harnesses. [`muriel.tools.impeccable_bridge`](muriel/tools/impeccable_bridge.py) wraps pbakaus/impeccable's 27-rule deterministic detector as an *optional* pre-scan for `muriel-critique`; it stays silent when Node / impeccable / network are missing, so the critique agent works identically with or without it. None of the three is a dependency; each is a peer. Long-form notes: [`RELEASE_NOTES_v0.10.0.md`](RELEASE_NOTES_v0.10.0.md).
+
 ### Added
+- **`muriel.spatial.ridgemap(field, canvas, …)`** — stacked 1D slices of a 2D scalar field. Joy Division *Unknown Pleasures* / Harold Craft 1970 PSR B1919+21 lineage; sibling primitive to `grid()`. Zero-dep, duck-types numpy ndarray, brand defaults clear the 8:1 floor, occlusion fill on by default with `fill=None` for line-art mode. `python -m muriel.spatial --ridgemap` renders a deterministic pulsar-style demo.
 - **`.agents/skills/muriel` broadcast symlink** — one symlink pointing to the canonical `plugins/muriel/skills/compose/` directory. Read natively by Codex CLI and as an alternate path by Cursor, Gemini CLI, GitHub Copilot, OpenCode, and Pi. Per-harness verification still TBD; rollout plan in [`HARNESSES.md`](HARNESSES.md).
-- **`muriel.spatial.ridgemap`** — stacked 1D slices of a 2D scalar field (Joy Division / Harold Craft 1970 pulsar plot lineage); sibling primitive to `grid()`. Zero-dep, duck-types numpy ndarray, brand defaults clear the 8:1 floor.
-- **`muriel.tools.impeccable_bridge`** — optional Python wrapper around `npx impeccable detect <target>` (pbakaus/impeccable's 27-rule deterministic anti-pattern detector). Silent / no-op when Node + impeccable are absent, so it never becomes a requirement.
+- **`muriel.tools.impeccable_bridge`** — optional Python wrapper around `npx impeccable detect <target>` (pbakaus/impeccable's 27-rule deterministic anti-pattern detector, regex + Puppeteer, no LLM). Defensive JSON-shape normalisation; `format_markdown(result)` returns `""` when unavailable so callers paste it unconditionally and the section silently disappears.
+- **`HARNESSES.md`** — top-level plan for cross-harness packaging across eleven AI agent harnesses (Claude Code, Codex CLI, Cursor, Gemini CLI, GitHub Copilot, Kiro, OpenCode, Pi, Qoder, Rovo Dev, Trae). Mirrors [pbakaus/impeccable](https://github.com/pbakaus/impeccable)'s packaging matrix. P0 landed (the symlink); P1 (per-harness manifests + `./install.sh --harness`) and P2 (frontmatter universalism, marketplace submissions, critique-agent portability) queued.
+- **`vocabularies/data-viz-platforms.md`** — survey of seven platform charting guides (Apple HIG, Google Material 3, IBM Carbon Charts, Vega-Lite, Observable Plot, FT Visual Vocabulary, Datawrapper Academy) with license posture spelled out for each (Apple proprietary, Material CC BY 4.0, Carbon Apache 2.0, Vega-Lite BSD-3, Plot ISC, FT MIT, Datawrapper per-page). Five-rule cross-platform consensus + divergence list.
+- **`examples/scrutinizer-ridgemap/`** — branded composition exemplar. A vesica-piscis scalar field whose row-wise ridges trace an eye outline; bottom half mirrored so the almond closes; pupil + iris core for the eyeball; rendered in Scrutinizer orange on a Blauch log-spaced concentric-ring scaffold.
 
 ### Changed
-- **`muriel-critique` agent** can optionally invoke the impeccable bridge as a deterministic pre-scan on web artifacts. Silent and non-blocking when impeccable / Node are absent — `muriel-critique` works identically with or without it.
-- **README "Other AI harnesses" section** and **`channels/web.md` impeccable footnote** updated to reflect impeccable Skill 3.1.1 (May 2026), its 27-rule deterministic detector, and the `muriel capture → npx impeccable detect → muriel-critique` pipeline.
-
-### Documentation
-- **`HARNESSES.md`** — new top-level plan for cross-harness packaging, mirroring pbakaus/impeccable's eleven-harness matrix.
-- **`vocabularies/data-viz-platforms.md`** — survey of Apple HIG / Google Material 3 / IBM Carbon / Vega-Lite / Observable Plot / FT Visual Vocabulary / Datawrapper Academy charting guidance, with license posture spelled out for each.
-- **`channels/spatial.md`** — adds the ridgemap path section and the scalar-field-to-topology lineage / queued projections.
-- **`examples/scrutinizer-ridgemap/`** — branded composition exemplar (Scrutinizer-coloured eye drawn by ridgemap rows on a Blauch log-spaced ring scaffold).
+- **`muriel-critique` agent** can optionally invoke `python -m muriel.tools.impeccable_bridge` as a deterministic pre-scan on HTML / URL / project-directory artifacts. Output template grows an optional `## Deterministic pre-scan (impeccable)` section above `## Issues`; layering rule says don't re-derive pre-scan findings in `## Issues`. Silent and non-blocking when impeccable / Node are absent — the agent's primary description, workflow, and verdict rules are unchanged for the without-impeccable path.
+- **README "Other AI harnesses" section** updated to reflect the landed `.agents/skills/` broadcast symlink and point at `HARNESSES.md` for verification status per harness.
+- **`channels/web.md` impeccable footnote** updated to reflect impeccable Skill 3.1.1 (May 2026), its 27-rule deterministic detector, and the `muriel capture → npx impeccable detect → muriel-critique` pipeline.
+- **`channels/spatial.md`** documents the ridgemap path alongside the existing perspective-grid path; queued: filled-iso-line, wireframe-protrusion, hachured-relief projections of the same scalar-field primitive.
+- **`channels/science.md`** "Prior art / upstream" entry for Apple HIG — *Charting data*, cited by link + paraphrase per scholarly discipline (Apple-proprietary docs). Calls out Swift Charts' audio-graph accessibility as a distinctive contribution.
 
 ## [0.9.0] — 2026-05-17
 

@@ -61,7 +61,7 @@ Twelve output channels, each with its own subfile under [`channels/`](plugins/mu
 - **Science** (matplotlib + LaTeX + `muriel.stats`) — paper figures, notebook editorial, APA reporting
 - **Infographics** (deterministic SVG) — single-image explainers, 10 types × layout patterns × colorblind-safe palettes
 - **Diagrams** (deterministic SVG) — rhetorical primitives: 2×2 matrix, N-step cycle, Venn shipped, plus Mermaid → SVG/ASCII and TeX → SVG (MathJax) Node-bridges; comparison pair, funnel, stack, DAG, spectrum, pyramid, heat-grid queued. Each preset carries an epistemic precondition + anti-prescription
-- **Spatial** (`muriel.spatial` + `render_assets/`) — depth scaffolding for layered typography. Static SVG perspective grids (1pt / 2pt / 3pt / iso) plus Three.js + CSS3DRenderer exemplars sharing one helper lib. Cooper VLW / Mackinlay-Robertson-Card / Dumais Data Mountain lineage. See [`channels/spatial.md`](plugins/muriel/skills/compose/channels/spatial.md).
+- **Spatial** (`muriel.spatial` + `render_assets/`) — depth scaffolding for layered typography + scalar-field topology. Static SVG perspective grids (1pt / 2pt / 3pt / iso) where `grid()` scaffolds *space*, plus `ridgemap()` — a sibling primitive that scaffolds *scalar fields* as stacked 1D slices (Joy Division / Harold Craft 1970 pulsar plot lineage). Three.js + CSS3DRenderer exemplars share one helper lib. Cooper VLW / Mackinlay-Robertson-Card / Dumais Data Mountain lineage. See [`channels/spatial.md`](plugins/muriel/skills/compose/channels/spatial.md).
 
 Plus two cross-channel references used by every channel:
 
@@ -103,7 +103,7 @@ The script symlinks `plugins/muriel/skills/compose/` into `~/.claude/skills/muri
 ```bash
 pip install -e ~/Documents/dev/muriel   # source install (editable)
 # pip install muriel                    # PyPI — not yet published; track via GitHub Releases
-pip install https://github.com/andyed/muriel/releases/download/v0.8.0/muriel-0.8.0-py3-none-any.whl
+pip install https://github.com/andyed/muriel/releases/download/v0.10.0/muriel-0.10.0-py3-none-any.whl
 ```
 
 Then, from any script or notebook:
