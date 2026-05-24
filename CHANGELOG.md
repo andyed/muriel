@@ -6,6 +6,16 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.11.1] — 2026-05-24
+
+**ECharts vocabulary + aiism cross-repo sync.** Two small additions that were authored in a parallel session alongside the v0.11.0 cut: a deep [`vocabularies/echarts.md`](plugins/muriel/skills/compose/vocabularies/echarts.md) covering ECharts dashboard / dark-theme work that doesn't fit the per-library quick-reference row in `channels/charts.md`, and `scripts/extract_aiism_rules.py` — a one-shot helper that lets `science-agent` consume muriel's `*_RULES` tables in its own JSON shape without forking the rule definitions. Sibling to v0.11.0's [`vocabularies/data-viz-platforms.md`](plugins/muriel/skills/compose/vocabularies/data-viz-platforms.md): platforms vocab surveys design *guides*, ECharts vocab covers a specific *library* deeply.
+
+### Added
+
+- **`vocabularies/echarts.md`** (358 lines) — deep ECharts vocabulary for dashboard / interactive / dark-theme work. Candor up-front about training-data under-representation (verify against upstream docs every time); five-block dark-mode baseline `setOption` override; `markArea` two-element pair shape + `markLine` playhead sync; the series-color contract bug; HTML5 `<audio>` playhead sync gotchas; option-tree diffing; multi-axis discipline; data-shape contract; renderer choice (canvas vs SVG); heatmap + visualMap "3D projected grid" pattern; live-verification protocol. Apache-2.0 substrate, pinned to `echarts@^5.4`.
+- **`channels/charts.md` ECharts row** gains a one-line pointer to the new vocab for dashboard / interactive / dark-theme work that needs more than the quick-reference row.
+- **`scripts/extract_aiism_rules.py`** — one-shot helper that loads muriel's `*_RULES` tables and emits them as JSON entries compatible with `science-agent`'s `aiism-rules.json` schema, preserving any non-muriel entries already in the target file. Defaults to `~/Documents/dev/science-agent/src/aiism-rules.json`; supports `--dry-run` and `--target=<path>`. Keeps the muriel-side rule definitions canonical while letting `science-agent` consume them in its own JSON shape.
+
 ## [0.11.0] — 2026-05-24
 
 **Sibling, not subordinate.** Three new surfaces, each a sibling of something already in muriel rather than a new top-level concern. [`muriel.spatial.ridgemap`](muriel/spatial.py) is a sibling primitive to `grid()` — same module, same conventions, same brand floor — that scaffolds *scalar fields* the way `grid()` scaffolds *space*. The new [`.agents/skills/muriel`](.agents/skills/) broadcast symlink is a sibling install path to `.claude/skills/`, read natively by Codex CLI and as an alternate by Cursor / Gemini CLI / GitHub Copilot / OpenCode / Pi — one symlink, six harnesses. [`muriel.tools.impeccable_bridge`](muriel/tools/impeccable_bridge.py) wraps pbakaus/impeccable's 27-rule deterministic detector as an *optional* pre-scan for `muriel-critique`; it stays silent when Node / impeccable / network are missing, so the critique agent works identically with or without it. None of the three is a dependency; each is a peer. Long-form notes: [`RELEASE_NOTES_v0.11.0.md`](RELEASE_NOTES_v0.11.0.md).
