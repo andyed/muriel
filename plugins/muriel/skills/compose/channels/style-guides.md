@@ -285,6 +285,27 @@ for role, ratio, passes in sg.audit_contrast():
 
 Audits every text-bearing role — raw colors (`foreground`, `foreground_muted`, `accent`, `accent_ink`), named accents, and semantic-state `text` colors — against `colors.background`. Default threshold is `sg.a11y.min_contrast_ratio` (8.0 unless overridden). Pass `required=4.5` to audit against WCAG AA instead.
 
+## Interop — design.md ↔ brand.toml ↔ DTCG
+
+brand.toml is muriel's native schema, but it's also the rigorous **hub** between two outside ecosystems. Reach for these whenever a brand arrives in, or needs to leave for, a foreign format — and **never hand-transcribe brand hex/fonts from a screenshot or memory when an importable source exists.** (`design.md` is [Google Stitch's](https://stitch.withgoogle.com/docs/design-md/) YAML-frontmatter + Markdown brand-spec format, also the convention adopted by Claude Design and [OpenCoworkAI/open-codesign](https://github.com/OpenCoworkAI/open-codesign), where it doubles as the multi-screen design baton. DTCG is the [W3C Design Tokens](https://design-tokens.github.io/community-group/format/) JSON that style-dictionary, Theo, and Figma tokens-studio consume.)
+
+```text
+design.md ──import──▶ brand.toml ──export-dtcg──▶ tokens.json
+                          │                            │
+                          ▼                            ▼
+                 muriel renderers            style-dictionary, Theo,
+              (matplotlib, SVG, CSS,         Figma plugins, iOS/Android
+                  Playwright)                       pipelines
+```
+
+**In — `muriel import <design.md>`** (→ `brand.toml`). brand.toml v2 is a strict superset of design.md, so import flattens the Stitch frontmatter onto muriel's schema. Color roles map by priority (`surface`/`canvas`/`bg` → `background`; `on-surface`/`body`/`ink` → `foreground`; `primary`/`brand` → `accent`); unmatched roles land in `[colors.named]` + `[colors.aliases]` under their original names. Prose `Do's and Don'ts` / `Components` sections are preserved as `[rules]` strings. **Lossy by design** — design.md's flat schema can't express ring gradients, semantic-state trios, viz palettes, or typed iconography, so those stay absent; hand-augment after import. **muriel's 8:1 floor always wins:** an imported `contrast.minimum` below 8.0 is recorded as `imported_min_contrast_ratio` and emits a WARN, but the validation gate stays at 8.0 (brand values are data, not an override of muriel's a11y floor).
+
+**Out (tokens) — `muriel export-dtcg <brand.toml>`** (→ `tokens.json`). Pivots a brand into the entire style-dictionary ecosystem without writing a downstream transformer. muriel-specific fields that don't fit DTCG cleanly (elevation box-shadows, `motion.motion_preference`) survive under `$extensions.muriel.*` so a future re-import recovers them.
+
+**Out (design-system handoff) — queued.** The reverse of import (`brand.toml` → `design.md`) isn't built yet (see `TODO.md`). open-codesign's lesson is that a portable design-system file should be both *input and output* — the artifact you hand off and re-open across screens. muriel consumes design.md richly but can't yet emit one; when a brief asks for a portable design-system doc as a deliverable, that's the missing leg. Until then, hand off `tokens.json` (DTCG) or the `brand.toml` itself.
+
+To audit a whole corpus of design.md files through the importer + 8:1 floor in one pass, use `muriel import-corpus`.
+
 ## CLI
 
 ```bash
@@ -302,6 +323,15 @@ muriel styleguide examples/example-brand.toml --contrast
 
 # Override the brand's own threshold
 muriel styleguide examples/example-brand.toml --contrast --required 4.5
+
+# Import a Google Stitch design.md → brand.toml (WARNs to stderr on <8:1 floors)
+muriel import design.md --out brands/my-brand/brand.toml
+
+# Export brand.toml → W3C DTCG tokens.json (style-dictionary / Figma / native pipelines)
+muriel export-dtcg brand.toml -o tokens.json
+
+# Audit a whole design.md corpus through the importer + 8:1 floor
+muriel import-corpus <corpus-dir>
 ```
 
 ## Shipped examples
