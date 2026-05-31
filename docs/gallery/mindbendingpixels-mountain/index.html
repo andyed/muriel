@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MindBendingPixels — Data Mountain</title>
+<link rel="stylesheet" href="../_lib/spatial.css">
+<style>
+  /* Demo-specific palette + product-card styles. Base palette and HUD
+     layout live in _lib/spatial.css. */
+  :root {
+    --bg: #07070d;
+    --violet: #a07cff;
+  }
+  body {
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 35%,
+        rgba(160, 124, 255, 0.10) 0%, transparent 60%),
+      var(--bg);
+  }
+
+  #hud .brand {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    line-height: 1.05;
+  }
+  #hud .brand .pink { color: var(--magenta); }
+  #hud .brand .sub {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+
+  .product {
+    background: rgba(7, 7, 13, 0.6);
+    border: 1px solid rgba(127, 223, 255, 0.32);
+    padding: 6px 6px 8px;
+    box-shadow:
+      0 0 0 1px rgba(7, 7, 13, 0.8) inset,
+      0 0 40px rgba(127, 223, 255, 0.18);
+    user-select: none;
+    cursor: pointer;
+    transition: border-color 180ms ease, box-shadow 180ms ease,
+                transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: center center;
+  }
+  .product:hover {
+    border-color: var(--magenta);
+    box-shadow:
+      0 0 0 1px rgba(7, 7, 13, 0.8) inset,
+      0 0 60px rgba(255, 95, 162, 0.32);
+    transform: scale(1.04);
+  }
+  .product img {
+    display: block;
+    width: 100%;
+    height: auto;
+    image-rendering: -webkit-optimize-contrast;
+  }
+  .product .caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 6px;
+    padding: 0 2px;
+  }
+  .product .name {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .product .tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--cyan);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+  .product.featured {
+    border-color: var(--magenta);
+    box-shadow:
+      0 0 0 1px rgba(7, 7, 13, 0.8) inset,
+      0 0 50px rgba(255, 95, 162, 0.28);
+  }
+</style>
+</head>
+<body>
+
+<div id="webgl"></div>
+<div id="css3d"></div>
+
+<div id="hud">
+  <div class="row">
+    <div class="brand">
+      MIND BENDING <span class="pink">PIXELS</span>
+      <span class="sub">data mountain · spatial memory as index</span>
+    </div>
+    <div class="meta">
+      <div><span class="acc">tilt:</span> 21° · <span class="acc">cards:</span> upright</div>
+      <div><span class="acc">cards:</span> <span id="card-count">—</span> ·
+           <span class="acc">plane v:</span> [0, −1700]</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="hint">
+      <kbd>move</kbd> mouse · <kbd>scroll</kbd> dolly ·
+      <kbd>click</kbd> focus · <kbd>space</kbd> orbit
+    </div>
+    <div class="cite">
+      <em>after</em> Robertson · Czerwinski · Larson · Robbins · Thiel ·
+      van Dantzich — <strong>Data Mountain</strong>, MSR-TR-98-18 (1998);
+      Dumais et al., <em>Replacing the Web Browser</em> (2000).
+    </div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import {
+  createScene, Mountain, addHorizon, addFloorGrid,
+  FocusController, startRenderLoop, CSS3DObject, THREE,
+} from '../_lib/spatial.js';
+
+// ─── Scene + mountain ───────────────────────────────────────────────
+const { scene, camera, webglRenderer, cssRenderer } = createScene({
+  cameraPos: [0, 170, 780],
+  lookAt:    [0, 130, -300],
+});
+
+const mountain = new Mountain({ scene });
+addHorizon(scene);
+addFloorGrid(scene, { opacity: 0.12 });
+
+// ─── Products ───────────────────────────────────────────────────────
+const IMG = 'https://mindbendingpixels.com/images/';
+const products = [
+  { u:    0, v: -260, w: 300, h: 250, src: 'psychodeli-peacock.jpg',
+    name: 'Psychodeli',          tag: 'flagship · peacock',  featured: true },
+  { u: -460, v: -100, w: 210, h: 180, src: 'iblipper-kinetic.png',
+    name: 'iBlipper',            tag: 'kinetic type' },
+  { u:  470, v: -180, w: 210, h: 180, src: 'scrutinizer-screenshot.png',
+    name: 'Scrutinizer',         tag: 'vision science' },
+  { u: -320, v: -480, w: 180, h: 160, src: 'fireworks-plasma.jpg',
+    name: 'Fireworks',           tag: 'plasma' },
+  { u:  310, v: -480, w: 180, h: 160, src: 'psychodeli-stained-glass.jpg',
+    name: 'Psychodeli',          tag: 'stained-glass' },
+  { u: -620, v: -340, w: 160, h: 145, src: 'psychodeli-kaleidoscope.jpg',
+    name: 'Psychodeli',          tag: 'kaleidoscope' },
+  { u:  620, v: -380, w: 160, h: 145, src: 'fisheye-menu-screenshot.png',
+    name: 'Fisheye Menu',        tag: 'UI study' },
+  { u: -180, v: -680, w: 150, h: 135, src: 'brain-geometric.png',
+    name: 'Brain Geometric',     tag: 'visualization' },
+  { u:  220, v: -680, w: 130, h: 120, src: 'science-agent-logo.png',
+    name: 'Science Agent',       tag: 'logo · agent' },
+  { u:    0, v: -850, w: 130, h: 120, src: 'nokings-democracy.png',
+    name: 'No Kings',            tag: 'campaign · 2025' },
+];
+
+document.getElementById('card-count').textContent = products.length;
+
+function makeProductCard(p) {
+  const el = document.createElement('div');
+  el.className = 'product' + (p.featured ? ' featured' : '');
+  el.style.width = p.w + 'px';
+  el.innerHTML = `
+    <img src="${IMG}${p.src}" alt="${p.name}" loading="lazy" draggable="false">
+    <div class="caption">
+      <span class="name">${p.name}</span>
+      <span class="tag">${p.tag}</span>
+    </div>`;
+  const obj = new CSS3DObject(el);
+  obj.position.copy(mountain.planeToWorld(p.u, p.v, p.h));
+  obj.userData = { ...p, featured: !!p.featured };
+  return obj;
+}
+
+const cards = products.map(p => {
+  const card = makeProductCard(p);
+  scene.add(card);
+  return card;
+});
+
+// ─── Focus + parallax ───────────────────────────────────────────────
+const focus = new FocusController({
+  focusPos: new THREE.Vector3(0, 160, 420),
+});
+focus.bind(cards);
+
+startRenderLoop({
+  scene, camera, webglRenderer, cssRenderer,
+  basePos:    new THREE.Vector3(0, 170, 780),
+  lookTarget: new THREE.Vector3(0, 130, -300),
+  onKeydown: (e) => {
+    if (e.code === 'Escape' && focus.focused) focus.unfocus(focus.focused);
+  },
+});
+</script>
+
+</body>
+</html>

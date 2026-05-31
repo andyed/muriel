@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>muriel.spatial — layered typography in X, Y, Z</title>
+<link rel="stylesheet" href="../_lib/spatial.css">
+<style>
+  /* Demo-specific overrides for spatial-typography. Base palette + HUD
+     layout come from _lib/spatial.css. */
+  :root {
+    --bg: #0a0a14;
+  }
+
+  /* HUD brand */
+  #hud .brand {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  #hud .brand .pink { color: var(--magenta); }
+  #hud .brand .sub {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+
+  /* ───── CSS3D plane styling — the layered DOM cards ───── */
+  .plane {
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--serif);
+    user-select: text;
+    -webkit-user-select: text;
+    text-shadow:
+      0 0 1px rgba(10, 10, 20, 0.9),
+      0 0 12px rgba(127, 223, 255, 0.18);
+  }
+
+  .plane.title {
+    width: 720px;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 68px;
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    text-align: center;
+  }
+  .plane.title .accent { color: var(--magenta); }
+  .plane.title .sub {
+    display: block;
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    line-height: 1.4;
+  }
+
+  .plane.body {
+    width: 440px;
+    font-size: 20px;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+  .plane.body em { color: var(--gold); font-style: normal; }
+  .plane.body .cite {
+    display: block;
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.04em;
+  }
+
+  .plane.lineage {
+    width: 460px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+  }
+  .plane.lineage h3 {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--cyan);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .plane.lineage .year { color: var(--ink-faint); margin-right: 8px; }
+  .plane.lineage .name { color: var(--ink); }
+
+  .chip {
+    background: rgba(10, 10, 20, 0.65);
+    border: 1px solid rgba(127, 223, 255, 0.22);
+    padding: 6px 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink);
+    border-radius: 2px;
+    white-space: nowrap;
+    text-shadow: none;
+  }
+  .chip .k { color: var(--cyan); }
+  .chip:hover {
+    border-color: var(--magenta);
+    color: var(--magenta);
+  }
+
+  .plane.deep {
+    width: 720px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 28px;
+    line-height: 1.35;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+
+  /* Surface-anchored text — laid on floor or rotated to a wall. */
+  .plane.floor-text {
+    width: 1400px;
+    font-family: var(--mono);
+    font-size: 44px;
+    line-height: 1;
+    color: var(--cyan);
+    text-align: center;
+    letter-spacing: 0.32em;
+    opacity: 0.55;
+    text-shadow: none;
+  }
+  .plane.wall-text {
+    width: 520px;
+    font-family: var(--serif);
+    font-size: 30px;
+    line-height: 1.32;
+    color: var(--ink);
+    font-style: italic;
+  }
+  .plane.wall-text .attrib {
+    display: block;
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-style: normal;
+    color: var(--cyan);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div id="webgl"></div>
+<div id="css3d"></div>
+
+<div id="hud">
+  <div class="row">
+    <div class="brand">
+      muriel.spatial &middot; <span class="pink">layered DOM × perspective grid</span>
+      <span class="sub">CSS3DRenderer · WebGL grid · motion parallax</span>
+    </div>
+    <div class="meta">
+      <div><span class="acc">grid mode:</span> 1pt &nbsp;|&nbsp;
+           <span class="acc">VPs:</span> 1 &nbsp;|&nbsp;
+           <span class="acc">horizon:</span> y=0</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="hint">
+      <kbd>move</kbd> mouse for parallax &nbsp; · &nbsp;
+      <kbd>scroll</kbd> to dolly &nbsp; · &nbsp;
+      <kbd>space</kbd> auto-orbit
+    </div>
+    <div class="cite">
+      Cooper VLW · Robertson/Dumais Data Mountain · Tron horizon —
+      layered DOM is real, selectable text.
+    </div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import {
+  createScene, addFloorGrid, makePlane, startRenderLoop,
+  CSS3DObject, THREE,
+} from '../_lib/spatial.js';
+
+// ─── Scene ──────────────────────────────────────────────────────────
+const { scene, camera, webglRenderer, cssRenderer } = createScene({
+  fov: 62,
+  cameraPos: [0, 90, 1200],
+  lookAt:    [0, 60, 0],
+});
+
+// ─── Perspective grid scaffolding ───────────────────────────────────
+// Floor + ceiling use the standard lib helper. Back wall and side walls
+// are demo-specific (non-floor planes) and stay inline. Same colour
+// logic as the SVG defaults in muriel/spatial.py — cyan grid + magenta
+// horizon — so static and interactive renders read as one visual lang.
+
+addFloorGrid(scene, {
+  halfWidth: 1500, divisions: 60, y: 0,
+  color: 0x7fdfff, opacity: 0.55,
+});
+addFloorGrid(scene, {
+  halfWidth: 1500, divisions: 30, y: 400,
+  color: 0x7fdfff, opacity: 0.18,
+});
+
+// Back wall — vanishing wall at z=-1100.
+{
+  const wallSize = 1800, wallY = 200, wallZ = -1100, div = 22;
+  const half = wallSize / 2;
+  const step = wallSize / div;
+  const positions = [];
+  for (let i = 0; i <= div; i++) {
+    const x = -half + i * step;
+    positions.push(x, wallY - half, wallZ,  x, wallY + half, wallZ);
+  }
+  for (let i = 0; i <= div; i++) {
+    const y = wallY - half + i * step;
+    positions.push(-half, y, wallZ,  half, y, wallZ);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position',
+    new THREE.Float32BufferAttribute(positions, 3));
+  scene.add(new THREE.LineSegments(geo,
+    new THREE.LineBasicMaterial({
+      color: 0x7fdfff, transparent: true, opacity: 0.22,
+    })));
+}
+
+// Magenta horizon at z=-3000.
+{
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(
+    [-4000, 60, -3000,  4000, 60, -3000], 3));
+  scene.add(new THREE.Line(geo,
+    new THREE.LineBasicMaterial({
+      color: 0xff5fa2, transparent: true, opacity: 0.6,
+    })));
+}
+
+// Side walls (vertical grids flanking the scene) — lateral parallax
+// cues. Demo-specific.
+function makeSideWall({ x, size = 1800, divisions = 22,
+                          color = 0x7fdfff, opacity = 0.22 } = {}) {
+  const half = size / 2;
+  const step = size / divisions;
+  const yCentre = 60, zCentre = -400;
+  const positions = [];
+  for (let i = 0; i <= divisions; i++) {
+    const z = zCentre - half + i * step;
+    positions.push(x, yCentre - half, z,  x, yCentre + half, z);
+  }
+  for (let i = 0; i <= divisions; i++) {
+    const y = yCentre - half + i * step;
+    positions.push(x, y, zCentre - half,  x, y, zCentre + half);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position',
+    new THREE.Float32BufferAttribute(positions, 3));
+  return new THREE.LineSegments(geo,
+    new THREE.LineBasicMaterial({ color, transparent: true, opacity }));
+}
+scene.add(makeSideWall({ x: -900 }));
+scene.add(makeSideWall({ x:  900 }));
+
+// ─── DOM text planes (CSS3D, real selectable text) ──────────────────
+scene.add(makePlane(
+  `SPATIAL<br><span class="accent">TYPOGRAPHY</span>
+   <span class="sub">layered DOM text · perspective grid · motion parallax</span>`,
+  { x: 0, y: 210, z: 200, className: 'plane title' },
+));
+
+scene.add(makePlane(
+  `Float text across <em>X</em>, <em>Y</em>, and <em>Z</em>.
+   The grid is the scaffold; the cards are the inhabitants.
+   Browser handles subpixel hinting, so the text stays
+   <em>selectable</em>, <em>copy-pasteable</em>, and <em>indexable</em>
+   even at distance.
+   <span class="cite">— muriel.spatial · CSS3DRenderer
+   exemplar · v0.7.x</span>`,
+  { x: 320, y: 40, z: -80, className: 'plane body' },
+));
+
+scene.add(makePlane(
+  `<h3>Lineage</h3>
+   <div><span class="year">1435</span><span class="name">Alberti — costruzione legittima</span></div>
+   <div><span class="year">1525</span><span class="name">Dürer — perspective machine</span></div>
+   <div><span class="year">1969</span><span class="name">Sutherland — head-mounted 3D wireframe</span></div>
+   <div><span class="year">1982</span><span class="name">Tron — synthwave horizon-to-VP grid</span></div>
+   <div><span class="year">1985</span><span class="name">Bederson — Pad zoomable UI</span></div>
+   <div><span class="year">1993</span><span class="name">Muriel Cooper — VLW Information Landscapes</span></div>
+   <div><span class="year">1996</span><span class="name">Robertson · Mackinlay · Card — Information Visualizer</span></div>
+   <div><span class="year">1998</span><span class="name">Robertson · Dumais et al. — Data Mountain (MSR)</span></div>`,
+  { x: -340, y: -40, z: -160, className: 'plane lineage' },
+));
+
+scene.add(makePlane(
+  `"The challenge is to make computers respond not just to the precision
+   of the eye but to the imagination of the mind." — M. Cooper`,
+  { x: 0, y: 170, z: -880, className: 'plane deep' },
+));
+
+// ─── Transformed text on architectural surfaces ─────────────────────
+scene.add(makePlane(
+  `← FLOOR · z=−500 · the grid as terrain · spatial.typeset_scene() →`,
+  { x: 0, y: 2, z: -500, rotX: -Math.PI / 2, className: 'plane floor-text' },
+));
+scene.add(makePlane(
+  `Type is no longer arrayed in two dimensions.<br>
+   The visual landscape becomes the interface.
+   <span class="attrib">M. Cooper · MIT Visible Language Workshop · 1994</span>`,
+  { x: -898, y: 100, z: -300, rotY: Math.PI / 2, className: 'plane wall-text' },
+));
+
+// ─── Image exhibits (real <img> via CSS3D) ──────────────────────────
+function makeImageCard({ src, caption, x, y, z, w = 240, rotY = 0 }) {
+  const html = `
+    <img src="${src}" width="${w}" loading="lazy"
+         style="display:block;width:${w}px;height:auto;
+                border:1px solid rgba(127,223,255,0.35);
+                box-shadow: 0 0 24px rgba(127,223,255,0.18);">
+    <div style="margin-top:6px;font-family:var(--mono);font-size:10px;
+                color:var(--ink-dim);letter-spacing:0.06em;
+                text-transform:uppercase;text-align:left;">${caption}</div>`;
+  return makePlane(html, { x, y, z, rotY, className: 'exhibit' });
+}
+const MBP = 'https://mindbendingpixels.com/images/';
+scene.add(makeImageCard({ src: MBP + 'psychodeli-peacock.jpg',
+  caption: 'psychodeli · peacock variant',
+  x: 480, y: 220, z: -300, w: 260, rotY: -0.25 }));
+scene.add(makeImageCard({ src: MBP + 'iblipper-kinetic.png',
+  caption: 'iblipper · kinetic typography',
+  x: 620, y: -20, z: -480, w: 240, rotY: -0.32 }));
+scene.add(makeImageCard({ src: MBP + 'scrutinizer-screenshot.png',
+  caption: 'scrutinizer · vision science',
+  x: 720, y: 180, z: -680, w: 220, rotY: -0.40 }));
+
+// "Data Mountain" cluster — spatial bookmarks at varying depths;
+// the spatial position IS the index.
+const chipLabels = [
+  { t: 'arxiv/2401.12345', p: [-380, 140, -380] },
+  { t: 'gh/anthropic/skills', p: [-180, 180, -480] },
+  { t: 'cooper-vlw-1994.pdf', p: [120, 200, -580] },
+  { t: 'nature/2025/foveation', p: [380, 160, -440] },
+  { t: 'inbox/digest-2026-05-15', p: [-120, 60, -320] },
+  { t: 'data-mountain-msr-tr-98-18', p: [220, 60, -520] },
+  { t: 'tron-horizon-shader.glsl', p: [-280, 240, -640] },
+  { t: 'place_label/v0.7.1.svg', p: [320, 220, -360] },
+];
+for (const { t, p } of chipLabels) {
+  scene.add(makePlane(`<span class="k">●</span> ${t}`,
+    { x: p[0], y: p[1], z: p[2], className: 'chip' }));
+}
+
+// ─── Parallax + render loop ─────────────────────────────────────────
+startRenderLoop({
+  scene, camera, webglRenderer, cssRenderer,
+  basePos:        new THREE.Vector3(0, 90, 1200),
+  lookTarget:     new THREE.Vector3(0, 60, -100),
+  fovParallax:    { x: 120, y: 60 },
+  lookXAmount:    30,
+  lookYAmount:    20,
+  dollyRange:     [-400, 600],
+  autoOrbit:      { radius: 220, yAmp: 30, speed: 0.0014 },
+  idleMs:         4000,
+});
+</script>
+
+</body>
+</html>

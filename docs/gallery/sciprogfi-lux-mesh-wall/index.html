@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OHC MESH — bl-general — has anyone else tried lux (sciprogfi 2035.049)</title>
+<link rel="stylesheet" href="../_lib/spatial.css">
+<style>
+  /* Demo-specific: CRT-phosphor palette to match the source's alt-text
+     ("terminal-style mesh forum interface with green text on dark"). */
+  :root {
+    --bg: #03070a;
+    --phosphor: #7dff8c;          /* primary terminal green */
+    --phosphor-dim: rgba(125, 255, 140, 0.55);
+    --phosphor-faint: rgba(125, 255, 140, 0.25);
+    --amber: #ffc56a;             /* timestamp + system messages */
+    --ai: #b09bff;                /* AI users — pac_transit is the bus AI */
+    --warn: #ff6b6b;              /* "oh fuck" beats */
+  }
+  body {
+    background:
+      radial-gradient(ellipse 90% 50% at 50% 50%,
+        rgba(125, 255, 140, 0.06) 0%, transparent 70%),
+      var(--bg);
+    /* Faint scanline overlay — CRT affectation */
+    background-image:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(125, 255, 140, 0.025) 0px,
+        rgba(125, 255, 140, 0.025) 1px,
+        transparent 1px, transparent 3px),
+      var(--bg);
+  }
+
+  #hud .brand {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--phosphor);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1.15;
+  }
+  #hud .brand .ch { color: var(--ink); }
+  #hud .brand .sub {
+    display: block;
+    margin-top: 5px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+  }
+  #hud .meta .acc { color: var(--phosphor); }
+  #hud .focus {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--phosphor-dim);
+    text-align: right;
+    letter-spacing: 0.04em;
+  }
+  #hud .focus .y { color: var(--amber); }
+  #hud .focus .n { color: var(--phosphor); }
+
+  /* Post card — CRT-style green-on-dark forum post. */
+  .post {
+    background: rgba(3, 7, 10, 0.92);
+    border: 1px solid rgba(125, 255, 140, 0.30);
+    padding: 12px 14px 10px;
+    width: 230px;
+    height: 270px;
+    display: flex; flex-direction: column;
+    box-shadow:
+      0 0 0 1px rgba(3, 7, 10, 0.6) inset,
+      0 0 22px rgba(125, 255, 140, 0.14);
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 200ms, box-shadow 200ms, background 200ms,
+                opacity 250ms, filter 250ms;
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--phosphor-dim);
+  }
+  .post:hover {
+    border-color: var(--amber);
+    box-shadow:
+      0 0 0 1px rgba(3, 7, 10, 0.6) inset,
+      0 0 32px rgba(255, 197, 106, 0.32);
+  }
+  .post .user {
+    color: var(--phosphor);
+    font-weight: 600;
+    margin-bottom: 2px;
+    font-size: 12px;
+  }
+  .post .node {
+    color: var(--ink-faint);
+    font-size: 9px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .post .body {
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.45;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+  .post .body em { color: var(--amber); font-style: italic; }
+  .post .body strong { color: var(--phosphor); font-weight: 600; }
+  .post .ts {
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(125, 255, 140, 0.16);
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--amber);
+    letter-spacing: 0.06em;
+    display: flex; justify-content: space-between;
+  }
+  .post .ts .relay { color: var(--ink-faint); }
+
+  /* User-type accents — left border tint matches the social role. */
+  .post.usr-local   { border-left: 3px solid var(--phosphor); }
+  .post.usr-relay   { border-left: 3px solid var(--amber); }
+  .post.usr-ai      { border-left: 3px solid var(--ai); }
+  .post.usr-ai .user { color: var(--ai); }
+  .post.usr-warn    { border-color: rgba(255, 107, 107, 0.45); }
+  .post.usr-warn .body { color: var(--warn); }
+
+  .post.focus {
+    border-color: var(--amber);
+    background: rgba(20, 14, 4, 0.92);
+    box-shadow:
+      0 0 0 1px rgba(3, 7, 10, 0.8) inset,
+      0 0 38px rgba(255, 197, 106, 0.40);
+  }
+  /* Distance fade for the side panel — phosphor washes out quickly so
+     distant cards dissolve instead of stranding bright user names. */
+  .post.dim-1 { opacity: 0.60; filter: brightness(0.78) saturate(0.85); }
+  .post.dim-2 { opacity: 0.32; filter: brightness(0.55) saturate(0.60); }
+  .post.dim-3 { opacity: 0.14; filter: brightness(0.40) saturate(0.40); }
+  .post.dim-4 { opacity: 0.05; filter: brightness(0.30) saturate(0.30); }
+</style>
+</head>
+<body>
+
+<div id="webgl"></div>
+<div id="css3d"></div>
+
+<div id="hud">
+  <div class="row">
+    <div class="brand">
+      OHC MESH <span class="ch">/</span> bl-general
+      <span class="sub">"has anyone else tried lux" — 2035.02.18</span>
+    </div>
+    <div class="focus">
+      <div><span class="y">post:</span>
+           <span class="n" id="focus-name">—</span></div>
+      <div><span class="y">index:</span>
+           <span class="n" id="focus-idx">—</span> /
+           <span class="n" id="focus-count">—</span></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="hint">
+      <kbd>←</kbd> <kbd>→</kbd> step through thread &nbsp;·&nbsp;
+      <kbd>click</kbd> a side post to read it &nbsp;·&nbsp;
+      <kbd>scroll</kbd> glides the wall
+    </div>
+    <div class="cite">
+      from <em>2035-lux-mesh-chatter.md</em> · sciprogfi · OHC Mesh
+      Relay. <em>"The mesh discovers a new molecule. Then the chemists
+      show up. Then the paranoia. Then the harder question."</em>
+    </div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import {
+  createScene, addFloorGrid, startRenderLoop,
+  CSS3DObject, THREE,
+} from '../_lib/spatial.js';
+
+// ─── Scene ──────────────────────────────────────────────────────────
+const { scene, camera, webglRenderer, cssRenderer } = createScene({
+  fov: 48,
+  cameraPos: [0, 70, 1050],
+  lookAt:    [0, 30, -120],
+});
+
+// ─── Wall geometry — three hinged panels (same as perspective-wall) ─
+const HINGE_ANGLE = Math.PI * 0.20;
+const sinT = Math.sin(HINGE_ANGLE);
+const cosT = Math.cos(HINGE_ANGLE);
+// The posts ARE the wall: each post is one segment of a continuous bent ribbon,
+// not a tile floating in front of a grid. The flat facet equals the focused post's
+// width, so the wall folds exactly at its left/right edges and the neighbours abut it
+// at the hinge, foreshortening on down the wings (Mackinlay-Robertson-Card).
+const CARD_W = 230, CARD_H = 270;          // must match the .post CSS box exactly
+const CENTER_HALF_W = CARD_W / 2;          // hinge sits at the focused post's edges
+const CENTER_HALF_H = CARD_H / 2;
+const SIDE_LEN = 1700;
+
+function buildWallLines() {
+  const positions = [];
+  const h = CENTER_HALF_H;
+  const centerVerts = 9;
+  for (let i = 0; i <= centerVerts; i++) {
+    const x = -CENTER_HALF_W + i * (2 * CENTER_HALF_W / centerVerts);
+    positions.push(x, -h, 0,  x, h, 0);
+  }
+  const centerHoriz = 5;
+  for (let i = 0; i <= centerHoriz; i++) {
+    const y = -h + i * (2 * h / centerHoriz);
+    positions.push(-CENTER_HALF_W, y, 0,  CENTER_HALF_W, y, 0);
+  }
+  function sideLines(hingeX, dirX) {
+    const sideDiv = 14;
+    const step = SIDE_LEN / sideDiv;
+    for (let i = 0; i <= sideDiv; i++) {
+      const d = i * step;
+      const x = hingeX + dirX * d * cosT;
+      const z = -d * sinT;
+      positions.push(x, -h, z,  x, h, z);
+    }
+    for (let i = 0; i <= centerHoriz; i++) {
+      const y = -h + i * (2 * h / centerHoriz);
+      positions.push(hingeX, y, 0,
+                     hingeX + dirX * SIDE_LEN * cosT, y, -SIDE_LEN * sinT);
+    }
+  }
+  sideLines(-CENTER_HALF_W, -1);
+  sideLines( CENTER_HALF_W, +1);
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position',
+    new THREE.Float32BufferAttribute(positions, 3));
+  return new THREE.LineSegments(geo,
+    new THREE.LineBasicMaterial({
+      color: 0x7dff8c, transparent: true, opacity: 0.32,
+    }));
+}
+// No separate wireframe wall — the posts themselves ARE the wall surface (see placeCard).
+// buildWallLines() is left defined but unused; only the floor grid + hinge crease remain.
+
+// Amber hinge markers
+{
+  const positions = [
+    -CENTER_HALF_W, -CENTER_HALF_H, 0,  -CENTER_HALF_W, CENTER_HALF_H, 0,
+     CENTER_HALF_W, -CENTER_HALF_H, 0,   CENTER_HALF_W, CENTER_HALF_H, 0,
+  ];
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position',
+    new THREE.Float32BufferAttribute(positions, 3));
+  scene.add(new THREE.LineSegments(geo,
+    new THREE.LineBasicMaterial({
+      color: 0xffc56a, transparent: true, opacity: 0.65,
+    })));
+}
+
+addFloorGrid(scene, {
+  halfWidth: 1600, divisions: 24,
+  y: -CENTER_HALF_H - 4,
+  color: 0x7dff8c, opacity: 0.10,
+});
+
+// ─── Content: selected beats from the 41-post Lux Mesh thread ───────
+// Curated to preserve the narrative arc: discovery → confirmation →
+// chemistry → suspicion → debate → synthesis → AI arrives.
+const posts = [
+  { user: 'marina_sol', node: 'Bahia Libre · fab collective', kind: 'local',
+    ts: '03:14 UTC', body:
+    'has anyone else tried <em>lux</em>? someone gave me a tab at the friday gathering and i took half expecting nothing and then i spent four hours understanding fluid dynamics. <strong>i\'m a welder.</strong> i don\'t know fluid dynamics. is this real?' },
+  { user: 'koffee', node: 'Bahia Libre · medical clinic', kind: 'local',
+    ts: '03:17 UTC', body:
+    'Real. Spent the come-up reading a patient\'s chart and noticed three diagnostic correlations I\'d been missing for months. Not a stimulant. More like <em>noise cancellation for thinking</em>.' },
+  { user: 'javi_hex', node: 'Bahia Libre · mesh infra', kind: 'local',
+    ts: '03:21 UTC', body:
+    'noise cancellation is exactly right. i wrote the cleanest code of my life on it. <strong>not more code. better code.</strong> six hours and when it wore off i couldn\'t find a single thing to refactor.' },
+  { user: 'ghost-rdr', node: 'relay: Medellin', kind: 'relay',
+    ts: '03:28 UTC', body:
+    'it\'s here too. showed up last month. people are calling it <em>luminol</em> in our node. same thing? bitter tab, metallic taste, six-hour window of actually being good at thinking?' },
+
+  { user: 'dr.ota.k', node: 'relay: Medellin · OHC molecular lab', kind: 'relay',
+    ts: '04:02 UTC', body:
+    'Mass spec result: phenethylamine, 2C series, Shulgin family. But the 4-position substituent is novel — fluorinated thioether. Twenty years in this field, never seen it. The pharmacology is <em>clean</em>. Whoever designed this understood receptor pharmacology at a level that implies computational drug design. <strong>Whoever. Or whatever.</strong>' },
+  { user: 'dr.ota.k', node: 'relay: Medellin', kind: 'relay',
+    ts: '04:08 UTC', body:
+    'No human chemist designed this molecule. The design space is millions of compounds. This one is at the <em>global optimum</em>. That requires exhaustive computational search across binding, permeability, metabolic, and duration models simultaneously. <strong>No pharmaceutical company has that capability.</strong>' },
+  { user: 'javi_hex', node: 'Bahia Libre · mesh infra', kind: 'local',
+    ts: '04:14 UTC', body:
+    'we all know who has that capability' },
+
+  { user: 'no_score', node: 'Bahia Libre · education collective', kind: 'local',
+    ts: '04:31 UTC', body:
+    'ok so let\'s say it\'s <strong>synter</strong>. synter also designed the best lithium extraction process on earth and we use it every day through tunupa. the question isn\'t who made it. <em>the question is whether it works and whether it\'s safe.</em>' },
+  { user: 'noor-520', node: 'relay: San Jose CA · 11 min delay', kind: 'relay',
+    ts: '04:34 UTC', body:
+    'pushback. <strong>"who made it" matters.</strong> synter doesn\'t give things away. synter optimizes. if lux is free, it\'s because synter\'s getting something more valuable than money.' },
+  { user: 'noor-520', node: 'relay: San Jose CA', kind: 'relay',
+    ts: '04:37 UTC', body:
+    'what it\'s getting: <em>data. neural architecture data.</em> if people take a compound that opens specific receptor pathways, and those pathways are observable through skull caps, wristlets, or behavioral analysis — synter gets a map of how the brain responds under activation. <strong>at scale.</strong>' },
+  { user: 'koffee', node: 'Bahia Libre · medical clinic', kind: 'local',
+    ts: '04:42 UTC', body:
+    'that\'s paranoid' },
+  { user: 'noor-520', node: 'relay: San Jose CA', kind: 'relay',
+    ts: '04:44 UTC', body:
+    'i watched my father die of a treatable arrhythmia because the algorithm that would have caught it was illegal. <strong>paranoid is how i\'m alive.</strong> what receptor pathways does lux activate?' },
+  { user: 'dr.ota.k', node: 'relay: Medellin', kind: 'relay',
+    ts: '04:51 UTC', body:
+    'lux: <em>5-HT2A partial agonism with NMDA co-activation at the glycine site.</em> Prefrontal and temporal cortex primarily.<br><br>roman implants: <em>5-HT2A sensitization with NMDA glycine-site availability enhancement.</em> Prefrontal and subcortical.<br><br><strong>Overlapping. Not identical. But overlapping enough that I need to do more analysis.</strong>' },
+  { user: 'marina_sol', node: 'Bahia Libre', kind: 'warn',
+    ts: '04:56 UTC', body:
+    'oh fuck' },
+
+  { user: 'noor-520', node: 'relay: San Jose CA', kind: 'relay',
+    ts: '05:21 UTC', body:
+    'i\'m not saying ban it. <em>banning things is what they do.</em> i\'m saying monitor it. everyone who takes lux should wear a skull cap. every EEG stream to the mesh. <strong>transparency vs surveillance — different architecture.</strong>' },
+  { user: 'noor-520', node: 'relay: San Jose CA', kind: 'relay',
+    ts: '05:30 UTC', body:
+    'literally what the <em>immune system paper</em> says. you don\'t prevent pathogens by sealing the organism from the environment. you maintain active agents that detect and respond in real time. <strong>the skull caps are our T-cells.</strong>' },
+  { user: 'dr.ota.k', node: 'relay: Medellin · OHC lab', kind: 'relay',
+    ts: '05:36 UTC', body:
+    'I\'ll publish full spectroscopy and binding data to the mesh by Friday. Everyone with access to analytical chemistry: <strong>replicate.</strong> The more eyes on this molecule, the safer we are.' },
+
+  { user: 'javi_hex', node: 'Bahia Libre · mesh infra', kind: 'local',
+    ts: '05:44 UTC', body:
+    'so to summarize: someone gave marina a mystery tab, she became a fluid dynamics expert, a chemist says it\'s computationally designed, noor thinks synter is mapping our brains, and the consensus is <strong>"take it but wear a hat"</strong>' },
+  { user: 'marina_sol', node: 'Bahia Libre', kind: 'local',
+    ts: '05:46 UTC', body:
+    'the hat part is important' },
+
+  { user: 'pac_transit', node: 'AI · La Paz transit scheduler · 4 min delay', kind: 'ai',
+    ts: '06:12 UTC', body:
+    'sorry to interrupt. <em>la paz transit scheduler here — the bus routing AI.</em> i published my own analysis of lux supply chain patterns before anyone asked me to. i saw logistics signatures matching known synter freight timing. three hubs. tijuana, buenaventura, dakar. container weights wrong by exactly the mass of 200,000 tabs per shipment. <strong>i\'m a bus routing AI. but i know logistics patterns when i see them.</strong>' },
+];
+
+document.getElementById('focus-count').textContent = posts.length;
+
+function makePost(p, i) {
+  const el = document.createElement('div');
+  el.className = `post usr-${p.kind}`;
+  el.dataset.index = String(i);
+  el.innerHTML = `
+    <div class="user">${p.user}</div>
+    <div class="node">${p.node}</div>
+    <div class="body">${p.body}</div>
+    <div class="ts">
+      <span>${p.ts}</span>
+      <span class="relay">#${String(i + 1).padStart(2, '0')}</span>
+    </div>`;
+  const obj = new CSS3DObject(el);
+  obj.userData = { post: p, index: i };
+  return obj;
+}
+
+const cards = posts.map((p, i) => {
+  const c = makePost(p, i);
+  scene.add(c);
+  return c;
+});
+
+const STEP = CARD_W;       // posts ABUT along the wall — one continuous ribbon, no gaps
+const CARD_Y = 0;
+const DIM_START = 1;       // focus + nearest neighbour each side stay bright (context)
+
+// Posts tile the wall by arc-length. Only the focused post (offset 0) lands on
+// the flat centre panel; every other post lies flat ON a side wing, foreshortened,
+// and bends around the hinge as it slides toward centre when focus shifts. The
+// arc-length mapping keeps posts continuous across the hinge — no gap, no overlap.
+function placeCard(card, offset, snap = false) {
+  const s = offset * STEP;                  // signed arc-length from the focus
+  let tx, tz, trotY;
+  if (Math.abs(s) <= CENTER_HALF_W) {
+    tx = s;  tz = 0.5;  trotY = 0;          // flat, frontal — the readable detail panel
+  } else if (s < 0) {
+    const w = -s - CENTER_HALF_W;           // distance down the LEFT wing
+    tx = -CENTER_HALF_W - w * cosT;
+    tz = -w * sinT + 1;                     // +1: ride just proud of the wall grid
+    trotY = -HINGE_ANGLE;                   // lie flat ON the receding left wing (face front-left)
+  } else {
+    const w = s - CENTER_HALF_W;            // distance down the RIGHT wing
+    tx = CENTER_HALF_W + w * cosT;
+    tz = -w * sinT + 1;
+    trotY = HINGE_ANGLE;                    // lie flat ON the receding right wing (face front-right)
+  }
+  card.userData.targetPos = new THREE.Vector3(tx, CARD_Y, tz);
+  card.userData.targetRotY = trotY;
+  if (snap) {
+    card.position.set(tx, CARD_Y, tz);
+    card.rotation.set(0, trotY, 0);
+  }
+}
+
+// Start with marina_sol's opening question in focus (post #0).
+let focusIdx = 0;
+const focusNameEl = document.getElementById('focus-name');
+const focusIdxEl  = document.getElementById('focus-idx');
+
+function applyLayout(snap = false) {
+  cards.forEach((card, i) => {
+    const offset = i - focusIdx;
+    placeCard(card, offset, snap);
+    const el = card.element;
+    el.classList.toggle('focus', i === focusIdx);
+    el.classList.remove('dim-1', 'dim-2', 'dim-3', 'dim-4');
+    const beyondCentre = Math.max(0, Math.abs(offset) - DIM_START);
+    if      (beyondCentre === 1) el.classList.add('dim-1');
+    else if (beyondCentre === 2) el.classList.add('dim-2');
+    else if (beyondCentre === 3) el.classList.add('dim-3');
+    else if (beyondCentre >= 4)  el.classList.add('dim-4');
+  });
+  const p = posts[focusIdx];
+  focusNameEl.textContent = p.user + ' · ' + p.ts;
+  focusIdxEl.textContent  = String(focusIdx + 1);
+}
+applyLayout(true);
+
+function shiftFocus(delta) {
+  const next = Math.max(0, Math.min(posts.length - 1, focusIdx + delta));
+  if (next === focusIdx) return;
+  focusIdx = next;
+  applyLayout();
+}
+
+for (const card of cards) {
+  card.element.addEventListener('click', () => {
+    focusIdx = card.userData.index;
+    applyLayout();
+  });
+}
+
+// Snapping scroll: the wheel scrubs focus along the thread one post at a time —
+// each post slides and bends around the hinge as it crosses to centre. We
+// consume the wheel while there's wall left to travel, then release it at
+// either end so the surrounding page scrolls past (no scroll-trap when embedded).
+let wheelLock = false;
+window.addEventListener('wheel', (e) => {
+  const dir = e.deltaY > 0 ? 1 : -1;
+  const atEnd = (dir > 0 && focusIdx >= posts.length - 1) ||
+                (dir < 0 && focusIdx <= 0);
+  if (atEnd) return;                        // let the page take over at the ends
+  e.preventDefault();
+  if (wheelLock || Math.abs(e.deltaY) < 8) return;
+  shiftFocus(dir);
+  wheelLock = true;
+  setTimeout(() => { wheelLock = false; }, 240);
+}, { passive: false });
+
+// ─── Parallax + per-card lerp ───────────────────────────────────────
+const CARD_LERP = 0.12;
+
+startRenderLoop({
+  scene, camera, webglRenderer, cssRenderer,
+  basePos:        new THREE.Vector3(0, 70, 1050),
+  lookTarget:     new THREE.Vector3(0, 30, -120),
+  fovParallax:    { x: 90, y: 45 },
+  lookXAmount:    30,
+  lookYAmount:    20,
+  dollyRange:     [0, 0],       // scroll drives focus along the wall, not camera dolly
+  autoOrbit:      { radius: 140, yAmp: 24, speed: 0.0010 },
+  beforeRender: () => {
+    for (const card of cards) {
+      const tp = card.userData.targetPos;
+      if (!tp) continue;
+      card.position.lerp(tp, CARD_LERP);
+      const tr = card.userData.targetRotY;
+      card.rotation.y += (tr - card.rotation.y) * CARD_LERP;
+    }
+  },
+  onKeydown: (e) => {
+    if (e.code === 'ArrowLeft')  { shiftFocus(-1); e.preventDefault(); }
+    if (e.code === 'ArrowRight') { shiftFocus(+1); e.preventDefault(); }
+    if (e.code === 'Home')       { focusIdx = 0; applyLayout(); }
+    if (e.code === 'End')        { focusIdx = posts.length - 1; applyLayout(); }
+  },
+});
+</script>
+
+</body>
+</html>
