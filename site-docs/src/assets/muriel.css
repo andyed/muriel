@@ -1,0 +1,198 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   muriel docs — OLED brand override for Material (slate dark base)
+   Palette lifted from docs/index.html landing page. Every text token is
+   computed against its actual background surface to clear the 8:1 floor.
+
+   Background surfaces (darkest → lightest text-bearing surface):
+     --m-bg   #0a0a0f   base page
+     --m-bg2  #12121a   cards / footer / hover fills
+     --m-bg3  #1a1a24   code blocks, table stripes, active nav
+   Text/accent tokens and their WORST-CASE ratio (against #1a1a24):
+     --m-fg     #e6e4d2  cream body     13.47:1
+     --m-muted  #b8b8cc  muted/caption   8.85:1
+     --m-accent #7dd4e4  links/accents  10.20:1  (use everywhere on surfaces)
+     --m-acc-lo #50b4c8  accent BASE     8.19:1 on #0a0a0f ONLY (fails on bg2/bg3)
+     --m-code   #8fd892  code green     10.19:1
+   ─────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --m-bg:     #0a0a0f;
+  --m-bg2:    #12121a;
+  --m-bg3:    #1a1a24;
+  --m-fg:     #e6e4d2;
+  --m-muted:  #b8b8cc;
+  --m-accent: #7dd4e4;
+  --m-acc-lo: #50b4c8;
+  --m-code:   #8fd892;
+  --m-rule:   #2a2a34;
+}
+
+/* Map muriel tokens onto Material's [data-md-color-scheme=slate] variables so
+   every built-in component inherits the OLED palette rather than Material's
+   lower-contrast indigo/grey defaults. */
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color:        var(--m-bg);
+  --md-default-fg-color:        var(--m-fg);
+  --md-default-fg-color--light: var(--m-fg);          /* 13.47:1 — was a faded grey */
+  --md-default-fg-color--lighter: var(--m-muted);     /* keep muted readable */
+  --md-default-fg-color--lightest: var(--m-bg3);      /* fills only, never text */
+
+  --md-primary-fg-color:        var(--m-bg);
+  --md-primary-bg-color:        var(--m-fg);
+  --md-accent-fg-color:         var(--m-accent);
+
+  /* Links / typeset accents — accent-ink, 10.2:1 worst-case */
+  --md-typeset-a-color:         var(--m-accent);
+
+  /* Code surfaces */
+  --md-code-bg-color:           var(--m-bg3);
+  --md-code-fg-color:           var(--m-fg);
+
+  /* Footer */
+  --md-footer-bg-color:         var(--m-bg2);
+  --md-footer-bg-color--dark:   var(--m-bg);
+  --md-footer-fg-color:         var(--m-fg);
+  --md-footer-fg-color--light:  var(--m-muted);   /* 8.85:1 on bg2 */
+  --md-footer-fg-color--lighter: var(--m-muted);
+}
+
+/* Body + headings ----------------------------------------------------------- */
+.md-typeset {
+  font-size: 0.82rem;          /* ~16.4px effective; Material base is small */
+  color: var(--m-fg);
+  /* Readable serif body per brief; mono left to code. */
+  font-family: "Iowan Old Style", "Palatino", "Palatino Linotype", Georgia,
+               "Times New Roman", serif;
+}
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  color: var(--m-accent);      /* luminous cyan headings, 10.2:1+ */
+  font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: -0.01em;
+}
+.md-typeset h1 { font-weight: 700; }
+
+/* Links — accent-ink, underline on hover for affordance */
+.md-typeset a {
+  color: var(--m-accent);
+  text-decoration: none;
+}
+.md-typeset a:hover,
+.md-typeset a:focus {
+  color: var(--m-accent);
+  text-decoration: underline;
+}
+
+/* Header bar ---------------------------------------------------------------- */
+.md-header {
+  background-color: var(--m-bg2);
+  color: var(--m-fg);
+  box-shadow: 0 0 0 1px var(--m-rule);
+}
+.md-header__title { color: var(--m-fg); font-weight: 600; }
+
+/* Search ------------------------------------------------------------------- */
+.md-search__input {
+  background-color: var(--m-bg3);
+  color: var(--m-fg);
+}
+.md-search__input::placeholder { color: var(--m-muted); }   /* 8.85:1 */
+.md-search__input + .md-search__icon { color: var(--m-fg); }
+[data-md-color-scheme="slate"] .md-search-result__meta,
+[data-md-color-scheme="slate"] .md-search-result__article {
+  color: var(--m-fg);
+}
+.md-search-result__teaser { color: var(--m-muted); }        /* 8.85:1 */
+
+/* Navigation rails ---------------------------------------------------------- */
+.md-nav {
+  color: var(--m-muted);       /* inactive items: 8.85:1 worst-case */
+}
+.md-nav__title { color: var(--m-fg); }
+.md-nav__link {
+  color: var(--m-muted);
+}
+.md-nav__item .md-nav__link--active,
+.md-nav__link:focus,
+.md-nav__link:hover {
+  color: var(--m-accent);      /* active/hover: 10.2:1 */
+}
+/* Section group labels (navigation.sections) */
+.md-nav__item--section > .md-nav__link {
+  color: var(--m-fg);
+  font-weight: 600;
+}
+
+/* Right-rail table of contents */
+.md-nav--secondary .md-nav__title { color: var(--m-fg); }
+.md-nav--secondary .md-nav__link { color: var(--m-muted); }
+.md-nav--secondary .md-nav__link--active { color: var(--m-accent); }
+
+/* Tables -------------------------------------------------------------------- */
+.md-typeset table:not([class]) {
+  background-color: var(--m-bg2);
+  color: var(--m-fg);
+  border: 1px solid var(--m-rule);
+}
+.md-typeset table:not([class]) th {
+  background-color: var(--m-bg3);
+  color: var(--m-fg);
+  font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.md-typeset table:not([class]) td { color: var(--m-fg); }
+
+/* Inline + block code ------------------------------------------------------- */
+.md-typeset code {
+  background-color: var(--m-bg3);
+  color: var(--m-code);        /* 10.19:1 on bg3 */
+  font-family: ui-monospace, "SF Mono", Menlo, Monaco, "Cascadia Code", monospace;
+}
+/* Code INSIDE a link: Material colors it with its own indigo link color
+   (#5e8bde, 5.11:1 on bg3 — fails the floor). Force accent-ink cyan (10.2:1). */
+.md-typeset a code,
+.md-typeset a:hover code,
+.md-typeset a:focus code {
+  color: var(--m-accent);
+  background-color: var(--m-bg3);
+}
+.md-typeset pre > code {
+  background-color: var(--m-bg3);
+  color: var(--m-fg);          /* default code text cream, highlights override */
+}
+
+/* Blockquotes / admonitions keep a readable cream body */
+.md-typeset blockquote {
+  color: var(--m-fg);
+  border-left: 3px solid var(--m-accent);
+}
+
+/* Call-to-action button (.md-button) — Material defaults to indigo #5e8bde
+   text+border (5.85:1, fails). Use accent-ink (11.67:1 on bg); filled cyan-on-
+   near-black on hover (bg #0a0a0f on #7dd4e4 = 11.67:1, inverted but ≥8:1). */
+.md-typeset .md-button {
+  color: var(--m-accent);
+  border-color: var(--m-accent);
+  background-color: transparent;
+}
+.md-typeset .md-button:hover,
+.md-typeset .md-button:focus {
+  color: var(--m-bg);                 /* near-black ink */
+  background-color: var(--m-accent);  /* on cyan fill — 11.67:1 */
+  border-color: var(--m-accent);
+}
+
+/* Heading permalink pilcrow (toc.permalink) — accent affordance, not invisible.
+   Material ships it transparent until heading hover; tint it so it reads. */
+.md-typeset .headerlink { color: var(--m-muted); }       /* 8.85:1 worst-case */
+.md-typeset .headerlink:hover,
+.md-typeset h1:hover .headerlink,
+.md-typeset h2:hover .headerlink,
+.md-typeset h3:hover .headerlink { color: var(--m-accent); }
+
+/* Horizontal rules */
+.md-typeset hr { border-bottom: 1px solid var(--m-rule); }
+
+/* Hide Material's faint "back to top" until it's accent-tinted */
+.md-top { background-color: var(--m-bg2); color: var(--m-fg); }

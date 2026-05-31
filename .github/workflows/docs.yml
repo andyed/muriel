@@ -1,0 +1,81 @@
+name: Build & publish docs
+
+# Rebuilds the MkDocs TOC site into docs/ (served by GitHub Pages, legacy
+# branch/docs deploy) whenever the source changes. The gallery is synced from
+# render_assets/ (single source) and its image-bearing demos are repointed to
+# the live mindbendingpixels.com CDN. .nojekyll is re-added after the --clean
+# build so Pages serves the gallery's underscore _lib/ dir. A verify step fails
+# the run before committing if the build is incomplete, so a bad build can never
+# replace the live site. The bot commit only touches docs/ (excluded from the
+# trigger paths) + carries [skip ci], so it cannot loop.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site-docs/**'
+      - 'render_assets/**'
+      - 'plugins/muriel/skills/compose/channels/**'
+      - 'plugins/muriel/skills/compose/vocabularies/**'
+      - 'plugins/muriel/skills/compose/SKILL.md'
+      - 'TODO.md'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: docs-publish
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install MkDocs Material
+        run: pip install "mkdocs-material==9.7.6"
+
+      - name: Sync gallery from render_assets (single source; repoint images to live CDN)
+        run: |
+          rm -rf site-docs/src/gallery
+          cp -R render_assets site-docs/src/gallery
+          find site-docs/src/gallery -name '.DS_Store' -delete
+          rm -f site-docs/src/gallery/__init__.py
+          sed -i 's#\.\./\.\./\.\./mindbendingpixels-www/images/#https://mindbendingpixels.com/images/#g' \
+            site-docs/src/gallery/mindbendingpixels-mountain/index.html \
+            site-docs/src/gallery/spatial-typography/index.html
+
+      - name: Build
+        working-directory: site-docs
+        run: mkdocs build -d ../docs --clean
+
+      - name: Re-add .nojekyll (Pages/Jekyll strips gallery/_lib otherwise)
+        run: touch docs/.nojekyll
+
+      - name: Verify build is complete (fail before committing if not)
+        run: |
+          for f in docs/.nojekyll docs/CNAME docs/index.html \
+                   docs/gallery/_lib/spatial.js docs/gallery/perspective-wall/index.html \
+                   docs/channels/spatial/index.html docs/vocabularies/visible-language/index.html; do
+            test -e "$f" || { echo "::error::missing $f"; exit 1; }
+          done
+          grep -qx 'muriel.mindbendingpixels.com' docs/CNAME || { echo '::error::bad CNAME content'; exit 1; }
+
+      - name: Commit regenerated docs
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add docs
+          if git diff --cached --quiet; then
+            echo 'docs/ unchanged — nothing to commit'
+          else
+            git commit -m 'build(docs): regenerate site from source [skip ci]'
+            git push
+          fi

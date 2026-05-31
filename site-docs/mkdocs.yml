@@ -1,0 +1,109 @@
+site_name: muriel
+site_description: >-
+  Multi-channel visual production for LLMs — sixteen output channels, a brand
+  token schema, and an 8:1 contrast rule enforced at render time.
+site_url: https://muriel.mindbendingpixels.com/
+site_author: Andy Edmonds
+
+# Prototype wiring: sources live in site-docs/src/ (mkdocs forbids the config
+# file from sitting inside docs_dir, so src is a child of site-docs/). Output is
+# a scratch dir OUTSIDE the live docs/ Pages root. Symlinks under src/ are
+# followed by mkdocs.
+docs_dir: src
+site_dir: ../site-build
+
+# The examples/ symlink (skill tree) carries internal README.md files that are
+# author notes, not site pages. Exclude them so they don't render as orphan
+# pages or emit broken-link warnings for their home-path (~/.claude/…) refs.
+# The example ASSETS (svg/html/toml) are still copied — channel links resolve.
+exclude_docs: |
+  examples/*/README.md
+  examples/**/README.md
+
+theme:
+  name: material
+  custom_dir: overrides        # main.html (site-docs/overrides/, sibling of this config) ports analytics + OG + favicons into <head>
+  favicon: favicon-512.png   # base template's default <link rel=icon>; full light/dark set added in overrides
+  palette:
+    # Slate (dark) only — no light toggle. extra_css overrides to OLED.
+    scheme: slate
+    primary: black
+    accent: cyan
+  font:
+    text: false      # use the system serif/sans stacks defined in muriel.css
+    code: false
+  features:
+    - navigation.sections   # render top-level groups as bold sections
+    - navigation.instant    # SPA-style instant nav
+    - navigation.instant.progress
+    - navigation.top        # back-to-top
+    - navigation.tracking   # update URL hash to the focused anchor
+    - toc.integrate         # right-rail TOC folded into the left nav
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+extra_css:
+  - assets/muriel.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      use_pygments: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.details
+
+plugins:
+  - search
+
+# ── Hand-built, curated navigation ─────────────────────────────────────────
+# Channels lead with the high-leverage spatial/charts/infographics/science set,
+# then the rest. Cross-channel references (dimensions, style-guides) live under
+# Reference, not Channels. Vocabularies ordered concept-first.
+nav:
+  - Home: index.md
+  - Channels:
+      - Spatial: channels/spatial.md
+      - Charts: channels/charts.md
+      - Infographics: channels/infographics.md
+      - Science: channels/science.md
+      - Diagrams: channels/diagrams.md
+      - Raster: channels/raster.md
+      - SVG: channels/svg.md
+      - Web: channels/web.md
+      - Interactive: channels/interactive.md
+      - Video: channels/video.md
+      - Density viz (heatmaps): channels/heatmaps.md
+      - Gaze plots: channels/gaze.md
+      - Terminal: channels/terminal.md
+      - Polish: channels/polish.md
+  - Vocabularies:
+      - Visible Language: vocabularies/visible-language.md
+      - FUI (fictional UI): vocabularies/fui.md
+      - Kinetic typography: vocabularies/kinetic-typography.md
+      - KaTeX (web math): vocabularies/katex.md
+      - PixiJS: vocabularies/pixijs.md
+      - ECharts: vocabularies/echarts.md
+      - Declassified: vocabularies/declassified.md
+      - Surfaces: vocabularies/surfaces.md
+      - Data-viz platforms: vocabularies/data-viz-platforms.md
+      - muriel brand: vocabularies/muriel-brand.md
+  - Reference:
+      - Dimensions: channels/dimensions.md
+      - Style guides (brand.toml): channels/style-guides.md
+      - Brand-token schema: channels/SCHEMA.md
+      - Live demos ↗: https://muriel.mindbendingpixels.com/gallery/
+  - About:
+      - The muriel skill: SKILL.md
+      - Critique agent: agents/muriel-critique.md
+      - Roadmap (TODO): TODO.md
+      - Harnesses: HARNESSES.md
+      - Third-party notices: THIRD_PARTY_NOTICES.md
+      - Plugin packaging spec: spec-plugin-packaging.md

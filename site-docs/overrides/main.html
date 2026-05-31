@@ -1,0 +1,46 @@
+{#-
+  muriel docs — Material theme override.
+  Ports the analytics + social/OG/favicon head content from the bespoke
+  docs/index.html landing into the Material base template so the docs site is a
+  complete drop-in replacement for the old static root.
+-#}
+{% extends "base.html" %}
+
+{#- Analytics: PostHog snippet lifted verbatim from docs/index.html. The key is
+    a PLACEHOLDER on purpose — PostHog silently no-ops on it. Do not invent a
+    real key; swap PLACEHOLDER_POSTHOG_KEY for the mindbendingpixels.com project
+    key at go-live. -#}
+{% block analytics %}
+  {{ super() }}
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+{% endblock %}
+
+{#- Social cards + favicons, ported from docs/index.html. og:url is the site
+    root; og:image is absolute so scrapers resolve it. -#}
+{% block extrahead %}
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ 'favicon-32.png' | url }}" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ 'favicon-16.png' | url }}" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ 'favicon-dark-32.png' | url }}" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ 'favicon-dark-16.png' | url }}" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ 'favicon-180.png' | url }}">
+  <link rel="icon" type="image/png" sizes="512x512" href="{{ 'favicon-512.png' | url }}">
+{% endblock %}

@@ -22,3 +22,7 @@ venv/
 
 # Drafts (private)
 docs/drafts/
+
+# muriel docs build (source venv + generated gallery copy + scratch build)
+/site-build/
+/site-docs/src/gallery/
