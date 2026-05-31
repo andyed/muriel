@@ -1,0 +1,2127 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/channels/diagrams/">
+      
+      
+        <link rel="prev" href="../science/">
+      
+      
+        <link rel="next" href="../raster/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Diagrams - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#diagrams-rhetorical-primitives-not-smartart" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Diagrams
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-channel-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this channel exists
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prioritized-catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prioritized catalog
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#this-channel-is-not-the-only-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        This channel is not the only path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API conventions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2×2 matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#n-step-cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        N-step cycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layered-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layered stack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyramid-funnel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pyramid / funnel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swimlane" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Swimlane
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-discipline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design discipline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#worked-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worked examples
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auditing-diagrams" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auditing diagrams
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="diagrams-rhetorical-primitives-not-smartart">Diagrams — rhetorical primitives, not SmartArt<a class="headerlink" href="#diagrams-rhetorical-primitives-not-smartart" title="Permanent link">&para;</a></h1>
+<p>A small library of named diagram structures, each one carrying a specific argument shape. Reach for these when prose can't hold the structure of the claim — when the data is shaped like a 2×2, a cycle, a comparison pair, a phase decomposition, a hierarchy. <strong>Don't reach for them when the data is shaped like a list.</strong></p>
+<p>Part of the <a href="../../SKILL/">muriel</a> skill — see the top-level index for mission and universal rules. Sister channel: <a href="../infographics/"><code>infographics.md</code></a> for K-Dense-style multi-element compositions; this channel is the primitive layer underneath.</p>
+<h2 id="why-this-channel-exists">Why this channel exists<a class="headerlink" href="#why-this-channel-exists" title="Permanent link">&para;</a></h2>
+<p>Office SmartArt ships ~200 "diagrams." Most of them are decorated lists — cells with chevrons, gears, and concentric rings that don't encode anything beyond visual interest. They are how presentations confuse the eye into thinking the speaker has structured a thought.</p>
+<p>This channel ships a curated set of diagrams that earn their geometry. Each one has:</p>
+<ul>
+<li>An <strong>epistemic precondition</strong> — the shape of data or claim it can honestly carry. If your content doesn't match, don't use it.</li>
+<li>An <strong>anti-prescription</strong> — when reaching for that structure misleads. Documented in the function's docstring.</li>
+<li>A <strong>deterministic SVG generator</strong> — brand-aware, contrast-audited, hand-written SVG (no external rasterizer dependency on the core path).</li>
+<li>A <strong>JSON-driven CLI</strong> so an agent can render one without writing Python.</li>
+</ul>
+<p>Pre-flight question for every diagram: <em>if I removed the geometry, would the reader lose information?</em> If no, ship the list.</p>
+<h2 id="prioritized-catalog">Prioritized catalog<a class="headerlink" href="#prioritized-catalog" title="Permanent link">&para;</a></h2>
+<p>Ordered by how often each structure carries a real argument in research, product, and editorial work. <strong>Bold</strong> is shipped today; the rest are queued in <a href="../../TODO/"><code>TODO.md</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Structure</th>
+<th>What it argues</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>2×2 matrix</strong></td>
+<td>Two <strong>independent</strong> binary axes divide a population into four meaningful classes.</td>
+<td><strong>Shipped</strong> — <code>muriel.tools.diagrams.matrix</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Cycle (3–8 step)</strong></td>
+<td>Iterative process with no exit; each step feeds the next.</td>
+<td><strong>Shipped</strong> — <code>muriel.tools.diagrams.cycle</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Comparison pair</td>
+<td>Same axes, one variable changed — the smallest Tufte small-multiple.</td>
+<td>Queued</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Phase / funnel</td>
+<td>Sequential narrowing; later phases are subsets of earlier.</td>
+<td><strong>Shipped</strong> — <code>muriel.tools.diagrams.pyramid</code> (<code>orientation="down"</code>)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Layered stack</td>
+<td>Higher layers depend on / abstract over lower; reading direction encodes hierarchy.</td>
+<td><strong>Shipped</strong> — <code>muriel.tools.diagrams.layer_stack</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Causal DAG</td>
+<td>What causes what; arrow direction is load-bearing.</td>
+<td>Queued</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Venn / Euler</td>
+<td>Categorical intersection; area-proportional.</td>
+<td><strong>Shipped</strong> — <code>muriel.tools.venn</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Spectrum</td>
+<td>Position between two poles is the encoding.</td>
+<td>Queued</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Pyramid</td>
+<td>Each level depends on the one below; apex is rare or important.</td>
+<td><strong>Shipped</strong> — <code>muriel.tools.diagrams.pyramid</code> (<code>orientation="up"</code>)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Comparison heat-grid</td>
+<td>Dense <code>n × m</code> comparison; small multiples for categorical evals.</td>
+<td>Queued</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Swimlane</td>
+<td>Cross-functional process; the handoffs between actors are the point.</td>
+<td><strong>Shipped</strong> — <code>muriel.tools.diagrams.swimlane</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Explicitly excluded.</strong> Process arrows, list-with-chevrons, interconnected blocks, radial gear cosmetics, target-with-concentric-rings as decoration. If a SmartArt category exists only to ornament a list, this channel will never ship it.</p>
+<h2 id="this-channel-is-not-the-only-path">This channel is not the only path<a class="headerlink" href="#this-channel-is-not-the-only-path" title="Permanent link">&para;</a></h2>
+<p>Several diagram forms have an existing home elsewhere in muriel. The native generators here are the <strong>static, brand-locked, print-ready</strong> option — the right pick for a paper figure or editorial SVG that must clear the 8:1 floor with no JS runtime. They are deliberately <em>not</em> the exclusive provider. Before reaching for one, check whether an existing substrate already serves the form better:</p>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Native generator</th>
+<th>Existing alternative — and when to prefer it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2×2, cycle, layer-stack, pyramid/funnel, swimlane, Venn</td>
+<td><strong>this channel</strong></td>
+<td>— (no cleaner substrate; these are the primitives)</td>
+</tr>
+<tr>
+<td>Sequence / interaction</td>
+<td>—</td>
+<td><strong>Mermaid</strong> <code>sequenceDiagram</code> via <code>mmdc</code> (<a href="../svg/"><code>svg.md</code></a>). Prefer Mermaid; only port to native SVG if a paper figure forbids the Mermaid aesthetic.</td>
+</tr>
+<tr>
+<td>State machine</td>
+<td>—</td>
+<td><strong>Mermaid</strong> <code>stateDiagram-v2</code>. Same call.</td>
+</tr>
+<tr>
+<td>ER / data model</td>
+<td>—</td>
+<td><strong>Mermaid</strong> <code>erDiagram</code>. Same call.</td>
+</tr>
+<tr>
+<td>Flowchart / generic DAG</td>
+<td>—</td>
+<td><strong>Mermaid</strong> <code>flowchart</code> today; native <strong>causal DAG</strong> is queued (catalog #6) for when arrow-direction is the load-bearing claim.</td>
+</tr>
+<tr>
+<td>Timeline</td>
+<td>—</td>
+<td><strong>ECharts</strong> time-axis + band overlays (<a href="../../vocabularies/echarts/"><code>echarts.md</code></a>), the <code>svg.md</code> OSEC phase diagram, or the infographics <strong>Timeline</strong> template (<a href="../infographics/"><code>infographics.md</code></a>). All predate this channel.</td>
+</tr>
+<tr>
+<td>Single-actor process flow</td>
+<td>swimlane (degenerate)</td>
+<td>infographics <strong>Process</strong> template — lighter when there are no lanes. Use swimlane only when ownership/handoffs are the argument.</td>
+</tr>
+<tr>
+<td>Tree / org-chart</td>
+<td>—</td>
+<td><strong>ECharts</strong> <code>tree</code> series (interactive) or the infographics <strong>Hierarchical</strong> template.</td>
+</tr>
+<tr>
+<td>Nested hierarchy (proportional)</td>
+<td>—</td>
+<td>Queued <strong>hierarchy family</strong> — sunburst / treemap / dendrogram (see <a href="../../TODO/"><code>TODO.md</code></a> #45), ECharts-backed.</td>
+</tr>
+<tr>
+<td>Magnitude flow</td>
+<td>—</td>
+<td>Queued <strong>Sankey</strong> primitive (<a href="../../TODO/"><code>TODO.md</code></a> #44).</td>
+</tr>
+</tbody>
+</table>
+<p>Rule of thumb: <strong>Mermaid</strong> for node-link relational diagrams (sequence, state, ER, flowchart), <strong>ECharts</strong> when the diagram is data-driven or interactive (timeline, tree, treemap, sunburst), and <strong>this channel</strong> when the output is a static editorial SVG whose geometry encodes a specific rhetorical claim.</p>
+<h2 id="api-conventions">API conventions<a class="headerlink" href="#api-conventions" title="Permanent link">&para;</a></h2>
+<p>Every generator follows the same signature shape, same as <a href="https://github.com/andyed/muriel/blob/main/muriel/tools/venn.py"><code>muriel.tools.venn</code></a>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">generator</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">brand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out_path</span><span class="o">=</span><span class="s2">&quot;...svg&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">structure_specific</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+<p>Returns the path written. <code>brand</code> is an optional <a href="../style-guides/"><code>StyleGuide</code></a> loaded from a <code>brand.toml</code>; without it, generators fall back to the OLED palette.</p>
+<p>Each module also exposes a <code>_main</code> CLI:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.tools.diagrams.matrix<span class="w"> </span>spec.json<span class="w"> </span>out.svg
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.tools.diagrams.cycle<span class="w">  </span>spec.json<span class="w"> </span>out.svg
+</code></pre></div>
+<p>The JSON spec mirrors the Python kwargs. See each module's docstring for the schema.</p>
+<h2 id="22-matrix">2×2 matrix<a class="headerlink" href="#22-matrix" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel.tools.diagrams</span><span class="w"> </span><span class="kn">import</span> <span class="n">matrix</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">matrix</span><span class="p">(</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">quadrants</span><span class="o">=</span><span class="p">[</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIMIZER&quot;</span><span class="p">,</span> <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Long, focused dwells&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>                                         <span class="s2">&quot;Targeted re-reads&quot;</span><span class="p">]},</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIMIZER + LOAD&quot;</span><span class="p">,</span> <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Position 1-3 of dense SERP&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>                                                <span class="s2">&quot;Sustained pupil dilation&quot;</span><span class="p">]},</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SATISFICER&quot;</span><span class="p">,</span> <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Quick scans&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>                                          <span class="s2">&quot;Early commitments&quot;</span><span class="p">]},</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SATISFICER + LOAD&quot;</span><span class="p">,</span> <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Conflict signals&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>                                                 <span class="s2">&quot;Re-reads without resolution&quot;</span><span class="p">]},</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="p">],</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">axes</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;low LF/HF&quot;</span><span class="p">,</span> <span class="s2">&quot;high LF/HF&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;satisficer&quot;</span><span class="p">,</span> <span class="s2">&quot;optimizer&quot;</span><span class="p">)],</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sat/opt × LF/HF — orthogonal axes&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    <span class="n">out_path</span><span class="o">=</span><span class="s2">&quot;examples/diagrams/matrix-sat-opt.svg&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Quadrants</strong> can be a 4-list in TL → TR → BL → BR order, or a dict keyed by <code>top_left</code> / <code>top_right</code> / <code>bottom_left</code> / <code>bottom_right</code>. Each cell is a string (just a label) or a dict <code>{"label": str, "items": [str, ...]}</code> (label plus up to 6 bullets).</p>
+<p><strong>Axes</strong> are <code>((x_low, x_high), (y_low, y_high))</code>. The four endpoint labels sit at the cardinal positions of the cross with SVG-path arrows so they render correctly even without system fonts (cairosvg-safe).</p>
+<p><strong>Anti-prescriptions</strong> (also in the docstring):</p>
+<ul>
+<li>Don't use a 2×2 if your axes are correlated. Half the cells will be empty; you've drawn a line, not a matrix. Plot the scatter instead.</li>
+<li>Don't use a 2×2 to disguise a list. Four bullet points pretending to occupy quadrants is worse than four bullet points.</li>
+<li>Don't label cells with marketing words ("Stars / Cash Cows / Dogs / Question Marks") if your audience won't recognize them. Use the actual short claim each cell carries.</li>
+</ul>
+<h2 id="n-step-cycle">N-step cycle<a class="headerlink" href="#n-step-cycle" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel.tools.diagrams</span><span class="w"> </span><span class="kn">import</span> <span class="n">cycle</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">cycle</span><span class="p">(</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">steps</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Learns&quot;</span><span class="p">,</span> <span class="s2">&quot;Executes&quot;</span><span class="p">,</span> <span class="s2">&quot;Evaluates&quot;</span><span class="p">,</span> <span class="s2">&quot;Hypothesizes&quot;</span><span class="p">,</span> <span class="s2">&quot;Tests&quot;</span><span class="p">],</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">center</span><span class="o">=</span><span class="s2">&quot;Evolver&#39;s</span><span class="se">\n</span><span class="s2">improvement</span><span class="se">\n</span><span class="s2">cycle&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;clockwise&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">out_path</span><span class="o">=</span><span class="s2">&quot;examples/diagrams/cycle-evolver.svg&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Steps</strong> is a list of 3–8 entries. Each entry is a string or a dict <code>{"label": str, "icon": &lt;svg-inner-markup or None&gt;}</code>. The <code>icon</code> slot is a hook for an icon library — pass raw SVG path/group markup to render at the node. Icons are optional; the MVP renders cleanly with text labels alone.</p>
+<p><strong>Direction</strong> is <code>"clockwise"</code> (default) or <code>"counterclockwise"</code>. The first step always sits at the top.</p>
+<p><strong>Anti-prescriptions:</strong></p>
+<ul>
+<li>Don't use a cycle if there's a real exit condition. A funnel, sequence, or flowchart is the honest shape — cycles claim the iteration is real.</li>
+<li>Don't cycle a list of unrelated steps. If step N+1 doesn't depend on step N's output, you've drawn a clock face, not a process.</li>
+<li>Don't exceed 8 steps. Past 8, no reader can hold the loop in working memory; decompose into nested cycles or sequential phases.</li>
+</ul>
+<h2 id="layered-stack">Layered stack<a class="headerlink" href="#layered-stack" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel.tools.diagrams</span><span class="w"> </span><span class="kn">import</span> <span class="n">layer_stack</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">layer_stack</span><span class="p">(</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">layers</span><span class="o">=</span><span class="p">[</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>        <span class="p">{</span><span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;L4&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Application&quot;</span><span class="p">,</span> <span class="s2">&quot;note&quot;</span><span class="p">:</span> <span class="s2">&quot;HTTP, DNS, TLS&quot;</span><span class="p">},</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="p">{</span><span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;L3&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Transport&quot;</span><span class="p">,</span>   <span class="s2">&quot;note&quot;</span><span class="p">:</span> <span class="s2">&quot;TCP, UDP&quot;</span><span class="p">,</span> <span class="s2">&quot;focal&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="p">{</span><span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;L2&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Internet&quot;</span><span class="p">,</span>    <span class="s2">&quot;note&quot;</span><span class="p">:</span> <span class="s2">&quot;IP, ICMP&quot;</span><span class="p">},</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>        <span class="p">{</span><span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;L1&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Link&quot;</span><span class="p">,</span>        <span class="s2">&quot;note&quot;</span><span class="p">:</span> <span class="s2">&quot;Ethernet, Wi-Fi&quot;</span><span class="p">},</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="p">],</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;The TCP/IP stack&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="n">axis_label</span><span class="o">=</span><span class="s2">&quot;abstraction&quot;</span><span class="p">,</span>   <span class="c1"># left-margin axis word; arrow points per axis_dir</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="n">axis_dir</span><span class="o">=</span><span class="s2">&quot;up&quot;</span><span class="p">,</span>              <span class="c1"># &quot;up&quot; = upper layers abstract over lower</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    <span class="n">out_path</span><span class="o">=</span><span class="s2">&quot;examples/diagrams/layers-tcpip.svg&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Layers</strong> is 4–6 entries in reading order, top to bottom (index 0 is the top band). Each is a string or a dict <code>{"label", "tag", "note", "focal"}</code> — <code>tag</code> is the far-left index eyebrow (<code>"L3"</code>, <code>"07"</code>, <code>"APPLICATION"</code>), <code>note</code> is the muted far-right annotation, <code>focal</code> flags the one band to highlight. The <code>focal=</code> kwarg overrides per-layer flags; highlight <strong>at most one</strong> (the bottleneck or the layer under discussion).</p>
+<p><strong>Anti-prescriptions</strong> (also in the docstring):</p>
+<ul>
+<li>Don't stack non-hierarchical peers — if the bands don't rest on each other, you want a swimlane or architecture diagram, not a stack. A stack claims load-bearing order.</li>
+<li>Don't skip indices (<code>L1, L2, L4</code>) — it sends the reader hunting for the missing layer.</li>
+<li>Don't exceed 6 layers, and don't paint every band a different hue — polychrome reads as unrelated categories, the opposite of "one ladder."</li>
+</ul>
+<h2 id="pyramid-funnel">Pyramid / funnel<a class="headerlink" href="#pyramid-funnel" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel.tools.diagrams</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyramid</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># Funnel — honest widths from real counts</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">pyramid</span><span class="p">(</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">tiers</span><span class="o">=</span><span class="p">[</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Visitors&quot;</span><span class="p">,</span>  <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span> <span class="s2">&quot;sublabel&quot;</span><span class="p">:</span> <span class="s2">&quot;all sessions&quot;</span><span class="p">},</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Signups&quot;</span><span class="p">,</span>   <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">24000</span><span class="p">,</span>  <span class="s2">&quot;annotation&quot;</span><span class="p">:</span> <span class="s2">&quot;−76%&quot;</span><span class="p">},</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Activated&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">9000</span><span class="p">,</span>   <span class="s2">&quot;annotation&quot;</span><span class="p">:</span> <span class="s2">&quot;−62%&quot;</span><span class="p">},</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Paid&quot;</span><span class="p">,</span>      <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">2100</span><span class="p">,</span>   <span class="s2">&quot;annotation&quot;</span><span class="p">:</span> <span class="s2">&quot;−77%&quot;</span><span class="p">},</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="p">],</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;down&quot;</span><span class="p">,</span>     <span class="c1"># &quot;down&quot; = funnel (apex at bottom = conversion)</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>    <span class="n">proportional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>      <span class="c1"># widths ∝ value; the taper is a measurement, not a vibe</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Acquisition funnel — Q2&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    <span class="n">axis_label</span><span class="o">=</span><span class="s2">&quot;drop-off&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    <span class="n">out_path</span><span class="o">=</span><span class="s2">&quot;examples/diagrams/funnel-q2.svg&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Tiers</strong> is 4–6 entries in reading order, top to bottom, each a string or a dict <code>{"label", "sublabel", "annotation", "value", "focal"}</code>. <code>orientation="up"</code> draws a pyramid (apex on top, narrow = rare/valuable); <code>"down"</code> draws a funnel (apex at bottom, narrow = converted). With <code>proportional=True</code> and a <code>value</code> on every tier, each tier becomes a centred bar whose width is proportional to its value — an <strong>honest</strong> funnel; otherwise tiers taper linearly, which says "narrowing" without faking a measurement. <code>focal</code> defaults to the apex (top tier for a pyramid, conversion tier for a funnel); pass <code>focal=-1</code> to highlight nothing.</p>
+<p><strong>Anti-prescriptions:</strong></p>
+<ul>
+<li>Don't use a pyramid for non-hierarchical data — if tiers don't rest on each other, width encodes nothing and you've drawn a decorative triangle. Use a bar chart.</li>
+<li>Don't fake funnel widths. If they aren't proportional to the counts, the reader sees a drop-off that isn't there — pass real <code>value</code>s or say in the caption that the taper is ordinal.</li>
+<li>Don't highlight the base. Coral on the broad base dilutes the "apex = rare" signal.</li>
+</ul>
+<h2 id="swimlane">Swimlane<a class="headerlink" href="#swimlane" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel.tools.diagrams</span><span class="w"> </span><span class="kn">import</span> <span class="n">swimlane</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">swimlane</span><span class="p">(</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">lanes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;PM&quot;</span><span class="p">,</span> <span class="s2">&quot;Engineering&quot;</span><span class="p">,</span> <span class="s2">&quot;QA&quot;</span><span class="p">,</span> <span class="s2">&quot;Release&quot;</span><span class="p">],</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Write spec&quot;</span><span class="p">,</span> <span class="s2">&quot;lane&quot;</span><span class="p">:</span> <span class="s2">&quot;PM&quot;</span><span class="p">},</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Implement&quot;</span><span class="p">,</span>  <span class="s2">&quot;lane&quot;</span><span class="p">:</span> <span class="s2">&quot;Engineering&quot;</span><span class="p">},</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Review PR&quot;</span><span class="p">,</span>  <span class="s2">&quot;lane&quot;</span><span class="p">:</span> <span class="s2">&quot;Engineering&quot;</span><span class="p">},</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Test build&quot;</span><span class="p">,</span> <span class="s2">&quot;lane&quot;</span><span class="p">:</span> <span class="s2">&quot;QA&quot;</span><span class="p">,</span> <span class="s2">&quot;focal&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Sign off&quot;</span><span class="p">,</span>   <span class="s2">&quot;lane&quot;</span><span class="p">:</span> <span class="s2">&quot;PM&quot;</span><span class="p">},</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Ship&quot;</span><span class="p">,</span>       <span class="s2">&quot;lane&quot;</span><span class="p">:</span> <span class="s2">&quot;Release&quot;</span><span class="p">},</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="p">],</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Release pipeline&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="n">out_path</span><span class="o">=</span><span class="s2">&quot;examples/diagrams/swimlane-release.svg&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Lanes</strong> is 2–6 actor/team labels, top to bottom. <strong>Steps</strong> are listed in flow order; each names its owning <code>lane</code> (label or row index) and gets the next column automatically (pass an explicit <code>col</code> to place two steps in the same column for a parallel fork). Consecutive steps are joined by a flow arrow; a step that changes lane draws an emphasised <strong>handoff</strong> arrow in the accent colour — the handoffs are visually the loudest thing, because they're the point.</p>
+<p>Reach for this only when ownership is the argument — see <a href="#this-channel-is-not-the-only-path">the provider table</a>: a single-actor flow is lighter as an infographics Process template, and an interactive/runtime flow is faster in Mermaid.</p>
+<p><strong>Anti-prescriptions</strong> (also in the docstring):</p>
+<ul>
+<li>Don't draw lanes you can't label — an unlabeled lane is a row with no actor; collapse it.</li>
+<li>Don't let a step span two lanes — every step has one owner. Shared ownership is a process smell, not a diagram feature.</li>
+<li>Don't snake the flow — if arrows backtrack to read in order, re-sequence the steps so progression runs forward.</li>
+</ul>
+<h2 id="design-discipline">Design discipline<a class="headerlink" href="#design-discipline" title="Permanent link">&para;</a></h2>
+<p>The generators bake in the editorial-diagram discipline that keeps SVG from reading as AI-generated SmartArt:</p>
+<ul>
+<li><strong>4px-increment alignment.</strong> All band heights, margins, and offsets land on a 4px grid (<code>band_h = 64</code>, <code>tier_h = 64</code>, paddings of 48). Off-grid drift is the tell.</li>
+<li><strong>1px hairline dividers, no fills competing with content.</strong> Non-focal bands use a near-invisible <code>paper</code> wash (<code>rgba(ink, 0.04)</code>); structure is carried by hairline strokes, not boxes.</li>
+<li><strong>No shadows, no gradients, no glow.</strong> Nothing in <code>&lt;defs&gt;</code> but the arrow marker. Depth is implied by order, not by drop-shadows.</li>
+<li><strong>One accent, one focal element.</strong> A single layer/tier gets the accent stroke + tint. Two highlights is no highlight.</li>
+</ul>
+<p>This is a <em>philosophy</em> import, not a brand import: the tokens stay muriel's own (OLED palette, <code>StyleGuide</code> fonts) and text clears the <strong>8:1</strong> contrast rule — stricter than the source's WCAG AA. We did <strong>not</strong> adopt the source's typefaces or colour system.</p>
+<blockquote>
+<p><strong>Attribution.</strong> The layout proportions for <code>layer_stack</code>, <code>pyramid</code>, and <code>swimlane</code> (band/tier/lane heights, taper rules, lane dividers + handoff emphasis, label placement, the focal-accent convention) are adapted from the MIT-licensed <a href="https://github.com/cathrynlavery/diagram-design"><code>diagram-design</code></a> skill, © 2025 Cathryn Lavery. muriel's contribution is the deterministic Python generators, the epistemic-precondition / anti-prescription gate on each, the 8:1 contrast floor, and brand-token integration. See <a href="../../../../../THIRD_PARTY_NOTICES.md"><code>THIRD_PARTY_NOTICES.md</code></a> for the full license.</p>
+</blockquote>
+<h2 id="worked-examples">Worked examples<a class="headerlink" href="#worked-examples" title="Permanent link">&para;</a></h2>
+<p>Both examples below render to <code>examples/diagrams/</code>:</p>
+<ul>
+<li><a href="../../examples/diagrams/cycle-evolver.svg"><code>cycle-evolver.svg</code></a> — a 5-step iteration loop with a centre label; honest re-rendering of the AI-generated reference image whose text was visibly mangled.</li>
+<li><a href="../../examples/diagrams/matrix-sat-opt.svg"><code>matrix-sat-opt.svg</code></a> — sat/opt × LF/HF, the orthogonality finding from ETTAC 2026. The matrix-shape claim is testable: if the axes were correlated, the diagonal cells would dominate; here the off-diagonal cells (<code>OPTIMIZER + LOAD</code>, <code>SATISFICER + LOAD</code>) carry distinct content, which is the data justification for a 2×2 over a 1D scatter.</li>
+<li><a href="../../examples/diagrams/layers-tcpip.svg"><code>layers-tcpip.svg</code></a> — a 4-layer dependency stack with the Transport layer as the focal band and an "abstraction ↑" axis; the stack shape is honest because each layer genuinely depends on the one below.</li>
+<li><a href="../../examples/diagrams/funnel-q2.svg"><code>funnel-q2.svg</code></a> — a proportional acquisition funnel; tier widths are driven by real counts (<code>proportional=True</code>), so the visual drop-off matches the <code>−%</code> annotations rather than faking a taper.</li>
+<li><a href="../../examples/diagrams/swimlane-release.svg"><code>swimlane-release.svg</code></a> — a 4-lane release pipeline; same-lane steps connect with a muted arrow, cross-lane handoffs are drawn in the accent because the handoffs are the claim.</li>
+</ul>
+<h2 id="auditing-diagrams">Auditing diagrams<a class="headerlink" href="#auditing-diagrams" title="Permanent link">&para;</a></h2>
+<p>Every diagram should pass <code>python -m muriel.contrast &lt;file.svg&gt;</code>. The included generators write fills inline (not via class selectors), so the audit currently reports zero text rules unless your selectors match marginalia conventions; rasterize via <code>cairosvg &lt;file.svg&gt; -o &lt;file.png&gt;</code> and inspect with the <a href="../../../agents/muriel-critique.md">muriel-critique</a> agent for the visual-judgment pass.</p>
+<p>For a rhetorical-fit pass: feed the diagram and the prose claim it accompanies to muriel-critique with the channel set to <code>diagrams</code>. The agent will check whether the structure earns its geometry.</p>
+<h2 id="anti-patterns">Anti-patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Reaching for a diagram before naming the claim.</strong> If you can't say in one sentence what the diagram argues, the right diagram is no diagram.</li>
+<li><strong>Decorating a list with cell borders.</strong> A 1×4 grid of bullet points with a header band is a list; don't market it as a "framework."</li>
+<li><strong>Cycling a sequence.</strong> If the last step ends the work, draw a sequence with an end-cap; don't loop it back for the symmetry.</li>
+<li><strong>2×2 with marketing-jargon quadrants.</strong> "Stars / Cash Cows / Dogs / Question Marks" is BCG-specific; lifting the names without the underlying market-share/growth measurement is cargo cult.</li>
+<li><strong>Mixing diagram types in one figure</strong> without an organizing frame. A cycle next to a 2×2 next to a funnel reads as "I had three slides and combined them"; lay them out as small multiples instead.</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

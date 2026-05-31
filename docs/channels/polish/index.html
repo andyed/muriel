@@ -1,0 +1,2360 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/channels/polish/">
+      
+      
+        <link rel="prev" href="../terminal/">
+      
+      
+        <link rel="next" href="../../vocabularies/visible-language/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Polish - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#polish-ui-micro-interaction-visual-detail-discipline" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Polish
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#universal-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Universal rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Universal rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-concentric-border-radius" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Concentric border radius
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-optical-over-geometric-alignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Optical over geometric alignment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-shadows-over-borders-for-depth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Shadows over borders for depth
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-minimum-4040px-hit-area" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Minimum 40×40px hit area
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typography-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typography rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Typography rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#5-text-wrap-balance-on-headings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. text-wrap: balance on headings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-text-wrap-pretty-on-body-text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. text-wrap: pretty on body text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-macos-font-smoothing-at-the-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. macOS font smoothing at the root
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-tabular-numbers-for-dynamic-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Tabular numbers for dynamic values
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#surface-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Surface rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Surface rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#9-image-outlines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Image outlines
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#animation-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Animation rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Animation rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10-interruptible-transitions-for-interactive-state-keyframes-only-for-one-shot-sequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Interruptible transitions for interactive state, keyframes only for one-shot sequences
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-split-stagger-enter-animations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Split + stagger enter animations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-subtle-exit-animations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Subtle exit animations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-contextual-icon-animations-exact-values-never-deviate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Contextual icon animations — exact values, never deviate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-scale-on-press-exactly-096-never-below-095" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Scale on press: exactly 0.96, never below 0.95
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-skip-enter-animations-on-page-load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Skip enter animations on page load
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#16-never-transition-all-will-change-only-for-compositor-friendly-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Never transition: all; will-change only for compositor-friendly properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-patterns at a glance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#brand-floor-reminder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Brand-floor reminder
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prior-art" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prior art
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="polish-ui-micro-interaction-visual-detail-discipline">Polish — UI micro-interaction + visual-detail discipline<a class="headerlink" href="#polish-ui-micro-interaction-visual-detail-discipline" title="Permanent link">&para;</a></h1>
+<p>The frontend-polish channel: the codified design-engineering rules that turn an OK interface into one that feels considered. Concentric border radius. Optical alignment. Scale on press. Tabular numbers. Interruptible transitions. The small things that compound.</p>
+<p>This is <strong>distinct from sibling channels</strong>:</p>
+<ul>
+<li><a href="../web/"><code>channels/web.md</code></a> covers editorial HTML, Marginalia, Pandoc, and static capture — the <em>prose</em> surface.</li>
+<li><a href="../interactive/"><code>channels/interactive.md</code></a> covers live demos where the reader moves parameters — the <em>exploratory</em> surface.</li>
+<li>This channel covers UI polish — the <em>tactile</em> surface that any frontend benefits from regardless of its higher-level purpose.</li>
+</ul>
+<p>Structurally mined from <a href="https://github.com/thedavidmurray/claude-make-interfaces-feel-better">thedavidmurray/claude-make-interfaces-feel-better</a> (MIT, archived 2026-05). The 16 rules below are ported and tightened for muriel's brand floor; per-rule citations live inline. Mining stance follows muriel's curator pattern — port the discipline, not the React component code.</p>
+<p>Part of the <a href="../../SKILL/">muriel</a> skill — see the top-level index for mission, universal rules, and channel map.</p>
+<h2 id="when-to-use">When to use<a class="headerlink" href="#when-to-use" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Building or reviewing UI components (buttons, cards, dropdowns, modals)</li>
+<li>Implementing animations, hover states, shadows, borders, typography micro-details</li>
+<li>Reviewing AI-generated frontend code for "feels off" without obvious cause</li>
+<li>Adding tactile feedback (scale on press, hover lift)</li>
+<li>Closing the gap between "renders correctly" and "feels considered"</li>
+<li>Triggers: <em>"make it feel better"</em>, <em>"polish this"</em>, <em>"feels off"</em>, <em>"jarring"</em>, <em>"loose"</em></li>
+</ul>
+<p>If the work is data viz, use <a href="../charts/"><code>channels/charts.md</code></a>. If it's a live demo, use <a href="../interactive/"><code>channels/interactive.md</code></a>. If it's prose-rendering HTML, use <a href="../web/"><code>channels/web.md</code></a>.</p>
+<h2 id="workflow">Workflow<a class="headerlink" href="#workflow" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Identify the surface.</strong> Is it a button, card, list item, modal, navigation? Different surfaces apply different subsets of rules.</li>
+<li><strong>Apply universal rules</strong> (1–4 below) — they hit nearly every interface.</li>
+<li><strong>Apply surface-specific rules</strong> from the matching section (Typography / Surfaces / Animations / Performance).</li>
+<li><strong>Run the validation checklist</strong> before declaring done.</li>
+<li><strong>Audit any text element with <code>muriel.contrast</code></strong> if brand tokens are in play — the 8:1 floor still binds; polish is additive, never a contrast excuse.</li>
+</ol>
+<h2 id="universal-rules">Universal rules<a class="headerlink" href="#universal-rules" title="Permanent link">&para;</a></h2>
+<p>The four that hit almost every interface. Numbered for citation.</p>
+<h3 id="1-concentric-border-radius">1. Concentric border radius<a class="headerlink" href="#1-concentric-border-radius" title="Permanent link">&para;</a></h3>
+<p>When nesting rounded elements, the outer radius must equal the inner radius plus the padding between them:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>outer_radius = inner_radius + padding
+</code></pre></div>
+<p>Mismatched radii on nested elements is the single most common thing that makes interfaces feel off. If padding exceeds <code>24px</code>, treat the layers as separate surfaces and choose each radius independently — the strict math stops mattering at that scale.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c">/* Good — concentric */</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">.</span><span class="nc">card</span><span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">  </span><span class="c">/* 12 + 8 = 20 */</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">.</span><span class="nc">card-inner</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c">/* Bad — same radius on both */</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">.</span><span class="nc">card</span><span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">.</span><span class="nc">card-inner</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h3 id="2-optical-over-geometric-alignment">2. Optical over geometric alignment<a class="headerlink" href="#2-optical-over-geometric-alignment" title="Permanent link">&para;</a></h3>
+<p>When geometric centering looks off, align optically. Three common cases:</p>
+<ul>
+<li><strong>Button with text + trailing icon:</strong> <code>icon-side padding = text-side padding − 2px</code> so the icon doesn't appear pushed too far out.</li>
+<li><strong>Play-button triangle:</strong> shift <code>2px</code> right of geometric center — the triangle's visual mass sits left of its bounding box.</li>
+<li><strong>Asymmetric icons (stars, arrows, carets):</strong> fix in the SVG itself when possible; fall back to <code>margin-left: 1px</code> adjustments only if the SVG can't be edited.</li>
+</ul>
+<h3 id="3-shadows-over-borders-for-depth">3. Shadows over borders for depth<a class="headerlink" href="#3-shadows-over-borders-for-depth" title="Permanent link">&para;</a></h3>
+<p>For buttons, cards, and containers using a border to suggest elevation: prefer a three-layer <code>box-shadow</code> over a solid border. Shadows adapt to any background via transparency; solid borders don't survive background changes or image fills.</p>
+<p><strong>Exception:</strong> dividers (<code>border-b</code>, <code>border-t</code>, side borders for layout separation) and form-input outlines (for focus accessibility) stay as borders. The shadow-over-border rule is for <em>elevation</em>, not <em>separation</em>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nv">--shadow-border</span><span class="p">:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.06</span><span class="p">),</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="mi">-1</span><span class="kt">px</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.06</span><span class="p">),</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="mi">0</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="mi">4</span><span class="kt">px</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.04</span><span class="p">);</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nv">--shadow-border-hover</span><span class="p">:</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.08</span><span class="p">),</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="mi">-1</span><span class="kt">px</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.08</span><span class="p">),</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="mi">0</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="mi">4</span><span class="kt">px</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.06</span><span class="p">);</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">}</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c">/* Dark mode — simplify to a single white ring */</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="o">[</span><span class="nt">data-theme</span><span class="o">=</span><span class="s2">&quot;dark&quot;</span><span class="o">]</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="nv">--shadow-border</span><span class="p">:</span><span class="w">       </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mf">0.08</span><span class="p">);</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="nv">--shadow-border-hover</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mf">0.13</span><span class="p">);</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="4-minimum-4040px-hit-area">4. Minimum 40×40px hit area<a class="headerlink" href="#4-minimum-4040px-hit-area" title="Permanent link">&para;</a></h3>
+<p>Interactive elements need a hit area of at least <code>40×40px</code> (WCAG 2.5.5 recommends <code>44×44</code>; <code>40</code> is the minimum muriel accepts). If the visible element is smaller (a <code>20×20</code> checkbox), extend with a pseudo-element. <strong>Never let two interactive hit areas overlap</strong> — shrink the pseudo-element rather than have collisions.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">.</span><span class="nc">checkbox</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="k">position</span><span class="p">:</span><span class="w"> </span><span class="kc">relative</span><span class="p">;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="k">height</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">}</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">.</span><span class="nc">checkbox</span><span class="p">::</span><span class="nd">after</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="k">content</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="k">position</span><span class="p">:</span><span class="w"> </span><span class="kc">absolute</span><span class="p">;</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="k">inset</span><span class="p">:</span><span class="w"> </span><span class="mi">-10</span><span class="kt">px</span><span class="p">;</span><span class="w">       </span><span class="c">/* extends to 40×40 */</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">}</span>
+</code></pre></div>
+<h2 id="typography-rules">Typography rules<a class="headerlink" href="#typography-rules" title="Permanent link">&para;</a></h2>
+<h3 id="5-text-wrap-balance-on-headings">5. <code>text-wrap: balance</code> on headings<a class="headerlink" href="#5-text-wrap-balance-on-headings" title="Permanent link">&para;</a></h3>
+<p>Headings and short text blocks (≤6 lines on Chromium, ≤10 on Firefox) get even line distribution with <code>text-wrap: balance</code>. The balancing algorithm is computationally expensive — on body paragraphs it's silently ignored.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">h1</span><span class="o">,</span><span class="w"> </span><span class="nt">h2</span><span class="o">,</span><span class="w"> </span><span class="nt">h3</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">text-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">balance</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h3 id="6-text-wrap-pretty-on-body-text">6. <code>text-wrap: pretty</code> on body text<a class="headerlink" href="#6-text-wrap-pretty-on-body-text" title="Permanent link">&para;</a></h3>
+<p>For paragraphs longer than the balance threshold, <code>text-wrap: pretty</code> runs a slower algorithm that favors typography over performance. Result: fewer orphans without the line-count cap.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">p</span><span class="o">,</span><span class="w"> </span><span class="p">.</span><span class="nc">article-body</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">text-wrap</span><span class="p">:</span><span class="w"> </span><span class="n">pretty</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>Decision table:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Property</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Headings, titles, short text (≤6 lines)</td>
+<td><code>text-wrap: balance</code></td>
+</tr>
+<tr>
+<td>Body paragraphs, descriptions</td>
+<td><code>text-wrap: pretty</code></td>
+</tr>
+<tr>
+<td>Code blocks, pre-formatted text</td>
+<td>Neither — leave default</td>
+</tr>
+</tbody>
+</table>
+<h3 id="7-macos-font-smoothing-at-the-root">7. macOS font smoothing at the root<a class="headerlink" href="#7-macos-font-smoothing-at-the-root" title="Permanent link">&para;</a></h3>
+<p>Apply once on <code>&lt;html&gt;</code>. Other platforms ignore these properties, so the rule is safe to ship universally.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">html</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="kp">-webkit-</span><span class="n">font-smoothing</span><span class="p">:</span><span class="w"> </span><span class="n">antialiased</span><span class="p">;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="kp">-moz-</span><span class="n">osx-font-smoothing</span><span class="p">:</span><span class="w"> </span><span class="n">grayscale</span><span class="p">;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">}</span>
+</code></pre></div>
+<p>Never apply per-element — inconsistent smoothing reads as heavier text in some places and thinner in others, which is more distracting than no smoothing at all.</p>
+<h3 id="8-tabular-numbers-for-dynamic-values">8. Tabular numbers for dynamic values<a class="headerlink" href="#8-tabular-numbers-for-dynamic-values" title="Permanent link">&para;</a></h3>
+<p>Counters, prices, timers, table columns of numbers, animated number transitions — all use <code>font-variant-numeric: tabular-nums</code> to prevent layout shift as digits change.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">.</span><span class="nc">counter</span><span class="o">,</span><span class="w"> </span><span class="p">.</span><span class="nc">price</span><span class="o">,</span><span class="w"> </span><span class="nt">table</span><span class="w"> </span><span class="nt">td</span><span class="p">.</span><span class="nc">numeric</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">font-variant-numeric</span><span class="p">:</span><span class="w"> </span><span class="n">tabular-nums</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p><strong>Don't</strong> use tabular-nums on static display numbers, phone numbers, zip codes, version strings, or decorative large numerals — the proportional spacing reads better when the value isn't changing. (Some fonts like Inter widen the <code>1</code> glyph under tabular-nums; verify in the project's font before shipping.)</p>
+<h2 id="surface-rules">Surface rules<a class="headerlink" href="#surface-rules" title="Permanent link">&para;</a></h2>
+<h3 id="9-image-outlines">9. Image outlines<a class="headerlink" href="#9-image-outlines" title="Permanent link">&para;</a></h3>
+<p>Add a subtle <code>1px</code> inset outline to images. Creates consistent depth across a design system without affecting layout (outlines don't add to box dimensions).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">img</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="k">outline</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">);</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="k">outline-offset</span><span class="p">:</span><span class="w"> </span><span class="mi">-1</span><span class="kt">px</span><span class="p">;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">}</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="o">[</span><span class="nt">data-theme</span><span class="o">=</span><span class="s2">&quot;dark&quot;</span><span class="o">]</span><span class="w"> </span><span class="nt">img</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="k">outline-color</span><span class="p">:</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">);</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="p">}</span>
+</code></pre></div>
+<h2 id="animation-rules">Animation rules<a class="headerlink" href="#animation-rules" title="Permanent link">&para;</a></h2>
+<h3 id="10-interruptible-transitions-for-interactive-state-keyframes-only-for-one-shot-sequences">10. Interruptible transitions for interactive state, keyframes only for one-shot sequences<a class="headerlink" href="#10-interruptible-transitions-for-interactive-state-keyframes-only-for-one-shot-sequences" title="Permanent link">&para;</a></h3>
+<p>CSS <em>transitions</em> interpolate toward the latest state and retarget mid-animation. CSS <em>keyframe animations</em> run on a fixed timeline and restart from the beginning if re-triggered. Pick by intent:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Transitions</th>
+<th>Keyframes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interruptible</td>
+<td>Yes — retargets</td>
+<td>No — restarts</td>
+</tr>
+<tr>
+<td>Use for</td>
+<td>Interactive state changes (hover, toggle, drawer)</td>
+<td>One-shot sequences (enter animations, loading spinners)</td>
+</tr>
+</tbody>
+</table>
+<p>A drawer using keyframes for open/close snaps on rapid toggling. A drawer using transitions smoothly reverses mid-flight.</p>
+<h3 id="11-split-stagger-enter-animations">11. Split + stagger enter animations<a class="headerlink" href="#11-split-stagger-enter-animations" title="Permanent link">&para;</a></h3>
+<p>Don't animate a single container. Break enters into semantic chunks and stagger:</p>
+<ul>
+<li>Title → description → CTA buttons, ~100ms between groups.</li>
+<li>For hero titles, consider splitting into individual words at ~80ms stagger.</li>
+<li>Combine <code>opacity</code> + <code>translateY(12px)</code> + <code>filter: blur(4px)</code> for the enter effect.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">.</span><span class="nc">stagger-item</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">opacity</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="nb">translateY</span><span class="p">(</span><span class="mi">12</span><span class="kt">px</span><span class="p">);</span><span class="w"> </span><span class="k">filter</span><span class="p">:</span><span class="w"> </span><span class="nb">blur</span><span class="p">(</span><span class="mi">4</span><span class="kt">px</span><span class="p">);</span><span class="w"> </span><span class="k">animation</span><span class="p">:</span><span class="w"> </span><span class="n">fadeInUp</span><span class="w"> </span><span class="mi">400</span><span class="kt">ms</span><span class="w"> </span><span class="kc">ease-out</span><span class="w"> </span><span class="kc">forwards</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="p">.</span><span class="nc">stagger-item</span><span class="p">:</span><span class="nd">nth-child</span><span class="o">(</span><span class="nt">1</span><span class="o">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">animation-delay</span><span class="p">:</span><span class="w">   </span><span class="mi">0</span><span class="kt">ms</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">.</span><span class="nc">stagger-item</span><span class="p">:</span><span class="nd">nth-child</span><span class="o">(</span><span class="nt">2</span><span class="o">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">animation-delay</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">ms</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p">.</span><span class="nc">stagger-item</span><span class="p">:</span><span class="nd">nth-child</span><span class="o">(</span><span class="nt">3</span><span class="o">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">animation-delay</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="kt">ms</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="p">@</span><span class="k">keyframes</span><span class="w"> </span><span class="nt">fadeInUp</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">to</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">opacity</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="nb">translateY</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="k">filter</span><span class="p">:</span><span class="w"> </span><span class="nb">blur</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h3 id="12-subtle-exit-animations">12. Subtle exit animations<a class="headerlink" href="#12-subtle-exit-animations" title="Permanent link">&para;</a></h3>
+<p>Exits should be quieter than enters — the user's focus is already moving to the next thing. Small fixed <code>translateY(-12px)</code> over <code>150ms</code> ease-in, not a full-height slide-out. Exception: when spatial context matters (a card returning to a list, a drawer to a screen edge), slide the full distance.</p>
+<p>Never remove the exit entirely — popping out of existence loses the user's place.</p>
+<h3 id="13-contextual-icon-animations-exact-values-never-deviate">13. Contextual icon animations — exact values, never deviate<a class="headerlink" href="#13-contextual-icon-animations-exact-values-never-deviate" title="Permanent link">&para;</a></h3>
+<p>When icons appear/disappear contextually (hover toolbars, state-change toggles), animate with <code>opacity</code> + <code>scale</code> + <code>blur</code>. Use <strong>exactly these values</strong>:</p>
+<ul>
+<li><code>scale</code>: <code>0.25</code> → <code>1</code> (never <code>0.5</code>, never <code>0.6</code>)</li>
+<li><code>opacity</code>: <code>0</code> → <code>1</code></li>
+<li><code>filter</code>: <code>blur(4px)</code> → <code>blur(0px)</code></li>
+<li>Motion: <code>{ type: "spring", duration: 0.3, bounce: 0 }</code> — <strong>bounce must be <code>0</code></strong>, never <code>0.1</code> or higher</li>
+</ul>
+<p>If the project has <code>motion</code>/<code>framer-motion</code> in <code>package.json</code>, use <code>AnimatePresence</code> with these values. If not, keep both icons in the DOM (one absolutely positioned, one in flow) and cross-fade via CSS transitions with <code>cubic-bezier(0.2, 0, 0, 1)</code> — don't add a motion dependency just for icon swaps.</p>
+<p>The exact values are tuned: smaller scale values feel jarring, bounce &gt; 0 reads as gimmicky, opacity-only feels lifeless.</p>
+<h3 id="14-scale-on-press-exactly-096-never-below-095">14. Scale on press: exactly <code>0.96</code>, never below <code>0.95</code><a class="headerlink" href="#14-scale-on-press-exactly-096-never-below-095" title="Permanent link">&para;</a></h3>
+<p>A subtle scale-down on click gives buttons tactile feedback. Always <code>scale(0.96)</code>. <strong>Anything below <code>0.95</code> reads as exaggerated</strong> — past that threshold the button feels like it's collapsing rather than depressing.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">.</span><span class="nc">button</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">transition-property</span><span class="p">:</span><span class="w"> </span><span class="k">scale</span><span class="p">;</span><span class="w"> </span><span class="k">transition-duration</span><span class="p">:</span><span class="w"> </span><span class="mi">150</span><span class="kt">ms</span><span class="p">;</span><span class="w"> </span><span class="k">transition-timing-function</span><span class="p">:</span><span class="w"> </span><span class="kc">ease-out</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="p">.</span><span class="nc">button</span><span class="p">:</span><span class="nd">active</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">scale</span><span class="p">:</span><span class="w"> </span><span class="mf">0.96</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>Not every button needs this. Provide a <code>static</code> prop on the button component to disable scale for cases where the motion would be distracting (form submits inside dense layouts, primary-action buttons that already have other feedback).</p>
+<h3 id="15-skip-enter-animations-on-page-load">15. Skip enter animations on page load<a class="headerlink" href="#15-skip-enter-animations-on-page-load" title="Permanent link">&para;</a></h3>
+<p>For animation systems that fire on mount (Framer Motion's <code>AnimatePresence</code>, etc.), use <code>initial={false}</code> so default-state elements don't animate in on first render. Icons that match the current state on page load shouldn't pop in — only state <em>changes</em> should animate.</p>
+<p><strong>Caveat:</strong> don't apply this to staged page-enter sequences (rule 11). If <code>initial={false}</code> would skip the entire intentional entrance, the rule doesn't apply.</p>
+<h2 id="performance-rules">Performance rules<a class="headerlink" href="#performance-rules" title="Permanent link">&para;</a></h2>
+<h3 id="16-never-transition-all-will-change-only-for-compositor-friendly-properties">16. Never <code>transition: all</code>; <code>will-change</code> only for compositor-friendly properties<a class="headerlink" href="#16-never-transition-all-will-change-only-for-compositor-friendly-properties" title="Permanent link">&para;</a></h3>
+<p>Two coupled performance rules:</p>
+<ul>
+<li><strong><code>transition: all</code> is banned.</strong> Always specify exact properties: <code>transition-property: scale, opacity, filter</code>. The shorthand forces the browser to watch every property for changes — causes unintended transitions on color/padding/shadow and prevents browser optimizations. Tailwind's <code>transition</code> shorthand has the same issue; use <code>transition-[scale,opacity,filter]</code> bracket syntax instead. <code>transition-transform</code> is fine — it expands to <code>transform, translate, scale, rotate</code> specifically.</li>
+<li><strong><code>will-change</code> only for GPU-compositable properties</strong> — <code>transform</code>, <code>opacity</code>, <code>filter</code>, <code>clip-path</code>. Never <code>will-change: all</code>. Never on <code>background-color</code>, <code>padding</code>, <code>top/left/width/height</code> — they can't be GPU-composited so the hint accomplishes nothing while costing a compositing layer in memory. Only add <code>will-change</code> when you observe first-frame stutter; modern browsers optimize most cases on their own.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>GPU-compositable?</th>
+<th><code>will-change</code> worth it?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>transform</code>, <code>translate</code>, <code>scale</code>, <code>rotate</code></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>opacity</code></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>filter</code> (blur, brightness)</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>clip-path</code></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>background-*</code>, <code>border-*</code>, <code>color</code></td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>top</code>, <code>left</code>, <code>width</code>, <code>height</code></td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h2 id="anti-patterns-at-a-glance">Anti-patterns at a glance<a class="headerlink" href="#anti-patterns-at-a-glance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Mistake</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Same border radius on parent and child</td>
+<td><code>outer = inner + padding</code></td>
+</tr>
+<tr>
+<td>Icons look off-center</td>
+<td>Optical adjustment (icon-side padding −2px, or fix SVG directly)</td>
+</tr>
+<tr>
+<td>Hard 1px borders for elevation</td>
+<td>Three-layer <code>box-shadow</code></td>
+</tr>
+<tr>
+<td>Jarring enter animations</td>
+<td>Split into semantic chunks, stagger at ~100ms</td>
+</tr>
+<tr>
+<td>Dramatic exit animations</td>
+<td>Small <code>translateY(-12px)</code>, <code>150ms</code> ease-in</td>
+</tr>
+<tr>
+<td>Icon swaps that pop without animation</td>
+<td><code>scale 0.25→1</code> + <code>opacity 0→1</code> + <code>blur 4px→0</code>, spring <code>bounce: 0</code></td>
+</tr>
+<tr>
+<td>Buttons with no press feedback</td>
+<td><code>scale(0.96)</code> on <code>:active</code>, never below <code>0.95</code></td>
+</tr>
+<tr>
+<td>Numbers that shift layout as they update</td>
+<td><code>font-variant-numeric: tabular-nums</code></td>
+</tr>
+<tr>
+<td>Text rendering heavy on macOS</td>
+<td><code>-webkit-font-smoothing: antialiased</code> at root</td>
+</tr>
+<tr>
+<td>Headings with orphaned words</td>
+<td><code>text-wrap: balance</code></td>
+</tr>
+<tr>
+<td>Body paragraphs with orphans</td>
+<td><code>text-wrap: pretty</code></td>
+</tr>
+<tr>
+<td>Page-load animations on default-state elements</td>
+<td><code>initial={false}</code> on the AnimatePresence boundary</td>
+</tr>
+<tr>
+<td><code>transition: all</code> or <code>transition</code> shorthand</td>
+<td><code>transition-property: scale, opacity</code> (or Tailwind bracket syntax)</td>
+</tr>
+<tr>
+<td><code>will-change: all</code> or <code>will-change: background-color</code></td>
+<td>Only on <code>transform</code>, <code>opacity</code>, <code>filter</code>; only when stutter is observed</td>
+</tr>
+<tr>
+<td>Tiny hit areas on small icon buttons</td>
+<td>Extend with <code>::after { inset: -10px }</code> to 40×40 minimum</td>
+</tr>
+</tbody>
+</table>
+<h2 id="validation-checklist">Validation checklist<a class="headerlink" href="#validation-checklist" title="Permanent link">&para;</a></h2>
+<p>Before declaring a UI surface done, walk through these:</p>
+<ul>
+<li>[ ] Nested rounded elements use concentric radius math</li>
+<li>[ ] Icons and asymmetric shapes are optically centered, not geometrically</li>
+<li>[ ] Elevation uses layered <code>box-shadow</code>, not solid borders</li>
+<li>[ ] Images carry a subtle <code>1px</code> inset outline</li>
+<li>[ ] Interactive elements have ≥40×40px hit area (no overlapping hit areas)</li>
+<li>[ ] Enter animations are split + staggered (~100ms between groups)</li>
+<li>[ ] Exit animations are subtle (small <code>translateY</code>, shorter duration than enter)</li>
+<li>[ ] Contextual icon swaps use the canonical <code>scale 0.25→1</code> + <code>opacity</code> + <code>blur</code> recipe with <code>bounce: 0</code></li>
+<li>[ ] Buttons have <code>scale(0.96)</code> on press (with <code>static</code> opt-out where appropriate)</li>
+<li>[ ] Default-state elements don't animate on page load (<code>initial={false}</code>)</li>
+<li>[ ] No <code>transition: all</code> anywhere — exact properties only</li>
+<li>[ ] <code>will-change</code> only on compositor-friendly properties, only when first-frame stutter is observed</li>
+<li>[ ] macOS font smoothing applied once at root</li>
+<li>[ ] Dynamic numbers use <code>tabular-nums</code></li>
+<li>[ ] Headings use <code>text-wrap: balance</code>; body uses <code>text-wrap: pretty</code></li>
+</ul>
+<h2 id="brand-floor-reminder">Brand-floor reminder<a class="headerlink" href="#brand-floor-reminder" title="Permanent link">&para;</a></h2>
+<p>Polish is additive — it never excuses a contrast violation. Any text element in the polished UI still has to clear muriel's 8:1 floor:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.contrast<span class="w"> </span>audit-svg<span class="w"> </span>path/to/component.svg
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.contrast<span class="w"> </span>audit-html<span class="w"> </span>path/to/component.html
+</code></pre></div>
+<p>Hover and focus states are particularly likely to drop below 8:1 — verify both rest and hover states explicitly. Shadows-over-borders (rule 3) interact with this: hover-shadow color must clear floor against whatever sits beneath.</p>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../web/"><code>channels/web.md</code></a> — editorial HTML, marginalia, the prose surface where polish rules apply to readable content</li>
+<li><a href="../interactive/"><code>channels/interactive.md</code></a> — live demos with parameter sliders, where the polish rules apply to the controls</li>
+<li><a href="../charts/"><code>channels/charts.md</code></a> — data viz, where polish applies to tooltips, axis labels, hover states</li>
+<li><a href="../../agents/muriel-critique/"><code>agents/muriel-critique.md</code></a> — runs the polish validation checklist as part of critique when artifacts target the <code>app</code> register</li>
+</ul>
+<h2 id="prior-art">Prior art<a class="headerlink" href="#prior-art" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://github.com/thedavidmurray/claude-make-interfaces-feel-better">thedavidmurray/claude-make-interfaces-feel-better</a> (MIT, archived May 2026) — Source for all 16 numbered rules above. The mathematical-precision framing (<code>outer = inner + padding</code>, exact <code>0.96</code> press value, exact <code>0.25</code> icon scale, <code>bounce: 0</code>) is preserved verbatim because the values are tuned, not arbitrary.</li>
+<li><a href="https://m3.material.io/styles/motion">Material Design 3 Motion</a> — Tangentially related; muriel intentionally does not adopt Material's broader motion vocabulary.</li>
+<li><a href="https://developer.apple.com/design/human-interface-guidelines/motion">Apple HIG — Motion</a> — Read-only reference; cited by paraphrase per scholarly discipline (Apple-proprietary docs).</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

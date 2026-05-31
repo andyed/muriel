@@ -1,0 +1,1914 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/vocabularies/data-viz-platforms/">
+      
+      
+        <link rel="prev" href="../surfaces/">
+      
+      
+        <link rel="next" href="../muriel-brand/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Data-viz platforms - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#data-viz-platforms-cross-platform-charting-vocabulary" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Data-viz platforms
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-reach-for-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to reach for this
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-platforms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The platforms
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The platforms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apple-charting-data-human-interface-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Apple — Charting data (Human Interface Guidelines)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#google-material-design-3-data-viz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Google — Material Design 3 — Data viz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ibm-carbon-charts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IBM — Carbon Charts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vega-vega-lite-grammar-of-graphics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vega / Vega-Lite — Grammar of Graphics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observable-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observable — Plot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#financial-times-visual-vocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Financial Times — Visual Vocabulary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datawrapper-academy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Datawrapper Academy
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-they-converge-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What they converge on
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-they-diverge-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What they diverge on
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-borrow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to borrow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prior-art-upstream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prior art / upstream
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="data-viz-platforms-cross-platform-charting-vocabulary">Data-viz platforms — cross-platform charting vocabulary<a class="headerlink" href="#data-viz-platforms-cross-platform-charting-vocabulary" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>What this vocabulary is.</strong> A short survey of the major platform charting guides that muriel can cite when a figure leaves the paper-figure register: when a chart will live in an iOS app, a Material-themed admin panel, an enterprise Carbon dashboard, an Observable notebook, or a newsroom data-story. None of these guides are <em>muriel's</em> opinion — muriel's opinion is encoded in <code>channels/science.md</code>, <code>channels/infographics.md</code>, and the universal rules — but a cited platform precedent is often the right way to settle a discussion that muriel doesn't have a hard rule for.</p>
+<p><strong>What this vocabulary is not.</strong> Not a chart-type taxonomy (that's <code>channels/infographics.md</code>'s 10-type table). Not a colour-palette reference (that's <code>muriel.palettes</code>). Not a "which JS chart library" recommendation (that's <a href="../../channels/charts/"><code>channels/charts.md</code></a>, which covers Recharts / ECharts / Chart.js / Plotly / D3 with 22 numbered rules and a per-library config table). <strong><code>channels/charts.md</code> is the sibling channel here</strong> — it covers chart <em>libraries</em>, this vocab covers platform design <em>guides</em>. Reach for that channel when picking an implementation; reach for this vocab when defending a principle to a reviewer.</p>
+</blockquote>
+<p>Part of the <a href="../../SKILL/">muriel</a> skill. Sibling vocabs: <a href="../visible-language/"><code>vocabularies/visible-language.md</code></a> (MIT Cooper VLW), <a href="../fui/"><code>vocabularies/fui.md</code></a>, <a href="../pixijs/"><code>vocabularies/pixijs.md</code></a>.</p>
+<h2 id="when-to-reach-for-this">When to reach for this<a class="headerlink" href="#when-to-reach-for-this" title="Permanent link">&para;</a></h2>
+<ul>
+<li>An artifact is being ported between registers (paper figure → iOS chart, dashboard → editorial story) and needs a cross-platform precedent for accessibility, motion, or type sizing.</li>
+<li>A reviewer (<code>muriel-critique</code>, human, or otherwise) raises an issue muriel's docs don't have a hard rule for — Apple HIG / Material / Carbon may have ruled on it explicitly.</li>
+<li>A <code>brand.toml</code> for a client lives downstream of a specific platform's design system and you want to know what they've already pre-decided.</li>
+<li>An accessibility audit needs a precedent — Apple's audio-graph and Material/Carbon's contrast tokens give you something defensible to cite.</li>
+</ul>
+<h2 id="the-platforms">The platforms<a class="headerlink" href="#the-platforms" title="Permanent link">&para;</a></h2>
+<p>Each entry: who owns it, what license its docs sit under (matters for citation discipline), what it's distinctively good at, where it converges with muriel, where it diverges.</p>
+<h3 id="apple-charting-data-human-interface-guidelines">Apple — <em>Charting data</em> (Human Interface Guidelines)<a class="headerlink" href="#apple-charting-data-human-interface-guidelines" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Source.</strong> <a href="https://developer.apple.com/design/human-interface-guidelines/charting-data">Apple HIG — Charting data</a>. Canonical surface: Swift Charts (iOS 16+, macOS 13+).</li>
+<li><strong>License.</strong> © Apple Inc., all rights reserved. Standard developer-site terms — free to read and link, <strong>not</strong> free to redistribute verbatim. Cite by URL + paraphrase, same scholarly pattern muriel uses for Tufte / Bertin / Cooper.</li>
+<li><strong>Distinctive contribution.</strong> <strong>Audio graphs</strong> — Swift Charts emits sonified narrations for VoiceOver, so a chart is navigable by ear, not only by sight. No other major platform has this baked in. Also: <strong>Dynamic Type</strong> (chart text scales with user accessibility settings) and automatic <strong>light/dark mode</strong> adaptation.</li>
+<li><strong>Convergent with muriel.</strong> Hierarchy via size + weight, hue carries semantics not decoration, motion is purposeful (no bounce/elastic), don't crowd labels — all already in <code>channels/web.md</code>'s anti-pattern list and <code>channels/science.md</code>'s plot-readability rules. Cite Apple HIG when a reviewer asks "where is that rule from?" and you want a non-academic precedent.</li>
+<li><strong>Divergent.</strong> Apple's register is <em>interactive surfaces</em>, not <em>paper figures</em>. Detail-on-demand via tap is a chart pattern muriel's <code>channels/science.md</code> doesn't endorse (a paper figure must read at-print without interaction). For static figures, ignore the interaction layer of Apple's guidance; for screenshots of iOS apps, follow it.</li>
+<li><strong>Cite when:</strong> porting a paper figure to a Swift Charts surface; auditing an iOS-bound chart's accessibility; arguing for audio-graph parity in a brief that owns native iOS deliverables.</li>
+</ul>
+<h3 id="google-material-design-3-data-viz">Google — <em>Material Design 3 — Data viz</em><a class="headerlink" href="#google-material-design-3-data-viz" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Source.</strong> <a href="https://m3.material.io/styles/color/data-visualization">Material Design — Data visualization</a>. Component library: Material Charts (Compose / JetPack / Flutter / Web).</li>
+<li><strong>License.</strong> <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> on the documentation — <strong>freely citable with attribution</strong>, including longer paraphrases.</li>
+<li><strong>Distinctive contribution.</strong> <strong>Token-driven palette discipline</strong> — every chart colour, type ramp, and motion duration resolves through Material's design-token system (<code>md.sys.color.primary</code>, etc.), so a chart's appearance follows the surrounding app theme automatically. Strong "Express" theme that lets a brand override token resolution without re-authoring components.</li>
+<li><strong>Convergent with muriel.</strong> Tokens-at-render-time is muriel's <code>brand.toml</code> story re-spelled. Material's chart-type-by-purpose table (line for trends, bar for categories, etc.) matches <code>channels/infographics.md</code>'s 10-type taxonomy.</li>
+<li><strong>Divergent.</strong> Material's accessibility floor is WCAG AA (4.5:1) rather than muriel's 8:1. Material's motion library is more permissive — they allow some Material-y bounce that muriel bans in <code>channels/web.md</code>.</li>
+<li><strong>Cite when:</strong> authoring for Android / Flutter / Compose; building a Material-themed admin dashboard; defending a token-driven palette to a client.</li>
+</ul>
+<h3 id="ibm-carbon-charts">IBM — <em>Carbon Charts</em><a class="headerlink" href="#ibm-carbon-charts" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Source.</strong> <a href="https://carbondesignsystem.com/data-visualization/charts/">Carbon Design System — Data visualization</a>. Library: <a href="https://github.com/carbon-design-system/carbon-charts">@carbon/charts</a> (D3-based, MIT-friendly).</li>
+<li><strong>License.</strong> Code is Apache 2.0. Documentation site terms permit citation; verify per-page before lifting paragraphs.</li>
+<li><strong>Distinctive contribution.</strong> <strong>Enterprise-dashboard chart taxonomy</strong> — when to use a <em>combo chart</em> vs a <em>stacked area</em>, when a <em>meter</em> outperforms a <em>donut</em>, exhaustive guidance for ops / observability / BI surfaces. Strong accessibility patterns (focus rings, ARIA descriptions, keyboard navigation across data points).</li>
+<li><strong>Convergent with muriel.</strong> Catalog-first thinking — Carbon answers "which chart for this question?" the same way <code>channels/infographics.md</code> answers "which template for this argument?".</li>
+<li><strong>Divergent.</strong> Enterprise voice; conservative palette; expects you're building a 50-chart dashboard, not a single hero figure. The visual register is intentionally muted, which can read corporate against muriel's OLED brand defaults.</li>
+<li><strong>Cite when:</strong> building dashboards, defending dense-data layouts, or sourcing keyboard-navigation patterns for interactive charts.</li>
+</ul>
+<h3 id="vega-vega-lite-grammar-of-graphics">Vega / Vega-Lite — <em>Grammar of Graphics</em><a class="headerlink" href="#vega-vega-lite-grammar-of-graphics" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Source.</strong> <a href="https://vega.github.io/vega-lite/">Vega-Lite</a> — declarative chart grammar (JSON spec). UW Interactive Data Lab + Voyager team. Lineage: Wilkinson's <em>Grammar of Graphics</em> (1999) → Hadley Wickham's <code>ggplot2</code> (2009) → Vega (2014) → Vega-Lite (2017).</li>
+<li><strong>License.</strong> <a href="https://github.com/vega/vega-lite/blob/main/LICENSE">BSD-3-Clause</a>. Examples and prose freely reusable with attribution.</li>
+<li><strong>Distinctive contribution.</strong> The <strong>grammar itself</strong> — a chart as a composition of <code>data + transform + mark + encoding</code>. Once you can spell a chart in Vega-Lite, you can spell it anywhere. Spec-as-artifact: the JSON <em>is</em> the chart, no library binding needed. Strong on <strong>interaction grammar</strong> (selections, brushes, linked views).</li>
+<li><strong>Convergent with muriel.</strong> Declarative &gt; imperative is exactly <code>channels/diagrams.md</code>'s spec-first ethos. Vega-Lite specs round-trip cleanly with <code>muriel/tools/diagrams</code> patterns.</li>
+<li><strong>Divergent.</strong> Vega-Lite's default theming is academic (white background, thin grey gridlines); muriel's brand-token discipline overrides this aggressively. The grammar is also opinionated about <em>what a chart is</em> — long-form data, tidy columns — which doesn't match every input shape.</li>
+<li><strong>Cite when:</strong> debating chart composition vs. configuration; teaching the grammar-of-graphics lineage; defending a spec-first pipeline.</li>
+</ul>
+<h3 id="observable-plot">Observable — <em>Plot</em><a class="headerlink" href="#observable-plot" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Source.</strong> <a href="https://observablehq.com/plot/">Observable Plot</a>. Mike Bostock's post-D3 chart opinion.</li>
+<li><strong>License.</strong> <a href="https://github.com/observablehq/plot/blob/main/LICENSE">ISC</a>. Permissive; examples freely citable.</li>
+<li><strong>Distinctive contribution.</strong> <strong>Conciseness</strong> — a Plot spec is shorter than the equivalent Vega-Lite for most exploratory charts. <strong>Marks</strong> abstraction (<code>dot</code>, <code>line</code>, <code>barY</code>, <code>tick</code>) reads as English. Designed for the explore-then-publish loop in Observable notebooks specifically but works standalone.</li>
+<li><strong>Convergent with muriel.</strong> Same grammar-of-graphics lineage as Vega-Lite. Same "spec-first" discipline.</li>
+<li><strong>Divergent.</strong> Less complete than Vega-Lite (no full interaction grammar yet); intended for <em>exploration</em> register more than <em>publication</em> register. Defaults are Bostock-y rather than brand-token-y.</li>
+<li><strong>Cite when:</strong> quick exploratory analysis in a notebook; small interactive charts where Vega-Lite's spec weight is overkill; teaching the post-D3 idiom.</li>
+</ul>
+<h3 id="financial-times-visual-vocabulary">Financial Times — <em>Visual Vocabulary</em><a class="headerlink" href="#financial-times-visual-vocabulary" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Source.</strong> <a href="https://ft-interactive.github.io/visual-vocabulary/">FT Visual Vocabulary</a> — the Financial Times' poster + companion app classifying chart types by communication purpose.</li>
+<li><strong>License.</strong> <a href="https://github.com/ft-interactive/visual-vocabulary/blob/master/LICENSE">MIT</a>. The chart-type taxonomy itself can be reproduced freely with attribution.</li>
+<li><strong>Distinctive contribution.</strong> <strong>Communication-purpose taxonomy</strong> — <em>Deviation, Correlation, Ranking, Distribution, Change-over-time, Magnitude, Part-to-whole, Spatial, Flow</em>. Nine purposes, each with a handful of canonical chart types. Closer to muriel's <code>channels/infographics.md</code> taxonomy than to a "which library" guide.</li>
+<li><strong>Convergent with muriel.</strong> Purpose-first classification matches muriel's "argument decides chart" framing. The FT taxonomy is the single best public artifact for that move.</li>
+<li><strong>Divergent.</strong> Editorial voice; intended for journalism, not science papers or apps. Doesn't address accessibility, motion, or interaction.</li>
+<li><strong>Cite when:</strong> picking a chart type from a list of candidates; teaching the "argument first, chart second" discipline; cross-referencing infographics templates.</li>
+</ul>
+<h3 id="datawrapper-academy">Datawrapper Academy<a class="headerlink" href="#datawrapper-academy" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Source.</strong> <a href="https://academy.datawrapper.de/">Datawrapper Academy</a>. Newsroom-aimed chart education from Datawrapper / Lisa Charlotte Muth.</li>
+<li><strong>License.</strong> Page-by-page; most articles are clearly readable but reuse permission varies. Cite by URL + paraphrase; check individual posts before quoting at length.</li>
+<li><strong>Distinctive contribution.</strong> <strong>Editorial register</strong> — concrete <em>do/don't</em> examples drawn from real published charts. Strong on colour psychology (named, not just hex), label placement, and "what would a reader actually understand?".</li>
+<li><strong>Convergent with muriel.</strong> Reader-first framing; named anti-patterns (cf. impeccable's named bans in <code>channels/web.md</code>).</li>
+<li><strong>Divergent.</strong> Journalism, not science; assumes Datawrapper's interactive surface; opinionated colour palettes that may not match a <code>brand.toml</code>.</li>
+<li><strong>Cite when:</strong> a chart will land in a newsroom-adjacent register; defending a specific colour choice with public-facing precedent.</li>
+</ul>
+<h2 id="what-they-converge-on">What they converge on<a class="headerlink" href="#what-they-converge-on" title="Permanent link">&para;</a></h2>
+<p>Five rules show up in every platform's guidance, including muriel's:</p>
+<ol>
+<li><strong>Choose chart type from the argument</strong>, not the data shape. (FT Visual Vocabulary names this explicitly; Material / Carbon ship taxonomies; Apple HIG / Datawrapper enforce per artifact.)</li>
+<li><strong>Don't rely on hue alone</strong> for categorical distinction — pair with shape, pattern, or label. (All five.)</li>
+<li><strong>Motion serves readability</strong>, not decoration — easing curves are smooth, durations are short, reduced-motion respected. (Apple HIG, Material, Carbon, and <code>channels/web.md</code>'s <code>bounce-easing</code> ban.)</li>
+<li><strong>Hierarchy via size + weight + position</strong> before colour. (Apple HIG, Tufte's <em>data-ink</em>, Bertin's retinal ranking — convergent across the academic and platform traditions.)</li>
+<li><strong>Label every number, label every axis</strong> — no decoration without context. (Universal.)</li>
+</ol>
+<p>These are the <strong>citable consensus</strong>. When muriel asserts one of them, you have five precedents in your pocket.</p>
+<h2 id="what-they-diverge-on">What they diverge on<a class="headerlink" href="#what-they-diverge-on" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Contrast floor.</strong> WCAG AA (4.5:1) for Apple / Material / Carbon; muriel's floor is 8:1. Cite muriel's stricter standard when authoring; cite the platform's floor when reviewing externally-produced work that meets AA but not muriel.</li>
+<li><strong>Pie/donut tolerance.</strong> Apple HIG and Material permit them for ≤3 categories; FT Visual Vocabulary and muriel's <code>channels/infographics.md</code> recommend bar charts almost always. The disagreement is real and worth naming when it surfaces.</li>
+<li><strong>Audio / sonification.</strong> Apple alone has it baked in. The rest treat it as a future direction.</li>
+<li><strong>Token-driven palettes.</strong> Material is the most disciplined; Carbon and muriel agree; Apple HIG defers to system colours; Vega-Lite and Plot are theme-agnostic.</li>
+<li><strong>Animation budget.</strong> Material allows more decoration motion than muriel or Apple HIG.</li>
+</ul>
+<h2 id="how-to-borrow">How to borrow<a class="headerlink" href="#how-to-borrow" title="Permanent link">&para;</a></h2>
+<p>The right citation pattern follows muriel's <code>agents/muriel-critique.md</code> § "Design-theory grounding":</p>
+<blockquote>
+<p><strong>"Material Design — Data viz (token-driven palette):</strong> "The chart's accent colour resolves through <code>md.sys.color.primary</code> — overrides at the theme level, not per-chart."*</p>
+</blockquote>
+<p>Name the platform, name the specific concept, link to the source, paraphrase in muriel's voice. Don't copy more than a sentence verbatim and don't lift images. The platforms' guidance is theirs; the application to a muriel artifact is muriel's.</p>
+<h2 id="prior-art-upstream">Prior art / upstream<a class="headerlink" href="#prior-art-upstream" title="Permanent link">&para;</a></h2>
+<p>This vocab borrows the survey-with-citation pattern from:</p>
+<ul>
+<li><a href="https://www.nature.com/articles/nmeth.1618">Bang Wong — <em>Points of view: Color blindness</em></a> (Nature Methods, 2011) — single-source citation discipline.</li>
+<li><a href="../../channels/infographics/"><code>channels/infographics.md</code> § Prior art / upstream</a> — the K-Dense survey pattern at channel scale.</li>
+<li>pbakaus/impeccable — the named-ban list pattern, applied here to platform-divergence calls rather than typographic bans.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1890 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/TODO/">
+      
+      
+        <link rel="prev" href="../agents/muriel-critique/">
+      
+      
+        <link rel="next" href="../HARNESSES/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Roadmap (TODO) - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/muriel.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#muriel-roadmap" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Roadmap (TODO)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#canonical-scenarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Canonical scenarios
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#active" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Active
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#queued" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Queued
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#someday" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Someday
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#policy-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Policy &amp; process
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wont-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Won't-do
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vocabularies-engine-adapters-full-candidate-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vocabularies &amp; engine adapters — full candidate inventory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release gate
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="muriel-roadmap">muriel — roadmap<a class="headerlink" href="#muriel-roadmap" title="Permanent link">&para;</a></h1>
+<p>Consolidated from <code>CHANGELOG.md</code>, <code>SKILL.md</code>, commit messages, and per-channel roadmap hints. Source of truth for what's next; <code>CHANGELOG.md</code> is source of truth for what's shipped.</p>
+<h2 id="canonical-scenarios">Canonical scenarios<a class="headerlink" href="#canonical-scenarios" title="Permanent link">&para;</a></h2>
+<p>Multi-channel narrative artifacts that compose several queued channels into one coherent demo. Each scenario forces the channel work it depends on; if the scenario ships, the channels worked. See <code>scenarios/</code>.</p>
+<ul>
+<li><a href="../scenarios/photons-to-recognition/"><code>scenarios/photons-to-recognition.md</code></a> — Five-panel arc binding 3D (cone density on retina), brain (visual pathway through cortex), and diagrams (Sankey + sunburst) into one Scrutinizer talk-deck-as-explainer. Forces the build order: 3D → diagrams → brain. Reusable as deck slides, single composed infographic, blog post, or paper figure.</li>
+<li><a href="../scenarios/math-essay/"><code>scenarios/math-essay.md</code></a> — Math-rich long-form essay binding marginalia (<code>channels/web.md</code>), KaTeX (<code>vocabularies/katex.md</code>), <code>typeset.py</code> figures, and Manim CE figure stills (when <code>channels/motion.md</code> ships) into one publishable HTML artifact. Reference exemplar: <code>inside_the_math</code> (psychodeli-webgl-port, shipped). Forces: math vocabulary completeness, Manim CE figure-embedding contract, marginalia ↔ KaTeX integration patterns.</li>
+</ul>
+<h2 id="active">Active<a class="headerlink" href="#active" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] <strong><code>surfaces/</code> directory — implement the layer above channels.</strong> <a href="plugins/muriel/skills/compose/vocabularies/surfaces.md"><code>vocabularies/surfaces.md</code></a> names the concept and cites html-anything as the canonical external catalog. Next step: ship muriel's first surface archetypes — start with the surfaces that compose channels muriel already has strong opinions on. Candidates ranked: (1) <strong>deck-swiss-international</strong> — fully spec'd by html-anything (22 layouts S01–S22, 4 locked themes), composes <code>channels/web.md</code> + <code>channels/charts.md</code> + <code>channels/polish.md</code>; (2) <strong>frame-data-chart-nyt</strong> — composes <code>channels/charts.md</code> for a hyperframes video frame, has clean editorial constraints; (3) <strong>pm-spec</strong> PRD — composes <code>channels/web.md</code> for a document register, ships as a marginalia template. Each surface lives at <code>surfaces/&lt;name&gt;/SKILL.md</code> + <code>surfaces/&lt;name&gt;/example.html</code> mirroring html-anything's shape; locked layout pool + locked palette + non-negotiable rules per surface. Defer until the first concrete brief actually wants one (the surface vocabulary should drive surface implementation, not speculation).</li>
+<li>[ ] <strong>CJK-first font stack — i18n support.</strong> html-anything routinely pairs Latin display fonts with <code>Noto Sans SC</code> for Chinese: <code>Inter Tight / Inter / Noto Sans SC / JetBrains Mono</code>. muriel's <code>brand.toml</code> schema and <code>channels/web.md</code> examples assume Latin-only font stacks today. When a brief needs CJK rendering: add a <code>i18n.cjk_fallback</code> field to <code>brand.toml</code>, default it to <code>Noto Sans SC</code>, ensure <code>muriel.contrast</code> audits the CJK glyphs (some CJK fonts render visibly heavier than their Latin pair at the same weight; verify the 8:1 floor on a representative CJK string, not just the Latin sample). Pairs with a queued <code>vocabularies/cjk-typography.md</code> covering vertical writing modes, ruby annotations, the Han-unification trap, and font-fallback-cascade order. No urgency until a brief lands.</li>
+<li>[ ] <strong>Polish channel — promote rules into <code>muriel.critique</code> gates.</strong> <a href="plugins/muriel/skills/compose/channels/polish.md"><code>channels/polish.md</code></a> ships 16 numbered rules + a validation checklist, but the critique agent doesn't auto-enforce them yet. Promote the top-tier (concentric radius math, hit-area minimum, <code>transition: all</code> ban, <code>will-change: all</code> ban, missing <code>tabular-nums</code> on dynamic numbers, <code>scale &lt; 0.95</code> press) into the critique pre-scan as deterministic checks (regex / DOM walk) when the artifact targets the <code>app</code> register. Defer the optical-alignment + stagger-timing checks to the LLM critique pass — they need visual inspection. Pairs with the existing impeccable-bridge pre-scan.</li>
+<li>
+<p>[ ] <strong>Constraint-elicitation SKILL.md rule — pattern validated.</strong> Pre-build constraint sheet (per <a href="~/.claude/projects/-Users-andyed-Documents-dev/memory/project_muriel_constraint_elicitation.md"><code>project_muriel_constraint_elicitation</code></a> memory) is already standard practice in <a href="https://github.com/wrsmith108/visual-prompt-coach">wrsmith108/visual-prompt-coach</a> — it asks up to four questions before producing a prompt artifact (learning objective, what's shown, audience prior knowledge, constraints). Shape is the same as the queued muriel rule; reduces design risk. Next compose-mode session: lift the 4-question intake shape into the muriel rule + ship the drop-cap CONSTRAINTS.md exemplar.</p>
+</li>
+<li>
+<p>[ ] <strong>Cross-harness packaging rollout — see <a href="../HARNESSES/"><code>HARNESSES.md</code></a>.</strong> Today muriel ships natively only for Claude Code (plugin + <code>install.sh</code>); ten other harnesses (Cursor, Codex CLI, Gemini CLI, GitHub Copilot, Kiro, OpenCode, Pi, Qoder, Rovo Dev, Trae) get a one-paragraph "mirror the SKILL.md into <code>.&lt;harness&gt;/skills/muriel/</code>" hint. Plan mirrors <a href="https://github.com/pbakaus/impeccable">pbakaus/impeccable</a>'s eleven-harness matrix. P0: add <code>.agents/skills/muriel/</code> symlink to canonical (closes six harnesses with one change). P1: per-harness manifest generator + <code>./install.sh --harness &lt;name&gt;</code>. P2: frontmatter universalism, marketplace submissions, critique-agent portability.</p>
+</li>
+<li>
+<p>[ ] <strong>muriel-critique auto-invoke gate — design the trigger conditions.</strong> Retrospective evidence (<code>mona_laplacian</code>, <code>falloff_curves</code>, <code>notification_ghost</code>, all in the peripheral-color blog session 2026-04-25/26) shows a pattern: tier-collisions, terminology drift, and unverified numeric claims all reach the user before the critique agent sees them. The rules already exist in <code>agents/muriel-critique.md</code> (visual-inventory step 0, occlusion check, numeric-claim probe list). The miss is workflow — the agent gets invoked manually or never. <em>Do not</em> hard-wire "every figure runs through critique" — it would burn agent calls on every test render. Need to think hard about trigger conditions: maybe (a) only on artifacts produced by the <code>science</code> / <code>infographic</code> / <code>gaze</code> channels at non-draft DPI, (b) only when an artifact is about to be embedded in a published HTML/blog/paper file, (c) only when <code>--final</code> flag passed from a render script, (d) only when SKILL.md is loaded with an "audit" intent. Defer until the trigger surface is articulated.</p>
+</li>
+<li>[ ] <strong>Screenshot designer P0.</strong> (from commit <code>533e32b</code>) Table-stakes compositor for marketing/doc screenshots: <code>drop_shadow()</code>, <code>fade_edge()</code>, <code>border_radius()</code>, <code>background()</code> (solid / gradient / mesh / blur / noise), <code>caption()</code> + dimension presets. Target channel: <code>channels/raster.md</code>, implementation under <code>muriel/tools/screenshot.py</code>.</li>
+</ul>
+<h2 id="queued">Queued<a class="headerlink" href="#queued" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] <strong>design.md export</strong> — counterpart to the just-shipped <code>muriel import</code> (commit pending). Take a brand.toml, produce a Stitch-compatible design.md (frontmatter + Markdown prose) so brands round-trip through the open format. Lossy back-direction: muriel-specific fields (semantic state trios, ring gradients, viz palettes, voice, iconography) get lifted into prose sections rather than dropped, so they survive a future re-import. Add a round-trip test that confirms imported→exported→re-imported preserves the Stitch-native fields exactly.</li>
+<li>[ ] <strong>Diagrams catalog — continuation.</strong> Shipped: <code>matrix</code>, <code>cycle</code>, <code>venn</code>, <code>layer_stack</code>, <code>pyramid</code> (pyramid <code>orientation="up"</code> + phase/funnel <code>orientation="down"</code>), <code>swimlane</code>; the last three adapted from the MIT <code>diagram-design</code> skill (see <a href="../THIRD_PARTY_NOTICES/"><code>THIRD_PARTY_NOTICES.md</code></a>). See <a href="../channels/diagrams/"><code>channels/diagrams.md</code></a> for the prioritized list and the <strong>provider-routing table</strong> (this channel is <em>not</em> the exclusive path for these forms). Remaining native presets, in order: comparison pair, causal DAG, spectrum, comparison heat-grid. <strong>Do not build native generators for sequence / state machine / ER / flowchart</strong> — those route to Mermaid; <strong>timeline / tree / treemap / sunburst</strong> route to ECharts + the queued hierarchy family. Only port one of those to native SVG if a specific paper figure forbids the Mermaid/ECharts substrate. Each native preset ships with an epistemic precondition + anti-prescription in its docstring.</li>
+<li>[ ] <strong>Diagrams icon-library decision.</strong> The cycle generator has an <code>icon</code> slot per step that accepts raw SVG inner markup. Pick a substrate before adding icon helpers: lucide-static (MIT, ~1500 24×24 stroke icons), phosphor (MIT, multi-weight), or a hand-curated set of ~30 covering the diagram-relevant verbs. Settle this before extending past the matrix+cycle MVP.</li>
+<li>[ ] <strong><code>vocabularies/threejs.md</code> + <code>channels/3d.md</code>.</strong> <em>Top-1 extension pick.</em> three.js is name-dropped in the README but undocumented; closes the most glaring vocab gap. MIT, zero license friction. Companion to <code>vocabularies/pixijs.md</code> — same shape (substrate decision, gotchas, version pin, exemplar). New <code>channels/3d.md</code> covers the channel surface (browser-side Three.js + Python-side PyVista / trimesh / Open3D). Consider naming it <code>channels/dimensional.md</code> if the "3d" tag reads narrow.</li>
+<li><strong>Canonical PyVista exemplar to ship with the channel: cone-density-on-retinal-surface.</strong> A 3D heatmap of receptor density painted on the back inner wall of the eye — fovea peak with radial falloff, exported as a rotated still. Solves a real explainer gap that 2D Gaussian curves can't carry (the falloff lives on a <em>curved</em> surface, and seeing it on the curve makes the cortical-magnification claim more visceral). When this lands, it becomes a second panel in the Scrutinizer foveation-explainer family ("the back of the eye, mapped") alongside the existing 2D side-view at <code>~/Documents/dev/scrutinizer-repo/scrutinizer-www/src/img/explainers/build_foveation.py</code>. Stretch goal: a sibling panel showing retina → V1 cortical magnification via the log-polar mapping (Blauch / Alvarez / Konkle 2026 reference).</li>
+<li>[ ] <strong><code>vocabularies/neuroimaging.md</code> + <code>channels/brain.md</code>.</strong> Sibling to the 3D channel — brain viz is its own world with its own substrates and idioms, and folding it into a generic 3D channel would dilute the work. Primary substrate: <strong>MNE-Python</strong> (BSD-3, modern <code>mne.viz.Brain</code> built on PyVista; the 2026 successor to PySurfer). Companion stack: <strong>nibabel</strong> (MIT, file I/O foundation), <strong>Nilearn</strong> (BSD-3, statistical / glass-brain plotting + atlas fetchers), <strong>fury</strong> (BSD-3, VTK-based glyphs + streamtubes for connectivity arrows), <strong>niivue</strong> (BSD-3, browser-side WebGL widget for blog embeds). Atlases: Glasser HCP-MMP1.0 (CC-BY) for the modern parcellation including V1–V4 / V8 / MT / MST / FFC / PIT; Wang et al. (2015) probabilistic visual ROIs for stream-specific work (vocab-only ref since it ships through neuropythy AGPL-3, not bundled).</li>
+<li><strong>Headline deliverable: <code>brain.visual_pathway()</code></strong> — takes a stream selection (<code>"ventral"</code> / <code>"dorsal"</code> / <code>"both"</code>) plus optional timing data, produces (a) a static publication figure with the hierarchy as a glass-brain projection + connecting arrows + region color, (b) an animated GIF/MP4 showing propagation, or (c) a niivue-embeddable HTML widget. Default timings from Schmolesky et al. (1998), Bullier (2001), Lamme &amp; Roelfsema (2000): retina ~30ms, LGN ~50ms, V1 ~70ms, V2 ~100ms, V4 ~130ms, IT ~170ms; MT ~80ms, MST ~110ms, parietal ~140ms.</li>
+<li><strong>Pairs with the queued PyVista cone-density-on-retina exemplar</strong> as a two-panel "from photons to recognition" arc for the Scrutinizer foveation-explainer family: (1) cone density on the retinal surface = the <em>input</em>, (2) visual pathway through cortex = the <em>processing</em>. Same audience hit twice.</li>
+<li><strong>License skip-list for this channel:</strong> Connectome Workbench (GPL), Mayavi (LGPL via VTK — and MNE migrated off it for a reason), neuropythy (AGPL-3 — vocab-only reference, do not bundle).</li>
+<li>[ ] <strong><code>channels/motion.md</code>.</strong> <em>Top-2 extension pick.</em> Operationalizes the schema's "motion as first-class field" with four MIT runtime adapters: Motion Canvas (TypeScript, programmatic keyframes — agent-authorable), Manim Community Edition (Python, expository / mathematical animation — pairs with <code>channels/science.md</code>), Lottie via <code>python-lottie</code> + <code>lottie-web</code> (declarative JSON, exports to web + After Effects), and <strong><code>@andyed/kinetic-type-engine</code></strong> (extracted from iblipper2025 — composable physics primitives for kinetic typography). Each gets a substrate-pick paragraph and at least one runnable example. Note GSAP separately under "may depend on, do not redistribute" — anti-competitive clause in the new free-for-commercial-use license precludes embedding.</li>
+<li><strong>Kinetic-type-engine dependency:</strong><ul>
+<li><strong>Phase 1 done (2026-04-25):</strong> <code>src/engine/</code> exists inside <code>iblipper2025</code> with primitives carved out — <code>chunking</code>, <code>fonts</code>, <code>layoutSafety</code>, <code>lineBreaking</code>, <code>nlp</code>, <code>orpCalculation</code>, <code>timingModel</code>, <code>trailModes</code>, <code>constants</code>, plus <code>__tests__/</code>. Fit tests followed the primitives. Spec at <a href="https://github.com/andyed/iblipper2025/blob/main/docs/kinetic_type_engine_extraction_spec.md"><code>iblipper2025/docs/kinetic_type_engine_extraction_spec.md</code></a>.</li>
+<li><strong>Phase 2 ahead:</strong> publish to npm as <code>@andyed/kinetic-type-engine</code> under MIT in a standalone repo at <code>github.com/andyed/kinetic-type-engine</code>. Define the public <code>EngineConfig</code> / <code>PhysicsConfig</code> / <code>Frame</code> surface; ship <code>.d.ts</code>. Engine ships physics primitives (jitter, drift, fade, weight, scale, blur, glitch, trail, easing, timing); named recipes ('emphatic', 'hurry', …) stay in iBlipper as brand IP.</li>
+<li><strong>Phase 3 ahead:</strong> iblipper2025 swaps <code>src/engine/</code> for the npm dep.</li>
+<li><strong>muriel-side adapter</strong> lands when Phase 3 is complete. The other three adapters in this channel (Motion Canvas, Manim CE, Lottie) don't depend on the engine and can ship first.</li>
+</ul>
+</li>
+<li>[ ] <strong><code>channels/charts-declarative.md</code>.</strong> <em>Top-3 extension pick.</em> Declarative-JSON charting alongside matplotlib. Two adapters: Vega-Lite + Altair (BSD-3, grammar-of-graphics — extremely LLM-friendly because the spec <em>is</em> the chart) and Observable Plot (ISC, modern concise D3). Rationale: matplotlib is for paper figures; LLMs reliably author Vega-Lite specs but stumble through matplotlib's imperative API.</li>
+<li>[ ] <strong><code>channels/charts-interactive.md</code>.</strong> Different lane from charts-declarative — <em>rich interactive widget library</em>, not grammar of graphics. Primary adapter: Apache ECharts (Apache-2.0). Alternates: Plotly.js (MIT), Bokeh (BSD-3). ECharts wins for dashboards, geographic widgets at country/province granularity, parallel coordinates with brushing, calendar heatmaps, sankey + theme-river flow viz, smooth animated transitions between chart types, 3D scatter/surface. Theme system maps cleanly onto brand tokens. Use when the artifact lives on a web surface and reader interaction is part of the contract; use charts-declarative when the artifact is a static figure and the spec is the auditable source.</li>
+<li>[ ] <strong>Sankey diagram primitive</strong> (new entry in <code>channels/diagrams.md</code> catalog). Argues <em>"this magnitude flowed from here to there"</em> — directly relevant to OSEC phase flow, attentional foraging migration, conversion funnels with branching. Three viable paths: (A) wrap <code>d3-sankey</code> (BSD-3, official Bostock plugin) via Node, (B) wrap <code>pysankey2</code> or <code>floweaver</code> (both MIT, matplotlib-rendered), (C) port the d3-sankey iterative-relaxation algorithm to Python (~250 lines) for a deterministic SVG output that matches the matrix + cycle pattern. Path C is the cleanest fit for muriel's ethos but the most work; path A ships fastest if a Node hop is acceptable. Decide before implementing. Anti-prescription: don't use a Sankey if your "flow" doesn't carry magnitudes — a flow with all-equal weights is a DAG, not a Sankey.</li>
+<li>[ ] <strong>Hierarchy family in <code>channels/diagrams.md</code> — currently underspecified.</strong> The catalog names <em>pyramid</em> (1D ordered hierarchy) but skips the rest of the family. Add at minimum: <strong>sunburst</strong> (multi-level radial hierarchy with area-proportional slices), <strong>treemap</strong> (rectangular sibling of sunburst), <strong>dendrogram</strong> (branching tree display). Each carries a distinct epistemic shape and shouldn't be conflated. Sunburst is the highest-priority entry — it argues <em>"this category contains these subcategories, with proportional weights, recursively"</em>, which lands cleanly on research taxonomies, eye-tracking AOI nesting (page → region → element), F-pattern phase × sub-phase decomposition, and click/conversion category drill-downs. Same three-path decision as Sankey: (A) wrap <code>d3-hierarchy</code> + <code>d3-shape</code> via Node, (B) no good Python wrapper exists, (C) port the partition-layout algorithm (~100 lines, recursive arc-angle assignment) for deterministic SVG. ECharts has the nicest interactive reference implementation (click-to-reroot at 60fps with breadcrumb-persistent parent) — that's the canonical pattern for the <code>channels/charts-interactive.md</code> lane when drill-down is part of the contract. Anti-prescription: don't use sunburst if the leaf weights are roughly equal — uniform area carries no signal; use a dendrogram or tree instead.</li>
+<li>[ ] <strong>Screenshot designer P1.</strong> Distinctive moves: <code>tilt()</code> (2D affine), <code>device_frame()</code>, <code>browser_url_bar()</code>, <code>spotlight()</code>, <code>vignette()</code>, <code>noise()</code>, <code>glow()</code>.</li>
+<li>[ ] <strong>Saliency detector wiring.</strong> <code>muriel/detectors/saliency.py:53</code> is a v0.2 placeholder; fetch logic is stubbed at <code>muriel/warmup.py:87</code>. Ship the ONNX backend.</li>
+<li>[ ] <strong>SVG primitives reused across research repos.</strong></li>
+<li>Gaze ribbon primitive (currently hand-rolled in AdSERP / RecGaze).</li>
+<li>F-pattern overlay (phase-segmented gaze framing).</li>
+<li>OSEC phase diagram (multi-band timeline).</li>
+<li>[ ] <strong>Shared <code>permalink.js</code>.</strong> Extract from Scrutinizer + Psychodeli; single source in <code>channels/interactive.md</code>.</li>
+<li>[ ] <strong>Science helpers</strong> (from <code>SKILL.md:193-196</code>):</li>
+<li>Figure caption template tool.</li>
+<li>Pre-registration boilerplate generator.</li>
+<li><code>contrast.py</code> inline-fill pass — walk <code>&lt;text fill="…"&gt;</code> in SVG.</li>
+<li><code>contrast.py</code> marginalia-token audit.</li>
+<li>[ ] <strong>Multi-line raster text layout.</strong> Configurable max-width, line-height, alignment in <code>muriel.typeset</code>. Blocks some infographics.</li>
+<li>[ ] <strong>Tests.</strong> No <code>tests/</code> directory exists. Highest-risk untested modules: <code>oklch.py</code> (roundtrip correctness), <code>contrast.py</code>, <code>dimensions.py</code>.</li>
+<li>[ ] <strong>Channel front-matter rollout.</strong> Schema lives in <a href="../channels/SCHEMA/"><code>channels/SCHEMA.md</code></a>. Shipped: <code>diagrams</code>, <code>science</code>, <code>gaze</code>, <code>heatmaps</code>, <code>infographics</code>, <code>web</code>, <code>svg</code>. Remaining: <code>dimensions</code>, <code>interactive</code>, <code>raster</code>, <code>style-guides</code>, <code>terminal</code>, <code>video</code>. The remaining six split into surface-flexible channels (audience optional — <code>interactive</code>, <code>raster</code>, <code>terminal</code>, <code>video</code>) and infrastructure channels with no artifact output (<code>dimensions</code>, <code>style-guides</code> — schema may grow a <code>kind: utility</code> flag before these land). Add front-matter as each channel is touched; do not bulk-rewrite. Critique runs without it — front-matter is opt-in.</li>
+<li>[ ] <strong>5-dimension critique scoring</strong> (mined from <code>nexu-io/open-design</code> <code>skills/critique</code>). Re-shape <code>muriel.critique</code> to score on 5 named dimensions with evidence-required: Direction consistency / Visual hierarchy / Detail execution / Functionality / <strong>Veracity</strong> (replacing open-design's "Innovation" — the wrong axis for science output; Veracity = chart supports the prose claim, nulls framed as detection limits, no extrapolated values labeled as measured). Today's automated checks become P0; the 5-dim scoring is a P1 layer with Keep/Fix/Quick-wins triple-list output. Optional SVG radar chart artifact mode.</li>
+<li>[ ] <strong><code>channels/decision-tree.md</code>.</strong> "Which channel for which job" disambiguation page (mined from open-design's "When to pick X vs peer-skill Y" tables). Tree by <em>artifact destination</em> (paper / blog / social / app / talk) → channel → primitive. Today the choice is implicit; reader has to remember which channel exists.</li>
+</ul>
+<h2 id="someday">Someday<a class="headerlink" href="#someday" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] <strong>Screenshot designer P2.</strong> <code>glass_panel()</code>, <code>numbered_callout()</code>, <code>reflection()</code>, <code>bento_grid()</code>, <code>glass_reflection_overlay()</code>, <code>auto_blur_regions()</code>, <code>magnifier()</code>, <code>annotation()</code>.</li>
+<li>[ ] <strong>K-Dense ports</strong> (from <code>SKILL.md:214-219</code>): market-research PDF channel, PPTX visual-QA pipeline, scientific-schematics shim, markitdown bridge.</li>
+<li>[ ] <strong>Heading-style standardization pass</strong> across <code>channels/*.md</code> — bare noun/verb convention, em-dashes only for structural disambiguation. ~12 files.</li>
+<li>[ ] <strong>Scrutinizer release-video + promo prototypes</strong> (demo-specific; two scripts).</li>
+<li>[ ] <strong>PixiJS frame adapter for hyperframes</strong> (video channel).</li>
+</ul>
+<h2 id="policy-process">Policy &amp; process<a class="headerlink" href="#policy-process" title="Permanent link">&para;</a></h2>
+<p>Surfaced by the independent review of the v0.9.0 cut (2026-05-17). Meta-items about how to ship features, not features themselves. Acting on these <em>before</em> the next minor bump keeps the project coherent as channel + vocabulary count grows.</p>
+<ul>
+<li>[ ] <strong>Write down the doc-convention contract.</strong> Add <code>CONTRIBUTING.md</code> (or a section in <code>SKILL.md</code>) that specifies the boundaries between <code>channels/*.md</code> (output substrates with selftest + CLI), <code>vocabularies/*.md</code> (aesthetic grammars, no shipped code), <code>RELEASE_NOTES_v*.md</code> (public-prose voice), <code>CHANGELOG.md</code> (diff log), and per-module docstrings. The boundaries are felt right now, not specified — a new contributor would invent a fifth doc kind without realizing they were drifting. ~1 page.</li>
+<li>[ ] <strong>Module API contract as test.</strong> Every new module shipped in v0.8.0 + v0.9.0 follows the same shape (pure Python stdlib core, lazy optional-dep imports, <code>--selftest</code>, <code>--demo</code>, module docstring with anti-prescription). Codify as <code>tests/test_module_contract.py</code> that introspects <code>muriel/*.py</code> and <code>muriel/tools/*.py</code> and fails CI if a module is missing the contract. The pattern is real; institutionalizing it stops drift in module N+1.</li>
+<li>[ ] <strong>Palette tier as a required field on every palette constant.</strong> Add <code>tier ∈ {"text-safe", "decorative-only"}</code> to every named palette (the eleven currently in <code>muriel.palettes</code>). Then <code>muriel-critique</code> can FAIL any artifact that uses a <code>decorative-only</code> palette for text, automatically. The 8:1 floor stays absolute on text; the <em>scope</em> of where it applies gets named per-token. This is the right way to handle the Catppuccin Latte / Nord Aurora / Frost decorative-only exceptions without weakening the universal rule.</li>
+<li>[ ] <strong>Corpus-audit-everything pattern.</strong> <code>corpus_audit</code> in v0.8.0 caught three real importer bugs on its first run. The pattern generalizes: build analogous harnesses for (a) contrast — run <code>audit_svg</code> across every shipped example, (b) DTCG round-trip — already done in <code>corpus_audit</code>, formalize as CI gate, (c) palette generation — run <code>generate_for_floor</code> across the 11 palette × N standard-background matrix, (d) diagram rasterization — verify every diagram primitive renders cleanly via <code>rsvg-convert</code>. Each catches a different class of silent regression.</li>
+<li>[ ] <strong>Spatial cross-substrate pattern — formalize before adding a second cross-substrate channel.</strong> <code>channels/spatial.md</code> ships Python (<code>muriel.spatial</code>) + JS-runtime (<code>render_assets/</code>) sharing a coordinate system. The pattern is right (same coords in two substrates = the value); it's also where the queued <code>typeset_scene()</code> belongs — it's what <em>justifies</em> the dual-substrate framing by closing the loop. Ship <code>typeset_scene()</code> before the next channel goes cross-substrate, OR you'll have three channels that each invented their own bridge. Add "shared coordinate system" as a documented channel-frontmatter field so the convention propagates.</li>
+</ul>
+<h2 id="wont-do">Won't-do<a class="headerlink" href="#wont-do" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Ray-traced 3D device renders — pre-render pipeline; muriel ships PNGs.</li>
+<li>AI screenshot editing (Magic Edit / Magic Grab) — different skill.</li>
+<li>Perspective-transform screenshots — P1 <code>tilt()</code> is 2D affine only; real 3D deferred indefinitely.</li>
+<li>Venn beyond 3 sets — four interlocking circles are cosmetic, not informative (see <code>muriel/tools/venn.py</code>).</li>
+<li><strong>Bundling copyleft / source-available libraries.</strong> Any of the following may be referenced from a vocabulary doc but never vendored, wrapped as a bundled adapter, or imported as a hard dependency without adopting their copyleft (or paying):</li>
+<li><strong>GPL family:</strong> ComfyUI (GPL-3), Blender bpy (GPL), PlantUML (GPL).</li>
+<li><strong>AGPL:</strong> Hydra-synth (AGPL-3.0). Vocab-only reference at most.</li>
+<li><strong>LGPL:</strong> p5.js (LGPL).</li>
+<li><strong>Source-available / paid:</strong> tldraw SDK (production use requires paid license as of SDK 4.0; only starter kits are MIT).</li>
+<li><strong>MPL / file-scoped copyleft:</strong> Satori (MPL-2.0) — fine to depend on, not to vendor-modify.</li>
+<li><strong>Anti-competitive clause:</strong> GSAP (now free for commercial use under Webflow's Standard License, but contains a clause forbidding use in competing visual-animation builders; not OSI-approved). OK to depend on, not to redistribute.</li>
+</ul>
+<h2 id="vocabularies-engine-adapters-full-candidate-inventory">Vocabularies &amp; engine adapters — full candidate inventory<a class="headerlink" href="#vocabularies-engine-adapters-full-candidate-inventory" title="Permanent link">&para;</a></h2>
+<p>Curated by gap area. Each candidate's license noted; only MIT / Apache-2.0 / BSD / ISC / MPL-2.0 are viable as bundled adapters under muriel's outbound MIT license.</p>
+<p><strong>3D and generative graphics</strong> (gap: three.js is name-dropped only):
+- three.js (MIT) — primary 3D substrate.
+- Babylon.js (Apache-2.0) — heavier; physics + WebXR.
+- regl (MIT) — functional WebGL; generative / procedural.
+- PyVista (MIT) and trimesh (MIT) — Python-side mesh / scientific viz.
+- Open3D (MIT) — point clouds, meshes, reconstruction.</p>
+<p><strong>Animation and motion</strong> (gap: motion is in the schema but has no runtime adapter):
+- Motion Canvas (MIT) — TypeScript, programmatic keyframes; agent-authorable.
+- Manim Community Edition (MIT) — mathematical / expository.
+- Lottie via lottie-web + python-lottie (MIT) — declarative JSON, web + AE export.
+- Rive runtimes (MIT, confirmed April 2026) — state-machine interactive animation, multi-platform.
+- GSAP — see Won't-bundle block above.</p>
+<p><strong>Charting beyond matplotlib</strong> (gap: matplotlib is the only path):
+- Vega-Lite + Vega + Altair (BSD-3) — grammar of graphics, JSON-spec, LLM-friendly.
+- Observable Plot (ISC) — modern concise D3 API.
+- Plotly.js (MIT) — interactive HTML.
+- Apache ECharts (Apache-2.0) — rich statistical + geographic.
+- Bokeh (BSD-3) — Python-native interactive.</p>
+<p><strong>Image processing / CV / generative AI</strong> (gap: Flux adapter mentioned but unpopulated):
+- OpenCV (Apache-2.0) — classical CV.
+- scikit-image (BSD-3) — scientific image processing on the NumPy stack.
+- rembg (MIT) — background removal.
+- HuggingFace diffusers (Apache-2.0) — wrapper for diffusion models. <strong>Caveat:</strong> weights (SD / Flux) carry their own non-MIT licenses; vocabulary yes, bundled weights no.</p>
+<p><strong>Typography</strong> (gap: typeset.py is custom, no font tooling):
+- fontTools (MIT) — parse / subset / manipulate OpenType; essential for variable fonts.
+- HarfBuzz (Old MIT / "MIT-Harfbuzz") — shaping engine.
+- opentype.js (MIT) — browser-side font parsing.
+- Satori (MPL-2.0) — JSX-to-SVG text layout. See Won't-bundle for redistribution caveat.</p>
+<p><strong>Diagramming</strong> (currently Mermaid + Excalidraw only):
+- Graphviz (CPL / EPL-style, MIT-compatible in practice) — canonical graph layout. Pairs with the queued causal DAG diagram primitive.
+- Excalidraw libraries (MIT) — already referenced; promote to first-class.
+- draw.io / mxGraph core (Apache-2.0).
+- <em>Skip:</em> tldraw SDK (source-available), PlantUML (GPL).</p>
+<p><strong>Creative coding / shader toolkits</strong>:
+- openFrameworks (MIT) — C++; heavier to embed but MIT-clean.
+- <em>Skip:</em> Hydra (AGPL-3.0); Shadertoy snippets (author-dependent — curate carefully).</p>
+<p><strong>Geospatial</strong> (absent):
+- Leaflet (BSD-2).
+- deck.gl (MIT), kepler.gl (MIT).
+- MapLibre GL (BSD-3).</p>
+<p><strong>Audio / waveform</strong> (absent):
+- WaveSurfer.js (BSD-3).
+- Tone.js (MIT), Howler.js (MIT).</p>
+<p><strong>Sources</strong> (for the contested licenses): rive-runtime LICENSE (Rive MIT confirmed); CSS-Tricks "GSAP Now Completely Free" + Webflow Standard License (GSAP anti-compete clause); tldraw SDK License + tldraw blog "License updates for the SDK" (paid for production); hydra-synth/hydra LICENSE (AGPL-3.0).</p>
+<h2 id="release-gate">Release gate<a class="headerlink" href="#release-gate" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>render_assets</code> deprecation shim is committed to removal in <strong>0.7.0</strong> (see <code>CHANGELOG.md [0.5.0] Deprecated</code>). Do not remove before then.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

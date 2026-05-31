@@ -1,0 +1,2052 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/channels/video/">
+      
+      
+        <link rel="prev" href="../interactive/">
+      
+      
+        <link rel="next" href="../heatmaps/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Video - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#video-product-demos-gifs-recorded-talks" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Video
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tools-available" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools available
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#with-recordly-recommended-for-polished-productwalkthrough-videos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        With Recordly (recommended for polished product/walkthrough videos)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#without-recordly-zero-setup-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Without Recordly (zero-setup path)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ffmpeg-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ffmpeg setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tooltip-burn-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tooltip burn script
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lessons-learned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lessons learned
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ffmpeg-editing-recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ffmpeg editing recipes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-doc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design doc
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#html-mp4-via-hyperframes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTML → MP4 via hyperframes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HTML → MP4 via hyperframes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-pick-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to pick what
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quickstart
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#catalog-blocks-worth-knowing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catalog blocks worth knowing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frame-adapter-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frame Adapter pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#not-a-replacement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not a replacement
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="video-product-demos-gifs-recorded-talks">Video — Product Demos, GIFs, Recorded Talks<a class="headerlink" href="#video-product-demos-gifs-recorded-talks" title="Permanent link">&para;</a></h1>
+<p>Scripted screen recordings with tooltip overlays for YouTube/social. ffmpeg for trim/concat/burn. <code>desktop-control</code> MCP for mouse choreography. AppleScript for menu automation.</p>
+<p>Part of the <a href="../../SKILL/">muriel</a> skill — see the top-level index for mission, universal rules, and channel map.</p>
+<h2 id="tools-available">Tools available<a class="headerlink" href="#tools-available" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>How to invoke</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>desktop-control</code> MCP</td>
+<td>Move mouse, click, key combos, screenshots</td>
+<td><code>mcp__desktop-control__move_mouse</code>, <code>__click</code>, <code>__key_combo</code></td>
+</tr>
+<tr>
+<td>App-specific skill</td>
+<td>Switch modes or toggle features in the app being demoed via AppleScript menus</td>
+<td><code>/&lt;app&gt; mode &lt;name&gt;</code> (project-specific)</td>
+</tr>
+<tr>
+<td>AppleScript (direct)</td>
+<td>Any macOS UI automation — menu clicks, window focus, keystrokes</td>
+<td><code>osascript -e '...'</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/webadderall/Recordly"><strong>Recordly</strong></a></td>
+<td>Capture + auto-zoom + cursor polish + motion blur + styled frames (the "product-demo video" app)</td>
+<td>AGPL-3.0 desktop app; record → export MP4 → hand off to muriel's post-processing</td>
+</tr>
+<tr>
+<td>macOS built-in screen recording</td>
+<td>Zero-setup capture, no polish</td>
+<td><code>Cmd+Shift+5</code> — use when Recordly is overkill or unavailable</td>
+</tr>
+<tr>
+<td>ffmpeg (homebrew-ffmpeg tap)</td>
+<td>Trim, burn captions, add music, encode</td>
+<td>Hard-burn via <code>subtitles</code> filter (libass)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="workflow">Workflow<a class="headerlink" href="#workflow" title="Permanent link">&para;</a></h2>
+<h3 id="with-recordly-recommended-for-polished-productwalkthrough-videos">With Recordly (recommended for polished product/walkthrough videos)<a class="headerlink" href="#with-recordly-recommended-for-polished-productwalkthrough-videos" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Record in Recordly</strong> — auto-zoom follows the cursor, cursor polish + motion blur applied in-editor, webcam overlay optional, styled frame around the final composition. Export MP4.</li>
+<li><strong>(Optional) Burn captions via muriel</strong> — if you have a tooltip manifest with precise timecodes, run <code>burn-tooltips.sh manifest.json recordly-out.mp4 final.mp4</code> to add hard-burned captions.</li>
+<li><strong>(Optional) Further ffmpeg passes</strong> — trim, concat, encode for YouTube using the recipes below.</li>
+</ol>
+<h3 id="without-recordly-zero-setup-path">Without Recordly (zero-setup path)<a class="headerlink" href="#without-recordly-zero-setup-path" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Write a tooltip manifest</strong> — JSON array of <code>{start, end, text}</code> objects</li>
+<li><strong>Script the choreography</strong> — <code>desktop-control</code> moves the mouse on timed coordinates; AppleScript switches modes</li>
+<li><strong>User records</strong> with <code>Cmd+Shift+5</code> while agent drives the app</li>
+<li><strong>Post-process</strong>: <code>burn-tooltips.sh manifest.json raw.mov output.mp4</code></li>
+<li>Generates SRT from manifest</li>
+<li>Burns captions via ffmpeg <code>subtitles</code> filter (Helvetica 24px, white, black outline)</li>
+<li>Trims with <code>-ss</code> / <code>-t</code> flags</li>
+<li>Drops audio with <code>-an</code> when needed</li>
+<li>H.264 CRF 22, faststart for YouTube</li>
+</ol>
+<h2 id="ffmpeg-setup">ffmpeg setup<a class="headerlink" href="#ffmpeg-setup" title="Permanent link">&para;</a></h2>
+<p>The default <code>brew install ffmpeg</code> lacks <code>drawtext</code>/<code>subtitles</code> filters. Install the full version:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>brew<span class="w"> </span>uninstall<span class="w"> </span>ffmpeg
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>brew<span class="w"> </span>tap<span class="w"> </span>homebrew-ffmpeg/ffmpeg
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>brew<span class="w"> </span>install<span class="w"> </span>homebrew-ffmpeg/ffmpeg/ffmpeg
+</code></pre></div>
+This includes freetype, libass, fontconfig — enables <code>drawtext</code>, <code>subtitles</code>, and <code>ass</code> filters.</p>
+<h2 id="tooltip-burn-script">Tooltip burn script<a class="headerlink" href="#tooltip-burn-script" title="Permanent link">&para;</a></h2>
+<p>A <code>burn-tooltips.sh</code> script (see your app repo or <a href="../tools/"><code>muriel/tools/</code></a>) — two modes:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># SRT only (no ffmpeg needed)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>burn-tooltips.sh<span class="w"> </span>tooltips.json<span class="w"> </span>output.srt
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Full pipeline: trim + burn + optional music</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>burn-tooltips.sh<span class="w"> </span>tooltips.json<span class="w"> </span>raw.mov<span class="w"> </span>output.mp4<span class="w"> </span><span class="o">[</span>music.mp3<span class="o">]</span>
+</code></pre></div></p>
+<p>Uses <code>subtitles</code> filter (libass) for hard-burn. Falls back to soft-sub mux if drawtext unavailable. Music mixed at 15% volume.</p>
+<h2 id="lessons-learned">Lessons learned<a class="headerlink" href="#lessons-learned" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Trim first, caption second</strong> — tooltip timecodes are relative to the trimmed video, not the raw recording. Use <code>-ss</code> to skip dead intro before the filter chain.</li>
+<li><strong>Drop audio with <code>-an</code></strong> — screen recordings capture system audio, dogs barking, etc.</li>
+<li><strong>macOS filenames have Unicode spaces</strong> — <code>PM</code> in screen recording filenames uses a narrow no-break space (U+202F). Use glob matching, not exact strings.</li>
+<li><strong>Excalidraw: skip hand-drawn</strong> — use <code>roughness: 0</code>, <code>fontFamily: 2</code> (Helvetica), <code>fillStyle: "solid"</code>. The hand-drawn aesthetic reads as fake, not charming.</li>
+<li><strong>SRT for YouTube</strong> — even with hard-burned captions, upload the SRT too. YouTube auto-translates it.</li>
+</ul>
+<h2 id="ffmpeg-editing-recipes">ffmpeg editing recipes<a class="headerlink" href="#ffmpeg-editing-recipes" title="Permanent link">&para;</a></h2>
+<p>Standalone operations for cutting, joining, and splitting video outside the tooltip pipeline.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Cut segment (fast, keyframe-aligned)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>ffmpeg<span class="w"> </span>-ss<span class="w"> </span><span class="m">00</span>:00:10<span class="w"> </span>-to<span class="w"> </span><span class="m">00</span>:00:30<span class="w"> </span>-i<span class="w"> </span>input.mp4<span class="w"> </span>-c<span class="w"> </span>copy<span class="w"> </span>output.mp4
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Cut segment (precise, re-encodes)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>ffmpeg<span class="w"> </span>-ss<span class="w"> </span><span class="m">00</span>:00:10<span class="w"> </span>-i<span class="w"> </span>input.mp4<span class="w"> </span>-t<span class="w"> </span><span class="m">20</span><span class="w"> </span>-c:v<span class="w"> </span>libx264<span class="w"> </span>-c:a<span class="w"> </span>aac<span class="w"> </span>output.mp4
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># Last N seconds</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>ffmpeg<span class="w"> </span>-sseof<span class="w"> </span>-30<span class="w"> </span>-i<span class="w"> </span>input.mp4<span class="w"> </span>-c<span class="w"> </span>copy<span class="w"> </span>output.mp4
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># Concatenate via file list (recommended — works across codecs)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1"># list.txt contains: file &#39;clip1.mp4&#39;\nfile &#39;clip2.mp4&#39;\nfile &#39;clip3.mp4&#39;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>ffmpeg<span class="w"> </span>-f<span class="w"> </span>concat<span class="w"> </span>-safe<span class="w"> </span><span class="m">0</span><span class="w"> </span>-i<span class="w"> </span>list.txt<span class="w"> </span>-c<span class="w"> </span>copy<span class="w"> </span>output.mp4
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="c1"># Concatenate with re-encode (when codecs differ)</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>ffmpeg<span class="w"> </span>-f<span class="w"> </span>concat<span class="w"> </span>-safe<span class="w"> </span><span class="m">0</span><span class="w"> </span>-i<span class="w"> </span>list.txt<span class="w"> </span>-c:v<span class="w"> </span>libx264<span class="w"> </span>-c:a<span class="w"> </span>aac<span class="w"> </span>output.mp4
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="c1"># Split into fixed-length segments</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>ffmpeg<span class="w"> </span>-i<span class="w"> </span>input.mp4<span class="w"> </span>-c<span class="w"> </span>copy<span class="w"> </span>-f<span class="w"> </span>segment<span class="w"> </span>-segment_time<span class="w"> </span><span class="m">60</span><span class="w"> </span>-reset_timestamps<span class="w"> </span><span class="m">1</span><span class="w"> </span>output_%03d.mp4
+</code></pre></div>
+<p><strong><code>-c copy</code> vs re-encode:</strong> <code>-c copy</code> is instant but cuts on keyframes (may be off by a few frames). Add <code>-c:v libx264 -c:a aac</code> for frame-accurate cuts at the cost of speed. <code>-ss</code> before <code>-i</code> is faster; after <code>-i</code> is more precise.</p>
+<h2 id="design-doc">Design doc<a class="headerlink" href="#design-doc" title="Permanent link">&para;</a></h2>
+<p>See <a href="https://github.com/andyed/muriel/blob/main/docs/PERMUTE.md"><code>docs/PERMUTE.md</code></a> for the infographic aspiration: Tufte, Bertin, Gestalt, CRAP, semantic zoom, small multiples, linked displays.</p>
+<h2 id="html-mp4-via-hyperframes">HTML → MP4 via hyperframes<a class="headerlink" href="#html-mp4-via-hyperframes" title="Permanent link">&para;</a></h2>
+<p>For videos whose source of truth is HTML (release announcements, feature explainers, animated data viz, kinetic-typography compositions, website-to-video), use <a href="https://github.com/heygen-com/hyperframes"><strong>hyperframes</strong></a> (HeyGen, Apache 2.0). Puppeteer + FFmpeg + GSAP rendering; deterministic (same input → same output). Explicitly built for agent-driven authoring.</p>
+<p>Installed globally via <code>npx skills add heygen-com/hyperframes -y -g</code>. Registers five Claude Code slash commands:</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/hyperframes</code></td>
+<td>HTML composition authoring — captions, TTS, audio-reactive animation, transitions</td>
+</tr>
+<tr>
+<td><code>/hyperframes-cli</code></td>
+<td>CLI commands — <code>init</code>, <code>lint</code>, <code>preview</code>, <code>render</code>, <code>transcribe</code>, <code>tts</code>, <code>doctor</code></td>
+</tr>
+<tr>
+<td><code>/hyperframes-registry</code></td>
+<td>Block and component installation via <code>hyperframes add &lt;block&gt;</code></td>
+</tr>
+<tr>
+<td><code>/website-to-hyperframes</code></td>
+<td>Capture a URL → turn it into a video (Scrutinizer.app promo candidate)</td>
+</tr>
+<tr>
+<td><code>/gsap</code></td>
+<td>GSAP timelines, easing, ScrollTrigger, framework integration, performance</td>
+</tr>
+</tbody>
+</table>
+<h3 id="when-to-pick-what">When to pick what<a class="headerlink" href="#when-to-pick-what" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>If the source of truth is…</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A running macOS app (Scrutinizer mode sweeps, Psychodeli visualizer playback)</td>
+<td><strong>Recordly</strong></td>
+</tr>
+<tr>
+<td>An HTML composition (release demo, explainer, animated chart)</td>
+<td><strong>hyperframes</strong></td>
+</tr>
+<tr>
+<td>A scripted walkthrough driving a real app via the mouse</td>
+<td><strong>desktop-control + ffmpeg</strong></td>
+</tr>
+<tr>
+<td>A static screenshot pipeline that needs motion frosting (zoom-pan, fade-in caption)</td>
+<td><strong>ffmpeg filters directly</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="quickstart">Quickstart<a class="headerlink" href="#quickstart" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>npx<span class="w"> </span>hyperframes<span class="w"> </span>init<span class="w"> </span>my-video<span class="w">      </span><span class="c1"># scaffolds HTML composition</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">cd</span><span class="w"> </span>my-video
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>npx<span class="w"> </span>hyperframes<span class="w"> </span>preview<span class="w">            </span><span class="c1"># live-reload in browser</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>npx<span class="w"> </span>hyperframes<span class="w"> </span>render<span class="w">             </span><span class="c1"># MP4 out</span>
+</code></pre></div>
+<p>Compose in HTML with data attributes:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;stage&quot;</span> <span class="na">data-composition-id</span><span class="o">=</span><span class="s">&quot;release&quot;</span> <span class="na">data-start</span><span class="o">=</span><span class="s">&quot;0&quot;</span> <span class="na">data-width</span><span class="o">=</span><span class="s">&quot;1920&quot;</span> <span class="na">data-height</span><span class="o">=</span><span class="s">&quot;1080&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  <span class="p">&lt;</span><span class="nt">video</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;scrutinizer-demo.mp4&quot;</span> <span class="na">data-start</span><span class="o">=</span><span class="s">&quot;0&quot;</span> <span class="na">data-duration</span><span class="o">=</span><span class="s">&quot;8&quot;</span> <span class="na">data-track-index</span><span class="o">=</span><span class="s">&quot;0&quot;</span> <span class="na">muted</span> <span class="na">playsinline</span><span class="p">&gt;&lt;/</span><span class="nt">video</span><span class="p">&gt;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;caption&quot;</span> <span class="na">data-start</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">data-duration</span><span class="o">=</span><span class="s">&quot;4&quot;</span> <span class="na">data-track-index</span><span class="o">=</span><span class="s">&quot;1&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    Only 2° of your vision is sharp.
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  <span class="p">&lt;</span><span class="nt">audio</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;music.wav&quot;</span> <span class="na">data-start</span><span class="o">=</span><span class="s">&quot;0&quot;</span> <span class="na">data-duration</span><span class="o">=</span><span class="s">&quot;8&quot;</span> <span class="na">data-track-index</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">data-volume</span><span class="o">=</span><span class="s">&quot;0.5&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">audio</span><span class="p">&gt;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+<h3 id="catalog-blocks-worth-knowing">Catalog blocks worth knowing<a class="headerlink" href="#catalog-blocks-worth-knowing" title="Permanent link">&para;</a></h3>
+<p>50+ prebuilt blocks at <a href="https://hyperframes.heygen.com/catalog/blocks/data-chart">hyperframes.heygen.com/catalog</a>:</p>
+<ul>
+<li><strong>Social overlays</strong> — <code>instagram-follow</code>, lower thirds, subscribe animations</li>
+<li><strong>Shader transitions</strong> — <code>flash-through-white</code>, WebGL dissolves</li>
+<li><strong>Data viz</strong> — <code>data-chart</code> (animated bar/line), counters</li>
+<li><strong>Captions + TTS</strong> — synced text over video, auto-narration</li>
+<li><strong>Audio-reactive</strong> — shaders or CSS animations driven by waveform analysis</li>
+</ul>
+<p>Install blocks via <code>npx hyperframes add &lt;block-name&gt;</code>.</p>
+<h3 id="frame-adapter-pattern">Frame Adapter pattern<a class="headerlink" href="#frame-adapter-pattern" title="Permanent link">&para;</a></h3>
+<p>Bring your own animation runtime (GSAP, Lottie, CSS, Three.js). PixiJS (<a href="../../vocabularies/pixijs/"><code>vocabularies/pixijs.md</code></a>) and kinetic-typography compositions should drop in via a custom adapter.</p>
+<h3 id="not-a-replacement">Not a replacement<a class="headerlink" href="#not-a-replacement" title="Permanent link">&para;</a></h3>
+<p>hyperframes sits alongside the ffmpeg + Recordly + desktop-control recipes above, not instead of them. Pick the substrate by where the truth lives. A Scrutinizer feature demo video has three parts — a screen recording of the running app (Recordly), title cards and captions (hyperframes), and final encoding (ffmpeg). Stack them.</p>
+<h2 id="anti-patterns">Anti-patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Don't capture with system audio on</strong> unless narration is intentional. Dogs bark, notifications ding, system alerts leak into shipped reels.</li>
+<li><strong>Don't burn subtitles in the default SRT font.</strong> Use the brand's typography so captions feel authored, not tacked on.</li>
+<li><strong>Don't edit at 30 fps then upload at 60</strong> (or vice versa). Match the recording's frame rate or re-encode deliberately.</li>
+<li><strong>Don't ship a demo whose first 3 seconds don't hook attention.</strong> The opening frame is most of the commitment decision.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

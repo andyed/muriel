@@ -1,0 +1,2468 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/channels/dimensions/">
+      
+      
+        <link rel="prev" href="../../vocabularies/muriel-brand/">
+      
+      
+        <link rel="next" href="../style-guides/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Dimensions - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dimensions-common-screen-size-footprints" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dimensions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-pick-a-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to pick a size
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#social-cards-and-web-embeds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Social cards and web embeds
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-displays-physical-footprints-for-mockups-and-emulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device displays — physical footprints for mockups and emulation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web-viewport-tiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web viewport tiers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#video" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paper-and-print" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paper and print
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app-store-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App store assets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#favicons-and-app-icons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Favicons and app icons
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pixel-density-and-scale-factors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pixel density and scale factors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naming-convention-for-exported-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Naming convention for exported files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-counterpart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Code counterpart
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#todo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TODO
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#downstream-actually-posting-the-artifact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Downstream — actually posting the artifact
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="dimensions-common-screen-size-footprints">Dimensions — common screen-size footprints<a class="headerlink" href="#dimensions-common-screen-size-footprints" title="Permanent link">&para;</a></h1>
+<p>Cross-channel reference sheet for output sizing. When the task is "make me a thing for X," this is where you look up how big "a thing" should be.</p>
+<p>Part of the <a href="../../SKILL/">muriel</a> skill. Channels that need these values:
+- <a href="../raster/"><code>raster.md</code></a> — store assets, social cards, paper figures as raster
+- <a href="../interactive/"><code>interactive.md</code></a> — canvas sizes, viewport tiers for capture
+- <a href="../web/"><code>web.md</code></a> — Playwright window sizes, <code>@page</code> rules
+- <a href="../video/"><code>video.md</code></a> — ffmpeg target resolutions
+- <a href="../science/"><code>science.md</code></a> — paper column widths, figure export sizes</p>
+<h2 id="how-to-pick-a-size">How to pick a size<a class="headerlink" href="#how-to-pick-a-size" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Hard requirement first.</strong> Store assets and paper figures have <em>exact</em> dimensions that reject on mismatch. These are in the "hard" column below. Match them exactly.</li>
+<li><strong>Aspect-fit second.</strong> Social cards and thumbnails have canonical aspect ratios; the host will crop anything off-spec. Hit the aspect even if pixel count is flexible.</li>
+<li><strong>Retina-scale third.</strong> When in doubt, design at 2× the logical size. Desktop browsers treat 1600×900 as crisp at 2× on retina. Upload larger; let the target downscale; never upscale.</li>
+<li><strong>Vertical for mobile-first, horizontal for shared.</strong> Vertical (9:16) is for Reels/Shorts/TikTok/Stories. Horizontal (16:9) is for Twitter/X, YouTube, Twitter-style shares. Square (1:1) is the Instagram-era fallback.</li>
+</ol>
+<h2 id="social-cards-and-web-embeds">Social cards and web embeds<a class="headerlink" href="#social-cards-and-web-embeds" title="Permanent link">&para;</a></h2>
+<p><strong>Hard requirements</strong> — the platform crops or rejects anything else.</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Size (px)</th>
+<th>Aspect</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Twitter / X in-stream</strong></td>
+<td><strong>1600×900</strong></td>
+<td>16:9</td>
+<td>Full-bleed preview, no crop on desktop. The word-fingerprints images use this.</td>
+</tr>
+<tr>
+<td><strong>Twitter / X summary card</strong></td>
+<td>1200×628</td>
+<td>1.91:1</td>
+<td>For <code>twitter:card</code> meta; displays smaller than in-stream</td>
+</tr>
+<tr>
+<td><strong>Open Graph (default)</strong></td>
+<td>1200×630</td>
+<td>1.91:1</td>
+<td>Facebook, LinkedIn, Mastodon, Bluesky, Slack, Discord — most platforms fall back to OG</td>
+</tr>
+<tr>
+<td><strong>LinkedIn share</strong></td>
+<td>1200×627</td>
+<td>1.91:1</td>
+<td>Same as OG; LinkedIn tolerates off-ratio but won't crop cleanly</td>
+</tr>
+<tr>
+<td><strong>Substack featured image</strong></td>
+<td>1200×630</td>
+<td>1.91:1</td>
+<td>Rendered at hero size above the title</td>
+</tr>
+<tr>
+<td><strong>YouTube thumbnail</strong></td>
+<td>1280×720</td>
+<td>16:9</td>
+<td>Max 2 MB. Larger uploads accepted; delivered at 1280.</td>
+</tr>
+<tr>
+<td><strong>Instagram square</strong></td>
+<td>1080×1080</td>
+<td>1:1</td>
+<td>The legacy default</td>
+</tr>
+<tr>
+<td><strong>Instagram portrait</strong></td>
+<td>1080×1350</td>
+<td>4:5</td>
+<td>Taller = more feed real estate without crop</td>
+</tr>
+<tr>
+<td><strong>Instagram Stories / Reels</strong></td>
+<td>1080×1920</td>
+<td>9:16</td>
+<td>Full-screen vertical</td>
+</tr>
+<tr>
+<td><strong>TikTok</strong></td>
+<td>1080×1920</td>
+<td>9:16</td>
+<td>Same as Reels. Upload larger (e.g. 2160×3840) if possible.</td>
+</tr>
+<tr>
+<td><strong>Pinterest standard</strong></td>
+<td>1000×1500</td>
+<td>2:3</td>
+<td>Tall rectangle; pins scale to 1000 wide</td>
+</tr>
+<tr>
+<td><strong>Mastodon / Bluesky</strong></td>
+<td>1200×630</td>
+<td>1.91:1</td>
+<td>Honors OG tags</td>
+</tr>
+</tbody>
+</table>
+<h2 id="device-displays-physical-footprints-for-mockups-and-emulation">Device displays — physical footprints for mockups and emulation<a class="headerlink" href="#device-displays-physical-footprints-for-mockups-and-emulation" title="Permanent link">&para;</a></h2>
+<p><strong>Apple (current gen)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Physical (px)</th>
+<th>CSS (logical px)</th>
+<th>Aspect</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iPhone 15 Pro</td>
+<td>1179×2556</td>
+<td>393×852</td>
+<td>~19.5:9</td>
+<td>3× scale</td>
+</tr>
+<tr>
+<td>iPhone 15 Pro Max</td>
+<td>1290×2796</td>
+<td>430×932</td>
+<td>~19.5:9</td>
+<td>3× scale</td>
+</tr>
+<tr>
+<td>iPhone 15 / 14</td>
+<td>1170×2532</td>
+<td>390×844</td>
+<td>~19.5:9</td>
+<td>3× scale</td>
+</tr>
+<tr>
+<td>iPhone SE</td>
+<td>750×1334</td>
+<td>375×667</td>
+<td>16:9</td>
+<td>2× scale — floor for "small mobile" testing</td>
+</tr>
+<tr>
+<td>iPad Pro 12.9"</td>
+<td>2048×2732</td>
+<td>1024×1366</td>
+<td>4:3</td>
+<td>2× scale</td>
+</tr>
+<tr>
+<td>iPad Pro 11"</td>
+<td>1668×2388</td>
+<td>834×1194</td>
+<td>~17:13</td>
+<td>2× scale</td>
+</tr>
+<tr>
+<td>iPad (10.9")</td>
+<td>1640×2360</td>
+<td>820×1180</td>
+<td>~7:5</td>
+<td>2× scale</td>
+</tr>
+<tr>
+<td>MacBook Air 13"</td>
+<td>2560×1664</td>
+<td>1280×832</td>
+<td>1.54:1</td>
+<td>2× scale</td>
+</tr>
+<tr>
+<td>MacBook Pro 14"</td>
+<td>3024×1964</td>
+<td>1512×982</td>
+<td>~1.54:1</td>
+<td>2× scale</td>
+</tr>
+<tr>
+<td>MacBook Pro 16"</td>
+<td>3456×2234</td>
+<td>1728×1117</td>
+<td>~1.55:1</td>
+<td>2× scale</td>
+</tr>
+<tr>
+<td>Studio Display 27"</td>
+<td>5120×2880</td>
+<td>2560×1440</td>
+<td>16:9</td>
+<td>5K retina</td>
+</tr>
+<tr>
+<td>Pro Display XDR 32"</td>
+<td>6016×3384</td>
+<td>3008×1692</td>
+<td>16:9</td>
+<td>6K retina</td>
+</tr>
+<tr>
+<td>iMac 24"</td>
+<td>4480×2520</td>
+<td>2240×1260</td>
+<td>16:9</td>
+<td>4.5K retina</td>
+</tr>
+<tr>
+<td>Apple TV 4K</td>
+<td>3840×2160</td>
+<td>1920×1080</td>
+<td>16:9</td>
+<td>2× scale; top-shelf + screensaver target</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Other</strong></p>
+<table>
+<thead>
+<tr>
+<th>Device / class</th>
+<th>Physical (px)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fire TV (standard)</td>
+<td>1920×1080</td>
+<td>Primary target for Fire TV apps. CLAUDE.md notes ADB at <code>192.168.1.215:5555</code>.</td>
+</tr>
+<tr>
+<td>Fire TV (4K)</td>
+<td>3840×2160</td>
+<td></td>
+</tr>
+<tr>
+<td>Android flagship (2024)</td>
+<td>~1080×2400 to 1440×3200</td>
+<td>Highly variable; design for CSS 360×800 as a safe floor</td>
+</tr>
+<tr>
+<td>Pixel 8 Pro</td>
+<td>1344×2992</td>
+<td>CSS 448×998</td>
+</tr>
+<tr>
+<td>Chromecast with Google TV</td>
+<td>1920×1080 or 3840×2160</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="web-viewport-tiers">Web viewport tiers<a class="headerlink" href="#web-viewport-tiers" title="Permanent link">&para;</a></h2>
+<p>Use these as Playwright / headless-Chrome window sizes when capturing or testing responsive behavior. They are <strong>CSS pixel</strong> sizes, not physical; the rendering engine will up-scale internally.</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Viewport (CSS px)</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mobile small</td>
+<td>375×667</td>
+<td>iPhone SE floor</td>
+</tr>
+<tr>
+<td>Mobile standard</td>
+<td>390×844</td>
+<td>iPhone 14/15</td>
+</tr>
+<tr>
+<td>Mobile large</td>
+<td>430×932</td>
+<td>iPhone 15 Pro Max, Pixel 8 Pro</td>
+</tr>
+<tr>
+<td>Tablet portrait</td>
+<td>820×1180</td>
+<td>iPad (10.9")</td>
+</tr>
+<tr>
+<td>Tablet landscape</td>
+<td>1180×820</td>
+<td>iPad rotated</td>
+</tr>
+<tr>
+<td>Tablet pro portrait</td>
+<td>1024×1366</td>
+<td>iPad Pro 12.9"</td>
+</tr>
+<tr>
+<td>Laptop</td>
+<td>1280×800</td>
+<td>MacBook Air 13" CSS-level</td>
+</tr>
+<tr>
+<td>Laptop large</td>
+<td>1440×900</td>
+<td>Common dev default</td>
+</tr>
+<tr>
+<td>Desktop FHD</td>
+<td>1920×1080</td>
+<td>The single most common desktop size on the internet</td>
+</tr>
+<tr>
+<td>Desktop QHD</td>
+<td>2560×1440</td>
+<td>Common for external monitors</td>
+</tr>
+<tr>
+<td>Desktop 4K</td>
+<td>3840×2160</td>
+<td>Top of the market</td>
+</tr>
+<tr>
+<td>Ultrawide 21:9</td>
+<td>2560×1080</td>
+<td>Gaming/power-user monitors</td>
+</tr>
+<tr>
+<td>Ultrawide 32:9</td>
+<td>3840×1080</td>
+<td>Dual-monitor-replacement displays</td>
+</tr>
+</tbody>
+</table>
+<p>For responsive screenshot sets, the sensible minimum is: <code>{375, 820, 1280, 1920}</code> — mobile / tablet / laptop / desktop. Add 1440 if the design has a distinct "laptop" tier, and add 3840 only if the design has 4K-specific layout rules (rare).</p>
+<h2 id="video">Video<a class="headerlink" href="#video" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Resolution</th>
+<th>Aspect</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1080p HD</strong></td>
+<td>1920×1080</td>
+<td>16:9</td>
+<td>The default. ffmpeg <code>-s 1920x1080</code>.</td>
+</tr>
+<tr>
+<td><strong>4K UHD</strong></td>
+<td>3840×2160</td>
+<td>16:9</td>
+<td>ffmpeg <code>-s 3840x2160</code>. 4× the pixel count of 1080p.</td>
+</tr>
+<tr>
+<td><strong>8K UHD</strong></td>
+<td>7680×4320</td>
+<td>16:9</td>
+<td>Rarely shipped; useful for downscaling to 4K/1080p with headroom</td>
+</tr>
+<tr>
+<td><strong>Vertical (mobile)</strong></td>
+<td>1080×1920</td>
+<td>9:16</td>
+<td>Reels / Shorts / TikTok</td>
+</tr>
+<tr>
+<td><strong>Square</strong></td>
+<td>1080×1080</td>
+<td>1:1</td>
+<td>Instagram feed video</td>
+</tr>
+<tr>
+<td><strong>Cinema DCI 4K</strong></td>
+<td>4096×2160</td>
+<td>~1.9:1</td>
+<td>Slightly wider than UHD; theatrical</td>
+</tr>
+<tr>
+<td><strong>720p HD</strong></td>
+<td>1280×720</td>
+<td>16:9</td>
+<td>Legacy; only for fallback or low-bandwidth</td>
+</tr>
+<tr>
+<td><strong>YouTube preferred upload</strong></td>
+<td>3840×2160</td>
+<td>16:9</td>
+<td>Upload at 4K even if delivering at 1080p — YouTube's transcoder treats higher-source inputs better</td>
+</tr>
+</tbody>
+</table>
+<p>Screen recording on macOS via <code>Cmd+Shift+5</code> captures at the display's native resolution. Trim/encode to the target with ffmpeg in post — see <a href="../video/"><code>channels/video.md</code></a> for the editing recipes.</p>
+<h2 id="paper-and-print">Paper and print<a class="headerlink" href="#paper-and-print" title="Permanent link">&para;</a></h2>
+<p><strong>Page sizes</strong></p>
+<table>
+<thead>
+<tr>
+<th>Size</th>
+<th>Inches</th>
+<th>mm</th>
+<th>px @300 DPI</th>
+<th>px @600 DPI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>US Letter</td>
+<td>8.5 × 11</td>
+<td>216 × 279</td>
+<td>2550×3300</td>
+<td>5100×6600</td>
+</tr>
+<tr>
+<td>US Legal</td>
+<td>8.5 × 14</td>
+<td>216 × 356</td>
+<td>2550×4200</td>
+<td>—</td>
+</tr>
+<tr>
+<td>A4</td>
+<td>8.27 × 11.69</td>
+<td>210 × 297</td>
+<td>2480×3508</td>
+<td>4960×7016</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>11.69 × 16.54</td>
+<td>297 × 420</td>
+<td>3508×4961</td>
+<td>—</td>
+</tr>
+<tr>
+<td>A5</td>
+<td>5.83 × 8.27</td>
+<td>148 × 210</td>
+<td>1748×2480</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conference paper column widths</strong> — the common sizes science figures have to fit.</p>
+<table>
+<thead>
+<tr>
+<th>Venue / style</th>
+<th>Single col</th>
+<th>Double col / full width</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ACM (SIGCHI, CHI, IUI)</strong></td>
+<td>3.33 in (84.6 mm)</td>
+<td>7.00 in (177.8 mm)</td>
+<td>Recent <code>acmart</code> template; <code>\columnwidth</code> ≈ single</td>
+</tr>
+<tr>
+<td><strong>IEEE (two-column)</strong></td>
+<td>3.50 in (88.9 mm)</td>
+<td>7.16 in (181.9 mm)</td>
+<td>Legacy widths still shipped by most IEEE templates</td>
+</tr>
+<tr>
+<td><strong>Springer LNCS</strong></td>
+<td>—</td>
+<td>4.80 in (122 mm)</td>
+<td>Single-column format; full width is the column</td>
+</tr>
+<tr>
+<td><strong>PNAS</strong></td>
+<td>3.42 in (87 mm)</td>
+<td>7.00 in (178 mm)</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Nature (narrow)</strong></td>
+<td>3.54 in (90 mm)</td>
+<td>7.28 in (185 mm)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>How to use:</strong> for a matplotlib figure that will land in a CHI single column, set <code>figsize=(3.33, h)</code> and save as PDF. <code>h</code> depends on your aspect ratio; 2.0–2.5 is typical. The <code>channels/science.md</code> rcparams defaults assume a 10×6 figsize that's designed for a double-column or full-width placement, not a single column — override <code>figsize</code> per-figure when targeting single-column.</p>
+<p><strong>Conference posters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Size</th>
+<th>Inches</th>
+<th>cm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A0</td>
+<td>33.1 × 46.8</td>
+<td>84.1 × 118.9</td>
+</tr>
+<tr>
+<td>36" × 48"</td>
+<td>36 × 48</td>
+<td>91 × 122</td>
+</tr>
+<tr>
+<td>48" × 36" (landscape)</td>
+<td>48 × 36</td>
+<td>122 × 91</td>
+</tr>
+</tbody>
+</table>
+<p>At 150 DPI for poster print, A0 = 4968×7020 px. Don't exceed that — printers can't resolve more.</p>
+<h2 id="app-store-assets">App store assets<a class="headerlink" href="#app-store-assets" title="Permanent link">&para;</a></h2>
+<p>For the complete Amazon Appstore / Apple tvOS / Google Play store-specific dimensions, see the table in <a href="../raster/#common-store-dimensions"><code>channels/raster.md</code></a>. That's where the existing canonical reference lives — this file doesn't duplicate it to avoid drift.</p>
+<h2 id="favicons-and-app-icons">Favicons and app icons<a class="headerlink" href="#favicons-and-app-icons" title="Permanent link">&para;</a></h2>
+<p><strong>Favicon set</strong> (for a new web project, ship all of these):</p>
+<table>
+<thead>
+<tr>
+<th>Size</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16×16</td>
+<td>Legacy tab</td>
+</tr>
+<tr>
+<td>32×32</td>
+<td>Modern tab, pinned</td>
+</tr>
+<tr>
+<td>48×48</td>
+<td>Windows site tile</td>
+</tr>
+<tr>
+<td>180×180</td>
+<td><code>apple-touch-icon</code> (iOS home screen)</td>
+</tr>
+<tr>
+<td>192×192</td>
+<td>Android home screen, PWA manifest</td>
+</tr>
+<tr>
+<td>512×512</td>
+<td>PWA manifest, high-res Android</td>
+</tr>
+<tr>
+<td>512×512 (maskable)</td>
+<td>Android adaptive icon (full-bleed safe zone)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>iOS app icon</strong> — generate from a 1024×1024 master:</p>
+<table>
+<thead>
+<tr>
+<th>Size</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1024×1024</td>
+<td>App Store listing</td>
+</tr>
+<tr>
+<td>180×180</td>
+<td>iPhone (@3x)</td>
+</tr>
+<tr>
+<td>120×120</td>
+<td>iPhone (@2x)</td>
+</tr>
+<tr>
+<td>167×167</td>
+<td>iPad Pro</td>
+</tr>
+<tr>
+<td>152×152</td>
+<td>iPad</td>
+</tr>
+<tr>
+<td>87×87, 80×80, 60×60, 58×58, 40×40, 29×29, 20×20</td>
+<td>Settings, Spotlight, notifications</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Android adaptive icon</strong>: 108×108 dp (432×432 px at xxxhdpi), with the 72×72 dp (288×288 px) central "safe zone" containing all meaningful content. The outer border is at the mercy of the launcher's mask shape.</p>
+<h2 id="pixel-density-and-scale-factors">Pixel density and scale factors<a class="headerlink" href="#pixel-density-and-scale-factors" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>1× (standard):</strong> legacy desktops; rarely a concern for new work</li>
+<li><strong>2× (retina):</strong> MacBook, iMac, iPad, iPhone SE. Design at 2× target for crisp rendering.</li>
+<li><strong>3× (super retina):</strong> iPhone Pro models. Physical pixels are 3× CSS pixels.</li>
+<li><strong>Desktop DPI:</strong> browsers treat 96 DPI as 1× regardless of physical DPI. macOS and modern Windows handle the physical↔logical mapping transparently.</li>
+</ul>
+<p><strong>Rule of thumb for export resolution:</strong>
+- Social card upload: 2× the target (e.g., upload 2400×1260 for a 1200×630 OG slot) so retina feeds display crisply
+- Paper figure: 300 DPI minimum, 600 DPI for high-end journals, 150 DPI for posters
+- App icon: master at 1024×1024 (or 2048 for Apple Vision Pro), generate all smaller sizes via Pillow <code>Image.LANCZOS</code></p>
+<h2 id="naming-convention-for-exported-files">Naming convention for exported files<a class="headerlink" href="#naming-convention-for-exported-files" title="Permanent link">&para;</a></h2>
+<p>Consistent prefixes so multiple assets live in one directory without ambiguity:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>twitter-instream-1600x900.png
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>og-card-1200x630.png
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>linkedin-share-1200x627.png
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>yt-thumb-1280x720.png
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>ig-story-1080x1920.png
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>ig-square-1080x1080.png
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>reel-1080x1920.mp4
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>firetv-screen-1920x1080.png
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>tvos-topshelf-2320x720.png
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>play-feature-1024x500.png
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>letter-poster-300dpi.pdf
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>a4-handout-300dpi.pdf
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>chi-singlecol-fig1.pdf
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>chi-doublecol-fig2.pdf
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>ieee-singlecol-fig3.pdf
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>icon-master-1024.png
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>favicon-512-maskable.png
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>mbp16-mockup-3456x2234.png
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>ipad-pro-129-mockup-2048x2732.png
+</code></pre></div>
+<p>Pattern: <code>{platform}-{role}-{widthXheight}.{ext}</code> for raster; <code>{platform}-{role}-{dpi|size}.{ext}</code> for paper. Platform prefix keeps sorting aligned; width×height is the canonical identifier.</p>
+<h2 id="code-counterpart">Code counterpart<a class="headerlink" href="#code-counterpart" title="Permanent link">&para;</a></h2>
+<p>All values in this file are also available as importable Python constants in <a href="https://github.com/andyed/muriel/blob/main/muriel/dimensions.py"><code>muriel/dimensions.py</code></a>. Mirror of the markdown structure, standard-library-only, with three small classes (<code>Size</code>, <code>Device</code>, <code>PaperSize</code>), a dotted-name <code>REGISTRY</code> for programmatic lookup, and a <code>figsize_for(venue, columns, aspect)</code> helper so notebooks don't hardcode inch values.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel.dimensions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">TWITTER_INSTREAM</span><span class="p">,</span> <span class="n">OG_CARD</span><span class="p">,</span> <span class="n">VIDEO_1080P</span><span class="p">,</span> <span class="n">A4</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">figsize_for</span><span class="p">,</span> <span class="n">lookup</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">cvs_w</span><span class="p">,</span> <span class="n">cvs_h</span> <span class="o">=</span> <span class="n">TWITTER_INSTREAM</span>       <span class="c1"># → (1600, 900)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">OG_CARD</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>                      <span class="c1"># → Size(2400, 1260) for retina upload</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">A4</span><span class="o">.</span><span class="n">px_300dpi</span>                          <span class="c1"># → Size(2481, 3507)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">figsize_for</span><span class="p">(</span><span class="s1">&#39;chi&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>         <span class="c1"># → (3.33, 2.0)</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">device</span><span class="p">(</span><span class="s1">&#39;iphone-15-pro&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">css</span>           <span class="c1"># → Size(393, 852)</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">lookup</span><span class="p">(</span><span class="s1">&#39;twitter.instream&#39;</span><span class="p">)</span>            <span class="c1"># → Size(1600, 900)</span>
+</code></pre></div>
+<p>Run the module directly to print the full registry + device list + paper table + figsize examples:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.dimensions
+</code></pre></div>
+<h2 id="todo">TODO<a class="headerlink" href="#todo" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[x] <strong><code>muriel/dimensions.py</code></strong> — Shipped. <code>Size</code> / <code>Device</code> / <code>PaperSize</code> NamedTuples, 34 registry entries, 17 devices, 5 paper sizes, <code>figsize_for()</code> for 7 academic venues, CLI self-test.</li>
+<li>[x] <strong>Viewport-sweep capture script</strong> — Shipped as <code>muriel/capture.py</code>. Takes a URL and a tier list (default <code>['mobile', 'tablet', 'laptop', 'desktop']</code>) and produces Playwright screenshots named by this file's convention. Pulls tier data directly from <code>dimensions.NAMED_TIERS</code>. Playwright is an optional dependency; module imports cleanly without it and only requires it at capture time.</li>
+<li>[x] <strong>CHI / IEEE figsize helper</strong> — Shipped as <code>figsize_for(venue, columns, aspect)</code> in <code>muriel/dimensions.py</code>. Supports chi, acm, iui, ieee, pnas, nature, lncs.</li>
+</ul>
+<h2 id="downstream-actually-posting-the-artifact">Downstream — actually posting the artifact<a class="headerlink" href="#downstream-actually-posting-the-artifact" title="Permanent link">&para;</a></h2>
+<p>muriel produces the right-sized image; it doesn't upload it. Pair with a downstream dispatcher like <a href="https://github.com/geraldnguyen/social-media-posters">geraldnguyen/social-media-posters</a> (MIT — Python + GitHub Actions) for the post step: muriel emits <code>hero-og.png</code> at <code>OG_CARD</code>, <code>hero-twitter.png</code> at <code>TWITTER_INSTREAM</code>, etc., and social-media-posters sends each to the platform that expects that size. Clean separation: muriel owns <em>what the artifact looks like and whether it passes 8:1</em>; the posting tool owns <em>API credentials, retries, scheduling</em>.</p>
+<h2 id="anti-patterns">Anti-patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Don't scale a source image up and call it retina.</strong> Generate at target dimensions; upscaling pixelates.</li>
+<li><strong>Don't trust platforms' "recommended sizes"</strong> — they drift. Use muriel's dotted-name registry (<code>muriel.dimensions.TWITTER_INSTREAM</code> etc.) which pins verified values.</li>
+<li><strong>Don't forget <code>device_scale_factor=2</code></strong> for Playwright retina captures.</li>
+<li><strong>Don't set print output below 300 DPI.</strong> 72 DPI is screen-only; print wants 300+ for text, 600+ for line art.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

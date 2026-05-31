@@ -1,0 +1,2184 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/spec-plugin-packaging/">
+      
+      
+        <link rel="prev" href="../THIRD_PARTY_NOTICES/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Plugin packaging spec - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/muriel.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#spec-package-muriel-as-a-claude-code-plugin" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Plugin packaging spec
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Problem
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Goal
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-plugin-shape-canonical-from-the-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Plugin shape (canonical, from the docs)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-repo-layout-three-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Repo layout — three options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Repo layout — three options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-root-as-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A — Root-as-plugin
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-plugins-subdir-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B — Plugins-subdir (recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-c-separate-plugin-repo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option C — Separate plugin repo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommendation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommendation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-manifest-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Manifest templates
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Manifest templates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#claude-pluginmarketplacejson-repo-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        .claude-plugin/marketplace.json (repo root)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pluginsmurielclaude-pluginpluginjson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        plugins/muriel/.claude-plugin/plugin.json
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-the-murielskill-namespace-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. The /muriel:&lt;skill&gt; namespace decision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-skillmd-frontmatter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. SKILL.md frontmatter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-installsh-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. install.sh updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-test-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Test plan
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-out-of-scope-follow-ups-not-blockers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Out of scope (follow-ups, not blockers)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="spec-package-muriel-as-a-claude-code-plugin">Spec: Package muriel as a Claude Code plugin<a class="headerlink" href="#spec-package-muriel-as-a-claude-code-plugin" title="Permanent link">&para;</a></h1>
+<p><strong>Audience:</strong> muriel maintainer / coding agent working in this repo.
+<strong>Status:</strong> draft, ready to implement.
+<strong>Reference:</strong> <a href="https://code.claude.com/docs/en/plugins">https://code.claude.com/docs/en/plugins</a>,
+<a href="https://code.claude.com/docs/en/plugin-marketplaces">https://code.claude.com/docs/en/plugin-marketplaces</a>,
+<a href="https://code.claude.com/docs/en/plugins-reference">https://code.claude.com/docs/en/plugins-reference</a>. Anything in this spec
+that disagrees with those pages, the docs win — re-check the docs before
+implementing.</p>
+<hr />
+<h2 id="1-problem">1. Problem<a class="headerlink" href="#1-problem" title="Permanent link">&para;</a></h2>
+<p>Today's install path is <code>git clone … &amp;&amp; bash install.sh</code>, which symlinks the
+repo into <code>~/.claude/skills/muriel</code> and the critique into
+<code>~/.claude/agents/muriel-critique.md</code>. That works if you have a shell, know
+where to clone, and trust a script. It does <strong>not</strong> match how Claude Code
+users expect to install things in 2026: <code>/plugin marketplace add &lt;repo&gt;</code>
+followed by <code>/plugin install &lt;plugin&gt;</code>. The friction is real — even the
+author shipped the existing install path and still had to hand-hack the
+symlink targets on a fresh machine because the resolved paths confused the
+loader (the install.sh-derived <code>~/.claude/skills/muriel</code> symlink did not line
+up with what Claude Code expected at install time).</p>
+<p>The plugin/marketplace surface is the right shape:</p>
+<ul>
+<li>discoverable from inside Claude Code (no terminal context-switch),</li>
+<li>versioned (the user knows what they have),</li>
+<li>removable (<code>/plugin uninstall</code>),</li>
+<li>safe to update (Claude Code refreshes from the marketplace; no shell
+  scripts editing user dotfiles).</li>
+</ul>
+<h2 id="2-goal">2. Goal<a class="headerlink" href="#2-goal" title="Permanent link">&para;</a></h2>
+<p>A user running Claude Code can install muriel with two commands:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/plugin marketplace add andyed/muriel
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>/plugin install muriel@andyed-muriel
+</code></pre></div>
+<p>That should give them:</p>
+<ul>
+<li>A <code>/muriel:&lt;skill&gt;</code> slash skill (see §6 on the namespace decision — the
+  exact invocation depends on which skill folder name we settle on).</li>
+<li>The <code>muriel-critique</code> subagent available to the <code>Agent</code> tool.</li>
+<li>No conflict with a previous <code>bash install.sh</code> install on the same box (see
+  §8 dual-install).</li>
+</ul>
+<h2 id="3-plugin-shape-canonical-from-the-docs">3. Plugin shape (canonical, from the docs)<a class="headerlink" href="#3-plugin-shape-canonical-from-the-docs" title="Permanent link">&para;</a></h2>
+<p>A plugin directory:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>&lt;plugin-root&gt;/
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  .claude-plugin/
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    plugin.json            # manifest — REQUIRED
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  skills/
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    &lt;skill-name&gt;/
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>      SKILL.md             # YAML frontmatter + body
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>      …                    # additional files the skill references
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  agents/
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    &lt;agent&gt;.md             # subagent definition
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  commands/                # legacy flat-md skills; don&#39;t use for new plugins
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  hooks/hooks.json         # event handlers (out of scope for v0)
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  .mcp.json                # MCP servers (out of scope for v0)
+</code></pre></div>
+<p><strong>Common mistake (called out in the docs):</strong> do not put <code>skills/</code>,
+<code>agents/</code>, <code>commands/</code>, or <code>hooks/</code> inside <code>.claude-plugin/</code>. Only
+<code>plugin.json</code> lives in <code>.claude-plugin/</code>. Everything else sits at the plugin
+root.</p>
+<p>A <strong>marketplace</strong> is a repo with <code>.claude-plugin/marketplace.json</code> at the
+repo root. A repo can be its own marketplace.</p>
+<p>A plugin's <code>name</code> field becomes the slash-skill namespace prefix, e.g. a
+plugin named <code>muriel</code> containing a skill folder <code>compose/</code> is invoked as
+<code>/muriel:compose</code>. <strong>Plugin skills are always namespaced; this is non-
+negotiable.</strong> Standalone <code>.claude/skills/muriel/</code> is the only path that
+yields the bare <code>/muriel</code> invocation, and that is the existing install path,
+not the plugin path.</p>
+<h2 id="4-repo-layout-three-options">4. Repo layout — three options<a class="headerlink" href="#4-repo-layout-three-options" title="Permanent link">&para;</a></h2>
+<h3 id="option-a-root-as-plugin">Option A — Root-as-plugin<a class="headerlink" href="#option-a-root-as-plugin" title="Permanent link">&para;</a></h3>
+<p>Make the muriel repo itself the plugin root: move <code>SKILL.md</code> to
+<code>skills/muriel/SKILL.md</code> (or whatever folder name §6 picks), put
+<code>.claude-plugin/plugin.json</code> and <code>.claude-plugin/marketplace.json</code> at root,
+keep <code>agents/muriel-critique.md</code> at root.</p>
+<p>Pros: simplest layout; plugin loader reads root paths directly. Cons:
+top-level <code>skills/</code> and <code>agents/</code> collide visually with the existing
+top-level <code>muriel/</code> Python package, <code>tools/</code>, <code>render_assets/</code>, <code>examples/</code>.
+Migrating is one big mass move. No room for a sibling plugin later without
+restructuring again.</p>
+<h3 id="option-b-plugins-subdir-recommended">Option B — Plugins-subdir (recommended)<a class="headerlink" href="#option-b-plugins-subdir-recommended" title="Permanent link">&para;</a></h3>
+<p>Match the layout the docs themselves use in the marketplace walkthrough
+(<a href="https://code.claude.com/docs/en/plugin-marketplaces#walkthrough-create-a-local-marketplace">https://code.claude.com/docs/en/plugin-marketplaces#walkthrough-create-a-local-marketplace</a>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>.claude-plugin/marketplace.json           # repo root marketplace catalog
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>plugins/muriel/
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  .claude-plugin/plugin.json
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  skills/&lt;skill-folder&gt;/
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    SKILL.md                              # canonical SKILL location
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    channels/ vocabularies/ style-guides/ dimensions/ brands/
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    templates/ examples/ scenarios/ assets/
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  agents/
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    muriel-critique.md                    # canonical agent location
+</code></pre></div>
+<p>The Python package, install.sh, README, docs, and other top-level dirs are
+untouched. The marketplace lives at repo root where Claude Code expects it.
+Adding a future plugin (e.g. a slash-command pack) drops in as
+<code>plugins/muriel-tools/</code>.</p>
+<p>Within Option B, <strong>the SKILL.md and agent file are canonical at the
+plugins/muriel/ paths</strong>; the legacy <code>install.sh</code> symlinks point <em>to</em> those
+new paths. Symlinks-in-git are fragile on Windows checkouts and the docs
+explicitly warn that plugins are copied to a cache (see §3 footnote at
+<a href="https://code.claude.com/docs/en/plugin-marketplaces#how-plugins-are-installed">https://code.claude.com/docs/en/plugin-marketplaces#how-plugins-are-installed</a>),
+so a checked-in symlink from <code>plugins/muriel/skills/muriel/SKILL.md</code> →
+<code>../../../../SKILL.md</code> would not survive the cache copy. Move the files,
+update internal references, accept the churn.</p>
+<h3 id="option-c-separate-plugin-repo">Option C — Separate plugin repo<a class="headerlink" href="#option-c-separate-plugin-repo" title="Permanent link">&para;</a></h3>
+<p><code>andyed/muriel-plugin</code> as a thin marketplace repo that vendors <code>andyed/muriel</code>
+via git submodule or release-time copy.</p>
+<p>Pros: decouples plugin distribution from main-repo cadence. Cons: doubles
+maintenance, splits issues, defeats "one repo, one source of truth."</p>
+<h3 id="recommendation">Recommendation<a class="headerlink" href="#recommendation" title="Permanent link">&para;</a></h3>
+<p><strong>Option B.</strong> It mirrors the doc walkthrough, preserves the existing Python
+package and install.sh untouched, and keeps all files in one repo and one PR.</p>
+<h2 id="5-manifest-templates">5. Manifest templates<a class="headerlink" href="#5-manifest-templates" title="Permanent link">&para;</a></h2>
+<p>Field names verified against
+<a href="https://code.claude.com/docs/en/plugin-marketplaces#marketplace-schema">https://code.claude.com/docs/en/plugin-marketplaces#marketplace-schema</a> and
+<a href="https://code.claude.com/docs/en/plugins-reference#plugin-manifest-schema">https://code.claude.com/docs/en/plugins-reference#plugin-manifest-schema</a>.
+Re-check before committing — that page is the source of truth.</p>
+<h3 id="claude-pluginmarketplacejson-repo-root"><code>.claude-plugin/marketplace.json</code> (repo root)<a class="headerlink" href="#claude-pluginmarketplacejson-repo-root" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;andyed-muriel&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&quot;owner&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Andy Edmonds&quot;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Andy Edmonds&#39; Claude Code plugins.&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">&quot;metadata&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nt">&quot;pluginRoot&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;./plugins&quot;</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="nt">&quot;plugins&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;muriel&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">      </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;muriel&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">      </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Multi-channel visual production skill — raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics, diagrams. 8:1 contrast minimum enforced; brand tokens active at render time.&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">      </span><span class="nt">&quot;homepage&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://github.com/andyed/muriel&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">      </span><span class="nt">&quot;license&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MIT&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">      </span><span class="nt">&quot;category&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;design&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">      </span><span class="nt">&quot;keywords&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;visual&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;design&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;svg&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;infographic&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;science&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;gaze&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;brand&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;contrast&quot;</span><span class="p">]</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="p">}</span>
+</code></pre></div>
+<p>Notes:</p>
+<ul>
+<li><code>name</code> is the marketplace identifier users see in <code>muriel@andyed-muriel</code>.
+  Kebab-case, no spaces. Avoid Anthropic's reserved names (the docs list
+  them).</li>
+<li><code>metadata.pluginRoot: "./plugins"</code> lets each plugin entry use a short
+  <code>"source": "muriel"</code> instead of <code>"source": "./plugins/muriel"</code>. It's a
+  cosmetic win, drop it if multi-plugin layout is uncertain.</li>
+<li><code>version</code> is <strong>deliberately omitted</strong> from the plugin entry. Per
+  <a href="https://code.claude.com/docs/en/plugin-marketplaces#version-resolution-and-release-channels">https://code.claude.com/docs/en/plugin-marketplaces#version-resolution-and-release-channels</a>,
+  omitting <code>version</code> falls back to the git commit SHA, so every push is a new
+  version and users get updates automatically. We can add explicit semver
+  later when we want to gate updates.</li>
+</ul>
+<h3 id="pluginsmurielclaude-pluginpluginjson"><code>plugins/muriel/.claude-plugin/plugin.json</code><a class="headerlink" href="#pluginsmurielclaude-pluginpluginjson" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;muriel&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Multi-channel visual production skill with brand-token enforcement and 8:1 contrast minimum.&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">&quot;author&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Andy Edmonds&quot;</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nt">&quot;homepage&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://github.com/andyed/muriel&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="nt">&quot;license&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MIT&quot;</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="p">}</span>
+</code></pre></div>
+<p>Notes:</p>
+<ul>
+<li>Default skill / agent locations (<code>skills/</code>, <code>agents/</code>) are picked up
+  automatically — no need to declare them in the manifest.</li>
+<li><code>version</code> is again deliberately omitted; the marketplace resolves to the
+  commit SHA. <strong>Do not set <code>version</code> in both <code>plugin.json</code> and the
+  marketplace entry</strong> — the docs warn that <code>plugin.json</code> silently wins, which
+  has burned others.</li>
+<li><code>name</code> here is the plugin identifier and the slash-skill namespace prefix.
+  Keep it <code>muriel</code>.</li>
+</ul>
+<h2 id="6-the-murielskill-namespace-decision">6. The <code>/muriel:&lt;skill&gt;</code> namespace decision<a class="headerlink" href="#6-the-murielskill-namespace-decision" title="Permanent link">&para;</a></h2>
+<p>Plugin skills are namespaced as <code>/&lt;plugin-name&gt;:&lt;skill-folder-name&gt;</code>. With
+plugin name <code>muriel</code> and a skill folder named <code>muriel</code>, the invocation is
+<code>/muriel:muriel</code> — ugly, but accurate.</p>
+<p>Three options for the <strong>skill folder name</strong> inside <code>plugins/muriel/skills/</code>.
+This is independent of repo layout (§4):</p>
+<ol>
+<li><strong><code>muriel/</code></strong> — invocation becomes <code>/muriel:muriel</code>. Clear lineage with
+   the standalone install. Visually awkward.</li>
+<li><strong><code>compose/</code></strong> — invocation <code>/muriel:compose</code>. Maps to the verb the skill
+   actually performs (compose a visual artifact under brand constraints).
+   Cleaner read; small UX migration cost for the few existing standalone-
+   install users.</li>
+<li><strong><code>start/</code></strong> or <strong><code>index/</code></strong> — invocation <code>/muriel:start</code>. Generic, less
+   information-bearing.</li>
+</ol>
+<p><strong>Recommendation: option 2 (<code>compose/</code>).</strong> The standalone install at
+<code>~/.claude/skills/muriel/</code> continues to give <code>/muriel</code> for users on the
+legacy path; the plugin path gives <code>/muriel:compose</code>. Future siblings (e.g.
+<code>/muriel:critique</code> wrapping the agent — see §10) drop in cleanly.</p>
+<p>If keeping perfect parity with the standalone <code>/muriel</code> is more important
+than verb-clarity, take option 1 and accept <code>/muriel:muriel</code>.</p>
+<h2 id="7-skillmd-frontmatter">7. SKILL.md frontmatter<a class="headerlink" href="#7-skillmd-frontmatter" title="Permanent link">&para;</a></h2>
+<p>The current <code>SKILL.md</code> has <code>user-invocable: true</code> in its frontmatter. The
+plugins doc shows two frontmatter keys explicitly: <code>description</code> (required)
+and <code>disable-model-invocation</code> (optional, default false — i.e., model can
+invoke unless this is set).</p>
+<p>Action: keep <code>description</code>. Drop <code>user-invocable</code>; if the maintainer
+confirms it is silently ignored by the plugin loader, leave it removed; if it
+turns out to gate something, add a line back. Test step 1 in §9 is the place
+to verify.</p>
+<h2 id="8-installsh-updates">8. <code>install.sh</code> updates<a class="headerlink" href="#8-installsh-updates" title="Permanent link">&para;</a></h2>
+<p>Goal: legacy clone-and-run keeps working for <em>developers</em> working in the
+repo. End-user installs go through the plugin path.</p>
+<p>Required edits:</p>
+<ol>
+<li><strong>Update symlink targets</strong> to the new canonical paths under
+   <code>plugins/muriel/</code>:</li>
+<li><code>~/.claude/skills/muriel</code> → <code>$SRC/plugins/muriel/skills/&lt;skill-folder&gt;</code>
+     (the <code>&lt;skill-folder&gt;</code> chosen in §6).</li>
+<li><code>~/.claude/agents/muriel-critique.md</code> →
+     <code>$SRC/plugins/muriel/agents/muriel-critique.md</code></li>
+<li><strong>Detect existing plugin install.</strong> Before symlinking, check for a
+   muriel entry in Claude Code's plugin cache. Per
+   <a href="https://code.claude.com/docs/en/plugin-marketplaces#plugin-sources">https://code.claude.com/docs/en/plugin-marketplaces#plugin-sources</a> the
+   cache lives at <code>~/.claude/plugins/cache</code>. If
+   <code>~/.claude/plugins/cache/andyed-muriel/muriel/</code> (or any subdir matching
+   that pattern) exists, refuse and print:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>muriel is already installed via /plugin install. Skipping legacy symlink.
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>To switch to the dev-checkout install, first run:
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  /plugin uninstall muriel@andyed-muriel
+</code></pre></div>
+<p>The exact directory layout under <code>cache/</code> should be confirmed by running
+   <code>/plugin install</code> once on a clean box and inspecting the tree.
+3. <strong>Add a banner</strong> at the top of the script noting the plugin path is the
+   recommended end-user install method, with the two <code>/plugin …</code> commands
+   from §2.
+4. <strong>Keep the editable <code>pip install -e</code></strong> prompt — that is for hacking on
+   <code>muriel/critique.py</code> and the Python tools, unrelated to plugin install.</p>
+<p>The script remains supported for the dev workflow, but the README, the
+plugin doc, and the homepage should lead with <code>/plugin marketplace add</code>.</p>
+<h2 id="9-test-plan">9. Test plan<a class="headerlink" href="#9-test-plan" title="Permanent link">&para;</a></h2>
+<p>Five steps. Run on a clean macOS box, or in a fresh checkout that has never
+installed muriel before. Step 0 is pre-flight.</p>
+<ol>
+<li>
+<p><strong>Validate.</strong> From the repo root after the layout migration:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>claude plugin validate .
+</code></pre></div>
+   Catches malformed JSON, missing required fields, duplicate plugin names,
+   bad relative paths. <strong>Pass:</strong> no errors, only acceptable warnings.</p>
+</li>
+<li>
+<p><strong>Local plugin-dir load (no marketplace).</strong> Before pushing anything:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>claude --plugin-dir ./plugins/muriel
+</code></pre></div>
+   Inside that session:</p>
+</li>
+<li>Run <code>/help</code> and confirm the muriel skill appears under its namespace
+     (e.g. <code>/muriel:compose</code>).</li>
+<li>Invoke the skill with a trivial probe and confirm the response cites
+     the 8:1 contrast rule from <code>SKILL.md</code> (smoke test that SKILL.md loaded
+     and frontmatter parsed).</li>
+<li>Open the <code>Agent</code> tool's subagent picker and confirm <code>muriel-critique</code>
+     is listed.</li>
+<li>
+<p>Run <code>/reload-plugins</code> after touching a file to confirm dev workflow.</p>
+</li>
+<li>
+<p><strong>Marketplace add.</strong> Push the branch to GitHub, then:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>/plugin marketplace add andyed/muriel
+</code></pre></div>
+   Verify with <code>/plugin marketplace list</code> that <code>andyed-muriel</code> appears and
+   lists <code>muriel</code> in its catalog. <strong>If this fails:</strong> re-run
+   <code>claude plugin validate .</code> and check <code>marketplace.json</code> syntax with <code>jq</code>.</p>
+</li>
+<li>
+<p><strong>Install + content reachability.</strong> From a fresh Claude Code session:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>/plugin install muriel@andyed-muriel
+</code></pre></div>
+   Then:</p>
+</li>
+<li>Confirm the namespaced skill is invocable.</li>
+<li>Ask the skill to open <code>channels/svg.md</code> (or any file <code>SKILL.md</code>
+     references) and verify relative-path resolution still works inside the
+     cached install at <code>~/.claude/plugins/cache/andyed-muriel/muriel/</code>. This
+     is the most likely place a layout migration silently breaks: any
+     reference in <code>SKILL.md</code> that points at a file outside
+     <code>plugins/muriel/skills/&lt;skill-folder&gt;/</code> is broken because the cache
+     only copies the plugin root subtree.</li>
+<li>
+<p>Confirm the <code>muriel-critique</code> agent is loaded and runnable.</p>
+</li>
+<li>
+<p><strong>Dual-install conflict.</strong> With the plugin installed, run
+   <code>bash install.sh</code> from a clone of the repo. Confirm the script's new
+   detection (§8 step 2) refuses cleanly with the suggested
+   <code>/plugin uninstall</code> message. Then reverse: with <code>install.sh</code> symlinks in
+   place, run <code>/plugin install</code>. Document Claude Code's behavior:</p>
+</li>
+<li>(a) plugin install wins and the legacy symlink is shadowed;</li>
+<li>(b) Claude Code warns about the conflict; or</li>
+<li>
+<p>(c) only one is loaded with deterministic precedence.
+   Outcome (a) or (c) means the install.sh detection is the only guard
+   needed; outcome (b) means we can drop that detection.</p>
+</li>
+<li>
+<p><strong>Uninstall + reinstall.</strong>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>/plugin uninstall muriel@andyed-muriel
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>/plugin install muriel@andyed-muriel
+</code></pre></div>
+   Verify the namespaced skill disappears between the two and reappears
+   after. Confirms there's no orphan state in <code>~/.claude/plugins/cache/</code>.</p>
+</li>
+</ol>
+<h2 id="10-out-of-scope-follow-ups-not-blockers">10. Out of scope (follow-ups, not blockers)<a class="headerlink" href="#10-out-of-scope-follow-ups-not-blockers" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Public marketplace catalog.</strong> Submission to Anthropic's official
+  marketplace at <a href="https://claude.ai/settings/plugins/submit">https://claude.ai/settings/plugins/submit</a> or
+  <a href="https://platform.claude.com/plugins/submit">https://platform.claude.com/plugins/submit</a>. The
+  <code>/plugin marketplace add andyed/muriel</code> path works directly off GitHub
+  today; submission is a discovery upgrade, not a prerequisite.</li>
+<li><strong>Slash commands wrapping the critique agent.</strong> A <code>/muriel:critique</code>
+  slash skill that routes to the <code>muriel-critique</code> subagent with brand
+  context preloaded, instead of the current "invoke <code>Agent</code> manually"
+  workflow. Drops into <code>plugins/muriel/skills/critique/SKILL.md</code> later.</li>
+<li><strong>Hooks.</strong> The plugin format supports <code>hooks/hooks.json</code> (nested-by-event
+  schema — see the known-pitfall note in MEMORY:
+  <code>reference_claude_code_plugin_hooks_schema</code>). Candidates: pre-commit
+  "ran muriel-critique on changed visual artifacts," post-render "log to
+  research-log.jsonl." Not v0.</li>
+<li><strong><code>${CLAUDE_PLUGIN_ROOT}</code> and <code>${CLAUDE_PLUGIN_DATA}</code>.</strong> When hooks or
+  MCP servers ship in a future revision, they must reference plugin files
+  via <code>${CLAUDE_PLUGIN_ROOT}</code> (not relative paths) because the plugin runs
+  from the cache, not from the original checkout. Persistent state goes in
+  <code>${CLAUDE_PLUGIN_DATA}</code>.</li>
+<li><strong>Multi-plugin split.</strong> If muriel ever wants to ship a leaner core skill
+  separate from the full channel encyclopedia, the <code>plugins/</code> subdir from
+  §4 Option B accommodates that as a sibling directory.</li>
+<li><strong><code>extraKnownMarketplaces</code> for the muriel-plus-friends bundle.</strong> If we
+  ever want a "trust Andy's stuff by default" <code>.claude/settings.json</code>
+  fragment that prompts users to add the marketplace on project trust, that
+  belongs in a separate spec.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

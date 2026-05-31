@@ -1,0 +1,2351 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/channels/web/">
+      
+      
+        <link rel="prev" href="../svg/">
+      
+      
+        <link rel="next" href="../interactive/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Web - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#web-marginalia-pandoc-static-capture-data-uri" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Web
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#marginalia-editorial-html" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Marginalia — Editorial HTML
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Marginalia — Editorial HTML">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quick-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#markdown-patterns-subset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Markdown patterns (subset)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rules-from-past-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rules (from past feedback)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audit-the-html-before-shipping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit the HTML before shipping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#math-katex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Math — KaTeX
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pandoc-marginalia-bridge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pandoc → Marginalia Bridge
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pandoc → Marginalia Bridge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#light-editorial-variant-the-f-explainer-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Light editorial variant — the F explainer pattern
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Light editorial variant — the F explainer pattern">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extensions-beyond-core-marginalia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extensions beyond core marginalia
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#warm-editorial-palette" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Warm editorial palette
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-which-variant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use which variant
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web-rendering-static-capture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web Rendering &amp; Static Capture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Web Rendering &amp; Static Capture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tooling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tooling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-svg-png-via-playwright" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: SVG → PNG via Playwright
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsive-sweep-helper-murielcapture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsive sweep helper — muriel.capture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-marginalia-html-pdf-via-weasyprint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: marginalia HTML → PDF via weasyprint
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-capture-as-the-unifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static capture as the unifier
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-uri-embedding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data-URI Embedding
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data-URI Embedding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#size-budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Size budget
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caveats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caveats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#absolute-bans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Absolute bans
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="web-marginalia-pandoc-static-capture-data-uri">Web — Marginalia, Pandoc, Static Capture, Data-URI<a class="headerlink" href="#web-marginalia-pandoc-static-capture-data-uri" title="Permanent link">&para;</a></h1>
+<p>The editorial-HTML channel and its tooling. Covers:</p>
+<ul>
+<li><strong>Marginalia</strong> — the typographic callout library for blog posts and paper-style pages</li>
+<li><strong>Pandoc bridge</strong> — the Lua filter that emits marginalia classes from markdown</li>
+<li><strong>Web rendering &amp; static capture</strong> — Playwright / weasyprint / headless Chrome for DOM → PNG / PDF</li>
+<li><strong>Data-URI embedding</strong> — single-file portability trick for artifacts that must travel self-contained</li>
+</ul>
+<p>Part of the <a href="../../SKILL/">muriel</a> skill — see the top-level index for mission, universal rules, and channel map.</p>
+<h2 id="marginalia-editorial-html">Marginalia — Editorial HTML<a class="headerlink" href="#marginalia-editorial-html" title="Permanent link">&para;</a></h2>
+<p>The editorial layer for blog posts, paper-style web pages, and any prose that needs typographic callouts. 15 components, zero dependencies, dark theme by default. CSS-only — JS is optional.</p>
+<p><strong>Library:</strong> <a href="https://www.npmjs.com/package/marginalia"><code>marginalia</code></a> on npm (CDN: <code>marginalia@latest</code> via jsDelivr, see below). Source and full pattern catalog in the <a href="https://github.com/andyed/marginalia"><code>andyed/marginalia</code></a> repo; the repo's <code>SKILL.md</code> and <code>llm.md</code> are the reference docs when depth is needed.</p>
+<h3 id="quick-setup">Quick setup<a class="headerlink" href="#quick-setup" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/marginalia@latest/marginalia.css&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/marginalia@latest/marginalia.js&quot;</span> <span class="na">defer</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/marginalia@latest/marginalia-md.js&quot;</span> <span class="na">defer</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+<h3 id="markdown-patterns-subset">Markdown patterns (subset)<a class="headerlink" href="#markdown-patterns-subset" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>&gt; [!NOTE]    &gt; [!TIP]    &gt; [!WARNING]    &gt; [!IMPORTANT]
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>&gt; [!QUOTE]   &gt; [!ASIDE]  &gt; [!MARGIN]
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>==highlighted==    {Badge}    {Badge: tip}    [^1](footnote)
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>{dropcap}
+</code></pre></div>
+<p>Plain <code>&gt;</code> blockquotes become 3D perspective pull quotes — the signature component. Wrap content in <code>&lt;div class="mg-spread"&gt;</code> for two-column magazine layout.</p>
+<h3 id="rules-from-past-feedback">Rules (from past feedback)<a class="headerlink" href="#rules-from-past-feedback" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Core narrative inline always.</strong> Sidebars are for "go deeper" references only — one per section, at the heading.</li>
+<li><strong>Decorative elements ≥3:1 contrast.</strong> Don't fade below — compute the ratio.</li>
+<li><strong>All text 8:1 minimum.</strong></li>
+<li>All marginalia classes use <code>mg-</code> prefix. Theme via <code>--mg-*</code> CSS custom properties — these inherit into child SVGs, so a single theme switch repaints the whole page including embedded vector graphics.</li>
+</ul>
+<h3 id="audit-the-html-before-shipping">Audit the HTML before shipping<a class="headerlink" href="#audit-the-html-before-shipping" title="Permanent link">&para;</a></h3>
+<p><code>muriel.contrast</code> audits HTML files directly, not just SVG. It walks <code>&lt;style&gt;</code> blocks (skipping <code>@media</code> / <code>@keyframes</code>), resolves <code>var(--token)</code> chains end-to-end, walks inline <code>style="…"</code> attributes (deduping repeated colors), and runs the legibility-floor pass alongside contrast.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.contrast<span class="w"> </span>path/to/page.html
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.contrast<span class="w"> </span>path/to/page.html<span class="w"> </span>--required<span class="w"> </span><span class="m">4</span>.5<span class="w">      </span><span class="c1"># WCAG AA only</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.contrast<span class="w"> </span>path/to/page.html<span class="w"> </span>--background<span class="w"> </span><span class="s1">&#39;#fff&#39;</span><span class="w"> </span><span class="c1"># override</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.contrast<span class="w"> </span>path/to/page.html<span class="w"> </span>--no-inline<span class="w">         </span><span class="c1"># CSS rules only</span>
+</code></pre></div>
+<p>Exit status: <code>0</code> clean, <code>1</code> ratio failures, <code>2</code> legibility-only warnings (contrast passed but font-size/weight/opacity floors tripped), <code>3</code> usage error. The F-explainer AI Lab restyling pass is the reference exemplar — <code>~/Documents/dev/attentional-foraging/site/explainer/index-ailab.html</code> was caught and fixed by this audit (text-muted bumped from <code>#8a847a</code> (3.55:1) to <code>#4e483e</code> (8.67:1), TOC font-size bumped from 10px to 12px, byline/footer from <code>0.85em</code> to <code>1em</code>, opacity-on-text removed).</p>
+<h3 id="math-katex">Math — KaTeX<a class="headerlink" href="#math-katex" title="Permanent link">&para;</a></h3>
+<p>Marginalia essays with math drop <strong>KaTeX</strong> in via CDN + auto-render. MIT, no bundler, no MathJax-style runtime overhead. Pin to <code>^0.16</code>. Display math is <code>$$…$$</code>, inline is <code>$…$</code>. Wrap display equations in a <code>.eq-block</code> container themed from <code>--mg-*</code> variables so equations participate in the marginalia palette.</p>
+<p>Reference exemplar: <a href="https://github.com/andyed/psychodeli-webgl-port/blob/main/inside_the_math/index-marginalia.html"><code>inside_the_math</code></a> — math-heavy essay, marginalia + KaTeX + WebGL demos. Full vocabulary in <a href="../../vocabularies/katex/"><code>vocabularies/katex.md</code></a>: setup, the <code>.eq-block</code> pattern, color/emphasis with <code>\textcolor</code>, server-side rendering for stills.</p>
+<p>Do not use KaTeX for paper figures — see <a href="../science/"><code>channels/science.md</code></a>, where matplotlib + <code>usetex=True</code> keeps math inside the same TeX pass as the rest of the figure. KaTeX is the web answer; LaTeX is the paper answer.</p>
+<h2 id="pandoc-marginalia-bridge">Pandoc → Marginalia Bridge<a class="headerlink" href="#pandoc-marginalia-bridge" title="Permanent link">&para;</a></h2>
+<p>Pandoc 3.2+ recognizes GitHub-style alerts (<code>&gt; [!NOTE]</code>) via the <code>+alerts</code> extension. A Lua filter at <code>&lt;marginalia&gt;/pandoc/marginalia.lua</code> rewrites pandoc's output to marginalia classes: GitHub alerts → <code>mg-callout[data-type]</code>, extended markers (ASIDE/MARGIN/QUOTE) → <code>mg-sidebar</code> / <code>mg-margin</code> / <code>mg-pull</code>, plain blockquotes → <code>mg-pull</code>, <code>==mark==</code> → <code>mg-mark</code>, <code>{Badge}</code> and multi-word <code>{Text: type}</code> → <code>mg-badge</code>, pandoc footnotes → <code>mg-fn</code> popover, fenced code → <code>mg-code</code>, inline code → <code>mg-inline-code</code>, <code>{dropcap}</code> line marker → <code>mg-dropcap</code> wrap.</p>
+<h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pandoc<span class="w"> </span>draft.md<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--from<span class="w"> </span>markdown+mark+alerts<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--lua-filter<span class="w"> </span>&lt;marginalia&gt;/pandoc/marginalia.lua<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--template<span class="w"> </span>&lt;marginalia&gt;/pandoc/template.html<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>--standalone<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span>-o<span class="w"> </span>draft.html
+</code></pre></div>
+<p>Same source fans out to PDF (via weasyprint), DOCX, or EPUB without losing marginalia's typographic voice:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># HTML → PDF</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>weasyprint<span class="w"> </span>draft.html<span class="w"> </span>draft.pdf
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Direct to DOCX (filter still applies)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>pandoc<span class="w"> </span>draft.md<span class="w"> </span>--from<span class="w"> </span>markdown+mark+alerts<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>--lua-filter<span class="w"> </span>&lt;marginalia&gt;/pandoc/marginalia.lua<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span>-o<span class="w"> </span>draft.docx
+</code></pre></div>
+<h3 id="reference-example">Reference example<a class="headerlink" href="#reference-example" title="Permanent link">&para;</a></h3>
+<p>The <code>us-constitution.md</code> example in the marginalia repo — an annotated US Constitution reader's edition. Exercises every transformation: dropcap, all four callout colors, sidebars, margin notes in the desktop gutter via CSS Grid subgrid, pull quote, inline highlights, badges, footnote popover, fenced code, plus a cursive copperplate dropcap initial and closing signature paragraph. Good starting point for any new marginalia page.</p>
+<h2 id="light-editorial-variant-the-f-explainer-pattern">Light editorial variant — the F explainer pattern<a class="headerlink" href="#light-editorial-variant-the-f-explainer-pattern" title="Permanent link">&para;</a></h2>
+<p>The <a href="https://andyed.github.io/attentional-foraging/explainer/">Attentional Foraging F-pattern explainer</a> is the reference exemplar for a warm, reader-friendly light mode that extends marginalia beyond its default OLED palette. Reach for this pattern when a project wants explainer pages, blog posts, or paper drafts on a warm cream background instead of dark.</p>
+<blockquote>
+<p><strong>Note on status:</strong> the explainer is live and in active use, but some supplementary sections are still in draft; treat specific claims as provisional until the corresponding draft is lifted.</p>
+</blockquote>
+<h3 id="build-path">Build path<a class="headerlink" href="#build-path" title="Permanent link">&para;</a></h3>
+<p>The F explainer uses the browser-side <strong>marginalia-md.js</strong> converter via a Node build script, not pandoc. Different path from the pandoc bridge above, same underlying marginalia classes — the build script also post-processes <code>{dropcap}</code> into <code>&lt;p class="has-dropcap"&gt;</code> as a workaround for a marginalia-md rendering quirk.</p>
+<p><strong>When to use each path:</strong>
+- <strong>Pandoc bridge</strong> — for paper-draft round-trips (markdown → HTML → PDF → DOCX), when the same source needs to fan out to multiple output formats
+- <strong>marginalia-md.js + Node build</strong> — for single-target static explainer pages with heavy custom extensions and inline raw HTML</p>
+<h3 id="extensions-beyond-core-marginalia">Extensions beyond core marginalia<a class="headerlink" href="#extensions-beyond-core-marginalia" title="Permanent link">&para;</a></h3>
+<p>The F explainer adds four non-canonical patterns. They're worth knowing by name because they solve gaps marginalia doesn't cover:</p>
+<table>
+<thead>
+<tr>
+<th>Class / pattern</th>
+<th>Purpose</th>
+<th>Why it's not in core marginalia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>.outer-note</code></strong></td>
+<td>Short punchy margin labels (0.75em, amber <code>#b08050</code>, ~150px wide, <code>position: absolute; right: -180px</code>). Hidden at <code>max-width: 1100px</code>.</td>
+<td><code>mg-margin</code> is for full-sentence annotations; these are one-phrase rubrications that work like Tufte sidenotes.</td>
+</tr>
+<tr>
+<td><strong><code>.stats-detail</code></strong></td>
+<td>Inline span for numerical details with a dashed amber underline (<code>ρ = 0.02, p = .30</code>). Warm cream background, smaller font.</td>
+<td>No native inline-stats treatment in marginalia; inline <code>&lt;code&gt;</code> is wrong semantically.</td>
+</tr>
+<tr>
+<td><strong><code>.has-dropcap</code></strong> on <code>&lt;p&gt;</code> directly</td>
+<td><code>{dropcap}</code> line marker post-processed to <code>&lt;p class="has-dropcap"&gt;</code>. CSS targets <code>p.has-dropcap::first-letter</code>.</td>
+<td>Works around a marginalia-md.js rendering quirk; conceptually equivalent to our pandoc filter's <code>mg-dropcap</code> div wrap.</td>
+</tr>
+<tr>
+<td><strong>Staged h2 colors via <code>:nth-of-type</code></strong></td>
+<td><code>h2:nth-of-type(1..4)</code> get gold/red/blue/green for the OSEC stages (Orient, Survey, Evaluate, Commit).</td>
+<td>Document-structure-driven color. Works because this page's h2s are the OSEC stages in order, so position <em>is</em> semantics.</td>
+</tr>
+</tbody>
+</table>
+<p>The F explainer also floats <code>.mg-margin</code> and <code>.mg-sidebar</code> to the right <em>inside</em> the content area (230px width, amber-tinted <code>#d4a574</code> border) rather than escaping to the outer gutter the way the US Constitution example does. Reader-friendly on narrower viewports.</p>
+<h3 id="warm-editorial-palette">Warm editorial palette<a class="headerlink" href="#warm-editorial-palette" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Value</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Background</td>
+<td><code>#fafaf8</code></td>
+<td>Warm cream, not pure white</td>
+</tr>
+<tr>
+<td>Body text</td>
+<td><code>#222222</code></td>
+<td>Near-black on Georgia serif</td>
+</tr>
+<tr>
+<td>Accent amber</td>
+<td><code>#d4a574</code></td>
+<td>Margin-note borders, legend edges</td>
+</tr>
+<tr>
+<td>Note blue</td>
+<td><code>#f5f8fd</code> bg + <code>#2266cc80</code> border</td>
+<td>Info callouts</td>
+</tr>
+<tr>
+<td>Tip green</td>
+<td><code>#f2faf4</code> bg + <code>#22883380</code> border</td>
+<td>Positive notes</td>
+</tr>
+<tr>
+<td>Warning amber</td>
+<td><code>#fdf9f0</code> bg + <code>#cc880080</code> border</td>
+<td>Cautions</td>
+</tr>
+<tr>
+<td>Important red</td>
+<td><code>#fdf5f5</code> bg + <code>#cc444480</code> border</td>
+<td>Emphasis</td>
+</tr>
+<tr>
+<td>Stats-detail bg</td>
+<td><code>#f8f4ee</code> + dashed <code>#d4a574</code> underline</td>
+<td>Inline numerical callouts</td>
+</tr>
+</tbody>
+</table>
+<p>Matching matplotlibrc: <a href="https://github.com/andyed/muriel/blob/main/muriel/matplotlibrc_light.py"><code>muriel/matplotlibrc_light.py</code></a>. Same Georgia stack, same <code>#fafaf8</code> figure facecolor — figures rendered with the light rcparams match the editorial palette 1:1.</p>
+<h3 id="when-to-use-which-variant">When to use which variant<a class="headerlink" href="#when-to-use-which-variant" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Dark (OLED)</strong> — default. Blog posts on dark-themed sites, paper figures destined for a dark slide deck, any page using the default <code>data-mg-theme="dark"</code>.</li>
+<li><strong>Light editorial</strong> — long-form explainers, paper drafts in light review UI, blog posts on light-themed sites. Match to the F explainer when the voice is "reader's edition" not "research console".</li>
+</ul>
+<p><strong>Pick one per document.</strong> Don't mix dark and light callouts in the same paper or post.</p>
+<h2 id="web-rendering-static-capture">Web Rendering &amp; Static Capture<a class="headerlink" href="#web-rendering-static-capture" title="Permanent link">&para;</a></h2>
+<p>The "DOM is the rendering engine" trick: build the artifact as HTML/CSS/SVG/JS, then capture it with headless Chrome or Playwright. Combines marginalia's editorial chrome, SVG's vector precision, and interactive JS's parameter sliders — then freezes one state into PNG or PDF for distribution.</p>
+<h3 id="when-to-use">When to use<a class="headerlink" href="#when-to-use" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Capture an SVG that's CSS-themed at runtime (avoids redoing colors per export)</li>
+<li>Snapshot an interactive demo at a specific parameter state</li>
+<li>Render a marginalia paper-style HTML page as PDF for paper submission</li>
+<li>Build infographics in HTML (CSS Grid, marginalia callouts, embedded SVG) and rasterize for store/social</li>
+<li>Capture a Three.js scene at exact framing for blog hero images</li>
+<li>Generate device-frame screenshots from real page renders rather than mocking in Photoshop</li>
+</ul>
+<h3 id="tooling">Tooling<a class="headerlink" href="#tooling" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Strength</th>
+<th>Recipe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Playwright</strong> (Python or Node)</td>
+<td>Full automation, waits for fonts/network/JS, supports clip regions</td>
+<td><code>page.goto(url); page.locator('svg').screenshot()</code></td>
+</tr>
+<tr>
+<td><strong>Puppeteer</strong></td>
+<td>Same idea, Chrome-only, lighter</td>
+<td><code>await page.screenshot({ path, clip })</code></td>
+</tr>
+<tr>
+<td><strong><code>chrome --headless --screenshot</code></strong></td>
+<td>Zero-script one-off</td>
+<td><code>chrome --headless --screenshot=out.png --window-size=1280,720 file://...</code></td>
+</tr>
+<tr>
+<td><strong><code>weasyprint</code></strong></td>
+<td>HTML+CSS → PDF without a browser; respects <code>@page</code> rules</td>
+<td><code>weasyprint input.html out.pdf</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="patterns">Patterns<a class="headerlink" href="#patterns" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Wait for fonts.</strong> <code>page.evaluate(() =&gt; document.fonts.ready)</code> before screenshot, or webfonts render mid-capture.</li>
+<li><strong>Set <code>device_scale_factor=2</code></strong> for retina-quality output.</li>
+<li><strong>Use <code>clip</code> regions</strong> to capture a single SVG/canvas instead of the whole viewport.</li>
+<li><strong>Inject parameters via URL hash</strong> so the same demo HTML can be captured at multiple states (pairs with PermalinkManager pattern).</li>
+<li><strong>Use <code>--virtual-time-budget</code></strong> in headless Chrome to fast-forward animations to a stable frame.</li>
+<li><strong><code>prefers-color-scheme: dark</code> matters.</strong> Force it via <code>page.emulate_media(color_scheme='dark')</code> so OLED palette renders correctly.</li>
+<li><strong>Capture small multiples in one run.</strong> Loop over parameter values, set URL hash, screenshot. Output a grid of frames that compose into a small-multiples figure.</li>
+</ul>
+<h3 id="example-svg-png-via-playwright">Example: SVG → PNG via Playwright<a class="headerlink" href="#example-svg-png-via-playwright" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">playwright.sync_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">sync_playwright</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">with</span> <span class="n">sync_playwright</span><span class="p">()</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">browser</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">chromium</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">page</span> <span class="o">=</span> <span class="n">browser</span><span class="o">.</span><span class="n">new_page</span><span class="p">(</span><span class="n">device_scale_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">page</span><span class="o">.</span><span class="n">set_content</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;chart.html&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s1">&#39;document.fonts.ready&#39;</span><span class="p">)</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span><span class="s1">&#39;svg#chart&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;chart.png&#39;</span><span class="p">)</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="n">browser</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="responsive-sweep-helper-murielcapture">Responsive sweep helper — <code>muriel.capture</code><a class="headerlink" href="#responsive-sweep-helper-murielcapture" title="Permanent link">&para;</a></h3>
+<p>For "what does this look like at mobile/tablet/laptop/desktop?" in one command, the paired module <a href="https://github.com/andyed/muriel/blob/main/muriel/capture.py"><code>muriel/capture.py</code></a> wraps Playwright around the tier data in <a href="https://github.com/andyed/muriel/blob/main/muriel/dimensions.py"><code>muriel/dimensions.py</code></a>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel.capture</span><span class="w"> </span><span class="kn">import</span> <span class="n">capture_responsive</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">paths</span> <span class="o">=</span> <span class="n">capture_responsive</span><span class="p">(</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://example.com/&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;captures/&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="n">color_scheme</span><span class="o">=</span><span class="s2">&quot;dark&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="p">)</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="c1"># Writes four retina PNGs (device_scale_factor=2):</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="c1">#   captures/example-com-mobile-390x844.png</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="c1">#   captures/example-com-tablet-820x1180.png</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="c1">#   captures/example-com-laptop-1280x800.png</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="c1">#   captures/example-com-desktop-1920x1080.png</span>
+</code></pre></div>
+<p>Or from the command line:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.capture<span class="w"> </span>https://example.com/
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.capture<span class="w"> </span>https://example.com<span class="w"> </span>--dir<span class="w"> </span>captures/<span class="w"> </span>--dark
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.capture<span class="w"> </span>https://example.com<span class="w"> </span>--selector<span class="w"> </span>main<span class="w"> </span>--slug<span class="w"> </span>hero
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.capture<span class="w"> </span>https://example.com<span class="w"> </span>--tiers<span class="w"> </span>mobile-large<span class="w"> </span>desktop-qhd<span class="w"> </span>ultrawide
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.capture<span class="w"> </span>https://example.com<span class="w"> </span>--full-page
+</code></pre></div>
+<p>Defaults: four-tier sweep (<code>mobile tablet laptop desktop</code>), <code>device_scale_factor=2</code>, wait for <code>document.fonts.ready</code>, wait for <code>networkidle</code>. Output filenames follow the naming convention in <a href="../dimensions/#naming-convention-for-exported-files"><code>channels/dimensions.md</code></a>. Exit <code>0</code> on full success, <code>1</code> if any tier failed, <code>2</code> on missing Playwright / Chromium or usage error. Playwright is an optional install — the module is importable without it and raises a clean <code>ImportError</code> with install instructions on first call to <code>capture_responsive()</code>.</p>
+<h3 id="example-marginalia-html-pdf-via-weasyprint">Example: marginalia HTML → PDF via weasyprint<a class="headerlink" href="#example-marginalia-html-pdf-via-weasyprint" title="Permanent link">&para;</a></h3>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>weasyprint<span class="w"> </span>paper-draft.html<span class="w"> </span>paper-draft.pdf
+</code></pre></div>
+Add <code>@page { size: A4; margin: 2cm }</code> to the marginalia stylesheet override for paper formatting.</p>
+<h3 id="static-capture-as-the-unifier">Static capture as the unifier<a class="headerlink" href="#static-capture-as-the-unifier" title="Permanent link">&para;</a></h3>
+<p>This channel is what makes the whole toolkit composable. SVG rendered with CSS theming → captured as PNG → embedded in a video. Interactive demo at three parameter states → captured as small multiples → assembled into one image. Marginalia page → captured as PDF for submission. <strong>The DOM is the most flexible compositor; static capture is the export step.</strong></p>
+<h2 id="data-uri-embedding">Data-URI Embedding<a class="headerlink" href="#data-uri-embedding" title="Permanent link">&para;</a></h2>
+<p>The portability trick: embed images directly inside HTML/SVG/CSS as <code>data:image/png;base64,...</code> URIs. Single-file artifacts with zero asset management — they email, paste into Slack, copy onto USB sticks, embed in iframes from sandboxes that block external loads.</p>
+<h3 id="when-to-use_1">When to use<a class="headerlink" href="#when-to-use_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Single-file HTML demos (one file = the whole thing)</li>
+<li>SVG with embedded raster textures (one file = the whole figure)</li>
+<li>Marginalia blog post fragments that need to be paste-able</li>
+<li>Email-friendly artifacts (Outlook/Gmail strip external <code>&lt;img&gt;</code> until clicked)</li>
+<li>Paper figures where the journal wants a self-contained submission</li>
+<li>CSS backgrounds without HTTP round-trips</li>
+<li>Inlining icons inside SVG so a single file renders correctly when downloaded</li>
+</ul>
+<h3 id="recipes">Recipes<a class="headerlink" href="#recipes" title="Permanent link">&para;</a></h3>
+<p><strong>Bash → data URI:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># PNG → data URI string</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;data:image/png;base64,</span><span class="k">$(</span>base64<span class="w"> </span>-i<span class="w"> </span>input.png<span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;\n&#39;</span><span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># SVG → data URI (URL-encoded, smaller than base64 for SVG)</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import urllib.parse; print(&#39;data:image/svg+xml,&#39; + urllib.parse.quote(open(&#39;input.svg&#39;).read()))&quot;</span>
+</code></pre></div></p>
+<p><strong>Python → data URI:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">data_uri</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mime</span><span class="o">=</span><span class="s1">&#39;image/png&#39;</span><span class="p">):</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>        <span class="n">b64</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;data:</span><span class="si">{</span><span class="n">mime</span><span class="si">}</span><span class="s1">;base64,</span><span class="si">{</span><span class="n">b64</span><span class="si">}</span><span class="s1">&#39;</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="n">img_uri</span> <span class="o">=</span> <span class="n">data_uri</span><span class="p">(</span><span class="s1">&#39;icon.png&#39;</span><span class="p">)</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="n">html</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&lt;img src=&quot;</span><span class="si">{</span><span class="n">img_uri</span><span class="si">}</span><span class="s1">&quot;&gt;&#39;</span>
+</code></pre></div></p>
+<p><strong>Pillow → data URI without writing a file:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io</span><span class="o">,</span><span class="w"> </span><span class="nn">base64</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="n">buf</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;PNG&#39;</span><span class="p">)</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="n">uri</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;data:image/png;base64,</span><span class="si">{</span><span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span>
+</code></pre></div></p>
+<p><strong>SVG <code>&lt;image&gt;</code> element with embedded raster:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">&lt;svg</span><span class="w"> </span><span class="na">viewBox=</span><span class="s">&quot;0 0 400 200&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">&lt;image</span><span class="w"> </span><span class="na">href=</span><span class="s">&quot;data:image/png;base64,iVBORw0KG...&quot;</span><span class="w"> </span><span class="na">width=</span><span class="s">&quot;400&quot;</span><span class="w"> </span><span class="na">height=</span><span class="s">&quot;200&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="nt">&lt;/svg&gt;</span>
+</code></pre></div></p>
+<h3 id="size-budget">Size budget<a class="headerlink" href="#size-budget" title="Permanent link">&para;</a></h3>
+<p>Base64 inflates by ~33%. Stay under ~200 KB per image inside HTML; above that, prefer external assets unless portability is non-negotiable. SVGs URL-encode smaller than base64 — use <code>urllib.parse.quote</code> instead.</p>
+<h3 id="caveats">Caveats<a class="headerlink" href="#caveats" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Data URIs <strong>bypass browser cache</strong>. Don't use for images that repeat across many pages.</li>
+<li>Some XML parsers reject very long attribute values.</li>
+<li>Email clients are inconsistent: Gmail strips data URIs in some contexts, Outlook handles them in HTML body but not signatures.</li>
+</ul>
+<h2 id="anti-patterns">Anti-patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Don't exceed ~75 characters per line</strong> of body prose. Reading span research backs the 65–75ch cap.</li>
+<li><strong>Don't animate layout properties</strong> (<code>width</code>, <code>margin</code>, <code>top</code>, <code>left</code>). Use <code>transform</code> + <code>opacity</code> only; layout animations trigger reflow every frame.</li>
+<li><strong>Don't use pure <code>#000</code> or <code>#fff</code>.</strong> Cream + near-black per the OLED palette; pure black/white is harsh on OLED and pure white flares on cream backgrounds.</li>
+<li><strong>Don't chain more than two CSS custom-property fallbacks.</strong> A third fallback means the token system is underspecified — fix the schema, don't paper over it.</li>
+</ul>
+<h2 id="absolute-bans">Absolute bans<a class="headerlink" href="#absolute-bans" title="Permanent link">&para;</a></h2>
+<p>Five escalated anti-patterns — channel-spanning but most visible in web work. Named so the <a href="../../../agents/muriel-critique.md"><code>muriel-critique</code></a> agent can cite them directly and so a human reviewer has a finite list of "stop, don't ship this."</p>
+<ul>
+<li>
+<p><strong><code>gradient-text</code></strong> — <code>background-clip: text</code> with a gradient fill. Unreadable at body sizes (the gradient traverses low-contrast hues by construction, failing 8:1 across its span) and telegraphs <em>designer reached for the default Figma preset</em>. Vary weight/size for hierarchy; keep text one color.</p>
+</li>
+<li>
+<p><strong><code>side-stripe-borders</code></strong> — card or alert with <code>border-left: 4px solid accent</code> (or any border &gt; 1px on a single side). Identifies the artifact as a Tailwind-CSS-template card at a glance. Use background tint or iconography for the same semantic signal.</p>
+</li>
+<li>
+<p><strong><code>rounded-rect-with-drop-shadow</code></strong> — default <code>border-radius: 8–12px</code> plus <code>box-shadow: 0 4px 12px rgba(0,0,0,0.1)</code> is the most-recognizable "AI card" aesthetic. If someone can identify the artifact as AI-generated in the first second, it has no distinctiveness. Make a deliberate choice: square corners + no shadow, a pronounced shadow that commits to elevation, or a different grouping signal entirely (proximity, background tint).</p>
+</li>
+<li>
+<p><strong><code>bounce-easing</code></strong> — <code>cubic-bezier</code> curves with overshoot (elastic, back-out, Material's "playful" namespace). Reads as amateur motion design outside a toy. Use smooth curves — <code>cubic-bezier(0.2, 0, 0.2, 1)</code> or your brand's <code>motion.easing_default</code> token.</p>
+</li>
+<li>
+<p><strong><code>reflex-fonts</code></strong> — defaulting to the overused web stack without a reason: <strong>Inter</strong>, <strong>DM Sans</strong>, <strong>Instrument Sans</strong>, <strong>Geist</strong>, <strong>Satoshi</strong>, or <code>system-ui</code> chosen because it's safe. Fine tools, but everyone reaches for them because Vercel's starters do, which means the artifact looks like every other 2024–2026 landing page. Choose deliberately; if your brand doesn't have a display typeface, consider Helvetica Neue (restrained), Söhne (licensed), Work Sans, IBM Plex, or a serif/slab your brand is willing to commit to. muriel's <code>brand.toml</code> has a <code>[typography]</code> block — use it.</p>
+</li>
+</ul>
+<p><em>The "absolute bans" escalation and the reflex-fonts concept are borrowed with permission from <a href="https://github.com/pbakaus/impeccable">pbakaus/impeccable</a> (Apache-2.0, </em><em>Skill 3.1.1</em><em> as of May 2026), rephrased in muriel's voice. The underlying insight that a short named-ban list is a stronger instrument than a long positive-rule list is theirs. Impeccable now ships twenty-seven deterministic anti-pattern rules plus twelve LLM-critique rules (a much broader register than what's encoded here) and a standalone <code>npx impeccable detect &lt;path-or-url&gt;</code> CLI that runs regex + headless-Chrome scans with no API key required — a deterministic complement to muriel's vision-model <code>muriel-critique</code> agent. The shortest pipeline for a web artifact: <code>muriel capture</code> → <code>npx impeccable detect</code> → <code>muriel-critique</code>. See <a href="../../../../HARNESSES.md"><code>HARNESSES.md</code></a> for cross-harness packaging that mirrors impeccable's eleven-harness matrix.</em></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

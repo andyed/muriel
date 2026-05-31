@@ -1,0 +1,2125 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/vocabularies/echarts/">
+      
+      
+        <link rel="prev" href="../pixijs/">
+      
+      
+        <link rel="next" href="../declassified/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>ECharts - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#echarts-option-tree-charting-substrate" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ECharts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#version-and-licensing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version and licensing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dark-mode-baseline-the-studio-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dark-mode baseline (the studio pattern)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#time-segmented-overlays-markarea" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Time-segmented overlays (markArea)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-series-color-contract-the-bug-i-burned-a-round-trip-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The series color contract — the bug I burned a round-trip on
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#playhead-sync-gotchas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Playhead sync gotchas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#echarts-diffs-the-option-tree-dont-fight-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ECharts diffs the option tree (don't fight it)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-axis-discipline-dont-lie-with-scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-axis discipline (don't lie with scaling)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-shape-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data-shape contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#renderer-canvas-vs-svg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Renderer: canvas vs SVG
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#worked-exemplar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worked exemplar
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-i-dont-trust-myself-to-write-without-checking-the-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What I don't trust myself to write without checking the docs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#heatmap-visualmap-the-3d-projected-grid-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Heatmap + visualMap (the "3D projected grid" pattern)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-verification-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live-verification protocol
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="echarts-option-tree-charting-substrate">ECharts — option-tree charting substrate<a class="headerlink" href="#echarts-option-tree-charting-substrate" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Candor up front:</strong> Anthropic's training data has deep coverage of D3 and matplotlib and good coverage of Plotly/Chart.js, but ECharts is <em>under-represented</em>. When generating ECharts code, we get it ~right structurally but routinely hallucinate field names, miss the <code>markArea</code> two-element pair shape, mis-nest <code>axisLine.lineStyle.color</code>, or invent option keys that don't exist. <strong>Verify against the upstream docs every time:</strong> <a href="https://echarts.apache.org/en/option.html">echarts.apache.org/en/option.html</a>. Don't ship ECharts code untested.</p>
+</blockquote>
+<p><strong>When to reach for it.</strong> ECharts shines when you need a declarative time-series / scatter / radar chart on a dark-theme dashboard, with multiple overlaid series, brushable selection, and built-in tooltip + legend + zoom out of the box. It's the lightest substrate when:</p>
+<ul>
+<li>The piece is interactive (live data, hover, brush, drilldown) — D3 lets you do everything but you re-implement the chrome each time</li>
+<li>The chart already has more than one series and a tooltip on every datapoint would be useful — Chart.js handles single-series-with-tooltip well but multi-series tooltips are clumsy</li>
+<li>The chart is part of a larger UI (dashboard, report, studio surface) that already loads a JS framework — ECharts ships as a single <code>~1MB</code> minified file</li>
+<li>You want time-segmented overlays (<code>markArea</code>) and live cursor sync (<code>markLine</code>) without writing your own SVG primitives — D3 makes you build them; ECharts has them as first-class</li>
+</ul>
+<p><strong>Don't reach for it when:</strong></p>
+<ul>
+<li>The output is a static SVG paper figure → use matplotlib via <a href="../../channels/science/"><code>channels/science.md</code></a>, or D3+SVG via <a href="../../channels/svg/"><code>channels/svg.md</code></a>. ECharts' SVG renderer exists but the DX is canvas-first.</li>
+<li>The chart is a one-off table-replacement (e.g. a single sparkline) → <a href="../../channels/terminal/"><code>channels/terminal.md</code></a> or plain SVG.</li>
+<li>The piece needs strict Tufte / 8:1 chrome enforcement → start from <a href="../../channels/charts/"><code>channels/charts.md</code></a>, which has the per-library anti-pattern table. ECharts defaults violate most of that table; the configs below override them.</li>
+<li>You're going to ship the chart as a sharable PNG → render via headless screenshot or use matplotlib directly. ECharts is interactive-first.</li>
+</ul>
+<h2 id="version-and-licensing">Version and licensing<a class="headerlink" href="#version-and-licensing" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Pin to <strong><code>echarts@^5.4</code></strong> (current stable line). CDN: <code>https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js</code> — gzipped ≈ 350 KB.</li>
+<li>Apache-2.0 license — safe to vendor.</li>
+<li>For offline use (studio surfaces, file:// pages), download the dist file and reference it locally. Don't rely on the CDN when the artifact has to survive a network outage.</li>
+</ul>
+<h2 id="dark-mode-baseline-the-studio-pattern">Dark-mode baseline (the studio pattern)<a class="headerlink" href="#dark-mode-baseline-the-studio-pattern" title="Permanent link">&para;</a></h2>
+<p>ECharts' defaults are tuned for light pages: white background, dark <code>#666</code> axis text, white tooltip with subtle border, light gray gridlines. On a dark surface they read as blown-out chrome. The fix is to override five blocks in <code>setOption</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">chart</span><span class="p">.</span><span class="nx">setOption</span><span class="p">({</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="c1">// 1. Inherit page background — don&#39;t paint a white box behind the chart.</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nx">backgroundColor</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;transparent&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="c1">// 2. Set base text color so legend, axis labels, tooltip inherit it.</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="c1">//    Use the brand&#39;s primary foreground; ECharts cascades textStyle through children.</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nx">textStyle</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#e8e4f0&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nx">fontFamily</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;system-ui, sans-serif&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="c1">// 3. Axes — line color must be visible on dark, splitLine should be subtle.</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="c1">//    (Repeat for yAxis.)</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="nx">xAxis</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="nx">axisLine</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">lineStyle</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#5a5470&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">   </span><span class="c1">// visible but quiet</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="nx">splitLine</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">lineStyle</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#2a2638&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">  </span><span class="c1">// even quieter — guides the eye, doesn&#39;t compete</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span><span class="c1">// 4. Tooltip — the white default is the worst offender on dark themes.</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span><span class="nx">tooltip</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">    </span><span class="nx">trigger</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;axis&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">    </span><span class="nx">backgroundColor</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;rgba(20, 18, 26, 0.95)&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">    </span><span class="nx">borderColor</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#3a3450&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="nx">textStyle</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#e8e4f0&#39;</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">  </span><span class="c1">// 5. Legend — explicit text color (ECharts ignores parent textStyle here in some versions).</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">  </span><span class="nx">legend</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">textStyle</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#b8b3c8&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">  </span><span class="nx">series</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="cm">/* … */</span><span class="p">],</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="p">});</span>
+</code></pre></div>
+<p>This is enough for any single-chart dashboard panel. For multi-chart pages, wrap the above in a theme object and <code>echarts.registerTheme('studio-dark', theme)</code>; then <code>echarts.init(el, 'studio-dark')</code>. But registering a custom theme is more ceremony than most studio pieces need — inline overrides are fine for ≤3 chart instances.</p>
+<h2 id="time-segmented-overlays-markarea">Time-segmented overlays (<code>markArea</code>)<a class="headerlink" href="#time-segmented-overlays-markarea" title="Permanent link">&para;</a></h2>
+<p>The most powerful ECharts feature for asserted-arc-style timelines: rectangular bands behind a time series, each spanning a labeled time range. Used in psychodeli-audio-lab/studio to overlay state-target phases (relaxed / focused / open-monitoring / hypnagogic) on a 48-second analyzer-feature timeline.</p>
+<p><strong>The shape (commonly mis-written):</strong> <code>markArea.data</code> is a list of <strong>pairs</strong>. Each pair is <code>[startObj, endObj]</code>, where the first object specifies the leading edge + visual style and the second specifies the trailing edge. Both objects use <code>xAxis</code> (or <code>yAxis</code>) for the coordinate.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nx">series</span><span class="o">:</span><span class="w"> </span><span class="p">[{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;line&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="nx">tSec</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">[</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">values</span><span class="p">[</span><span class="nx">i</span><span class="p">]]),</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nx">markArea</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nx">silent</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">                          </span><span class="c1">// don&#39;t intercept hover on data points</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nx">label</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">position</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;top&#39;</span><span class="w"> </span><span class="p">},</span><span class="w">            </span><span class="c1">// label sits above the chart, not inside the band</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="p">[</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;drone_solo&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">xAxis</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">          </span><span class="nx">itemStyle</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;rgba(155,110,200,0.18)&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">                       </span><span class="nx">borderColor</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#9b6ec8&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">borderWidth</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">xAxis</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">      </span><span class="p">],</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="p">[</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;chant_call&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">xAxis</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">          </span><span class="nx">itemStyle</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;rgba(155,110,200,0.18)&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">xAxis</span><span class="o">:</span><span class="w"> </span><span class="mf">20</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">      </span><span class="p">],</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">    </span><span class="p">]</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="p">}]</span>
+</code></pre></div>
+<p>Three traps I hit:</p>
+<ul>
+<li><strong>The hallucinated single-object form.</strong> Plenty of generated code writes <code>data: [{ name, xAxis: [t0, t1], itemStyle }]</code>. Wrong shape — ECharts silently renders nothing. Always the <strong>pair</strong>.</li>
+<li><strong>Missing <code>silent: true</code>.</strong> Without it, the band's invisible bounding box intercepts mouse events meant for the data series — tooltips stop firing on hover over the band region.</li>
+<li><strong>Label position default is <code>'inside'</code></strong> which paints the segment name <em>over</em> your data. <code>position: 'top'</code> floats it above the chart frame and usually reads cleaner.</li>
+</ul>
+<h2 id="the-series-color-contract-the-bug-i-burned-a-round-trip-on">The series color contract — the bug I burned a round-trip on<a class="headerlink" href="#the-series-color-contract-the-bug-i-burned-a-round-trip-on" title="Permanent link">&para;</a></h2>
+<p><strong>Setting <code>lineStyle.color</code> is not enough.</strong> ECharts treats <code>color</code> at the series root as the "series base color" — it drives the legend marker, the tooltip dot, and the default symbol fill. <code>lineStyle.color</code> only paints the line itself. If you set only <code>lineStyle.color</code>, the line draws in your color but the legend marker (and tooltip dot) keeps using ECharts' default 9-color palette:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>default_palette: [&#39;#5470c6&#39;, &#39;#91cc75&#39;, &#39;#fac858&#39;, &#39;#ee6666&#39;, &#39;#73c0de&#39;, &#39;#3ba272&#39;, &#39;#fc8452&#39;, &#39;#9a60b4&#39;, &#39;#ea7ccc&#39;]
+</code></pre></div>
+<p>Caught the live in psychodeli-audio-lab/studio: I'd set five <code>lineStyle.color: BRAND.X</code> overrides and the lines drew correctly, but the legend showed <code>#5470c6 #91cc75 #fac858 #ee6666 #73c0de</code> — every legend marker pulled the default palette in index order. Looked correct in isolation, was 100% lying about which line was which.</p>
+<p><strong>The reliable pattern: set BOTH top-level <code>color: []</code> AND series-root <code>color</code></strong> for every series with brand colors:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nx">chart</span><span class="p">.</span><span class="nx">setOption</span><span class="p">({</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="c1">// Series-cycle palette — drives any series without an explicit `color`.</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">BRAND</span><span class="p">.</span><span class="nx">accent</span><span class="p">,</span><span class="w"> </span><span class="nx">BRAND</span><span class="p">.</span><span class="nx">stateRelaxed</span><span class="p">,</span><span class="w"> </span><span class="nx">BRAND</span><span class="p">.</span><span class="nx">stateFocused</span><span class="p">,</span><span class="w"> </span><span class="nx">BRAND</span><span class="p">.</span><span class="nx">stateHypnagogic</span><span class="p">,</span><span class="w"> </span><span class="nx">BRAND</span><span class="p">.</span><span class="nx">fail</span><span class="p">],</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nx">series</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">      </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;centroid (Hz)&#39;</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">      </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;line&#39;</span><span class="p">,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="nx">BRAND</span><span class="p">.</span><span class="nx">accent</span><span class="p">,</span><span class="w">                        </span><span class="c1">// legend marker + tooltip dot</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">      </span><span class="nx">lineStyle</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">width</span><span class="o">:</span><span class="w"> </span><span class="mf">1.8</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="nx">BRAND</span><span class="p">.</span><span class="nx">accent</span><span class="w"> </span><span class="p">},</span><span class="w">  </span><span class="c1">// line stroke</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">      </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="cm">/* … */</span><span class="p">,</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="c1">// … same shape per series</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="p">});</span>
+</code></pre></div>
+<p>Why both? The top-level <code>color: []</code> array is the categorical palette ECharts cycles through. Per-series <code>color</code> is an explicit override. Setting both makes the contract explicit (no positional dependency on series order) and survives series-list reordering during refactor.</p>
+<p>Other <code>color</code>-family fields that have their own narrow purpose:</p>
+<ul>
+<li><code>itemStyle.color</code> — fill color for symbols, bars, pie slices. For line charts with <code>showSymbol: false</code>, irrelevant.</li>
+<li><code>areaStyle.color</code> — for stacked area charts; fill below the line.</li>
+<li><code>emphasis.itemStyle.color</code> — hover state. Defaults to the series base color brightened ~30%; explicit override only if the default doesn't read on your background.</li>
+</ul>
+<p>If you see the legend in default-palette colors while the lines render correctly, that's this bug. Fix: set <code>color</code> at series root.</p>
+<h2 id="playhead-sync-gotchas">Playhead sync gotchas<a class="headerlink" href="#playhead-sync-gotchas" title="Permanent link">&para;</a></h2>
+<p>Pattern from studio: bind a <code>markLine</code> to the audio element's <code>currentTime</code>. <strong>Don't drive it from <code>timeupdate</code> alone — programmatic <code>audio.currentTime = X</code> while paused does NOT fire <code>timeupdate</code>.</strong> That event is playback-locked (fires ~4Hz only while the audio is playing). For seek-to-segment UX or any non-playback playhead movement, subscribe to <code>seeked</code> AND <code>loadedmetadata</code> as well:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;player&#39;</span><span class="p">);</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">drawPlayhead</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nx">chart</span><span class="p">.</span><span class="nx">setOption</span><span class="p">({</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nx">series</span><span class="o">:</span><span class="w"> </span><span class="p">[{</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="nx">markLine</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nx">symbol</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;none&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">silent</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nx">animation</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nx">lineStyle</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="nx">BRAND</span><span class="p">.</span><span class="nx">fg</span><span class="p">,</span><span class="w"> </span><span class="nx">width</span><span class="o">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">,</span><span class="w"> </span><span class="nx">opacity</span><span class="o">:</span><span class="w"> </span><span class="mf">0.85</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">        </span><span class="nx">label</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">show</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nx">xAxis</span><span class="o">:</span><span class="w"> </span><span class="nx">player</span><span class="p">.</span><span class="nx">currentTime</span><span class="w"> </span><span class="p">}],</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">      </span><span class="p">}</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="p">}]</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="p">});</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="p">};</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="nx">player</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;timeupdate&#39;</span><span class="p">,</span><span class="w">     </span><span class="nx">drawPlayhead</span><span class="p">);</span><span class="w">  </span><span class="c1">// playback tick</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="nx">player</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;seeked&#39;</span><span class="p">,</span><span class="w">         </span><span class="nx">drawPlayhead</span><span class="p">);</span><span class="w">  </span><span class="c1">// programmatic + scrubbed seek</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="nx">player</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;loadedmetadata&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">drawPlayhead</span><span class="p">);</span><span class="w">  </span><span class="c1">// initial position after load</span>
+</code></pre></div>
+<p>Caught live: a segment-card click handler did <code>player.currentTime = t0</code> without calling <code>play()</code>, expecting the playhead to follow. It didn't, because timeupdate is playback-locked. The user wanted seek-without-play (preview the segment context, then optionally hit space to play) — adding <code>seeked</code> to the event list fixes the UX without forcing playback.</p>
+<p><strong><code>preload="metadata"</code> is unreliable for showing duration at page load.</strong> Chromium defers metadata fetch — even after <code>audio.load()</code> + 8 second wait, <code>readyState</code> may still be 0 (HAVE_NOTHING) and <code>duration</code> is NaN. If the player chrome MUST show duration immediately, use <code>preload="auto"</code>. Cost: full audio fetch on page load. For studio surfaces serving local-net WAVs this is invisible; for public web pages with multi-megabyte audio it's not.</p>
+<p>(Note: Chrome extension contexts sometimes block media auto-fetch even with <code>preload="auto"</code> — verify against a regular browser tab before declaring it broken in production.)</p>
+<h2 id="echarts-diffs-the-option-tree-dont-fight-it">ECharts diffs the option tree (don't fight it)<a class="headerlink" href="#echarts-diffs-the-option-tree-dont-fight-it" title="Permanent link">&para;</a></h2>
+<p>Pattern from studio: bind a <code>markLine</code> to the audio element's <code>currentTime</code>, update on <code>timeupdate</code> event. ECharts diffs the option tree, so we only pay for the line move, not a full redraw.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;player&#39;</span><span class="p">);</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nx">player</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;timeupdate&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nx">chart</span><span class="p">.</span><span class="nx">setOption</span><span class="p">({</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nx">series</span><span class="o">:</span><span class="w"> </span><span class="p">[{</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">      </span><span class="nx">markLine</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">        </span><span class="nx">symbol</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;none&#39;</span><span class="p">,</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">        </span><span class="nx">silent</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">        </span><span class="nx">lineStyle</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#fff&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">width</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">opacity</span><span class="o">:</span><span class="w"> </span><span class="mf">0.8</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">        </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nx">xAxis</span><span class="o">:</span><span class="w"> </span><span class="nx">player</span><span class="p">.</span><span class="nx">currentTime</span><span class="w"> </span><span class="p">}]</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">      </span><span class="p">}</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="p">}]</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span><span class="p">});</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="p">});</span>
+</code></pre></div>
+<ul>
+<li><code>timeupdate</code> fires ~4Hz on Chromium, ~250ms throttle. Not animation-smooth, but the eye reads it as "playing." For animation-smooth, use <code>requestAnimationFrame</code> and read <code>player.currentTime</code> each tick.</li>
+<li><strong>Don't use <code>notMerge: true</code></strong> here — you want ECharts to diff the partial option, not blow away the series config and re-render from scratch every frame.</li>
+<li>For seek-by-click on segment labels, the reverse direction works the same: <code>player.currentTime = segment.t[0]</code> and the next <code>timeupdate</code> triggers the playhead move. No need to manually drive both.</li>
+</ul>
+<h2 id="multi-axis-discipline-dont-lie-with-scaling">Multi-axis discipline (don't lie with scaling)<a class="headerlink" href="#multi-axis-discipline-dont-lie-with-scaling" title="Permanent link">&para;</a></h2>
+<p>The scaling temptation: you have spectralCentroid (0–12000 Hz), energy bands (0–2), and onsetStrength (0–1) on the same chart, so you multiply the small ones (×200, ×1000) to make them visible against the centroid scale. <strong>Don't.</strong> The legend then reports "onsetStrength × 1000" and the viewer has to do mental math.</p>
+<p>Use <strong>multiple yAxis</strong> with <code>yAxisIndex</code> per series:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nx">yAxis</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Hz&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">position</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;left&#39;</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;value&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;energy&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">position</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;right&#39;</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">],</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nx">series</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;centroid (Hz)&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">yAxisIndex</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;line&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="cm">/* … */</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;energy&#39;</span><span class="p">,</span><span class="w">        </span><span class="nx">yAxisIndex</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;line&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="cm">/* … */</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="p">],</span>
+</code></pre></div>
+<p>Two y-axes for two unit families is honest. Four series sharing one axis with three of them rescaled is not.</p>
+<p>(This is the <em>one</em> legitimate use of dual y-axes — different unit dimensions. The Tufte/charts.md anti-pattern about dual y-axes is specifically about <em>same unit, different scale</em> dual axes that fake correlation. Different units, properly labeled, is fine.)</p>
+<h2 id="data-shape-contract">Data-shape contract<a class="headerlink" href="#data-shape-contract" title="Permanent link">&para;</a></h2>
+<p>ECharts time-series wants <code>[[x, y], [x, y], …]</code> arrays. Not <code>{x, y}</code> objects. Build the array explicitly; avoid <code>dataset</code> + <code>encode</code> for simple cases — they add indirection without much benefit until you're sharing one dataset across multiple series.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">// ✓ Correct</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="nx">tSec</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">[</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">values</span><span class="p">[</span><span class="nx">i</span><span class="p">]])</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1">// ✗ Hallucinated — ECharts won&#39;t parse this for line type without dataset config</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="nx">tSec</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({</span><span class="w"> </span><span class="nx">x</span><span class="o">:</span><span class="w"> </span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">y</span><span class="o">:</span><span class="w"> </span><span class="nx">values</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w"> </span><span class="p">}))</span>
+</code></pre></div>
+<h2 id="renderer-canvas-vs-svg">Renderer: canvas vs SVG<a class="headerlink" href="#renderer-canvas-vs-svg" title="Permanent link">&para;</a></h2>
+<p>Default canvas. Faster for &gt;500 points, no DOM bloat, transparent backgrounds work. Switch to SVG (<code>echarts.init(el, theme, { renderer: 'svg' })</code>) only when:</p>
+<ul>
+<li>You need DOM-level a11y on individual marks (screen reader landmarks)</li>
+<li>You're exporting the chart as a static SVG asset (rare — usually better to export PNG from canvas)</li>
+<li>The chart is part of a larger SVG composition you want to inspect with devtools</li>
+</ul>
+<p>For audio-reactive / playhead-driven charts, canvas is the right choice — SVG redraws cost more on every <code>setOption</code>.</p>
+<h2 id="worked-exemplar">Worked exemplar<a class="headerlink" href="#worked-exemplar" title="Permanent link">&para;</a></h2>
+<p><code>psychodeli-audio-lab/studio/meditate-001.html</code> (generated by <code>tools/studio-build.py</code>). The single-page studio surface:</p>
+<ul>
+<li>Dark-theme baseline (overrides above)</li>
+<li>5 series on shared y-axis (acceptable here only because energy bands and onset are dimensionless ratios on the same 0–1 logical scale; centroid is plotted in Hz on the same axis as a deliberate visual-density tradeoff — see the "Multi-axis discipline" caveat above; this file currently violates that rule and is a candidate for refactor to dual yAxis)</li>
+<li><code>markArea</code> segments per asserted-arc phase, colored by state-target taxonomy</li>
+<li><code>markLine</code> playhead synced to the <code>&lt;audio&gt;</code> element</li>
+<li>Click-on-segment → seek the audio → ECharts updates on next <code>timeupdate</code></li>
+</ul>
+<p>When in doubt, copy that file's <code>setOption</code> block as a starting point rather than generating from memory.</p>
+<h2 id="what-i-dont-trust-myself-to-write-without-checking-the-docs">What I don't trust myself to write without checking the docs<a class="headerlink" href="#what-i-dont-trust-myself-to-write-without-checking-the-docs" title="Permanent link">&para;</a></h2>
+<p>When generating ECharts options from a prompt, my failure modes (the ECharts-specific ones, beyond the dark-theme defaults above):</p>
+<ul>
+<li><strong>The series color contract</strong> — confirmed live, see section above. <code>lineStyle.color</code> ≠ legend marker color. Always also set series-root <code>color</code> (and/or top-level <code>color: []</code> palette).</li>
+<li><strong><code>markArea.data</code> shape</strong> — pairs of <code>[startObj, endObj]</code>, not single objects with <code>xAxis: [t0, t1]</code>. Confirmed live; muriel example uses the pair shape.</li>
+<li><strong><code>timeupdate</code> vs <code>seeked</code></strong> — confirmed live; <code>timeupdate</code> is playback-locked, <code>seeked</code> is the companion event for programmatic seeks.</li>
+<li><strong><code>visualMap</code></strong> — the piecewise/continuous distinction, the <code>inRange.color</code> array length matching the data range. I usually get the structure right but the field names drift.</li>
+<li><strong><code>dataZoom</code></strong> — <code>inside</code> vs <code>slider</code> types, the <code>start</code> and <code>end</code> percentage semantics, <code>xAxisIndex</code> linkage.</li>
+<li><strong><code>graphic</code></strong> — custom overlay shapes (text, rect, line annotations not tied to a series). I tend to mis-nest <code>elements[].style</code> vs <code>elements[].shape</code>.</li>
+<li><strong><code>brush</code></strong> — the cross-series selection mode. Most generated code under-specifies <code>toolbox.feature.brush</code> and the brush UI never appears.</li>
+<li><strong><code>series.large</code> performance flag</strong> for &gt;5k points — the threshold and the trade-off (loses some interactive precision) is easy to mis-state.</li>
+<li><strong><code>animation</code> defaults</strong> vary by chart type and ECharts version; disable explicitly for headless rendering (<code>animation: false</code>) rather than trusting a global config.</li>
+</ul>
+<p>When you hit any of these, open <a href="https://echarts.apache.org/en/option.html">the option reference</a>, <code>Cmd-F</code> the field name, and verify against the v5 schema. Don't ship from memory.</p>
+<h2 id="heatmap-visualmap-the-3d-projected-grid-pattern">Heatmap + visualMap (the "3D projected grid" pattern)<a class="headerlink" href="#heatmap-visualmap-the-3d-projected-grid-pattern" title="Permanent link">&para;</a></h2>
+<p>When you have a third data dimension that doesn't fit on a 2D line chart, the cheapest projection is a <strong>heatmap with visualMap</strong>: two categorical axes (e.g. time × band) and color encoding the third dimension's magnitude. It's the 2D shadow of a 3D landscape — the canonical spectrogram move — and ECharts ships it natively without <code>echarts-gl</code>.</p>
+<p>Worked exemplar from psychodeli-audio-lab/studio: a (time × frequency-band × energy) heatmap rendered below the 1D timeline, sharing the time axis so the eye can correlate "where the centroid line spikes" with "which band is hot at that moment."</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nx">chart</span><span class="p">.</span><span class="nx">setOption</span><span class="p">({</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="c1">// … brand theme tokens …</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nx">xAxis</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;category&#39;</span><span class="p">,</span><span class="w">                  </span><span class="c1">// category, not value — heatmap cells align to indices</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="nx">timeLabels</span><span class="p">,</span><span class="w">                  </span><span class="c1">// [&#39;0.0&#39;, &#39;0.2&#39;, &#39;0.4&#39;, …]</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">    </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;sec&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">nameLocation</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;middle&#39;</span><span class="p">,</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="c1">// Heuristic: 10–12 visible labels max. interval is a SKIP count</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="c1">// (n-1), not a &quot;1 in n&quot; ratio. interval: 24 → labels at index 0, 25, 50…</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="nx">axisLabel</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">interval</span><span class="o">:</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">timeLabels</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">10</span><span class="p">)</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">  </span><span class="nx">yAxis</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;category&#39;</span><span class="p">,</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">    </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;low&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;mid&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;high&#39;</span><span class="p">],</span><span class="w">      </span><span class="c1">// first item renders at BOTTOM of axis</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">                                        </span><span class="c1">// (ECharts inverts y-category by convention —</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">                                        </span><span class="c1">//  matches spectrogram intuition: low @ floor)</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">  </span><span class="nx">visualMap</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="w">    </span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="nx">bandMax</span><span class="p">,</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="w">    </span><span class="nx">orient</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">right</span><span class="o">:</span><span class="w"> </span><span class="mf">16</span><span class="p">,</span><span class="w"> </span><span class="nx">top</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="w">   </span><span class="c1">// vertical on the right</span>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="w">                                                     </span><span class="c1">// reads cleaner than horizontal bottom</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="w">                                                     </span><span class="c1">// for a wide heatmap</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="w">    </span><span class="nx">itemWidth</span><span class="o">:</span><span class="w"> </span><span class="mf">14</span><span class="p">,</span><span class="w"> </span><span class="nx">itemHeight</span><span class="o">:</span><span class="w"> </span><span class="mf">140</span><span class="p">,</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="w">    </span><span class="nx">calculable</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">                  </span><span class="c1">// adds drag handles for range filter</span>
+<a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="w">    </span><span class="nx">inRange</span><span class="o">:</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">BG</span><span class="p">,</span><span class="w"> </span><span class="nx">COOL</span><span class="p">,</span><span class="w"> </span><span class="nx">MID</span><span class="p">,</span><span class="w"> </span><span class="nx">WARM</span><span class="p">,</span><span class="w"> </span><span class="nx">HOT</span><span class="p">]</span><span class="w"> </span><span class="p">},</span><span class="w">   </span><span class="c1">// 4–5 color stops, low→high</span>
+<a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a><span class="w">    </span><span class="nx">outOfRange</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">BG</span><span class="p">]</span><span class="w"> </span><span class="p">},</span><span class="w">       </span><span class="c1">// pair with calculable so dragging dims outside</span>
+<a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a>
+<a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a><span class="w">    </span><span class="c1">// GOTCHA: text is [upperLabel, lowerLabel] — FIRST string labels MAX value.</span>
+<a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a><span class="w">    </span><span class="c1">// Mnemonic: reads top-down on a vertical visualMap.</span>
+<a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a><span class="w">    </span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;3.8&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;0&#39;</span><span class="p">],</span>
+<a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a>
+<a id="__codelineno-8-35" name="__codelineno-8-35" href="#__codelineno-8-35"></a><span class="w">  </span><span class="nx">series</span><span class="o">:</span><span class="w"> </span><span class="p">[{</span>
+<a id="__codelineno-8-36" name="__codelineno-8-36" href="#__codelineno-8-36"></a><span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;heatmap&#39;</span><span class="p">,</span>
+<a id="__codelineno-8-37" name="__codelineno-8-37" href="#__codelineno-8-37"></a><span class="w">    </span><span class="c1">// Each cell is a [xIdx, yIdx, value] TRIPLE — not a structured object.</span>
+<a id="__codelineno-8-38" name="__codelineno-8-38" href="#__codelineno-8-38"></a><span class="w">    </span><span class="c1">// xIdx/yIdx are integer indices into the category arrays.</span>
+<a id="__codelineno-8-39" name="__codelineno-8-39" href="#__codelineno-8-39"></a><span class="w">    </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="p">[[</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.5</span><span class="p">],</span><span class="w"> </span><span class="err">…</span><span class="p">],</span>
+<a id="__codelineno-8-40" name="__codelineno-8-40" href="#__codelineno-8-40"></a><span class="w">    </span><span class="nx">progressive</span><span class="o">:</span><span class="w"> </span><span class="mf">1000</span><span class="p">,</span><span class="w">                 </span><span class="c1">// chunked render for &gt;1000 cells</span>
+<a id="__codelineno-8-41" name="__codelineno-8-41" href="#__codelineno-8-41"></a><span class="w">    </span><span class="nx">emphasis</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w">                        </span><span class="c1">// hover state</span>
+<a id="__codelineno-8-42" name="__codelineno-8-42" href="#__codelineno-8-42"></a><span class="w">      </span><span class="nx">itemStyle</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">borderColor</span><span class="o">:</span><span class="w"> </span><span class="nx">BRAND</span><span class="p">.</span><span class="nx">fg</span><span class="p">,</span><span class="w"> </span><span class="nx">borderWidth</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-8-43" name="__codelineno-8-43" href="#__codelineno-8-43"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-8-44" name="__codelineno-8-44" href="#__codelineno-8-44"></a><span class="w">  </span><span class="p">}],</span>
+<a id="__codelineno-8-45" name="__codelineno-8-45" href="#__codelineno-8-45"></a><span class="p">});</span>
+</code></pre></div>
+<p><strong>The non-obvious bits:</strong></p>
+<ul>
+<li>
+<p><strong><code>visualMap.text</code> is <code>[upperLabel, lowerLabel]</code></strong> — first element labels the TOP of the vertical slider (the max value), second labels the BOTTOM (min). Mnemonic: it reads top-down. Counterintuitive enough that everyone gets it wrong the first time. Bare <code>text: ['max', 'min']</code> is the default-ish form; for numeric labels you typically want the actual numbers as strings.</p>
+</li>
+<li>
+<p><strong><code>visualMap.inRange.color</code> is a list of color stops</strong> ECharts interpolates between — order goes low → high. 4–5 stops covers most thermal maps without banding. For a brand-themed thermal: <code>[bg, cool-accent, brand-primary, warm-amber, hot-salmon]</code>.</p>
+</li>
+<li>
+<p><strong><code>visualMap.calculable: true</code></strong> adds drag handles. Pair with <code>outOfRange.color: [bg]</code> so dragging the handles visually filters the heatmap to the active range — incredibly useful for "show me only cells above 2.0" exploration.</p>
+</li>
+<li>
+<p><strong><code>xAxis.axisLabel.interval</code> is a SKIP count, not a ratio.</strong> <code>interval: 24</code> produces labels at indices <code>0, 25, 50, …</code> — show one, skip 24. Easy to misread as "1 in 24" (it's 1 in 25). Common heuristic: <code>Math.floor(arr.length / 10)</code> gives roughly 10 visible labels.</p>
+</li>
+<li>
+<p><strong>Category y-axis renders first-item-at-bottom by default</strong> (ECharts inverts y-categories). So <code>data: ['low', 'mid', 'high']</code> puts <code>low</code> at the floor — perfect spectrogram convention. If you want top-down rendering (taxonomic lists, ranking), set <code>yAxis.inverse: true</code>.</p>
+</li>
+<li>
+<p><strong>Heatmap data is <code>[xIdx, yIdx, value]</code> triples</strong>, not objects. The tuple positions are coordinates → color-mapped value. Tooltip formatter receives <code>p.data</code> as the same triple — index into it: <code>formatter: p =&gt; \</code>${p.data[2].toFixed(2)}``.</p>
+</li>
+<li>
+<p><strong>For sparse data</strong> (cells you don't want rendered), just omit them from the data array. ECharts doesn't render a cell for an absent (x, y) coordinate. No need for null fills.</p>
+</li>
+<li>
+<p><strong><code>progressive: N</code></strong> chunks the render — useful when you have &gt;1000 cells. For a 249 × 3 = 747 cell grid it's overkill but harmless. Above ~10k cells, drop the chunk size to 500 to avoid first-paint stutter.</p>
+</li>
+<li>
+<p><strong>For TRUE 3D</strong> (perspective, rotatable, depth) — that's <code>echarts-gl</code>, a separate package (<code>echarts-gl@^2.0</code>, ~600 KB minified). Series types: <code>bar3D</code>, <code>scatter3D</code>, <code>surface</code>, <code>line3D</code>. Reach for it when the magnitude axis needs to be VIEWED in 3D (rotation, parallax) rather than projected to color. For dashboard / report surfaces, the 2D heatmap projection is almost always the right call — color is read faster than depth, and you don't need to manage a camera.</p>
+</li>
+</ul>
+<h2 id="live-verification-protocol">Live-verification protocol<a class="headerlink" href="#live-verification-protocol" title="Permanent link">&para;</a></h2>
+<p>When wiring up an ECharts surface, before declaring it done:</p>
+<ol>
+<li><strong>Open in a real Chrome tab.</strong> Not just a screenshot, not just devtools — a live tab where you can probe the chart instance.</li>
+<li><strong>Probe the resolved option tree</strong> via <code>echarts.getInstanceByDom(el).getOption()</code>. ECharts merges your input with defaults — what you see in <code>getOption()</code> is what's actually painting. Check:</li>
+<li><code>opt.color</code> — is the palette you intended? (If you didn't set it, it's the default 9 colors — caught the legend-marker bug this way.)</li>
+<li><code>opt.series[i].color</code> vs <code>opt.series[i].lineStyle.color</code> — series-root color drives legend.</li>
+<li><code>opt.yAxis[i].min/max</code> — did your <code>min: 0, max: N</code> survive merge, or did auto-scaling override?</li>
+<li><code>opt.series[i].markArea.data</code> — is the two-pair shape preserved after merge?</li>
+<li><strong>Trigger the interactions you wired</strong> (audio seek, hover, legend click) and re-probe. State changes that should affect the option tree are easy to assert; state changes that don't are easy to miss.</li>
+<li><strong>Test programmatic state changes</strong>, not just user-driven ones. <code>player.currentTime = X</code> from a JS console probes whether your <code>seeked</code> handler is wired (the <code>timeupdate</code>-only bug doesn't show under "play and watch").</li>
+</ol>
+<p>This caught two real bugs in 15 minutes on the studio page that wouldn't have shown in static screenshots: the legend color mismatch and the timeupdate-only playhead.</p>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../channels/charts/"><code>channels/charts.md</code></a> — the strict-mode Tufte enforcement layer with per-library anti-pattern tables. ECharts defaults violate ~half of that table; the cheat row there is the minimum override set, the section above is the dark-theme dashboard set.</li>
+<li><a href="../../channels/interactive/"><code>channels/interactive.md</code></a> — single-file interactive demo scaffolds. ECharts loaded from CDN is a common substrate for marginalia demos with one chart.</li>
+<li><a href="../pixijs/"><code>vocabularies/pixijs.md</code></a> — when you need per-pixel control or particle counts beyond ECharts' batching (10k+ marks).</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

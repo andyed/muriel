@@ -1,0 +1,1957 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/vocabularies/kinetic-typography/">
+      
+      
+        <link rel="prev" href="../fui/">
+      
+      
+        <link rel="next" href="../katex/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Kinetic typography - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#kinetic-typography-letters-that-move-with-intent" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Kinetic typography
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lineage-and-grammar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lineage and grammar
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#substrate-choices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Substrate choices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calling-iblipper-headlessly-for-stills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calling iblipper headlessly for stills
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Calling iblipper headlessly for stills">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#controlling-word-splitting-with-explicit-n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controlling word splitting with explicit \n
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recipe-selection-cheatsheet-for-stills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe selection cheatsheet for stills
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-exemplars" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference exemplars
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-with-other-muriel-channels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration with other muriel channels
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rules-that-always-apply" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rules that always apply
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="kinetic-typography-letters-that-move-with-intent">Kinetic typography — letters that move with intent<a class="headerlink" href="#kinetic-typography-letters-that-move-with-intent" title="Permanent link">&para;</a></h1>
+<p><strong>When to reach for it.</strong> When the message is <em>emotional</em> or <em>temporal</em> and the typography is doing the expressive work — protest signs, announcements, reveals, warnings, agent-to-human communication with character. Static text can't time itself; kinetic typography is type designed to be played, not just read.</p>
+<p>Use it for:</p>
+<ul>
+<li><strong>Agent-to-human flourish</strong> — when a response deserves more than plain markdown (greetings, completions, alerts, dramatic reveals).</li>
+<li><strong>Protest and broadcast graphics</strong> — slogan-scale typography where impact + legibility at a glance matters more than information density.</li>
+<li><strong>Editorial punctuation inside longer pieces</strong> — a single animated pull-quote or scene title inside an otherwise static blog post.</li>
+<li><strong>Scene titles / kickers for video</strong> — muriel's <a href="../../channels/video/"><code>channels/video.md</code></a> captures these once and burns them into the final MP4.</li>
+</ul>
+<p>Don't reach for it when:</p>
+<ul>
+<li>The message is informational and needs to be scannable — regular typography serves readers better. Motion <em>costs</em> attention.</li>
+<li>The target surface is print or email. Motion vanishes; fall back to raster.</li>
+<li>Ambient-noise motion is the only reason you're considering it. Kinetic typography should <em>deliver</em> meaning, not fill airspace.</li>
+</ul>
+<h2 id="lineage-and-grammar">Lineage and grammar<a class="headerlink" href="#lineage-and-grammar" title="Permanent link">&para;</a></h2>
+<p>The tradition runs from Saul Bass's title sequences through Kyle Cooper / Imaginary Forces into Territory Studio's motion-forward UI work (the same lineage that feeds <a href="../fui/">FUI</a> — they overlap on sci-fi title cards). The grammar is narrow and strict:</p>
+<ul>
+<li><strong>Max contrast.</strong> Cream or white on near-black, or inverse. No muddy middle tones. muriel's 8:1 rule is the floor; kinetic typography often goes higher (~15:1) because motion-blurred glyphs lose apparent contrast during transitions.</li>
+<li><strong>Strategic motion.</strong> Every keyframe communicates. If a letter moves without reason, cut the animation.</li>
+<li><strong>No ambient noise.</strong> No floaters, no drift, no decorative wiggle. The type is the message; nothing else is on screen doing busy work.</li>
+<li><strong>Emotional vocabulary.</strong> A small named set of expressive modes (excited, playful, question, warning, reveal, etc.) — rehearsed, not improvised per shot. Consistency is how the audience learns to read the motion.</li>
+<li><strong>SDF text alpha rule.</strong> When using SDF/MSDF text renderers (Troika, BMFont), never modulate alpha for fade effects — it breaks the distance-field antialiasing. Use RGB animation or scale/position tweens instead.</li>
+<li><strong>Debug-logging discipline.</strong> Animated demos multiply log spam. Route through a project-level <code>debugManager</code> or a conditional logger; never ship bare <code>console.log</code>.</li>
+</ul>
+<h2 id="substrate-choices">Substrate choices<a class="headerlink" href="#substrate-choices" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Substrate</th>
+<th>When</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="https://chenglou.me/pretext/">pretext</a></strong></td>
+<td>Typographic layout + animated Canvas2D at 60fps</td>
+<td>Measures text outside the DOM reflow path, so per-frame re-layout is cheap. Good when the animation needs precise control over line breaks, rich inline weight/color, or text-in-shape flow. See <a href="../../channels/interactive/#typographic-canvas-with-pretext"><code>channels/interactive.md</code></a> for the API walkthrough.</td>
+</tr>
+<tr>
+<td><strong><a href="https://github.com/andyed/iblipper2025">iblipper</a></strong></td>
+<td>Full animation-as-a-language pipeline with a rehearsed emotion vocabulary — <em>and</em> single-frame social-media graphic composer</td>
+<td>muriel's dedicated kinetic-typography substrate. Built on pretext; exposes the emotional vocabulary as a UI. Invoke <code>/iblipper</code> when (a) the deliverable is an animated artifact, or (b) the deliverable is a single-frame social-media graphic where slogan-scale rhetorical typography is the work. Edit Message → export PNG covers the still case without IAP. Additional programmatic controls likely to be feature-requested upstream as muriel's call-pattern stabilizes.</td>
+</tr>
+<tr>
+<td><strong>Troika three.js SDF text</strong></td>
+<td>3D scenes with kinetic type inside</td>
+<td>Respect the SDF alpha rule. Scale / position animations are safe; alpha fades are not.</td>
+</tr>
+<tr>
+<td><strong>Raw Canvas2D + rAF</strong></td>
+<td>Simple single-line kinetic type with custom easing</td>
+<td>Lowest activation energy. Use when pretext's rich-inline API is overkill.</td>
+</tr>
+<tr>
+<td><strong>CSS animations</strong></td>
+<td>Editorial-scale kinetic type on the web</td>
+<td>Fine for subtle motion; hits limits when the animation needs per-character timing or non-DOM layout.</td>
+</tr>
+<tr>
+<td><strong><a href="https://github.com/ChrisBuilds/terminaltexteffects">TerminalTextEffects</a></strong> (MIT)</td>
+<td>When the runtime is a terminal cell grid — installer ceremonies, deploy banners, README hero GIFs</td>
+<td>Python, <code>pip install terminaltexteffects</code>; ~100 named effects (<code>decrypt</code>, <code>matrix</code>, <code>scattered</code>, <code>vhsTape</code>, <code>sweep</code>, …). Same kinetic-typography rules apply (max contrast, strategic motion, no ambient noise), just the substrate is ANSI escapes instead of canvas. Pairs with <a href="../../channels/terminal/#animated-effects--when-the-terminal-is-the-artifact"><code>channels/terminal.md</code></a>. Capture to GIF via <code>asciinema</code> + <code>agg</code> for README embed.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="calling-iblipper-headlessly-for-stills">Calling iblipper headlessly for stills<a class="headerlink" href="#calling-iblipper-headlessly-for-stills" title="Permanent link">&para;</a></h2>
+<p>iblipper exposes a <code>/render.html</code> route that mounts its renderer with no app shell — no Landing, FAQ, composer, gestures, IAP, splash. The page reads a JSON config from <code>?config=&lt;encoded JSON&gt;</code>, renders to canvas, and sets <code>window.__renderReady = true</code> after a configurable hold so a screenshot driver can capture the "held moment" of the entry animation. Pixel-identical to the in-app iBlipper output because it <em>is</em> the same renderer.</p>
+<p><strong>Minimum config:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Maximum signal&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;emotion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;emphatic&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;fgColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#ffeb3b&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;bgColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#0a0a0f&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;wpm&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">250</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1200</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">630</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;density&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;holdMs&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">700</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p><strong>Capture pattern (raw chrome, no automation library):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">ENCODED</span><span class="o">=</span><span class="k">$(</span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CONFIG</span><span class="s2">&quot;</span><span class="k">)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="s2">&quot;/Applications/Google Chrome.app/Contents/MacOS/Google Chrome&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--headless<span class="o">=</span>new<span class="w"> </span>--hide-scrollbars<span class="w"> </span>--window-size<span class="o">=</span><span class="m">1200</span>,630<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--virtual-time-budget<span class="o">=</span><span class="m">1500</span><span class="w"> </span>--screenshot<span class="o">=</span>out.png<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="s2">&quot;http://localhost:5173/render.html?config=</span><span class="nv">$ENCODED</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p><code>--virtual-time-budget</code> lets Chrome run a fast clock for the page so the entry animation runs to <code>holdMs</code> quickly; ~1500ms is plenty of headroom for <code>holdMs ≤ 1100</code>.</p>
+<p><strong>Key knobs.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Knob</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td>Plain text. <strong>Embed <code>\n</code> for explicit phrase breaks</strong> — see below.</td>
+</tr>
+<tr>
+<td><code>emotion</code></td>
+<td>Named recipe. <code>emphatic</code>, <code>hurry</code>, <code>idyllic</code>, <code>question</code>, <code>excited</code>, <code>playful</code>, <code>electric</code>, <code>urgent</code> (<code>response_required</code>), <code>casual</code>, <code>wobbly</code>, <code>glitch</code>, <code>fuzzy</code>, <code>decrypted</code>, <code>neutral</code>. Each picks font, animation, trail, and timing.</td>
+</tr>
+<tr>
+<td><code>density</code></td>
+<td>Words per frame, 1–10 normally. <strong>Pass <code>100</code> (or any value &gt; 50) for "All" mode</strong> — every word on one frame, no chunking.</td>
+</tr>
+<tr>
+<td><code>holdMs</code></td>
+<td>Wait this many ms after mount before flagging <code>__renderReady</code>. Default 600. Bump to 800–1100 if the recipe has a long entry animation (<code>emphatic</code>, <code>glitch_reveal</code>-restart).</td>
+</tr>
+<tr>
+<td><code>fgColor</code> / <code>bgColor</code></td>
+<td>Hex strings. Verify 8:1 contrast — see <a href="../../channels/style-guides/"><code>channels/style-guides.md</code></a>.</td>
+</tr>
+<tr>
+<td><code>width</code> / <code>height</code></td>
+<td>CSS pixels. Match your target dimension exactly; no need to oversample, the renderer is vector-faithful at any size. See <a href="../../channels/dimensions/"><code>channels/dimensions.md</code></a> for the canonical IG / OG / video / paper presets.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="controlling-word-splitting-with-explicit-n">Controlling word splitting with explicit <code>\n</code><a class="headerlink" href="#controlling-word-splitting-with-explicit-n" title="Permanent link">&para;</a></h3>
+<p>iBlipper's break-finder picks a balanced line arrangement automatically, with a built-in disparity cap that prevents function-word amplification (so "AT THE" can't be larger than "QUESTION"). For most stills the default is fine — let it choose.</p>
+<p>When you need <em>specific</em> phrase boundaries, <strong>embed <code>\n</code> directly in <code>text</code></strong>. Density-100 mode preserves them as hard line breaks; the renderer treats each <code>\n</code>-separated paragraph independently and the cross-paragraph cap keeps sizes consistent. This is the documented escape hatch:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>// Auto-balance — break-finder decides:
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>{ &quot;text&quot;: &quot;AI is fast at the wrong question.&quot;, &quot;density&quot;: 100, ... }
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>// Renders as: AI IS / FAST AT / THE WRONG / QUESTION.
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>// Explicit phrase boundary at the comma:
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>{ &quot;text&quot;: &quot;AI is fast,\nat the wrong question.&quot;, &quot;density&quot;: 100, ... }
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>// Forces: AI IS FAST / AT THE WRONG QUESTION.
+</code></pre></div>
+<p><strong>Heuristics for where to put <code>\n</code>:</strong></p>
+<ul>
+<li><strong>At sentence breaks</strong> (periods, semicolons) when the chunk has multiple sentences and you want each on its own group of lines.</li>
+<li><strong>At natural rhetorical breaks</strong> (commas before a contrasting clause, conjunctions starting a payoff line). Mirrors how a poster designer would read the line aloud and hit a beat.</li>
+<li><strong>Between attribution and quote</strong> — <code>"The medium is the message.\n— McLuhan"</code>.</li>
+</ul>
+<p><strong>Heuristics for where NOT to:</strong></p>
+<ul>
+<li>Don't split on every word — you reintroduce the disparity bug, and the per-paragraph independent sizing makes single-word lines size to fill width regardless of word length.</li>
+<li>Don't split a phrase that has stopwords-only on one side: <code>"AI is fast at the\nwrong question"</code> strands "AT THE" alone, which the cap then forces small. Group them: <code>"AI is fast\nat the wrong question"</code>.</li>
+</ul>
+<h3 id="recipe-selection-cheatsheet-for-stills">Recipe selection cheatsheet for stills<a class="headerlink" href="#recipe-selection-cheatsheet-for-stills" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Vibe</th>
+<th>Emotion</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bold declarative, slogan, "I have a take"</td>
+<td><code>emphatic</code></td>
+<td>Rubik Mono One; very wide, <strong>avoid for &gt;5 words</strong> at IG-square — letters crop</td>
+</tr>
+<tr>
+<td>Forward-motion observation, fast take</td>
+<td><code>hurry</code></td>
+<td>Roboto Condensed Italic; italic skew enacts motion; tightest fit for long lines</td>
+</tr>
+<tr>
+<td>Tech / AI / monitor aesthetic</td>
+<td><code>electric</code></td>
+<td>Share Tech Mono + RGB-split fringe; on-theme for AI subjects</td>
+</tr>
+<tr>
+<td>Loud / urgent / "stop and read this"</td>
+<td><code>response_required</code></td>
+<td>Anton bold; pair with bright accent (verify 8:1)</td>
+</tr>
+<tr>
+<td>Bouncy, joyful, casual</td>
+<td><code>playful</code></td>
+<td>Chewy; round letterforms; pink/warm palette</td>
+</tr>
+<tr>
+<td>Calm, editorial, breathing</td>
+<td><code>idyllic</code></td>
+<td>Lora Italic; reflection trail under text; airy spacing</td>
+</tr>
+<tr>
+<td>Inquisitive, soft alarm</td>
+<td><code>question</code></td>
+<td>Quicksand; subtle echo trail drifting up-left</td>
+</tr>
+</tbody>
+</table>
+<h2 id="reference-exemplars">Reference exemplars<a class="headerlink" href="#reference-exemplars" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>iblipper</strong> — canonical in this workspace. Emotional-expression vocabulary, Pretext-based renderer, protest-sign mode, URL-shareable animations. The <code>/iblipper</code> skill is how you invoke it; read its SKILL.md for the supported emotion set.</li>
+<li><strong>pretext-coachella</strong> — public pretext exemplar at <a href="https://github.com/andyed/pretext-coachella">andyed/pretext-coachella</a>. Not primarily animated, but demonstrates the typographic canvas substrate that animated work builds on.</li>
+<li><strong>Saul Bass title sequences</strong> — foundational. <em>Psycho</em>, <em>Vertigo</em>, <em>North by Northwest</em>. The best pre-CGI argument for motion as meaning.</li>
+<li><strong>Kyle Cooper / Imaginary Forces</strong> — <em>Se7en</em>, <em>The Mummy</em>, <em>Dawn of the Dead</em>. Type as scene-setting; the lineage into Territory and Perception.</li>
+<li><strong>Type in Motion</strong> (Woolman, Bellantoni — Thames &amp; Hudson) — the reference book on the grammar. Worth reading in print.</li>
+</ul>
+<h2 id="integration-with-other-muriel-channels">Integration with other muriel channels<a class="headerlink" href="#integration-with-other-muriel-channels" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><a href="../../channels/video/"><code>channels/video.md</code></a></strong> — capture a kinetic-typography piece (from iblipper, pretext, or custom) as MP4, then burn tooltips / trim / concat with ffmpeg.</li>
+<li><strong><a href="../../channels/raster/"><code>channels/raster.md</code></a></strong> — pull a single frame as a static hero image for social cards or paper figures.</li>
+<li><strong><a href="../../channels/interactive/"><code>channels/interactive.md</code></a></strong> — embed the live animation inline in a marginalia blog post.</li>
+<li><strong><a href="../fui/"><code>vocabularies/fui.md</code></a></strong> — the overlap surface: sci-fi title cards are kinetic typography in the FUI idiom.</li>
+</ul>
+<h2 id="rules-that-always-apply">Rules that always apply<a class="headerlink" href="#rules-that-always-apply" title="Permanent link">&para;</a></h2>
+<p>Muriel's universal rules aren't suspended because the text is moving:</p>
+<ul>
+<li><strong>8:1 contrast minimum</strong> on all text, including mid-animation states. If a tween dips below 8:1 for more than a frame, fix it — usually by interpolating RGB rather than alpha.</li>
+<li><strong>Label every number.</strong> Animated stats dashboards still need units.</li>
+<li><strong>Measure before drawing.</strong> Pretext makes this literal — it measures outside the DOM reflow path.</li>
+<li><strong>No false profundity.</strong> If a letter moves and you can't state the reason in one sentence, it shouldn't move.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

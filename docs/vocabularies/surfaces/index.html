@@ -1,0 +1,1934 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/vocabularies/surfaces/">
+      
+      
+        <link rel="prev" href="../declassified/">
+      
+      
+        <link rel="next" href="../data-viz-platforms/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Surfaces - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#surfaces-composed-artifact-archetypes-that-compose-channels" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Surfaces
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#channels-vs-surfaces-why-both" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Channels vs surfaces — why both
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-canonical-external-catalog-html-anything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The canonical external catalog — html-anything
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patterns-worth-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patterns worth naming
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Patterns worth naming">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-typed-frontmatter-per-surface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Typed frontmatter per surface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-absolute-rules-per-surface-locked-down-hex-locked-down-grid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Absolute rules per surface (locked-down hex / locked-down grid)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cjk-first-font-stacks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. CJK-first font stacks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-inspired-by-lineage-chain-in-skill-frontmatter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. "Inspired by" lineage chain in skill frontmatter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-featured-recommended-ranking-as-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Featured / recommended ranking as data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-to-mine-what-to-leave" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What to mine, what to leave
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#citation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Citation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="surfaces-composed-artifact-archetypes-that-compose-channels">Surfaces — composed-artifact archetypes that compose channels<a class="headerlink" href="#surfaces-composed-artifact-archetypes-that-compose-channels" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>What this vocabulary is.</strong> A survey of the <em>surfaces</em> concept — composed-artifact archetypes (a Swiss-international slide deck, an NYT-style data-chart frame, a SaaS landing prototype, a PRD doc page, a Twitter share card) that sit <em>one layer above</em> muriel's channels. A channel is an output substrate (HTML/CSS, SVG, matplotlib, terminal). A surface is a composed artifact for a specific brief, expressed <em>through</em> one or more channels, with locked layout choices and a published-piece register.</p>
+<p><strong>What this vocabulary is not.</strong> Not a competitor to muriel's channels — surfaces compose channels, they don't replace them. Not a generator catalog (muriel doesn't ship surface generators today; this vocab cites the canonical external catalog). Not a brand system (that's <code>channels/style-guides.md</code>).</p>
+</blockquote>
+<p>Part of the <a href="../../SKILL/">muriel</a> skill. Sibling vocabs: <a href="../data-viz-platforms/"><code>vocabularies/data-viz-platforms.md</code></a> (Apple HIG / Material / Carbon / Vega-Lite / Plot / FT / Datawrapper charting guides), <a href="../visible-language/"><code>vocabularies/visible-language.md</code></a> (MIT Cooper VLW), <a href="../kinetic-typography/"><code>vocabularies/kinetic-typography.md</code></a>.</p>
+<h2 id="channels-vs-surfaces-why-both">Channels vs surfaces — why both<a class="headerlink" href="#channels-vs-surfaces-why-both" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>channels (substrates)              surfaces (composed archetypes)
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>───────────────────────            ────────────────────────────────
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>channels/raster.md     ←─┐         &quot;Swiss International deck&quot;
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>channels/svg.md          ├──→ compose →  &quot;NYT-style data-chart frame&quot;
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>channels/web.md          │              &quot;PRD spec page&quot;
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>channels/charts.md       │              &quot;Twitter share card&quot;
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>channels/polish.md     ←─┘              &quot;Brutalist web prototype&quot;
+</code></pre></div>
+<p>A channel tells you <em>how to emit pixels for this substrate at muriel's rigor</em>. A surface tells you <em>what composition to reach for when the brief is "make me a deck"</em>. The same channel (HTML+CSS via <code>channels/web.md</code>) underwrites many surfaces (decks, magazine articles, dashboards, share cards, PRDs).</p>
+<p>muriel today ships fourteen channels and one example surface (<code>examples/scrutinizer-ridgemap/</code>). The surface vocabulary lives <em>here</em> because formalizing the layer above channels is a queued direction, not shipped code — but the concept is already in use in the wider Claude-skill ecosystem and worth naming.</p>
+<h2 id="the-canonical-external-catalog-html-anything">The canonical external catalog — html-anything<a class="headerlink" href="#the-canonical-external-catalog-html-anything" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/nexu-io/html-anything"><code>nexu-io/html-anything</code></a> (Apache-2.0, 4.7k★ as of 2026-05) ships <strong>75 surface archetypes</strong> grouped into roughly nine families, all rendered as single-file HTML. It's the closest contemporary to a fully-fleshed surfaces catalog; muriel cites it rather than rebuilding its surface taxonomy from scratch.</p>
+<p>The nine families:</p>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th style="text-align: right;">Surface count</th>
+<th>Examples</th>
+<th>Channel substrate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Decks</strong></td>
+<td style="text-align: right;">~17</td>
+<td><code>deck-swiss-international</code> (16-col grid, 22 locked layouts, IKB/Lemon/Mint/Safety-Orange themes), <code>deck-guizang-editorial</code> (magazine ink), <code>deck-xhs-pastel</code> (Xiaohongshu-native), <code>deck-pitch</code>, <code>deck-replit</code>, <code>deck-hermes-cyber</code></td>
+<td>HTML + CSS, sometimes PPTX</td>
+</tr>
+<tr>
+<td><strong>Frames</strong> (motion / video)</td>
+<td style="text-align: right;">~11</td>
+<td><code>frame-data-chart-nyt</code> (NYT-newsroom data frame), <code>frame-glitch-title</code> (cyan/magenta aberration + CRT scanlines), <code>frame-light-leak-cinema</code>, <code>frame-liquid-bg-hero</code>, <code>frame-flowchart-sticky</code>, <code>video-hyperframes</code>, <code>sprite-animation</code>, <code>motion-frames</code>, <code>vfx-text-cursor</code></td>
+<td>HTML + CSS (composed into hyperframes/video)</td>
+</tr>
+<tr>
+<td><strong>Cards</strong> (social)</td>
+<td style="text-align: right;">~8</td>
+<td><code>card-twitter</code>, <code>card-xiaohongshu</code>, <code>social-reddit-card</code>, <code>social-spotify-card</code>, <code>social-x-post-card</code>, <code>social-carousel</code>, <code>social-media-dashboard</code>, <code>social-media-matrix</code></td>
+<td>HTML → PNG via headless capture</td>
+</tr>
+<tr>
+<td><strong>Web prototypes</strong></td>
+<td style="text-align: right;">~9</td>
+<td><code>web-proto-brutalist</code> (Swiss industrial, ASCII decoration), <code>web-proto-editorial</code> (serif + grid), <code>web-proto-soft</code> (rounded + warm), <code>saas-landing</code>, <code>pricing-page</code>, <code>waitlist-page</code>, <code>mobile-app</code>, <code>mobile-onboarding</code>, <code>prototype-web</code></td>
+<td>HTML + CSS</td>
+</tr>
+<tr>
+<td><strong>Articles</strong></td>
+<td style="text-align: right;">~4</td>
+<td><code>article-magazine</code>, <code>blog-post</code>, <code>digital-eguide</code>, <code>magazine-poster</code></td>
+<td>HTML + CSS (editorial register)</td>
+</tr>
+<tr>
+<td><strong>Office / PM</strong></td>
+<td style="text-align: right;">~9</td>
+<td><code>pm-spec</code> (PRD), <code>team-okrs</code>, <code>meeting-notes</code>, <code>weekly-update</code>, <code>eng-runbook</code>, <code>hr-onboarding</code>, <code>kanban-board</code>, <code>finance-report</code>, <code>invoice</code></td>
+<td>HTML + CSS (document register)</td>
+</tr>
+<tr>
+<td><strong>Dashboards</strong></td>
+<td style="text-align: right;">~4</td>
+<td><code>dashboard</code>, <code>live-dashboard</code>, <code>flowai-team-dashboard</code>, <code>social-media-dashboard</code></td>
+<td>HTML + CSS + chart libraries</td>
+</tr>
+<tr>
+<td><strong>Posters</strong></td>
+<td style="text-align: right;">~2</td>
+<td><code>poster-hero</code>, <code>magazine-poster</code></td>
+<td>HTML + CSS, single-page display</td>
+</tr>
+<tr>
+<td><strong>Specialized</strong></td>
+<td style="text-align: right;">~11</td>
+<td><code>resume-modern</code>, <code>data-report</code>, <code>email-marketing</code>, <code>mockup-device-3d</code>, <code>doc-kami-parchment</code>, <code>docs-page</code>, <code>wireframe-sketch</code>, <code>dating-web</code>, <code>gamified-app</code>, <code>ppt-keynote</code>, <code>social-media-matrix</code></td>
+<td>varies</td>
+</tr>
+</tbody>
+</table>
+<h2 id="patterns-worth-naming">Patterns worth naming<a class="headerlink" href="#patterns-worth-naming" title="Permanent link">&para;</a></h2>
+<p>Even without committing to a muriel-side surface implementation, the html-anything catalog establishes patterns that map onto muriel conventions and inform future channel work:</p>
+<h3 id="1-typed-frontmatter-per-surface">1. Typed frontmatter per surface<a class="headerlink" href="#1-typed-frontmatter-per-surface" title="Permanent link">&para;</a></h3>
+<p>Each html-anything skill ships YAML frontmatter with fields muriel doesn't currently emit on channels:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deck-swiss-international</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">en_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Swiss</span><span class="nv"> </span><span class="s">International</span><span class="nv"> </span><span class="s">Deck&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">zh_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;瑞士国际主义</span><span class="nv"> </span><span class="s">Deck&quot;</span><span class="w">      </span><span class="c1"># ← bilingual title (CJK-first instances exist too)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">emoji</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;🟦&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;16</span><span class="nv"> </span><span class="s">列网格</span><span class="nv"> </span><span class="s">+</span><span class="nv"> </span><span class="s">单一饱和</span><span class="nv"> </span><span class="s">accent</span><span class="nv"> </span><span class="s">+</span><span class="nv"> </span><span class="s">22</span><span class="nv"> </span><span class="s">个锁死版面&quot;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slides</span><span class="w">                  </span><span class="c1"># surface family</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nt">scenario</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">marketing</span><span class="w">               </span><span class="c1"># what brief this serves</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nt">aspect_hint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;16:9</span><span class="nv"> </span><span class="s">横向翻页&quot;</span><span class="w">        </span><span class="c1"># canvas hint</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nt">featured</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span><span class="w">                       </span><span class="c1"># registry sort weight</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nt">recommended</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">                     </span><span class="c1"># featured-in-defaults rank</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;swiss&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;grid&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;international&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;ikb&quot;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="nt">example_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sample-swiss-international</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="nt">example_source_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://github.com/op7418/guizang-ppt-skill&quot;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="nt">example_source_label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;op7418/guizang-ppt-skill&quot;</span>
+</code></pre></div>
+<p>What's transferable to muriel channels — fields worth considering for a <code>kind: surface</code> schema extension in <a href="../../channels/SCHEMA/"><code>channels/SCHEMA.md</code></a>: <code>scenario</code> (what brief), <code>aspect_hint</code> (canvas), <code>example_source_url</code> + <code>example_source_label</code> (lineage citation as data, not prose).</p>
+<h3 id="2-absolute-rules-per-surface-locked-down-hex-locked-down-grid">2. Absolute rules per surface (locked-down hex / locked-down grid)<a class="headerlink" href="#2-absolute-rules-per-surface-locked-down-hex-locked-down-grid" title="Permanent link">&para;</a></h3>
+<p>Surfaces enforce non-negotiable constraints inside their archetype. <code>deck-swiss-international</code>'s rules read like muriel's universal rules but scoped to one surface:</p>
+<ul>
+<li><strong>Only direct angles.</strong> <code>border-radius: 0</code> everywhere; any curve breaks the surface.</li>
+<li><strong>1px hairline borders only.</strong> No shadows, no gradients, no blur.</li>
+<li><strong>16-column grid, gap 0.</strong></li>
+<li><strong>Pick exactly one theme from the four locked palettes</strong> — Klein Blue IKB <code>#002FA7</code>, Lemon Yellow <code>#FFD500</code>, Lemon Green <code>#C5E803</code>, Safety Orange <code>#FF6B35</code>. <strong>No hex modification, no mixing.</strong></li>
+<li><strong>Numbers must come from user input.</strong> Bar heights = real data, proportionally. Inventing numbers breaks the surface.</li>
+<li><strong>22 locked layouts</strong> (S01 Cover, S02 Vertical Timeline, S03 Statement, ..., S22 Image Hero). Don't invent new layouts; pick from the pool, repeat as needed.</li>
+</ul>
+<p>This pattern — <em>surface = channel substrate + locked layout pool + locked palette + locked typography + locked grid + non-negotiable composition rules</em> — is exactly what muriel could codify above its channels. Today muriel offers <em>capability</em> (the channels emit anything that clears 8:1 / weight×size×opacity / brand tokens); surfaces would offer <em>opinion</em> (this <em>specific</em> artifact must use this <em>specific</em> layout pool against this <em>specific</em> canvas).</p>
+<h3 id="3-cjk-first-font-stacks">3. CJK-first font stacks<a class="headerlink" href="#3-cjk-first-font-stacks" title="Permanent link">&para;</a></h3>
+<p>html-anything routinely pairs Latin display fonts with <code>Noto Sans SC</code> for Chinese:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Inter Tight (Latin display) / Inter (body) / Noto Sans SC (中文) / JetBrains Mono (数据)
+</code></pre></div>
+<p>muriel currently assumes Latin-only font stacks. The CJK pairing pattern (Latin first, CJK fallback in the same family) is a queued addition — see <a href="../../../../TODO.md"><code>TODO.md</code></a> i18n entry.</p>
+<h3 id="4-inspired-by-lineage-chain-in-skill-frontmatter">4. "Inspired by" lineage chain in skill frontmatter<a class="headerlink" href="#4-inspired-by-lineage-chain-in-skill-frontmatter" title="Permanent link">&para;</a></h3>
+<p>Most html-anything skills cite an <code>example_source_url</code> pointing to the prior art they descend from — <code>op7418/guizang-ppt-skill</code>, <code>hyperframes.heygen.com/catalog</code>, etc. The lineage is shipped <em>as a frontmatter field</em>, not buried in prose. Matches muriel's curator stance — credit travels with the artifact.</p>
+<h3 id="5-featured-recommended-ranking-as-data">5. Featured / recommended ranking as data<a class="headerlink" href="#5-featured-recommended-ranking-as-data" title="Permanent link">&para;</a></h3>
+<p><code>featured: 50</code>, <code>recommended: 2</code> — surfaces declare their own registry rank. An agent picking a surface for a brief can sort by these without reading the prose. muriel doesn't currently rank its channels/vocabs against each other; if surfaces ship muriel-side, this ranking pattern would let the picker do less work.</p>
+<h2 id="what-to-mine-what-to-leave">What to mine, what to leave<a class="headerlink" href="#what-to-mine-what-to-leave" title="Permanent link">&para;</a></h2>
+<p><strong>Worth mining when muriel ships surfaces:</strong></p>
+<ul>
+<li>The 9 families as a starting taxonomy (decks / frames / cards / web prototypes / articles / office docs / dashboards / posters / specialized).</li>
+<li>The typed frontmatter shape (<code>category</code>, <code>scenario</code>, <code>aspect_hint</code>, <code>featured</code>, <code>recommended</code>, <code>example_source_url</code>).</li>
+<li>"Absolute rules per surface" as enforceable gates in <code>muriel.critique</code> for that surface.</li>
+<li>The "locked layout pool" pattern (<code>deck-swiss-international</code>'s 22 S## layouts) as a <em>layout vocabulary</em> for the decks family.</li>
+<li>CJK-first font stacks as the default for any i18n-aware surface.</li>
+</ul>
+<p><strong>Worth leaving:</strong></p>
+<ul>
+<li>The full 75-surface catalog (most are variations of a few core patterns; muriel doesn't need to ship 75 to ship surfaces).</li>
+<li>html-anything's framework choice (Next.js app, registry-driven HTML rendering) — muriel is Python-first.</li>
+<li>The Chinese-marketplace-specific surfaces (<code>card-xiaohongshu</code>, <code>deck-xhs-*</code>) until a brief actually needs them.</li>
+<li>The "vibe-clone-this-PPTX" image-based skill (different ethos from muriel's deterministic-by-construction generation).</li>
+</ul>
+<h2 id="citation">Citation<a class="headerlink" href="#citation" title="Permanent link">&para;</a></h2>
+<p>When a muriel artifact draws on a surface pattern documented above, cite <a href="https://github.com/nexu-io/html-anything"><code>nexu-io/html-anything</code></a> with a surface name (e.g., "<code>deck-swiss-international</code> lineage"). When the underlying lineage extends further (<code>deck-swiss-international</code> cites <code>op7418/guizang-ppt-skill</code>), follow the chain — credit travels.</p>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../data-viz-platforms/"><code>vocabularies/data-viz-platforms.md</code></a> — sibling vocab surveying platform charting guides</li>
+<li><a href="../../channels/charts/"><code>channels/charts.md</code></a> — JS chart-library channel (charts.md substrate; surfaces compose charts.md into dashboards)</li>
+<li><a href="../../channels/polish/"><code>channels/polish.md</code></a> — UI micro-interaction discipline (orthogonal layer; polish applies to any surface's interactive elements)</li>
+<li><a href="../../channels/style-guides/"><code>channels/style-guides.md</code></a> — brand.toml schema (orthogonal; a surface inherits from a brand, the surface itself locks layout / grid / typography choices regardless of brand)</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

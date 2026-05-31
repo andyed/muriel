@@ -1,0 +1,2388 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/channels/charts/">
+      
+      
+        <link rel="prev" href="../spatial/">
+      
+      
+        <link rel="next" href="../infographics/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Charts - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#charts-data-viz-across-web-libraries" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Charts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#universal-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Universal rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Universal rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#layout-chrome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layout &amp; chrome
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#color-weight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Color &amp; weight
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#screen-extensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Screen extensions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#content-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Content &amp; format
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#color-tokens-muriel-strict-overrides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Color tokens — muriel-strict overrides
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Color tokens — muriel-strict overrides">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#webeditorial-register-tufte-light-muriel-strict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web/editorial register (Tufte light, muriel-strict)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oled-register-muriel-canonical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OLED register (muriel canonical)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#categorical-palettes-when-categories-must-be-distinguished-by-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Categorical palettes (when categories must be distinguished by color)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sequential-and-diverging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sequential and diverging
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#library-quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Library quick reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chart-type-guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chart-type guidance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns-detection-and-fix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-patterns — detection and fix
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Anti-patterns — detection and fix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#universal-anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Universal anti-patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-library-detection-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-library detection patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#can-i-remove-it-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Can I remove it?" test
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prior-art-upstream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prior art / upstream
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="charts-data-viz-across-web-libraries">Charts — Data viz across web libraries<a class="headerlink" href="#charts-data-viz-across-web-libraries" title="Permanent link">&para;</a></h1>
+<p>The JS/web charting channel: Recharts, ECharts, Chart.js, Plotly, D3/SVG. matplotlib lives in <a href="../science/"><code>channels/science.md</code></a> — read that for paper figures, stats reporting, and the OLED rcparams. This file is the agent-actionable counterpart for everything that renders in a browser.</p>
+<p>Structurally ported from <a href="https://github.com/caylent/tufte-data-viz">Caylent's <code>tufte-data-viz</code></a> (MIT) — they did the cross-library rule-naming work. Muriel's universal rules (8:1 contrast, weight × size × opacity floors, OLED palette, brand tokens) override their color tokens. Read upstream for deeper per-library code; this file is the muriel-curated subset plus the strictness overrides.</p>
+<p>Part of the <a href="../../SKILL/">muriel</a> skill — see the top-level index for mission, universal rules, and channel map.</p>
+<h2 id="when-to-use">When to use<a class="headerlink" href="#when-to-use" title="Permanent link">&para;</a></h2>
+<ul>
+<li>A blog post, dashboard, or React app needs a chart and you're reaching for Recharts/ECharts/Chart.js/Plotly/D3</li>
+<li>Reviewing chart code (PR review, AI-generated chart cleanup)</li>
+<li>Replacing a <code>&lt;Pie&gt;</code> or dual-y-axis chart someone else wrote</li>
+<li>Sparklines or slopegraphs anywhere (web, app, marginalia page)</li>
+</ul>
+<p>If the chart lands in a paper, lab notebook, or matplotlib pipeline — use <a href="../science/"><code>channels/science.md</code></a> instead.</p>
+<h2 id="workflow">Workflow<a class="headerlink" href="#workflow" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Identify the message.</strong> Before writing chart code: what is the <em>finding</em> this chart must make visible? What is the <em>comparison context</em> — baseline, target, prior period, peer group? If no finding, no chart (see rule 22).</li>
+<li><strong>Pick the right chart type</strong> from the chart-type guide below.</li>
+<li><strong>Apply the 22 universal rules.</strong> They are defaults — deviate only on explicit user instruction.</li>
+<li><strong>Apply library-specific config</strong> from the quick-reference table.</li>
+<li><strong>Run the validation checklist</strong> before declaring done.</li>
+<li><strong>Audit text colors with <code>muriel.contrast</code></strong> if the chart includes HTML/SVG text labels.</li>
+</ol>
+<h2 id="universal-rules">Universal rules<a class="headerlink" href="#universal-rules" title="Permanent link">&para;</a></h2>
+<p>Numbered for citation. Lifted from Tufte's classic principles + modern screen-first extensions; reworded for muriel's stricter floors.</p>
+<h3 id="layout-chrome">Layout &amp; chrome<a class="headerlink" href="#layout-chrome" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>No top or right borders.</strong> Bottom + left axes are sufficient. Top/right lines are chartjunk.</li>
+<li><strong>Direct labels, not legends.</strong> Label each series at the endpoint, on the bar, or beside the cluster. Drop the <code>&lt;Legend&gt;</code> component. If there is only one series, the title carries the context.</li>
+<li><strong>No gridlines by default.</strong> For static charts where exact reads matter, horizontal-only at 0.08–0.12 opacity. For interactive charts, a contextual crosshair on hover replaces gridlines (rule 15). Never vertical gridlines.</li>
+<li><strong>Range-frame axes.</strong> Axis lines span only the data's range, not zero-to-arbitrary-max. Start at (or near) the min; end at the max. Exception: zero-baseline bar charts must include zero (rule 11 corollary).</li>
+<li><strong>No 3D effects.</strong> No perspective, no depth, no shadows on data elements. 2D data → 2D representation.</li>
+<li><strong>No pie charts unless explicitly requested.</strong> Default to a horizontal bar chart sorted by value. If pie is required: max 4 slices, 2D, start at 12 o'clock, direct percentage labels per slice.</li>
+<li><strong>Aspect ratio ≈ 1.5:1.</strong> Charts ~50% wider than tall. Standard sizes: 600×400, 750×500, 900×600. Exception: sparklines and small multiples may be more compact.</li>
+<li><strong>No dual y-axes.</strong> They imply correlations that may not exist. Use small multiples — two charts stacked, shared x-axis.</li>
+</ol>
+<h3 id="color-weight">Color &amp; weight<a class="headerlink" href="#color-weight" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Background never pure white or pure black.</strong> Light: <code>#fffff8</code> (muriel's web/editorial register) or <code>#e6e4d2</code> (OLED cream). Dark: <code>#151515</code> or <code>#0a0a0f</code> (OLED near-black).</li>
+<li><strong>Gray-first, highlight selectively.</strong> Default series is a muted dark gray; one accent color highlights the most important series or data point. Max 4 distinct colors. See <em>Color tokens</em> below — the muriel-strict palette differs from Tufte's published palette because Tufte's defaults fail 8:1.</li>
+<li><strong>Bar baselines include zero.</strong> Truncating a bar y-axis above zero exaggerates differences. Lines and scatters may use range-frame axes; bars may not.</li>
+<li><strong>Annotate the notable.</strong> If the data contains a peak, trough, inflection, or event boundary, add a text annotation pointing to it. Place in the nearest clear space with a short leader line if needed.</li>
+<li><strong>Comparison context required.</strong> Every chart must answer <em>"compared to what?"</em> — a baseline line, target band, prior period series, or peer group. A solitary line with no reference fails. (See also SKILL.md universal rule.)</li>
+<li><strong>Minimal tooltips.</strong> Plain text with value and label. No colored background, no border, no arrow pointer, no shadow.</li>
+</ol>
+<h3 id="screen-extensions">Screen extensions<a class="headerlink" href="#screen-extensions" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Progressive disclosure over static density.</strong> Default to the clean overview; layer details through hover/tap/click. A contextual crosshair on hover replaces permanent gridlines.</li>
+<li><strong>Accessible by default.</strong> 8:1 minimum contrast on <strong>all text</strong> (muriel universal rule — Tufte settles for 4.5:1; we do not). Color is never the sole differentiator — pair with shape, dash pattern, or direct label. Every chart has a text alternative (<code>aria-label</code> summarizing the key finding, or a companion data table). Interactive charts are keyboard-navigable.</li>
+<li><strong>Responsive, not just resized.</strong> Use percentage width + <code>viewBox</code>, or adaptive breakpoint changes. At narrow viewports, change chart type or layout (horizontal bars, reduced tick density, abbreviated labels) — don't merely shrink.</li>
+<li><strong>Animate to explain, not decorate.</strong> Transitions for data changes (sort, filter, time-step) are good. Entrance bouncing, decorative motion, gratuitous "build-in" animations are chartjunk. Duration 200–500ms, ease-out. Always honor <code>prefers-reduced-motion</code>.</li>
+<li><strong>Dark mode is a first-class palette, never an inversion.</strong> Reduce saturation in dark mode (bright colors "vibrate" on dark backgrounds). Honor <code>prefers-color-scheme</code>. Use semantic tokens (<code>--chart-bg</code>, <code>--chart-text</code>, <code>--chart-series-default</code>) so swaps are automatic.</li>
+</ol>
+<h3 id="content-format">Content &amp; format<a class="headerlink" href="#content-format" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Titles assert findings.</strong> "Revenue Surged 23% in Q3" — not "Revenue by Quarter, 2024". The chart title states the insight. Subtitle adds context ("vs. prior year, USD millions"). If the data has no clear finding, the chart may not be needed (rule 22).</li>
+<li><strong>Format numbers for humans.</strong> Abbreviate large numbers (<code>$1.2M</code> not <code>$1,200,000</code>). Thousand separators for mid-range (<code>12,450</code>). Match decimal precision to significance. Right-align numbers in tables. State units once (axis label or title), not on every datum.</li>
+<li><strong>Don't chart what a sentence can say.</strong> 1–2 numbers → write a sentence with inline context ("Revenue was $4.2M, up 23% from Q2"). A simple ranking of 3–5 items → consider a table. Charts earn their space by revealing patterns, trends, or distributions that prose and tables cannot.</li>
+</ol>
+<h2 id="color-tokens-muriel-strict-overrides">Color tokens — muriel-strict overrides<a class="headerlink" href="#color-tokens-muriel-strict-overrides" title="Permanent link">&para;</a></h2>
+<p>Tufte's published palette uses <code>#666</code> series and <code>#e41a1c</code> accent. Both fail muriel's 8:1 floor on <code>#fffff8</code>. The muriel-strict palette below passes; verify with <code>python -m muriel.contrast &lt;file.svg&gt;</code> for any inline-styled output.</p>
+<h3 id="webeditorial-register-tufte-light-muriel-strict">Web/editorial register (Tufte light, muriel-strict)<a class="headerlink" href="#webeditorial-register-tufte-light-muriel-strict" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Hex</th>
+<th>Contrast vs <code>#fffff8</code></th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Background</td>
+<td><code>#fffff8</code></td>
+<td>—</td>
+<td>off-white, never pure</td>
+</tr>
+<tr>
+<td>Text primary (titles, data labels)</td>
+<td><code>#1a1a1a</code></td>
+<td>17.4:1</td>
+<td>≥500 weight at body sizes</td>
+</tr>
+<tr>
+<td>Text secondary (subtitles, annotations)</td>
+<td><code>#444</code></td>
+<td>9.7:1</td>
+<td>passes 8:1</td>
+</tr>
+<tr>
+<td>Axis / rule</td>
+<td><code>#444</code></td>
+<td>9.7:1</td>
+<td>match text-secondary</td>
+</tr>
+<tr>
+<td>Default data series</td>
+<td><code>#444</code></td>
+<td>9.7:1</td>
+<td>darker than Tufte's <code>#666</code></td>
+</tr>
+<tr>
+<td>Highlight / accent</td>
+<td><code>#8b0000</code></td>
+<td>10.0:1</td>
+<td>deeper than Tufte's <code>#e41a1c</code></td>
+</tr>
+<tr>
+<td>Gridline (if used)</td>
+<td><code>#ddd</code> at 1.0 opacity</td>
+<td>decorative</td>
+<td>never <code>opacity:</code> on text</td>
+</tr>
+</tbody>
+</table>
+<h3 id="oled-register-muriel-canonical">OLED register (muriel canonical)<a class="headerlink" href="#oled-register-muriel-canonical" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Hex</th>
+<th>Contrast vs <code>#0a0a0f</code></th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Background</td>
+<td><code>#0a0a0f</code></td>
+<td>—</td>
+<td>near-black, never pure</td>
+</tr>
+<tr>
+<td>Text primary</td>
+<td><code>#e6e4d2</code></td>
+<td>15.4:1</td>
+<td>cream, matches matplotlibrc_dark</td>
+</tr>
+<tr>
+<td>Text secondary</td>
+<td><code>#bbb</code></td>
+<td>9.5:1</td>
+<td>passes 8:1</td>
+</tr>
+<tr>
+<td>Axis / rule</td>
+<td><code>#bbb</code></td>
+<td>9.5:1</td>
+<td>match text-secondary</td>
+</tr>
+<tr>
+<td>Default data series</td>
+<td><code>#bbb</code></td>
+<td>9.5:1</td>
+<td>darker than Tufte's <code>#999</code></td>
+</tr>
+<tr>
+<td>Highlight / accent</td>
+<td><code>#ffa07a</code></td>
+<td>9.2:1</td>
+<td>salmon — passes 8:1 on near-black</td>
+</tr>
+<tr>
+<td>Gridline (if used)</td>
+<td><code>#3a3a4a</code></td>
+<td>decorative</td>
+<td>meets the ≥55/255 dark-bg floor</td>
+</tr>
+</tbody>
+</table>
+<h3 id="categorical-palettes-when-categories-must-be-distinguished-by-color">Categorical palettes (when categories must be distinguished by color)<a class="headerlink" href="#categorical-palettes-when-categories-must-be-distinguished-by-color" title="Permanent link">&para;</a></h3>
+<p>Direct labels handle most cases (rule 2). When a true categorical encoding is unavoidable, use a colorblind-safe palette — never auto-generated rainbows. Muriel ships these as importable constants in <code>muriel.palettes</code> (queued — see SKILL.md TODO). Until shipped, hard-code by hand.</p>
+<ul>
+<li><strong>Wong 8</strong> (Nature Methods 2011, optimized for protanopia/deuteranopia/tritanopia):
+  <code>#000000 #E69F00 #56B4E9 #009E73 #F0E442 #0072B2 #D55E00 #CC79A7</code></li>
+<li><strong>IBM 5</strong> (IBM Design Language v2):
+  <code>#648FFF #785EF0 #DC267F #FE6100 #FFB000</code></li>
+<li><strong>Tol bright 7</strong> (Paul Tol):
+  <code>#4477AA #EE6677 #228833 #CCBB44 #66CCEE #AA3377 #BBBBBB</code></li>
+</ul>
+<p>Max 4 categories before pattern-pairing or small-multiplying. Always pair color with a second channel (shape, dash pattern, direct label).</p>
+<h3 id="sequential-and-diverging">Sequential and diverging<a class="headerlink" href="#sequential-and-diverging" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Sequential</strong> (ordered magnitude): use viridis, cividis, or any single-hue ramp. Never rainbow (perceptually non-uniform; colorblind-hostile).</li>
+<li><strong>Diverging</strong> (deviation from a midpoint): two-hue blue↔red or teal↔orange, white-center. Use for effect sizes, profit/loss, change-from-baseline.</li>
+</ul>
+<h2 id="library-quick-reference">Library quick reference<a class="headerlink" href="#library-quick-reference" title="Permanent link">&para;</a></h2>
+<p>The 22 universal rules are sufficient for most charts. Per-library essentials below. For deep code examples, read the corresponding file in the upstream <a href="https://github.com/caylent/tufte-data-viz/tree/main/rules"><code>tufte-data-viz/rules/</code></a> — same rule names, same numbering.</p>
+<table>
+<thead>
+<tr>
+<th>Library</th>
+<th>Essential config (muriel-strict tokens applied)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Recharts</strong></td>
+<td><code>&lt;CartesianGrid stroke="none" /&gt;</code> · drop <code>&lt;Legend /&gt;</code> · <code>&lt;YAxis axisLine={false} tickLine={false} tick={{fill:'#444',fontSize:12}} /&gt;</code> · <code>&lt;Line dot={false} strokeWidth={1.5} stroke="#444" /&gt;</code> · highlight series: <code>stroke="#8b0000"</code> · background: wrap in <code>&lt;div style={{background:'#fffff8'}}&gt;</code></td>
+</tr>
+<tr>
+<td><strong>ECharts</strong></td>
+<td><code>splitLine:{show:false}</code> · <code>legend:{show:false}</code> · <code>grid:{show:false}</code> · series: <code>endLabel:{show:true,formatter:'{a}'}</code> for direct labels · <code>backgroundColor:'#fffff8'</code> · axis text color: <code>#444</code>. <strong>For dashboard / interactive / dark-theme work</strong> (timeline overlays, playhead sync with HTML5 <code>&lt;audio&gt;</code>, <code>markArea</code> + <code>markLine</code> patterns, the training-data accuracy caveat) — see <a href="../../vocabularies/echarts/"><code>vocabularies/echarts.md</code></a>.</td>
+</tr>
+<tr>
+<td><strong>Chart.js</strong></td>
+<td><code>scales.x.grid.display:false</code> · <code>scales.x.border.display:false</code> (same for y) · <code>plugins.legend.display:false</code> · use <code>chartjs-plugin-datalabels</code> for direct labels · <code>backgroundColor:'rgba(68,68,68,0.8)'</code> (muriel <code>#444</code>)</td>
+</tr>
+<tr>
+<td><strong>Plotly</strong></td>
+<td><code>showgrid=False</code> · <code>showlegend=False</code> · <code>plot_bgcolor='#fffff8'</code> · <code>paper_bgcolor='#fffff8'</code> · <code>zeroline=False</code> · <code>tickfont=dict(color='#444',size=12)</code> · use <code>fig.add_annotation(...)</code> for endpoint labels</td>
+</tr>
+<tr>
+<td><strong>D3/SVG/HTML</strong></td>
+<td><code>.domain { display: none }</code> for axis lines (or set <code>stroke:#444; stroke-width:0.5</code>) · no <code>&lt;rect&gt;</code> backgrounds · gridlines at <code>stroke-opacity:0.1</code> if at all · use <code>&lt;text&gt;</code> for direct labels at <code>fill:#444</code></td>
+</tr>
+<tr>
+<td><strong>matplotlib</strong></td>
+<td>see <a href="../science/"><code>channels/science.md</code></a> — already covered via <code>muriel.matplotlibrc_dark</code> / <code>_light</code> importable rcparams</td>
+</tr>
+</tbody>
+</table>
+<h2 id="chart-type-guidance">Chart-type guidance<a class="headerlink" href="#chart-type-guidance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Key settings</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Line</strong></td>
+<td>1.5–2px stroke, no dots unless ≤7 points (then r=2), direct label at rightmost point, range-frame axes</td>
+</tr>
+<tr>
+<td><strong>Bar</strong></td>
+<td>Prefer horizontal for categorical labels (avoids rotated ticks). Sort by value descending. Direct value labels. Default fill <code>#444</code>. Zero baseline required (rule 11).</td>
+</tr>
+<tr>
+<td><strong>Scatter</strong></td>
+<td>Gray dots <code>#444</code> r=3. Highlight key cluster/outlier with <code>#8b0000</code>. Regression line if meaningful (dashed, thin).</td>
+</tr>
+<tr>
+<td><strong>Time series</strong></td>
+<td>Label events on chart ("Recession", "Launch"), range-frame x-axis. YoY: current solid, prior period 30% opacity.</td>
+</tr>
+<tr>
+<td><strong>Small multiples</strong></td>
+<td>Shared scale across ALL panels (most-common bug: per-panel auto-scale). X labels only on bottom row; y labels only on leftmost column. No panel borders.</td>
+</tr>
+<tr>
+<td><strong>Sparklines</strong></td>
+<td>≈80×20px. No axes, labels, or gridlines. Min/max dots at r=1.5. Embed inline in text or table cells.</td>
+</tr>
+<tr>
+<td><strong>Slopegraph</strong></td>
+<td>Before/after categories. Label both endpoints (value + name). Gray default + highlight key slopes with <code>#8b0000</code>.</td>
+</tr>
+<tr>
+<td><strong>Data table</strong></td>
+<td>No zebra striping (moire). Whitespace + thin rules every 3–5 rows. Right-align numbers. <code>font-feature-settings: 'onum' 1</code> for old-style figures.</td>
+</tr>
+<tr>
+<td><strong>Area</strong></td>
+<td>Prefer lines. If area: fillOpacity 0.03–0.08, no gradient, direct labels at endpoints.</td>
+</tr>
+<tr>
+<td><strong>Stacked bar</strong></td>
+<td>Avoid — use small multiples. If forced: sort by total, direct labels per segment, max 4 segments.</td>
+</tr>
+<tr>
+<td><strong>Heatmap</strong></td>
+<td>See <a href="../heatmaps/"><code>channels/heatmaps.md</code></a> for density overlays. For categorical heatmaps: sequential or diverging palette only, value labels in cells, companion data table for accessibility.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="anti-patterns-detection-and-fix">Anti-patterns — detection and fix<a class="headerlink" href="#anti-patterns-detection-and-fix" title="Permanent link">&para;</a></h2>
+<p>When reviewing chart code, grep for these patterns. Each row is a PATTERN → FIX one-liner. Per-library detection blocks follow.</p>
+<h3 id="universal-anti-patterns">Universal anti-patterns<a class="headerlink" href="#universal-anti-patterns" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Anti-pattern</th>
+<th>Why it fails</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pie chart</td>
+<td>Humans poorly compare angles/areas. 28% vs 32% looks identical.</td>
+<td>Horizontal bar, sorted by value.</td>
+</tr>
+<tr>
+<td>3D effects</td>
+<td>Perspective distorts. Back bars appear smaller than equal front bars.</td>
+<td>Flat 2D only.</td>
+</tr>
+<tr>
+<td>Dual y-axes</td>
+<td>Implies false correlation. Scale tricks make any two lines look correlated.</td>
+<td>Two stacked charts, shared x.</td>
+</tr>
+<tr>
+<td>Legend box</td>
+<td>Eyes shuttle legend↔data. +40% cognitive load.</td>
+<td>Direct labels at endpoints/on data.</td>
+</tr>
+<tr>
+<td>Heavy gridlines</td>
+<td>Cage that imprisons the data. Competes for attention.</td>
+<td>Remove, or horizontal-only at 0.08–0.12 opacity.</td>
+</tr>
+<tr>
+<td>Rainbow palette</td>
+<td>No natural ordering. Inaccessible to 8% of males.</td>
+<td>Gray + accent, or Wong/IBM/Tol palette.</td>
+</tr>
+<tr>
+<td>Gauge / speedometer</td>
+<td>Huge area for one number. No trend, no context.</td>
+<td>Single large number + sparkline + comparison.</td>
+</tr>
+<tr>
+<td>Zebra-striped table</td>
+<td>Moire vibration. Stripes louder than data.</td>
+<td>Whitespace + thin rules every 3–5 rows.</td>
+</tr>
+<tr>
+<td>Gradient fills</td>
+<td>No information. Distract from value reading.</td>
+<td>Solid flat fill (muted gray or accent).</td>
+</tr>
+<tr>
+<td>Rotated axis labels</td>
+<td>45°/90° text is hard to read.</td>
+<td>Horizontal bar chart, or abbreviate ticks.</td>
+</tr>
+<tr>
+<td>Truncated bar y-axis</td>
+<td>A 2% change looks like 50% swing.</td>
+<td>Include zero, or annotate the axis break explicitly.</td>
+</tr>
+<tr>
+<td>Decorative borders</td>
+<td>Box around chart is chartjunk.</td>
+<td>Remove. Whitespace defines the chart boundary.</td>
+</tr>
+<tr>
+<td>Markers on every point</td>
+<td>50+ circles = confetti, obscures trend.</td>
+<td><code>dot={false}</code> or markers only at min/max/endpoint.</td>
+</tr>
+<tr>
+<td>Thick axis lines (2–3px)</td>
+<td>1+1=3 effect; phantom visual weight.</td>
+<td>0.5–1px, or remove if ticks orient.</td>
+</tr>
+<tr>
+<td>Hover-only information</td>
+<td>Touch and keyboard users get nothing. WCAG violation.</td>
+<td>Tap/click/focus fallback.</td>
+</tr>
+<tr>
+<td>Missing text alternative</td>
+<td>Screen-readers announce nothing.</td>
+<td><code>aria-label</code> with key finding + data summary.</td>
+</tr>
+<tr>
+<td>Color as sole differentiator</td>
+<td>8% of males have CVD.</td>
+<td>Pair with shape, dash pattern, or direct label.</td>
+</tr>
+<tr>
+<td>Gratuitous entrance animation</td>
+<td>Delays comprehension.</td>
+<td>Remove, or gate behind <code>prefers-reduced-motion</code>.</td>
+</tr>
+<tr>
+<td>Fixed pixel width</td>
+<td>Mobile overflow.</td>
+<td>Percentage/<code>viewBox</code> width, or breakpoint-based layout.</td>
+</tr>
+<tr>
+<td>Tufte <code>#666</code> series + <code>#e41a1c</code> accent</td>
+<td>Fails muriel's 8:1 (5.7 / 4.7).</td>
+<td>Use <code>#444</code> series + <code>#8b0000</code> accent (9.7 / 10.0).</td>
+</tr>
+<tr>
+<td><code>opacity:</code> on text labels</td>
+<td>Composites effective contrast below the raw token.</td>
+<td>Set color directly; never reach for opacity on text.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="per-library-detection-patterns">Per-library detection patterns<a class="headerlink" href="#per-library-detection-patterns" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>RECHARTS
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  &lt;Legend /&gt;                                 → remove; add direct labels
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  &lt;CartesianGrid /&gt;                          → &lt;CartesianGrid stroke=&quot;none&quot; /&gt;
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  &lt;Pie&gt; / &lt;PieChart&gt;                         → &lt;BarChart layout=&quot;vertical&quot;&gt;
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  fill=&quot;url(#gradient...)&quot;                   → fill=&quot;#444&quot;
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  &lt;YAxis yAxisId=&quot;right&quot; /&gt;                  → two &lt;LineChart&gt; stacked
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  stroke=&quot;#e41a1c&quot; or other Tufte color      → stroke=&quot;#8b0000&quot; (muriel-strict)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  &lt;Area fillOpacity={0.3+} /&gt;                → &lt;Line /&gt; or fillOpacity={0.05}
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  fill=&quot;#666&quot; / stroke=&quot;#666&quot;                → fill=&quot;#444&quot; / stroke=&quot;#444&quot;
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>ECHARTS
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  type: &#39;pie&#39;                                → type: &#39;bar&#39;, horizontal
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  splitLine: { show: true }                  → splitLine: { show: false }
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  legend: { show: true }                     → legend: { show: false } + endLabel
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  series.areaStyle.opacity &gt;= 0.3            → opacity: 0.05 or remove
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>  visualMap with rainbow                     → single-hue sequential
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>  textStyle.color: &#39;#666&#39;                    → &#39;#444&#39;
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>CHART.JS
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>  type: &#39;pie&#39; / &#39;doughnut&#39;                  → type: &#39;bar&#39;, indexAxis: &#39;y&#39;
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>  grid.display: true                         → grid.display: false
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>  border.display: true                       → border.display: false
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>  plugins.legend.display: true               → display: false + datalabels plugin
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>  backgroundColor: &#39;rgba(R,G,B,0.5)&#39;         → &#39;rgba(68,68,68,0.8)&#39; (#444)
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>PLOTLY
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>  go.Pie(...)                                → go.Bar(orientation=&#39;h&#39;, ...)
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>  showlegend=True                            → showlegend=False + annotations
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>  showgrid=True                              → showgrid=False
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>  plot_bgcolor=&#39;white&#39; / &#39;#ffffff&#39;           → plot_bgcolor=&#39;#fffff8&#39;
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>  font.color=&#39;#666&#39;                          → font.color=&#39;#444&#39;
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>D3/SVG/HTML
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>  &lt;rect class=&quot;background&quot; fill=&quot;white&quot; /&gt;   → remove or fill=&#39;#fffff8&#39;
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>  .grid line { stroke-opacity: 0.5+; }       → 0.08–0.12, horizontal only
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>  rainbow scale (d3.interpolateRainbow)      → d3.interpolateViridis
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>  text { fill: #666; }                       → fill: #444
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>  text { opacity: 0.6; }                     → remove; set fill directly
+</code></pre></div>
+<h2 id="can-i-remove-it-test">"Can I remove it?" test<a class="headerlink" href="#can-i-remove-it-test" title="Permanent link">&para;</a></h2>
+<p>For each non-data element, ask: <em>if I delete this, does the chart lose information?</em></p>
+<ul>
+<li>Gridlines → usually no (data marks show position)</li>
+<li>Legend → no (if directly labeled)</li>
+<li>Axis title → sometimes no (if chart title already specifies the axis)</li>
+<li>Top/right borders → always no</li>
+<li>Background color other than off-white/near-black → always no</li>
+<li>Tick marks → maybe (keep if needed for read-precision, remove if axis line is sufficient)</li>
+<li>Tooltip border/background → always no</li>
+</ul>
+<p>If "no," remove. If "maybe," try removing and verify the chart still communicates.</p>
+<h2 id="validation-checklist">Validation checklist<a class="headerlink" href="#validation-checklist" title="Permanent link">&para;</a></h2>
+<p>Before declaring a chart done:</p>
+<ul>
+<li>[ ] No top or right borders/spines</li>
+<li>[ ] No legend (or only when ≥3 series and direct labeling impossible)</li>
+<li>[ ] No vertical gridlines; horizontal gridlines only at ≤0.12 opacity if at all</li>
+<li>[ ] No pie chart (or explicit user request + max 4 slices)</li>
+<li>[ ] No dual y-axes</li>
+<li>[ ] No 3D, no gradient fills, no decorative borders</li>
+<li>[ ] Bar y-axis includes zero; line/scatter axes range-framed</li>
+<li>[ ] Title asserts the finding (rule 20)</li>
+<li>[ ] Comparison context present (baseline, target, prior period — rule 13)</li>
+<li>[ ] Each series directly labeled (rule 2)</li>
+<li>[ ] Notable points annotated (rule 12)</li>
+<li>[ ] All text passes 8:1 contrast — run <code>python -m muriel.contrast file.svg</code> for SVG output</li>
+<li>[ ] No <code>opacity:</code> on text labels</li>
+<li>[ ] Categorical encoding paired with shape/dash/label, not color alone</li>
+<li>[ ] <code>aria-label</code> or companion data table present for screen-readers</li>
+<li>[ ] Responsive strategy chosen (not just shrunk)</li>
+<li>[ ] Animation gated behind <code>prefers-reduced-motion</code></li>
+<li>[ ] Dark mode palette designed, not auto-inverted</li>
+<li>[ ] Numbers formatted for humans (abbreviated, thousand-separated, units stated once)</li>
+<li>[ ] The chart would lose information if you removed it (rule 22 — otherwise replace with a sentence)</li>
+</ul>
+<h2 id="prior-art-upstream">Prior art / upstream<a class="headerlink" href="#prior-art-upstream" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><a href="https://github.com/caylent/tufte-data-viz">Caylent <code>tufte-data-viz</code></a></strong> (MIT). The structural model for this channel — 22 numbered rules, per-library cheat tables, anti-pattern PATTERN→FIX detection, can-I-remove test. Worth installing directly (<code>npx skills add caylent/tufte-data-viz</code>) when you want their full per-library rule files (each ~7–9KB). Muriel takes the structure and replaces the color tokens with our 8:1-passing palette; we keep their rule names so cross-references stay legible. Specific divergences:</li>
+<li>Contrast bar: they target WCAG AA (3:1 element, 4.5:1 text); muriel mandates 8:1 text floor.</li>
+<li>Default series: they use <code>#666</code> (5.7:1, fails); we use <code>#444</code> (9.7:1, passes).</li>
+<li>Highlight: they use <code>#e41a1c</code> (4.7:1, fails); we use <code>#8b0000</code> (10.0:1, passes).</li>
+<li>Dark-mode series: they use <code>#999</code> (6.4:1, fails); we use <code>#bbb</code> (9.5:1, passes).</li>
+<li>Dark-mode highlight: they use <code>#fc8d62</code> (7.9:1, fails); we use <code>#ffa07a</code> (9.2:1, passes).</li>
+<li>Weight × size × opacity floor: muriel adds the body-weight ≥500 / no-opacity-on-text rule on top of contrast (Tufte addresses contrast only).</li>
+<li><strong><a href="https://www.edwardtufte.com/book/the-visual-display-of-quantitative-information/">Tufte, <em>The Visual Display of Quantitative Information</em></a></strong> (1983, 2nd ed. 2001). The book the upstream skill descends from. Coining sources for data-ink ratio, chartjunk, range-frame, small multiples, sparklines, slopegraph.</li>
+<li><strong><a href="https://www.nature.com/articles/nmeth.1618">Wong, <em>Points of view: Color blindness</em></a></strong> (Nature Methods, 2011). Source for the Wong 8 palette.</li>
+<li><strong><a href="https://personal.sron.nl/~pault/">Paul Tol's notes on colour schemes</a></strong>. Source for Tol bright/light/muted palettes.</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

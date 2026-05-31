@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Muriel — animated colophon</title>
+<style>
+  :root {
+    --paper: #E8E2D0;
+    --mark:  #750014;
+    --ink:   #121212;
+    --accent: #750014;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); height: 100%; }
+  body {
+    display: grid;
+    place-items: center;
+    font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+  }
+  .stage { width: 1200px; max-width: 100vw; aspect-ratio: 1200/630; }
+  svg { width: 100%; height: 100%; display: block; }
+  .bar { fill: var(--mark); }
+  .rule { stroke: var(--mark); stroke-width: 2; }
+  .wordmark { font-size: 76px; font-weight: 700; fill: var(--ink); letter-spacing: -0.01em; }
+  .sub1 { font-size: 22px; fill: var(--ink); }
+  .sub2 { font-size: 17px; fill: #5C5852; }
+  .credit { font-size: 11px; fill: var(--accent); fill-opacity: 0.88; }
+  .controls {
+    position: fixed; bottom: 14px; right: 14px;
+    display: flex; gap: 8px; font-size: 11px;
+  }
+  button {
+    background: transparent; border: 1px solid var(--ink); color: var(--ink);
+    padding: 4px 10px; border-radius: 2px; cursor: pointer; font: inherit;
+  }
+  button:hover { background: var(--ink); color: var(--paper); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+    <!-- Six bars — outer two are static (M's stems), inner four breathe
+         in sync so the top edges always trace an M silhouette with a
+         varying V-depth. -->
+    <rect class="bar" id="b0"/>
+    <rect class="bar" id="b1"/>
+    <rect class="bar" id="b2"/>
+    <rect class="bar" id="b3"/>
+    <rect class="bar" id="b4"/>
+    <rect class="bar" id="b5"/>
+
+    <!-- Rule + wordmark -->
+    <line class="rule" x1="400" y1="410" x2="800" y2="410"/>
+    <text class="wordmark" x="600" y="490" text-anchor="middle">muriel</text>
+    <text class="sub1"     x="600" y="532" text-anchor="middle">scriptable visual production toolkit</text>
+    <text class="sub2"     x="600" y="558" text-anchor="middle">for researcher-designer-engineers</text>
+    <text class="credit"   x="40"  y="612">after muriel cooper · mit press colophon, 1962</text>
+  </svg>
+</div>
+
+<div class="controls">
+  <button id="pauseBtn">pause</button>
+  <button id="speedBtn">speed · 1×</button>
+</div>
+
+<script>
+(() => {
+  // ── Colophon geometry ──────────────────────────────────────────────
+  const CX = 600, CY_TOP = 90;      // top-of-tallest-bar anchors here
+  const MARK_H = 280;                // tallest bar height
+  const BAR_GAP = 10;
+  // Widths proportional to letter visual mass: M U R I E L
+  const WIDTHS = [30, 20, 20, 8, 16, 10];
+  const SCALE  = 4.4;                 // unit → px multiplier
+  const WIDTHS_PX = WIDTHS.map(w => Math.round(w * SCALE));
+  const TOTAL_W = WIDTHS_PX.reduce((a,b) => a+b, 0) + BAR_GAP * (WIDTHS_PX.length - 1);
+  const START_X = CX - TOTAL_W / 2;
+  const BOTTOM_Y = CY_TOP + MARK_H;
+
+  // Lay out each bar's X position
+  const xs = [];
+  let x = START_X;
+  for (const w of WIDTHS_PX) { xs.push(x); x += w + BAR_GAP; }
+
+  const bars = [0,1,2,3,4,5].map(i => document.getElementById('b' + i));
+  // Base (reference) heights — bars at these heights render at base widths.
+  const BASE_H_FRAC = [1.00, 0.62, 0.24, 0.24, 0.62, 1.00];
+
+  // ── M-silhouette breathing, FLOATING inner bars ────────────────────
+  // Outer bars pinned to baseline (M's stems). Inner four float above
+  // the baseline — their bottoms are lifted by a fraction of the drop,
+  // their tops still trace the M silhouette. Both top AND bottom edges
+  // trace an M shape, which is where the "impact" comes from.
+  //
+  // The V breathes between shallow and deep extremes.
+  const OUTER_H = 1.00;
+  // Each inner bar breathes independently within its role's height range
+  // (outer-inner pair: 0.55–0.78; inner-inner pair: 0.22–0.55). Phases
+  // are close but not identical, so bars 1-4 can differ subtly — the
+  // M is preserved because each bar STAYS in its role's range, so the
+  // V monotonicity is intrinsic (no cross-role collapse). Total width
+  // is kept constant so the mark's footprint doesn't bounce.
+  const BAR_SHALLOW = [null, 0.78, 0.55, 0.55, 0.78, null];
+  const BAR_DEEP    = [null, 0.55, 0.22, 0.22, 0.55, null];
+  const BAR_PHASES  = [0,    0.0,  1.4,  3.1,  0.7,  0];
+  const BAR_PERIODS = [0,    9.2,  8.6,  8.0,  9.4,  0];
+  const FLOAT_FRAC_A = 0.45;
+  const FLOAT_FRAC_B = 0.60;
+
+  function innerBreath(i, tSec) {
+    const phase = ((tSec + BAR_PHASES[i]) / BAR_PERIODS[i]) * Math.PI * 2;
+    const u = (Math.sin(phase) + 1) / 2;
+    return BAR_SHALLOW[i] + (BAR_DEEP[i] - BAR_SHALLOW[i]) * u;
+  }
+
+  function heightsAt(tSec) {
+    return [OUTER_H,
+            innerBreath(1, tSec), innerBreath(2, tSec),
+            innerBreath(3, tSec), innerBreath(4, tSec),
+            OUTER_H];
+  }
+
+  function floatFor(i) {
+    if (i === 1 || i === 4) return FLOAT_FRAC_A;
+    if (i === 2 || i === 3) return FLOAT_FRAC_B;
+    return 0;
+  }
+
+  // Width-as-corrective-axis: when a bar's height drops below its base,
+  // its width grows slightly to preserve visual mass. When the bar grows
+  // taller than base, width shrinks. Clamped to [MIN_W_MULT, MAX_W_MULT]
+  // so extremes stay readable. The M silhouette is perceivable even when
+  // heights drift because the bars rebalance on the x-axis.
+  const MIN_W_MULT = 0.88;
+  const MAX_W_MULT = 1.24;
+  function widthMultFor(i, heightFrac) {
+    if (i === 0 || i === 5) return 1.0;           // outer stems stable
+    const base = BASE_H_FRAC[i];
+    // Inverse-sqrt keeps area ~= base_area while clamping extremes
+    const mult = Math.sqrt(base / Math.max(0.05, heightFrac));
+    return Math.max(MIN_W_MULT, Math.min(MAX_W_MULT, mult));
+  }
+
+  // The x-axis constraint: TOTAL width of all inner bars is preserved.
+  // When one inner bar widens (because its height dropped), another must
+  // narrow to compensate. Outer stems are fixed; inner bars redistribute.
+  const OUTER_BASE_W = WIDTHS_PX[0] + WIDTHS_PX[5];
+  const INNER_BASE_TOTAL = WIDTHS_PX[1] + WIDTHS_PX[2] + WIDTHS_PX[3] + WIDTHS_PX[4];
+
+  function apply(hs) {
+    // Desired (pre-normalization) widths per bar.
+    const desired = hs.map((hFrac, i) => WIDTHS_PX[i] * widthMultFor(i, hFrac));
+    // Normalize inner bars so their sum matches the fixed inner-total.
+    const innerDesiredSum = desired[1] + desired[2] + desired[3] + desired[4];
+    const innerScale = INNER_BASE_TOTAL / Math.max(0.01, innerDesiredSum);
+    const widths = desired.map((w, i) =>
+      (i === 0 || i === 5) ? WIDTHS_PX[i] : Math.round(w * innerScale));
+    // Preserve total inner width exactly (rounding correction)
+    const postRound = widths[1] + widths[2] + widths[3] + widths[4];
+    widths[2] += INNER_BASE_TOTAL - postRound;   // absorb ±1px into bar 2
+
+    const totalW = widths.reduce((a,b) => a+b, 0) + BAR_GAP * (widths.length - 1);
+    let x = CX - totalW / 2;
+
+    for (let i = 0; i < bars.length; i++) {
+      const h = Math.round(hs[i] * MARK_H);
+      let lift = 0;
+      if (i >= 1 && i <= 4) {
+        const drop = MARK_H - h;
+        lift = Math.round(drop * floatFor(i));
+      }
+      const y = BOTTOM_Y - h - lift;
+      bars[i].setAttribute('x', x);
+      bars[i].setAttribute('y', y);
+      bars[i].setAttribute('width', widths[i]);
+      bars[i].setAttribute('height', h);
+      x += widths[i] + BAR_GAP;
+    }
+  }
+
+  // ── Animation loop ─────────────────────────────────────────────────
+  let startTime = null;
+  let paused = false;
+  let pausedAt = 0;
+  let speed = 1;
+
+  function frame(now) {
+    if (startTime == null) startTime = now;
+    const tSec = paused ? pausedAt : (now - startTime) / 1000 * speed;
+    apply(heightsAt(tSec));
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // ── Controls ───────────────────────────────────────────────────────
+  const pauseBtn = document.getElementById('pauseBtn');
+  pauseBtn.addEventListener('click', () => {
+    if (!paused) {
+      pausedAt = (performance.now() - startTime) / 1000 * speed;
+      paused = true;
+      pauseBtn.textContent = 'play';
+    } else {
+      startTime = performance.now() - (pausedAt / speed) * 1000;
+      paused = false;
+      pauseBtn.textContent = 'pause';
+    }
+  });
+
+  const speedBtn = document.getElementById('speedBtn');
+  const speeds = [1, 0.5, 2];
+  let speedIdx = 0;
+  speedBtn.addEventListener('click', () => {
+    const tSec = paused ? pausedAt : (performance.now() - startTime) / 1000 * speed;
+    speedIdx = (speedIdx + 1) % speeds.length;
+    speed = speeds[speedIdx];
+    startTime = performance.now() - (tSec / speed) * 1000;
+    if (paused) pausedAt = tSec;
+    speedBtn.textContent = `speed · ${speed}×`;
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,2479 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/channels/science/">
+      
+      
+        <link rel="prev" href="../infographics/">
+      
+      
+        <link rel="next" href="../diagrams/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Science - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#science-paper-figures-stats-reporting-notebook-editorial" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Science
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#matplotlib-rcparams-oled-compliant-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        matplotlib rcparams — OLED-compliant defaults
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="matplotlib rcparams — OLED-compliant defaults">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#importable-module-preferred" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Importable module (preferred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drop-in-dark-block-oled-palette" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drop-in dark block (OLED palette)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#light-theme-variant-for-journal-submissions-that-require-white" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Light theme variant (for journal submissions that require white)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plot-readability-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plot readability rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Plot readability rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#axes-proportional-to-signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Axes proportional to signal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fonts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fonts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#label-every-number" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Label every number
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Color
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#statistical-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Statistical reporting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Statistical reporting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#importable-helpers-preferred" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Importable helpers (preferred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#effect-sizes-with-confidence-intervals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Effect sizes with confidence intervals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#null-results-framed-as-detection-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Null results framed as detection limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-committed-vs-exploratory-analyses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-committed vs. exploratory analyses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#copy-paste-formulations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Copy-paste formulations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notebook-editorial-pass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notebook editorial pass
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Notebook editorial pass">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caption-first-writing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caption-first writing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#latex-bibtex-bridge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LaTeX / BibTeX bridge
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="LaTeX / BibTeX bridge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#export-for-latex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Export for LaTeX
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bibtex-hygiene" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BibTeX hygiene
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recipes-for-current-projects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipes for current projects
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recipes for current projects">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adserp-fixation-phase-plot-f-pattern-decomposition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AdSERP fixation-phase plot (F-pattern decomposition)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pupil-lfhf-trajectory-with-ci-ribbon-ettac-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pupil LF/HF trajectory with CI ribbon (ETTAC 2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#small-multiples-of-scanpaths-by-condition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Small multiples of scanpaths by condition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#effect-size-forest-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Effect-size forest plot
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns-to-reject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-patterns to reject
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prior-art-upstream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prior art / upstream
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="science-paper-figures-stats-reporting-notebook-editorial">Science — Paper Figures, Stats Reporting, Notebook Editorial<a class="headerlink" href="#science-paper-figures-stats-reporting-notebook-editorial" title="Permanent link">&para;</a></h1>
+<p>The research-communication channel. How to produce figures, statistical reports, and notebook prose that meet the standards of publishable research — empirically grounded, honestly framed, reproducibly generated, and readable at the sizes papers actually print.</p>
+<p>Part of the <a href="../../SKILL/">muriel</a> skill — see the top-level index for mission, universal rules, and channel map. Closely related: <a href="../gaze/">channels/gaze.md</a>, <a href="../heatmaps/">channels/heatmaps.md</a>, <a href="../svg/">channels/svg.md</a>.</p>
+<h2 id="when-to-use">When to use<a class="headerlink" href="#when-to-use" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Paper figures for CHI, ETTAC, CIKM, IUI submissions</li>
+<li>Research notebook editorial passes (explicit metric definitions, caption-first prose)</li>
+<li>Statistical reports (effect sizes with confidence intervals, null results framed as detection limits)</li>
+<li>LaTeX figure round-trip (matplotlib PDF/PGF → paper build)</li>
+<li>Pre-registration boilerplate and methods sections</li>
+<li>Blog posts that present empirical results (research explainers)</li>
+</ul>
+<h2 id="matplotlib-rcparams-oled-compliant-defaults">matplotlib rcparams — OLED-compliant defaults<a class="headerlink" href="#matplotlib-rcparams-oled-compliant-defaults" title="Permanent link">&para;</a></h2>
+<p>Matplotlib's out-of-the-box defaults are wrong for every constraint muriel enforces. Light background, thin sans-serif at default sizes that fail 8:1 contrast, 6×4 figsize too small for a paper, no units on ticks. A rcParams block at the top of every notebook fixes all of it in one place.</p>
+<h3 id="importable-module-preferred">Importable module (preferred)<a class="headerlink" href="#importable-module-preferred" title="Permanent link">&para;</a></h3>
+<p>The dark and light rcparams blocks are shipped as importable Python modules in <a href="https://github.com/andyed/muriel/tree/main/muriel/"><code>muriel/</code></a>. Add the muriel repo to your <code>PYTHONPATH</code> (or <code>pip install -e ~/Documents/dev/muriel</code>), then:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Auto-apply on import — pick one palette per document</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel</span><span class="w"> </span><span class="kn">import</span> <span class="n">matplotlibrc_dark</span>    <span class="c1"># OLED cream on near-black</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># or</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel</span><span class="w"> </span><span class="kn">import</span> <span class="n">matplotlibrc_light</span>   <span class="c1"># warm editorial (F explainer)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Scoped to a single figure (no global side effect)</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel.matplotlibrc_dark</span><span class="w"> </span><span class="kn">import</span> <span class="n">PARAMS</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="k">with</span> <span class="n">plt</span><span class="o">.</span><span class="n">rc_context</span><span class="p">(</span><span class="n">PARAMS</span><span class="p">):</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="c1"># ...</span>
+</code></pre></div>
+<p>Prefer the import path so updates to the rcparams stay in one place and propagate to every notebook on the next run. The rest of this section documents the raw blocks as they live in <code>muriel/matplotlibrc_dark.py</code> and <code>muriel/matplotlibrc_light.py</code>.</p>
+<h3 id="drop-in-dark-block-oled-palette">Drop-in dark block (OLED palette)<a class="headerlink" href="#drop-in-dark-block-oled-palette" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="c1"># Figure sizing — large enough that a paper figure doesn&#39;t need upscaling</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="s1">&#39;figure.figsize&#39;</span><span class="p">:</span>        <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="s1">&#39;figure.dpi&#39;</span><span class="p">:</span>             <span class="mi">120</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="s1">&#39;savefig.dpi&#39;</span><span class="p">:</span>            <span class="mi">300</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="s1">&#39;savefig.bbox&#39;</span><span class="p">:</span>          <span class="s1">&#39;tight&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="s1">&#39;savefig.transparent&#39;</span><span class="p">:</span>    <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="c1"># Typography — readable at paper print sizes; never Light weight at small sizes</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="s1">&#39;font.family&#39;</span><span class="p">:</span>           <span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    <span class="s1">&#39;font.sans-serif&#39;</span><span class="p">:</span>       <span class="p">[</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;DejaVu Sans&#39;</span><span class="p">],</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    <span class="s1">&#39;font.size&#39;</span><span class="p">:</span>              <span class="mi">14</span><span class="p">,</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    <span class="s1">&#39;axes.titlesize&#39;</span><span class="p">:</span>         <span class="mi">16</span><span class="p">,</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    <span class="s1">&#39;axes.labelsize&#39;</span><span class="p">:</span>         <span class="mi">14</span><span class="p">,</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    <span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">:</span>        <span class="mi">12</span><span class="p">,</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>    <span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">:</span>        <span class="mi">12</span><span class="p">,</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    <span class="s1">&#39;legend.fontsize&#39;</span><span class="p">:</span>        <span class="mi">12</span><span class="p">,</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>    <span class="s1">&#39;figure.titlesize&#39;</span><span class="p">:</span>       <span class="mi">18</span><span class="p">,</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>    <span class="s1">&#39;font.weight&#39;</span><span class="p">:</span>           <span class="s1">&#39;regular&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>    <span class="c1"># OLED palette — matches muriel&#39;s universal rules</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>    <span class="s1">&#39;figure.facecolor&#39;</span><span class="p">:</span>      <span class="s1">&#39;#0a0a0f&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>    <span class="s1">&#39;axes.facecolor&#39;</span><span class="p">:</span>        <span class="s1">&#39;#0a0a0f&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>    <span class="s1">&#39;savefig.facecolor&#39;</span><span class="p">:</span>     <span class="s1">&#39;#0a0a0f&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>    <span class="s1">&#39;axes.edgecolor&#39;</span><span class="p">:</span>        <span class="s1">&#39;#e6e4d2&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>    <span class="s1">&#39;axes.labelcolor&#39;</span><span class="p">:</span>       <span class="s1">&#39;#e6e4d2&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>    <span class="s1">&#39;xtick.color&#39;</span><span class="p">:</span>           <span class="s1">&#39;#e6e4d2&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>    <span class="s1">&#39;ytick.color&#39;</span><span class="p">:</span>           <span class="s1">&#39;#e6e4d2&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>    <span class="s1">&#39;text.color&#39;</span><span class="p">:</span>            <span class="s1">&#39;#e6e4d2&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>    <span class="s1">&#39;grid.color&#39;</span><span class="p">:</span>            <span class="s1">&#39;#3a3a4a&#39;</span><span class="p">,</span>  <span class="c1"># decorative ≥55/255 on dark bg</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>    <span class="s1">&#39;grid.linewidth&#39;</span><span class="p">:</span>         <span class="mf">0.6</span><span class="p">,</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>    <span class="s1">&#39;grid.alpha&#39;</span><span class="p">:</span>             <span class="mf">1.0</span><span class="p">,</span>       <span class="c1"># set color directly, don&#39;t fade via alpha</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>    <span class="c1"># Axes — visible but not loud</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>    <span class="s1">&#39;axes.linewidth&#39;</span><span class="p">:</span>         <span class="mf">1.2</span><span class="p">,</span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>    <span class="s1">&#39;axes.grid&#39;</span><span class="p">:</span>              <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>    <span class="s1">&#39;axes.grid.axis&#39;</span><span class="p">:</span>        <span class="s1">&#39;y&#39;</span><span class="p">,</span>        <span class="c1"># horizontal grid only by default</span>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>    <span class="s1">&#39;axes.axisbelow&#39;</span><span class="p">:</span>         <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>    <span class="s1">&#39;axes.spines.top&#39;</span><span class="p">:</span>        <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>    <span class="s1">&#39;axes.spines.right&#39;</span><span class="p">:</span>      <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>    <span class="c1"># Ticks — outside, proportional to signal</span>
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>    <span class="s1">&#39;xtick.direction&#39;</span><span class="p">:</span>       <span class="s1">&#39;out&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>    <span class="s1">&#39;ytick.direction&#39;</span><span class="p">:</span>       <span class="s1">&#39;out&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>    <span class="s1">&#39;xtick.major.size&#39;</span><span class="p">:</span>       <span class="mi">5</span><span class="p">,</span>
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>    <span class="s1">&#39;ytick.major.size&#39;</span><span class="p">:</span>       <span class="mi">5</span><span class="p">,</span>
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>    <span class="s1">&#39;xtick.major.width&#39;</span><span class="p">:</span>      <span class="mf">1.2</span><span class="p">,</span>
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>    <span class="s1">&#39;ytick.major.width&#39;</span><span class="p">:</span>      <span class="mf">1.2</span><span class="p">,</span>
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>    <span class="c1"># Lines and markers — thick enough to read through a PDF down-resize</span>
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>    <span class="s1">&#39;lines.linewidth&#39;</span><span class="p">:</span>        <span class="mf">2.0</span><span class="p">,</span>
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>    <span class="s1">&#39;lines.markersize&#39;</span><span class="p">:</span>       <span class="mi">7</span><span class="p">,</span>
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>    <span class="s1">&#39;patch.linewidth&#39;</span><span class="p">:</span>        <span class="mf">1.0</span><span class="p">,</span>
+<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>
+<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>    <span class="c1"># Legend — framed, no shadow, opaque background</span>
+<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>    <span class="s1">&#39;legend.frameon&#39;</span><span class="p">:</span>         <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>    <span class="s1">&#39;legend.framealpha&#39;</span><span class="p">:</span>      <span class="mf">0.9</span><span class="p">,</span>
+<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>    <span class="s1">&#39;legend.edgecolor&#39;</span><span class="p">:</span>      <span class="s1">&#39;#3a3a4a&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>    <span class="s1">&#39;legend.facecolor&#39;</span><span class="p">:</span>      <span class="s1">&#39;#0f1117&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a><span class="p">})</span>
+</code></pre></div>
+<h3 id="light-theme-variant-for-journal-submissions-that-require-white">Light theme variant (for journal submissions that require white)<a class="headerlink" href="#light-theme-variant-for-journal-submissions-that-require-white" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="s1">&#39;figure.facecolor&#39;</span><span class="p">:</span>      <span class="s1">&#39;white&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="s1">&#39;axes.facecolor&#39;</span><span class="p">:</span>        <span class="s1">&#39;white&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="s1">&#39;savefig.facecolor&#39;</span><span class="p">:</span>     <span class="s1">&#39;white&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="s1">&#39;axes.edgecolor&#39;</span><span class="p">:</span>        <span class="s1">&#39;#1a1a2e&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="s1">&#39;axes.labelcolor&#39;</span><span class="p">:</span>       <span class="s1">&#39;#1a1a2e&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="s1">&#39;xtick.color&#39;</span><span class="p">:</span>           <span class="s1">&#39;#1a1a2e&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="s1">&#39;ytick.color&#39;</span><span class="p">:</span>           <span class="s1">&#39;#1a1a2e&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="s1">&#39;text.color&#39;</span><span class="p">:</span>            <span class="s1">&#39;#1a1a2e&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="s1">&#39;grid.color&#39;</span><span class="p">:</span>            <span class="s1">&#39;#cccccc&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">})</span>
+</code></pre></div>
+<p>Keep every other setting. The palette flip is a two-dozen-line override, not a reset. Save both blocks as <code>~/Documents/dev/muriel/assets/matplotlibrc_dark.py</code> / <code>_light.py</code> and <code>import</code> whichever one fits the target medium.</p>
+<h2 id="plot-readability-rules">Plot readability rules<a class="headerlink" href="#plot-readability-rules" title="Permanent link">&para;</a></h2>
+<p>Codified from per-project feedback. Every rule exists because a specific plot failed in a specific way.</p>
+<h3 id="axes-proportional-to-signal">Axes proportional to signal<a class="headerlink" href="#axes-proportional-to-signal" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Axis space should scale with the signal.</strong> If the interesting variance is in a 10% range, don't waste 90% of the plot on empty y-axis. Zoom in. Let the reader see the difference.</li>
+<li><strong>Never use matplotlib's default figsize (6×4).</strong> Too small for anything worth looking at. Set <code>figsize=(10, 6)</code> minimum; go larger for multi-series plots.</li>
+<li><strong>Reserve the bottom 20% for axis labels + units.</strong> Cramming them causes the axis to eat the data.</li>
+</ul>
+<h3 id="fonts">Fonts<a class="headerlink" href="#fonts" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>No Light weight at small sizes.</strong> 14pt Light is unreadable at paper print size regardless of contrast ratio (<code>feedback_thin_font_contrast.md</code>). Regular minimum; Bold for axis titles.</li>
+<li><strong>8:1 contrast on all text.</strong> Compute the WCAG ratio between axis color and figure background. <code>#e6e4d2</code> on <code>#0a0a0f</code> passes. The <code>grid.color</code> <code>#3a3a4a</code> is decorative-only — fails as text.</li>
+<li><strong>Consistent type scale.</strong> One font family per paper; one weight per element class. Don't mix Regular and Medium body labels in the same figure.</li>
+</ul>
+<h3 id="label-every-number">Label every number<a class="headerlink" href="#label-every-number" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Axes need units.</strong> <code>ms</code>, <code>%</code>, <code>px</code>, <code>°</code>, <code>$USD</code>, <code>fixations/trial</code>. Every number. No exceptions.</li>
+<li><strong>Legend entries need context.</strong> "N=42, women only" beats "condition A".</li>
+<li><strong>Annotations beat floating numbers.</strong> If a value matters enough to point at, add a text callout with an arrow — don't assume readers will find it in the legend.</li>
+<li><strong>Error bars need a key.</strong> State what they represent (SEM, 95% CI, SD, IQR) in the caption or legend.</li>
+</ul>
+<h3 id="color">Color<a class="headerlink" href="#color" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Sequential when the variable has order.</strong> Viridis for time, cognitive load, any scalar. Never use rainbow — it's perceptually non-uniform and fails colorblind accessibility.</li>
+<li><strong>Diverging when the variable has a meaningful midpoint.</strong> Red-white-blue (or equivalents) for effect sizes, correlations, changes from baseline.</li>
+<li><strong>Categorical when the variable has no order.</strong> Tableau 10, Dark2, or a hand-picked palette. Max 8 categories; more becomes indistinguishable.</li>
+<li><strong>Color is redundant, not primary.</strong> Always pair with shape, linestyle, or text labels. Pure color encoding fails for ~5% of readers.</li>
+</ul>
+<h2 id="statistical-reporting">Statistical reporting<a class="headerlink" href="#statistical-reporting" title="Permanent link">&para;</a></h2>
+<p>How to present numerical findings so they are precise, honest, and not over-claimed.</p>
+<h3 id="importable-helpers-preferred">Importable helpers (preferred)<a class="headerlink" href="#importable-helpers-preferred" title="Permanent link">&para;</a></h3>
+<p>Every template in this section is shipped as a function in <a href="https://github.com/andyed/muriel/blob/main/muriel/stats.py"><code>muriel/stats.py</code></a>. Standard-library only — no numpy, scipy, or pandas required.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel.stats</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">format_comparison</span><span class="p">,</span> <span class="n">format_null</span><span class="p">,</span> <span class="n">format_correlation</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">format_auc</span><span class="p">,</span> <span class="n">format_chi2</span><span class="p">,</span> <span class="n">format_exploratory</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">cohens_d</span><span class="p">,</span> <span class="n">cohens_d_paired</span><span class="p">,</span> <span class="n">fisher_ci</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">apa_number</span><span class="p">,</span> <span class="n">format_p</span><span class="p">,</span> <span class="n">format_ci</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">)</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">format_comparison</span><span class="p">(</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="s2">&quot;baseline&quot;</span><span class="p">,</span> <span class="s2">&quot;treatment&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="n">mean_a</span><span class="o">=</span><span class="mf">1.42</span><span class="p">,</span> <span class="n">sd_a</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">n_a</span><span class="o">=</span><span class="mi">127</span><span class="p">,</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="n">mean_b</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span> <span class="n">sd_b</span><span class="o">=</span><span class="mf">0.11</span><span class="p">,</span> <span class="n">n_b</span><span class="o">=</span><span class="mi">127</span><span class="p">,</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="p">))</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># baseline: M = 1.42 (SD = 0.12, n = 127). treatment: M = 0.98 (SD = 0.11,</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="c1"># n = 127). Δ = −0.44, 95% CI [−0.47, −0.41], Cohen&#39;s d = 3.82, n = 254.</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="nb">print</span><span class="p">(</span><span class="n">format_null</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">ci_lo</span><span class="o">=-</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">ci_hi</span><span class="o">=</span><span class="mf">0.18</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">84</span><span class="p">))</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="c1"># Not detected (Δ = 0.03, 95% CI [−0.12, 0.18], n = 84). The 95% CI</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="c1"># excludes effects larger than 0.18; smaller effects may exist but cannot</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="c1"># be resolved at this sample size.</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="nb">print</span><span class="p">(</span><span class="n">format_correlation</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mf">0.34</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">62</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.007</span><span class="p">))</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="c1"># r = .34, 95% CI [.10, .54], n = 62, p = .007</span>
+</code></pre></div>
+<p>All formatters enforce: 95% CI paired with every point estimate, minus signs as U+2212 (proper typography), APA leading-zero stripping for probabilities and correlations, <code>p &lt; .001</code> for tiny values (never <code>p = 0.000</code>), detection-limit phrasing for nulls, explicit exploratory labels.</p>
+<p>The raw templates below still apply — they document <em>why</em> the formatters say what they say. Use the Python helpers in notebooks; use the templates when writing prose by hand.</p>
+<h3 id="effect-sizes-with-confidence-intervals">Effect sizes with confidence intervals<a class="headerlink" href="#effect-sizes-with-confidence-intervals" title="Permanent link">&para;</a></h3>
+<p>Minimum acceptable report for any empirical result:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>The LF/HF index decreased from 1.42 to 0.98 (Δ = −0.44, 95% CI [−0.61, −0.27],
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Cohen&#39;s d = 0.82, n = 127).
+</code></pre></div>
+<p>Not acceptable:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>The LF/HF index significantly decreased (p &lt; 0.05).
+</code></pre></div>
+<p>Bare p-values hide how large the effect was and how precisely it was measured. Always include:</p>
+<ul>
+<li><strong>Point estimate</strong> (Δ, mean difference, slope, odds ratio, AUC, etc.)</li>
+<li><strong>Uncertainty interval</strong> (95% CI is standard; SE is acceptable for raw quantities)</li>
+<li><strong>Standardized effect size</strong> when comparing across units (Cohen's d, Hedges' g, η², Cliff's delta)</li>
+<li><strong>Sample size</strong> (n, including n per group for between-subjects designs)</li>
+</ul>
+<h3 id="null-results-framed-as-detection-limits">Null results framed as detection limits<a class="headerlink" href="#null-results-framed-as-detection-limits" title="Permanent link">&para;</a></h3>
+<p>The hard rule from <code>feedback_empirical_not_truth.md</code>: <strong>null results reflect instrument sensitivity, not ground truth.</strong> Never write "there is no effect" — write "not detected at this granularity."</p>
+<p>Template:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>We did not detect a difference between conditions A and B (Δ = 0.03, 95% CI
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>[−0.12, 0.18], n = 84). The 95% CI excludes effects larger than 0.18; smaller
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>effects may exist but cannot be resolved at this sample size.
+</code></pre></div>
+<p>Note what the CI <em>excludes</em>, not just what it contains. A wide CI is a detection-limit statement, not a zero-effect claim.</p>
+<h3 id="pre-committed-vs-exploratory-analyses">Pre-committed vs. exploratory analyses<a class="headerlink" href="#pre-committed-vs-exploratory-analyses" title="Permanent link">&para;</a></h3>
+<p>Label them. Exploratory findings are hypotheses, not conclusions.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Exploratory: we observed a correlation between dwell time and phase 3 onset
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>(r = 0.34, 95% CI [0.11, 0.55], n = 62). This was not pre-registered and
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>should be interpreted as a candidate for replication.
+</code></pre></div>
+<h3 id="copy-paste-formulations">Copy-paste formulations<a class="headerlink" href="#copy-paste-formulations" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Finding type</th>
+<th>Template</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Between-groups comparison</td>
+<td><code>Group A: M=X (SD=Y). Group B: M=X (SD=Y). Δ = Z, 95% CI [...], d = ...</code></td>
+</tr>
+<tr>
+<td>Within-subjects change</td>
+<td><code>Baseline M=X; follow-up M=X. Mean change Δ=Z, 95% CI [...], dz = ...</code></td>
+</tr>
+<tr>
+<td>Correlation</td>
+<td><code>r = 0.XX, 95% CI [a, b], n = N, p = ... (two-sided)</code></td>
+</tr>
+<tr>
+<td>AUC / classifier</td>
+<td><code>AUC = 0.XX, 95% CI [a, b], chance = 0.50, n = N</code></td>
+</tr>
+<tr>
+<td>Chi-squared</td>
+<td><code>χ²(df) = X, p = ..., Cramer's V = ..., n = N</code></td>
+</tr>
+<tr>
+<td>Logistic regression</td>
+<td><code>OR = X, 95% CI [a, b], p = ... (Wald)</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="notebook-editorial-pass">Notebook editorial pass<a class="headerlink" href="#notebook-editorial-pass" title="Permanent link">&para;</a></h2>
+<p>From <code>project_notebooks_v2_editorial.md</code>: research notebooks need explicit metric definitions before any interpretive prose. Readers shouldn't have to infer what "performance" means from context.</p>
+<h3 id="the-rule">The rule<a class="headerlink" href="#the-rule" title="Permanent link">&para;</a></h3>
+<p><strong>Before using any metric in prose, define it inline with units and direction.</strong></p>
+<p>Bad:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Performance improved in the new condition.
+</code></pre></div>
+<p>Good:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>The primary outcome — time to first fixation on the target AOI, measured in
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>milliseconds from trial onset — decreased from M=842 ms (SD=210) in the
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>baseline condition to M=671 ms (SD=185) in the treatment condition.
+</code></pre></div>
+<p>The second version tells the reader:</p>
+<ul>
+<li>What the metric is</li>
+<li>What units it's measured in</li>
+<li>What direction "improvement" means</li>
+<li>The magnitude of the change</li>
+<li>The variability of the measurement</li>
+</ul>
+<h3 id="caption-first-writing">Caption-first writing<a class="headerlink" href="#caption-first-writing" title="Permanent link">&para;</a></h3>
+<p>Write the figure caption <em>before</em> writing the surrounding prose. The caption is the self-contained summary the reader scans first — it should answer "what am I looking at?" and "what's the takeaway?" without depending on the body text.</p>
+<p><strong>Template:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Figure N. [WHAT is plotted] across [CONDITIONS]. [KEY FINDING in one sentence].
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>[METHODS: n, error bars, filter criteria]. [TECHNICAL NOTE if needed].
+</code></pre></div>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Figure 1. Mean LF/HF pupil index across trial positions 1–10 for satisficer
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>and optimizer sub-populations. Cognitive load decreased with position for
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>both groups (ANOVA main effect of position, p &lt; 0.001), but did not differ
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>between groups (position × group AUC = 0.43 for discrimination, χ² p = 0.77).
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>Error bars are 95% CIs; n = 84 trials per position. Data preprocessed with
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>Jayawardena RIPA2 filter (see Methods §2.3).
+</code></pre></div>
+<p>~90 words. Tells you exactly what you're looking at and what it means. Body prose can add context, interpretation, and references without re-explaining the figure.</p>
+<h2 id="latex-bibtex-bridge">LaTeX / BibTeX bridge<a class="headerlink" href="#latex-bibtex-bridge" title="Permanent link">&para;</a></h2>
+<p>For paper submissions, matplotlib figures need to round-trip into a LaTeX build.</p>
+<h3 id="export-for-latex">Export for LaTeX<a class="headerlink" href="#export-for-latex" title="Permanent link">&para;</a></h3>
+<p>Prefer PDF over PNG for vector precision:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;figures/lfhf_trajectory.pdf&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</code></pre></div>
+<p>Or PGF for native LaTeX text rendering (matches the paper's font automatically):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">mpl</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;pgf&#39;</span><span class="p">)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="s1">&#39;pgf.texsystem&#39;</span><span class="p">:</span> <span class="s1">&#39;xelatex&#39;</span><span class="p">,</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="s1">&#39;font.family&#39;</span><span class="p">:</span>   <span class="s1">&#39;serif&#39;</span><span class="p">,</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>    <span class="s1">&#39;text.usetex&#39;</span><span class="p">:</span>    <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    <span class="s1">&#39;pgf.rcfonts&#39;</span><span class="p">:</span>    <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="p">})</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;figures/lfhf_trajectory.pgf&#39;</span><span class="p">)</span>
+</code></pre></div>
+<p>Include in LaTeX:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">\begin</span><span class="nb">{</span>figure<span class="nb">}</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>  <span class="k">\centering</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>  <span class="k">\input</span><span class="nb">{</span>figures/lfhf<span class="nb">_</span>trajectory.pgf<span class="nb">}</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>  <span class="k">\caption</span><span class="nb">{</span>...<span class="nb">}</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>  <span class="k">\label</span><span class="nb">{</span>fig:lfhf<span class="nb">_</span>trajectory<span class="nb">}</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="k">\end</span><span class="nb">{</span>figure<span class="nb">}</span>
+</code></pre></div>
+<h3 id="bibtex-hygiene">BibTeX hygiene<a class="headerlink" href="#bibtex-hygiene" title="Permanent link">&para;</a></h3>
+<p>Keep a single <code>references.bib</code> per paper. Use <code>pandoc-citeproc</code> or <code>natbib</code> for consistent formatting. Common mistakes:</p>
+<ul>
+<li>Missing DOIs — add them; reviewers check</li>
+<li>Wrong title capitalization — use <code>{CamelCase}</code> to preserve case</li>
+<li><code>@misc</code> entries for real papers — use <code>@article</code> or <code>@inproceedings</code></li>
+<li>Missing year field on preprint citations</li>
+</ul>
+<h2 id="recipes-for-current-projects">Recipes for current projects<a class="headerlink" href="#recipes-for-current-projects" title="Permanent link">&para;</a></h2>
+<h3 id="adserp-fixation-phase-plot-f-pattern-decomposition">AdSERP fixation-phase plot (F-pattern decomposition)<a class="headerlink" href="#adserp-fixation-phase-plot-f-pattern-decomposition" title="Permanent link">&para;</a></h3>
+<p>Bands showing survey/evaluate phases over a SERP screenshot. Per <code>project_f_pattern_decomposition.md</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">Rectangle</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="n">fix</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;trial.tsv&#39;</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>    <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;FixationIndex&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">is_not_null</span><span class="p">()</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="p">)</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;serp.png&#39;</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.55</span><span class="p">)</span>  <span class="c1"># desaturated background</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="c1"># Phase bands</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="n">survey_end_x</span> <span class="o">=</span> <span class="n">fix</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;t_ms&#39;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2000</span><span class="p">)[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">survey_end_x</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>                       <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#e6a817&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Survey phase (0–2s)&#39;</span><span class="p">))</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">fix</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">50</span><span class="p">,</span>
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a>                       <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#50b4c8&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Evaluate phase (2s+)&#39;</span><span class="p">))</span>
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a>
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="c1"># Numbered fixations sized by duration</span>
+<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fix</span><span class="o">.</span><span class="n">iter_rows</span><span class="p">(</span><span class="n">named</span><span class="o">=</span><span class="kc">True</span><span class="p">)):</span>
+<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;duration_ms&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span>
+<a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a>               <span class="n">c</span><span class="o">=</span><span class="s1">&#39;#e6e4d2&#39;</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;#0a0a0f&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#0a0a0f&#39;</span><span class="p">,</span>
+<a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a>                <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a>
+<a id="__codelineno-15-26" name="__codelineno-15-26" href="#__codelineno-15-26"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Screen x (px)&#39;</span><span class="p">)</span>
+<a id="__codelineno-15-27" name="__codelineno-15-27" href="#__codelineno-15-27"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Screen y (px)&#39;</span><span class="p">)</span>
+<a id="__codelineno-15-28" name="__codelineno-15-28" href="#__codelineno-15-28"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Trial 042 — Survey/Evaluate F-pattern decomposition&#39;</span><span class="p">)</span>
+<a id="__codelineno-15-29" name="__codelineno-15-29" href="#__codelineno-15-29"></a><span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
+<a id="__codelineno-15-30" name="__codelineno-15-30" href="#__codelineno-15-30"></a><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<a id="__codelineno-15-31" name="__codelineno-15-31" href="#__codelineno-15-31"></a><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;trial-042-phases.pdf&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="pupil-lfhf-trajectory-with-ci-ribbon-ettac-2026">Pupil LF/HF trajectory with CI ribbon (ETTAC 2026)<a class="headerlink" href="#pupil-lfhf-trajectory-with-ci-ribbon-ettac-2026" title="Permanent link">&para;</a></h3>
+<p>Per <code>project_lfhf_orthogonality.md</code> and <code>project_ettac2026.md</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">lfhf_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.42</span><span class="p">,</span> <span class="mf">1.38</span><span class="p">,</span> <span class="mf">1.30</span><span class="p">,</span> <span class="mf">1.21</span><span class="p">,</span> <span class="mf">1.14</span><span class="p">,</span> <span class="mf">1.08</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.98</span><span class="p">])</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="n">lfhf_ci95</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.12</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">])</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">lfhf_mean</span> <span class="o">-</span> <span class="n">lfhf_ci95</span><span class="p">,</span> <span class="n">lfhf_mean</span> <span class="o">+</span> <span class="n">lfhf_ci95</span><span class="p">,</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>                <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#50b4c8&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;95% CI&#39;</span><span class="p">)</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">lfhf_mean</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#50b4c8&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>        <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;LF/HF pupil index&#39;</span><span class="p">)</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#8a8aa0&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">10.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;baseline&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#8a8aa0&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Trial position&#39;</span><span class="p">)</span>
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;LF/HF pupil index (ratio)&#39;</span><span class="p">)</span>
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
+<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Cognitive load decreases with trial position (n = 84/position)&#39;</span><span class="p">)</span>
+<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a><span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;lfhf-trajectory.pdf&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="small-multiples-of-scanpaths-by-condition">Small multiples of scanpaths by condition<a class="headerlink" href="#small-multiples-of-scanpaths-by-condition" title="Permanent link">&para;</a></h3>
+<p>The small-multiples principle (see Visualization principles in the top-level index) applied to gaze data.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;easy&#39;</span><span class="p">,</span> <span class="s1">&#39;medium&#39;</span><span class="p">,</span> <span class="s1">&#39;hard&#39;</span><span class="p">,</span> <span class="s1">&#39;novel&#39;</span><span class="p">,</span> <span class="s1">&#39;repeat&#39;</span><span class="p">,</span> <span class="s1">&#39;catch&#39;</span><span class="p">]</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">cond</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">,</span> <span class="n">conditions</span><span class="p">):</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>    <span class="n">trial</span> <span class="o">=</span> <span class="n">fix</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;condition&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">cond</span><span class="p">)</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">trial</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">trial</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="n">trial</span><span class="p">[</span><span class="s1">&#39;duration_ms&#39;</span><span class="p">]</span><span class="o">*</span><span class="mf">1.5</span><span class="p">,</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>               <span class="n">c</span><span class="o">=</span><span class="n">trial</span><span class="p">[</span><span class="s1">&#39;t_ms&#39;</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>               <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;#0a0a0f&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cond</span><span class="si">}</span><span class="s1"> (n = </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trial</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1920</span><span class="p">)</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">1080</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># flip y for screen coordinates</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Fixation scanpaths by task condition&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="n">fig</span><span class="o">.</span><span class="n">supxlabel</span><span class="p">(</span><span class="s1">&#39;Screen x (px)&#39;</span><span class="p">)</span>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="n">fig</span><span class="o">.</span><span class="n">supylabel</span><span class="p">(</span><span class="s1">&#39;Screen y (px)&#39;</span><span class="p">)</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;scanpath-small-multiples.pdf&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="effect-size-forest-plot">Effect-size forest plot<a class="headerlink" href="#effect-size-forest-plot" title="Permanent link">&para;</a></h3>
+<p>For meta-analytic or multi-condition summaries.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Satisficer vs optimizer&#39;</span><span class="p">,</span> <span class="s1">&#39;Novel vs repeat&#39;</span><span class="p">,</span> <span class="s1">&#39;Hard vs easy&#39;</span><span class="p">,</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>          <span class="s1">&#39;Ambient light effect&#39;</span><span class="p">,</span> <span class="s1">&#39;Hour-of-day effect&#39;</span><span class="p">]</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="n">effects</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.82</span><span class="p">,</span> <span class="mf">1.41</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">]</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="n">ci_lo</span>   <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.12</span><span class="p">,</span> <span class="mf">0.61</span><span class="p">,</span> <span class="mf">1.18</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.09</span><span class="p">]</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="n">ci_hi</span>   <span class="o">=</span> <span class="p">[</span><span class="mf">0.18</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">,</span> <span class="mf">1.64</span><span class="p">,</span> <span class="mf">0.34</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">effects</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">xerr</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">effects</span><span class="p">,</span> <span class="n">ci_lo</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">ci_hi</span><span class="p">,</span> <span class="n">effects</span><span class="p">)],</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>            <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#50b4c8&#39;</span><span class="p">,</span> <span class="n">ecolor</span><span class="o">=</span><span class="s1">&#39;#50b4c8&#39;</span><span class="p">,</span> <span class="n">elinewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>            <span class="n">markersize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#8a8aa0&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Cohen&#39;s d (95% CI)&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Effect sizes across conditions — forest plot&#39;</span><span class="p">)</span>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;effect-forest.pdf&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="workflow">Workflow<a class="headerlink" href="#workflow" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Import rcparams</strong> at the top of every figure-producing notebook (<code>from muriel.matplotlibrc_dark import *</code>)</li>
+<li><strong>Write the figure caption first</strong> — what is this, what's the takeaway — before touching the plotting code</li>
+<li><strong>Code the figure to match the caption claim exactly</strong> — not more, not less</li>
+<li><strong>Print contrast ratio and effective figsize</strong> before saving, to catch silent regressions</li>
+<li><strong>Save as PDF or PGF</strong> (not PNG) for LaTeX round-trip</li>
+<li><strong>Write prose that adds context</strong> referencing the figure, don't re-explain what's on screen</li>
+<li><strong>Every numerical claim in prose must be traceable</strong> to a table or figure in the same notebook</li>
+<li><strong>Run an editorial pass before sharing</strong>: define every metric, frame nulls as detection limits, pair every p-value with effect size + CI</li>
+</ol>
+<h2 id="anti-patterns-to-reject">Anti-patterns to reject<a class="headerlink" href="#anti-patterns-to-reject" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Default matplotlib figsize.</strong> Always override.</li>
+<li><strong>Bare p-values.</strong> Always pair with effect size.</li>
+<li><strong>"No effect" phrasing.</strong> Use "not detected at this granularity."</li>
+<li><strong>Unlabeled axes.</strong> Every number has a unit.</li>
+<li><strong>Rainbow colormap.</strong> Use viridis or a paired diverging scale.</li>
+<li><strong>Light-weight fonts at small sizes.</strong> Regular minimum.</li>
+<li><strong>Alpha-faded gridlines.</strong> Set color directly; alpha fails on PDF re-render.</li>
+<li><strong>Figure without caption.</strong> Caption is non-optional for any research artifact.</li>
+<li><strong>Prose before metric definition.</strong> Define first, interpret second.</li>
+<li><strong>Tier-collision in stacked text.</strong> Multi-tier figures (<code>suptitle</code> / per-axes <code>set_title</code> / <code>fig.text</code> annotations / <code>figcaption</code>) cramp into each other when y-positions are typed as bare literals — the gaps don't scale with <code>fig_h</code> or with a panel's actual aspect. Express every tier's y as a function of <code>fig_h</code> (e.g. <code>y_title = 1 - 0.40 / fig_h</code>), and either render at draft + final aspect to confirm no two tiers' bbox y-extents overlap, or use <code>constrained_layout=True</code> and let the engine resolve. The Mona Lisa Laplacian and falloff-curve figures (peripheral-color blog) are the worked examples.</li>
+<li><strong>Terminology drift inside the same figure.</strong> A channel called <em>BY</em> in the legend and <em>YV</em> in the inline annotation forces the reader to translate. Pick one name per quantity per figure; if the field has two conventions (castleCSF <em>YV</em> vs HCI <em>BY</em>), reconcile before drawing and put the cross-walk in the docstring, not the figure.</li>
+</ul>
+<h2 id="anti-patterns">Anti-patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Don't report a point estimate without a 95% CI.</strong> Every number paired with an interval.</li>
+<li><strong>Don't say "not significant."</strong> Say "not detected at this granularity" and state the CI upper bound that you've excluded.</li>
+<li><strong>Don't use gradient fills in bar charts.</strong> Gradients distort perceived value; solid fills are readable.</li>
+<li><strong>Don't pluralize "data" both ways in one paper.</strong> Pick "data are" or "data is" once and commit.</li>
+</ul>
+<h2 id="prior-art-upstream">Prior art / upstream<a class="headerlink" href="#prior-art-upstream" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/matplotlib/SKILL.md">K-Dense scientific-agent-skills — matplotlib</a> (MIT). Pure guidance doc: OO interface default, <code>constrained_layout=True</code>, viridis/cividis, ban rainbow/jet, 72/150/300 DPI by medium. Muriel's rcparams and figures already enforce the same principles with project-specific palettes and importable helpers. Worth skimming before adding new recipes — if it's conventional matplotlib opinion, check there first to avoid reinventing. One alternative worth knowing: K-Dense prefers <code>constrained_layout=True</code> over <code>tight_layout()</code>; both work, <code>constrained_layout</code> handles suptitle / colorbar edges more gracefully on multi-panel figures.</li>
+<li><a href="https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/statistical-analysis/SKILL.md">K-Dense — statistical-analysis</a> (MIT). Test-selection guide, assumption checks via <code>scipy.stats</code> + <code>statsmodels</code> + <code>pingouin</code> + <code>pymc</code>, APA reporting. Overlaps <a href="https://github.com/andyed/muriel/blob/main/muriel/stats.py"><code>muriel/stats.py</code></a> on output formatting but goes deeper on test selection. Read when the question is "which test?" not "how do I report the number?"</li>
+<li><a href="https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/scientific-critical-thinking/SKILL.md">K-Dense — scientific-critical-thinking</a> (MIT). GRADE system, Cochrane Risk of Bias, bias taxonomy (Cognitive / Selection / Measurement / Analysis / Confounding). Useful vocabulary when an editorial pass needs to name <em>why</em> a claim is weak, not just flag it.</li>
+<li><a href="https://developer.apple.com/design/human-interface-guidelines/charting-data">Apple Human Interface Guidelines — <em>Charting data</em></a> (© Apple Inc.; cite by link + paraphrase, do not copy verbatim). Apple's chart-design guidance for iOS / iPadOS / macOS surfaces — clarity over completeness, hierarchy via size + weight before colour, hue is semantic (not decorative), tap/hover detail-on-demand for dense data, Dynamic Type, light/dark adaptation. Distinctive contribution: <strong>Swift Charts' audio-graph accessibility</strong> — sonified data narration for VoiceOver, an accessibility surface most other platforms don't have. Read when a paper figure is also bound for an iOS app or when an accessibility audit needs a precedent. Cross-platform survey in <a href="../../vocabularies/data-viz-platforms/"><code>vocabularies/data-viz-platforms.md</code></a>.</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

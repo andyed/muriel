@@ -12,29 +12,31 @@
         <meta name="author" content="Andy Edmonds">
       
       
-        <link rel="canonical" href="https://muriel.mindbendingpixels.com/">
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/channels/heatmaps/">
       
       
+        <link rel="prev" href="../video/">
       
-        <link rel="next" href="channels/spatial/">
+      
+        <link rel="next" href="../gaze/">
       
       
         
       
       
-      <link rel="icon" href="favicon-512.png">
+      <link rel="icon" href="../../favicon-512.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>muriel</title>
+        <title>Density viz (heatmaps) - muriel</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -53,9 +55,9 @@
       
     
     
-      <link rel="stylesheet" href="assets/muriel.css">
+      <link rel="stylesheet" href="../../assets/muriel.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
   
       
@@ -83,12 +85,12 @@
   <!-- Favicons — colophon bars, light + dark variants. Served from the output
        ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
        so cached references and the apple-touch-icon path keep resolving. -->
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" media="(prefers-color-scheme: light)">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" media="(prefers-color-scheme: light)">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-dark-32.png" media="(prefers-color-scheme: dark)">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-dark-16.png" media="(prefers-color-scheme: dark)">
-  <link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
 
   </head>
   
@@ -107,7 +109,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#muriel" class="md-skip">
+        <a href="#heatmaps-smooth-gaussian-density-overlays" class="md-skip">
           Skip to content
         </a>
       
@@ -123,7 +125,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -143,7 +145,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              Density viz (heatmaps)
             
           </span>
         </div>
@@ -225,7 +227,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -240,37 +242,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Home
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -286,59 +261,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#start-here" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Start here
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-81-rule" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The 8:1 rule
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-channel-concept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The channel concept
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -347,8 +269,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -359,11 +283,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
@@ -384,7 +308,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -402,7 +326,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/spatial/" class="md-nav__link">
+      <a href="../spatial/" class="md-nav__link">
         
   
   
@@ -437,7 +361,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/charts/" class="md-nav__link">
+      <a href="../charts/" class="md-nav__link">
         
   
   
@@ -472,7 +396,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/infographics/" class="md-nav__link">
+      <a href="../infographics/" class="md-nav__link">
         
   
   
@@ -507,7 +431,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/science/" class="md-nav__link">
+      <a href="../science/" class="md-nav__link">
         
   
   
@@ -542,7 +466,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/diagrams/" class="md-nav__link">
+      <a href="../diagrams/" class="md-nav__link">
         
   
   
@@ -577,7 +501,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/raster/" class="md-nav__link">
+      <a href="../raster/" class="md-nav__link">
         
   
   
@@ -605,7 +529,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/svg/" class="md-nav__link">
+      <a href="../svg/" class="md-nav__link">
         
   
   
@@ -640,7 +564,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/web/" class="md-nav__link">
+      <a href="../web/" class="md-nav__link">
         
   
   
@@ -675,7 +599,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/interactive/" class="md-nav__link">
+      <a href="../interactive/" class="md-nav__link">
         
   
   
@@ -703,7 +627,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/video/" class="md-nav__link">
+      <a href="../video/" class="md-nav__link">
         
   
   
@@ -728,10 +652,44 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="channels/heatmaps/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -754,6 +712,92 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#typesetrender_heatmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        typeset.render_heatmap()
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#colormaps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Colormaps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generation-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generation script
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -766,7 +810,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/gaze/" class="md-nav__link">
+      <a href="../gaze/" class="md-nav__link">
         
   
   
@@ -801,7 +845,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/terminal/" class="md-nav__link">
+      <a href="../terminal/" class="md-nav__link">
         
   
   
@@ -829,7 +873,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/polish/" class="md-nav__link">
+      <a href="../polish/" class="md-nav__link">
         
   
   
@@ -923,7 +967,7 @@
   
   
     <li class="md-nav__item">
-      <a href="vocabularies/visible-language/" class="md-nav__link">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
         
   
   
@@ -951,7 +995,7 @@
   
   
     <li class="md-nav__item">
-      <a href="vocabularies/fui/" class="md-nav__link">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
         
   
   
@@ -979,7 +1023,7 @@
   
   
     <li class="md-nav__item">
-      <a href="vocabularies/kinetic-typography/" class="md-nav__link">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
         
   
   
@@ -1007,7 +1051,7 @@
   
   
     <li class="md-nav__item">
-      <a href="vocabularies/katex/" class="md-nav__link">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
         
   
   
@@ -1035,7 +1079,7 @@
   
   
     <li class="md-nav__item">
-      <a href="vocabularies/pixijs/" class="md-nav__link">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
         
   
   
@@ -1063,7 +1107,7 @@
   
   
     <li class="md-nav__item">
-      <a href="vocabularies/echarts/" class="md-nav__link">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
         
   
   
@@ -1091,7 +1135,7 @@
   
   
     <li class="md-nav__item">
-      <a href="vocabularies/declassified/" class="md-nav__link">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
         
   
   
@@ -1119,7 +1163,7 @@
   
   
     <li class="md-nav__item">
-      <a href="vocabularies/surfaces/" class="md-nav__link">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
         
   
   
@@ -1147,7 +1191,7 @@
   
   
     <li class="md-nav__item">
-      <a href="vocabularies/data-viz-platforms/" class="md-nav__link">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
         
   
   
@@ -1175,7 +1219,7 @@
   
   
     <li class="md-nav__item">
-      <a href="vocabularies/muriel-brand/" class="md-nav__link">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
         
   
   
@@ -1262,7 +1306,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/dimensions/" class="md-nav__link">
+      <a href="../dimensions/" class="md-nav__link">
         
   
   
@@ -1290,7 +1334,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/style-guides/" class="md-nav__link">
+      <a href="../style-guides/" class="md-nav__link">
         
   
   
@@ -1318,7 +1362,7 @@
   
   
     <li class="md-nav__item">
-      <a href="channels/SCHEMA/" class="md-nav__link">
+      <a href="../SCHEMA/" class="md-nav__link">
         
   
   
@@ -1433,7 +1477,7 @@
   
   
     <li class="md-nav__item">
-      <a href="SKILL/" class="md-nav__link">
+      <a href="../../SKILL/" class="md-nav__link">
         
   
   
@@ -1461,7 +1505,7 @@
   
   
     <li class="md-nav__item">
-      <a href="agents/muriel-critique/" class="md-nav__link">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
         
   
   
@@ -1489,7 +1533,7 @@
   
   
     <li class="md-nav__item">
-      <a href="TODO/" class="md-nav__link">
+      <a href="../../TODO/" class="md-nav__link">
         
   
   
@@ -1517,7 +1561,7 @@
   
   
     <li class="md-nav__item">
-      <a href="HARNESSES/" class="md-nav__link">
+      <a href="../../HARNESSES/" class="md-nav__link">
         
   
   
@@ -1545,7 +1589,7 @@
   
   
     <li class="md-nav__item">
-      <a href="THIRD_PARTY_NOTICES/" class="md-nav__link">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
         
   
   
@@ -1573,7 +1617,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec-plugin-packaging/" class="md-nav__link">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
         
   
   
@@ -1618,89 +1662,57 @@
 
 
 
-<h1 id="muriel">muriel<a class="headerlink" href="#muriel" title="Permanent link">&para;</a></h1>
-<p><strong>A multi-constraint solver for visual production.</strong> muriel turns a brief —
-"make me a deck / a paper figure / a gaze plot / a share card" — into a
-deterministic, reproducible artifact for human eyes, across sixteen output
-channels. Named after Muriel Cooper, founder of the MIT Visible Language
-Workshop.</p>
-<p>It is a curator before it is an originator: it lifts the sharpest structural
-patterns from sibling skills, ports their agent-actionable detection tables,
-attributes the lineage, and overrides anything that fights its universal rules.</p>
-<p><a class="md-button md-button--primary" href="gallery/">See the live demo gallery ↗</a>
-<a class="md-button" href="SKILL/">Read the skill ↗</a></p>
-<h2 id="start-here">Start here<a class="headerlink" href="#start-here" title="Permanent link">&para;</a></h2>
-<p>New to muriel? These are the highest-leverage channels — each is a self-contained
-recipe set you can route a brief to:</p>
+<h1 id="heatmaps-smooth-gaussian-density-overlays">Heatmaps — Smooth Gaussian Density Overlays<a class="headerlink" href="#heatmaps-smooth-gaussian-density-overlays" title="Permanent link">&para;</a></h1>
+<p>Tobii-style topographic heatmaps from fixation data. The aggregate counterpart to scanpath visualization — same data, averaged across trials.</p>
+<p>Part of the <a href="../../SKILL/">muriel</a> skill — see the top-level index for mission, universal rules, and channel map. Related: <a href="../gaze/">channels/gaze.md</a> for individual-trial scanpaths.</p>
+<h2 id="typesetrender_heatmap"><code>typeset.render_heatmap()</code><a class="headerlink" href="#typesetrender_heatmap" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typeset</span><span class="w"> </span><span class="kn">import</span> <span class="n">render_heatmap</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">heatmap</span> <span class="o">=</span> <span class="n">render_heatmap</span><span class="p">(</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">fixations</span><span class="p">,</span>              <span class="c1"># list of {&#39;x&#39;, &#39;y&#39;, &#39;d&#39;} dicts</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">canvas_size</span><span class="o">=</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">800</span><span class="p">),</span> <span class="c1"># output dimensions</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">radius</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>              <span class="c1"># blob radius (controls bin coarseness)</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">blur</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>                 <span class="c1"># gaussian blur after binning</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;pink&quot;</span><span class="p">,</span>        <span class="c1"># &quot;pink&quot; (Tobii-style), &quot;heat&quot;, or (r,g,b) tuple</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">background</span><span class="o">=</span><span class="s2">&quot;serp.png&quot;</span><span class="p">,</span>  <span class="c1"># optional background image path</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">desaturate</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>         <span class="c1"># background desaturation (0=color, 1=gray)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">bg_opacity</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span>        <span class="c1"># background layer opacity</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="n">output</span><span class="o">=</span><span class="s2">&quot;heatmap.png&quot;</span><span class="p">,</span>   <span class="c1"># save path (None to just return Image)</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">)</span>
+</code></pre></div>
+<h2 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
+<p>Fixations are binned into a coarse grid, then large gaussian blobs are stamped at each bin center (weighted by fixation count/duration). Density is quantized into 8 bands to create visible topographic contour plateaus, then softened with a light blur so band edges aren't pixelated. Result: discrete rounded peaks that merge where they overlap, like contour islands on a topo map.</p>
+<h2 id="key-parameters">Key parameters<a class="headerlink" href="#key-parameters" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><a href="channels/spatial/">Spatial</a></strong> — 3-D perspective walls and floors for
-  typography and imagery. The look behind the <a href="gallery/">live demos</a>.</li>
-<li><strong><a href="channels/charts/">Charts</a></strong> — data graphics with the contrast floor and
-  brand tokens baked in.</li>
-<li><strong><a href="channels/infographics/">Infographics</a></strong> — explanatory layouts that earn
-  every element on the page.</li>
-<li><strong><a href="channels/science/">Science</a></strong> — paper figures, reproducible and
-  publication-ready.</li>
+<li><strong><code>radius</code></strong> controls blob size and bin coarseness. Smaller = more granular topology. 12–20 is the sweet spot for aggregate data.</li>
+<li><strong><code>blur</code></strong> controls post-stamp smoothing. Keep low (6–10) to preserve topo feel. Too high washes out the contour structure.</li>
+<li><strong>For sparse data</strong> (&lt;500 fixations), increase radius to 30+ so individual blobs are visible.</li>
+<li><strong>For dense data</strong> (&gt;10K fixations), the contour banding is what creates the topo feel — without it, density saturates everywhere.</li>
 </ul>
-<p>Then browse the full <strong><a href="SKILL/">channel map</a></strong>, or jump straight into the
-<strong><a href="gallery/">live demo gallery ↗</a></strong> to see spatial typography rendered in the
-browser.</p>
-<h2 id="the-81-rule">The 8:1 rule<a class="headerlink" href="#the-81-rule" title="Permanent link">&para;</a></h2>
-<p>One constraint stays active at render time above all others:</p>
-<blockquote>
-<p><strong>8:1 contrast minimum on all text. Compute the WCAG ratio. No exceptions.</strong></p>
-</blockquote>
-<p>Contrast is necessary but not sufficient — size, weight, and opacity compound on
-legibility. The floors that pair with the 8:1 rule:</p>
+<h2 id="colormaps">Colormaps<a class="headerlink" href="#colormaps" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Body weight ≥ 500 (medium).</strong> Regular weight + muted color + 9:1 contrast
-  still reads thin at small sizes.</li>
-<li><strong>Footer / caption text ≥ 16 px.</strong></li>
-<li><strong>No <code>opacity</code> on text</strong> — it composites the effective ratio below the raw
-  value and erodes glyph thickness.</li>
-<li><strong>Decorative elements ≥ 55/255</strong> on a dark background, or they vanish on small
-  screens.</li>
+<li><strong><code>"pink"</code></strong> — monochrome magenta with gamma-corrected two-stop ramp: light pink → hot pink → deep magenta. Alpha ramps fast and saturates early. Tobii-style.</li>
+<li><strong><code>"heat"</code></strong> — yellow → red → dark red.</li>
+<li><strong><code>(r, g, b)</code></strong> tuple — monochrome with custom tint. Use the project's accent color for theme consistency.</li>
 </ul>
-<p>The canonical OLED palette: cream <code>rgb(230,228,210)</code> on near-black
-<code>rgb(10,10,15)</code>. Pure white is too harsh. (This documentation site is built to
-the same floor — every text token here is computed ≥ 8:1 against its surface.)</p>
-<h2 id="the-channel-concept">The channel concept<a class="headerlink" href="#the-channel-concept" title="Permanent link">&para;</a></h2>
-<p>Each <strong>channel</strong> is a dedicated output medium with its own deep recipes, tooling,
-and hard-won lessons. The top-level skill is the map; the channel subfiles are
-the territory. A brief routes to one or more channels; the universal rules
-(8:1 contrast, weight/size/opacity floors, brand tokens, reproducibility) bind
-across all of them.</p>
-<table>
-<thead>
-<tr>
-<th>Group</th>
-<th>What it covers</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Channels</strong></td>
-<td>The output media: spatial, charts, infographics, science, raster, SVG, web, interactive, diagrams, video, terminal, density viz, gaze, polish.</td>
-</tr>
-<tr>
-<td><strong>Vocabularies</strong></td>
-<td>Named aesthetic grammars to borrow conventions from — Visible Language, FUI, kinetic typography, KaTeX, PixiJS, declassified, surfaces, data-viz platform guides, muriel's own brand.</td>
-</tr>
-<tr>
-<td><strong>Reference</strong></td>
-<td>Cross-channel constants: dimensions (social cards, device footprints, print) and style-guides (the <code>brand.toml</code> schema).</td>
-</tr>
-</tbody>
-</table>
-<p>Use the left rail to navigate. Every channel page is single-sourced from the
-skill itself — what you read here is exactly what the skill carries at render
-time.</p>
+<h2 id="generation-script">Generation script<a class="headerlink" href="#generation-script" title="Permanent link">&para;</a></h2>
+<p><code>attentional-foraging/scripts/generate_explainer_heatmaps.py</code> — loads all 2,776 AdSERP trials, filters by phase/behavior, generates <code>f-decomposition.png</code> and <code>f-dissection.png</code> for the explainer page. Good starting point for any new aggregate heatmap work.</p>
+<h2 id="anti-patterns">Anti-patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Don't use <code>jet</code> or <code>rainbow</code> colormaps.</strong> They introduce false discontinuities and fail colorblind tests. Use perceptually-uniform maps (<code>viridis</code>, <code>magma</code>, <code>inferno</code>).</li>
+<li><strong>Don't show a heatmap without its colorbar</strong> — the colorbar carries units, N, and the range.</li>
+<li><strong>Don't aggregate across trials without stating <code>N</code></strong> in the caption. Heatmap density without N is ambiguous.</li>
+<li><strong>Don't apply a Gaussian kernel without recording the σ / bandwidth</strong> in the figure metadata or caption.</li>
+</ul>
 
 
 
 
 
 
+
+  
+  
 
 
 
@@ -1752,10 +1764,10 @@ time.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

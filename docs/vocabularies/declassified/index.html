@@ -1,0 +1,2299 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/vocabularies/declassified/">
+      
+      
+        <link rel="prev" href="../echarts/">
+      
+      
+        <link rel="next" href="../surfaces/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Declassified - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#declassified-released-leaked-seized-discovered" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Declassified
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lineage-and-grammar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lineage and grammar
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provenance-vocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provenance vocabulary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-redaction-grammars-keep-them-separate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two redaction grammars — keep them separate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#foia-exemption-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FOIA exemption codes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aging-as-era-distance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aging as era-distance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#marginalia-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Marginalia conventions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simulating-handwriting-making-marginalia-look-handwritten" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Simulating handwriting — making marginalia look handwritten
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Simulating handwriting — making marginalia look handwritten">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-font-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Font selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-the-visual-grammar-of-handwriting-vs-print" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The visual grammar of handwriting (vs print)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-css-recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. CSS recipes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-pen-color-authenticity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Pen-color authenticity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-compositional-grammar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Compositional grammar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-channel-specific-implementations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Channel-specific implementations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Anti-patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-channel-translation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-channel translation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frontmatter-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frontmatter schema
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-exemplars" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference exemplars
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="declassified-released-leaked-seized-discovered">Declassified — released, leaked, seized, discovered<a class="headerlink" href="#declassified-released-leaked-seized-discovered" title="Permanent link">&para;</a></h1>
+<p><strong>When to reach for it.</strong> When an artifact is framed as <em>not originally meant for the reader</em> — released after the fact, leaked against the issuer's wishes, seized as evidence, or recovered from an archive. The visual register of the released document carries weight a clean rendering of the same prose can't: it tells the reader the document has <em>survived</em> something. FBI Vault, FOIA reading-room PDFs, the Pentagon Papers, the Mitrokhin archive, Wikileaks cables, the Stasi files, and the Snowden cache all share the same typography of release — black bars, exemption codes, classification banners, marginalia, scan damage. Borrow it deliberately.</p>
+<p>Use it for:</p>
+<ul>
+<li><strong>Speculative-fiction documents</strong> framed as recovered, leaked, or seized — sciprogfi-web's <code>type: document</code> nodes are the canonical case.</li>
+<li><strong>Worldbuilding bibles</strong> when an in-universe document needs to feel like an artifact, not a stat block.</li>
+<li><strong>Editorial pieces</strong> that <em>are</em> about classification, secrecy, surveillance, or the FOIA process — let the form match the topic.</li>
+<li><strong>Forensic walkthroughs</strong> where the visible redaction itself is the point ("the bar is over the agent's name; here's why we know").</li>
+</ul>
+<p>Don't reach for it when:</p>
+<ul>
+<li>The document is not framed as released. A working memo, a marketing post, or a research paper presented straight should not cosplay as classified. Aesthetic-only declassification reads as costume and erodes the grammar.</li>
+<li>The audience can't tell the artifact is <em>fictional</em>. Real declassified-document conventions are read as authentic government output by some readers; pair fictional uses with explicit framing (in-universe filename, narrative wrapper, or visible disclaimer).</li>
+<li>The content is fine on its own. If the prose stands without the paratext, the paratext is decoration.</li>
+</ul>
+<h2 id="lineage-and-grammar">Lineage and grammar<a class="headerlink" href="#lineage-and-grammar" title="Permanent link">&para;</a></h2>
+<p>The grammar is narrow, well-codified, and recognized at a glance:</p>
+<ul>
+<li><strong>Classification banner.</strong> Top and bottom of every page. "TOP SECRET", "SECRET", "CONFIDENTIAL", "SENSITIVE BUT UNCLASSIFIED", "FOR OFFICIAL USE ONLY", "UNCLASSIFIED". Compartments append (<code>//SCI</code>, <code>//NOFORN</code>, <code>//ORCON</code>, <code>//REL TO USA, FVEY</code>). Banner colors track sensitivity (red for TS, blue for SECRET in some traditions; banner-only color is sufficient — don't tint the whole page).</li>
+<li><strong>Declassification stamp.</strong> Diagonal red overprint: "DECLASSIFIED", "DECLASSIFIED IN PART", "RELEASED IN FULL", "APPROVED FOR PUBLIC RELEASE". Includes release date, authority code, and case number. This is what marks a document as <em>available</em> — without it, the page is still pretending to be classified.</li>
+<li><strong>Case-file identifier.</strong> Top-right or top-left: <code>OHC-2033-IMM-407 // PAGE 4 OF 12</code>. Stable across pages, anchors the document in a system. If your document doesn't have a case-file ID, invent one — the absence is more conspicuous than a fake.</li>
+<li><strong>Redaction bars.</strong> Solid black rectangles that occlude text but preserve the <em>bounding box of the redacted span</em>. Length is informative — "REDACTED" replacing a whole paragraph reads differently than a 3-character bar inside a sentence. Margin annotation cites the exemption: <code>(b)(7)(C)</code>, <code>(b)(1)</code>, etc.</li>
+<li><strong>Exemption legend.</strong> Footer or final page: lists what each <code>(b)(...)</code> code means in plain English. Without the legend, the codes are noise; with it, the document teaches the reader to read its own redactions.</li>
+<li><strong>Page paratext.</strong> Sequential numbering, sometimes a routing line ("FILE COPY", "ROUTED TO: ___", date stamps), sometimes a header carrying agency / case / subject. Lower-end documents have less; higher-classification documents have more.</li>
+<li><strong>Aging artifacts.</strong> Scan moiré, edge wear, dog-ears, staple shadows, dust specks, photocopier streaks, carbon-paper bleed. Aging is <em>substrate damage</em> — paper, ink, scanner roller — not a sepia filter.</li>
+<li><strong>Marginalia.</strong> Handwritten annotations from readers along the way: blue pen for an analyst, red pen for an adversary or surveillance reader, pencil for an archivist. Marginalia is whose hands the document passed through; it tells a story the document itself doesn't.</li>
+</ul>
+<p>The 8:1 contrast rule still applies: redaction-code labels, classification banners, page numbers, exemption legends, and marginalia text all need to clear 8:1 against their backgrounds. Aging artifacts may not — they're the substrate, not the message.</p>
+<h2 id="provenance-vocabulary">Provenance vocabulary<a class="headerlink" href="#provenance-vocabulary" title="Permanent link">&para;</a></h2>
+<p>Six values, each with a different visual signature. Pick one per document and let the rest of the styling follow.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Story</th>
+<th>Visual cues</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>foia</code></td>
+<td>Government-sanctioned release through formal records request. The cleanest variant.</td>
+<td>Crisp scan, full paratext intact, neat redaction bars w/ exemption codes, declassification stamp w/ release date + authority, exemption legend in footer.</td>
+</tr>
+<tr>
+<td><code>leak</code></td>
+<td>Released against the issuer's wishes. Less polished, often photographed pages rather than scanned.</td>
+<td>Original classification banner <em>still present</em> (no decl stamp), partial or sloppy redactions, occasional white-out, sometimes annotated by the leaker. May include screen glare, finger occlusion, or off-axis photography artifacts.</td>
+</tr>
+<tr>
+<td><code>seizure</code></td>
+<td>Physical document recovered through raid, warrant, or war-zone capture.</td>
+<td>Battle / water / fold damage, foreign-language stamps, military or court evidence markings, chain-of-custody numbering, sometimes stapled or paper-clipped to a cover sheet.</td>
+</tr>
+<tr>
+<td><code>discovery</code></td>
+<td>Archival find — declassified by time, recovered from estate, museum, or library.</td>
+<td>Heavy paper aging (yellowing, foxing, edge browning), archive paratext (acquisition #, finding-aid reference), original classification stamps marked <em>cancelled</em>, museum/archive label adhesive ghosts.</td>
+</tr>
+<tr>
+<td><code>open</code></td>
+<td>Published willingly by the source. The "manifesto" register.</td>
+<td>Minimal or no paratext, no redactions, signed/dated by author, cover-sheet typography (issue number, distribution list). The <em>typography</em> signals self-published-but-formal — broadsheet, samizdat, technical-report covers.</td>
+</tr>
+<tr>
+<td><code>seized-annotated</code></td>
+<td>A copy of a public document captured by an adversary, with their marginalia and routing stamps over the original.</td>
+<td>Original document is clean (it was public); overlay carries red-pen threat assessment, surveillance routing stamps ("REVIEWED BY: ___"), highlighting, sometimes a translation ribbon down the side.</td>
+</tr>
+</tbody>
+</table>
+<p>These are visual <em>registers</em>, not technical truth claims. A fictional <code>leak</code> doc isn't actually leaked; it's framed as if it were, and its styling has to back the framing.</p>
+<h2 id="two-redaction-grammars-keep-them-separate">Two redaction grammars — keep them separate<a class="headerlink" href="#two-redaction-grammars-keep-them-separate" title="Permanent link">&para;</a></h2>
+<p>Black-bar styling collapses two distinct stories that need to read differently:</p>
+<ol>
+<li><strong>Government redaction at creation.</strong> Done by the issuer (or a reviewer) before release, citing a legal exemption. Solid black bar, length ≈ original text length, exemption code in the right margin: <code>(b)(7)(C)</code>. The reader knows <em>something specific</em> was removed by an <em>identified authority</em> under a <em>cited rule</em>. Use a <code>redact</code> shortcode / class for this.</li>
+<li><strong>View-time censorship.</strong> Done by the <em>display environment</em> — a Clean Net filter, a regional firewall, a corporate compliance overlay. The text was once visible to <em>some</em> readers and is now blocked from <em>this</em> reader. Often rendered as <code>█</code> characters (the original glyph count is preserved as a tell), and the overlay tooltip names the censor. Use a <code>censor</code> shortcode / class for this.</li>
+</ol>
+<p>These can coexist on the same page (a leaked document re-suppressed by a Clean Net filter), but they should not share visual language. Government redaction is a property of the document; view-time censorship is a property of the reader's environment.</p>
+<h2 id="foia-exemption-codes">FOIA exemption codes<a class="headerlink" href="#foia-exemption-codes" title="Permanent link">&para;</a></h2>
+<p>The five-or-six codes a reader will see often enough to recognize. Use these in fiction; invent parallel codes only when the universe explicitly diverges.</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(b)(1)</code></td>
+<td>Classified national-security information.</td>
+</tr>
+<tr>
+<td><code>(b)(3)</code></td>
+<td>Specifically exempted by another statute.</td>
+</tr>
+<tr>
+<td><code>(b)(4)</code></td>
+<td>Trade secrets or commercial/financial info from a person.</td>
+</tr>
+<tr>
+<td><code>(b)(5)</code></td>
+<td>Inter/intra-agency memoranda — privileged deliberation.</td>
+</tr>
+<tr>
+<td><code>(b)(6)</code></td>
+<td>Personnel/medical files — clearly unwarranted invasion of privacy.</td>
+</tr>
+<tr>
+<td><code>(b)(7)(A)</code></td>
+<td>Law enforcement records — interferes with enforcement.</td>
+</tr>
+<tr>
+<td><code>(b)(7)(C)</code></td>
+<td>Law enforcement records — personal privacy.</td>
+</tr>
+<tr>
+<td><code>(b)(7)(D)</code></td>
+<td>Law enforcement records — confidential source.</td>
+</tr>
+<tr>
+<td><code>(b)(7)(E)</code></td>
+<td>Law enforcement records — techniques and procedures.</td>
+</tr>
+<tr>
+<td><code>(b)(7)(F)</code></td>
+<td>Law enforcement records — endangerment of life or safety.</td>
+</tr>
+</tbody>
+</table>
+<p>Render the code in the right margin opposite the bar, in a smaller monospace face. Always include the exemption legend somewhere on the page (footer or final page), or the codes don't teach.</p>
+<h2 id="aging-as-era-distance">Aging as era-distance<a class="headerlink" href="#aging-as-era-distance" title="Permanent link">&para;</a></h2>
+<p>Aging is <em>time elapsed between issue date and view date</em>, not absolute calendar time. A document dated 2026 viewed inside a 2026 era surface should look fresh; the same document re-rendered inside a 2033 era surface should carry seven years of substrate damage. This composes naturally with era-progression CSS already in use (sciprogfi-web's <code>2024-2026.css</code> → <code>2035.css</code>) — the aging filter is <em>a function of <code>view_year - issue_year</code></em>, not of <code>issue_year</code> alone.</p>
+<p>Three intensity tiers:</p>
+<ul>
+<li><strong>Tier 0 (<code>Δ ≤ 1 year</code>)</strong> — fresh. Crisp scan, clean edges, full ink density, minimal artifacts.</li>
+<li><strong>Tier 1 (<code>Δ 2–7 years</code>)</strong> — used. Light scan grain, soft edge wear, occasional dust spec, mild ink density loss. Marginalia from intermediate readers becomes plausible here.</li>
+<li><strong>Tier 2 (<code>Δ ≥ 8 years</code>)</strong> — archival. Yellowing, foxing, visible photocopier streaks, edge browning, possible coffee ring or staple-shadow geometry. Original classification stamps may be cancelled (red overstrike on TOP SECRET).</li>
+</ul>
+<p>Implementation: an SVG paper-grain overlay at 4–10% opacity (tier-scaled), an edge-wear mask at the page perimeter, and an optional yellow-tint blend on tier 2 (≤ 8% opacity, on the <em>paper</em> layer only, never on text — text must clear 8:1 always). For sciprogfi-web specifically, the <code>(view_year - issue_year)</code> calculation can use the existing <code>intrusion</code> system as a proxy — older docs in higher-intrusion eras inherit higher aging tiers.</p>
+<h2 id="marginalia-conventions">Marginalia conventions<a class="headerlink" href="#marginalia-conventions" title="Permanent link">&para;</a></h2>
+<p>Marginalia tells the story of <em>who read this document along the way</em>. Three hands cover most cases:</p>
+<ul>
+<li><strong>Red pen</strong> — adversarial reader. Surveillance state, opposing analyst, intercept reviewer. Used for threat assessment, target identification, action-required circling. Renders as a slightly off-rotation handwritten note in a red ink color (e.g., <code>#a8242b</code>). Always 8:1 against the paper.</li>
+<li><strong>Blue pen</strong> — friendly analyst. Internal reviewer, allied agency, the document's own staff. Used for clarification, citation, follow-up question. Renders as a more controlled handwritten note in dark blue (<code>#1c3a6e</code>).</li>
+<li><strong>Pencil</strong> — archivist or scholar. Cataloguing, dating, source attribution, finding-aid reference. Most restrained of the three — short, often abbreviated, often in the bottom margin. Renders as a soft graphite gray.</li>
+</ul>
+<p>Each annotation should be <em>positioned</em> relative to a specific span of text (right margin opposite a paragraph, between two paragraphs, or in a bottom-margin block). Floating annotations not anchored to content read as decoration.</p>
+<p>A typewriter strikethrough is the fourth hand: when the <em>original document</em> was edited at issue time, render <code>~~struck text~~</code> with a red horizontal line at half-stroke through the original text in the document's own face. This is different from marginalia — it's a property of the document at issue, not a later reader's annotation.</p>
+<h2 id="simulating-handwriting-making-marginalia-look-handwritten">Simulating handwriting — making marginalia <em>look</em> handwritten<a class="headerlink" href="#simulating-handwriting-making-marginalia-look-handwritten" title="Permanent link">&para;</a></h2>
+<p>A cursive font in a margin reads as fake unless it carries the irregularities of an actual hand. The grammar of handwriting differs from print along five dimensions; reproducing them is what separates "rotated cursive text" from a marginalia note that someone wrote.</p>
+<h3 id="1-font-selection">1. Font selection<a class="headerlink" href="#1-font-selection" title="Permanent link">&para;</a></h3>
+<p>System handwriting fonts (Bradley Hand, Marker Felt, Comic Sans MS, Segoe Print) are <em>available</em> but not <em>consistent</em> across platforms — a cursive fallback chain produces a different effective face on every reader's device. Two better options:</p>
+<ul>
+<li><strong>Hosted webfonts.</strong> Pick a face with handwriting authenticity, broad glyph coverage, and a license that ships with the artifact. Defaults that work well in declassified contexts:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Font</th>
+<th>Hand</th>
+<th>License</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://fonts.google.com/specimen/Caveat">Caveat</a></td>
+<td>informal ballpoint</td>
+<td>OFL</td>
+<td>Most legible at small sizes; the safe default.</td>
+</tr>
+<tr>
+<td><a href="https://fonts.google.com/specimen/Kalam">Kalam</a></td>
+<td>rounded marker / fine pen</td>
+<td>OFL</td>
+<td>Excellent for blue-pen analyst notes; reads slightly more deliberate than Caveat.</td>
+</tr>
+<tr>
+<td><a href="https://fonts.google.com/specimen/Architects+Daughter">Architects Daughter</a></td>
+<td>print-letter handwriting</td>
+<td>OFL</td>
+<td>Good when the marginalia is technical or schematic (engineer's hand).</td>
+</tr>
+<tr>
+<td><a href="https://fonts.google.com/specimen/Shadows+Into+Light+Two">Shadows Into Light Two</a></td>
+<td>quick scrawl</td>
+<td>OFL</td>
+<td>Best for adversarial red-pen notes — has tension.</td>
+</tr>
+<tr>
+<td><a href="https://fonts.google.com/specimen/Reenie+Beanie">Reenie Beanie</a></td>
+<td>hurried cursive</td>
+<td>OFL</td>
+<td>Use sparingly — the irregularity reads as agitated, fits surveillance contexts.</td>
+</tr>
+<tr>
+<td><a href="https://fonts.google.com/specimen/Permanent+Marker">Permanent Marker</a></td>
+<td>thick felt-tip</td>
+<td>OFL</td>
+<td>Reserve for emphatic single-word callouts (<code>URGENT</code>, <code>STOP</code>).</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Custom scanned handwriting.</strong> For a single-author voice across a large corpus (a fictional analyst whose marginalia recurs across many documents), trace handwriting samples and bake into a webfont via <a href="https://www.calligraphr.com/">Calligraphr</a> or hand-craft an SVG font. Higher activation cost; pays back when the <em>same hand</em> appears across dozens of documents.</li>
+</ul>
+<p>Pair the font choice with a stack: <code>font-family: 'Caveat', 'Bradley Hand', 'Marker Felt', cursive;</code>. The system fallbacks degrade gracefully when the webfont fails to load.</p>
+<h3 id="2-the-visual-grammar-of-handwriting-vs-print">2. The visual grammar of handwriting (vs print)<a class="headerlink" href="#2-the-visual-grammar-of-handwriting-vs-print" title="Permanent link">&para;</a></h3>
+<p>Five things printed text does <em>not</em> do, but handwriting always does:</p>
+<ul>
+<li><strong>Per-character drift.</strong> Letters don't sit on a perfect baseline; they drift up-and-down by a fraction of a pixel. Larger drift on words at line breaks.</li>
+<li><strong>Per-character rotation.</strong> Each glyph rotates by a small random angle (±1.5° typical, ±3° for hurried notes).</li>
+<li><strong>Ink saturation variability.</strong> Pen pressure changes; the same pen reads darker at the start of a stroke and lighter at the end. Ballpoints leave gaps; felt-tips bleed.</li>
+<li><strong>Word-level rotation.</strong> A word may tilt as a unit before the writer corrects course on the next word.</li>
+<li><strong>Line-to-line drift.</strong> Lines aren't parallel. They slope (usually up-and-to-the-right for right-handed writers; down-and-to-the-right for left-handed). The slope changes between paragraphs.</li>
+</ul>
+<p>Apply these in layers — over-applying any one looks like a stylization gimmick; the cumulative effect of three at low intensity reads as authentic.</p>
+<h3 id="3-css-recipes">3. CSS recipes<a class="headerlink" href="#3-css-recipes" title="Permanent link">&para;</a></h3>
+<p>The minimum baseline (works without JS):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">.</span><span class="nc">marginalia</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="k">font-family</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;Caveat&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Bradley Hand&#39;</span><span class="p">,</span><span class="w"> </span><span class="kc">cursive</span><span class="p">;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mf">1.05</span><span class="kt">rem</span><span class="p">;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="k">line-height</span><span class="p">:</span><span class="w"> </span><span class="mf">1.4</span><span class="p">;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="c">/* Word-level rotation — irregular per note, not page-wide */</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="nb">rotate</span><span class="p">(</span><span class="mf">-0.6</span><span class="kt">deg</span><span class="p">);</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="c">/* Slight ink bleed via tiny outward text-shadow */</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="k">text-shadow</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mf">0.4</span><span class="kt">px</span><span class="w"> </span><span class="kc">currentColor</span><span class="p">;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="c">/* Soften ink-into-paper interaction */</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="k">mix-blend-mode</span><span class="p">:</span><span class="w"> </span><span class="kc">multiply</span><span class="p">;</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">}</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c">/* Vary rotation per hand so identically-typed paragraphs look like</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="c">   different hands wrote them. */</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="p">.</span><span class="nc">marginalia</span><span class="o">[</span><span class="nt">data-hand</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="o">]</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="nb">rotate</span><span class="p">(</span><span class="mf">-0.6</span><span class="kt">deg</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="p">.</span><span class="nc">marginalia</span><span class="o">[</span><span class="nt">data-hand</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="o">]</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="nb">rotate</span><span class="p">(</span><span class="w"> </span><span class="mf">0.4</span><span class="kt">deg</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="p">.</span><span class="nc">marginalia</span><span class="o">[</span><span class="nt">data-hand</span><span class="o">=</span><span class="s2">&quot;pencil&quot;</span><span class="o">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="nb">rotate</span><span class="p">(</span><span class="mf">-0.3</span><span class="kt">deg</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>Baseline drift via per-character spans (works without JS if you accept generated markup, or use a small render-time helper):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">&lt;</span><span class="nt">aside</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;marginalia hand-jitter&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;--y:-0.4px&quot;</span><span class="p">&gt;</span>T<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;</span><span class="nt">span</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;--y:0.3px&quot;</span><span class="p">&gt;</span>a<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>...
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">&lt;/</span><span class="nt">aside</span><span class="p">&gt;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">.</span><span class="nc">hand-jitter</span><span class="w"> </span><span class="nt">span</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">inline-block</span><span class="p">;</span><span class="w"> </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="nb">translateY</span><span class="p">(</span><span class="nf">var</span><span class="p">(</span><span class="nv">--y</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>A more authentic ink-bleed via SVG filter (apply via CSS <code>filter</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">&lt;</span><span class="nt">svg</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;0&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;0&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;position:absolute&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  <span class="p">&lt;</span><span class="nt">filter</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ink&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="p">&lt;</span><span class="nt">feTurbulence</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;fractalNoise&quot;</span> <span class="na">baseFrequency</span><span class="o">=</span><span class="s">&quot;0.04&quot;</span> <span class="na">numOctaves</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">seed</span><span class="o">=</span><span class="s">&quot;3&quot;</span><span class="p">/&gt;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="p">&lt;</span><span class="nt">feDisplacementMap</span> <span class="na">in</span><span class="o">=</span><span class="s">&quot;SourceGraphic&quot;</span> <span class="na">scale</span><span class="o">=</span><span class="s">&quot;0.6&quot;</span><span class="p">/&gt;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  <span class="p">&lt;/</span><span class="nt">filter</span><span class="p">&gt;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">&lt;/</span><span class="nt">svg</span><span class="p">&gt;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">.</span><span class="nc">marginalia</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">filter</span><span class="p">:</span><span class="w"> </span><span class="nb">url</span><span class="p">(</span><span class="sx">#ink</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p><code>scale="0.6"</code> is just enough to roughen the glyph edges; <code>scale &gt; 1</code> reads as drunk, not as written. The filter has a real cost — fine on marginalia (small text spans), avoid on body copy.</p>
+<h3 id="4-pen-color-authenticity">4. Pen-color authenticity<a class="headerlink" href="#4-pen-color-authenticity" title="Permanent link">&para;</a></h3>
+<p>Generic CSS color names (<code>red</code>, <code>blue</code>) read as digital, not as ink. Use realistic ink palettes — and verify each clears the brand's contrast floor against paper.</p>
+<table>
+<thead>
+<tr>
+<th>Pen</th>
+<th>Hex</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ballpoint blue</td>
+<td><code>#1c3a6e</code></td>
+<td>The single most common ink in 20th-century institutional documents. 9:1 on <code>#f9f5e8</code>.</td>
+</tr>
+<tr>
+<td>Felt-tip blue</td>
+<td><code>#1f4dba</code></td>
+<td>Brighter, slightly purplish — late-century markers.</td>
+</tr>
+<tr>
+<td>Ballpoint red (correction)</td>
+<td><code>#7a0e14</code></td>
+<td>The "red pen" of evaluators. 8.3:1 on cream.</td>
+</tr>
+<tr>
+<td>Felt-tip red (declass stamp)</td>
+<td><code>#5a0c0c</code></td>
+<td>Very dark, almost burgundy — what looks "official".</td>
+</tr>
+<tr>
+<td>Pencil graphite</td>
+<td><code>#3d3d3b</code></td>
+<td>Cool gray, not warm. 8.6:1 on cream — borderline; verify.</td>
+</tr>
+<tr>
+<td>Sharpie / permanent black</td>
+<td><code>#0a0a0a</code> with slight bleed</td>
+<td>Use 1.5px text-shadow for the bleed-through-paper effect.</td>
+</tr>
+<tr>
+<td>Highlighter yellow</td>
+<td><code>#fff263</code> at 0.4 alpha</td>
+<td>Rare in declassified docs; prefer underline over highlight.</td>
+</tr>
+<tr>
+<td>Carbon-paper purple (typewriter)</td>
+<td><code>#3a2a4a</code></td>
+<td>When the document itself is a carbon copy, body ink shifts here.</td>
+</tr>
+</tbody>
+</table>
+<p>The 8:1 contrast rule still applies — verify each pen color against the paper tier in use. Tier-2 (yellowed) paper changes the math; precompute and store per-tier ink colors rather than reusing tier-0 values.</p>
+<h3 id="5-compositional-grammar">5. Compositional grammar<a class="headerlink" href="#5-compositional-grammar" title="Permanent link">&para;</a></h3>
+<p>Marginalia <em>is</em> placement — a note in the wrong spot reads as decoration:</p>
+<ul>
+<li><strong>Anchored, not floating.</strong> Every note refers to a specific span in the body. Use the right margin opposite that span on wide layouts; use a flush block immediately after the span on narrow layouts.</li>
+<li><strong>Connector marks</strong> are optional but powerful. A small SVG line or arrow from the margin note to the underlined or circled span in the body sells the annotation. Render the arrow in the same ink color as the marginalia.</li>
+<li><strong>Underlines and circles in the body itself.</strong> Same hand, same ink — <code>&lt;u class="hand-mark" data-hand="red"&gt;</code> for an underline or a small SVG circle drawn over the relevant phrase. The marginalia note then references "the circled phrase."</li>
+<li><strong>Length matches voice.</strong> Single word = exclamation (<code>Confirmed.</code> <code>Sus?</code> <code>URGENT</code>). Single sentence = analyst comment. Multi-line = staff review. A handwritten paragraph in the margin always reads as theatrical; if the note is long, break it into two anchored notes at different positions.</li>
+<li><strong>Attribution is a tell.</strong> Initials and date in parens (<code>— JL 4/82</code>) signal institutional handwriting culture. Without attribution, the reader doesn't know whose hand they're seeing — fine for ambient atmosphere, weaker for narrative weight.</li>
+</ul>
+<h3 id="6-channel-specific-implementations">6. Channel-specific implementations<a class="headerlink" href="#6-channel-specific-implementations" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>How to render handwriting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Web / HTML</strong></td>
+<td>CSS recipe above. Webfont via <code>@font-face</code> (self-host the OFL files, don't hot-link Google Fonts in production-quality artifacts). Use <code>font-display: swap</code> so absent webfont falls back gracefully.</td>
+</tr>
+<tr>
+<td><strong>SVG</strong></td>
+<td><code>&lt;text&gt;</code> with custom font, per-<code>&lt;tspan&gt;</code> <code>dy</code> for baseline drift, <code>transform="rotate(N)"</code> per-character. Apply <code>&lt;feTurbulence&gt;</code> + <code>&lt;feDisplacementMap&gt;</code> filter for ink-roughened edges. Vector-faithful at any scale; preferred for printable artifacts.</td>
+</tr>
+<tr>
+<td><strong>Raster (Pillow)</strong></td>
+<td>Load handwriting font via <code>ImageFont.truetype()</code>. Draw each character separately at slightly randomized rotation (use <code>Image.new</code> for the glyph, rotate, paste). Apply <code>ImageFilter.GaussianBlur(0.6)</code> to the marginalia layer for ink bleed. Composite over paper grain via <code>Image.alpha_composite</code>.</td>
+</tr>
+<tr>
+<td><strong>Print (PDF)</strong></td>
+<td>Same as web; weasyprint and Prince both honor <code>@font-face</code> and CSS <code>transform</code>. SVG filters do not survive print rasterization in some pipelines — use baked-in jitter via per-span markup instead of <code>filter: url(#ink)</code>.</td>
+</tr>
+<tr>
+<td><strong>Video</strong></td>
+<td>Animate the <em>writing</em> of the note: progressive <code>clip-path: inset(0 100% 0 0)</code> reveal at ~5 chars/sec for the writing motion. Marginalia appearing fully-formed reads as overlay, not as performed annotation.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="7-anti-patterns">7. Anti-patterns<a class="headerlink" href="#7-anti-patterns" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Don't use Comic Sans for "casual" handwriting.</strong> It's recognizable as a font; it pulls the reader out of the artifact.</li>
+<li><strong>Don't render every marginalia note at the same rotation.</strong> Multiple notes in the same hand should share <em>style</em> (rotation range, ink color, font) but not exact transform — they were written at different sittings.</li>
+<li><strong>Don't make handwriting too jittery.</strong> Per-character rotation &gt; ±3° crosses into "shaky-hand" territory and reads as drunk or distressed. Default range: ±1.5°.</li>
+<li><strong>Don't use stroke effects (<code>-webkit-text-stroke</code>) on marginalia.</strong> Real handwriting has uneven ink density; outline strokes look stenciled.</li>
+<li><strong>Don't render handwriting at body-text size.</strong> Marginalia is typically a touch larger than body (1.05–1.15× body size) so the cursive shapes remain legible. Smaller sizes turn into blur.</li>
+<li><strong>Don't use multiple webfonts for different hands.</strong> One handwriting font, varied by ink color and rotation, reads as different hands. Stacking fonts reads as a typography demo.</li>
+<li><strong>Don't auto-generate marginalia.</strong> Each note should anchor to specific content with specific authorial intent. Procedurally placed notes ("a random note every 200 words") read as noise.</li>
+<li><strong>Don't ignore line-height.</strong> Handwriting needs more vertical breathing room than print — <code>line-height: 1.4</code> minimum, <code>1.6</code> better. Tightly packed handwriting reads as a wall of cursive.</li>
+</ul>
+<h2 id="cross-channel-translation">Cross-channel translation<a class="headerlink" href="#cross-channel-translation" title="Permanent link">&para;</a></h2>
+<p>Declassified is substrate-aware. Each output channel implements the grammar with the materials it has:</p>
+<ul>
+<li><strong>Web (<a href="../../channels/web/"><code>channels/web.md</code></a>).</strong> CSS-driven. Classification banner = <code>&lt;header&gt;</code> + <code>&lt;footer&gt;</code> with sticky position. Redaction bar = inline <code>&lt;span class="redact"&gt;</code> with <code>data-exemption</code> attribute and <code>::after</code> for the code label. Paper grain = SVG noise filter applied as <code>background-image</code> on the page surface. Marginalia = positioned absolute or floated, with rotation transforms. Aging = CSS filter chains (<code>sepia()</code>, <code>contrast()</code>, mask gradients).</li>
+<li><strong>SVG (<a href="../../channels/svg/"><code>channels/svg.md</code></a>).</strong> Vector-native. Banners as text on rect; redaction bars as filled rects; aging as <code>&lt;feTurbulence&gt;</code> + <code>&lt;feDisplacementMap&gt;</code> filters. Paper grain renders crisply at any zoom — preferred when the artifact will be enlarged or printed.</li>
+<li><strong>Raster (<a href="../../channels/raster/"><code>channels/raster.md</code></a>).</strong> Pillow + typeset. Compose layers: paper-grain noise (PIL.ImageFilter), text layer, redaction layer (filled rects), banner/stamp layer, marginalia layer. Use this when the deliverable is a single PNG (social card, in-fiction screenshot of a printed page). PIL's <code>Image.composite</code> handles the layering; <code>ImageDraw.rectangle</code> produces clean redaction bars.</li>
+<li><strong>Document (paged HTML or PDF).</strong> Pandoc + weasyprint route from <a href="../../channels/web/"><code>channels/web.md</code></a>. Paged-media CSS (<code>@page</code>, <code>@page :first</code>, running headers/footers) maps directly onto classification banners and case-file paratext. <code>page-break-before: always</code> between sections.</li>
+</ul>
+<h2 id="frontmatter-schema">Frontmatter schema<a class="headerlink" href="#frontmatter-schema" title="Permanent link">&para;</a></h2>
+<p>Suggested shape for projects adopting this vocabulary. Fields are optional unless noted.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">declassified</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">                         </span><span class="c1"># required to opt the document into the register</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">provenance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">leak</span><span class="w">                           </span><span class="c1"># foia | leak | seizure | discovery | open | seized-annotated</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nt">classification</span><span class="p">:</span><span class="w">                            </span><span class="c1"># original classification at issue</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SECRET</span><span class="w">                            </span><span class="c1"># TOP SECRET | SECRET | CONFIDENTIAL | SBU | FOUO | UNCLASSIFIED</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">compartments</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">NOFORN</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ORCON</span><span class="p p-Indicator">]</span><span class="w">            </span><span class="c1"># optional — appended after //</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nt">casefile</span><span class="p">:</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OHC-2033-IMM-407</span><span class="w">                     </span><span class="c1"># stable identifier across pages</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="nt">pages</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12</span><span class="w">                                </span><span class="c1"># total page count for &quot;PAGE x OF y&quot; rendering</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="nt">agency</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;OHC</span><span class="nv"> </span><span class="s">//</span><span class="nv"> </span><span class="s">Strategy</span><span class="nv"> </span><span class="s">Directorate&quot;</span><span class="w">    </span><span class="c1"># issuing body</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="nt">subject</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Immune-system</span><span class="nv"> </span><span class="s">thesis</span><span class="nv"> </span><span class="s">(draft)&quot;</span><span class="w">  </span><span class="c1"># subject line</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="nt">declassification</span><span class="p">:</span><span class="w">                          </span><span class="c1"># only when provenance ∈ {foia, discovery}</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2034-01-15</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">  </span><span class="nt">authority</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;OHC-DECL-AUTH-04&quot;</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">  </span><span class="nt">release_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RELEASED</span><span class="nv"> </span><span class="s">IN</span><span class="nv"> </span><span class="s">FULL&quot;</span><span class="w">         </span><span class="c1"># IN FULL | IN PART | DENIED IN PART</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="nt">exemptions</span><span class="p">:</span><span class="w">                                </span><span class="c1"># only when redactions are present</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;(b)(7)(C)&quot;</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">    </span><span class="nt">plain</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Personal</span><span class="nv"> </span><span class="s">privacy</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">law-enforcement</span><span class="nv"> </span><span class="s">context&quot;</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">code</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;(b)(1)&quot;</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">    </span><span class="nt">plain</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Classified</span><span class="nv"> </span><span class="s">national-security</span><span class="nv"> </span><span class="s">information&quot;</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="nt">seizure</span><span class="p">:</span><span class="w">                                   </span><span class="c1"># only when provenance == seizure</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">  </span><span class="nt">recovered_from</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Lagos</span><span class="nv"> </span><span class="s">node,</span><span class="nv"> </span><span class="s">2034-04-02&quot;</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">  </span><span class="nt">custody</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;OHC</span><span class="nv"> </span><span class="s">Evidence</span><span class="nv"> </span><span class="s">Locker</span><span class="nv"> </span><span class="s">/</span><span class="nv"> </span><span class="s">case</span><span class="nv"> </span><span class="s">2034-LAG-117&quot;</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="nt">marginalia</span><span class="p">:</span><span class="w">                                </span><span class="c1"># optional — also doable inline via shortcode</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hand</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">red</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">    </span><span class="nt">anchor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">paragraph-3</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;TGT</span><span class="nv"> </span><span class="s">confirmed</span><span class="nv"> </span><span class="s">—</span><span class="nv"> </span><span class="s">request</span><span class="nv"> </span><span class="s">authorization</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">act.&quot;</span>
+</code></pre></div>
+<p>The schema is suggestive, not enforced. A web project may flatten these into top-level keys if its templating prefers; a paper project may carry only <code>declassified</code>, <code>provenance</code>, and a single case-file string.</p>
+<h2 id="anti-patterns">Anti-patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Don't mix the two redaction grammars in one shortcode.</strong> Government-redaction-at-creation and view-time-censorship are different stories. Use distinct classes/shortcodes (<code>redact</code> vs <code>censor</code>) so a future author can compose them deliberately.</li>
+<li><strong>Don't use redaction for emphasis or surprise.</strong> Bars on a punchline read as a meme. Redact only what an in-universe authority would redact, for an in-universe reason.</li>
+<li><strong>Don't put redaction bars over text the reader still needs to follow the document.</strong> Leave enough surrounding context that the rest of the page makes sense; over-redaction breaks comprehension and is a tell that the document is fake.</li>
+<li><strong>Don't skip the exemption legend.</strong> Codes without legend are noise. The legend is what makes the redaction <em>legal-feeling</em> instead of mysterious.</li>
+<li><strong>Don't tint the whole page sepia and call that aging.</strong> Aging is substrate damage — grain, edges, scan moiré — not a color filter. A sepia layer over crisp text is a costume, not a register.</li>
+<li><strong>Don't render marginalia in a body-text font.</strong> Marginalia is <em>handwriting</em> — different face, slight rotation, ink color, irregular tracking. If it looks like the document's body type, it reads as part of the document, not as a reader's note.</li>
+<li><strong>Don't put aging or redaction artifacts under text without checking 8:1.</strong> Paper grain at 8% opacity will not break text contrast; the same grain at 25% will. Audit every text-bearing role over the aged surface.</li>
+<li><strong>Don't apply the register to documents the universe says are public.</strong> A manifesto issued openly by its author has no FOIA history and no redactions. Use <code>provenance: open</code> and let the manifesto layout do its job — the register is wrong here.</li>
+<li><strong>Don't fake real-world classification systems for non-fiction work.</strong> "TOP SECRET" on a marketing piece is a bad joke; "DRAFT — INTERNAL" is the honest equivalent. Reserve the actual government grammar for fiction or for pieces that are themselves <em>about</em> declassification.</li>
+</ul>
+<h2 id="reference-exemplars">Reference exemplars<a class="headerlink" href="#reference-exemplars" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>FBI Vault</strong> — <code>vault.fbi.gov</code>. The canonical reference for FOIA-released US federal documents. Note the consistent paratext, exemption-code marginalia, and case-file headers. Particularly useful are the multi-decade case files (Hoover-era memos through 1990s investigations) — the same grammar, applied across substrate generations from typewriter carbons to photocopies to native PDFs.</li>
+<li><strong>National Security Archive (GWU)</strong> — <code>nsarchive.gwu.edu</code>. Curated declassified collections with editorial framing. Good source for how <em>historians</em> present declassified material — captions, source notes, finding aids.</li>
+<li><strong>Wikileaks Cablegate</strong> — leak-register reference. Documents retain original classification banners, no decl stamps, tabular metadata strip at the top. Different aesthetic from FOIA; closer to raw issue-time formatting.</li>
+<li><strong>The Pentagon Papers (NARA digital release)</strong> — multi-volume document with mixed declassification status across pages. Useful reference for how declassification stamps interact with original classification banners ("TOP SECRET" with diagonal "DECLASSIFIED" overstamp).</li>
+</ul>
+<p>These are visual references, not citation sources for the fictional projects that borrow the grammar. Read them to learn the form, then build new artifacts that <em>are</em> the form, not pastiches of specific real documents.</p>
+<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../channels/web/"><code>channels/web.md</code></a> — CSS implementation, paged-media for HTML/PDF, marginalia tokens.</li>
+<li><a href="../../channels/svg/"><code>channels/svg.md</code></a> — vector implementation with <code>&lt;feTurbulence&gt;</code> aging, scalable paper grain.</li>
+<li><a href="../../channels/raster/"><code>channels/raster.md</code></a> — Pillow compositing of layered substrates for single-PNG deliverables.</li>
+<li><a href="../../channels/style-guides/"><code>channels/style-guides.md</code></a> — <code>[provenance]</code> table on <code>brand.toml</code> is unrelated naming-collision; brand-token provenance ≠ document-register provenance.</li>
+<li><a href="../fui/"><code>vocabularies/fui.md</code></a> — sci-fi UI grammar; pairs naturally with <code>seized-annotated</code> overlays where the surveilling system is itself an FUI surface.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

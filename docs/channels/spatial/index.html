@@ -1,0 +1,2078 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Multi-channel visual production for LLMs — sixteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/channels/spatial/">
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../charts/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Spatial - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#spatial-depth-scaffolding-for-layered-typography" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Spatial
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-channel-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this channel exists
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-ships-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What ships today
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-static-path-murielspatial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The static path — muriel.spatial
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-ridgemap-path-murielspatialridgemap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The ridgemap path — muriel.spatial.ridgemap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-interactive-path-render_assets_libspatialcssjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The interactive path — render_assets/_lib/spatial.{css,js}
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The interactive path — render_assets/_lib/spatial.{css,js}">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#palette-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Palette tokens
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lineage-where-to-read-more" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lineage — where to read more
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-prescription-when-not-to-reach-for-this-channel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-prescription — when not to reach for this channel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#files-this-channel-owns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files this channel owns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#queued" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Queued
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap (TODO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HARNESSES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harnesses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="spatial-depth-scaffolding-for-layered-typography">Spatial — depth scaffolding for layered typography<a class="headerlink" href="#spatial-depth-scaffolding-for-layered-typography" title="Permanent link">&para;</a></h1>
+<p>A small library for putting type into <em>felt</em> space — perspective grids that turn the page from a stack of layers into a single volumetric scene, plus a set of Three.js + CSS3DRenderer exemplars that consume the same coordinate system at runtime. Reach for this channel when you need to argue <em>"these things live in a relationship," not just "these things appear in a list."</em></p>
+<p>Part of the <a href="../../SKILL/">muriel</a> skill — see the top-level index for mission and universal rules. Sister channels: <a href="../svg/"><code>svg.md</code></a> for the static surface this writes onto; <a href="../web/"><code>web.md</code></a> and <a href="../interactive/"><code>interactive.md</code></a> for the runtime surfaces the JS exemplars target.</p>
+<h2 id="why-this-channel-exists">Why this channel exists<a class="headerlink" href="#why-this-channel-exists" title="Permanent link">&para;</a></h2>
+<p>Floating text in 3D space without a perspective scaffold reads as <strong>stacked planes</strong> — there is no felt depth, just layers. The visual system needs three or four well-placed cues — vanishing-point convergence, a horizon anchor, foreshortened transversals — to lock a scene into one continuous space. Once it does, the same screen real estate carries far more information without overcrowding.</p>
+<p>This is not a styling trick. Spatial-typography is an explicit lineage in design history — Alberti's <em>De pictura</em> (1435) and the <em>costruzione legittima</em>; Dürer's perspective machine (1525); architect's blueprint axonometrics; <strong>Muriel Cooper's MIT Visible Language Workshop</strong> (receding planes of type as an information environment); the <strong>Robertson / Mackinlay / Card <em>Information Visualizer</em></strong> cone trees and the <strong>Dumais / Cockburn / Robertson <em>Data Mountain</em></strong> at MSR (spatial memory as an indexing primitive); and the Tron / synthwave horizon-to-VP grid that re-popularised one-point perspective in the 1980s. Every one of those traditions earned its geometry — the depth carried meaning, not decoration.</p>
+<p>Pre-flight question for any spatial composition: <em>if I flattened the scene to a list, would the reader lose information?</em> If no, ship the list.</p>
+<h2 id="what-ships-today">What ships today<a class="headerlink" href="#what-ships-today" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Surface</th>
+<th>Module / file</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Static SVG perspective grids</td>
+<td><code>muriel.spatial</code></td>
+<td><code>grid("1pt"|"2pt"|"3pt"|"iso", BBox)</code> → <code>PerspectiveGrid</code> with <code>.svg()</code>. Tron-style cyan-on-near-black defaults; horizon anchor, fade-to-horizon depth weighting, VP annotation toggle.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Ridgemap (stacked 1D slices)</td>
+<td><code>muriel.spatial.ridgemap</code></td>
+<td><code>ridgemap(field, BBox)</code> → <code>RidgeMap</code> with <code>.svg()</code>. Joy Division <em>Unknown Pleasures</em> / Harold Craft 1970 pulsar plot — each row of a 2D scalar field becomes a polyline, rows stacked top-to-bottom, front ridges occlude back ridges via a baseline-closed polygon fill. Sibling primitive to <code>grid()</code>: where the perspective grid is a scaffold for <em>space</em>, the ridgemap is a scaffold for <em>scalar fields</em>. Zero-dep (duck-types numpy ndarray).</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Shared 3D runtime helpers</td>
+<td><code>render_assets/_lib/spatial.{css,js}</code></td>
+<td><code>createScene</code>, <code>Mountain</code>, <code>addFloorGrid</code>, <code>addHorizon</code>, <code>makePlane</code> (CSS3D), <code>FocusController</code>, <code>startRenderLoop</code>. WebGL + CSS3DRenderer stacked so DOM text gets composited in 3D without losing selectability or accessibility.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Layered DOM × perspective grid</td>
+<td><code>render_assets/spatial-typography/</code></td>
+<td>Cooper VLW homage — receding planes of DOM type, navigable, on a horizon-anchored grid. Base exemplar for the lib.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Data Mountain (MSR)</td>
+<td><code>render_assets/mindbendingpixels-mountain/</code> + <code>render_assets/sciprogfi-agentchan-mountain/</code></td>
+<td>Dumais et al. (2001) spatial-memory index — tilted plane group with click-to-focus zones; cards arranged on the slope so spatial position carries identity. Two brand skins (psychodeli + sciprogfi/agentchan).</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Perspective Wall</td>
+<td><code>render_assets/perspective-wall/</code> + <code>render_assets/sciprogfi-lux-mesh-wall/</code></td>
+<td>Mackinlay / Robertson / Card (1991) focus + context — central card readable, peripheral cards foreshortened against the receding wall. Two brand skins (psychodeli + sciprogfi/OHC mesh).</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Demo gallery</td>
+<td><code>render_assets/index.html</code></td>
+<td>Single page indexing every exemplar with kicker / tag / lineage / source link.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Queued.</strong> <code>muriel.spatial.typeset_scene()</code> — Python emitter that consumes a <code>PerspectiveGrid</code> and a list of DOM blocks and writes a <code>.html</code> artifact ready to drop into <code>render_assets/&lt;name&gt;/index.html</code>. Closes the design.md → brand.toml → CSS-3D-typography loop so the static SVG grid and the interactive scene share their coordinate system by construction, not by hand-port.</p>
+<h2 id="the-static-path-murielspatial">The static path — <code>muriel.spatial</code><a class="headerlink" href="#the-static-path-murielspatial" title="Permanent link">&para;</a></h2>
+<p>Pure Python, zero deps, SVG-first. Match the muriel ethos: deterministic output, no runtime, exportable to print.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">grid</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel.layout</span><span class="w"> </span><span class="kn">import</span> <span class="n">BBox</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">g</span> <span class="o">=</span> <span class="n">grid</span><span class="p">(</span><span class="s2">&quot;1pt&quot;</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="n">BBox</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="mi">700</span><span class="p">))</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;grid.svg&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">svg</span><span class="p">(</span><span class="n">stroke</span><span class="o">=</span><span class="s2">&quot;#7fdfff&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="s2">&quot;#0a0a14&quot;</span><span class="p">))</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">g2</span> <span class="o">=</span> <span class="n">grid</span><span class="p">(</span><span class="s2">&quot;2pt&quot;</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="n">BBox</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="mi">700</span><span class="p">),</span> <span class="n">vp_offsets</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">))</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="k">for</span> <span class="n">vp</span> <span class="ow">in</span> <span class="n">g2</span><span class="o">.</span><span class="n">vanishing_points</span><span class="p">:</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">vp</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">vp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">vp</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</code></pre></div>
+<p>Four modes, each carrying a different argument shape:</p>
+<ul>
+<li><strong><code>"1pt"</code> (one-point)</strong> — single VP on the horizon. Corridor / Tron horizon / cinematic into-the-distance. Use when the argument is <em>"this leads toward a single point."</em></li>
+<li><strong><code>"2pt"</code> (two-point)</strong> — two VPs on the horizon, verticals stay vertical. Architectural cube corner. Use when the argument is <em>"this object has volume; you're looking at it from a definite vantage."</em></li>
+<li><strong><code>"3pt"</code> (three-point)</strong> — two horizon VPs + one vertical VP (high or low). Looking up at a tower / down into a pit. Use when the argument is <em>"you are below / above the subject."</em></li>
+<li><strong><code>"iso"</code> (isometric)</strong> — three axes at 30° / 150° / 90°, no convergence. Use when the argument is <em>"every position is measurable; depth is not a story."</em></li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.spatial<span class="w"> </span>--demo<span class="w">                </span><span class="c1"># 2×2 panel of all four modes</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.spatial<span class="w"> </span>--demo<span class="w"> </span>--mode<span class="w"> </span>1pt<span class="w">     </span><span class="c1"># one mode, full canvas</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.spatial<span class="w"> </span>--ridgemap<span class="w">            </span><span class="c1"># pulsar-style ridgemap demo</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.spatial<span class="w"> </span>--selftest<span class="w">            </span><span class="c1"># assertion suite</span>
+</code></pre></div>
+<p>The result objects (<code>PerspectiveGrid</code>, <code>VanishingPoint</code>, <code>GridLine</code>) are frozen dataclasses you can inspect before emit — the <code>lines</code> tuple carries every clipped segment with its <code>role</code> (<code>horizon</code>, <code>orthogonal-floor</code>, <code>transversal-ceiling</code>, <code>from-vp-z</code>, …) and <code>weight</code> (depth-driven opacity). That makes the grid composable into a larger SVG composition rather than only viewable as a standalone document.</p>
+<h2 id="the-ridgemap-path-murielspatialridgemap">The ridgemap path — <code>muriel.spatial.ridgemap</code><a class="headerlink" href="#the-ridgemap-path-murielspatialridgemap" title="Permanent link">&para;</a></h2>
+<p>Sibling primitive to <code>grid()</code>. Where the perspective grid scaffolds <em>space</em>, the ridgemap scaffolds <em>scalar fields</em>: any source that yields one value per (x, y) — terrain DEM, gaze density, image luminance, attention map, audio spectrogram, weather front — feeds the same emitter, and the rendering is just <em>which projection of the field you draw</em>. First shipped projection is the stacked 1D-slice form (Harold Craft's 1970 PSR B1919+21 successive-period chart, popularised by Peter Saville's 1979 Joy Division <em>Unknown Pleasures</em> sleeve, ported to statistical density plots by Wilke's <em>ggridges</em> in 2016). Filled-isoline, wireframe-protrusion, and hachured-relief projections are queued under the same module.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">ridgemap</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel.layout</span><span class="w"> </span><span class="kn">import</span> <span class="n">BBox</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># field is any 2D iterable — list-of-lists, tuple-of-tuples,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># numpy.ndarray. Each row becomes one ridge polyline.</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">field</span> <span class="o">=</span> <span class="p">[[</span><span class="o">...</span><span class="p">],</span> <span class="p">[</span><span class="o">...</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span>                        <span class="c1"># shape (rows, cols)</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">rm</span> <span class="o">=</span> <span class="n">ridgemap</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="n">BBox</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;ridges.svg&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">rm</span><span class="o">.</span><span class="n">svg</span><span class="p">())</span>             <span class="c1"># cream-on-near-black default</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;ridges-lineart.svg&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">rm</span><span class="o">.</span><span class="n">svg</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>  <span class="c1"># no occlusion, every ridge visible</span>
+</code></pre></div>
+<p>The default <code>.svg()</code> paints each ridge with a <code>fill</code> that matches the background colour, closed down to the row's baseline — that is the occlusion that makes the stack read as layered rather than transparent. Set <code>fill=None</code> to drop the occlusion and let every ridge show through, useful when the back-to-front semantics are not what you're arguing.</p>
+<p>Key knobs on <code>ridgemap(...)</code>:</p>
+<ul>
+<li><strong><code>amplitude</code></strong> — peak excursion (canvas units) for a sample at <code>vmax</code>. Default <code>1.6 × row_spacing</code>, which makes the tallest peaks rise past the next row's baseline (the overlap that creates the iconic stacked look).</li>
+<li><strong><code>row_spacing</code></strong> — vertical distance between baselines. Default fills the canvas: <code>(canvas.height - 2×pad) / (n_rows - 1)</code>.</li>
+<li><strong><code>vmin</code> / <code>vmax</code></strong> — clamp the normalisation range. Default: data min / max.</li>
+<li><strong><code>margin</code></strong> — fraction of canvas reserved as padding on every side (default 0.06).</li>
+</ul>
+<p>The result object (<code>RidgeMap</code>, frozen, with a <code>ridges</code> tuple of <code>Ridge</code> frozen dataclasses) is composable: read each ridge's <code>points</code> and <code>baseline_y</code> to drop the geometry into a larger SVG — annotate the strongest peak, overlay a vertical reference axis, etc.</p>
+<p>When to reach for ridgemap vs the existing channels:</p>
+<ul>
+<li><strong>Reach for ridgemap</strong> when the row ordering and stacking direction carry meaning (time-series of successive periods, depth profiles down a core, frequency-over-time spectrogram). The eye reads the stack as <em>evolution</em> — that semantics is the whole argument.</li>
+<li><strong>Reach for <a href="../heatmaps/"><code>heatmaps.md</code></a> (<code>render_heatmap</code>)</strong> when row order doesn't matter and you want value→colour with no occlusion. Better for quantitative comparison across the whole field.</li>
+<li><strong>Reach for <a href="../science/"><code>science.md</code></a> (matplotlib <code>pcolormesh</code> / <code>contourf</code>)</strong> when you need axis labels, value scale legend, and a peer-reviewable figure.</li>
+</ul>
+<h2 id="the-interactive-path-render_assets_libspatialcssjs">The interactive path — <code>render_assets/_lib/spatial.{css,js}</code><a class="headerlink" href="#the-interactive-path-render_assets_libspatialcssjs" title="Permanent link">&para;</a></h2>
+<p>Each exemplar in <code>render_assets/&lt;name&gt;/index.html</code> is self-contained: an importmap points <code>three</code> at a CDN, the page imports <code>../_lib/spatial.js</code>, declares its scene, and starts the render loop. No build step.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;../_lib/spatial.css&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;importmap&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">{</span><span class="s2">&quot;imports&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="s2">&quot;three&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;https://unpkg.com/three@0.160.0/build/three.module.js&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="s2">&quot;three/addons/&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;https://unpkg.com/three@0.160.0/examples/jsm/&quot;</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">}}&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;module&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createScene</span><span class="p">,</span><span class="w"> </span><span class="nx">Mountain</span><span class="p">,</span><span class="w"> </span><span class="nx">makePlane</span><span class="p">,</span><span class="w"> </span><span class="nx">FocusController</span><span class="p">,</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">           </span><span class="nx">startRenderLoop</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../_lib/spatial.js&#39;</span><span class="p">;</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">scene</span><span class="p">,</span><span class="w"> </span><span class="nx">camera</span><span class="p">,</span><span class="w"> </span><span class="nx">webglRenderer</span><span class="p">,</span><span class="w"> </span><span class="nx">cssRenderer</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="nx">createScene</span><span class="p">({</span><span class="w"> </span><span class="nx">cameraPos</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">170</span><span class="p">,</span><span class="w"> </span><span class="mf">780</span><span class="p">],</span><span class="w"> </span><span class="nx">lookAt</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">130</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">300</span><span class="p">]</span><span class="w"> </span><span class="p">});</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">mountain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Mountain</span><span class="p">(</span><span class="nx">scene</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">tiltDeg</span><span class="o">:</span><span class="w"> </span><span class="mf">22</span><span class="p">,</span><span class="w"> </span><span class="nx">depth</span><span class="o">:</span><span class="w"> </span><span class="mf">1400</span><span class="w"> </span><span class="p">});</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">card</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">cards</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">plane</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">makePlane</span><span class="p">(</span><span class="nx">card</span><span class="p">.</span><span class="nx">html</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">width</span><span class="o">:</span><span class="w"> </span><span class="mf">360</span><span class="p">,</span><span class="w"> </span><span class="nx">height</span><span class="o">:</span><span class="w"> </span><span class="mf">220</span><span class="w"> </span><span class="p">});</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">position</span><span class="p">,</span><span class="w"> </span><span class="nx">rotation</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">mountain</span><span class="p">.</span><span class="nx">planeToWorld</span><span class="p">(</span><span class="nx">card</span><span class="p">.</span><span class="nx">row</span><span class="p">,</span><span class="w"> </span><span class="nx">card</span><span class="p">.</span><span class="nx">col</span><span class="p">);</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">    </span><span class="nx">plane</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">position</span><span class="p">);</span><span class="w"> </span><span class="nx">plane</span><span class="p">.</span><span class="nx">rotation</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">rotation</span><span class="p">);</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">    </span><span class="nx">scene</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">plane</span><span class="p">);</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">  </span><span class="nx">startRenderLoop</span><span class="p">({</span><span class="w"> </span><span class="nx">scene</span><span class="p">,</span><span class="w"> </span><span class="nx">camera</span><span class="p">,</span><span class="w"> </span><span class="nx">webglRenderer</span><span class="p">,</span><span class="w"> </span><span class="nx">cssRenderer</span><span class="w"> </span><span class="p">});</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>The two-renderer stack (<code>#webgl</code> underneath, <code>#css3d</code> on top) is intentional: WebGL handles the grid / horizon / atmospheric layer at GPU speed; CSS3DRenderer carries the DOM cards so text stays selectable, copyable, and screen-reader-addressable. <code>pointer-events</code> is gated on the HUD so floating-corner brand chrome doesn't absorb clicks meant for cards that overlap it in screen space.</p>
+<h3 id="palette-tokens">Palette tokens<a class="headerlink" href="#palette-tokens" title="Permanent link">&para;</a></h3>
+<p><code>_lib/spatial.css</code> exposes the demo base palette as CSS custom properties at <code>:root</code> — every exemplar overrides <code>--bg</code> and adds its own card classes, but pulls font stacks and accent colours from this floor:</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Default</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--bg</code></td>
+<td><code>#07070d</code></td>
+<td>Page background — demos override per scene mood</td>
+</tr>
+<tr>
+<td><code>--ink</code></td>
+<td><code>#e6e4d2</code></td>
+<td>Primary text. <strong>15.42:1 contrast on default <code>--bg</code></strong> — passes muriel's 8:1 floor</td>
+</tr>
+<tr>
+<td><code>--ink-dim</code></td>
+<td><code>rgba(230,228,210,0.62)</code></td>
+<td>Secondary text</td>
+</tr>
+<tr>
+<td><code>--cyan</code></td>
+<td><code>#7fdfff</code></td>
+<td>Grid lines, hint chips, citation links</td>
+</tr>
+<tr>
+<td><code>--magenta</code></td>
+<td><code>#ff5fa2</code></td>
+<td>Horizon, hover states, focal accent</td>
+</tr>
+<tr>
+<td><code>--gold</code></td>
+<td><code>#d2b06a</code></td>
+<td>Editorial highlight (italicised brand chrome)</td>
+</tr>
+<tr>
+<td><code>--mono</code></td>
+<td>system mono stack</td>
+<td>HUD meta, citations, kbd chips</td>
+</tr>
+<tr>
+<td><code>--sans</code></td>
+<td>system sans stack</td>
+<td>Brand chrome, headings</td>
+</tr>
+<tr>
+<td><code>--serif</code></td>
+<td>system serif stack</td>
+<td>Editorial body within DOM cards</td>
+</tr>
+</tbody>
+</table>
+<p>The defaults are deliberately Tron / Cooper-VLW palette-coded so the exemplars all feel like one family. A brand can override by reassigning the tokens at <code>:root</code> inside its own demo override block (see <code>sciprogfi-agentchan-mountain/index.html</code> for the agent-green override).</p>
+<h2 id="lineage-where-to-read-more">Lineage — where to read more<a class="headerlink" href="#lineage-where-to-read-more" title="Permanent link">&para;</a></h2>
+<p>Each piece of geometry in this channel has prior art that earned it. Cite when you ship something built on the channel; the citation does work, not decoration.</p>
+<table>
+<thead>
+<tr>
+<th>Period</th>
+<th>Source</th>
+<th>Geometry it earned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1435</td>
+<td>Alberti, <em>De pictura</em></td>
+<td>Linear perspective; the <em>costruzione legittima</em> construction</td>
+</tr>
+<tr>
+<td>1525</td>
+<td>Dürer, <em>Underweysung der Messung</em></td>
+<td>Perspective machine; mechanical projection</td>
+</tr>
+<tr>
+<td>1980s</td>
+<td>Cooper, MIT Visible Language Workshop</td>
+<td>Receding planes of type as an information environment</td>
+</tr>
+<tr>
+<td>1991</td>
+<td>Mackinlay, Robertson, Card (Xerox PARC) — <em>The Perspective Wall: Detail and Context Smoothly Integrated</em> (CHI '91)</td>
+<td>Focus + context; central detail readable, peripheral context foreshortened</td>
+</tr>
+<tr>
+<td>1993</td>
+<td>Robertson, Mackinlay, Card — <em>Information Visualizer</em></td>
+<td>Cone trees; perspective as navigation primitive</td>
+</tr>
+<tr>
+<td>1970</td>
+<td>Harold Craft, Cornell PhD — successive-period plot of pulsar PSR B1919+21</td>
+<td>Stacked 1D slices of a 2D scalar field; row order = time, x = phase, height = amplitude</td>
+</tr>
+<tr>
+<td>1979</td>
+<td>Peter Saville for Joy Division, <em>Unknown Pleasures</em></td>
+<td>Same plot, restyled into the most reproduced ridge-plot in graphic design; established back-to-front occlusion as the readable form</td>
+</tr>
+<tr>
+<td>1998</td>
+<td>Tron / synthwave / vaporwave</td>
+<td>One-point perspective as cultural shorthand for "computer space"</td>
+</tr>
+<tr>
+<td>1998</td>
+<td>Robertson, Czerwinski, Larson, Robbins, Thiel, van Dantzich (MSR) — <em>Data Mountain</em> (UIST '98) — (Dumais et al. 2001 was the spatial-memory follow-up study)</td>
+<td>Spatial memory as an indexing primitive; cards arranged by location on a tilted plane</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>Claus O. Wilke — <em>ggridges</em> (R package)</td>
+<td>Ridge plot ported to statistical density visualisation; established stack-as-distribution-comparison vocabulary</td>
+</tr>
+</tbody>
+</table>
+<h2 id="anti-prescription-when-not-to-reach-for-this-channel">Anti-prescription — when not to reach for this channel<a class="headerlink" href="#anti-prescription-when-not-to-reach-for-this-channel" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Quantitative comparison.</strong> Perspective foreshortens. If the reader needs to compare values, the foreshortened series will systematically under-weight the back. Use <a href="../science/"><code>science.md</code></a> or <a href="../infographics/"><code>infographics.md</code></a>.</li>
+<li><strong>Forms / data entry / chrome.</strong> Tilted text impairs reading speed. Don't tilt anything the user needs to fill in.</li>
+<li><strong>Tiny screens.</strong> Under ~720px wide, perspective scenes lose their cues and read as visual noise. Fall back to a flat composition.</li>
+<li><strong>Accessibility-critical surfaces.</strong> CSS3DRenderer preserves DOM text, but screen-reader navigation through a 3D scene is non-trivial; pair every demo with a flat fallback at <code>prefers-reduced-motion: reduce</code> and (where the artifact is reference, not exploration) a linked flat-HTML companion.</li>
+<li><strong>Generic 'add depth' decoration.</strong> If you can't name which lineage (Cooper / Perspective Wall / Data Mountain / Tron / Unknown Pleasures) the composition belongs to, you're decorating, not arguing.</li>
+<li><strong>Ridgemap when row order is arbitrary.</strong> Stacking implies sequence (time / depth / index). If the rows could be shuffled without losing meaning, the visual is making an argument the data does not support — use a heatmap.</li>
+<li><strong>Ridgemap for precise peak comparison.</strong> Front ridges occlude back ridges by construction. If the reader needs to compare row maxima quantitatively, switch to <code>fill=None</code> (line-art mode), a heatmap, or small multiples.</li>
+</ul>
+<h2 id="files-this-channel-owns">Files this channel owns<a class="headerlink" href="#files-this-channel-owns" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>muriel/spatial.py                                  # static SVG perspective grids + ridgemap
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>render_assets/_lib/spatial.css                     # shared base palette + HUD
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>render_assets/_lib/spatial.js                      # createScene / Mountain / FocusController / planeToWorld
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>render_assets/index.html                           # gallery
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>render_assets/spatial-typography/index.html        # Cooper VLW exemplar
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>render_assets/mindbendingpixels-mountain/          # Data Mountain (psychodeli skin)
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>render_assets/sciprogfi-agentchan-mountain/        # Data Mountain (sciprogfi/agentchan skin)
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>render_assets/perspective-wall/                    # Mackinlay-Robertson-Card (psychodeli skin)
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>render_assets/sciprogfi-lux-mesh-wall/             # Perspective Wall (sciprogfi/OHC skin)
+</code></pre></div>
+<h2 id="queued">Queued<a class="headerlink" href="#queued" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>muriel.spatial.typeset_scene()</code></strong> — Python emitter that takes a <code>PerspectiveGrid</code> + a list of DOM blocks (HTML strings + <code>("vp", "left", 3)</code> / <code>("grid", row, col, depth)</code> anchor names) and writes a runnable <code>&lt;scene&gt;/index.html</code> that wires the same coordinates into the JS lib. Closes the static-↔-interactive loop so a paper figure and a fly-through share their geometry by construction.</li>
+<li><strong>Reduced-motion fallback emitter.</strong> When a demo loads under <code>prefers-reduced-motion: reduce</code>, the lib should swap to a flat composition (the static SVG grid plus the cards laid out by row/col in the document order). One opt-in flag on <code>startRenderLoop</code>.</li>
+<li><strong><code>muriel.spatial.cone_tree()</code></strong> — Robertson-Mackinlay-Card (1993) hierarchical cone-tree primitive, both as static SVG and as a JS scene. Pairs with the <a href="../diagrams/"><code>diagrams.md</code></a> dendrogram / pyramid entries when the hierarchy is large enough that a flat tree falls off the page.</li>
+<li><strong>Further ridgemap projections.</strong> The <code>ridgemap</code> MVP ships only the stacked-1D-slice form. The same <code>(field, canvas, …)</code> signature should grow siblings that render the same scalar field as: filled isoline bands (USGS / Imhof quadrangle), wireframe protrusion from a grid (BYTE-cover / Tinney 3D mesh), and hachured / halftone relief. One extractor stage, several emitters — the unifier is <em>scalar field → topology</em>. Documenting the taxonomy in a <code>channels/topography.md</code> companion before the next emitter lands.</li>
+<li><strong>Field ingestion from pixels.</strong> Today <code>ridgemap</code> takes a 2D numeric array. A small <code>muriel.spatial.field_from_image(path, downsample=N, channel="luma")</code> helper would let raster sources (image luminance, video frame Δ, attention/saliency maps) feed the same primitive without callers needing to roll their own resampling. Crosses the channel's first input-is-pixels line — defer until a real artifact needs it.</li>
+</ul>
+<p>See <a href="../../TODO/"><code>TODO.md</code></a> for cross-channel queue context.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
