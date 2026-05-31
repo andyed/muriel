@@ -175,7 +175,7 @@ Each piece of geometry in this channel has prior art that earned it. Cite when y
 | 1970 | Harold Craft, Cornell PhD — successive-period plot of pulsar PSR B1919+21 | Stacked 1D slices of a 2D scalar field; row order = time, x = phase, height = amplitude |
 | 1979 | Peter Saville for Joy Division, *Unknown Pleasures* | Same plot, restyled into the most reproduced ridge-plot in graphic design; established back-to-front occlusion as the readable form |
 | 1998 | Tron / synthwave / vaporwave | One-point perspective as cultural shorthand for "computer space" |
-| 2001 | Dumais, Cuthbertson, Czerwinski, Robertson, van Dantzich (MSR) — *Data Mountain* | Spatial memory as an indexing primitive; cards arranged by location on a tilted plane |
+| 1998 | Robertson, Czerwinski, Larson, Robbins, Thiel, van Dantzich (MSR) — *Data Mountain* (UIST '98) — (Dumais et al. 2001 was the spatial-memory follow-up study) | Spatial memory as an indexing primitive; cards arranged by location on a tilted plane |
 | 2016 | Claus O. Wilke — *ggridges* (R package) | Ridge plot ported to statistical density visualisation; established stack-as-distribution-comparison vocabulary |
 
 ## Anti-prescription — when not to reach for this channel

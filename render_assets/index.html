@@ -313,35 +313,36 @@
     <a class="demo" href="perspective-wall/index.html">
       <div class="preview">
         <svg viewBox="0 0 340 200" preserveAspectRatio="xMidYMid meet">
-          <!-- Bent three-panel ribbon -->
-          <g stroke="#7fdfff" stroke-width="0.6" fill="none" opacity="0.55">
-            <!-- Left panel (perspective lines) -->
-            <line x1="20" y1="60"  x2="120" y2="80"/>
-            <line x1="20" y1="140" x2="120" y2="120"/>
-            <line x1="20" y1="60"  x2="20"  y2="140"/>
-            <line x1="55" y1="68"  x2="55"  y2="132" opacity="0.4"/>
-            <line x1="88" y1="74"  x2="88"  y2="126" opacity="0.5"/>
-            <!-- Centre panel -->
-            <line x1="120" y1="80" x2="220" y2="80"  stroke="#ff5fa2" opacity="0.7"/>
-            <line x1="120" y1="120" x2="220" y2="120" stroke="#ff5fa2" opacity="0.7"/>
-            <line x1="120" y1="80" x2="120" y2="120"/>
-            <line x1="220" y1="80" x2="220" y2="120"/>
-            <!-- Right panel -->
-            <line x1="220" y1="80"  x2="320" y2="60"/>
-            <line x1="220" y1="120" x2="320" y2="140"/>
-            <line x1="320" y1="60"  x2="320" y2="140"/>
-            <line x1="252" y1="74"  x2="252" y2="126" opacity="0.5"/>
-            <line x1="288" y1="68"  x2="288" y2="132" opacity="0.4"/>
+          <!-- Bent three-panel ribbon: the centre panel is NEAREST (frontal, tallest);
+               the wings recede and foreshorten toward the outer edges. Cards ARE the ribbon. -->
+          <g stroke="#7fdfff" stroke-width="0.6" fill="none" opacity="0.5">
+            <!-- left wing: top/bottom edges converge outward + foreshortened transversals -->
+            <line x1="130" y1="66"  x2="26" y2="92"/>
+            <line x1="130" y1="134" x2="26" y2="108"/>
+            <line x1="26"  y1="92"  x2="26" y2="108"/>
+            <line x1="82"  y1="79"  x2="82" y2="121" opacity="0.45"/>
+            <line x1="54"  y1="86"  x2="54" y2="114" opacity="0.3"/>
+            <!-- right wing -->
+            <line x1="210" y1="66"  x2="314" y2="92"/>
+            <line x1="210" y1="134" x2="314" y2="108"/>
+            <line x1="314" y1="92"  x2="314" y2="108"/>
+            <line x1="258" y1="79"  x2="258" y2="121" opacity="0.45"/>
+            <line x1="286" y1="86"  x2="286" y2="114" opacity="0.3"/>
           </g>
-          <!-- Cards on the ribbon -->
-          <g>
-            <rect x="135" y="86"  width="70" height="28" fill="#14070f" stroke="#ff5fa2" stroke-width="1"/>
-            <text x="170" y="105" text-anchor="middle"
-                  font-family="ui-sans-serif" font-weight="700"
-                  font-size="13" fill="#ff5fa2">1991</text>
-            <rect x="64" y="86" width="42" height="28" fill="#070a14" stroke="#7fdfff" stroke-width="0.8" opacity="0.7"/>
-            <rect x="234" y="86" width="42" height="28" fill="#070a14" stroke="#7fdfff" stroke-width="0.8" opacity="0.7"/>
+          <!-- side cards lying flat ON the receding wings (foreshortened quads) -->
+          <g fill="#070a14" stroke="#7fdfff" stroke-width="0.8" opacity="0.7">
+            <polygon points="130,66 82,79 82,121 130,134"/>
+            <polygon points="82,79 54,86 54,114 82,121" opacity="0.45"/>
+            <polygon points="210,66 258,79 258,121 210,134"/>
+            <polygon points="258,79 286,86 286,114 258,121" opacity="0.45"/>
           </g>
+          <!-- hinge creases (the fold lines, at the focused card's edges) -->
+          <line x1="130" y1="66" x2="130" y2="134" stroke="#ff5fa2" stroke-width="0.8" opacity="0.6"/>
+          <line x1="210" y1="66" x2="210" y2="134" stroke="#ff5fa2" stroke-width="0.8" opacity="0.6"/>
+          <!-- centre focus card: nearest + frontal -->
+          <rect x="130" y="66" width="80" height="68" fill="#14070f" stroke="#ff5fa2" stroke-width="1.2"/>
+          <text x="170" y="105" text-anchor="middle" font-family="ui-sans-serif"
+                font-weight="700" font-size="15" fill="#ff5fa2">1991</text>
         </svg>
       </div>
       <div class="body">
@@ -411,30 +412,33 @@
     <a class="demo" href="sciprogfi-lux-mesh-wall/index.html">
       <div class="preview lux">
         <svg viewBox="0 0 340 200" preserveAspectRatio="xMidYMid meet">
-          <g stroke="#7dff8c" stroke-width="0.6" fill="none" opacity="0.45">
-            <line x1="20" y1="60"  x2="120" y2="80"/>
-            <line x1="20" y1="140" x2="120" y2="120"/>
-            <line x1="120" y1="80" x2="220" y2="80"  stroke="#ffc56a" opacity="0.7"/>
-            <line x1="120" y1="120" x2="220" y2="120" stroke="#ffc56a" opacity="0.7"/>
-            <line x1="120" y1="80" x2="120" y2="120"/>
-            <line x1="220" y1="80" x2="220" y2="120"/>
-            <line x1="220" y1="80"  x2="320" y2="60"/>
-            <line x1="220" y1="120" x2="320" y2="140"/>
+          <!-- centre post NEAREST (frontal); wings recede + foreshorten outward -->
+          <g stroke="#7dff8c" stroke-width="0.6" fill="none" opacity="0.42">
+            <line x1="130" y1="66"  x2="26" y2="92"/>
+            <line x1="130" y1="134" x2="26" y2="108"/>
+            <line x1="26"  y1="92"  x2="26" y2="108"/>
+            <line x1="82"  y1="79"  x2="82" y2="121" opacity="0.4"/>
+            <line x1="210" y1="66"  x2="314" y2="92"/>
+            <line x1="210" y1="134" x2="314" y2="108"/>
+            <line x1="314" y1="92"  x2="314" y2="108"/>
+            <line x1="258" y1="79"  x2="258" y2="121" opacity="0.4"/>
           </g>
-          <g>
-            <rect x="135" y="86" width="70" height="28" fill="#0e0a02"
-                  stroke="#ffc56a" stroke-width="1"/>
-            <text x="170" y="98" text-anchor="middle"
-                  font-family="ui-monospace" font-weight="600"
-                  font-size="8" fill="#7dff8c">marina_sol</text>
-            <text x="170" y="110" text-anchor="middle"
-                  font-family="ui-monospace" font-size="7"
-                  fill="#e6e4d2">"is this real?"</text>
-            <rect x="64" y="86" width="42" height="28" fill="#03070a"
-                  stroke="#7dff8c" stroke-width="0.8" opacity="0.7"/>
-            <rect x="234" y="86" width="42" height="28" fill="#03070a"
-                  stroke="#7dff8c" stroke-width="0.8" opacity="0.7"/>
+          <!-- side posts lying flat ON the receding wings (foreshortened) -->
+          <g fill="#03070a" stroke="#7dff8c" stroke-width="0.8" opacity="0.7">
+            <polygon points="130,66 82,79 82,121 130,134"/>
+            <polygon points="82,79 54,86 54,114 82,121" opacity="0.45"/>
+            <polygon points="210,66 258,79 258,121 210,134"/>
+            <polygon points="258,79 286,86 286,114 258,121" opacity="0.45"/>
           </g>
+          <!-- hinge creases -->
+          <line x1="130" y1="66" x2="130" y2="134" stroke="#ffc56a" stroke-width="0.8" opacity="0.6"/>
+          <line x1="210" y1="66" x2="210" y2="134" stroke="#ffc56a" stroke-width="0.8" opacity="0.6"/>
+          <!-- centre focus post: nearest + frontal -->
+          <rect x="130" y="66" width="80" height="68" fill="#0e0a02" stroke="#ffc56a" stroke-width="1.2"/>
+          <text x="170" y="96" text-anchor="middle" font-family="ui-monospace"
+                font-weight="600" font-size="9" fill="#7dff8c">marina_sol</text>
+          <text x="170" y="112" text-anchor="middle" font-family="ui-monospace"
+                font-size="8" fill="#e6e4d2">"is this real?"</text>
         </svg>
       </div>
       <div class="body">

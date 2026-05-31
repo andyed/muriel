@@ -170,7 +170,7 @@
     <div class="hint">
       <kbd>←</kbd> <kbd>→</kbd> step through thread &nbsp;·&nbsp;
       <kbd>click</kbd> a side post to read it &nbsp;·&nbsp;
-      <kbd>scroll</kbd> dolly
+      <kbd>scroll</kbd> glides the wall
     </div>
     <div class="cite">
       from <em>2035-lux-mesh-chatter.md</em> · sciprogfi · OHC Mesh
@@ -206,8 +206,13 @@ const { scene, camera, webglRenderer, cssRenderer } = createScene({
 const HINGE_ANGLE = Math.PI * 0.20;
 const sinT = Math.sin(HINGE_ANGLE);
 const cosT = Math.cos(HINGE_ANGLE);
-const CENTER_HALF_W = 340;
-const CENTER_HALF_H = 200;
+// The posts ARE the wall: each post is one segment of a continuous bent ribbon,
+// not a tile floating in front of a grid. The flat facet equals the focused post's
+// width, so the wall folds exactly at its left/right edges and the neighbours abut it
+// at the hinge, foreshortening on down the wings (Mackinlay-Robertson-Card).
+const CARD_W = 230, CARD_H = 270;          // must match the .post CSS box exactly
+const CENTER_HALF_W = CARD_W / 2;          // hinge sits at the focused post's edges
+const CENTER_HALF_H = CARD_H / 2;
 const SIDE_LEN = 1700;
 
 function buildWallLines() {
@@ -248,7 +253,8 @@ function buildWallLines() {
       color: 0x7dff8c, transparent: true, opacity: 0.32,
     }));
 }
-scene.add(buildWallLines());
+// No separate wireframe wall — the posts themselves ARE the wall surface (see placeCard).
+// buildWallLines() is left defined but unused; only the floor grid + hinge crease remain.
 
 // Amber hinge markers
 {
@@ -367,31 +373,34 @@ const cards = posts.map((p, i) => {
   return c;
 });
 
-const CENTER_SPAN = 1;
-const STEP = 260;
+const STEP = CARD_W;       // posts ABUT along the wall — one continuous ribbon, no gaps
 const CARD_Y = 0;
+const DIM_START = 1;       // focus + nearest neighbour each side stay bright (context)
 
+// Posts tile the wall by arc-length. Only the focused post (offset 0) lands on
+// the flat centre panel; every other post lies flat ON a side wing, foreshortened,
+// and bends around the hinge as it slides toward centre when focus shifts. The
+// arc-length mapping keeps posts continuous across the hinge — no gap, no overlap.
 function placeCard(card, offset, snap = false) {
-  let tx, ty, tz, trotY;
-  if (offset >= -CENTER_SPAN && offset <= CENTER_SPAN) {
-    tx = offset * STEP;        ty = CARD_Y;  tz = 0.5;  trotY = 0;
-  } else if (offset < -CENTER_SPAN) {
-    const d = (Math.abs(offset) - CENTER_SPAN) * STEP - STEP * 0.5;
-    tx = -CENTER_HALF_W - d * cosT;
-    ty = CARD_Y;
-    tz = -d * sinT + 1;
-    trotY = HINGE_ANGLE;
+  const s = offset * STEP;                  // signed arc-length from the focus
+  let tx, tz, trotY;
+  if (Math.abs(s) <= CENTER_HALF_W) {
+    tx = s;  tz = 0.5;  trotY = 0;          // flat, frontal — the readable detail panel
+  } else if (s < 0) {
+    const w = -s - CENTER_HALF_W;           // distance down the LEFT wing
+    tx = -CENTER_HALF_W - w * cosT;
+    tz = -w * sinT + 1;                     // +1: ride just proud of the wall grid
+    trotY = -HINGE_ANGLE;                   // lie flat ON the receding left wing (face front-left)
   } else {
-    const d = (offset - CENTER_SPAN) * STEP - STEP * 0.5;
-    tx =  CENTER_HALF_W + d * cosT;
-    ty = CARD_Y;
-    tz = -d * sinT + 1;
-    trotY = -HINGE_ANGLE;
+    const w = s - CENTER_HALF_W;            // distance down the RIGHT wing
+    tx = CENTER_HALF_W + w * cosT;
+    tz = -w * sinT + 1;
+    trotY = HINGE_ANGLE;                    // lie flat ON the receding right wing (face front-right)
   }
-  card.userData.targetPos = new THREE.Vector3(tx, ty, tz);
+  card.userData.targetPos = new THREE.Vector3(tx, CARD_Y, tz);
   card.userData.targetRotY = trotY;
   if (snap) {
-    card.position.set(tx, ty, tz);
+    card.position.set(tx, CARD_Y, tz);
     card.rotation.set(0, trotY, 0);
   }
 }
@@ -408,7 +417,7 @@ function applyLayout(snap = false) {
     const el = card.element;
     el.classList.toggle('focus', i === focusIdx);
     el.classList.remove('dim-1', 'dim-2', 'dim-3', 'dim-4');
-    const beyondCentre = Math.max(0, Math.abs(offset) - CENTER_SPAN);
+    const beyondCentre = Math.max(0, Math.abs(offset) - DIM_START);
     if      (beyondCentre === 1) el.classList.add('dim-1');
     else if (beyondCentre === 2) el.classList.add('dim-2');
     else if (beyondCentre === 3) el.classList.add('dim-3');
@@ -434,6 +443,23 @@ for (const card of cards) {
   });
 }
 
+// Snapping scroll: the wheel scrubs focus along the thread one post at a time —
+// each post slides and bends around the hinge as it crosses to centre. We
+// consume the wheel while there's wall left to travel, then release it at
+// either end so the surrounding page scrolls past (no scroll-trap when embedded).
+let wheelLock = false;
+window.addEventListener('wheel', (e) => {
+  const dir = e.deltaY > 0 ? 1 : -1;
+  const atEnd = (dir > 0 && focusIdx >= posts.length - 1) ||
+                (dir < 0 && focusIdx <= 0);
+  if (atEnd) return;                        // let the page take over at the ends
+  e.preventDefault();
+  if (wheelLock || Math.abs(e.deltaY) < 8) return;
+  shiftFocus(dir);
+  wheelLock = true;
+  setTimeout(() => { wheelLock = false; }, 240);
+}, { passive: false });
+
 // ─── Parallax + per-card lerp ───────────────────────────────────────
 const CARD_LERP = 0.12;
 
@@ -444,7 +470,7 @@ startRenderLoop({
   fovParallax:    { x: 90, y: 45 },
   lookXAmount:    30,
   lookYAmount:    20,
-  dollyRange:     [-280, 500],
+  dollyRange:     [0, 0],       // scroll drives focus along the wall, not camera dolly
   autoOrbit:      { radius: 140, yAmp: 24, speed: 0.0010 },
   beforeRender: () => {
     for (const card of cards) {
