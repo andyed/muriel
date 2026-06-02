@@ -78,6 +78,8 @@ muriel is a multi-constraint solver for visual production. The tooling is LLM-na
 
 ## Install
 
+> **Where things live.** The skill's canonical source is [`plugins/muriel/skills/compose/SKILL.md`](plugins/muriel/skills/compose/SKILL.md). The repo root's `.claude-plugin/` holds only `marketplace.json`; the plugin's own manifest lives at [`plugins/muriel/.claude-plugin/plugin.json`](plugins/muriel/.claude-plugin/plugin.json) (a root-level manifest isn't needed when the marketplace `source` points to a subdirectory). The committed `.agents/skills/muriel` symlink is a deliberate cross-harness bridge (see *Other AI harnesses* below), not a stray copy.
+
 ### As a Claude Code plugin (recommended)
 
 From any Claude Code session:
