@@ -6,9 +6,14 @@
 <title>muriel.spatial — render assets</title>
 <link rel="stylesheet" href="_lib/spatial.css">
 <style>
-  /* Override the lib's overflow:hidden — this page actually scrolls. */
+  /* Override the lib's `height:100%; overflow:hidden` — this page is a
+   * normal scrolling document, not a fixed full-screen demo. Resetting
+   * height to auto/min-height lets the DOCUMENT scroll (scrollingElement),
+   * instead of trapping the scroll inside <body> (which strands content
+   * below the first viewport on some mobile browsers + breaks anchors). */
   html, body {
-    overflow-y: auto;
+    height: auto;
+    min-height: 100%;
     overflow-x: hidden;
   }
   body {
@@ -214,6 +219,8 @@
     <a href="_lib/spatial.js"><code style="font-family: var(--mono); font-size: 13px;">_lib/spatial.js</code></a>
     scaffold (scene · mountain · parallax · focus). Beyond it: a FUI telemetry HUD
     and the muriel brand mark. Every demo is standalone and runs in the browser.
+    For the full cross-channel gallery — raster, science, diagrams, web — see the
+    <a href="../examples/gallery/">muriel gallery</a>.
   </p>
 </header>
 

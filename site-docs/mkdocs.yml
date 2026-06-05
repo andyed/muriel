@@ -17,8 +17,13 @@ site_dir: ../site-build
 # pages or emit broken-link warnings for their home-path (~/.claude/…) refs.
 # The example ASSETS (svg/html/toml) are still copied — channel links resolve.
 exclude_docs: |
-  examples/*/README.md
-  examples/**/README.md
+  # critique-fixtures/README.md is a stub/planning doc, not a published page.
+  # NOTE: examples/gallery/README.md is intentionally NOT excluded — it is the
+  # cross-channel demo gallery surfaced in the nav. Do NOT re-add a broad
+  # examples/**/README.md rule or it gets swallowed (that regressed the live
+  # site on 2026-05-31). Inline comments break these patterns — keep them on
+  # their own lines.
+  examples/critique-fixtures/README.md
 
 theme:
   name: material
@@ -99,11 +104,10 @@ nav:
       - Dimensions: channels/dimensions.md
       - Style guides (brand.toml): channels/style-guides.md
       - Brand-token schema: channels/SCHEMA.md
-      - Live demos ↗: https://muriel.mindbendingpixels.com/gallery/
+      - Gallery — all channels: examples/gallery/README.md
+      - Live spatial demos ↗: https://muriel.mindbendingpixels.com/gallery/
   - About:
       - The muriel skill: SKILL.md
       - Critique agent: agents/muriel-critique.md
-      - Roadmap (TODO): TODO.md
-      - Harnesses: HARNESSES.md
       - Third-party notices: THIRD_PARTY_NOTICES.md
       - Plugin packaging spec: spec-plugin-packaging.md

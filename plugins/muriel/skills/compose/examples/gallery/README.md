@@ -2,6 +2,8 @@
 
 Worked examples from shipped projects that exemplify what muriel's channels produce. **Each entry leads with the tool chain** — which muriel helpers (and external libraries) produced the artifact. The goal is to make the abstract channel categories executable: if you want output like this, here's the exact recipe.
 
+For the interactive in-browser set — 3D spatial typography, data mountains, the perspective wall — see the [live spatial demos ↗](https://muriel.mindbendingpixels.com/gallery/).
+
 ---
 
 ## 0. muriel's own hero mark — Raster + Kinetic Typography + Visible Language
