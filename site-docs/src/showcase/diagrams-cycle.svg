@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
+<defs><marker id="cycle-arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="#7dd4e4"/></marker></defs>
+<rect width="900" height="700" fill="#0a0a0f"/>
+<path d="M 492.1 130.0 A 224.0 224.0 0 0 1 646.2 242.0" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
+<path d="M 672.2 322.0 A 224.0 224.0 0 0 1 613.4 503.3" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
+<path d="M 545.3 552.7 A 224.0 224.0 0 0 1 354.7 552.7" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
+<path d="M 286.6 503.3 A 224.0 224.0 0 0 1 227.8 322.0" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
+<path d="M 253.8 242.0 A 224.0 224.0 0 0 1 407.9 130.0" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
+<text x="450.0" y="333.5" fill="#e6e4d2" font-size="16" font-weight="500" text-anchor="middle" opacity="0.85">Evolver&#x27;s</text>
+<text x="450.0" y="355.5" fill="#e6e4d2" font-size="16" font-weight="500" text-anchor="middle" opacity="0.85">improvement</text>
+<text x="450.0" y="377.5" fill="#e6e4d2" font-size="16" font-weight="500" text-anchor="middle" opacity="0.85">cycle</text>
+<circle cx="450.0" cy="126.0" r="40.3" fill="rgba(125, 212, 228, 0.12)" stroke="#7dd4e4" stroke-width="1.5"/>
+<text x="450.0" y="131.0" fill="#7dd4e4" font-size="20" font-weight="600" text-anchor="middle">1</text>
+<text x="450.0" y="68.7" fill="#e6e4d2" font-size="15" font-weight="500" text-anchor="middle">Learns</text>
+<circle cx="663.0" cy="280.8" r="40.3" fill="rgba(125, 212, 228, 0.12)" stroke="#7dd4e4" stroke-width="1.5"/>
+<text x="663.0" y="285.8" fill="#7dd4e4" font-size="20" font-weight="600" text-anchor="middle">2</text>
+<text x="722.3" y="266.5" fill="#e6e4d2" font-size="15" font-weight="500" text-anchor="start">Executes</text>
+<circle cx="581.7" cy="531.2" r="40.3" fill="rgba(125, 212, 228, 0.12)" stroke="#7dd4e4" stroke-width="1.5"/>
+<text x="581.7" y="536.2" fill="#7dd4e4" font-size="20" font-weight="600" text-anchor="middle">3</text>
+<text x="618.3" y="586.6" fill="#e6e4d2" font-size="15" font-weight="500" text-anchor="start">Evaluates</text>
+<circle cx="318.3" cy="531.2" r="40.3" fill="rgba(125, 212, 228, 0.12)" stroke="#7dd4e4" stroke-width="1.5"/>
+<text x="318.3" y="536.2" fill="#7dd4e4" font-size="20" font-weight="600" text-anchor="middle">4</text>
+<text x="281.7" y="586.6" fill="#e6e4d2" font-size="15" font-weight="500" text-anchor="end">Hypothesizes</text>
+<circle cx="237.0" cy="280.8" r="40.3" fill="rgba(125, 212, 228, 0.12)" stroke="#7dd4e4" stroke-width="1.5"/>
+<text x="237.0" y="285.8" fill="#7dd4e4" font-size="20" font-weight="600" text-anchor="middle">5</text>
+<text x="177.7" y="266.5" fill="#e6e4d2" font-size="15" font-weight="500" text-anchor="end">Tests</text>
+</svg>
