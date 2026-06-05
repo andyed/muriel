@@ -13,7 +13,7 @@ name             = "Scrutinizer"
 slug             = "scrutinizer"
 version          = "0.1.0"
 owner_repo       = "scrutinizer-www"
-owner_path       = "~/Documents/dev/scrutinizer-repo/scrutinizer-www"
+owner_path       = "<brand-guide-repo>"
 canonical_source = "muriel/examples/scrutinizer-brand.toml (stub)"
 ownership_rule   = "Scrutinizer brand assets — owned by scrutinizer-www, edited there once promoted"
 

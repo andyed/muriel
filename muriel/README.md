@@ -1,22 +1,82 @@
 # muriel
 
-Importable Python assets for the [the skill doc](../SKILL.md) skill. matplotlibrc blocks, APA-style reporting helpers, WCAG contrast audit, dimension constants, capture, and brand style guides — extracted from the [`channels/`](../channels/) subfiles so notebooks can `import` them instead of copy-pasting.
+Importable Python assets for the [muriel skill](../plugins/muriel/skills/compose/SKILL.md). matplotlibrc blocks, APA-style reporting helpers, WCAG contrast audit, dimension constants, capture, and brand style guides — extracted from the [`channels/`](../plugins/muriel/skills/compose/channels/) subfiles so notebooks can `import` them instead of copy-pasting.
 
 ## Install
 
 No required dependencies. Add the muriel repo to your `PYTHONPATH`:
 
 ```bash
-export PYTHONPATH=~/Documents/dev/muriel:$PYTHONPATH
+export PYTHONPATH=/path/to/muriel:$PYTHONPATH
 ```
 
 Or `pip install -e` it:
 
 ```bash
-pip install -e ~/Documents/dev/muriel
+pip install -e /path/to/muriel
 ```
 
 Then `from muriel import ...` works from any Python environment. The old `render_assets` import path continues to work via a deprecation shim for one release.
+
+## Tools by purpose
+
+A quick index of every importable utility and CLI muriel ships, so you don't rebuild a contrast helper, color-conversion, or APA formatter that already exists. The most-used modules are documented in detail below; the channel/vocabulary recipes that drive them live in the skill at [`plugins/muriel/skills/compose/`](../plugins/muriel/skills/compose/).
+
+### Color & contrast
+
+| Tool | Import | CLI | Use when |
+|---|---|---|---|
+| **WCAG contrast audit** | `from muriel.contrast import audit_svg, contrast_ratio, check_text_pair` | `python -m muriel.contrast file.svg [--required 8.0]` | Verifying every text role in an SVG passes the 8:1 floor; pre-commit hooks; CI gates. Exit codes: 0 pass / 1 fail / 2 usage. |
+| **OKLCH color science** | `from muriel.oklch import to_oklch, perceptual_distance` | `python -m muriel.oklch '#5B3EB8'` | Converting hex to perceptual color space; computing perceptual distance between two colors. |
+| **Color palettes** | `from muriel.palettes import CATEGORICAL_WONG, CATEGORICAL_IBM, CATEGORICAL_TOL` | — | A chart needs a colorblind-safe categorical palette and the brand hasn't shipped its own. |
+
+### Sizes & dimensions
+
+| Tool | Import | CLI | Use when |
+|---|---|---|---|
+| **Dimension registry** | `from muriel.dimensions import REGISTRY, figsize_for, Size, Device, PaperSize` | `python -m muriel.dimensions` | Picking pixel dimensions for social cards (`og-image`, `x-card`, `ig-square`), device frames (`iphone_15_pro`, `macbook_pro`), paper sizes (A4, US Letter), or matplotlib `figsize` for academic venues (CHI, ACM, IEEE, PNAS, Nature, LNCS). |
+
+### Statistics & reporting
+
+| Tool | Import | CLI | Use when |
+|---|---|---|---|
+| **APA stats helpers** | `from muriel.stats import format_p, format_ci, format_correlation, format_auc, format_chi2, format_comparison, format_null, format_exploratory, cohens_d, cohens_d_paired, fisher_ci, apa_number` | — | Formatting *p*-values with APA leading-zero stripping; computing Cohen's *d*; assembling CIs in U+2212-minus form; framing nulls as detection limits. |
+
+### Matplotlib defaults
+
+| Tool | Import | CLI | Use when |
+|---|---|---|---|
+| **Editorial light rcparams** | `from muriel.matplotlibrc_light import rcparams; rcparams()` | — | Cream-background paper figures for long-form explainers and light-themed posts. |
+| **OLED dark rcparams** | `from muriel.matplotlibrc_dark import rcparams; rcparams()` | — | Dark-mode paper figures with the OLED palette. |
+
+### Critique & verification
+
+| Tool | Import | CLI | Use when |
+|---|---|---|---|
+| **Critique gate** | `from muriel.critique import critique_artifact, CritiqueReport` | `python -m muriel.critique path/to/figure.{svg,png,pdf} [--audience … --channel …]` | Pre-ship verification of any rendered artifact: 8:1 contrast (SVG), dimension-target match, P0 honesty probe (stock-emoji + unattributed numeric claims), per-channel audience enforcement. Exits with a CI-friendly status code. The recurring `/muriel critique` pattern, codified. |
+
+### Generation & rendering
+
+| Tool | Import | CLI | Use when |
+|---|---|---|---|
+| **Text + asset rendering (Pillow)** | `from muriel.typeset import render_text, render_asset, generate_from_manifest` | — | Pillow raster text with shadow/blur; templated app-store icons / Fire TV banners / promo cards. |
+| **Responsive web capture** | `from muriel.capture import capture_responsive` | `python -m muriel.capture <url>` | Playwright viewport-sweep screenshots (mobile / tablet / desktop). Optional dependency. |
+| **Hero shot composition** | `from muriel.tools.heroshot import compose` | — | Layered hero-shot rendering with shadow, glass panel, vignette. |
+| **Smart crop** | `from muriel.tools.smartcrop import crop` | — | Saliency-aware cropping for promo / thumbnail generation. |
+| **Tilt-shift** | `from muriel.tools.tilt_shift import apply` | — | Tilt-shift focus blur on a raster image. |
+| **Venn diagrams** | `from muriel.tools.venn import draw_venn2, draw_venn3` | — | Two- or three-set Venn diagrams via matplotlib_venn. |
+| **Diagrams** | `from muriel.tools.diagrams import ...` | — | Generic schematic primitives (flowcharts, schemas, layer stacks, pyramids, swimlanes). |
+| **Quick chart helpers** | `from muriel.chart import bar, line, scatter` | — | Lightweight chart constructors with muriel rcparams and contrast-safe colors baked in (the Terminal-channel renderer). |
+
+### Brand, diagnostics & maintenance
+
+| Tool | Import | CLI | Use when |
+|---|---|---|---|
+| **Brand schema loader** | `from muriel.styleguide import load_brand, derive_css_tokens, derive_matplotlibrc` | — | Reading `brand.toml`; deriving CSS tokens / matplotlib rcparams from brand colors. |
+| **Doctor** | `from muriel.doctor import check_environment` | `python -m muriel.doctor` | Verifying optional deps (Pillow, matplotlib, Playwright, matplotlib_venn) are reachable. |
+| **Warmup** | `from muriel.warmup import warm_caches` | `python -m muriel.warmup` | Pre-loading font caches / palette data / dimension registry in CI to avoid cold-start cost. |
+
+**When *not* to use these:** AI image generation (muriel is data-driven SVG/raster, not generative), hand-drawn/freeform diagrams (use Excalidraw / Figma), or real-time interactive demos (see the skill's `channels/interactive.md`).
 
 ## matplotlibrc_dark — OLED palette
 
@@ -139,7 +199,7 @@ print(format_exploratory(corr))
 - Leading zeros stripped from probabilities and correlations (APA convention)
 - p-values below 0.001 render as `p < .001`, never `p = 0.000`
 
-See [`channels/science.md`](../channels/science.md) in the muriel repo for the full statistical reporting chapter.
+See [`channels/science.md`](../plugins/muriel/skills/compose/channels/science.md) in the muriel repo for the full statistical reporting chapter.
 
 ## contrast — WCAG audit helper
 

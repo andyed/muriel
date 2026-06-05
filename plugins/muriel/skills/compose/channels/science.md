@@ -41,7 +41,7 @@ Matplotlib's out-of-the-box defaults are wrong for every constraint muriel enfor
 
 ### Importable module (preferred)
 
-The dark and light rcparams blocks are shipped as importable Python modules in [`muriel/`](https://github.com/andyed/muriel/tree/main/muriel/). Add the muriel repo to your `PYTHONPATH` (or `pip install -e ~/Documents/dev/muriel`), then:
+The dark and light rcparams blocks are shipped as importable Python modules in [`muriel/`](https://github.com/andyed/muriel/tree/main/muriel/). Add the muriel repo to your `PYTHONPATH` (or `pip install -e /path/to/muriel`), then:
 
 ```python
 # Auto-apply on import — pick one palette per document
@@ -143,7 +143,7 @@ mpl.rcParams.update({
 })
 ```
 
-Keep every other setting. The palette flip is a two-dozen-line override, not a reset. Save both blocks as `~/Documents/dev/muriel/assets/matplotlibrc_dark.py` / `_light.py` and `import` whichever one fits the target medium.
+Keep every other setting. The palette flip is a two-dozen-line override, not a reset. Save both blocks as `muriel/matplotlibrc_dark.py` / `_light.py` and `import` whichever one fits the target medium.
 
 ## Plot readability rules
 

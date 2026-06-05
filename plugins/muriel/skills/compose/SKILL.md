@@ -130,7 +130,7 @@ For data-driven channels (raster plots, SVG, interactive JS, science, charts), a
 - **Compared to what?** Every chart includes at least one reference element — a baseline line, target band, prior-period series, or peer group. A solitary line with no comparison fails the "compared to what?" test and should be rebuilt with context.
 - **Don't chart what a sentence can say.** 1–2 numbers → write a sentence with inline context ("Revenue was $4.2M, up 23% from Q2"). A simple ranking of 3–5 items → consider a table. Charts earn their space by revealing patterns, trends, or distributions that prose and tables cannot. A chart of two bars is almost always worse than a sentence.
 
-Reference: `~/Documents/dev/ascii-charts/docs/PERMUTE.md` — full Tufte/Bertin/Gestalt/CRAP framing. For 22-rule chart-library guidance (Recharts/ECharts/Chart.js/Plotly/D3), see [`channels/charts.md`](channels/charts.md). For matplotlib + paper figures, [`channels/science.md`](channels/science.md).
+These rules distill the Tufte/Bertin/Gestalt/CRAP framing. For 22-rule chart-library guidance (Recharts/ECharts/Chart.js/Plotly/D3), see [`channels/charts.md`](channels/charts.md). For matplotlib + paper figures, [`channels/science.md`](channels/science.md).
 
 ## Interaction design grounding
 

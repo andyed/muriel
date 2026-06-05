@@ -29,9 +29,9 @@ Most callers just want the savefig wrapper::
         script=__file__,
         h_ids=["H03"],
         nb_k_ids=["NB22:K3", "NB21:K-bbox-3"],
-        dataset="AdSERP/data/cursor-approach-features-organic.json",
+        dataset="data/experiment-results.json",
         figure_version="v2",      # optional, caller-defined
-        notes="organic-hybrid, Δ=500ms",  # optional free text
+        notes="condition A vs B, Δ=500ms",  # optional free text
         dpi=200,
     )
 
