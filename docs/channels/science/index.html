@@ -1701,6 +1701,62 @@
   
   
     <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/showcase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Showcase — featured work ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gallery — all channels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
         
   
@@ -1708,7 +1764,7 @@
   <span class="md-ellipsis">
     
   
-    Live demos ↗
+    Live spatial demos ↗
   
 
     
@@ -1844,62 +1900,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../TODO/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Roadmap (TODO)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../HARNESSES/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Harnesses
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
         
   
@@ -1988,7 +1988,7 @@
 <h2 id="matplotlib-rcparams-oled-compliant-defaults">matplotlib rcparams — OLED-compliant defaults<a class="headerlink" href="#matplotlib-rcparams-oled-compliant-defaults" title="Permanent link">&para;</a></h2>
 <p>Matplotlib's out-of-the-box defaults are wrong for every constraint muriel enforces. Light background, thin sans-serif at default sizes that fail 8:1 contrast, 6×4 figsize too small for a paper, no units on ticks. A rcParams block at the top of every notebook fixes all of it in one place.</p>
 <h3 id="importable-module-preferred">Importable module (preferred)<a class="headerlink" href="#importable-module-preferred" title="Permanent link">&para;</a></h3>
-<p>The dark and light rcparams blocks are shipped as importable Python modules in <a href="https://github.com/andyed/muriel/tree/main/muriel/"><code>muriel/</code></a>. Add the muriel repo to your <code>PYTHONPATH</code> (or <code>pip install -e ~/Documents/dev/muriel</code>), then:</p>
+<p>The dark and light rcparams blocks are shipped as importable Python modules in <a href="https://github.com/andyed/muriel/tree/main/muriel/"><code>muriel/</code></a>. Add the muriel repo to your <code>PYTHONPATH</code> (or <code>pip install -e /path/to/muriel</code>), then:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Auto-apply on import — pick one palette per document</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">muriel</span><span class="w"> </span><span class="kn">import</span> <span class="n">matplotlibrc_dark</span>    <span class="c1"># OLED cream on near-black</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># or</span>
@@ -2080,7 +2080,7 @@
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="s1">&#39;grid.color&#39;</span><span class="p">:</span>            <span class="s1">&#39;#cccccc&#39;</span><span class="p">,</span>
 <a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">})</span>
 </code></pre></div>
-<p>Keep every other setting. The palette flip is a two-dozen-line override, not a reset. Save both blocks as <code>~/Documents/dev/muriel/assets/matplotlibrc_dark.py</code> / <code>_light.py</code> and <code>import</code> whichever one fits the target medium.</p>
+<p>Keep every other setting. The palette flip is a two-dozen-line override, not a reset. Save both blocks as <code>muriel/matplotlibrc_dark.py</code> / <code>_light.py</code> and <code>import</code> whichever one fits the target medium.</p>
 <h2 id="plot-readability-rules">Plot readability rules<a class="headerlink" href="#plot-readability-rules" title="Permanent link">&para;</a></h2>
 <p>Codified from per-project feedback. Every rule exists because a specific plot failed in a specific way.</p>
 <h3 id="axes-proportional-to-signal">Axes proportional to signal<a class="headerlink" href="#axes-proportional-to-signal" title="Permanent link">&para;</a></h3>

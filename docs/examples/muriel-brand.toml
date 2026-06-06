@@ -13,7 +13,7 @@ name             = "muriel"
 slug             = "muriel"
 version          = "2.0.0"
 owner_repo       = "muriel"
-owner_path       = "~/Documents/dev/muriel"
+owner_path       = "."
 canonical_source = "muriel/matplotlibrc_dark.py"
 ownership_rule   = "muriel's own palette — no external owner, free to use for any output"
 

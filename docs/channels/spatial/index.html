@@ -1440,6 +1440,62 @@
   
   
     <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/showcase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Showcase — featured work ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gallery — all channels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
         
   
@@ -1447,7 +1503,7 @@
   <span class="md-ellipsis">
     
   
-    Live demos ↗
+    Live spatial demos ↗
   
 
     
@@ -1563,62 +1619,6 @@
     
   
     Critique agent
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../TODO/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Roadmap (TODO)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../HARNESSES/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Harnesses
   
 
     
@@ -2007,7 +2007,7 @@
 <li><strong>Further ridgemap projections.</strong> The <code>ridgemap</code> MVP ships only the stacked-1D-slice form. The same <code>(field, canvas, …)</code> signature should grow siblings that render the same scalar field as: filled isoline bands (USGS / Imhof quadrangle), wireframe protrusion from a grid (BYTE-cover / Tinney 3D mesh), and hachured / halftone relief. One extractor stage, several emitters — the unifier is <em>scalar field → topology</em>. Documenting the taxonomy in a <code>channels/topography.md</code> companion before the next emitter lands.</li>
 <li><strong>Field ingestion from pixels.</strong> Today <code>ridgemap</code> takes a 2D numeric array. A small <code>muriel.spatial.field_from_image(path, downsample=N, channel="luma")</code> helper would let raster sources (image luminance, video frame Δ, attention/saliency maps) feed the same primitive without callers needing to roll their own resampling. Crosses the channel's first input-is-pixels line — defer until a real artifact needs it.</li>
 </ul>
-<p>See <a href="../../TODO/"><code>TODO.md</code></a> for cross-channel queue context.</p>
+<p>See <a href="../TODO.md"><code>TODO.md</code></a> for cross-channel queue context.</p>
 
 
 
