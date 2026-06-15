@@ -114,6 +114,23 @@ The 8:1 rules above say what craft *is*; this says what generated-default slop *
 - **Center-aligned body paragraphs.** Center headings if you must; never the body.
 - **Gradient-blob hero** + bold sans headline + generic screenshot mockup. The house style of every generated landing page.
 
+### Prose anti-slop (AI writing tells)
+
+The checklist above is about how an artifact *looks*; this is about how its **prose reads**. Any channel that ships sentences — notebook editorial, blog explainers, captions, doc copy, marginalia — should scan against these before shipping. They're the textual equivalent of the gradient-blob hero: the patterns that make writing read as machine-default. (Curated from [hardikpandya/stop-slop](https://github.com/hardikpandya/stop-slop), MIT.)
+
+- **Throat-clearing openers.** "It turns out", "Here's the thing", "The uncomfortable truth is", "Let me be clear". Cut the runway; start at the sentence that matters.
+- **Binary-contrast scaffolds.** "Not because X. Because Y.", "The question isn't X. It's Y.", "It's not this, it's that", "not just X but also Y". The single most common AI-explainer tell. State the thing directly.
+- **Vague declaratives.** "The implications are significant", "The reasons are structural", "The stakes are high". Name the implication, the reason, the stake — or delete the sentence.
+- **Adverb crutches.** really, just, genuinely, simply, actually, literally, fundamentally, truly. Almost always deletable with no loss.
+- **False agency.** "the data tells us", "the culture shifts", "the market rewards". Inanimate subjects with human verbs. Name who acts.
+- **Dramatic fragmentation / punchy endings.** "X. That's it.", three-item lists, every paragraph closing on a quotable one-liner. Vary rhythm; not every paragraph earns a mic-drop.
+- **Meta-commentary.** "Let me walk you through", "Plot twist:", "Hint:". The reader doesn't need a tour guide.
+- **Em-dash overuse and staccato.** Stylistic, not a hard ban — but if every other sentence has an em-dash or trails into "Not always. Not perfectly.", it reads generated.
+
+Optional gate: score a draft on Directness / Rhythm / Trust / Authenticity / Density (1–10 each); below 35/50 wants a revision pass.
+
+**Register carve-out.** These are defaults for editorial and explainer prose, *not* overrides for genre conventions. In scientific writing specifically: passive voice is conventional in methods sections ("participants were randomized", "data were filtered") and should not be force-converted; hedging is required, not slop — "not detected at this granularity" is correct precision, not softening to strip. When a stop-slop rule fights the genre, the genre wins.
+
 ## Visualization principles
 
 For data-driven channels (raster plots, SVG, interactive JS, science, charts), apply Tufte/Bertin/CRAP via these high-leverage patterns. The first three are composition patterns; the next three are per-chart rules that catch ~80% of agent-generated chart problems before they ship.
