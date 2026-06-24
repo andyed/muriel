@@ -51,6 +51,7 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     "export-dtcg":    ("muriel.dtcg_export",                "Export a brand.toml as W3C Design Tokens Community Group JSON"),
     "heroshot":       ("muriel.tools.heroshot",             "Tilted + bordered + shadowed hero-shot from a PNG"),
     "import":         ("muriel.design_md_import",            "Convert a Google Stitch design.md into a muriel brand.toml"),
+    "import-tokens":  ("muriel.design_tokens_import",         "Convert a DTCG / open-codesign tokens.json into a muriel brand.toml"),
     "import-corpus":  ("muriel.tools.corpus_audit",          "Audit a DESIGN.md corpus through design_md_import + 8:1 floor"),
     "smartcrop":      ("muriel.tools.smartcrop",            "Saliency-aware crop solver (edges + optional faces / text / saliency)"),
     "styleguide":     ("muriel.styleguide",                 "Load a brand.toml; print / derive CSS / matplotlibrc / contrast audit"),
