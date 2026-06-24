@@ -56,6 +56,18 @@ Plain `>` blockquotes become 3D perspective pull quotes — the signature compon
 - **All text 8:1 minimum.**
 - All marginalia classes use `mg-` prefix. Theme via `--mg-*` CSS custom properties — these inherit into child SVGs, so a single theme switch repaints the whole page including embedded vector graphics.
 
+### Audit the HTML before shipping
+`muriel.contrast` audits HTML files directly, not just SVG. It walks `<style>` blocks (skipping `@media` / `@keyframes`), resolves `var(--token)` chains end-to-end, walks inline `style="…"` attributes (deduping repeated colors), and runs the legibility-floor pass alongside contrast.
+
+```bash
+python -m muriel.contrast path/to/page.html
+python -m muriel.contrast path/to/page.html --required 4.5      # WCAG AA only
+python -m muriel.contrast path/to/page.html --background '#fff' # override
+python -m muriel.contrast path/to/page.html --no-inline         # CSS rules only
+```
+
+Exit status: `0` clean, `1` ratio failures, `2` legibility-only warnings (contrast passed but font-size/weight/opacity floors tripped), `3` usage error. A real AI-Lab explainer restyling pass is the reference exemplar — an `index-ailab.html` page was caught and fixed by this audit (text-muted bumped from `#8a847a` (3.55:1) to `#4e483e` (8.67:1), TOC font-size bumped from 10px to 12px, byline/footer from `0.85em` to `1em`, opacity-on-text removed).
+
 ### Math — KaTeX
 
 Marginalia essays with math drop **KaTeX** in via CDN + auto-render. MIT, no bundler, no MathJax-style runtime overhead. Pin to `^0.16`. Display math is `$$…$$`, inline is `$…$`. Wrap display equations in a `.eq-block` container themed from `--mg-*` variables so equations participate in the marginalia palette.
