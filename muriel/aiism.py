@@ -154,6 +154,68 @@ SINGLE_PHRASE_RULES: list[tuple[str, str, str, str]] = [
      "'Regime' carries political connotations in current usage; for technical contexts prefer 'phase', 'mode', or 'state'."),
 ]
 
+
+# ---------------------------------------------------------------------------
+# Per-rule suppression — false-positive control
+# ---------------------------------------------------------------------------
+# A rule may name a regex that, when it also matches the local context around a
+# hit, cancels that hit. This is the discipline ported from ``muriel.devibe``
+# (whose rounded-corner rule skips avatar-sized boxes): flag a tell only where
+# it is actually a tell. Keyed by rule_id; the context window is a few words on
+# either side of the match.
+RULE_SUPPRESS: dict[str, str] = {
+    # "regime" is loaded in political prose but is neutral, standard vocabulary
+    # in physics, applied math, and vision science: an asymptotic regime, the
+    # linear regime of a psychometric function, the scotopic / low-light regime.
+    # Suppress the rule when one of those technical collocations produced the
+    # match, so the audit still flags "the regime's crackdown" but leaves
+    # "saturation regime" alone.
+    "phrase-regime": (
+        r"\b(?:asymptotic|linear|non-?linear|saturat\w+|threshold|supra-?threshold|"
+        r"sub-?threshold|scotopic|photopic|mesopic|foveal|parafoveal|peripheral|"
+        r"ballistic|diffusiv\w+|perturbativ\w+|viscous|inertial|turbulent|laminar|"
+        r"hydrodynamic|kinetic|thermodynamic|quantum|classical|relativistic|"
+        r"steady-?state|transient|scaling|light|dark|contrast|luminance|noise|"
+        r"signal|dose|energy|temperature|density|velocity|frequency|intensity|"
+        r"coupling|stimulus|response)[-\s]+regimes?\Z"
+    ),
+}
+
+_SUPPRESS_COMPILED: dict[str, "re.Pattern[str]"] = {
+    rid: re.compile(pat, re.IGNORECASE) for rid, pat in RULE_SUPPRESS.items()
+}
+
+
+# ---------------------------------------------------------------------------
+# Cleared candidates — the "do not chase" list
+# ---------------------------------------------------------------------------
+# Candidate tells considered and deliberately NOT flagged. Documented so they
+# are not re-added on a future pass and so the audit stays narrow enough to
+# trust — the same discipline as vibecoded-design-tells' "Cleared by the data"
+# section (and ``muriel.devibe``'s tell #12). Over-flagging trains the writer to
+# ignore the tool. (candidate, why-not)
+CLEARED_CANDIDATES: list[tuple[str, str]] = [
+    ("the em-dash itself",
+     "A few em-dashes per paper is ordinary punctuation. Only the density rule "
+     "(3+ on one line) fires; flagging every em-dash is noise."),
+    ("single LLM-vocabulary words ('delve', 'leverage', 'tapestry', 'realm')",
+     "High false-positive in technical prose — 'leverage' is a real mechanics "
+     "term, 'realm' a math one. These lists were also CC-BY-SA-derived and were "
+     "removed in 0.10.0. Cluster context, not single words, is the signal."),
+    ("passive voice",
+     "Standard and often correct in a methods section ('participants were "
+     "recruited'). A style preference, not an AI tell."),
+    ("first-person 'we' / 'our'",
+     "Normal academic voice."),
+    ("semicolons and parentheticals",
+     "Punctuation choices, not AI signatures."),
+    ("sentence-initial 'And' / 'But'",
+     "A register choice common in deliberate human prose."),
+    ("'regime' in a technical collocation",
+     "Suppressed (see RULE_SUPPRESS): 'asymptotic / linear / scotopic regime' is "
+     "neutral domain vocabulary. Only the political sense is a tell."),
+]
+
 # Phrases that repeat. Allow up to `max_count` occurrences before flagging.
 REPEATED_PHRASE_RULES: list[tuple[str, str, int, str, str]] = [
     ("repeat-load-bearing", r"\bload[-\s]bearing\b", 1, "error",
@@ -315,7 +377,16 @@ def _audit_hard_artifacts(text: str, source: str) -> list[Finding]:
 def _audit_single_phrases(text: str, source: str) -> list[Finding]:
     out = []
     for rule_id, pattern, severity, message in SINGLE_PHRASE_RULES:
+        suppress = _SUPPRESS_COMPILED.get(rule_id)
         for m in re.finditer(pattern, source, flags=re.IGNORECASE):
+            if suppress is not None:
+                # Anchor the collocation to THIS match: is the text ending at
+                # this token a technical collocation (".*<techword> regime")?
+                # A two-sided window would wrongly suppress a political 'regime'
+                # that merely sits near a technical one.
+                pre = source[max(0, m.start() - 40):m.end()]
+                if suppress.search(pre):
+                    continue  # benign technical context — not a tell
             line, col = _line_col(source, m.start())
             out.append(Finding(line, col, severity, rule_id, message,
                                _excerpt(text, m.start())))
@@ -595,9 +666,23 @@ def format_findings(findings: list[Finding], *, color: bool = True) -> str:
     return "\n".join(lines) + summary + "\n\nrule counts:\n" + by_rule_lines
 
 
+def format_cleared() -> str:
+    """Render the 'do not chase' list — candidate tells deliberately not flagged."""
+    lines = [
+        "Candidate tells deliberately NOT flagged (the 'do not chase' list).",
+        "Flag what the evidence supports, at the weight it supports it; over-",
+        "flagging trains the writer to ignore the tool.",
+        "",
+    ]
+    for candidate, why in CLEARED_CANDIDATES:
+        lines.append(f"  · {candidate}")
+        lines.append(f"      {why}")
+    return "\n".join(lines)
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="muriel.aiism", description=__doc__.split("\n\n")[0])
-    p.add_argument("file", help="markdown file to audit")
+    p.add_argument("file", nargs="?", help="markdown file to audit")
     p.add_argument("--severity", choices=SEVERITIES, default="warn",
                    help="exit nonzero if any finding is at or above this severity (default: warn)")
     p.add_argument("--respect-pencil", action="store_true",
@@ -605,7 +690,16 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--no-color", action="store_true", help="disable ANSI color")
     p.add_argument("--rule", action="append", help="filter to specific rule id (repeatable)")
     p.add_argument("--json", action="store_true", help="emit findings as JSON for tool integration")
+    p.add_argument("--list-cleared", action="store_true",
+                   help="print the candidate tells deliberately NOT flagged (the "
+                        "'do not chase' list) and exit")
     args = p.parse_args(argv)
+
+    if args.list_cleared:
+        print(format_cleared())
+        return 0
+    if not args.file:
+        p.error("a file argument is required (unless --list-cleared)")
 
     fp = Path(args.file)
     if not fp.exists():
