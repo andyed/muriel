@@ -343,7 +343,7 @@ function makeImageCard({ src, caption, x, y, z, w = 240, rotY = 0 }) {
     <img src="${src}" width="${w}" loading="lazy"
          style="display:block;width:${w}px;height:auto;
                 border:1px solid rgba(127,223,255,0.35);
-                box-shadow: 0 0 24px rgba(127,223,255,0.18);">
+                box-shadow: 0 0 24px rgba(127,223,255,0.18); /* unslop-ignore: deliberate cyan depth-glow on lit panels */">
     <div style="margin-top:6px;font-family:var(--mono);font-size:10px;
                 color:var(--ink-dim);letter-spacing:0.06em;
                 text-transform:uppercase;text-align:left;">${caption}</div>`;

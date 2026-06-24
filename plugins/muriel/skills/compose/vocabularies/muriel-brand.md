@@ -77,7 +77,7 @@ If the available display size is below the floor, **don't shrink the mark — dr
 
 - **Spelling.** `muriel` — always lowercase. The brand name is set in lowercase in every context including title positions. The library is `muriel`, not "Muriel" or "MURIEL."
 - **Phrase.** `built with muriel` — canonical attribution form. Lowercase throughout. The verb is "built with," not "powered by," "made with," or "rendered by."
-- **Font.** Inter (or system fallback `-apple-system, 'Segoe UI', system-ui, sans-serif`). Regular weight (400) for "built with"; semibold (600) for the "muriel" word so the brand name reads as the load-bearing token.
+- **Font.** Inter (or system fallback `-apple-system, 'Segoe UI', system-ui, sans-serif`). Regular weight (400) for "built with"; semibold (600) for the "muriel" word so the brand name reads as the load-bearing token. <!-- unslop-ignore: Inter is muriel's stated brand-credit font, a deliberate decision -->
 - **Sizing.** Match the surrounding text size. The credit doesn't shout.
 - **Italic — no.** muriel is editorial, not kinetic. Roman only.
 

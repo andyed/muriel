@@ -105,7 +105,7 @@ The 8:1 rules above say what craft *is*; this says what generated-default slop *
 
 - **Default tool palettes.** Tailwind blue `#3b82f6` or Tailwind grays as the entire neutral scale; the `#0E0E10`-everywhere + one-purple-accent "minimal dark" page. Commit to a real palette.
 - **Pure black `#000` text or pure white `#fff` surfaces.** Use near-black/near-white with a slight hue cast (the OLED cream rule generalized).
-- **Overused default fonts.** Inter, Roboto, Arial, Helvetica, Playfair Display — unless the brief asks. A font choice is a design decision, not a fallback.
+- **Overused default fonts.** Inter, Roboto, Arial, Helvetica, Playfair Display — unless the brief asks. A font choice is a design decision, not a fallback. <!-- unslop-ignore: naming the fonts to avoid is the teaching point here, not a font choice -->
 - **Placeholder content.** Lorem ipsum, "John Doe", "Acme Corp", round-number filler (`100%`, `1,234`), stale dates. Content must be domain-specific. If a value is genuinely unknown, use a stylized blank (`████`), not lazy filler — see `fui.md`.
 - **Hotlinked external images.** No `unsplash.com` / `picsum.photos` / `placeholder.com` / `randomuser.me`. Inline SVG, generated assets, local files, or data URIs only — this is the reproducible/self-contained rule restated.
 - **Logo-as-letter-in-rounded-square.** A soft square with one centered initial reads as a stub. Use a constructed monogram, a wordmark, or an explicit "YOUR LOGO HERE" placeholder that admits it's a placeholder.

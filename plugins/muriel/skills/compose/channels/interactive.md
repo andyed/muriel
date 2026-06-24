@@ -248,7 +248,7 @@ Pretext publishes as [`@chenglou/pretext`](https://www.npmjs.com/package/@chengl
 
 ### Font preloading is mandatory
 
-Canvas-side text measurement depends on the actual font being loaded. Measure against the fallback and the layout is wrong the instant Inter (or whatever) arrives. Preload before the first call to `prepare*`:
+Canvas-side text measurement depends on the actual font being loaded. Measure against the fallback and the layout is wrong the instant Inter (or whatever) arrives. Preload before the first call to `prepare*`: <!-- unslop-ignore: Inter named as the demo's example font, not a chrome default -->
 
 ```js
 if (document.fonts?.load) {

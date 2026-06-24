@@ -77,6 +77,12 @@ try:
 except Exception:
     _HAS_DIMENSIONS = False
 
+try:
+    from muriel.devibe import audit_source as _devibe_audit, vibe_score as _devibe_score
+    _HAS_DEVIBE = True
+except Exception:
+    _HAS_DEVIBE = False
+
 
 VERDICT_PASS = "PASS"
 VERDICT_NEEDS_REVISION = "NEEDS REVISION"
@@ -360,6 +366,10 @@ def _is_pdf(path: Path) -> bool:
     return path.suffix.lower() == ".pdf"
 
 
+def _is_web(path: Path) -> bool:
+    return path.suffix.lower() in (".html", ".htm")
+
+
 def critique_artifact(
     artifact_path: str | Path,
     *,
@@ -504,6 +514,38 @@ def critique_artifact(
                 False,
                 f"target '{target}' not in muriel.dimensions.REGISTRY",
             )
+
+    # ── Automated check 5: design-tell scan (web / HTML artifact) ──
+    #
+    # Delegates to muriel.devibe — the visual analogue of the prose aiism
+    # audit. Flags the AI-default look (shadcn defaults, AI-purple, gradient
+    # text, the cream+serif+sage "tasteful default") that makes a page read as
+    # vibe-coded. Error-tier tells fail the check and drive NEEDS REVISION;
+    # warn/info are surfaced for the human. HTML artifacts only.
+    if _is_web(p) and _HAS_DEVIBE:
+        try:
+            findings = _devibe_audit(p.read_text(encoding="utf-8", errors="ignore"), str(p))
+            errors = [f for f in findings if f.severity == "error"]
+            warns = [f for f in findings if f.severity == "warn"]
+            if errors:
+                rules = "; ".join(sorted({f.rule for f in errors}))
+                report.add_auto(
+                    "design-tell scan (no AI-default look)",
+                    False,
+                    f"{len(errors)} error-tier design tell(s): {rules} "
+                    f"(+{len(warns)} warn; vibe score {_devibe_score(findings)}). "
+                    "Run `python -m muriel.devibe <file>` for the full report.",
+                    framework="muriel.devibe — vibecoded-design-tells (MIT)",
+                )
+            else:
+                report.add_auto(
+                    "design-tell scan (no AI-default look)",
+                    True,
+                    "no error-tier tells"
+                    + (f"; {len(warns)} warn-tier surfaced for review" if warns else ""),
+                )
+        except Exception as e:
+            report.add_auto("design-tell scan", False, f"scan error: {e}")
 
     # ── Manual checklist ──
     report.manual_checklist.extend(CHECKLIST_UNIVERSAL)

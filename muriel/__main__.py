@@ -45,6 +45,7 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     # name            (module,                              one-line help)
     "capture":        ("muriel.capture",                    "Responsive viewport-sweep screenshot via Playwright"),
     "contrast":       ("muriel.contrast",                   "WCAG 8:1 contrast audit on SVG / CSS / color pairs"),
+    "devibe":         ("muriel.devibe",                     "Scan web/UI source for AI-default 'vibe-coded' design tells (8:1-aware)"),
     "dimensions":     ("muriel.dimensions",                 "Print the dimensions registry (sizes, devices, paper)"),
     "doctor":         ("muriel.doctor",                     "Report muriel install state, extras, and model caches"),
     "export-dtcg":    ("muriel.dtcg_export",                "Export a brand.toml as W3C Design Tokens Community Group JSON"),
