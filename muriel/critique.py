@@ -207,6 +207,23 @@ CHECKLIST_BY_CHANNEL = {
 }
 
 
+def uipromax_anti_patterns(query: Optional[str] = None) -> list[dict]:
+    """Supplementary critique knowledge from the ui-ux-pro-max corpus.
+
+    Surfaces the corpus's anti-patterns (ui-reasoning) and don'ts
+    (ux-guidelines) as ``{category, anti_pattern, severity, source}`` rows — a
+    reference muriel-critique can consult alongside the ``CHECKLIST_*`` gates
+    above. ``query`` is a case-insensitive substring filter (e.g. a channel or
+    product-type name). Lazy-imported; the corpus is a verbatim MIT port (see
+    ``THIRD_PARTY_NOTICES.md``). Returns ``[]`` if the corpus is unavailable.
+    """
+    try:
+        from muriel import uipromax
+    except Exception:
+        return []
+    return uipromax.anti_patterns(query)
+
+
 # ── Channel front-matter parser ──
 #
 # Handles the bounded YAML subset documented in ``channels/SCHEMA.md``:

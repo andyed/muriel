@@ -50,7 +50,7 @@ all      = [
 muriel = "muriel.__main__:main"
 
 [tool.setuptools]
-packages = ["muriel", "muriel.detectors", "muriel.diagrams", "muriel.math", "muriel.tools", "render_assets"]
+packages = ["muriel", "muriel.detectors", "muriel.diagrams", "muriel.math", "muriel.tools", "muriel.uipromax", "render_assets"]
 
 [tool.setuptools.package-data]
 # Ship the Node bridges + npm manifests with the package. The npm
@@ -59,3 +59,6 @@ packages = ["muriel", "muriel.detectors", "muriel.diagrams", "muriel.math", "mur
 # not bundled (size + version-sensitive).
 "muriel.math" = ["tex2svg.js", "package.json"]
 "muriel.diagrams" = ["render.mjs", "package.json"]
+# The ui-ux-pro-max corpus: verbatim MIT CSVs + their license (see
+# muriel/uipromax/__init__.py and THIRD_PARTY_NOTICES.md).
+"muriel.uipromax" = ["data/*.csv", "LICENSE.txt"]

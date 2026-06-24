@@ -344,6 +344,21 @@ def citation(name: str) -> str:
     return c
 
 
+def uipromax_brand_palettes(meeting_floor: bool = True) -> list[dict]:
+    """Brand UI colour *sets* from the ui-ux-pro-max corpus (:mod:`muriel.uipromax`).
+
+    Unlike the viz palettes above (ordered hex lists for charts), these are
+    product-type → semantic-role sets (Primary / Background / Foreground / Card
+    / Accent / Destructive / …). With ``meeting_floor=True`` (default) only sets
+    whose body text clears muriel's 8:1 floor are returned; their interactive
+    pairs (``On Primary`` etc.) still need a per-button contrast pass. Lazy-
+    imported so palettes.py keeps its zero-dependency import. The corpus is a
+    verbatim MIT port — see ``THIRD_PARTY_NOTICES.md``.
+    """
+    from muriel import uipromax
+    return uipromax.palettes(meeting_floor=meeting_floor)
+
+
 # ─── Contrast-floor palette generator ──────────────────────────────
 
 

@@ -56,6 +56,7 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     "smartcrop":      ("muriel.tools.smartcrop",            "Saliency-aware crop solver (edges + optional faces / text / saliency)"),
     "styleguide":     ("muriel.styleguide",                 "Load a brand.toml; print / derive CSS / matplotlibrc / contrast audit"),
     "tilt-shift":     ("muriel.tools.tilt_shift",           "Fake-lens depth-of-field blur on a PNG"),
+    "uipromax":       ("muriel.uipromax",                    "Browse the ui-ux-pro-max corpus; audit its palettes against 8:1"),
     "venn":           ("muriel.tools.venn",                 "Area-proportional Venn / Euler diagram from a JSON spec"),
     "warmup":         ("muriel.warmup",                     "Prefetch detector model weights for installed extras"),
 }

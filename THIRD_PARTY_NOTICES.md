@@ -49,6 +49,53 @@ SOFTWARE.
 
 ---
 
+## ui-ux-pro-max corpus
+
+The CSV reference data under `muriel/uipromax/data/` (`colors.csv`,
+`typography.csv`, `ui-reasoning.csv`, `ux-guidelines.csv`, `styles.csv`,
+`charts.csv`, `icons.csv`) is a **verbatim** port of the `ui-ux-pro-max` skill's
+data files — product-type colour sets, font pairings, UI-reasoning rules, UX
+guidelines, design styles, chart taxonomy, and an icon index.
+
+- Source: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+- Via: https://github.com/All-The-Vibes/ATV-Design (`skills/ui-ux-pro-max/`)
+- Adapted: 2026-06 (both upstreams MIT)
+
+muriel's own contribution is the accessor layer (`muriel/uipromax/__init__.py`)
+and the **8:1 contrast re-gate**: the colour sets target WCAG 3:1/AA, so each is
+measured against muriel's universal 8:1 floor via `muriel.contrast`. The data
+itself is unchanged; muriel adds no colours. The source palettes' interactive
+pairs (`On Primary`, `On Accent`, destructive, muted-on-muted) are reported as
+sub-8:1 and **not adopted** as compliant — only the body-text pairs that clear
+8:1 are surfaced as muriel starting points. A copy of the upstream MIT license
+also ships at `muriel/uipromax/LICENSE.txt`.
+
+```
+MIT License
+
+Copyright (c) 2024 Next Level Builder
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+---
+
 ## emil-design-eng-inspired (motion principles)
 
 The motion-quality axes added to `muriel/motion.py` (compositor-safe property
