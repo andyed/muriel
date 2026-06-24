@@ -49,6 +49,52 @@ SOFTWARE.
 
 ---
 
+## emil-design-eng-inspired (motion principles)
+
+The motion-quality axes added to `muriel/motion.py` (compositor-safe property
+set, easing-by-direction, entrance scale floor) and to
+`plugins/muriel/skills/compose/channels/polish.md` (rules 18–22) are paraphrased
+from the `emil-design-eng-inspired` skill — itself MIT-licensed original prose
+that the ATV-Design authors wrote as a clean-room paraphrase of Emil Kowalski's
+(unlicensed) `emil-design-eng` skill.
+
+- Source: https://github.com/All-The-Vibes/ATV-Design (`skills/emil-design-eng-inspired/`)
+- Lineage: paraphrases https://github.com/emilkowalski/skill (no upstream license)
+- Adapted: 2026-06 (ATV-Design MIT)
+
+muriel's own contribution is the programmatic enforcement (`validate_properties`,
+`easing_for`, `validate_scale`) and the integration with muriel's existing
+polish rules. muriel deliberately **does not adopt** the source's duration
+*bands* (100–500 ms) — they fall in `muriel.motion`'s uncanny zone, where the
+forced utility (≤ 100 ms) / cinematic (≥ 1500 ms) binary overrides them — and
+keeps its own tuned `0.96` press-scale value over the source's `0.97`.
+
+```
+MIT License
+
+Copyright (c) 2026 atv-design contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+---
+
 ## vibecoded-design-tells (devibe rules)
 
 The rule table in `muriel/devibe.py` — the design-tell catalogue (shadcn

@@ -187,6 +187,29 @@ img {
 }
 ```
 
+### 17. Local text scrims over translucent surfaces — never a panel-wide dark plate
+
+When text sits on a translucent / backdrop-blurred surface (a frosted popup, a glass card over live content, an overlay on a visualization) and needs contrast against whatever shows through, **darken behind the text only** — per-line caption plates or a glyph-hugging scrim. Do **not** drop a large opaque/dark fill behind the whole content block to buy contrast.
+
+A hard-edged dark plate sitting *inside* a translucent panel reads as a **dark box floating in fog**: it re-introduces the nested-container problem (rule 1) the glass surface was supposed to avoid, doubles the visible container count, and muddies the very blur that made the surface feel like glass. It's the lazy contrast fix — the box just moved inward.
+
+Opaque media (album art, thumbnails, avatars) already carry their own contrast — let them sit **directly** on the translucent surface. Only the text needs help, so only the text gets a backing.
+
+```css
+/* Bad — panel-wide scrim: a dark box floating in the frosted panel */
+.card { background: radial-gradient(120% 100% at 50% 40%, rgba(6,7,16,.86), transparent); }
+
+/* Good — card is layout-only; selective darkening hugs each text line */
+.card   { background: none; }
+.title,
+.artist { background: rgba(6,8,13,.9);          /* near-opaque so 8:1 holds over any backdrop */
+          padding: 3px 13px; border-radius: 10px;
+          -webkit-box-decoration-break: clone;   /* per-line plates when the line wraps */
+          box-decoration-break: clone; }
+```
+
+The plate opacity is a **contrast decision, not a taste one**: compute it against the *brightest* the backdrop can get — a near-white highlight in a visualization, not the calm frame in front of you. A translucent plate that looks fine over the current view can dip below 8:1 for light text over a bright highlight. Push alpha toward `0.9` (≈12:1 even over pure white) rather than leaving it pretty-but-failing at `0.75` (~7.9:1 for dim text over white). Hide empty plates (`:empty { display: none }`) so missing metadata doesn't leave a floating dark pill.
+
 ## Animation rules
 
 ### 10. Interruptible transitions for interactive state, keyframes only for one-shot sequences
@@ -270,6 +293,44 @@ Two coupled performance rules:
 | `background-*`, `border-*`, `color` | No | No |
 | `top`, `left`, `width`, `height` | No | No |
 
+## Motion axes — easing, scale, budget
+
+Rules 18–22 cover the axes rules 10–16 leave open. Paraphrased from All-The-Vibes/ATV-Design's `emil-design-eng-inspired` (MIT). `muriel.motion` enforces the mechanical ones — `validate_properties`, `easing_for`, `validate_scale`. muriel's duration **binary** (`muriel.motion`: utility ≤ 100 ms / cinematic ≥ 1500 ms) deliberately overrides the source's 100–500 ms bands — don't import those.
+
+### 18. Easing curve follows direction
+
+The curve encodes the physical model the user applies to the motion. Pick by where the element is going, not by taste:
+
+| Direction | Curve | Why |
+|---|---|---|
+| Entering / user-triggered (modal mount, toast in, click response) | `ease-out` | decelerates to rest — catches up to where the user expects it |
+| Leaving (modal dismiss, toast out) | `ease-in`, or linear under 150 ms | accelerates away; exit is less load-bearing |
+| Repositioning on-screen / system-scheduled (list reorder, reflow) | `ease-in-out` | accelerates from one rest position, decelerates into the next |
+
+**Never `ease-in` for an entrance** — acceleration-on-appear reads as the element *avoiding* the user. `muriel.motion.easing_for("enter"|"exit"|"move")` returns the curve.
+
+### 19. Entrance scale floors at `0.95` — never from `0`
+
+Distinct from press feedback (rule 14). A mounting modal/popover scales `0.95 → 1` while opacity goes `0 → 1`: opacity carries "wasn't here, now is," scale carries depth. From `0` it reads as a black hole opening; from `0.95` it's a card stepping forward. Set a popover's `transform-origin` toward its anchor (Radix exposes `--radix-*-transform-origin`) so it doesn't appear unanchored. `muriel.motion.ENTRANCE_SCALE_FLOOR` / `validate_scale()`.
+
+### 20. Gate `:hover` behind pointer capability; carry touch presses with opacity
+
+```css
+@media (hover: hover) and (pointer: fine) { .card:hover { /* … */ } }
+```
+
+An unconditional `:hover` fires on tap on touch devices and sticks until the next tap ("stuck hover"). On touch there's no hover preview, so the press itself must carry weight — pair the `:active` scale (rule 14) with a brief opacity dip (`0.85` for ~80 ms).
+
+**Reduced motion is a dial, not a kill switch.** `prefers-reduced-motion: reduce` means "don't parallax/slide me across the viewport," not "freeze everything." muriel brands pick the response via `[a11y].motion_reduce_policy`: the default `collapse-to-zero`, or the softer `reduce` (shorten to ~100 ms, drop transforms to identity, keep opacity). Either way, decorative/background motion goes.
+
+### 21. One load-bearing motion per interaction
+
+A single click/tap/drag-end should produce **one** motion that carries meaning. If a click opens a modal *and* slides a sidebar *and* fades a backdrop *and* repositions a tooltip, the user can't tell which is the consequence of their action. Pick the most informative (usually the modal entrance) and play the rest silently — instant opacity, no transforms.
+
+### 22. Reorders and expands use FLIP, not animated layout
+
+Rule 16 bans animating layout properties; FLIP is the technique that replaces them. To move an element to a new position, don't animate `top`/`left`/`height` — snapshot **F**irst and **L**ast positions, **I**nvert the delta with a `transform`, then transition the transform to identity (**P**lay). For accordions, prefer letting content settle into place; if height must animate, animate `max-height` with a generous ceiling and accept it's less crisp than FLIP.
+
 ## Anti-patterns at a glance
 
 | Mistake | Fix |
@@ -288,7 +349,13 @@ Two coupled performance rules:
 | Page-load animations on default-state elements | `initial={false}` on the AnimatePresence boundary |
 | `transition: all` or `transition` shorthand | `transition-property: scale, opacity` (or Tailwind bracket syntax) |
 | `will-change: all` or `will-change: background-color` | Only on `transform`, `opacity`, `filter`; only when stutter is observed |
+| `ease-in` on a modal/popover entrance | `ease-out` for entrances; reserve `ease-in` for exits (rule 18) |
+| Entrance scaling from `scale(0)` | Floor at `scale(0.95)`; let opacity carry the appear (rule 19) |
+| Unconditional `:hover` (sticks on touch) | Gate behind `@media (hover: hover) and (pointer: fine)` (rule 20) |
+| One click firing several competing motions | One load-bearing motion; play the rest silently (rule 21) |
+| Animating `top`/`left`/`height` to reorder | FLIP (transform-based), or `max-height` for accordions (rule 22) |
 | Tiny hit areas on small icon buttons | Extend with `::after { inset: -10px }` to 40×40 minimum |
+| Panel-wide dark scrim to make text readable on a translucent surface | Transparent container; near-opaque per-line plates behind the text only — opaque media sits directly on the glass |
 
 ## Validation checklist
 
@@ -298,6 +365,7 @@ Before declaring a UI surface done, walk through these:
 - [ ] Icons and asymmetric shapes are optically centered, not geometrically
 - [ ] Elevation uses layered `box-shadow`, not solid borders
 - [ ] Images carry a subtle `1px` inset outline
+- [ ] Text over translucent/blurred surfaces uses local per-line plates (computed for 8:1 over the brightest backdrop), not a panel-wide dark scrim
 - [ ] Interactive elements have ≥40×40px hit area (no overlapping hit areas)
 - [ ] Enter animations are split + staggered (~100ms between groups)
 - [ ] Exit animations are subtle (small `translateY`, shorter duration than enter)
@@ -306,6 +374,9 @@ Before declaring a UI surface done, walk through these:
 - [ ] Default-state elements don't animate on page load (`initial={false}`)
 - [ ] No `transition: all` anywhere — exact properties only
 - [ ] `will-change` only on compositor-friendly properties, only when first-frame stutter is observed
+- [ ] Easing matches direction — enter `ease-out`, exit `ease-in`, on-screen move `ease-in-out`
+- [ ] Entrance scale floors at `0.95` (not `0`); `:hover` gated behind `@media (hover: hover) and (pointer: fine)`
+- [ ] One load-bearing motion per interaction; reorders/expands use FLIP, not animated layout
 - [ ] macOS font smoothing applied once at root
 - [ ] Dynamic numbers use `tabular-nums`
 - [ ] Headings use `text-wrap: balance`; body uses `text-wrap: pretty`
@@ -330,6 +401,7 @@ Hover and focus states are particularly likely to drop below 8:1 — verify both
 
 ## Prior art
 
-- [thedavidmurray/claude-make-interfaces-feel-better](https://github.com/thedavidmurray/claude-make-interfaces-feel-better) (MIT, archived May 2026) — Source for all 16 numbered rules above. The mathematical-precision framing (`outer = inner + padding`, exact `0.96` press value, exact `0.25` icon scale, `bounce: 0`) is preserved verbatim because the values are tuned, not arbitrary.
+- [thedavidmurray/claude-make-interfaces-feel-better](https://github.com/thedavidmurray/claude-make-interfaces-feel-better) (MIT, archived May 2026) — Source for rules 1–16. The mathematical-precision framing (`outer = inner + padding`, exact `0.96` press value, exact `0.25` icon scale, `bounce: 0`) is preserved verbatim because the values are tuned, not arbitrary.
+- [All-The-Vibes/ATV-Design](https://github.com/All-The-Vibes/ATV-Design) `emil-design-eng-inspired` (MIT) — Source for rules 18–22 (easing-by-direction, entrance scale floor, hover-gating, motion budget, FLIP), itself a clean-room paraphrase of [emilkowalski/skill](https://github.com/emilkowalski/skill). muriel keeps its own duration binary and `0.96` press value over the source's bands and `0.97`.
 - [Material Design 3 Motion](https://m3.material.io/styles/motion) — Tangentially related; muriel intentionally does not adopt Material's broader motion vocabulary.
 - [Apple HIG — Motion](https://developer.apple.com/design/human-interface-guidelines/motion) — Read-only reference; cited by paraphrase per scholarly discipline (Apple-proprietary docs).
