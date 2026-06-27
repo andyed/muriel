@@ -331,6 +331,46 @@ A single click/tap/drag-end should produce **one** motion that carries meaning. 
 
 Rule 16 bans animating layout properties; FLIP is the technique that replaces them. To move an element to a new position, don't animate `top`/`left`/`height` — snapshot **F**irst and **L**ast positions, **I**nvert the delta with a `transform`, then transition the transform to identity (**P**lay). For accordions, prefer letting content settle into place; if height must animate, animate `max-height` with a generous ceiling and accept it's less crisp than FLIP.
 
+## Composition rules — hierarchy, distribution, surface system
+
+Rules 1–22 are *tactile* detail — the feel of a single element. Rules 23–27 are one altitude up: how elements compose so a build doesn't read as AI-generated. This is the layer that separates a Linear/Vercel/Stripe dashboard from a template. Paraphrased from [Dammyjay93/interface-design](https://github.com/Dammyjay93/interface-design) (MIT) — **with its low-contrast hierarchy lever removed** (see rule 24); the rest is 8:1-safe as written.
+
+### 23. One focal point per view
+
+Every screen has one thing the user came to do. That element dominates — through **size, weight, position, or surrounding space** (not low-contrast neighbors — see rule 24). When everything competes equally, nothing leads and the layout reads as a parking lot. Before building, name the focal element; make it win; demote the rest deliberately. The failure mode is *flatness* — same size, weight, spacing everywhere — which is the single biggest "this was generated" tell.
+
+### 24. Type scale is a ratio — demote with weight, size, and space, never with low contrast
+
+Pick a ratio and step it: `~1.2` (dense/calm), `~1.25` (most product UI), `~1.333` (expressive). From a 14–16px body that yields a *visibly* distinct scale, not 15/16/17 mush. A 14px base at 1.25: `caption 11 · body 14 · h4 16 · h3 18 · h2 22 · h1 28 · display 44+`. Round to whole px and to the spacing grid.
+
+Weight does more hierarchy work than size: a single 14px size holds three tiers through weight alone (`600` value / `500` label / `400` meta).
+
+**The 8:1 carve.** The source skill builds a fourth lever — demoting secondary/muted/disabled text via *low opacity and muted color* (`secondary`/`muted`/`faint` tiers at e.g. slate-600/400/200). **muriel does not import that lever** — a muted tier at slate-400 on white is ~3:1 and violates the 8:1 floor (`~/CLAUDE.md` — readable text has no contrast exception; only logotypes/decorative lettering do, per WCAG 1.4.3). Build the *same* hierarchy with the three contrast-safe levers — **weight, size, and space** — and keep every text tier, including metadata and disabled-state labels, at ≥8:1. Disabled controls signal state through cursor, border, and fill, not by dropping text below floor.
+
+### 25. 60/30/10 distribution — one accent, color means something
+
+A dominant neutral surface (~60%), a secondary tone (~30%), and ~10% accent. Color is a scarce resource: gray builds structure, color *communicates* (status, action, identity). One intentional accent beats five low-commitment tints. Keep **one hue across surfaces** and shift only lightness — different hues per surface fragments the space. Decorative gradients and unmotivated color are noise; remove them or make them mean something. (The accent still clears 8:1 anywhere it carries text.)
+
+### 26. Surface elevation is a numbered system, whisper-quiet
+
+Surfaces stack — dropdown above card above page — via a numbered lightness scale, each step only a few percent: dark mode base → +7% → +9% → +12%; light mode stays light and adds shadow per rule 3. You should *feel* the step, not see it (the squint test, rule 27). Specifics:
+
+- **Sidebars:** same background as the canvas + a subtle border, not a different color — different colors split the UI into "sidebar world" and "content world."
+- **Inputs:** slightly *darker* than their surroundings, not lighter — inset surfaces receive content; a darker fill says "type here" without a heavy border.
+- **Dropdowns/popovers:** exactly one level above their parent surface, or the layering collapses.
+
+This is the surface-token side of the brand floor: text on every elevation step must still clear 8:1, so verify against the *lightest* step a given text color lands on.
+
+### 27. Composition test battery — run before showing
+
+Higher-altitude analogues to the validation checklist; run them on the rendered output, not the CSS:
+
+- **Swap test** — mentally swap the typeface for the default and the layout for a standard template. Anything that wouldn't change is where you defaulted.
+- **Squint test** — blur your eyes: hierarchy still legible (what's above what, where sections divide), and *nothing* jumps out harshly? Quiet structure, clear focal point.
+- **Signature test** — point to five specific elements expressing this product's identity. "The overall feel" doesn't count.
+
+If a screen fails these, the fix is composition (rules 23–26), not more micro-polish.
+
 ## Anti-patterns at a glance
 
 | Mistake | Fix |
@@ -356,6 +396,11 @@ Rule 16 bans animating layout properties; FLIP is the technique that replaces th
 | Animating `top`/`left`/`height` to reorder | FLIP (transform-based), or `max-height` for accordions (rule 22) |
 | Tiny hit areas on small icon buttons | Extend with `::after { inset: -10px }` to 40×40 minimum |
 | Panel-wide dark scrim to make text readable on a translucent surface | Transparent container; near-opaque per-line plates behind the text only — opaque media sits directly on the glass |
+| Flat layout — everything one size/weight, no focal point | Name the focal element; make it win via size/weight/space (rule 23) |
+| Hierarchy built by dimming text (muted/disabled tiers below 8:1) | Demote with weight + size + space; keep every tier ≥8:1 (rule 24) |
+| Five tints spread evenly / one accent on everything | 60/30/10, one intentional accent, one hue shifting only lightness (rule 25) |
+| Different background color for the sidebar | Same canvas + subtle border; elevation via whisper-quiet lightness steps (rule 26) |
+| Inputs lighter than their surroundings | Inputs slightly darker — inset surfaces receive content (rule 26) |
 
 ## Validation checklist
 
@@ -380,6 +425,10 @@ Before declaring a UI surface done, walk through these:
 - [ ] macOS font smoothing applied once at root
 - [ ] Dynamic numbers use `tabular-nums`
 - [ ] Headings use `text-wrap: balance`; body uses `text-wrap: pretty`
+- [ ] One named focal point per view; hierarchy demotes with weight/size/space, never with sub-8:1 muted text (rules 23–24)
+- [ ] ~60/30/10 distribution, one accent, one hue shifting only lightness (rule 25)
+- [ ] Surface elevation is a whisper-quiet numbered scale; sidebar = canvas; inputs darker (rule 26)
+- [ ] Passes the composition battery — swap / squint / signature (rule 27)
 
 ## Brand-floor reminder
 
@@ -403,5 +452,6 @@ Hover and focus states are particularly likely to drop below 8:1 — verify both
 
 - [thedavidmurray/claude-make-interfaces-feel-better](https://github.com/thedavidmurray/claude-make-interfaces-feel-better) (MIT, archived May 2026) — Source for rules 1–16. The mathematical-precision framing (`outer = inner + padding`, exact `0.96` press value, exact `0.25` icon scale, `bounce: 0`) is preserved verbatim because the values are tuned, not arbitrary.
 - [All-The-Vibes/ATV-Design](https://github.com/All-The-Vibes/ATV-Design) `emil-design-eng-inspired` (MIT) — Source for rules 18–22 (easing-by-direction, entrance scale floor, hover-gating, motion budget, FLIP), itself a clean-room paraphrase of [emilkowalski/skill](https://github.com/emilkowalski/skill). muriel keeps its own duration binary and `0.96` press value over the source's bands and `0.97`.
+- [Dammyjay93/interface-design](https://github.com/Dammyjay93/interface-design) (MIT, Damola Akinleye) — Source for rules 23–27 (composition: focal point, type-scale ratio, 60/30/10, surface-elevation system, test battery). muriel **drops the source's low-opacity/muted-color hierarchy lever** — it conflicts with the 8:1 floor — and rebuilds the same hierarchy on weight + size + space. Its polish/motion section (concentric radius, tabular-nums, easing, hit area, etc.) was *not* imported: muriel rules 1–22 already cover it, more precisely.
 - [Material Design 3 Motion](https://m3.material.io/styles/motion) — Tangentially related; muriel intentionally does not adopt Material's broader motion vocabulary.
 - [Apple HIG — Motion](https://developer.apple.com/design/human-interface-guidelines/motion) — Read-only reference; cited by paraphrase per scholarly discipline (Apple-proprietary docs).
