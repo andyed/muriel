@@ -327,6 +327,15 @@ _DECORATIVE_HINTS = (
     "icon", "arrow", "marker", "pointer",
 )
 
+# Logotype selectors are exempt from the text rule per WCAG 1.4.3 — a
+# wordmark/logo glyph is a recognizable brand SHAPE, not running text the
+# reader parses for meaning. Checked BEFORE text hints so it wins over the
+# generic "mark" text hint (which "wordmark"/"lettermark"/"brandmark" contain).
+# Keep tokens specific enough not to false-positive on body copy.
+_LOGOTYPE_HINTS = (
+    "logo", "logotype", "wordmark", "lettermark", "brandmark", "monogram",
+)
+
 # Substrings that strongly suggest text roles. Text wins over decorative
 # when both match — be conservative and check if uncertain.
 _TEXT_HINTS = (
@@ -374,6 +383,10 @@ def _selector_role(selector: str) -> str:
     last = re.sub(r"::?[A-Za-z-]+(\([^)]*\))?", "", last)
     last = re.sub(r"\[[^\]]*\]", "", last)
     last = last.strip().lstrip(".#")
+    # Logotype exemption (WCAG 1.4.3) wins over everything, including the
+    # generic "mark" text hint that wordmark/lettermark/brandmark contain.
+    if any(hint in key for hint in _LOGOTYPE_HINTS):
+        return "decorative"
     leaf_tag = re.match(r"[A-Za-z][A-Za-z0-9-]*", last)
     if leaf_tag and leaf_tag.group(0).lower() in _TEXT_TAGS:
         return "text"

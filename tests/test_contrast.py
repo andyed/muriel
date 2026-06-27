@@ -411,6 +411,28 @@ class SvgAuditTests(unittest.TestCase):
         self.assertIsNone(axis.passes)
 
 
+class LogotypeExemptionTests(unittest.TestCase):
+    """Logotypes/wordmarks are exempt from the text rule (WCAG 1.4.3)."""
+
+    def _role(self, selector):
+        return contrast_module._selector_role(selector)
+
+    def test_logo_and_wordmark_classify_decorative(self):
+        for sel in (".logo", ".wordmark", ".logotype", ".lettermark",
+                    ".brandmark", ".monogram", ".site-logo", ".logo-letter"):
+            self.assertEqual(self._role(sel), "decorative", sel)
+
+    def test_logotype_wins_over_generic_mark_text_hint(self):
+        # "wordmark"/"lettermark"/"brandmark" contain the "mark" text hint;
+        # the logotype tier must win so the brand glyph isn't failed as text.
+        self.assertEqual(self._role(".wordmark"), "decorative")
+
+    def test_bare_mark_element_still_text(self):
+        # <mark> highlight is still readable text — exemption must not leak.
+        self.assertEqual(self._role("mark"), "text")
+        self.assertEqual(self._role(".highlight"), "text")
+
+
 # ─── Exit code semantics ────────────────────────────────────────────────
 
 class ExitCodeTests(unittest.TestCase):
