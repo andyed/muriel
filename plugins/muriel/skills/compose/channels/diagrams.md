@@ -73,6 +73,8 @@ Several diagram forms have an existing home elsewhere in muriel. The native gene
 
 Rule of thumb: **Mermaid** for node-link relational diagrams (sequence, state, ER, flowchart), **ECharts** when the diagram is data-driven or interactive (timeline, tree, treemap, sunburst), and **this channel** when the output is a static editorial SVG whose geometry encodes a specific rhetorical claim.
 
+When the Mermaid diagram is rendered into an **HTML page** (not exported to a flat SVG) and it's large enough to render unreadable, wrap it in the [zoom/pan/expand shell](#mermaid-in-html--the-zoompanexpand-shell) below — a complex flowchart squeezed into a fixed column is illegible without it.
+
 ## API conventions
 
 Every generator follows the same signature shape, same as [`muriel.tools.venn`](https://github.com/andyed/muriel/blob/main/muriel/tools/venn.py):
@@ -255,6 +257,392 @@ Both examples below render to `examples/diagrams/`:
 - [`layers-tcpip.svg`](../examples/diagrams/layers-tcpip.svg) — a 4-layer dependency stack with the Transport layer as the focal band and an "abstraction ↑" axis; the stack shape is honest because each layer genuinely depends on the one below.
 - [`funnel-q2.svg`](../examples/diagrams/funnel-q2.svg) — a proportional acquisition funnel; tier widths are driven by real counts (`proportional=True`), so the visual drop-off matches the `−%` annotations rather than faking a taper.
 - [`swimlane-release.svg`](../examples/diagrams/swimlane-release.svg) — a 4-lane release pipeline; same-lane steps connect with a muted arrow, cross-lane handoffs are drawn in the accent because the handoffs are the claim.
+
+## Mermaid in HTML — the zoom/pan/expand shell
+
+The native generators above emit flat SVG; Mermaid (routed to from the [provider table](#this-channel-is-not-the-only-path)) renders **inside the page at runtime**. A flowchart with 10+ nodes, a deep sequence diagram, or any graph wider than its column collapses into an unreadable thumbnail — Mermaid auto-fits the SVG to the container and the labels shrink past the legibility floor. The fix is a viewport shell that lets the reader zoom, pan, and pop the diagram out full-size, instead of squinting at a 9px label.
+
+This is a **runtime web affordance**, not a static-SVG generator: it belongs in any HTML page that renders Mermaid client-side (an editorial post, a review doc, a [`web.md`](web.md) artifact). It is theme-driven by muriel's `--mg-*` brand tokens, clears the **8:1** floor on every control, and respects `prefers-reduced-motion`.
+
+### Wrapper structure
+
+One `.diagram-shell` per diagram. The Mermaid source lives in a `<script type="text/plain" class="diagram-source">` block, so multiple diagrams coexist on a page with no ID collisions.
+
+```
+.diagram-shell                  ← one per diagram; positioning context
+├─ .diagram-shell__hint         ← one-line "how to interact" caption
+├─ .mermaid-wrap                ← bordered card; sets cursor + adaptive height
+│  ├─ .zoom-controls            ← +  −  ⟲(fit)  1:1  ⛶(expand)  + live % label
+│  └─ .mermaid-viewport         ← overflow:hidden clip region
+│     └─ .mermaid-canvas        ← absolutely positioned; transform = pan, SVG size = zoom
+└─ <script class="diagram-source">  ← raw Mermaid text, never rendered as text
+```
+
+The SVG is rendered into `.mermaid-canvas`. **Zoom** sets the SVG's pixel `width`/`height` directly (not CSS `zoom`, which has cross-browser quirks); **pan** applies `transform: translate()` to the canvas; the viewport's `overflow: hidden` clips the panned content. **Expand** clones the SVG into a new full-window tab.
+
+### CSS — muriel tokens, 8:1 controls, reduced-motion safe
+
+Every color resolves through a `--mg-*` token (see [`style-guides.md`](style-guides.md) / marginalia), so a single theme switch repaints the shell with the page. Control glyphs and the live zoom label use **`--mg-text`** (full contrast, ≥8:1) — not the muted token — because they are informational text, not decoration. `muriel.contrast` cannot see these states (the SVG and labels are JS-injected), so verify the control contrast by hand against your brand `--mg-bg2`.
+
+```css
+.diagram-shell { position: relative; }
+
+.diagram-shell__hint {
+  font-family: var(--mg-font-mono, ui-monospace, monospace);
+  font-size: 12px;
+  color: var(--mg-text);          /* instructional text → full 8:1, not muted */
+  margin-bottom: 8px;
+}
+
+.mermaid-wrap {
+  position: relative;
+  background: var(--mg-bg2);
+  border: 1px solid var(--mg-border);
+  border-radius: var(--mg-radius, 12px);
+  padding: 32px 24px;
+  overflow: hidden;
+  min-height: 360px;               /* stops vertical flowcharts compressing to thumbnails */
+  cursor: grab;
+}
+.mermaid-wrap.is-panning { cursor: grabbing; user-select: none; }
+
+.zoom-controls {
+  position: absolute;
+  top: 8px; right: 8px;
+  z-index: 10;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--mg-bg2);
+  border: 1px solid var(--mg-border);
+  border-radius: 6px;
+}
+.zoom-controls button {
+  width: 28px; height: 28px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--mg-text);           /* glyphs are text → 8:1, never the muted token */
+  font-family: var(--mg-font-mono, ui-monospace, monospace);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s ease;
+}
+.zoom-controls button:hover { background: var(--mg-border); }
+.zoom-controls button:focus-visible {
+  outline: 2px solid var(--mg-accent);
+  outline-offset: 1px;
+}
+
+.zoom-label {
+  align-self: center;
+  padding: 0 6px;
+  font-family: var(--mg-font-mono, ui-monospace, monospace);
+  font-size: 11px;
+  color: var(--mg-text);           /* live "120% — contain" readout is text → 8:1 */
+  white-space: nowrap;
+}
+
+.mermaid-viewport {
+  position: relative;
+  overflow: hidden;
+  width: 100%; height: 100%;
+  min-height: 300px;
+}
+.mermaid-canvas { position: absolute; top: 0; left: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .zoom-controls button { transition: none; }
+}
+```
+
+### HTML
+
+```html
+<section class="diagram-shell">
+  <p class="diagram-shell__hint">
+    Ctrl/Cmd + wheel to zoom · scroll or drag to pan · double-click to fit · ⛶ to open full size
+  </p>
+  <div class="mermaid-wrap">
+    <div class="zoom-controls">
+      <button type="button" data-action="zoom-in"     title="Zoom in"        aria-label="Zoom in">+</button>
+      <button type="button" data-action="zoom-out"    title="Zoom out"       aria-label="Zoom out">&minus;</button>
+      <button type="button" data-action="zoom-fit"    title="Smart fit"      aria-label="Fit to view">&#8634;</button>
+      <button type="button" data-action="zoom-one"    title="1:1 zoom"       aria-label="Actual size">1:1</button>
+      <button type="button" data-action="zoom-expand" title="Open full size" aria-label="Open full size">&#x26F6;</button>
+      <span class="zoom-label" role="status">Loading…</span>
+    </div>
+    <div class="mermaid-viewport">
+      <div class="mermaid mermaid-canvas"></div>
+    </div>
+  </div>
+  <script type="text/plain" class="diagram-source">
+    flowchart TD
+      Q[Query] --> R{Result type?}
+      R -->|organic| O[Read snippet]
+      R -->|ad| A[Evaluate ad]
+      O --> C[Click or skip]
+      A --> C
+  </script>
+</section>
+```
+
+### JavaScript
+
+Closure-based: per-diagram state lives inside `initDiagram(shell)`; shared drag listeners stay at module scope so two diagrams never fight over the mouse. Mermaid theme variables are pulled from the page's computed `--mg-*` tokens, so the diagram inherits the brand instead of hardcoding hexes.
+
+```html
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  const config = {
+    fitPadding: 28, minHeight: 360, maxHeightPx: 960, maxHeightVh: 0.84,
+    maxInitialZoom: 1.8, minZoom: 0.08, maxZoom: 6.5, zoomStep: 0.14,
+    readabilityFloor: 0.58,
+  };
+  const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
+
+  // Feed Mermaid from the page's brand tokens so the diagram matches the shell.
+  // NOTE: node fill (primaryColor) vs label (primaryTextColor) must clear 8:1 —
+  // that contract lives in your brand tokens; verify it on an exported render.
+  const root = getComputedStyle(document.documentElement);
+  const tok = (name, fallback) => (root.getPropertyValue(name).trim() || fallback);
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      fontFamily: tok('--mg-font-body', 'system-ui, sans-serif'),
+      fontSize: '16px',
+      primaryColor:       tok('--mg-bg2',  '#15151b'),
+      primaryBorderColor: tok('--mg-accent', '#7cc4ff'),
+      primaryTextColor:   tok('--mg-text', '#f2f2f6'),
+      secondaryColor:     tok('--mg-bg',   '#0b0b0f'),
+      tertiaryColor:      tok('--mg-bg2',  '#15151b'),
+      lineColor:          tok('--mg-text', '#f2f2f6'),
+    },
+  });
+
+  // Shared drag state — one mousemove/mouseup pair for the whole page.
+  let activeDrag = null;
+  addEventListener('mousemove', (e) => activeDrag?.onMove(e));
+  addEventListener('mouseup',   ()  => { activeDrag?.onEnd(); activeDrag = null; });
+
+  function initDiagram(shell) {
+    const wrap     = shell.querySelector('.mermaid-wrap');
+    const viewport = shell.querySelector('.mermaid-viewport');
+    const canvas   = shell.querySelector('.mermaid-canvas');
+    const source   = shell.querySelector('.diagram-source');
+    const label    = shell.querySelector('.zoom-label');
+    if (!wrap || !viewport || !canvas || !source || !label) {
+      console.error('initDiagram: missing elements in', shell);
+      return;
+    }
+
+    let zoom = 1, fitMode = 'contain', panX = 0, panY = 0, svgW = 0, svgH = 0;
+    let sx = 0, sy = 0, spx = 0, spy = 0;            // mouse-drag anchors
+    let touchDist = 0, touchCx = 0, touchCy = 0;     // pinch anchors
+
+    const canPan = () =>
+         svgW * zoom + config.fitPadding * 2 > viewport.clientWidth
+      || svgH * zoom + config.fitPadding * 2 > viewport.clientHeight;
+
+    function constrainPan() {
+      const vpW = viewport.clientWidth, vpH = viewport.clientHeight;
+      const rW = svgW * zoom, rH = svgH * zoom, pad = config.fitPadding;
+      panX = (rW + pad * 2 <= vpW) ? (vpW - rW) / 2 : clamp(panX, vpW - rW - pad, pad);
+      panY = (rH + pad * 2 <= vpH) ? (vpH - rH) / 2 : clamp(panY, vpH - rH - pad, pad);
+    }
+
+    function applyTransform() {
+      const svg = canvas.querySelector('svg');
+      if (!svg || !svgW) return;
+      constrainPan();
+      svg.style.width  = (svgW * zoom) + 'px';
+      svg.style.height = (svgH * zoom) + 'px';
+      canvas.style.transform = `translate(${panX}px, ${panY}px)`;
+      label.textContent = Math.round(zoom * 100) + '% — ' + fitMode;
+    }
+
+    // Smart fit: contain, unless that drops labels below the readability floor,
+    // in which case prioritise the dominant axis and let the reader pan the rest.
+    function computeSmartFit() {
+      const vpW = viewport.clientWidth, vpH = viewport.clientHeight;
+      const aW = Math.max(80, vpW - config.fitPadding * 2);
+      const aH = Math.max(80, vpH - config.fitPadding * 2);
+      const contain = Math.min(aW / svgW, aH / svgH);
+      let z = contain, mode = 'contain';
+      if (contain < config.readabilityFloor) {
+        if (svgH / svgW >= vpH / Math.max(vpW, 1)) { z = aW / svgW; mode = 'width-priority'; }
+        else                                       { z = aH / svgH; mode = 'height-priority'; }
+      }
+      return { zoom: clamp(z, config.minZoom, config.maxInitialZoom), mode };
+    }
+
+    function fitDiagram() {
+      if (!svgW) return;
+      const fit = computeSmartFit();
+      zoom = fit.zoom; fitMode = fit.mode;
+      panX = (viewport.clientWidth  - svgW * zoom) / 2;
+      panY = (viewport.clientHeight - svgH * zoom) / 2;
+      applyTransform();
+    }
+
+    function setOneToOne() {
+      zoom = clamp(1, config.minZoom, config.maxZoom); fitMode = '1:1';
+      panX = (viewport.clientWidth  - svgW * zoom) / 2;
+      panY = (viewport.clientHeight - svgH * zoom) / 2;
+      applyTransform();
+    }
+
+    function zoomAround(factor, cx, cy) {
+      const next = clamp(zoom * factor, config.minZoom, config.maxZoom);
+      const ratio = next / zoom;
+      panX = cx - ratio * (cx - panX);
+      panY = cy - ratio * (cy - panY);
+      zoom = next; fitMode = 'custom'; applyTransform();
+    }
+
+    function readSvgNaturalSize(svg) {
+      let w = 0, h = 0;
+      if (svg.viewBox?.baseVal?.width > 0) { w = svg.viewBox.baseVal.width; h = svg.viewBox.baseVal.height; }
+      if (!w) { w = parseFloat(svg.getAttribute('width')) || 0; h = parseFloat(svg.getAttribute('height')) || 0; }
+      if (!w) { const b = svg.getBBox(); w = b.width; h = b.height; }
+      if (!w) { const r = svg.getBoundingClientRect(); w = r.width || 1000; h = r.height || 700; }
+      if (!svg.getAttribute('viewBox')) svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      return { w, h };
+    }
+
+    function setAdaptiveHeight() {
+      if (!svgW) return;
+      const usableW = Math.max(280, wrap.getBoundingClientRect().width - 2);
+      const idealH  = (svgH / svgW) * usableW + config.fitPadding * 2;
+      const maxVp   = Math.floor(innerHeight * config.maxHeightVh);
+      const hardMax = Math.min(config.maxHeightPx, Math.max(config.minHeight + 40, maxVp));
+      wrap.style.height = Math.round(clamp(idealH, config.minHeight, hardMax)) + 'px';
+    }
+
+    function openInNewTab() {
+      const svg = canvas.querySelector('svg');
+      if (!svg) return;
+      const clone = svg.cloneNode(true);
+      clone.style.width = ''; clone.style.height = '';
+      const bg = tok('--mg-bg', '#0b0b0f');
+      const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Diagram</title>
+        <style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+        background:${bg};padding:40px;box-sizing:border-box}svg{max-width:100%;max-height:90vh;height:auto}</style>
+        </head><body>${clone.outerHTML}</body></html>`;
+      open(URL.createObjectURL(new Blob([html], { type: 'text/html' })), '_blank');
+    }
+
+    async function render() {
+      try {
+        const code = source.textContent.trim();
+        if (!code) { label.textContent = 'Error: empty source'; return; }
+        const id = 'diagram-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+        const { svg } = await mermaid.render(id, code);
+        // Parse as text/html, NOT image/svg+xml: the strict XML parser silently
+        // truncates Mermaid's <foreignObject> labels (unclosed <br> etc.).
+        const parsed = new DOMParser().parseFromString(svg, 'text/html');
+        const parsedSvg = parsed.body.querySelector('svg');
+        if (!parsedSvg) { label.textContent = 'Error: no SVG'; return; }
+        canvas.replaceChildren(document.adoptNode(parsedSvg));
+
+        const size = readSvgNaturalSize(parsedSvg);
+        svgW = size.w; svgH = size.h;
+        parsedSvg.removeAttribute('width');
+        parsedSvg.removeAttribute('height');
+        parsedSvg.style.maxWidth = 'none';
+        parsedSvg.style.display = 'block';
+
+        setAdaptiveHeight();
+        fitDiagram();
+      } catch (err) {
+        console.error('Mermaid render failed:', err);
+        label.textContent = 'Error: ' + (err.message || 'render failed');
+      }
+    }
+
+    const actions = {
+      'zoom-in':     () => zoomAround(1 + config.zoomStep,       viewport.clientWidth / 2, viewport.clientHeight / 2),
+      'zoom-out':    () => zoomAround(1 / (1 + config.zoomStep), viewport.clientWidth / 2, viewport.clientHeight / 2),
+      'zoom-fit':    fitDiagram,
+      'zoom-one':    setOneToOne,
+      'zoom-expand': openInNewTab,
+    };
+    Object.entries(actions).forEach(([action, handler]) =>
+      wrap.querySelector(`[data-action="${action}"]`)?.addEventListener('click', handler));
+
+    viewport.addEventListener('dblclick', fitDiagram);
+
+    viewport.addEventListener('wheel', (e) => {
+      if (e.ctrlKey || e.metaKey) {                 // Ctrl/Cmd + wheel → zoom at cursor
+        e.preventDefault();
+        const rect = viewport.getBoundingClientRect();
+        const factor = e.deltaY < 0 ? 1 + config.zoomStep : 1 / (1 + config.zoomStep);
+        zoomAround(factor, e.clientX - rect.left, e.clientY - rect.top);
+      } else if (canPan()) {                          // bare wheel → pan
+        e.preventDefault();
+        panX -= e.deltaX; panY -= e.deltaY; applyTransform();
+      }
+    }, { passive: false });
+
+    viewport.addEventListener('mousedown', (e) => {
+      if (e.target.closest('.zoom-controls') || !canPan()) return;
+      wrap.classList.add('is-panning');
+      sx = e.clientX; sy = e.clientY; spx = panX; spy = panY;
+      e.preventDefault();
+      activeDrag = {
+        onMove: (ev) => { panX = spx + (ev.clientX - sx); panY = spy + (ev.clientY - sy); applyTransform(); },
+        onEnd:  ()   => wrap.classList.remove('is-panning'),
+      };
+    });
+
+    viewport.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; spx = panX; spy = panY; }
+      else if (e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        touchDist = Math.hypot(dx, dy);
+        const r = viewport.getBoundingClientRect();
+        touchCx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+        touchCy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      }
+    }, { passive: true });
+
+    viewport.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1 && canPan()) {
+        if (touchDist > 0) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; spx = panX; spy = panY; touchDist = 0; }
+        e.preventDefault();
+        panX = spx + (e.touches[0].clientX - sx);
+        panY = spy + (e.touches[0].clientY - sy);
+        applyTransform();
+      } else if (e.touches.length === 2 && touchDist > 0) {
+        e.preventDefault();
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const d = Math.hypot(dx, dy);
+        zoomAround(d / touchDist, touchCx, touchCy);
+        touchDist = d;
+      }
+    }, { passive: false });
+
+    new ResizeObserver(() => { if (svgW) { setAdaptiveHeight(); fitDiagram(); } }).observe(wrap);
+    render();
+  }
+
+  document.querySelectorAll('.diagram-shell').forEach(initDiagram);
+</script>
+```
+
+### Notes and gotchas
+
+- **Parse Mermaid output as `text/html`, never `image/svg+xml`.** Mermaid 10+ emits HTML (`<br>`, unclosed tags) inside `<foreignObject>` labels; the strict XML parser silently truncates labels and edges. `canvas.innerHTML = svg` works but trips security scanners as an HTML sink — adopt the parsed node instead.
+- **One `.diagram-shell` per diagram.** The source lives in `<script type="text/plain">`, so IDs never collide and you can drop a dozen on one page.
+- **Reserve Mermaid for graphs that need it.** A simple linear flow (A → B → C) renders tiny in a tall container — use CSS step-cards or a native [layer-stack / swimlane](#prioritized-catalog) instead. The shell earns its weight only when automatic edge routing does.
+- **8:1 is on you for the diagram body.** The shell's chrome (controls, labels) is wired to clear 8:1, but Mermaid node fills vs. label text come from your brand tokens — `muriel.contrast` can't audit the runtime-injected SVG, so export one render (`mmdc -i diagram.mmd -o diagram.svg`, see [`svg.md`](svg.md)) and audit that flat file to prove the floor.
+- **Reduced motion.** The pan/zoom transforms are direct user manipulation (no easing), so they're motion-safe by construction; the only animated property is the button hover, which the `prefers-reduced-motion` block disables.
 
 ## Auditing diagrams
 
