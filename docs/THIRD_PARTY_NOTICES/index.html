@@ -1540,6 +1540,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ui-ux-pro-max-corpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ui-ux-pro-max corpus
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emil-design-eng-inspired-motion-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        emil-design-eng-inspired (motion principles)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#vibecoded-design-tells-devibe-rules" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1654,6 +1676,89 @@ adopted.</p>
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>SOFTWARE.
 </code></pre></div>
 <hr />
+<h2 id="ui-ux-pro-max-corpus">ui-ux-pro-max corpus<a class="headerlink" href="#ui-ux-pro-max-corpus" title="Permanent link">&para;</a></h2>
+<p>The CSV reference data under <code>muriel/uipromax/data/</code> (<code>colors.csv</code>,
+<code>typography.csv</code>, <code>ui-reasoning.csv</code>, <code>ux-guidelines.csv</code>, <code>styles.csv</code>,
+<code>charts.csv</code>, <code>icons.csv</code>) is a <strong>verbatim</strong> port of the <code>ui-ux-pro-max</code> skill's
+data files — product-type colour sets, font pairings, UI-reasoning rules, UX
+guidelines, design styles, chart taxonomy, and an icon index.</p>
+<ul>
+<li>Source: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill</li>
+<li>Via: https://github.com/All-The-Vibes/ATV-Design (<code>skills/ui-ux-pro-max/</code>)</li>
+<li>Adapted: 2026-06 (both upstreams MIT)</li>
+</ul>
+<p>muriel's own contribution is the accessor layer (<code>muriel/uipromax/__init__.py</code>)
+and the <strong>8:1 contrast re-gate</strong>: the colour sets target WCAG 3:1/AA, so each is
+measured against muriel's universal 8:1 floor via <code>muriel.contrast</code>. The data
+itself is unchanged; muriel adds no colours. The source palettes' interactive
+pairs (<code>On Primary</code>, <code>On Accent</code>, destructive, muted-on-muted) are reported as
+sub-8:1 and <strong>not adopted</strong> as compliant — only the body-text pairs that clear
+8:1 are surfaced as muriel starting points. A copy of the upstream MIT license
+also ships at <code>muriel/uipromax/LICENSE.txt</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>MIT License
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Copyright (c) 2024 Next Level Builder
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>Permission is hereby granted, free of charge, to any person obtaining a copy
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>of this software and associated documentation files (the &quot;Software&quot;), to deal
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>in the Software without restriction, including without limitation the rights
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>copies of the Software, and to permit persons to whom the Software is
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>furnished to do so, subject to the following conditions:
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>The above copyright notice and this permission notice shall be included in all
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>copies or substantial portions of the Software.
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>SOFTWARE.
+</code></pre></div>
+<hr />
+<h2 id="emil-design-eng-inspired-motion-principles">emil-design-eng-inspired (motion principles)<a class="headerlink" href="#emil-design-eng-inspired-motion-principles" title="Permanent link">&para;</a></h2>
+<p>The motion-quality axes added to <code>muriel/motion.py</code> (compositor-safe property
+set, easing-by-direction, entrance scale floor) and to
+<code>plugins/muriel/skills/compose/channels/polish.md</code> (rules 18–22) are paraphrased
+from the <code>emil-design-eng-inspired</code> skill — itself MIT-licensed original prose
+that the ATV-Design authors wrote as a clean-room paraphrase of Emil Kowalski's
+(unlicensed) <code>emil-design-eng</code> skill.</p>
+<ul>
+<li>Source: https://github.com/All-The-Vibes/ATV-Design (<code>skills/emil-design-eng-inspired/</code>)</li>
+<li>Lineage: paraphrases https://github.com/emilkowalski/skill (no upstream license)</li>
+<li>Adapted: 2026-06 (ATV-Design MIT)</li>
+</ul>
+<p>muriel's own contribution is the programmatic enforcement (<code>validate_properties</code>,
+<code>easing_for</code>, <code>validate_scale</code>) and the integration with muriel's existing
+polish rules. muriel deliberately <strong>does not adopt</strong> the source's duration
+<em>bands</em> (100–500 ms) — they fall in <code>muriel.motion</code>'s uncanny zone, where the
+forced utility (≤ 100 ms) / cinematic (≥ 1500 ms) binary overrides them — and
+keeps its own tuned <code>0.96</code> press-scale value over the source's <code>0.97</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>MIT License
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Copyright (c) 2026 atv-design contributors
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>Permission is hereby granted, free of charge, to any person obtaining a copy
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>of this software and associated documentation files (the &quot;Software&quot;), to deal
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>in the Software without restriction, including without limitation the rights
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>copies of the Software, and to permit persons to whom the Software is
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>furnished to do so, subject to the following conditions:
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>The above copyright notice and this permission notice shall be included in all
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>copies or substantial portions of the Software.
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>SOFTWARE.
+</code></pre></div>
+<hr />
 <h2 id="vibecoded-design-tells-devibe-rules">vibecoded-design-tells (devibe rules)<a class="headerlink" href="#vibecoded-design-tells-devibe-rules" title="Permanent link">&para;</a></h2>
 <p>The rule table in <code>muriel/devibe.py</code> — the design-tell catalogue (shadcn
 defaults, AI-purple, gradient text, the cream + serif + sage "tasteful default",
@@ -1677,27 +1782,27 @@ that <em>also</em> fails accessibility is reported as such; (3) integration as a
 gate (<code>muriel/critique.py</code>, check 5) on HTML artifacts. muriel deliberately does
 <strong>not</strong> vendor the project's harvested Reddit text or quote banks — those are
 public Reddit content belonging to their authors; only the rule logic is derived.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>MIT License
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Copyright (c) 2026 Carter Johnson
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>Permission is hereby granted, free of charge, to any person obtaining a copy
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>of this software and associated documentation files (the &quot;Software&quot;), to deal
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>in the Software without restriction, including without limitation the rights
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>copies of the Software, and to permit persons to whom the Software is
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>furnished to do so, subject to the following conditions:
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>The above copyright notice and this permission notice shall be included in all
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>copies or substantial portions of the Software.
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>SOFTWARE.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>MIT License
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Copyright (c) 2026 Carter Johnson
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>Permission is hereby granted, free of charge, to any person obtaining a copy
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>of this software and associated documentation files (the &quot;Software&quot;), to deal
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>in the Software without restriction, including without limitation the rights
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>copies of the Software, and to permit persons to whom the Software is
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>furnished to do so, subject to the following conditions:
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>The above copyright notice and this permission notice shall be included in all
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>copies or substantial portions of the Software.
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>SOFTWARE.
 </code></pre></div>
 
 

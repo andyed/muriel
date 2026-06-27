@@ -296,6 +296,7 @@ export function startRenderLoop({
   });
   const tmpPos = new THREE.Vector3();
   const tmpLook = new THREE.Vector3();
+  const _zTmp = new THREE.Vector3();
   function tick(now) {
     if (beforeRender) beforeRender(now);
     const idle = (now - cam.lastInput) > idleMs;
@@ -316,6 +317,17 @@ export function startRenderLoop({
       lookTarget.z,
     );
     camera.lookAt(tmpLook);
+    // CSS3DRenderer does NOT depth-sort. Assign zIndex by camera distance so the
+    // nearest card always paints on top. Without this, cards flattened by
+    // opacity/filter (e.g. the distance-dimming .dim-* classes) stack in DOM
+    // order and a far card can sit above the focused one. Harmless for
+    // non-flattened cards (3D position still wins).
+    scene.traverse((o) => {
+      if (o.element && o.visible) {
+        o.element.style.zIndex =
+          String(Math.round(1e6 - camera.position.distanceTo(o.getWorldPosition(_zTmp))));
+      }
+    });
     webglRenderer.render(scene, camera);
     cssRenderer.render(scene, camera);
     requestAnimationFrame(tick);
