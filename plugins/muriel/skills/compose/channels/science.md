@@ -172,7 +172,7 @@ Codified from per-project feedback. Every rule exists because a specific plot fa
 
 - **Sequential when the variable has order.** Viridis for time, cognitive load, any scalar. Never use rainbow — it's perceptually non-uniform and fails colorblind accessibility.
 - **Diverging when the variable has a meaningful midpoint.** Red-white-blue (or equivalents) for effect sizes, correlations, changes from baseline.
-- **Categorical when the variable has no order.** Tableau 10, Dark2, or a hand-picked palette. Max 8 categories; more becomes indistinguishable.
+- **Categorical when the variable has no order.** Prefer a muriel-shipped colorblind-safe set (`muriel.palettes.WONG` is the citation a reviewer expects; `IBM`, `TOL_BRIGHT` also ship). Max 8 categories; more becomes indistinguishable. For a hand-picked or brand palette, validate it: `python -m muriel palettes --validate "#hex,…" --bg <surface>` runs the protan/deutan separation check — the one contrast auditing can't make, since it measures colors against each other rather than against the background.
 - **Color is redundant, not primary.** Always pair with shape, linestyle, or text labels. Pure color encoding fails for ~5% of readers.
 
 ## Statistical reporting

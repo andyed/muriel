@@ -49,7 +49,7 @@ Usage
 
     from muriel.palettes import (
         WONG, CATPPUCCIN_MOCHA, NORD_AURORA,
-        palette, generate_for_floor, register_matplotlib,
+        palette, generate_for_floor, register_matplotlib, validate,
     )
 
     WONG[0]                            # → '#000000'
@@ -58,6 +58,19 @@ Usage
     register_matplotlib('nord_aurora') # set matplotlib default cycle
     generate_for_floor('#0a0a0f',      # → 6 hues guaranteed 8:1 on bg
                        floor=8.0, n=6)
+    validate(WONG, bg='#0a0a0f')       # → PaletteReport(ok=True, …)
+
+Validating your own colors
+--------------------------
+
+The named palettes above are safe on authority — Wong is the citation a
+reviewer expects. That authority does not transfer to a brand palette, to
+``generate_for_floor()`` output, or to any hand-picked set. :func:`validate`
+runs the four checks ``muriel.contrast`` cannot: OKLCH lightness band, chroma
+floor, CVD separation (via :mod:`muriel.cvd`), and contrast vs the surface.
+Contrast measures each color against the *background*; ``validate`` measures
+the palette against *itself*, which is where categorical palettes actually
+fail.
 
 CLI:
 
@@ -66,6 +79,10 @@ CLI:
                                             # render an SVG swatch sheet
     python -m muriel.palettes --generate --bg "#0a0a0f" --floor 8 --n 6
                                             # contrast-floor palette
+    python -m muriel.palettes --validate "#4477AA,#EE6677" --bg "#0a0a0f"
+                                            # the four checks
+    python -m muriel.palettes --palette wong --pairs adjacent
+                                            # validate a named palette
 
 Cross-references: ``channels/science.md`` (palette section),
 ``channels/infographics.md`` (named palette use), ``channels/style-guides.md``
@@ -359,6 +376,220 @@ def uipromax_brand_palettes(meeting_floor: bool = True) -> list[dict]:
     return uipromax.palettes(meeting_floor=meeting_floor)
 
 
+# ─── Palette validation ────────────────────────────────────────────
+#
+# muriel.contrast measures a color against the *background*. That catches
+# illegibility and misses palette collapse: two hues can each clear 8:1 on
+# near-black and still be the same color to a deuteranope. These checks
+# measure the palette against *itself* (and its surface) — the questions
+# contrast.py structurally cannot ask.
+
+# Two checks the sibling validators run are deliberately NOT implemented here.
+# Both are real checks — in a design system whose parameters differ from muriel's.
+# Ported verbatim they would each reject muriel's own house style, which is the
+# signature of a constant that belongs to its original system, not to the method.
+#
+# **Lightness band** (theirs: OKLCH L 0.48–0.67 on dark). Tuned to a lighter
+# surface (#1a1a19) and a permissive 3:1 mark floor. Muriel's OLED register runs
+# bright on #0a0a0f, where an 8:1 floor *mathematically forces* L >= ~0.72: every
+# color generate_for_floor() emits at the floor lands at L 0.72–0.75, and the
+# shipped chart tokens (#ffa07a L=0.794, #bbb L=0.792) sit higher still. The band
+# would reject muriel's own generator output wholesale. It is redundant besides:
+# its lower bound restates "don't dissolve into the surface" (the contrast check)
+# and its upper bound restates "don't blow out to white" (chroma).
+#
+# **Chroma floor** (theirs: OKLCH C >= 0.10, a gray slot "encodes nothing").
+# True where gray is reserved for chrome. Muriel reserves no such thing —
+# channels/charts.md rule 10 is *gray-first*: a muted gray default series with one
+# accent is the house pattern. The floor also fails Wong's #000000 on the white
+# paper Wong was designed for, and Tol Bright's #BBBBBB. A check that rejects the
+# canonical colorblind-safe palette on its own surface is measuring the wrong
+# thing. The real risk — two neutral slots colliding — is caught by CVD
+# separation, which scores muriel's gray-first pair (#bbb ↔ #ffa07a) at ΔE 29.7.
+#
+# What is left is what was genuinely missing: separation, plus a role-aware
+# contrast floor. Composing those two is the whole job.
+
+MARK_CONTRAST_FLOOR = 3.0
+"""WCAG 2.1 SC 1.4.11 non-text contrast — the floor for a *fill* against its surface."""
+
+TEXT_CONTRAST_FLOOR = 8.0
+"""muriel's universal floor — applies the moment a palette color is used as text."""
+
+
+class Check:
+    """One validation check's outcome.
+
+    ``status`` is ``'pass'``, ``'warn'`` (conditional — legal only with the
+    stated mitigation), or ``'fail'`` (the palette is wrong).
+    """
+
+    __slots__ = ("name", "status", "detail")
+
+    def __init__(self, name: str, status: str, detail: str):
+        self.name = name
+        self.status = status
+        self.detail = detail
+
+    def __repr__(self) -> str:
+        return f"Check({self.name!r}, {self.status!r}, {self.detail!r})"
+
+
+class PaletteReport:
+    """The result of :func:`validate`. Truthy when no check failed."""
+
+    __slots__ = ("checks", "palette", "bg", "mode")
+
+    def __init__(self, checks, palette, bg, mode):
+        self.checks = checks
+        self.palette = palette
+        self.bg = bg
+        self.mode = mode
+
+    @property
+    def ok(self) -> bool:
+        """True when no check has status ``'fail'``. WARNs do not gate."""
+        return not any(c.status == "fail" for c in self.checks)
+
+    @property
+    def warnings(self) -> list:
+        """Checks that passed conditionally — each carries a mandatory mitigation."""
+        return [c for c in self.checks if c.status == "warn"]
+
+    def __bool__(self) -> bool:
+        return self.ok
+
+    def __repr__(self) -> str:
+        return (f"PaletteReport({len(self.palette)} slots, {self.mode}, "
+                f"{'ok' if self.ok else 'FAILED'}, "
+                f"{len(self.warnings)} warning(s))")
+
+
+def validate(
+    palette_colors: Sequence[str],
+    *,
+    bg: str = "#0a0a0f",
+    pairs: str = "all",
+    as_text: bool = False,
+) -> PaletteReport:
+    """Validate a categorical palette against the checks contrast alone can't make.
+
+    Two checks, computed — never eyeballed:
+
+    1. **CVD separation** — worst protan/deutan pair >= :data:`muriel.cvd.CVD_TARGET`.
+       Between TARGET and FLOOR the palette is legal *only* with a second
+       encoding channel (direct label, dash, shape, texture). This is the
+       check :mod:`muriel.contrast` structurally cannot make: contrast measures
+       each color against the *background*, and two hues can each clear 8:1 on
+       near-black while being the same color to a deuteranope.
+    2. **Contrast vs surface** — see the floor note below.
+
+    Sibling validators also gate a lightness band and a chroma floor. Muriel
+    deliberately runs neither — see the comment above this function; ported to
+    muriel's surfaces they reject muriel's own generator output and its
+    gray-first house pattern.
+
+    The floor depends on what the color *is*, not what it costs to pass
+    ---------------------------------------------------------------------
+    muriel's 8:1 rule governs **readable text** — anything parsed for meaning.
+    A bar fill is not text: it is a mark whose job is to be distinguishable,
+    and WCAG 2.1 SC 1.4.11 sets 3:1 for that. So by default this function
+    gates marks at :data:`MARK_CONTRAST_FLOOR` (3.0), not at 8.0 — applying
+    the text floor to fills would be over-reading muriel's own rule, and would
+    reject Wong, IBM, and Tol wholesale.
+
+    Pass ``as_text=True`` when the palette's colors will also be rendered as
+    type (data labels, direct series labels, KPI values). Then the floor is
+    :data:`TEXT_CONTRAST_FLOOR` (8.0) and it is hard — that is muriel's rule,
+    and it does not bend for a chart.
+
+    Parameters
+    ----------
+    palette_colors
+        Hex strings in slot order.
+    bg
+        The surface the marks render on. Default ``'#0a0a0f'`` (muriel's OLED
+        near-black). Contrast and band results are only meaningful against the
+        surface the chart actually uses — pass your own.
+    pairs
+        ``'all'`` (default) — any two marks can meet: scatter, bubble,
+        choropleth, small multiples. ``'adjacent'`` — bars, stacks, lines,
+        where slot assignment never skips.
+    as_text
+        Gate contrast at muriel's 8:1 text floor instead of the 3:1 mark floor.
+
+    Returns
+    -------
+    PaletteReport
+        Truthy when nothing failed. Inspect ``.checks`` for detail and
+        ``.warnings`` for the conditional passes.
+
+    Example
+    -------
+
+    ::
+
+        >>> from muriel.palettes import validate, WONG
+        >>> bool(validate(WONG, bg="#0a0a0f"))
+        True
+
+    See also
+    --------
+    :func:`muriel.cvd.worst_separation` — the separation check on its own.
+    :func:`generate_for_floor` — build a palette at a contrast floor by construction.
+    :func:`muriel.contrast.audit_svg` — legibility of rendered text.
+    """
+    from muriel.contrast import contrast_ratio, hex_to_rgb, relative_luminance
+    from muriel.cvd import CVD_FLOOR, CVD_TARGET, worst_separation
+
+    colors = [c for c in palette_colors]
+    if not colors:
+        raise ValueError("palette is empty")
+
+    # Mode is reported for context and follows the surface, not the caller's
+    # say-so — it is a fact about the background's luminance.
+    mode = "dark" if relative_luminance(hex_to_rgb(bg)) < 0.5 else "light"
+    checks = []
+
+    # 1. CVD separation — the whole reason this module exists.
+    if len(colors) < 2:
+        checks.append(Check("CVD separation", "pass", "single slot — nothing to separate"))
+    else:
+        worst = worst_separation(colors, pairs=pairs)
+        status = {"pass": "pass", "floor": "warn", "fail": "fail"}[worst.status]
+        detail = (f"worst {pairs} pair ΔE {worst.delta:.1f} ({worst.kind}) — "
+                  f"slot {worst.index_a} {worst.color_a} ↔ "
+                  f"slot {worst.index_b} {worst.color_b}")
+        if status == "warn":
+            detail += (f"; in the {CVD_FLOOR}–{CVD_TARGET} floor band — a second "
+                       "encoding channel (direct label, dash, shape, texture) is mandatory")
+        elif status == "fail":
+            detail += f"; below the {CVD_FLOOR} floor — these slots collapse"
+        checks.append(Check("CVD separation", status, detail))
+
+    # 2. Contrast vs surface.
+    floor = TEXT_CONTRAST_FLOOR if as_text else MARK_CONTRAST_FLOOR
+    role = "text" if as_text else "marks"
+    low = [(c, round(contrast_ratio(c, bg), 2))
+           for c in colors if contrast_ratio(c, bg) < floor]
+    if not low:
+        status, detail = "pass", f"all {len(colors)} >= {floor}:1 vs {bg} ({role})"
+    elif as_text:
+        # muriel's floor. It does not have a relief valve.
+        status = "fail"
+        detail = (f"below muriel's {floor}:1 text floor vs {bg}: {low}. "
+                  "These colors cannot carry type — use a text token and let a "
+                  "mark beside it carry identity.")
+    else:
+        # A fill under 3:1 is legal with relief; it is not free.
+        status = "warn"
+        detail = (f"below {floor}:1 vs {bg}: {low}. Legal for fills only with "
+                  "relief — visible direct labels or a companion table.")
+    checks.append(Check("Contrast vs surface", status, detail))
+
+    return PaletteReport(checks, colors, bg, mode)
+
+
 # ─── Contrast-floor palette generator ──────────────────────────────
 
 
@@ -428,6 +659,17 @@ def generate_for_floor(
     -------
     list[str]
         Hex strings, all clearing ``floor`` vs ``bg``.
+
+    Guarantees what it optimizes, and only that
+    -------------------------------------------
+    Every output clears ``floor`` **against the background**. It does *not*
+    guarantee the colors are distinguishable **from each other** — the hues are
+    spaced evenly in degrees, which is not the same as spaced evenly under
+    color-vision deficiency. Evenly-spaced hues can still collapse for a
+    deuteranope (``n=6`` on ``#0a0a0f`` puts slots 0 and 3 at ΔE 6.4, below the
+    separation floor). Pass the result through :func:`validate` — the CVD check
+    is exactly the complement this function lacks — and reorder or reduce ``n``
+    if it warns. The two functions are designed to be used together.
 
     Raises
     ------
@@ -636,6 +878,97 @@ def _selftest() -> int:
     else:
         raise AssertionError("expected ValueError for invalid direction")
 
+    # ── validate() ──────────────────────────────────────────────────
+
+    # Wong is THE colorblind-safe reference. On the white paper it was designed
+    # for, all eight slots (black included) must pass — a validator that rejects
+    # Wong on its own surface is measuring the wrong thing.
+    assert validate(WONG, bg="#fffff8").ok, "Wong must pass on the paper register"
+
+    # On OLED near-black, Wong's black slot (#000000) is invisible — 1.06:1, a
+    # real property of the palette on this surface. As MARKS it warns (relief
+    # available); it must not silently pass, and must not hard-fail as if #000000
+    # were forbidden everywhere. (Muriel keeps no chroma gate, so a gray/black
+    # slot is judged by whether it can be *seen*, not by whether it has a hue.)
+    dark = validate(WONG, bg="#0a0a0f")
+    dark_contrast = [c for c in dark.checks if c.name == "Contrast vs surface"][0]
+    assert dark_contrast.status == "warn"
+    assert "#000000" in dark_contrast.detail
+
+    # Mode follows the surface's luminance, not the caller.
+    assert validate(WONG, bg="#0a0a0f").mode == "dark"
+    assert validate(WONG, bg="#fffff8").mode == "light"
+
+    # The load-bearing invariant: muriel's own generator output must never fail
+    # validate()'s *contrast* check on the surface it was generated for. This
+    # fires if a foreign lightness band (incompatible with the 8:1 floor, which
+    # forces L >= ~0.72 on near-black) ever creeps in. generate_for_floor emits
+    # colors AT the floor by construction, so as_text=True must find them clean.
+    generated = generate_for_floor("#0a0a0f", floor=8.0, n=6)
+    gen_report = validate(generated, bg="#0a0a0f", as_text=True)
+    gen_contrast = [c for c in gen_report.checks if c.name == "Contrast vs surface"][0]
+    assert gen_contrast.status == "pass", (
+        "generate_for_floor() output must clear validate()'s contrast check on "
+        "the same bg — any non-pass means an imported band or chroma gate is "
+        "fighting muriel's generator"
+    )
+    # NB: gen_report.ok may still be False — the generator spaces hues evenly and
+    # does NOT check CVD separation, so its output can collapse under deuteranopia
+    # (n=6 on #0a0a0f: slots 0↔3 at ΔE 6.4). That is a real generator limitation,
+    # not a validate() bug: the two are complementary, and validate() is exactly
+    # what catches it. See generate_for_floor's own note.
+
+    # Gray-first (charts.md rule 10): a muted gray series + one accent is muriel
+    # house style and must validate cleanly — never rejected for "being gray".
+    assert validate(["#bbbbbb", "#ffa07a"], bg="#0a0a0f").ok
+
+    # The floor depends on the color's role. Wong's black slot cannot carry
+    # type on near-black — as text that must FAIL, as a mark it need not.
+    text_report = validate(WONG, bg="#0a0a0f", as_text=True)
+    assert not text_report.ok, "8:1 text floor must reject #000000 on #0a0a0f"
+    contrast_check = [c for c in text_report.checks if c.name == "Contrast vs surface"][0]
+    assert contrast_check.status == "fail", "muriel's text floor has no relief valve"
+
+    # A mark below 3:1 warns (relief available) rather than failing.
+    mark_report = validate(["#0a0a10", "#EE6677"], bg="#0a0a0f")
+    mark_contrast = [c for c in mark_report.checks if c.name == "Contrast vs surface"][0]
+    assert mark_contrast.status == "warn"
+
+    # The check that earns the module: two hues that both clear the 8:1 TEXT
+    # floor on near-black yet collapse for a deuteranope (ΔE 6.4). muriel.contrast
+    # sees two happy PASSes — this pair is lifted straight from generate_for_floor
+    # output, so it also proves the generator can emit CVD-colliding palettes.
+    from muriel.contrast import contrast_ratio
+    pink, teal = "#ff78af", "#00bfa8"
+    for c in (pink, teal):
+        assert contrast_ratio(c, "#0a0a0f") >= 8.0, "control: both clear the text floor"
+    collapsed = validate([pink, teal], bg="#0a0a0f")
+    cvd_check = [c for c in collapsed.checks if c.name == "CVD separation"][0]
+    assert cvd_check.status == "fail", (
+        f"expected CVD collapse for {pink}/{teal}, got {cvd_check.status}"
+    )
+    assert not collapsed.ok
+
+    # A gray is judged by separation, not by a chroma gate. muriel's documented
+    # gray-first pair passes (asserted above); a gray only fails when it actually
+    # collapses into its neighbour — e.g. #888 mid-gray vs Tol red #EE6677 darken
+    # together under protanopia (ΔE 6.5). That is the CVD check doing its job, not
+    # a "no grays allowed" rule. Pin the distinction so no one re-adds a chroma gate.
+    assert validate(["#888888", "#EE6677"], bg="#0a0a0f").checks[0].status == "fail"
+    assert validate(["#bbbbbb", "#ffa07a"], bg="#0a0a0f").ok  # separated gray: fine
+
+    # Report truthiness tracks .ok, and warnings never gate.
+    assert bool(validate(WONG, bg="#0a0a0f")) is True
+    assert all(c.status != "fail" for c in validate(WONG, bg="#0a0a0f").checks)
+
+    # Empty palette is an error, not a silent pass.
+    try:
+        validate([], bg="#0a0a0f")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("expected ValueError for empty palette")
+
     return 0
 
 
@@ -725,14 +1058,45 @@ def _main(argv=None) -> int:
     ap.add_argument("--direction", default="auto",
                     choices=("auto", "light", "dark"),
                     help="--generate direction (default auto)")
+    ap.add_argument("--validate", metavar="HEXES", default=None,
+                    help="validate a comma-separated palette (or a named "
+                         "palette with --palette) against the four checks")
+    ap.add_argument("--palette", dest="named", default=None, metavar="NAME",
+                    help="named palette to --validate (wong, ibm, tol_bright, …)")
+    ap.add_argument("--pairs", choices=("adjacent", "all"), default="all",
+                    help="--validate pair scope: all (scatter/maps, default) "
+                         "or adjacent (bars/stacks/lines)")
+    ap.add_argument("--as-text", action="store_true",
+                    help="--validate against muriel's 8:1 text floor instead "
+                         "of the 3:1 mark floor (use when slots render as type)")
     ap.add_argument("--selftest", action="store_true",
-                    help="run generate_for_floor() invariant checks")
+                    help="run generate_for_floor() + validate() invariant checks")
     args = ap.parse_args(argv)
 
     if args.selftest:
         _selftest()
         print("muriel.palettes: selftest passed")
         return 0
+
+    if args.validate or args.named:
+        if args.named:
+            colors, label = palette(args.named), args.named
+        else:
+            colors = [c.strip() for c in args.validate.split(",") if c.strip()]
+            label = "palette"
+        report = validate(colors, bg=args.bg, pairs=args.pairs, as_text=args.as_text)
+        glyph = {"pass": "PASS", "warn": "WARN", "fail": "FAIL"}
+        role = "text (8:1)" if args.as_text else "marks (3:1)"
+        print(f"\n{label} — {len(colors)} slots, {report.mode} surface "
+              f"{args.bg}, {args.pairs} pairs, {role}")
+        for c in report.checks:
+            print(f"  [{glyph[c.status]:4}] {c.name:22} {c.detail}")
+        print(f"\n  → {'ALL CHECKS PASS' if report.ok else 'FAILED — fix the marked checks'}")
+        if report.warnings:
+            print("  WARNs are conditional passes — each names a mandatory mitigation.")
+        print("  scope: the palette against itself + its surface. For legibility "
+              "of rendered text run `muriel contrast`.\n")
+        return 0 if report.ok else 1
 
     if args.generate:
         from muriel.contrast import contrast_ratio

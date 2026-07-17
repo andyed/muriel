@@ -111,7 +111,7 @@ Tufte's published palette uses `#666` series and `#e41a1c` accent. Both fail mur
 
 ### Categorical palettes (when categories must be distinguished by color)
 
-Direct labels handle most cases (rule 2). When a true categorical encoding is unavoidable, use a colorblind-safe palette — never auto-generated rainbows. Muriel ships these as importable constants in `muriel.palettes` (queued — see SKILL.md TODO). Until shipped, hard-code by hand.
+Direct labels handle most cases (rule 2). When a true categorical encoding is unavoidable, use a colorblind-safe palette — never auto-generated rainbows. Muriel ships these as importable constants in `muriel.palettes` (`WONG`, `IBM`, `TOL_BRIGHT`, …). **Validate any palette you didn't get from that list** — a brand set, a hand-picked subset, or `generate_for_floor()` output — with `python -m muriel palettes --validate "#hex,#hex,…" --bg <surface>` (or `muriel cvd` for the separation report alone). This is the check `muriel.contrast` cannot make: contrast measures each color against the *background*, while `validate` measures the palette against *itself* under simulated protanopia/deuteranopia — two hues can each clear 8:1 on near-black and still be one color to a colorblind reader. Worst-pair ΔE ≥ 12 passes; 8–12 is legal only with a second encoding channel (direct label, dash, shape, texture); below 8 the slots collapse.
 
 - **Wong 8** (Nature Methods 2011, optimized for protanopia/deuteranopia/tritanopia):
   `#000000 #E69F00 #56B4E9 #009E73 #F0E442 #0072B2 #D55E00 #CC79A7`
@@ -260,6 +260,7 @@ Before declaring a chart done:
 - [ ] Notable points annotated (rule 12)
 - [ ] All text passes 8:1 contrast — run `python -m muriel.contrast file.svg` for SVG output
 - [ ] No `opacity:` on text labels
+- [ ] Categorical palette passes CVD separation — run `python -m muriel palettes --validate "<hexes>" --bg <surface>` for any non-shipped palette (ΔE ≥ 12, or ≥ 8 with a second encoding channel)
 - [ ] Categorical encoding paired with shape/dash/label, not color alone
 - [ ] `aria-label` or companion data table present for screen-readers
 - [ ] Responsive strategy chosen (not just shrunk)

@@ -45,6 +45,7 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     # name            (module,                              one-line help)
     "capture":        ("muriel.capture",                    "Responsive viewport-sweep screenshot via Playwright"),
     "contrast":       ("muriel.contrast",                   "WCAG 8:1 contrast audit on SVG / CSS / color pairs"),
+    "cvd":            ("muriel.cvd",                        "Color-vision-deficiency separation report — can a colorblind reader tell these colors apart?"),
     "devibe":         ("muriel.devibe",                     "Scan web/UI source for AI-default 'vibe-coded' design tells (8:1-aware)"),
     "dimensions":     ("muriel.dimensions",                 "Print the dimensions registry (sizes, devices, paper)"),
     "doctor":         ("muriel.doctor",                     "Report muriel install state, extras, and model caches"),
@@ -53,6 +54,7 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     "import":         ("muriel.design_md_import",            "Convert a Google Stitch design.md into a muriel brand.toml"),
     "import-tokens":  ("muriel.design_tokens_import",         "Convert a DTCG / open-codesign tokens.json into a muriel brand.toml"),
     "import-corpus":  ("muriel.tools.corpus_audit",          "Audit a DESIGN.md corpus through design_md_import + 8:1 floor"),
+    "palettes":       ("muriel.palettes",                   "List / generate / validate categorical palettes (CVD + contrast)"),
     "smartcrop":      ("muriel.tools.smartcrop",            "Saliency-aware crop solver (edges + optional faces / text / saliency)"),
     "styleguide":     ("muriel.styleguide",                 "Load a brand.toml; print / derive CSS / matplotlibrc / contrast audit"),
     "tilt-shift":     ("muriel.tools.tilt_shift",           "Fake-lens depth-of-field blur on a PNG"),
