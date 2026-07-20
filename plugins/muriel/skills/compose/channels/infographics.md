@@ -76,6 +76,24 @@ Hybrid is fine and often better. The Scrutinizer foveation explainer (see Recipe
 
 **Muriel default for LinkedIn/X/Pinterest:** single-column portrait (1080×1920 or 1080×1350). The vertical stack matches mobile scroll behavior; every block can be understood without seeing its neighbors.
 
+## Module vocabulary (dense-modules)
+
+Seven typed panel contracts for high-density guide artifacts — the "complete guide in one image" genre. Adapted from the `dense-modules` layout in [baoyu-infographic](https://github.com/JimLiu/baoyu-skills) (MIT; see `THIRD_PARTY_NOTICES.md`). Baoyu's are prompt specs for raster generation; muriel's are **content contracts**: structured-input minimums a panel must satisfy before it renders. A module that can't meet its minimum doesn't ship thinner — it gets cut or merged.
+
+| Module | Contract (minimum input) | Renders as |
+|--------|--------------------------|------------|
+| **Option Array** (baoyu: Brand/Selection Array) | 4–8 items, each with name + one-line descriptor; exactly one flagged as the pick | Grid of cards, pick highlighted with the 10% accent |
+| **Scale/Gauge** (baoyu: Specification Scale) | 3–5 levels with precise numeric increments — real units, not "low/med/high" | Horizontal scale or stepped bar, numbers in accent |
+| **Anatomy Callout** (baoyu: Deep Dive/Detail) | 1 subject + ≥3 labeled internals | Central figure with leader-line callouts (kin to the Anatomical type above) |
+| **Use-Case Matrix** (baoyu: Scenario Comparison) | 3–6 scenarios, each with a specific recommendation and at least one datum | Row-per-scenario table or card strip |
+| **Diagnostic Checklist** (baoyu: Identification Tips) | 3–5 steps in look/test/check form, each actionable | Numbered checklist with check glyphs |
+| **Pitfall Panel** (baoyu: Warning/Pitfall Zone) | 3–5 mistakes each with a stated consequence, plus 1–2 correct approaches | High-contrast warning card; ✗/✓ drawn glyphs, not emoji |
+| **TL;DR Block** (baoyu: Quick Reference) | Dense table, decision flowchart, or ≤5 key takeaways | Compact summary panel, usually last before the footer |
+
+**The density rule (kept):** every module must carry concrete data — names, numbers, parameters. "Choose a good one" is not a module; "≥600 fill power, 90/10 down ratio" is. Generic descriptions fail the contract the same way missing items do.
+
+**The density rule (rejected):** baoyu permits shrinking text and eliminating whitespace to fit more in. Muriel does not — the 18px floor and 8:1 contrast are hard limits. Density comes from module count and data specificity, never from sub-threshold type. If it doesn't fit at 18px, the artifact has too many modules, not too-large text.
+
 ## Color
 
 Three-layer discipline, in order of authority:
@@ -225,6 +243,20 @@ The canonical muriel infographic. Single-column layout, hero at top, 2-3 body pa
 
 **Footer zone:** 1680-1920px. Tagline + URL + attribution. Right-aligned or centered. Never hero-sized.
 
+### High-density guide (dense-modules)
+
+For buying guides, "avoid these mistakes" explainers, multi-dimension technical comparisons — content where the reader saves the image *because* it's dense. Portrait 1080×1920.
+
+**Composition:** 6–7 modules from the Module vocabulary above. A working default sequence: Option Array → Scale/Gauge → Anatomy Callout → Use-Case Matrix → Pitfall Panel → TL;DR Block. Vary per content; never two of the same type adjacent.
+
+**Framing:** each module gets an explicit boundary — card container, dotted frame, or rule — plus a header badge (short label on a filled rounded rect, white text, 8:1 against the badge fill). Optional coordinate labels (`A-01`, `B-02`) when the register is technical; skip them for lifestyle content.
+
+**Title block:** main title + a subtitle that states the module count ("6 things to check before you buy"). The count is a genre convention — it promises scannable structure and tells the reader when they're done.
+
+**Numbers:** all data values in the accent color and one size step larger than surrounding body text. In a dense artifact the oversized numbers *are* the reading path — a viewer skimming only the accent numerals should still extract the gist.
+
+**Still muriel:** 18px text floor, 8:1 everywhere, one font family, drawn ✓/✗ glyphs instead of emoji quality markers, `contrast.py` audit before export. The story arc still applies — the TL;DR Block is the conclusion; don't ship without it.
+
 ### Scrutinizer foveation explainer
 
 See `assets/explainers/foveation.svg` in scrutinizer-www. Source script in the same directory. Subject: foveation + cortical magnification. Type: Anatomical + Statistical + Comparison hybrid.
@@ -256,5 +288,6 @@ Palette: scrutinizer-www canonical — slate-900 `#0f172a` background, white pri
 - [K-Dense scientific-agent-skills — infographics](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/infographics/SKILL.md) (MIT). Source for the 10-type taxonomy, 8-style-preset concept, 5-point quality rubric, 60-40 visual/text rule, 60-30-10 color rule, and colorblind-safe palettes (Wong/IBM/Tol). K-Dense's pipeline (Nano Banana Pro + Gemini scoring) is explicitly **not** adopted — muriel's lane is deterministic SVG.
 - [K-Dense — design_principles.md](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/infographics/references/design_principles.md). Long-form principles reference. Useful when debating a specific layout choice in an artifact review.
 - [K-Dense — color_palettes.md](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/infographics/references/color_palettes.md). Industry-style palettes (Corporate / Healthcare / Tech / Nature / Education / Marketing / Finance / Nonprofit). Reference when adapting muriel output to a brand that doesn't have its own tokens.
+- [JimLiu/baoyu-skills — baoyu-infographic](https://github.com/JimLiu/baoyu-skills) (MIT). Source for the dense-modules module vocabulary (seven typed module archetypes, generalized and re-cast as content contracts) and the high-density-guide text-placement conventions (module-count subtitle, badge headers, oversized accent numbers). Baoyu's pipeline (prompt-to-raster via image-gen backends) and its shrink-text-to-fit density rule are explicitly **not** adopted — muriel's lane is deterministic SVG with hard type-size and contrast floors.
 - [Bang Wong — "Points of view: Color blindness"](https://www.nature.com/articles/nmeth.1618) (Nature Methods, 2011). Primary source for the Okabe-Ito palette.
 - [Paul Tol — Colour Schemes](https://personal.sron.nl/~pault/). Primary source for the Tol qualitative / sequential / diverging palettes.

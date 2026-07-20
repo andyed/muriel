@@ -103,10 +103,10 @@ set, easing-by-direction, entrance scale floor) and to
 `plugins/muriel/skills/compose/channels/polish.md` (rules 18–22) are paraphrased
 from the `emil-design-eng-inspired` skill — itself MIT-licensed original prose
 that the ATV-Design authors wrote as a clean-room paraphrase of Emil Kowalski's
-(unlicensed) `emil-design-eng` skill.
+`emil-design-eng` skill.
 
 - Source: https://github.com/All-The-Vibes/ATV-Design (`skills/emil-design-eng-inspired/`)
-- Lineage: paraphrases https://github.com/emilkowalski/skill (no upstream license)
+- Lineage: paraphrases https://github.com/emilkowalski/skill (MIT as of 2026-06-21; it carried no license when muriel first adapted via ATV-Design's clean-room paraphrase)
 - Adapted: 2026-06 (ATV-Design MIT)
 
 muriel's own contribution is the programmatic enforcement (`validate_properties`,
@@ -190,3 +190,56 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+---
+
+## baoyu-infographic (dense-modules module vocabulary)
+
+The module vocabulary and high-density-guide recipe in
+`plugins/muriel/skills/compose/channels/infographics.md` — the seven typed
+module archetypes (Option Array, Scale/Gauge, Anatomy Callout, Use-Case
+Matrix, Diagnostic Checklist, Pitfall Panel, TL;DR Block), the
+every-module-carries-concrete-data density rule, and the text-placement
+conventions (module-count subtitle, badge-framed module headers, data values
+oversized in the accent color) — are adapted from the `dense-modules` layout
+definition in the `baoyu-infographic` skill of the `baoyu-skills` collection.
+
+- Source: https://github.com/JimLiu/baoyu-skills (`skills/baoyu-infographic/references/layouts/dense-modules.md`)
+- Adapted: 2026-07 (MIT)
+
+muriel's own contribution is the re-cast from prompt spec to **content
+contract** — each module declares structured-input minimums (item counts,
+required numerics, stated consequences) that a deterministic SVG panel
+builder can refuse to render below — plus genre-neutral renamings of the
+source's buying-guide-specific module names. Two source rules are
+deliberately **not** adopted: the shrink-text-and-eliminate-whitespace
+density rule (it conflicts with muriel's 18px type floor and 8:1 contrast
+floor — density comes from module count and data specificity instead), and
+emoji quality indicators (muriel renders drawn ✓/✗ glyphs). The source's
+raster generation pipeline (prompt-to-image via image-gen backends) is not
+used in any form — muriel's lane is deterministic SVG.
+
+```
+MIT License
+
+Copyright (c) 2026 Jim Liu
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
