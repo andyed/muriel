@@ -2106,7 +2106,7 @@
 <ul>
 <li><strong>Sequential when the variable has order.</strong> Viridis for time, cognitive load, any scalar. Never use rainbow — it's perceptually non-uniform and fails colorblind accessibility.</li>
 <li><strong>Diverging when the variable has a meaningful midpoint.</strong> Red-white-blue (or equivalents) for effect sizes, correlations, changes from baseline.</li>
-<li><strong>Categorical when the variable has no order.</strong> Tableau 10, Dark2, or a hand-picked palette. Max 8 categories; more becomes indistinguishable.</li>
+<li><strong>Categorical when the variable has no order.</strong> Prefer a muriel-shipped colorblind-safe set (<code>muriel.palettes.WONG</code> is the citation a reviewer expects; <code>IBM</code>, <code>TOL_BRIGHT</code> also ship). Max 8 categories; more becomes indistinguishable. For a hand-picked or brand palette, validate it: <code>python -m muriel palettes --validate "#hex,…" --bg &lt;surface&gt;</code> runs the protan/deutan separation check — the one contrast auditing can't make, since it measures colors against each other rather than against the background.</li>
 <li><strong>Color is redundant, not primary.</strong> Always pair with shape, linestyle, or text labels. Pure color encoding fails for ~5% of readers.</li>
 </ul>
 <h2 id="statistical-reporting">Statistical reporting<a class="headerlink" href="#statistical-reporting" title="Permanent link">&para;</a></h2>

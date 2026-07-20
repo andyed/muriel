@@ -1572,6 +1572,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#baoyu-infographic-dense-modules-module-vocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        baoyu-infographic (dense-modules module vocabulary)
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1724,10 +1735,10 @@ set, easing-by-direction, entrance scale floor) and to
 <code>plugins/muriel/skills/compose/channels/polish.md</code> (rules 18–22) are paraphrased
 from the <code>emil-design-eng-inspired</code> skill — itself MIT-licensed original prose
 that the ATV-Design authors wrote as a clean-room paraphrase of Emil Kowalski's
-(unlicensed) <code>emil-design-eng</code> skill.</p>
+<code>emil-design-eng</code> skill.</p>
 <ul>
 <li>Source: https://github.com/All-The-Vibes/ATV-Design (<code>skills/emil-design-eng-inspired/</code>)</li>
-<li>Lineage: paraphrases https://github.com/emilkowalski/skill (no upstream license)</li>
+<li>Lineage: paraphrases https://github.com/emilkowalski/skill (MIT as of 2026-06-21; it carried no license when muriel first adapted via ATV-Design's clean-room paraphrase)</li>
 <li>Adapted: 2026-06 (ATV-Design MIT)</li>
 </ul>
 <p>muriel's own contribution is the programmatic enforcement (<code>validate_properties</code>,
@@ -1803,6 +1814,53 @@ public Reddit content belonging to their authors; only the rule logic is derived
 <a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 <a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 <a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>SOFTWARE.
+</code></pre></div>
+<hr />
+<h2 id="baoyu-infographic-dense-modules-module-vocabulary">baoyu-infographic (dense-modules module vocabulary)<a class="headerlink" href="#baoyu-infographic-dense-modules-module-vocabulary" title="Permanent link">&para;</a></h2>
+<p>The module vocabulary and high-density-guide recipe in
+<code>plugins/muriel/skills/compose/channels/infographics.md</code> — the seven typed
+module archetypes (Option Array, Scale/Gauge, Anatomy Callout, Use-Case
+Matrix, Diagnostic Checklist, Pitfall Panel, TL;DR Block), the
+every-module-carries-concrete-data density rule, and the text-placement
+conventions (module-count subtitle, badge-framed module headers, data values
+oversized in the accent color) — are adapted from the <code>dense-modules</code> layout
+definition in the <code>baoyu-infographic</code> skill of the <code>baoyu-skills</code> collection.</p>
+<ul>
+<li>Source: https://github.com/JimLiu/baoyu-skills (<code>skills/baoyu-infographic/references/layouts/dense-modules.md</code>)</li>
+<li>Adapted: 2026-07 (MIT)</li>
+</ul>
+<p>muriel's own contribution is the re-cast from prompt spec to <strong>content
+contract</strong> — each module declares structured-input minimums (item counts,
+required numerics, stated consequences) that a deterministic SVG panel
+builder can refuse to render below — plus genre-neutral renamings of the
+source's buying-guide-specific module names. Two source rules are
+deliberately <strong>not</strong> adopted: the shrink-text-and-eliminate-whitespace
+density rule (it conflicts with muriel's 18px type floor and 8:1 contrast
+floor — density comes from module count and data specificity instead), and
+emoji quality indicators (muriel renders drawn ✓/✗ glyphs). The source's
+raster generation pipeline (prompt-to-image via image-gen backends) is not
+used in any form — muriel's lane is deterministic SVG.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>MIT License
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>Copyright (c) 2026 Jim Liu
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>Permission is hereby granted, free of charge, to any person obtaining a copy
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>of this software and associated documentation files (the &quot;Software&quot;), to deal
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>in the Software without restriction, including without limitation the rights
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>copies of the Software, and to permit persons to whom the Software is
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>furnished to do so, subject to the following conditions:
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>The above copyright notice and this permission notice shall be included in all
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>copies or substantial portions of the Software.
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>SOFTWARE.
 </code></pre></div>
 
 
