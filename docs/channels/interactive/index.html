@@ -874,6 +874,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#radial-menu-shape-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Radial-menu shape flow
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2163,6 +2174,43 @@
 </tbody>
 </table>
 <p>Reads as a direct descendant of David Small's 1996 Shakespeare navigation: text as navigable space, multi-scale rendering via tier-based weight (instead of Small's greeking), categorical color for structure, Canvas2D at 60fps because pretext measures outside the DOM reflow path. Good scaffold for any new typographic-canvas work.</p>
+<h3 id="radial-menu-shape-flow">Radial-menu shape flow<a class="headerlink" href="#radial-menu-shape-flow" title="Permanent link">&para;</a></h3>
+<p>For pie or marking menus, keep the host's SVG or DOM wedge as the semantic target
+and use Pretext as the renderer-independent text compositor. First lock separate
+status, command-glyph, label, and exact-value rails. For horizontal copy,
+intersect text rails with the padded annular sector. For an explicit arc-follow
+probe, give Pretext the guarded arc length at each candidate label radius; do not
+wrap against a chord and bend the line afterward. Select one legal label tier
+across the peer ring;
+do not let short labels grow or status glyphs squeeze their local wedge. Routine
+state is glyphed, only decision-changing values remain wedge text, and neither is
+appended inline to the command label. Target paths remain byte-stable across
+hover and focus.</p>
+<p>The default hybrid for existing SVG wheels is normal positioned DOM content over
+stable SVG targets. This follows iBlipper's production pattern: Pretext predicts
+line breaks and the wheel-wide type tier, ordinary DOM carries the actual
+typography, and a settled <code>getBoundingClientRect()</code> pass checks rendered truth,
+peer type variance, glyph/text rail gaps, and label/value separation.</p>
+<p>An arc-follow renderer materializes the winning Pretext fragments as individual
+grapheme spans. Preserve kerning with cumulative-prefix measurement and
+reparameterize the line-to-arc blend so Cartesian interpolation cannot contract
+letter spacing on side wedges. Keep path bow and per-letter tangent turn as
+independent probe parameters, reverse traversal to keep lower-half text upright,
+and leave command and status glyphs unrotated. Start near 30% bow and 10%
+orientation follow; a 40-degree command word is a readability failure, not a
+target. The complete command remains on the semantic wedge and the per-letter
+DOM layer is visual projection.</p>
+<p>Carrier selection precedes decoration. Short-label rings may use the shallow DOM
+bow. Value-dense rings and multiword commands use upright word lines, with the
+full source command retained in the accessible name and caption when a shorter
+visible <code>displayLabel</code> is needed.</p>
+<p>Load <a href="../references/radial-menus.md"><code>references/radial-menus.md</code></a> for the full
+state, geometry, typography, glyph, keyboard, touch, stop-condition, and proof
+contract. The runnable
+<a href="../../examples/radial-menu-pretext.html"><code>examples/radial-menu-pretext.html</code></a>
+compares fixed midpoint SVG stacks with an adaptive carrier: a vendored Pretext
+0.0.5 shallow per-grapheme bow for Psychodeli and an upright value-dense stack
+for Pot Luck.</p>
 <h2 id="sci-fi-ui-fui-patterns">Sci-fi UI (FUI) patterns<a class="headerlink" href="#sci-fi-ui-fui-patterns" title="Permanent link">&para;</a></h2>
 <p>When the output wants to feel like telemetry — live stats, mission clocks, bearing readouts, signal traces — reach for the FUI vocabulary. The full grammar, substrate decision table, and common-failure list live in <a href="../../vocabularies/fui/"><code>vocabularies/fui.md</code></a>; this section is the interactive-channel seam.</p>
 <p><strong>Canonical stack</strong> (lifted from the vocabulary's substrate decision):</p>
