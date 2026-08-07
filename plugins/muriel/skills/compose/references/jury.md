@@ -179,9 +179,9 @@ Two seats sharing a lens and a loss function are one seat. Cut one.
 
 ## The roster
 
-Five seats. Two ship as agents. Three are specified and not yet built, and
-running them inline as scripted prompts is a weaker thing than seating them —
-say so on the ballot rather than pretending otherwise.
+Five seats, all five shipped as agents. Seat them as subagents. Running one
+inline as a scripted prompt is a weaker thing than seating it — say so on the
+ballot rather than pretending otherwise.
 
 **Evidence denial requires context isolation, and only a subagent provides
 it.** A scripted prompt runs inside the chair's context. Anything the chair has
@@ -193,13 +193,14 @@ not be the sole source of a CRITICAL. Its findings still enter the union at
 HIGH or below; promoting one to CRITICAL needs a second seat naming the same
 defect.
 
-**The Stranger is unusable until it ships as a subagent.** It is the only seat
-defined by denial of the brief, and the only seat that can catch the panel
-grading the wrong thing well. Run inline, in a context that has already read
-the brief, it is the chair's own opinion wearing a persona — the exact failure
-the seat exists to prevent, and worse than not seating it, because the ballot
-claims an independence it does not have. Do not script it. Seat three or four
-and record the Stranger as unseated.
+**The Stranger may never be scripted inline.** It is the only seat defined by
+denial of the brief. Run inside a context that has already read the brief, it
+is the chair's own opinion wearing a persona — the exact failure the seat
+exists to prevent, and worse than not seating it, because the ballot claims an
+independence it does not have. It ships as a subagent and enforces this at its
+own boundary: it audits its invocation for briefing material and aborts rather
+than filing a contaminated ballot. If it aborts, reseat it cleanly or record
+the Stranger as unseated. Do not argue with the abort.
 
 **The Squinter — SHIPPED as an agent.** *Lens:* heavy Gaussian blur (sigma ≈ 2%
 of the long edge), plus a luminance-only pass. *Loss:* misses in hierarchy;
@@ -209,19 +210,22 @@ dominance, reading order, figure/ground, whether the composition has one center
 of mass or three. The actual test for hierarchy, not a proxy, and the blur is
 deterministic, so the lens replays.
 
-**The Thumbnail — specified, not yet built; inline seating is degraded.**
-*Lens:* the artifact at 1/8 scale, and separately at 16 px. *Loss:* misses in
-scale survival. *Access:* downscaled renders plus the intended use sizes;
-denied the full-size render. *Judges:* whether the primary signal survives an
-OG preview, favicon, slide thumbnail, or paper figure at column width. The lens
-is a real input transform and survives inline seating — hand it only the
-downscales and it genuinely cannot see detail that is not there. The *denial*
-does not survive: a chair that has seen the full-size render cannot unsee it.
-Seat it inline with `Isolation: inline (denial nominal)` and the CRITICAL
-restriction above. It needs a compute tool the way the Squinter has
-`muriel.squint`, or its lens stops replaying.
+**The Thumbnail — SHIPPED as an agent.** *Lens:* the artifact at 1/8 scale, at
+16 px, and at 16 px zoomed 8× for inspection — the three downscale companions
+`muriel.squint` already writes on every run, so the lens replays. *Loss:*
+misses in scale survival. *Access:* downscaled renders plus the intended use
+sizes; denied the full-size render and the blur ladder. *Judges:* whether the
+primary signal survives an OG preview, favicon, slide thumbnail, or paper
+figure at column width.
 
-**The Stranger — specified, not yet built; do not seat inline.** *Lens:* a
+It is not a smaller Squinter, and the distinction is what keeps the two seats
+from correlating. Blur preserves position and area while removing high spatial
+frequency, so a large pale mass survives `heavy` intact. Downscale destroys
+sub-pixel features outright — hairlines, thin strokes, small type — and
+aliasing invents structure that was never in the source. An artifact can pass
+the hierarchy test cleanly and die at 16 px, and the reverse.
+
+**The Stranger — SHIPPED as an agent; never seat it inline.** *Lens:* a
 single `Read` of the artifact, no re-read, followed by three questions answered
 from that one pass — what is this for, what is the one number, where do I
 click. *Loss:* misses in premise; willing to be wrong about execution entirely.
@@ -238,6 +242,17 @@ a prompt saying "you saw this for five seconds" is a costume. Single-read,
 no-re-read, brief-withheld is the executable version of the same denial, and it
 is enforceable only across a subagent boundary.
 
+**What the Stranger actually measures.** It is not a naive human. It shares a
+base model with every other seat, so isolation removes brief anchoring and does
+nothing about model priors, training-set familiarity, or genre knowledge. Its
+ballot reports what this model concludes from the artifact alone — a real and
+otherwise-unavailable signal, and not the same as first-time human
+comprehension. Its ballot therefore carries a mandatory `Prior strength` line:
+`high` where the model has strong genre priors (a bar chart, a login form),
+`low` where the artifact is novel enough that the reading approaches first
+contact. Weight the seat by that line. Do not let a quiet Stranger on a
+familiar genre be read as evidence that real strangers will understand it.
+
 **The Forger — SHIPPED as an agent.** *Lens:* none on input; the lens is on
 output. The seat asserts "I can reproduce this from a generic template in four
 minutes," then *actually attempts it* and reports how close it got. *Loss:*
@@ -248,20 +263,27 @@ unfalsifiable, "here is the forgery, 4 minutes, differs only in accent hue" is
 not. *Reports:* elapsed time, forgery path, and a named list of what it could
 not reproduce. An empty list is CRITICAL.
 
-**The Pedant — specified, not yet built; inline seating is degraded.** *Lens:*
-text extraction only — labels, legend entries, ticks, captions, units,
-callouts, flattened with source locations. *Loss:* misses in labeling.
-*Access:* extracted text plus any sibling data file; denied the rendered
-composition, so a handsome layout cannot charm it. *Judges:* unlabeled numbers,
-missing units, terminology drift between legend and caption; applies the
-numeric-claim probe list from
+**The Pedant — SHIPPED as an agent.** *Lens:* text extraction only — labels,
+legend entries, ticks, captions, units, callouts, flattened with source
+locations. *Loss:* misses in labeling. *Access:* extracted text plus any
+sibling data file; denied the rendered composition, so a handsome layout cannot
+charm it. *Judges:* unlabeled numbers, missing units, terminology drift between
+legend and caption; applies the numeric-claim probe list from
 [`agents/muriel-critique.md`](../../../agents/muriel-critique.md)
 exhaustively. Unglamorous, highest hit rate of the five — most shipped defects
-are a missing unit, not a broken layout. Like the Thumbnail, the extraction
-survives inline seating and the denial does not: a chair that has looked at the
-render is charmed already. Seat it inline with `Isolation: inline (denial
-nominal)`. Note also that its probe list comes from `muriel-critique`, which is
-why the two bodies may not both run — see [Two bodies, two aggregation
+are a missing unit, not a broken layout.
+
+**Its denial depends on substrate, and the ballot must say which it got.** On
+source artifacts — SVG, HTML, Markdown, LaTeX, a plotting script — the denial
+is real: the seat greps text nodes and never reads the render. On rasters there
+is no OCR path that returns strings (`muriel.detectors.text` returns bounding
+boxes only and is not a subcommand), so either the chair supplies extracted
+text and the denial holds, or the seat reads the raster itself and records
+`Isolation: subagent (denial partial — raster read)`. Its findings stay valid
+either way; the claim of compositional blindness does not.
+
+Note also that its probe list comes from `muriel-critique`, which is why the
+two bodies may not both run — see [Two bodies, two aggregation
 rules](#two-bodies-two-aggregation-rules).
 
 ## Ballot mechanics
@@ -609,15 +631,13 @@ All three at 1400×900, seed 7, exported to render_assets/dwell/.
 ```
 
 None of that entered a ballot; two directions were repaired, not debated.
-Panel: squinter, forger (subagents); thumbnail, pedant (inline, denial
-nominal — neither seat has an agent file yet, so their denial is nominal and
-neither may be the sole source of a CRITICAL).
+Panel: all five seats, each as a subagent. The pedant read SVG source, so its
+denial is real and its `Isolation` is plain `subagent`; on a PNG export it
+would have carried `subagent (denial partial — raster read)` instead.
 
-**The Stranger's ballot below is shown as the seat will behave once it ships as
-a subagent, and could not be produced today.** It is included because the split
-it drives is the point of the example. Do not read it as a live five-seat
-recipe: a scripted Stranger in the chair's context has already read the brief,
-and its ballot would be the chair's opinion. Today this sitting is four seats.
+The stranger was invoked with three artifact paths and a decision id, and
+nothing else. It did not receive the brief above, the question being decided,
+or the fact that the three artifacts are alternatives to one another.
 
 Round 1 sealed; ballots abridged to load-bearing lines:
 
@@ -661,14 +681,14 @@ pedant     order A,B,C   pairwise B>C, B>A, C>A   ranking B,C,A   high
   Recused: composition, scale survival, brand voice
 ```
 
-Two mechanics fire on the pedant's CRITICAL before aggregation. It is not
+One mechanic fires on the pedant's CRITICAL before aggregation. It is not
 form-fatal — aligning two words does not change A's encoding — so under [Two
 bodies](#two-bodies-two-aggregation-rules) it gates A's commit and does not
-delete A from the ranking. And the pedant ran inline, so it may not be the sole
-source of a CRITICAL; no second seat named the drift, so the chair records it
-at HIGH with `claimedSeverity: CRITICAL` preserved. A's verdict falls to NEEDS
-REVISION. A still ranks last on its own merits, which is the ranking doing its
-own job rather than borrowing the defect body's.
+delete A from the ranking. A's verdict is FAIL and A still ranks last on its
+own merits, which is the ranking doing its own job rather than borrowing the
+defect body's. Had the pedant been scripted inline, the inline-seat restriction
+would have capped this at HIGH with `claimedSeverity: CRITICAL` preserved,
+because no second seat named the drift — one more reason to seat subagents.
 
 Finding, written by the chair:
 
@@ -676,17 +696,16 @@ Finding, written by the chair:
 Muriel jury finding
 Decision ID: gaze-dwell-readout-01
 Question: which dwell-readout direction earns implementation
-Panel: squinter, forger (subagents); thumbnail, pedant (inline, denial
-  nominal); stranger (subagent — illustrative, seat not yet built)
+Panel: squinter, thumbnail, stranger, forger, pedant (all subagents)
 Stipulated facts: 3 contrast runs; A and C repaired pre-seating; seed 7;
   devibe not applicable (SVG exports, no scannable component source)
 Ranking: B 0.52 > C 0.41 > A 0.07 (Bradley-Terry, 15 comparisons)
 Separation: P(B>C) = 3/5 = 0.60  (< 0.65 — split trigger 3)
 Concordance: 20/30 = 0.67   Unique contributors: 4/5   Collapsed: no
 Defects (union, max severity):
-  HIGH     A — terminology drift, legend vs caption      (pedant)
-             claimed CRITICAL; not form-fatal, and inline-seated sole
-             source, so recorded at HIGH
+  CRITICAL A — terminology drift, legend vs caption      (pedant)
+             form_fatal: no — gates A's commit, does not delete it
+             from the ranking
   HIGH     A — no focal point survives blur              (squinter)
   HIGH     B — AOI identifiers opaque without the brief  (stranger)
   HIGH     C — 14 unlabeled numerals                     (pedant)
@@ -694,8 +713,9 @@ Defects (union, max severity):
   MEDIUM   B — 90% forgeable in 3m40s                    (forger)
 No mutually exclusive fix pairs on one target — nothing routed to the
   split by trigger 5.
-Verdict on A: NEEDS REVISION. A ranks last on the comparative body; the
-  defect body gates its commit. Neither eliminated it.
+Verdict on A: FAIL (CRITICAL, not form-fatal). A ranks last on the
+  comparative body; the defect body gates its commit. Neither eliminated
+  it from the ranking.
 
 Split: squinter + thumbnail rank B first; stranger + forger rank C first.
   Squinter and thumbnail optimize signal survival under degradation — B
