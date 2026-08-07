@@ -14,9 +14,9 @@ set -euo pipefail
 
 SRC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PLUGIN_SKILL_SRC="$SRC/plugins/muriel/skills/compose"
-PLUGIN_AGENT_SRC="$SRC/plugins/muriel/agents/muriel-critique.md"
+PLUGIN_AGENT_SRC="$SRC/plugins/muriel/agents"
 SKILL_DST="$HOME/.claude/skills/muriel"
-AGENT_DST="$HOME/.claude/agents/muriel-critique.md"
+AGENT_DST_DIR="$HOME/.claude/agents"
 PLUGIN_CACHE_HINT="$HOME/.claude/plugins/cache/andyed-muriel"
 
 echo "muriel — dev install helper"
@@ -37,7 +37,7 @@ if [ -d "$PLUGIN_CACHE_HINT" ]; then
 fi
 
 # ── Sanity-check the plugin tree ──────────────────────────────────────
-if [ ! -d "$PLUGIN_SKILL_SRC" ] || [ ! -f "$PLUGIN_AGENT_SRC" ]; then
+if [ ! -d "$PLUGIN_SKILL_SRC" ] || [ ! -d "$PLUGIN_AGENT_SRC" ]; then
   echo "✗ Expected plugin layout missing."
   echo "  PLUGIN_SKILL_SRC=$PLUGIN_SKILL_SRC"
   echo "  PLUGIN_AGENT_SRC=$PLUGIN_AGENT_SRC"
@@ -54,14 +54,21 @@ else
   echo "✓ linked $PLUGIN_SKILL_SRC → $SKILL_DST"
 fi
 
-# ── Critique agent ─────────────────────────────────────────────────────
-mkdir -p "$HOME/.claude/agents"
-if [ -L "$AGENT_DST" ] || [ -f "$AGENT_DST" ]; then
-  echo "✓ $AGENT_DST already exists — leaving alone"
-else
-  ln -s "$PLUGIN_AGENT_SRC" "$AGENT_DST"
-  echo "✓ linked $PLUGIN_AGENT_SRC → $AGENT_DST"
-fi
+# ── Agents (critique + every juror seat) ───────────────────────────────
+# Link every agent in the plugin tree, not just muriel-critique. The jury
+# seats ship as their own agent files and subagent_type must resolve for
+# them too.
+mkdir -p "$AGENT_DST_DIR"
+for agent_src in "$PLUGIN_AGENT_SRC"/*.md; do
+  [ -f "$agent_src" ] || continue
+  agent_dst="$AGENT_DST_DIR/$( basename "$agent_src" )"
+  if [ -L "$agent_dst" ] || [ -f "$agent_dst" ]; then
+    echo "✓ $agent_dst already exists — leaving alone"
+  else
+    ln -s "$agent_src" "$agent_dst"
+    echo "✓ linked $agent_src → $agent_dst"
+  fi
+done
 
 # ── Python package (optional, editable) ────────────────────────────────
 if command -v pip >/dev/null 2>&1; then

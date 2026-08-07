@@ -139,7 +139,7 @@ Each subcommand is also callable directly via `python -m muriel.capture`, `pytho
 
 ### The critique agent
 
-The `muriel-critique` subagent ships with the plugin and is loaded automatically by both install paths above (plugin install and `install.sh`). Dispatch it from any Claude Code session with the Agent tool, `subagent_type: muriel-critique`. See [Critique agent](#critique-agent) below.
+The `muriel-critique` subagent ships with the plugin and is loaded automatically by both install paths above (plugin install and `install.sh`). Dispatch it from any Claude Code session with the Agent tool, `subagent_type: muriel-critique`. See [Critique agent](#critique-agent) below. Two jury seats ship and load the same way — `muriel-squinter` (blur-ladder survival) and `muriel-forger` (counterfeit distinguishability) — dispatched as `subagent_type: muriel-squinter` / `muriel-forger` and governed by [`references/jury.md`](plugins/muriel/skills/compose/references/jury.md).
 
 ### Other AI harnesses (Cursor, Codex, Gemini CLI, GitHub Copilot, Kiro, OpenCode, Pi, Qoder, Rovo Dev, Trae, …)
 
@@ -175,7 +175,7 @@ Encoded in `SKILL.md` and enforced across every channel:
 
 ## Critique agent
 
-muriel ships a vision-model critique agent at [`plugins/muriel/agents/muriel-critique.md`](plugins/muriel/agents/muriel-critique.md). It reads a rendered artifact and names — with evidence — every way the artifact fails muriel's rules, channel anti-patterns, and (optionally) a `brand.toml`'s tokens. Read-only tools (Read / Glob / Grep), hardened against prompt-injection, badge-laundering, and contrast-claim spoofing embedded in the image itself.
+muriel ships a vision-model critique agent at [`plugins/muriel/agents/muriel-critique.md`](plugins/muriel/agents/muriel-critique.md). It reads a rendered artifact and names — with evidence — every way the artifact fails muriel's rules, channel anti-patterns, and (optionally) a `brand.toml`'s tokens. Read-only tools (Read / Glob / Grep), hardened against prompt-injection, badge-laundering, and contrast-claim spoofing embedded in the image itself. The jury seats differ: `muriel-squinter` adds Bash for `muriel.squint`, and `muriel-forger` carries Write plus a documented render escape hatch because its whole method is building a counterfeit and rendering it — its output lands under `render_assets/forgery/<decisionId>/`, which is gitignored.
 
 **Install:** the subagent ships with the muriel plugin and is loaded automatically by both install paths in [Install](#install) above (plugin install via `/plugin install muriel@andyed-muriel` and the developer `install.sh` route). No manual symlinks required.
 

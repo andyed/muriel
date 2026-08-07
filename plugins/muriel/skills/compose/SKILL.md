@@ -156,6 +156,10 @@ Optional deep references:
 - [`references/creative-provocations.md`](references/creative-provocations.md) —
   an optional Eno-like repertoire of original transformations for escaping a
   design rut, plus a return-to-truth gate and observable provocation record.
+- [`references/jury.md`](references/jury.md) — multi-seat panel judgement for a
+  contested direction or defect sweep, with lens-defined seats, randomized
+  comparative ballots, reported splits, and a ledger that scores each seat
+  against what happened next.
 - [`references/interaction-contracts.md`](references/interaction-contracts.md) —
   canonical-state flow, feedback, recovery, and async behavior contracts for
   interfaces whose interaction truth is not yet settled.
@@ -172,6 +176,9 @@ Optional deep references:
 When design synthesis was loaded, emit its labeled **Muriel synthesis** rationale
 before the delta. An unlabeled recommendation does not satisfy the observable
 decision contract.
+
+When the jury was convened, emit its labeled **Muriel jury finding**, split
+unresolved, before the delta.
 
 Finish with a concise Muriel delta:
 

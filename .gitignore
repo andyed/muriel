@@ -23,6 +23,11 @@ venv/
 # Drafts (private)
 docs/drafts/
 
+# Jury byproducts (Forger counterfeits + Squinter blur ladders) — a panel
+# sitting writes these next to tracked artifacts; they are evidence, not source.
+render_assets/forgery/
+**/squint/
+
 # muriel docs build (source venv + generated gallery copy + scratch build)
 /site-build/
 /site-docs/src/gallery/

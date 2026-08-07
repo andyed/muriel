@@ -56,6 +56,7 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     "import-corpus":  ("muriel.tools.corpus_audit",          "Audit a DESIGN.md corpus through design_md_import + 8:1 floor"),
     "palettes":       ("muriel.palettes",                   "List / generate / validate categorical palettes (CVD + contrast)"),
     "smartcrop":      ("muriel.tools.smartcrop",            "Saliency-aware crop solver (edges + optional faces / text / saliency)"),
+    "squint":         ("muriel.squint",                     "Dimension-scaled blur ladder + thumbnail companions — does hierarchy survive degradation?"),
     "styleguide":     ("muriel.styleguide",                 "Load a brand.toml; print / derive CSS / matplotlibrc / contrast audit"),
     "tilt-shift":     ("muriel.tools.tilt_shift",           "Fake-lens depth-of-field blur on a PNG"),
     "uipromax":       ("muriel.uipromax",                    "Browse the ui-ux-pro-max corpus; audit its palettes against 8:1"),
