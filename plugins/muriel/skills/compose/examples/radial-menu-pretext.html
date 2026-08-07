@@ -1,0 +1,1476 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Muriel radial-menu typography probe</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f3efe5;
+      --muted: #c7cbc9;
+      --paper: #090b10;
+      --panel: #11161d;
+      --wedge: #18202a;
+      --wedge-alt: #202a35;
+      --accent: #65e7ff;
+      --line: #778493;
+      --selected-ink: #090b10;
+      --danger: #ffd2b8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 36px 0 64px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: end;
+      padding-bottom: 22px;
+      border-bottom: 2px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(32px, 5vw, 64px);
+      line-height: 0.95;
+      letter-spacing: -0.045em;
+    }
+
+    .lede {
+      max-width: 760px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .version {
+      align-self: start;
+      border: 2px solid var(--accent);
+      padding: 8px 10px;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    select,
+    input[type="range"] {
+      width: 100%;
+      min-height: 44px;
+    }
+
+    select {
+      border: 2px solid var(--line);
+      border-radius: 0;
+      background: var(--panel);
+      color: var(--ink);
+      padding: 0 12px;
+      font: 800 16px Arial, sans-serif;
+    }
+
+    output {
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      min-width: 0;
+      border: 2px solid var(--line);
+      background: var(--panel);
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: baseline;
+      padding: 16px 18px;
+      border-bottom: 2px solid var(--line);
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+
+    .card-tag {
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .wheel-wrap {
+      display: grid;
+      place-items: center;
+      min-height: 360px;
+      padding: 12px;
+      overflow: hidden;
+      background:
+        linear-gradient(var(--panel), var(--panel)) padding-box,
+        repeating-linear-gradient(45deg, transparent 0 12px, #1b252f 12px 13px);
+    }
+
+    .wheel,
+    .wheel-shell {
+      display: block;
+      width: min(var(--menu-size, 440px), 100%);
+      aspect-ratio: 1;
+    }
+
+    .wheel {
+      height: auto;
+      outline: none;
+      touch-action: manipulation;
+    }
+
+    .wheel-shell {
+      position: relative;
+    }
+
+    .wheel-shell .wheel {
+      width: 100%;
+    }
+
+    .wheel-dom {
+      position: absolute;
+      inset: 0;
+      overflow: visible;
+      pointer-events: none;
+      color: var(--ink);
+    }
+
+    .dom-wedge {
+      position: absolute;
+      inset: 0;
+      color: var(--ink);
+    }
+
+    .dom-wedge.is-active { color: var(--selected-ink); }
+
+    .dom-line {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .dom-fragment {
+      display: inline-block;
+      flex: none;
+      white-space: pre;
+    }
+
+    .dom-glyph-letter {
+      position: absolute;
+      display: block;
+      line-height: 1;
+      transform-origin: center;
+      white-space: pre;
+      will-change: transform;
+    }
+
+    .dom-icon {
+      position: absolute;
+      display: block;
+      overflow: visible;
+      color: currentColor;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .dom-icon .live { fill: var(--accent); stroke: var(--accent); }
+    .dom-wedge.is-active .dom-icon .live { fill: #006079; stroke: #006079; }
+    .dom-status { color: var(--accent); }
+    .dom-wedge.is-active .dom-status { color: #006079; }
+
+    .wheel:focus-visible {
+      outline: 4px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .wedge-path {
+      fill: var(--wedge);
+      stroke: var(--paper);
+      stroke-width: 4;
+      cursor: pointer;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .wedge:nth-child(even) .wedge-path { fill: var(--wedge-alt); }
+
+    .wedge.is-active .wedge-path {
+      fill: var(--ink);
+      stroke: var(--accent);
+      stroke-width: 5;
+    }
+
+    .wedge text {
+      fill: var(--ink);
+      pointer-events: none;
+    }
+
+    .wedge.is-active text { fill: var(--selected-ink); }
+
+    .wedge-icon {
+      color: var(--ink);
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .wedge.is-active .wedge-icon { color: var(--selected-ink); }
+    .wedge-icon .live { fill: var(--accent); stroke: var(--accent); }
+    .wedge.is-active .wedge-icon .live { fill: #006079; stroke: #006079; }
+    .wedge-status { color: var(--accent); }
+    .wedge.is-active .wedge-status { color: #006079; }
+
+    .hub {
+      fill: var(--paper);
+      stroke: var(--line);
+      stroke-width: 3;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .hub-label {
+      fill: var(--ink);
+      font: 800 16px Arial, sans-serif;
+      text-anchor: middle;
+      letter-spacing: 0.08em;
+    }
+
+    .card-foot {
+      min-height: 76px;
+      margin: 0;
+      padding: 14px 18px 16px;
+      border-top: 2px solid var(--line);
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    .card-foot strong { color: var(--ink); }
+
+    .audit {
+      margin-top: 18px;
+      border: 2px solid var(--line);
+      background: var(--panel);
+      padding: 18px;
+    }
+
+    .audit h2 { margin: 0 0 14px; font-size: 22px; }
+
+    .audit-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .metric {
+      min-height: 96px;
+      border: 2px solid var(--line);
+      padding: 12px;
+    }
+
+    .metric b {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 24px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .probe-note {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 840px) {
+      header { grid-template-columns: 1fr; }
+      .version { justify-self: start; }
+      .controls { grid-template-columns: 1fr; }
+      .compare { grid-template-columns: 1fr; }
+      .audit-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 480px) {
+      main { width: min(100% - 20px, 1180px); padding-top: 22px; }
+      .audit-grid { grid-template-columns: 1fr; }
+      .wheel-wrap { min-height: 320px; padding: 4px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <p class="eyebrow">Muriel competency probe · RM-01</p>
+        <h1>Let the wedge typeset itself.</h1>
+        <p class="lede">The target geometry stays fixed. Pretext chooses one legal label tier for the ring; the right wheel gives short commands a shallow per-grapheme bow while keeping multiword commands on word-coherent lines.</p>
+      </div>
+      <div class="version">Pretext 0.0.5 · DOM materialization</div>
+    </header>
+
+    <section class="controls" aria-label="Probe controls">
+      <label>Content preset
+        <select id="preset">
+          <option value="psychodeli">Psychodeli consumerUI</option>
+          <option value="potluck">Pot Luck actions</option>
+          <option value="stress">Long-label stress</option>
+        </select>
+      </label>
+      <label>Rendered diameter <output id="size-value" for="size">440 px</output>
+        <input id="size" type="range" min="320" max="520" step="20" value="440">
+      </label>
+      <label>Wedge count <output id="count-value" for="count">5</output>
+        <input id="count" type="range" min="3" max="8" step="1" value="5">
+      </label>
+      <label>Arc bow <output id="arc-value" for="arc">30%</output>
+        <input id="arc" type="range" min="0" max="100" step="10" value="30">
+      </label>
+      <label>Letter turn <output id="turn-value" for="turn">10%</output>
+        <input id="turn" type="range" min="0" max="100" step="10" value="10">
+      </label>
+    </section>
+
+    <section class="compare" aria-label="Radial menu composition comparison">
+      <article class="card">
+        <div class="card-head">
+          <h2>Fixed midpoint</h2>
+          <span class="card-tag">baseline</span>
+        </div>
+        <div class="wheel-wrap">
+          <svg id="baseline" class="wheel" viewBox="0 0 480 480" role="menu" tabindex="0" aria-label="Fixed midpoint radial menu"></svg>
+        </div>
+        <p id="baseline-caption" class="card-foot"><strong>Arrow keys rotate.</strong> Enter or Space commits the highlighted command.</p>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h2>Adaptive label flow</h2>
+          <span class="card-tag">Pretext → carrier</span>
+        </div>
+        <div class="wheel-wrap">
+          <div id="flow-shell" class="wheel-shell">
+            <svg id="flow" class="wheel" viewBox="0 0 480 480" role="menu" tabindex="0" aria-label="Pretext-composed radial menu"></svg>
+            <div id="flow-dom" class="wheel-dom" aria-hidden="true"></div>
+          </div>
+        </div>
+        <p id="flow-caption" class="card-foot"><strong>Same SVG targets, readable words.</strong> Arc bow shapes short labels; multiword labels retain horizontal word lines. Letter turn stays independently restrained.</p>
+      </article>
+    </section>
+
+    <section class="audit" aria-labelledby="audit-title">
+      <h2 id="audit-title">Live proof</h2>
+      <div id="audit-grid" class="audit-grid" aria-live="polite"></div>
+      <p class="probe-note">Hard gates: 16 px physical text, 8:1 contrast, status conveyed by shape rather than printed state words, no rendered DOM bbox outside its wedge, no curved-label/exact-value collision, and byte-stable SVG target paths across focus. This demo tests composition; product state and side effects remain with the host application.</p>
+    </section>
+  </main>
+
+  <script type="module">
+    import {
+      prepareRichInline,
+      layoutNextRichInlineLineRange,
+      materializeRichInlineLineRange,
+    } from './vendor/pretext-rich-inline-0.0.5.min.js'
+
+    const NS = 'http://www.w3.org/2000/svg'
+    const CX = 240
+    const CY = 240
+    const R_IN = 78
+    const R_OUT = 220
+    const VIEW = 480
+    const MIN_TEXT_PX = 16
+    const MAX_TEXT_PX = 28
+    const VALUE_TEXT_PX = 16
+    const COMMAND_ICON_PX = 28
+    const STATUS_ICON_PX = 16
+    const GLYPH_GAP_PX = 6
+    const LABEL_GAP_PX = 8
+    const ARC_LABEL_GAP_PX = 22
+    const VALUE_GAP_PX = 20
+    const arcMeasureCanvas = document.createElement('canvas')
+    const arcMeasure = arcMeasureCanvas.getContext('2d')
+    const graphemeSegmenter = typeof Intl?.Segmenter === 'function'
+      ? new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+      : null
+
+    const ICONS = {
+      vibe: '<circle class="live" cx="12" cy="12" r="2.2"/><path d="M15.6 8.4a5 5 0 0 1 0 7.2M8.4 8.4a5 5 0 0 0 0 7.2M18.4 5.6a9 9 0 0 1 0 12.8M5.6 5.6a9 9 0 0 0 0 12.8"/>',
+      color: '<circle cx="9" cy="10" r="5"/><circle class="live" cx="15" cy="10" r="5"/><circle cx="12" cy="15" r="5"/>',
+      camera: '<rect x="3" y="6.5" width="18" height="12.5" rx="2.5"/><circle class="live" cx="12" cy="13" r="3.3"/><path d="M8.5 6.5 10 4h4l1.5 2.5"/>',
+      play: '<path class="live" d="M7 5l12 7-12 7z"/>',
+      dots: '<circle cx="5" cy="12" r="1.7"/><circle class="live" cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/>',
+      sprout: '<path d="M12 21V11M12 13C8 13 5.5 10 5.5 6c4 0 6.5 2.5 6.5 7M12 11c4 0 6.5-3 6.5-7-4 0-6.5 2.5-6.5 7"/>',
+      drop: '<path class="live" d="M12 3.5S5.5 11 5.5 15.5a6.5 6.5 0 0 0 13 0C18.5 11 12 3.5 12 3.5Z"/>',
+      shears: '<circle cx="8" cy="18.5" r="2.4"/><circle class="live" cx="16" cy="18.5" r="2.4"/><path d="m9.3 16.6 6.2-12.1M14.7 16.6 8.5 4.5"/>',
+      tag: '<path d="M4 12.5 12.5 4H20v7.5L11.5 20Z"/><circle class="live" cx="15.8" cy="8.2" r="1.4"/>',
+      phone: '<path d="M5.5 4C4.6 4 4 4.7 4 5.6A14.4 14.4 0 0 0 18.4 20c.9 0 1.6-.6 1.6-1.5v-3.1l-4.1-1.2-1.9 1.9A11 11 0 0 1 7.9 10l1.9-1.9L8.6 4.1Z"/>',
+      build: '<path d="M4 5.5h16V10H4ZM6 10v9h12v-9"/><path class="live" d="M12 12.5V17M9.8 14.75h4.4"/>',
+      shield: '<path d="M12 3 19.5 6v5.5c0 5-3 8.5-7.5 10-4.5-1.5-7.5-5-7.5-10V6Z"/><path class="live" d="M12 3v18.5"/>',
+      share: '<path d="M12 14V3M8 7l4-4 4 4M7 11H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1"/>',
+      on: '<circle cx="12" cy="12" r="8.5"/><path class="live" d="m8.2 12.2 2.4 2.5 5.4-5.6"/>',
+      off: '<circle cx="12" cy="12" r="8.5"/><path class="live" d="M6 6l12 12"/>',
+      live: '<circle class="live" cx="12" cy="12" r="2.5"/><path d="M7.7 7.7a6 6 0 0 0 0 8.6M16.3 7.7a6 6 0 0 1 0 8.6"/>',
+      ready: '<path d="M5 4.5h14v15H5Z"/><path class="live" d="m8.2 12.2 2.4 2.5 5.4-5.6"/>',
+    }
+
+    const PRESETS = {
+      psychodeli: [
+        { label: 'Vibe', status: 'on', statusLabel: 'on', icon: 'vibe' },
+        { label: 'Color', status: 'live', statusLabel: 'live', icon: 'color' },
+        { label: 'Reactivity', status: 'off', statusLabel: 'audio off', icon: 'camera' },
+        { label: 'Demo', icon: 'play' },
+        { label: 'More', meta: '5', icon: 'dots' },
+        { label: 'Reduce flash', status: 'off', statusLabel: 'off', icon: 'shield' },
+        { label: 'Share', icon: 'share' },
+        { label: 'Power', status: 'ready', statusLabel: 'ready', icon: 'vibe' },
+      ],
+      potluck: [
+        { label: 'Plant', meta: '1 AP', icon: 'sprout' },
+        { label: 'Water', meta: '1 AP', icon: 'drop' },
+        { label: 'Harvest', meta: '1 AP', icon: 'shears' },
+        { label: 'Sell', meta: '12.0 OZ', icon: 'tag' },
+        { label: 'Work Connections', displayLabel: 'Connections', meta: '$350', icon: 'phone' },
+        { label: 'Build', meta: '2', status: 'ready', statusLabel: 'ready', icon: 'build' },
+        { label: 'Lay Low', meta: 'HEAT −2', icon: 'shield' },
+        { label: 'Share the Work', meta: '1 AP', icon: 'share' },
+      ],
+      stress: [
+        { label: 'Audio Reactivity', status: 'off', statusLabel: 'audio off', icon: 'camera' },
+        { label: 'Reduce Flashing', status: 'on', statusLabel: 'on', icon: 'shield' },
+        { label: 'Work Connections', meta: '$350', icon: 'phone' },
+        { label: 'Share This Session', icon: 'share' },
+        { label: 'Build Capacity', meta: '2', status: 'ready', statusLabel: 'ready', icon: 'build' },
+        { label: 'Color & Palette', status: 'live', statusLabel: 'live', icon: 'color' },
+        { label: 'Harvest Everything', meta: '1 AP', icon: 'shears' },
+        { label: 'Power & Display', status: 'ready', statusLabel: 'ready', icon: 'vibe' },
+      ],
+    }
+
+    function itemVisibleDetail(item) {
+      return item.meta || ''
+    }
+
+    function itemDisplayLabel(item) {
+      return item.displayLabel || item.label
+    }
+
+    function itemAriaLabel(item) {
+      return [item.label, item.meta, item.statusLabel].filter(Boolean).join(', ')
+    }
+
+    const ui = {
+      preset: document.getElementById('preset'),
+      size: document.getElementById('size'),
+      count: document.getElementById('count'),
+      arc: document.getElementById('arc'),
+      turn: document.getElementById('turn'),
+      sizeValue: document.getElementById('size-value'),
+      countValue: document.getElementById('count-value'),
+      arcValue: document.getElementById('arc-value'),
+      turnValue: document.getElementById('turn-value'),
+      baseline: document.getElementById('baseline'),
+      flow: document.getElementById('flow'),
+      flowShell: document.getElementById('flow-shell'),
+      flowDom: document.getElementById('flow-dom'),
+      baselineCaption: document.getElementById('baseline-caption'),
+      flowCaption: document.getElementById('flow-caption'),
+      audit: document.getElementById('audit-grid'),
+    }
+
+    const wheelState = new WeakMap()
+    function svgEl(tag, attrs = {}) {
+      const el = document.createElementNS(NS, tag)
+      Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, String(value)))
+      return el
+    }
+
+    function normalizeAngle(angle, target) {
+      while (angle < target - Math.PI) angle += Math.PI * 2
+      while (angle > target + Math.PI) angle -= Math.PI * 2
+      return angle
+    }
+
+    function signedAngle(angle) {
+      while (angle <= -Math.PI) angle += Math.PI * 2
+      while (angle > Math.PI) angle -= Math.PI * 2
+      return angle
+    }
+
+    function graphemes(text) {
+      return graphemeSegmenter
+        ? Array.from(graphemeSegmenter.segment(text), ({ segment }) => segment)
+        : Array.from(text)
+    }
+
+    function lerp(a, b, amount) {
+      return a + (b - a) * amount
+    }
+
+    function pointInsideWedge(x, y, wedge, pad = 0) {
+      const dx = x - CX
+      const dy = y - CY
+      const radius = Math.hypot(dx, dy)
+      if (radius < wedge.rIn + pad || radius > wedge.rOut - pad) return false
+      const mid = (wedge.a0 + wedge.a1) / 2
+      const angle = normalizeAngle(Math.atan2(dy, dx), mid)
+      const angularPad = Math.min(0.035, pad / Math.max(radius, 1))
+      return angle >= wedge.a0 + angularPad && angle <= wedge.a1 - angularPad
+    }
+
+    function rectInsideWedge(rect, wedge, pad = 0) {
+      const { x, y, width, height } = rect
+      return [
+        [x, y], [x + width / 2, y], [x + width, y],
+        [x, y + height / 2], [x + width, y + height / 2],
+        [x, y + height], [x + width / 2, y + height], [x + width, y + height],
+      ].every(([px, py]) => pointInsideWedge(px, py, wedge, pad))
+    }
+
+    function rectGap(a, b) {
+      const horizontal = a.x + a.width <= b.x
+        ? b.x - (a.x + a.width)
+        : b.x + b.width <= a.x
+          ? a.x - (b.x + b.width)
+          : 0
+      const vertical = a.y + a.height <= b.y
+        ? b.y - (a.y + a.height)
+        : b.y + b.height <= a.y
+          ? a.y - (b.y + b.height)
+          : 0
+      return Math.hypot(horizontal, vertical)
+    }
+
+    function pointOnCircle(angle, radius) {
+      return [CX + radius * Math.cos(angle), CY + radius * Math.sin(angle)]
+    }
+
+    function wedgePath(wedge) {
+      const [x0, y0] = pointOnCircle(wedge.a0, wedge.rOut)
+      const [x1, y1] = pointOnCircle(wedge.a1, wedge.rOut)
+      const [x2, y2] = pointOnCircle(wedge.a1, wedge.rIn)
+      const [x3, y3] = pointOnCircle(wedge.a0, wedge.rIn)
+      const large = wedge.a1 - wedge.a0 > Math.PI ? 1 : 0
+      return `M${x0.toFixed(3)},${y0.toFixed(3)} A${wedge.rOut},${wedge.rOut} 0 ${large} 1 ${x1.toFixed(3)},${y1.toFixed(3)} L${x2.toFixed(3)},${y2.toFixed(3)} A${wedge.rIn},${wedge.rIn} 0 ${large} 0 ${x3.toFixed(3)},${y3.toFixed(3)} Z`
+    }
+
+    function wedgesFor(count) {
+      const step = Math.PI * 2 / count
+      const start = -Math.PI / 2 - step / 2
+      return Array.from({ length: count }, (_, index) => ({
+        a0: start + index * step + 0.016,
+        a1: start + (index + 1) * step - 0.016,
+        rIn: R_IN,
+        rOut: R_OUT,
+      }))
+    }
+
+    function longestSlot(wedge, top, bottom, pad) {
+      if (top < 8 || bottom > VIEW - 8 || bottom <= top) return null
+      const step = 2
+      let runStart = null
+      let best = null
+      for (let x = 8; x <= VIEW - 8; x += step) {
+        const inside = rectInsideWedge({ x, y: top, width: step, height: bottom - top }, wedge, pad)
+        if (inside && runStart === null) runStart = x
+        if ((!inside || x >= VIEW - 8) && runStart !== null) {
+          const end = inside ? x + step : x
+          if (!best || end - runStart > best.width) best = { x: runStart, width: end - runStart }
+          runStart = null
+        }
+      }
+      if (!best || best.width < 8) return null
+      return { ...best, top, height: bottom - top }
+    }
+
+    function wordItems(text, size, weight, kind) {
+      const specs = []
+      const descriptors = []
+      String(text).split(/\s+/).filter(Boolean).forEach((word, index) => {
+        specs.push({
+          text: `${index > 0 ? ' ' : ''}${word}`,
+          font: `${weight} ${size}px Arial`,
+          break: 'never',
+        })
+        descriptors.push({ kind, size, weight })
+      })
+      return { specs, descriptors }
+    }
+
+    function atomicTextItem(text, size, weight, kind) {
+      return {
+        specs: [{ text: String(text), font: `${weight} ${size}px Arial`, break: 'never' }],
+        descriptors: [{ kind, size, weight }],
+      }
+    }
+
+    function rangeFlow(prepared, descriptors, slots, startIndex = 0) {
+      const lines = []
+      let cursor = { itemIndex: 0, segmentIndex: 0, graphemeIndex: 0 }
+      for (let index = startIndex; index < slots.length; index++) {
+        const slot = slots[index]
+        if (!slot) return null
+        const range = layoutNextRichInlineLineRange(prepared, slot.width, cursor)
+        if (!range) return null
+        const line = materializeRichInlineLineRange(prepared, range)
+        // A break:'never' item is intentionally allowed to overrun an empty
+        // line in Pretext. That is useful for pills, but a wedge has a hard
+        // boundary, so reject the candidate and continue at a smaller tier.
+        if (line.width > slot.width + 0.01) return null
+        lines.push({ line, slot })
+        cursor = range.end
+        if (cursor.itemIndex >= descriptors.length) return lines
+      }
+      return null
+    }
+
+    function arcGlyphPlacements({ line, slot }, descriptors, wedge, scale, arcBlend, turnBlend, arcRadius) {
+      const units = []
+      line.fragments.forEach((fragment) => {
+        const descriptor = descriptors[fragment.itemIndex]
+        const font = `${descriptor.weight} ${descriptor.size}px Arial`
+        graphemes(fragment.text).forEach((character, index) => {
+          units.push({
+            character,
+            descriptor,
+            font,
+            gapBefore: index === 0 ? fragment.gapBefore : 0,
+          })
+        })
+      })
+      while (units.length && /^\s$/u.test(units[0].character)) units.shift()
+      while (units.length && /^\s$/u.test(units.at(-1).character)) units.pop()
+      if (!units.length) return []
+
+      // Measure cumulative prefixes instead of summing isolated glyph widths.
+      // That preserves the font's natural kerning before the letters leave the
+      // normal inline formatting context; rescaling isolated advances made
+      // pairs such as "Co" and "Mo" visibly collide.
+      let cursor = 0
+      let runStart = 0
+      let runText = ''
+      let runFont = ''
+      units.forEach((unit) => {
+        if (unit.font !== runFont || unit.gapBefore) {
+          cursor += unit.gapBefore
+          runStart = cursor
+          runText = ''
+          runFont = unit.font
+        }
+        arcMeasure.font = unit.font
+        const before = arcMeasure.measureText(runText).width
+        runText += unit.character
+        const after = arcMeasure.measureText(runText).width
+        unit.center = runStart + (before + after) / 2
+        unit.advance = arcMeasure.measureText(unit.character).width
+        cursor = runStart + after
+      })
+      const mid = (wedge.a0 + wedge.a1) / 2
+      const radius = Math.max(wedge.rIn + 12 / scale, Math.min(wedge.rOut - 12 / scale, arcRadius))
+      // Both endpoints share the same radial rail. Only the character
+      // trajectory changes, so the blend cannot sweep text through the icon.
+      const horizontalCenterX = Number.isFinite(slot.horizontalX)
+        ? slot.horizontalX
+        : CX + radius * Math.cos(mid)
+      const horizontalCenterY = Number.isFinite(slot.horizontalY)
+        ? slot.horizontalY
+        : CY + radius * Math.sin(mid)
+      const forwardTangent = signedAngle(mid + Math.PI / 2)
+      const direction = Math.abs(forwardTangent) <= Math.PI / 2 ? 1 : -1
+      const blendedTangent = (angle) => {
+        const arcX = direction * -Math.sin(angle)
+        const arcY = direction * Math.cos(angle)
+        return {
+          x: (1 - arcBlend) + arcBlend * arcX,
+          y: arcBlend * arcY,
+        }
+      }
+      const centerTangent = blendedTangent(mid)
+      const centerSpeed = Math.max(0.35, Math.hypot(centerTangent.x, centerTangent.y))
+
+      return units.filter(({ character }) => !/^\s$/u.test(character)).map((unit) => {
+        const offset = unit.center - cursor / 2
+        // Cartesian interpolation between a line and a circle contracts the
+        // path on side wedges. Reparameterize by the blended tangent speed so
+        // neighboring glyph centers retain their measured reading distance.
+        const pathOffset = offset / centerSpeed
+        const horizontalX = horizontalCenterX + pathOffset
+        const horizontalY = horizontalCenterY
+        const arcAngle = mid + direction * pathOffset / radius
+        const arcX = CX + radius * Math.cos(arcAngle)
+        const arcY = CY + radius * Math.sin(arcAngle)
+        const tangent = blendedTangent(arcAngle)
+        const rotation = Math.atan2(tangent.y, tangent.x) * turnBlend
+        const width = unit.advance
+        const height = unit.descriptor.size * 1.06
+        const bboxWidth = Math.abs(width * Math.cos(rotation)) + Math.abs(height * Math.sin(rotation))
+        const bboxHeight = Math.abs(width * Math.sin(rotation)) + Math.abs(height * Math.cos(rotation))
+        const x = lerp(horizontalX, arcX, arcBlend)
+        const y = lerp(horizontalY, arcY, arcBlend)
+        return {
+          character: unit.character,
+          descriptor: unit.descriptor,
+          x,
+          y,
+          rotation,
+          rect: {
+            x: x - bboxWidth / 2,
+            y: y - bboxHeight / 2,
+            width: bboxWidth,
+            height: bboxHeight,
+          },
+        }
+      })
+    }
+
+    function guardedSlot(wedge, top, bottom, pad, scale) {
+      const slot = longestSlot(wedge, top, bottom, pad)
+      if (!slot) return null
+      // Canvas and DOM font engines can differ by fractions of a pixel. Keep a
+      // physical 3 px guard on each side before accepting predictive fit.
+      const guard = 3 / scale
+      if (slot.width <= guard * 2 + 8) return null
+      return { ...slot, x: slot.x + guard, width: slot.width - guard * 2 }
+    }
+
+    function composeWedgeAtTier(item, wedge, scale, physical, labelBandLines, arcBlend, turnBlend) {
+      let best = null
+      const targetAngle = (wedge.a0 + wedge.a1) / 2
+      const targetY = CY + ((wedge.rIn + wedge.rOut) / 2) * Math.sin(targetAngle)
+      const displayLabel = itemDisplayLabel(item)
+
+      const labelSize = physical / scale
+      const valueSize = VALUE_TEXT_PX / scale
+      const iconSize = COMMAND_ICON_PX / scale
+      const statusSize = STATUS_ICON_PX / scale
+      const labelLineHeight = labelSize * 1.06
+      const pad = 5 / scale
+      const glyphGap = GLYPH_GAP_PX / scale
+      const labelGap = LABEL_GAP_PX / scale
+      const isMultiwordLabel = /\s/.test(displayLabel.trim())
+      // Two word-lines need extra label/value separation, not extra distance
+      // from the command glyph. Trade those gaps without increasing the total
+      // radial stack, and use the last four outer pixels that a long phrase
+      // genuinely needs.
+      const arcLabelGap = (isMultiwordLabel ? 10 : ARC_LABEL_GAP_PX) / scale
+      const valueGap = (isMultiwordLabel ? 32 : VALUE_GAP_PX) / scale
+      const outerInset = (isMultiwordLabel ? 2 : 8) / scale
+      const statusHeight = item.status ? statusSize : 0
+      const totalHeight = statusHeight
+        + (item.status ? glyphGap : 0)
+        + iconSize
+        + labelGap
+        + labelLineHeight * labelBandLines
+        + (item.meta ? valueGap + valueSize : 0)
+      const labelItems = wordItems(displayLabel, labelSize, 800, 'label')
+      const labelPrepared = prepareRichInline(labelItems.specs)
+      const valueItems = item.meta ? atomicTextItem(item.meta, valueSize, 700, 'meta') : null
+      const valuePrepared = valueItems ? prepareRichInline(valueItems.specs) : null
+      const labelArcBlend = isMultiwordLabel ? Math.min(arcBlend, 0.15) : arcBlend
+      const labelTurnBlend = isMultiwordLabel ? 0 : turnBlend
+      arcMeasure.font = `800 ${labelSize}px Arial`
+      const longestWordWidth = Math.max(...displayLabel.split(/\s+/).map((word) => arcMeasure.measureText(word).width))
+
+      const idealTop = targetY - totalHeight / 2
+      const searchStart = Math.max(14, idealTop - 48)
+      const searchEnd = Math.min(VIEW - totalHeight - 14, idealTop + 48)
+      // The final carrier is radial, so repeating the former screen-vertical
+      // position search only recomposes the same polar rails. Retain one
+      // representative slot pass for Pretext measurement and let the radial
+      // containment gates decide legality.
+      const topCandidates = searchStart <= searchEnd
+        ? [Math.max(searchStart, Math.min(searchEnd, idealTop))]
+        : []
+      for (const top of topCandidates) {
+        let y = top
+        let status = null
+        if (item.status) {
+          const slot = guardedSlot(wedge, y, y + statusSize, pad, scale)
+          if (!slot || slot.width < statusSize + pad * 2) continue
+          status = { x: slot.x + slot.width / 2, y: y + statusSize / 2, size: statusSize }
+          y += statusSize + glyphGap
+        }
+
+        const iconSlot = guardedSlot(wedge, y, y + iconSize, pad, scale)
+        if (!iconSlot || iconSlot.width < iconSize + pad * 2) continue
+        const icon = { x: iconSlot.x + iconSlot.width / 2, y: y + iconSize / 2, size: iconSize }
+        y += iconSize + labelGap
+        const labelBandTop = y
+        const labelBandBottom = y + labelLineHeight * labelBandLines
+
+        for (let usedLabelLines = 1; usedLabelLines <= labelBandLines; usedLabelLines++) {
+          const radialTotal = statusHeight
+            + (item.status ? glyphGap : 0)
+            + iconSize
+            + arcLabelGap
+            + labelLineHeight * usedLabelLines
+            + (item.meta ? valueGap + valueSize : 0)
+          if (radialTotal > wedge.rOut - wedge.rIn - pad * 2) continue
+
+          // Use the outer edge as the invariant anchor. Curved labels gain arc
+          // length there, while inward value rails retain a usable chord.
+          let plannedCursor = wedge.rOut - outerInset
+          if (item.status) plannedCursor -= statusSize + glyphGap
+          plannedCursor -= iconSize + arcLabelGap
+          const plannedOuterLabelRadius = plannedCursor - labelLineHeight / 2
+          const labelSlots = Array.from({ length: usedLabelLines }, (_, lineIndex) => {
+            const radius = plannedOuterLabelRadius - lineIndex * labelLineHeight
+            const angularGuard = Math.max(0.035, (7 / scale) / Math.max(radius, 1))
+            const arcWidth = radius * Math.max(0, wedge.a1 - wedge.a0 - angularGuard * 2)
+            const centerX = CX + radius * Math.cos(targetAngle)
+            const centerY = CY + radius * Math.sin(targetAngle)
+            const horizontalSlot = guardedSlot(
+              wedge,
+              centerY - labelLineHeight / 2,
+              centerY + labelLineHeight / 2,
+              pad,
+              scale,
+            )
+            const horizontalWidth = horizontalSlot?.width || 0
+            return {
+              x: 0,
+              top: 0,
+              width: Math.min(
+                lerp(horizontalWidth, arcWidth, labelArcBlend),
+                isMultiwordLabel && usedLabelLines > 1
+                  ? longestWordWidth + 4 / scale
+                  : Infinity,
+              ),
+              height: labelLineHeight,
+              horizontalX: horizontalSlot ? horizontalSlot.x + horizontalSlot.width / 2 : centerX,
+              horizontalY: centerY,
+            }
+          })
+          const labelLines = rangeFlow(labelPrepared, labelItems.descriptors, labelSlots)
+          if (!labelLines || labelLines.length !== usedLabelLines) continue
+
+          let bottom = labelBandBottom
+          let valueLines = []
+          if (item.meta) {
+            bottom += valueGap
+            const valueSlot = guardedSlot(wedge, bottom, bottom + valueSize, pad, scale)
+            if (!valueSlot) continue
+            valueLines = rangeFlow(valuePrepared, valueItems.descriptors, [valueSlot])
+            if (!valueLines) continue
+            bottom += valueSize
+          }
+
+          let radialCursor = wedge.rOut - outerInset
+          const polarPlacement = (radius, size) => ({
+            x: CX + radius * Math.cos(targetAngle),
+            y: CY + radius * Math.sin(targetAngle),
+            size,
+          })
+
+          let radialStatus = null
+          if (item.status) {
+            radialStatus = polarPlacement(radialCursor - statusSize / 2, statusSize)
+            radialCursor -= statusSize + glyphGap
+          }
+          const radialIcon = polarPlacement(radialCursor - iconSize / 2, iconSize)
+          radialCursor -= iconSize + arcLabelGap
+          // When the exact-value rail is absent (or only a compact count), use
+          // part of that spare inner space to keep the command word clear of
+          // its icon. Longer decision values retain the declared shared rails.
+          const readabilityInset = (!item.meta || String(item.meta).length <= 2) ? 16 / scale : 0
+          const outerLabelRadius = radialCursor - labelLineHeight / 2 - readabilityInset
+          const labelGlyphs = labelLines.flatMap((line, lineIndex) =>
+            arcGlyphPlacements(
+              line,
+              labelItems.descriptors,
+              wedge,
+              scale,
+              labelArcBlend,
+              labelTurnBlend,
+              outerLabelRadius - lineIndex * labelLineHeight,
+            ),
+          )
+          radialCursor -= labelLineHeight * usedLabelLines
+
+          let radialValueLines = valueLines
+          if (item.meta) {
+            radialCursor -= valueGap
+            const valueRadius = radialCursor - valueSize / 2
+            const valueCenter = polarPlacement(valueRadius, valueSize)
+            radialValueLines = valueLines.map(({ line }) => ({
+              line,
+              slot: {
+                x: valueCenter.x - line.width / 2,
+                top: valueCenter.y - valueSize / 2,
+                width: line.width,
+                height: valueSize,
+              },
+            }))
+          }
+
+          const radialValueFits = radialValueLines.every(({ slot }) =>
+            rectInsideWedge(
+              { x: slot.x, y: slot.top, width: slot.width, height: slot.height },
+              wedge,
+              2 / scale,
+            ),
+          )
+          const radialValueGap = radialValueLines.length
+            ? Math.min(...labelGlyphs.flatMap(({ rect }) => radialValueLines.map(({ slot }) =>
+              rectGap(rect, { x: slot.x, y: slot.top, width: slot.width, height: slot.height }),
+            )))
+            : Infinity
+          if (
+            labelGlyphs.some(({ rect }) => !rectInsideWedge(rect, wedge, 2 / scale))
+            || !radialValueFits
+            || radialValueGap < 3 / scale
+          ) continue
+
+          const verticalDistance = Math.abs((top + bottom) / 2 - targetY)
+          const unused = [...labelLines, ...radialValueLines].reduce(
+            (sum, { line, slot }) => sum + (slot.width - line.width) / Math.max(slot.width, 1),
+            0,
+          )
+          const candidate = {
+            score: -verticalDistance - unused * 0.1 - usedLabelLines * 0.01,
+            physical,
+            mode: 'zoned',
+            labelSize,
+            valueSize,
+            icon: radialIcon,
+            status: radialStatus,
+            labelLines,
+            labelGlyphs,
+            labelDescriptors: labelItems.descriptors,
+            valueLines: radialValueLines,
+            valueDescriptors: valueItems?.descriptors || [],
+          }
+          if (!best || candidate.score > best.score) best = candidate
+        }
+      }
+      return best
+    }
+
+    function composeWheel(items, geometry, scale, arcBlend, turnBlend) {
+      const hasMultiwordLabel = items.some((item) => /\s/.test(item.label.trim()))
+      const bandOrder = hasMultiwordLabel ? [2, 1] : [1, 2]
+      for (let physical = MAX_TEXT_PX; physical >= MIN_TEXT_PX; physical -= 2) {
+        for (const labelBandLines of bandOrder) {
+          const compositions = items.map((item, index) =>
+            composeWedgeAtTier(item, geometry[index], scale, physical, labelBandLines, arcBlend, turnBlend),
+          )
+          if (compositions.every(Boolean)) return compositions
+        }
+      }
+      return null
+    }
+
+    function appendIcon(group, iconName, cx, cy, size, kind = 'icon') {
+      const icon = svgEl('svg', {
+        class: `wedge-icon wedge-content wedge-${kind}`,
+        x: cx - size / 2,
+        y: cy - size / 2,
+        width: size,
+        height: size,
+        viewBox: '0 0 24 24',
+        fill: 'none',
+        stroke: 'currentColor',
+        'stroke-width': 1.9,
+        'stroke-linecap': 'round',
+        'stroke-linejoin': 'round',
+        'aria-hidden': 'true',
+      })
+      icon.innerHTML = ICONS[iconName] || ICONS.dots
+      group.appendChild(icon)
+      return icon
+    }
+
+    function domIcon(iconName, physicalSize, kind = 'icon') {
+      const icon = svgEl('svg', {
+        class: `dom-icon wedge-content dom-${kind}`,
+        viewBox: '0 0 24 24',
+        'aria-hidden': 'true',
+      })
+      icon.style.width = `${physicalSize}px`
+      icon.style.height = `${physicalSize}px`
+      icon.innerHTML = ICONS[iconName] || ICONS.dots
+      return icon
+    }
+
+    function domWedge(layer, index) {
+      const wedge = document.createElement('div')
+      wedge.className = 'dom-wedge'
+      wedge.dataset.index = String(index)
+      layer.appendChild(wedge)
+      return wedge
+    }
+
+    function renderComposedDom(layer, group, item, composition, scale, index) {
+      if (!composition) return false
+      const wedge = domWedge(layer, index)
+
+      const placeIcon = (iconName, placement, kind = 'icon') => {
+        if (!placement) return
+        const icon = domIcon(iconName, placement.size * scale, kind)
+        icon.style.left = `${placement.x / VIEW * 100}%`
+        icon.style.top = `${placement.y / VIEW * 100}%`
+        icon.style.transform = 'translate(-50%, -50%)'
+        wedge.appendChild(icon)
+      }
+
+      const placeLines = (lines, descriptors) => lines.forEach(({ line, slot }) => {
+        const lineEl = document.createElement('div')
+        lineEl.className = 'dom-line'
+        lineEl.style.left = `${slot.x / VIEW * 100}%`
+        lineEl.style.top = `${slot.top / VIEW * 100}%`
+        lineEl.style.width = `${slot.width / VIEW * 100}%`
+        lineEl.style.height = `${slot.height / VIEW * 100}%`
+
+        line.fragments.forEach((fragment) => {
+          const descriptor = descriptors[fragment.itemIndex]
+          const content = document.createElement('span')
+          content.className = `dom-fragment wedge-content dom-${descriptor.kind}`
+          content.textContent = fragment.text
+          content.style.font = `${descriptor.weight} ${descriptor.size * scale}px Arial`
+          content.style.marginLeft = `${fragment.gapBefore * scale}px`
+          lineEl.appendChild(content)
+        })
+        wedge.appendChild(lineEl)
+      })
+
+      const placeGlyphLetters = (glyphs) => glyphs.forEach((glyph) => {
+        const content = document.createElement('span')
+        const rotationDegrees = glyph.rotation * 180 / Math.PI
+        content.className = 'dom-fragment wedge-content dom-label dom-glyph-letter'
+        content.textContent = glyph.character
+        content.dataset.rotation = rotationDegrees.toFixed(3)
+        content.style.left = `${glyph.x / VIEW * 100}%`
+        content.style.top = `${glyph.y / VIEW * 100}%`
+        content.style.font = `${glyph.descriptor.weight} ${glyph.descriptor.size * scale}px Arial`
+        content.style.transform = `translate(-50%, -50%) rotate(${rotationDegrees}deg)`
+        wedge.appendChild(content)
+      })
+
+      placeIcon(item.status, composition.status, 'status')
+      placeIcon(item.icon, composition.icon)
+      placeGlyphLetters(composition.labelGlyphs)
+      placeLines(composition.valueLines, composition.valueDescriptors)
+
+      group.dataset.fontPhysical = composition.physical
+      group.dataset.composeMode = 'DOM arc'
+      return true
+    }
+
+    function renderBaseline(group, item, wedge, scale, physicalText = MIN_TEXT_PX, mode = 'fixed') {
+      const mid = (wedge.a0 + wedge.a1) / 2
+      const radius = (wedge.rIn + wedge.rOut) / 2
+      const cx = CX + radius * Math.cos(mid)
+      const cy = CY + radius * Math.sin(mid)
+      const iconSize = 24 / scale
+      const textSize = physicalText / scale
+      appendIcon(group, item.icon, cx, cy - 18 / scale, iconSize)
+
+      const label = svgEl('text', {
+        class: 'wedge-content wedge-label',
+        x: cx,
+        y: cy + 12 / scale,
+        'font-size': textSize,
+        'font-family': 'Arial',
+        'font-weight': 800,
+        'text-anchor': 'middle',
+      })
+      label.textContent = itemDisplayLabel(item)
+      group.appendChild(label)
+
+      if (item.meta) {
+        const meta = svgEl('text', {
+          class: 'wedge-content wedge-meta',
+          x: cx,
+          y: cy + 32 / scale,
+          'font-size': textSize,
+          'font-family': 'Arial',
+          'font-weight': 700,
+          'text-anchor': 'middle',
+        })
+        meta.textContent = item.meta
+        group.appendChild(meta)
+      }
+      if (item.status) {
+        appendIcon(group, item.status, cx + (item.meta ? 30 / scale : 0), cy + 28 / scale, 18 / scale, 'status')
+      }
+      group.dataset.fontPhysical = physicalText
+      group.dataset.composeMode = mode
+    }
+
+    function setActive(svg, index, announce = false) {
+      const state = wheelState.get(svg)
+      if (!state || !state.items.length) return
+      state.active = (index + state.items.length) % state.items.length
+      svg.querySelectorAll('.wedge').forEach((group, groupIndex) => {
+        group.classList.toggle('is-active', groupIndex === state.active)
+        group.setAttribute('aria-current', groupIndex === state.active ? 'true' : 'false')
+      })
+      state.domLayer?.querySelectorAll('.dom-wedge').forEach((group, groupIndex) => {
+        group.classList.toggle('is-active', groupIndex === state.active)
+      })
+      const active = svg.querySelector(`#${svg.id}-item-${state.active}`)
+      if (active) svg.setAttribute('aria-activedescendant', active.id)
+      const item = state.items[state.active]
+      const detail = itemVisibleDetail(item)
+      state.caption.innerHTML = announce
+        ? `<strong>${item.label} selected.</strong>${detail ? ` ${detail}.` : ''} Host application would receive this intent.`
+        : `<strong>${item.label}</strong>${detail ? ` · ${detail}.` : '.'} Arrow keys rotate; Enter or Space commits.`
+    }
+
+    function bindWheel(svg, caption) {
+      wheelState.set(svg, { active: 0, items: [], caption })
+      svg.addEventListener('keydown', (event) => {
+        const state = wheelState.get(svg)
+        if (!state) return
+        if (event.key === 'ArrowRight') setActive(svg, state.active + 1)
+        else if (event.key === 'ArrowLeft') setActive(svg, state.active - 1)
+        else if (event.key === 'Home') setActive(svg, 0)
+        else if (event.key === 'End') setActive(svg, state.items.length - 1)
+        else if (event.key === 'Enter' || event.key === ' ') setActive(svg, state.active, true)
+        else return
+        event.preventDefault()
+      })
+      svg.addEventListener('pointermove', (event) => {
+        const wedge = event.target.closest('.wedge')
+        if (!wedge || !svg.contains(wedge)) return
+        setActive(svg, Number(wedge.dataset.index))
+      })
+      svg.addEventListener('click', (event) => {
+        const wedge = event.target.closest('.wedge')
+        if (!wedge || !svg.contains(wedge)) return
+        setActive(svg, Number(wedge.dataset.index), true)
+      })
+    }
+
+    function renderWheel(svg, items, size, algorithm, domLayer = null, arcBlend = 0, turnBlend = 0) {
+      svg.replaceChildren()
+      domLayer?.replaceChildren()
+      const sizingTarget = domLayer ? svg.closest('.wheel-shell') : svg
+      sizingTarget.style.setProperty('--menu-size', `${size}px`)
+      const scale = size / VIEW
+      const geometry = wedgesFor(items.length)
+      const valueDense = algorithm === 'flow'
+        && items.filter((item) => item.meta).length >= Math.ceil(items.length / 2)
+      const compositions = algorithm === 'flow' && !valueDense
+        ? composeWheel(items, geometry, scale, arcBlend, turnBlend)
+        : null
+      const state = wheelState.get(svg)
+      state.items = items
+      state.active = Math.min(state.active, items.length - 1)
+      state.domLayer = valueDense ? null : domLayer
+
+      geometry.forEach((wedge, index) => {
+        const item = items[index]
+        const group = svgEl('g', {
+          id: `${svg.id}-item-${index}`,
+          class: 'wedge',
+          role: 'menuitem',
+          'aria-label': itemAriaLabel(item),
+          'data-index': index,
+          'data-a0': wedge.a0,
+          'data-a1': wedge.a1,
+        })
+        group.appendChild(svgEl('path', { class: 'wedge-path', d: wedgePath(wedge) }))
+
+        if (algorithm === 'flow') {
+          if (valueDense) {
+            renderBaseline(group, item, wedge, scale, 18, 'SVG readable')
+          } else {
+            const composition = compositions?.[index] || null
+            if (!renderComposedDom(domLayer, group, item, composition, scale, index)) {
+              group.dataset.fontPhysical = MIN_TEXT_PX
+              group.dataset.composeMode = 'DOM stop'
+            }
+          }
+        } else {
+          renderBaseline(group, item, wedge, scale)
+        }
+        svg.appendChild(group)
+      })
+
+      svg.appendChild(svgEl('circle', { class: 'hub', cx: CX, cy: CY, r: R_IN - 10 }))
+      const hub = svgEl('text', { class: 'hub-label', x: CX, y: CY + 6 })
+      hub.textContent = valueDense ? 'UPRIGHT' : algorithm === 'flow' ? 'DOM FLOW' : 'FIXED'
+      svg.appendChild(hub)
+      setActive(svg, state.active)
+    }
+
+    function hexRgb(hex) {
+      const value = hex.replace('#', '')
+      return [0, 2, 4].map((offset) => Number.parseInt(value.slice(offset, offset + 2), 16))
+    }
+
+    function luminance(rgb) {
+      const channels = rgb.map((value) => {
+        const channel = value / 255
+        return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4
+      })
+      return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722
+    }
+
+    function contrast(a, b) {
+      const la = luminance(hexRgb(a))
+      const lb = luminance(hexRgb(b))
+      return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05)
+    }
+
+    function auditWheel(svg, domLayer = null) {
+      const pathsBefore = Array.from(svg.querySelectorAll('.wedge-path'), (path) => path.getAttribute('d'))
+      const state = wheelState.get(svg)
+      setActive(svg, state.active + 1)
+      const pathsAfter = Array.from(svg.querySelectorAll('.wedge-path'), (path) => path.getAttribute('d'))
+      const stable = pathsBefore.every((path, index) => path === pathsAfter[index])
+      const svgRect = svg.getBoundingClientRect()
+      const toViewBoxRect = (element) => {
+        const rect = element.getBoundingClientRect()
+        return {
+          x: (rect.x - svgRect.x) * VIEW / svgRect.width,
+          y: (rect.y - svgRect.y) * VIEW / svgRect.height,
+          width: rect.width * VIEW / svgRect.width,
+          height: rect.height * VIEW / svgRect.height,
+        }
+      }
+      let overflow = 0
+      const overflowItems = []
+      let visuals = 0
+      let fallback = 0
+      const fonts = []
+      const modes = new Set()
+      let minGlyphTextGap = Infinity
+      let minLabelValueGap = Infinity
+      let maxLetterRotation = 0
+
+      svg.querySelectorAll('.wedge').forEach((group) => {
+        const wedge = {
+          a0: Number(group.dataset.a0),
+          a1: Number(group.dataset.a1),
+          rIn: R_IN,
+          rOut: R_OUT,
+        }
+        fonts.push(Number(group.dataset.fontPhysical))
+        modes.add(group.dataset.composeMode)
+        if (group.dataset.composeMode.endsWith('fixed') || group.dataset.composeMode.endsWith('stop')) fallback++
+        let groupOverflow = false
+        const failingKinds = []
+        const projectedContent = domLayer?.querySelector(`.dom-wedge[data-index="${group.dataset.index}"]`)
+        const contentRoot = projectedContent || group
+        contentRoot?.querySelectorAll('.wedge-content').forEach((content) => {
+          visuals++
+          if (!rectInsideWedge(toViewBoxRect(content), wedge, 1)) {
+            groupOverflow = true
+            failingKinds.push(content.getAttribute('class'))
+          }
+        })
+        if (domLayer && contentRoot) {
+          const glyphs = contentRoot.querySelectorAll('.dom-icon')
+          const textItems = contentRoot.querySelectorAll('.dom-label, .dom-meta')
+          glyphs.forEach((glyph) => textItems.forEach((textItem) => {
+            const glyphBox = glyph.getBoundingClientRect()
+            // The 24-grid artwork is inset inside its SVG viewport. Compare
+            // text to the painted glyph bounds instead of treating the empty
+            // viewport corners as visible collisions.
+            const glyphInset = Math.min(glyphBox.width, glyphBox.height) * 3 / 24
+            const glyphRect = {
+              left: glyphBox.left + glyphInset,
+              right: glyphBox.right - glyphInset,
+              top: glyphBox.top + glyphInset,
+              bottom: glyphBox.bottom - glyphInset,
+            }
+            const textRect = textItem.getBoundingClientRect()
+            const horizontalGap = glyphRect.right <= textRect.left
+              ? textRect.left - glyphRect.right
+              : textRect.right <= glyphRect.left
+                ? glyphRect.left - textRect.right
+                : 0
+            const verticalGap = glyphRect.bottom <= textRect.top
+              ? textRect.top - glyphRect.bottom
+              : textRect.bottom <= glyphRect.top
+                ? glyphRect.top - textRect.bottom
+                : 0
+            const gap = Math.hypot(horizontalGap, verticalGap)
+            minGlyphTextGap = Math.min(minGlyphTextGap, gap)
+          }))
+          const labelItems = contentRoot.querySelectorAll('.dom-label')
+          const valueItems = contentRoot.querySelectorAll('.dom-meta')
+          labelItems.forEach((label) => valueItems.forEach((value) => {
+            const a = label.getBoundingClientRect()
+            const b = value.getBoundingClientRect()
+            const horizontalGap = a.right <= b.left
+              ? b.left - a.right
+              : b.right <= a.left
+                ? a.left - b.right
+                : 0
+            const verticalGap = a.bottom <= b.top
+              ? b.top - a.bottom
+              : b.bottom <= a.top
+                ? a.top - b.bottom
+                : 0
+            minLabelValueGap = Math.min(minLabelValueGap, Math.hypot(horizontalGap, verticalGap))
+          }))
+          contentRoot.querySelectorAll('.dom-glyph-letter').forEach((letter) => {
+            maxLetterRotation = Math.max(maxLetterRotation, Math.abs(Number(letter.dataset.rotation) || 0))
+          })
+        }
+        group.dataset.auditOverflow = String(groupOverflow)
+        if (groupOverflow) {
+          overflow++
+          overflowItems.push(`${group.getAttribute('aria-label')} [${failingKinds.join(', ')}]`)
+        }
+      })
+
+      return {
+        overflow,
+        overflowItems,
+        visuals,
+        fallback,
+        stable,
+        min: Math.min(...fonts),
+        max: Math.max(...fonts),
+        avg: fonts.reduce((sum, value) => sum + value, 0) / fonts.length,
+        modes: [...modes].join(' + '),
+        minGlyphTextGap: Number.isFinite(minGlyphTextGap) ? minGlyphTextGap : null,
+        minLabelValueGap: Number.isFinite(minLabelValueGap) ? minLabelValueGap : null,
+        maxLetterRotation,
+      }
+    }
+
+    function metric(value, label) {
+      return `<div class="metric"><b>${value}</b><span>${label}</span></div>`
+    }
+
+    function renderAudit() {
+      const baseline = auditWheel(ui.baseline)
+      const flow = auditWheel(ui.flow, ui.flowDom)
+      const ratio = contrast('#f3efe5', '#18202a')
+      const wedgeCount = ui.flow.querySelectorAll('.wedge').length
+      const configuredStatusCount = currentItems().filter((item) => item.status).length
+      const paintedStatusCount = ui.flowDom.querySelectorAll('.dom-status').length
+      ui.audit.innerHTML = [
+        metric(`${flow.avg.toFixed(0)} px`, `Wheel-wide label tier; fixed baseline ${baseline.avg.toFixed(0)} px`),
+        metric(`${(flow.max - flow.min).toFixed(0)} px`, `Peer label-size variance; hard floor ${MIN_TEXT_PX} px`),
+        metric(`${baseline.overflow} → ${flow.overflow}`, `Wedges with a visual bbox outside the annular sector${flow.overflowItems.length ? `; flow: ${flow.overflowItems.join('; ')}` : ''}`),
+        metric(flow.stable ? 'stable' : 'changed', 'Target path data before and after focus movement'),
+        metric(`${ratio.toFixed(1)}:1`, 'Cream text against the darker wedge fill'),
+        metric(`${Number(ui.arc.value)}%`, 'Maximum horizontal-to-circular bow blend for short labels'),
+        metric(`${Number(ui.turn.value)}%`, 'Upright-to-tangent orientation blend, independent of the path'),
+        metric(`${flow.maxLetterRotation.toFixed(1)}°`, 'Maximum absolute per-letter turn in the current ring'),
+        metric(flow.modes.includes('DOM') ? `${ARC_LABEL_GAP_PX} px rail` : 'upright stack', 'Declared command-glyph to label separation before spare-space inset'),
+        metric(flow.minLabelValueGap == null ? 'n/a' : `${flow.minLabelValueGap.toFixed(1)} px`, 'Minimum rendered gap between curved labels and exact-value rails'),
+        metric('4 locked rails', 'Status · command · label · exact value; absent rails collapse without reordering'),
+        metric(configuredStatusCount ? `${paintedStatusCount}/${configuredStatusCount} glyphed` : 'none configured', 'Painted routine status uses shape plus an accessible name; stop-gated status remains accessible, never printed'),
+        metric(flow.modes, 'Carrier selected from content density: shallow DOM bow or upright SVG stack'),
+        metric(`${wedgeCount - flow.fallback}/${wedgeCount}`, flow.fallback ? `No illegal fallback is painted; ${flow.fallback} wedges require a larger or linear surface` : 'All wedges found a legal Pretext composition'),
+        metric('1 tab stop', 'Left/Right rotate; Home/End jump; Enter/Space commit'),
+      ].join('')
+    }
+
+    function currentItems() {
+      const requested = Number(ui.count.value)
+      const source = PRESETS[ui.preset.value]
+      return source.slice(0, Math.min(requested, source.length))
+    }
+
+    let auditEpoch = 0
+
+    function renderAll() {
+      const size = Number(ui.size.value)
+      const arcBlend = Number(ui.arc.value) / 100
+      const turnBlend = Number(ui.turn.value) / 100
+      const items = currentItems()
+      ui.sizeValue.textContent = `${size} px`
+      ui.countValue.textContent = String(items.length)
+      ui.arcValue.textContent = `${Math.round(arcBlend * 100)}%`
+      ui.turnValue.textContent = `${Math.round(turnBlend * 100)}%`
+      renderWheel(ui.baseline, items, size, 'baseline')
+      renderWheel(ui.flow, items, size, 'flow', ui.flowDom, arcBlend, turnBlend)
+      const epoch = ++auditEpoch
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (epoch === auditEpoch) renderAudit()
+      }))
+    }
+
+    bindWheel(ui.baseline, ui.baselineCaption)
+    bindWheel(ui.flow, ui.flowCaption)
+    ui.preset.addEventListener('change', renderAll)
+    ui.size.addEventListener('input', renderAll)
+    ui.count.addEventListener('input', renderAll)
+    ui.arc.addEventListener('input', renderAll)
+    ui.turn.addEventListener('input', renderAll)
+
+    if (document.fonts?.load) {
+      await Promise.all([
+        document.fonts.load('800 30px Arial'),
+        document.fonts.load('800 16px Arial'),
+        document.fonts.load('700 18px Arial'),
+        document.fonts.load('700 16px Arial'),
+      ])
+    }
+    renderAll()
+  </script>
+</body>
+</html>

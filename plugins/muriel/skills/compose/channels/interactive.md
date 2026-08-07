@@ -276,6 +276,49 @@ A publicly available worked example of pretext Tier 2: [andyed/pretext-coachella
 
 Reads as a direct descendant of David Small's 1996 Shakespeare navigation: text as navigable space, multi-scale rendering via tier-based weight (instead of Small's greeking), categorical color for structure, Canvas2D at 60fps because pretext measures outside the DOM reflow path. Good scaffold for any new typographic-canvas work.
 
+### Radial-menu shape flow
+
+For pie or marking menus, keep the host's SVG or DOM wedge as the semantic target
+and use Pretext as the renderer-independent text compositor. First lock separate
+status, command-glyph, label, and exact-value rails. For horizontal copy,
+intersect text rails with the padded annular sector. For an explicit arc-follow
+probe, give Pretext the guarded arc length at each candidate label radius; do not
+wrap against a chord and bend the line afterward. Select one legal label tier
+across the peer ring;
+do not let short labels grow or status glyphs squeeze their local wedge. Routine
+state is glyphed, only decision-changing values remain wedge text, and neither is
+appended inline to the command label. Target paths remain byte-stable across
+hover and focus.
+
+The default hybrid for existing SVG wheels is normal positioned DOM content over
+stable SVG targets. This follows iBlipper's production pattern: Pretext predicts
+line breaks and the wheel-wide type tier, ordinary DOM carries the actual
+typography, and a settled `getBoundingClientRect()` pass checks rendered truth,
+peer type variance, glyph/text rail gaps, and label/value separation.
+
+An arc-follow renderer materializes the winning Pretext fragments as individual
+grapheme spans. Preserve kerning with cumulative-prefix measurement and
+reparameterize the line-to-arc blend so Cartesian interpolation cannot contract
+letter spacing on side wedges. Keep path bow and per-letter tangent turn as
+independent probe parameters, reverse traversal to keep lower-half text upright,
+and leave command and status glyphs unrotated. Start near 30% bow and 10%
+orientation follow; a 40-degree command word is a readability failure, not a
+target. The complete command remains on the semantic wedge and the per-letter
+DOM layer is visual projection.
+
+Carrier selection precedes decoration. Short-label rings may use the shallow DOM
+bow. Value-dense rings and multiword commands use upright word lines, with the
+full source command retained in the accessible name and caption when a shorter
+visible `displayLabel` is needed.
+
+Load [`references/radial-menus.md`](../references/radial-menus.md) for the full
+state, geometry, typography, glyph, keyboard, touch, stop-condition, and proof
+contract. The runnable
+[`examples/radial-menu-pretext.html`](../examples/radial-menu-pretext.html)
+compares fixed midpoint SVG stacks with an adaptive carrier: a vendored Pretext
+0.0.5 shallow per-grapheme bow for Psychodeli and an upright value-dense stack
+for Pot Luck.
+
 ## Sci-fi UI (FUI) patterns
 
 When the output wants to feel like telemetry — live stats, mission clocks, bearing readouts, signal traces — reach for the FUI vocabulary. The full grammar, substrate decision table, and common-failure list live in [`vocabularies/fui.md`](../vocabularies/fui.md); this section is the interactive-channel seam.
