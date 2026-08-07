@@ -100,7 +100,11 @@ git clone https://github.com/andyed/muriel ~/Documents/dev/muriel
 cd ~/Documents/dev/muriel && ./install.sh
 ```
 
-The script symlinks `plugins/muriel/skills/compose/` into `~/.claude/skills/muriel/` (so the bare `/muriel` invocation continues to work) and the critique agent into `~/.claude/agents/`. It refuses if the plugin install is already present, to avoid double-loading.
+The script creates exactly two directory symlinks — `plugins/muriel/skills/compose/` → `~/.claude/skills/muriel` (so the bare `/muriel` invocation keeps working) and `plugins/muriel/agents/` → `~/.claude/agents/muriel`. One symlink each is deliberate: a new channel, reference, or jury seat then appears in the live install the moment it lands in the checkout, with no re-run. Claude Code scans `~/.claude/agents/` recursively and identifies a subagent by its `name:` frontmatter rather than its path, so the single agents mount registers every seat.
+
+The script verifies where an existing mount actually points instead of assuming that anything present is correct. A symlink it owns gets repointed automatically. A legacy per-item mount — a real directory of individual symlinks, which never picks up directories added later — is reported and left alone until you re-run with `--repair`, which moves it to `muriel.bak-<timestamp>` before replacing it. Nothing is deleted.
+
+It refuses outright if the plugin install is already present, to avoid double-loading.
 
 ### As a Python package
 
@@ -177,7 +181,7 @@ Encoded in `SKILL.md` and enforced across every channel:
 
 muriel ships a vision-model critique agent at [`plugins/muriel/agents/muriel-critique.md`](plugins/muriel/agents/muriel-critique.md). It reads a rendered artifact and names — with evidence — every way the artifact fails muriel's rules, channel anti-patterns, and (optionally) a `brand.toml`'s tokens. Read-only tools (Read / Glob / Grep), hardened against prompt-injection, badge-laundering, and contrast-claim spoofing embedded in the image itself. The jury seats differ. `muriel-squinter`, `muriel-thumbnail`, and `muriel-pedant` add Bash for their lens tools (`muriel.squint` for the first two, grep-based extraction for the third). `muriel-forger` carries Write plus a documented render escape hatch because its whole method is building a counterfeit and rendering it — its output lands under `render_assets/forgery/<decisionId>/`, which is gitignored. `muriel-stranger` holds only Read and Bash on purpose: its lens is one pass over the artifact with the brief withheld, and every additional tool is a way to lose that.
 
-**Install:** the subagent ships with the muriel plugin and is loaded automatically by both install paths in [Install](#install) above (plugin install via `/plugin install muriel@andyed-muriel` and the developer `install.sh` route). No manual symlinks required.
+**Install:** the subagent ships with the muriel plugin and is loaded automatically by both install paths in [Install](#install) above (plugin install via `/plugin install muriel@andyed-muriel` and the developer `install.sh` route). No manual symlinks required. If `subagent_type: muriel-critique` fails to resolve, check where the mount points — `ls -la ~/.claude/agents/muriel` — and re-run `./install.sh --repair`.
 
 **Invoke** from any Claude Code session:
 
