@@ -8,7 +8,7 @@ controlled visual variety — non-uniform but non-distracting backgrounds
 that read as "designed" rather than stock. The ad-hoc approach is to
 hand-place a gradient or grab a stock noise PNG; both go stale fast.
 
-This module ships three deterministic primitives that cover the
+This module ships four deterministic primitives that cover the
 "workhorse background" surface used by the screenshot designer's
 ``background(mesh|noise|...)`` arg:
 
@@ -21,6 +21,9 @@ This module ships three deterministic primitives that cover the
 * **grain** — value-noise raster sampled at cell granularity →
   small SVG ``<pattern>`` tile (repeats without blowing up file
   size). Used for: film-grain overlays, paper texture, non-flat fill.
+* **wavefield** — smooth, layered contour bands from seeded harmonic
+  synthesis or caller-supplied normalized series. Used for: section
+  boundaries, signal bands, uncertainty fields, and rhythmic structure.
 
 Lineage
 -------
@@ -62,7 +65,7 @@ Usage
 ::
 
     from muriel.layout import BBox
-    from muriel.patterns import dots, flow, grain
+    from muriel.patterns import dots, flow, grain, wavefield
 
     cv = BBox(0, 0, 1200, 700)
 
@@ -75,12 +78,15 @@ Usage
     p = grain(cv, cell=3, seed=42)
     open("grain.svg", "w").write(p.svg(bg="#0a0a14", fg="#e6e4d2"))
 
+    p = wavefield(cv, layers=4, seed=42)
+    open("waves.svg", "w").write(p.svg())
+
 CLI
 ---
 
 ::
 
-    python -m muriel.patterns --demo                  # 1x3 panel of all primitives
+    python -m muriel.patterns --demo                  # 2x2 panel of all primitives
     python -m muriel.patterns --kind dots             # render a single primitive
     python -m muriel.patterns --selftest              # assertion suite
 
@@ -104,10 +110,13 @@ __all__ = [
     "DotField",
     "FlowField",
     "Grain",
+    "WaveLayer",
+    "WaveField",
     "PatternError",
     "dots",
     "flow",
     "grain",
+    "wavefield",
 ]
 
 
@@ -339,6 +348,106 @@ class Grain:
         return "\n".join(out) + "\n"
 
 
+@dataclass(frozen=True)
+class WaveLayer:
+    """One inspectable contour in a :class:`WaveField`.
+
+    ``values`` are normalized to ``[-1, 1]`` with positive values rising
+    above ``baseline_y``. ``curve_d`` is the open contour; ``area_d`` closes
+    that contour against the canvas bottom for layered fills.
+    """
+
+    index: int
+    baseline_y: float
+    values: Tuple[float, ...]
+    points: Tuple[Tuple[float, float], ...]
+    curve_d: str
+    area_d: str
+
+
+@dataclass(frozen=True)
+class WaveField:
+    """Layered wave geometry from ``wavefield(...)`` plus SVG emission."""
+
+    canvas: BBox
+    layers: Tuple[WaveLayer, ...]
+    source: str
+    seed: int
+    amplitude: float
+    smoothness: float
+
+    def svg(
+        self,
+        *,
+        bg: Optional[str] = "var(--mg-bg, #0a0a14)",
+        fill_colors: Optional[Sequence[str]] = None,
+        fill_opacity: float = 1.0,
+        stroke: str = "var(--mg-wave-stroke, #e6e4d2)",
+        stroke_width: float = 1.1,
+        title: str = "Layered wave field",
+        desc: Optional[str] = None,
+    ) -> str:
+        """Render a viewBox-first, accessible SVG document.
+
+        Pass ``fill_colors=()`` for line art. Otherwise colors cycle across
+        layers; defaults are restrained dark-to-cyan Muriel tokens. Motion is
+        intentionally absent: a static export remains the canonical artifact.
+        """
+        if not 0.0 <= fill_opacity <= 1.0:
+            raise PatternError(
+                f"fill_opacity must be in [0, 1]; got {fill_opacity}"
+            )
+        if stroke_width < 0:
+            raise PatternError(f"stroke_width must be >= 0; got {stroke_width}")
+
+        colors: Sequence[str] = fill_colors if fill_colors is not None else (
+            "var(--mg-wave-0, #12323b)",
+            "var(--mg-wave-1, #174c59)",
+            "var(--mg-wave-2, #1d6878)",
+            "var(--mg-accent, #7fdfff)",
+        )
+        cv = self.canvas
+        description = desc or (
+            f"{len(self.layers)} smooth contour layers from {self.source} values; "
+            f"seed {self.seed}."
+        )
+        out: list[str] = [
+            '<svg xmlns="http://www.w3.org/2000/svg" role="img" '
+            f'viewBox="{_fmt(cv.x0)} {_fmt(cv.y0)} '
+            f'{_fmt(cv.width)} {_fmt(cv.height)}" '
+            'preserveAspectRatio="xMidYMid meet">',
+            f"  <title>{_xml_escape(title)}</title>",
+            f"  <desc>{_xml_escape(description)}</desc>",
+        ]
+        if bg:
+            out.append(
+                f'  <rect x="{_fmt(cv.x0)}" y="{_fmt(cv.y0)}" '
+                f'width="{_fmt(cv.width)}" height="{_fmt(cv.height)}" '
+                f'fill="{bg}"/>'
+            )
+        line_art = len(colors) == 0
+        for layer in self.layers:
+            if line_art:
+                fill = "none"
+            elif len(self.layers) == 1:
+                fill = colors[-1]
+            else:
+                color_index = round(
+                    layer.index * (len(colors) - 1) / (len(self.layers) - 1)
+                )
+                fill = colors[color_index]
+            path_d = layer.curve_d if line_art else layer.area_d
+            out.append(
+                f'  <path d="{path_d}" fill="{fill}" '
+                f'fill-opacity="{fill_opacity:.3f}" stroke="{stroke}" '
+                f'stroke-width="{_fmt(stroke_width)}" '
+                f'stroke-linecap="round" stroke-linejoin="round" '
+                f'data-layer="{layer.index}" data-source="{self.source}"/>'
+            )
+        out.append("</svg>")
+        return "\n".join(out) + "\n"
+
+
 # ─── Public constructors ────────────────────────────────────────────
 
 
@@ -502,6 +611,178 @@ def grain(
     )
 
 
+def wavefield(
+    canvas: BBox,
+    *,
+    layers: Optional[int] = None,
+    samples: int = 16,
+    amplitude: Optional[float] = None,
+    cycles: float = 1.6,
+    roughness: float = 0.35,
+    smoothness: float = 0.8,
+    margin: float = 0.08,
+    seed: int = 0,
+    series: Optional[Sequence[Sequence[float]]] = None,
+) -> WaveField:
+    """Build smooth layered contours from harmonics or normalized data.
+
+    Generated mode (``series=None``) combines three seeded sinusoids. The
+    result is organic but byte-stable for a given seed. Semantic mode accepts
+    one normalized ``[-1, 1]`` series per layer; positive values rise above the
+    layer baseline. Muriel does not silently normalize data because doing so
+    would hide the scale that gives a signal its meaning.
+
+    ``layers`` defaults to four in generated mode and is inferred from
+    ``series`` in semantic mode. Geometry is returned as frozen dataclasses so
+    callers can annotate, compare, or recompose it before SVG emission.
+    """
+    if canvas.width <= 0 or canvas.height <= 0:
+        raise PatternError("wavefield canvas must have positive width and height")
+    if not 0.0 <= margin < 0.45:
+        raise PatternError(f"margin must be in [0, 0.45); got {margin}")
+    if not 0.0 <= roughness <= 1.0:
+        raise PatternError(f"roughness must be in [0, 1]; got {roughness}")
+    if not 0.0 <= smoothness <= 1.0:
+        raise PatternError(f"smoothness must be in [0, 1]; got {smoothness}")
+
+    rows: list[Tuple[float, ...]] = []
+    source = "series" if series is not None else "generated"
+    if series is not None:
+        for row_index, row in enumerate(series):
+            vals = tuple(float(v) for v in row)
+            if len(vals) < 2:
+                raise PatternError(
+                    f"series row {row_index} must contain at least 2 values"
+                )
+            for value in vals:
+                if not math.isfinite(value) or not -1.0 <= value <= 1.0:
+                    raise PatternError(
+                        "series values must be finite and normalized to [-1, 1]; "
+                        f"row {row_index} contains {value}"
+                    )
+            rows.append(vals)
+        if not rows:
+            raise PatternError("series must contain at least one row")
+        if layers is not None and layers != len(rows):
+            raise PatternError(
+                f"layers={layers} conflicts with {len(rows)} series rows"
+            )
+        layer_count = len(rows)
+    else:
+        layer_count = 4 if layers is None else layers
+        if layer_count < 1:
+            raise PatternError(f"layers must be >= 1; got {layer_count}")
+        if samples < 4:
+            raise PatternError(f"samples must be >= 4; got {samples}")
+        if cycles <= 0:
+            raise PatternError(f"cycles must be > 0; got {cycles}")
+        for layer_index in range(layer_count):
+            phase_a = math.tau * _hash01(seed, 0xD1, layer_index)
+            phase_b = math.tau * _hash01(seed, 0xD2, layer_index)
+            phase_c = math.tau * _hash01(seed, 0xD3, layer_index)
+            layer_cycles = cycles * (1.0 + 0.055 * layer_index)
+            values: list[float] = []
+            for sample_index in range(samples):
+                t = sample_index / (samples - 1)
+                primary = math.sin(math.tau * layer_cycles * t + phase_a)
+                detail = (
+                    0.64
+                    * math.sin(math.tau * layer_cycles * 1.85 * t + phase_b)
+                    + 0.36
+                    * math.sin(math.tau * layer_cycles * 3.10 * t + phase_c)
+                )
+                values.append((1.0 - roughness) * primary + roughness * detail)
+            rows.append(tuple(values))
+
+    inner_top = canvas.y0 + canvas.height * margin
+    inner_bottom = canvas.y1 - canvas.height * margin
+    available = inner_bottom - inner_top
+    amp = amplitude
+    if amp is None:
+        amp = min(canvas.height * 0.12, available / (layer_count + 1) * 0.55)
+    if amp <= 0:
+        raise PatternError(f"amplitude must be > 0; got {amp}")
+    if amp * 2 >= available:
+        raise PatternError(
+            f"amplitude {amp} leaves no room inside the {available:.2f}-unit field"
+        )
+
+    baseline_top = inner_top + amp
+    baseline_bottom = inner_bottom - amp
+    if layer_count == 1:
+        baselines = [(baseline_top + baseline_bottom) * 0.5]
+    else:
+        baselines = [
+            baseline_top
+            + (baseline_bottom - baseline_top) * i / (layer_count - 1)
+            for i in range(layer_count)
+        ]
+
+    wave_layers: list[WaveLayer] = []
+    for layer_index, (baseline, values) in enumerate(zip(baselines, rows)):
+        pts = tuple(
+            (
+                canvas.x0 + canvas.width * i / (len(values) - 1),
+                baseline - value * amp,
+            )
+            for i, value in enumerate(values)
+        )
+        curve_d, area_d = _wave_paths(pts, canvas.y1, smoothness)
+        wave_layers.append(
+            WaveLayer(
+                index=layer_index,
+                baseline_y=baseline,
+                values=values,
+                points=pts,
+                curve_d=curve_d,
+                area_d=area_d,
+            )
+        )
+
+    return WaveField(
+        canvas=canvas,
+        layers=tuple(wave_layers),
+        source=source,
+        seed=seed,
+        amplitude=amp,
+        smoothness=smoothness,
+    )
+
+
+def _wave_paths(
+    points: Sequence[Tuple[float, float]],
+    bottom_y: float,
+    smoothness: float,
+) -> Tuple[str, str]:
+    """Return open and bottom-closed cubic paths through ``points``.
+
+    Control handles use the local Catmull-Rom tangent at each knot. This is a
+    standard interpolation construction, implemented here independently; the
+    upstream ``svgwave`` source is not imported, vendored, or translated.
+    """
+    curve = f"M {_fmt(points[0][0])} {_fmt(points[0][1])}"
+    for i in range(len(points) - 1):
+        p0 = points[i - 1] if i > 0 else points[i]
+        p1 = points[i]
+        p2 = points[i + 1]
+        p3 = points[i + 2] if i + 2 < len(points) else p2
+        scale = smoothness / 6.0
+        c1 = (p1[0] + (p2[0] - p0[0]) * scale,
+              p1[1] + (p2[1] - p0[1]) * scale)
+        c2 = (p2[0] - (p3[0] - p1[0]) * scale,
+              p2[1] - (p3[1] - p1[1]) * scale)
+        curve += (
+            f" C {_fmt(c1[0])} {_fmt(c1[1])}"
+            f" {_fmt(c2[0])} {_fmt(c2[1])}"
+            f" {_fmt(p2[0])} {_fmt(p2[1])}"
+        )
+    area = (
+        f"{curve} L {_fmt(points[-1][0])} {_fmt(bottom_y)}"
+        f" L {_fmt(points[0][0])} {_fmt(bottom_y)} Z"
+    )
+    return curve, area
+
+
 # ─── Internals: Bridson Poisson-disk ────────────────────────────────
 
 
@@ -652,11 +933,11 @@ def _trace_one_direction(
 
 
 def _demo_svg() -> str:
-    """A 1x3 panel showing all three primitives side-by-side."""
+    """A 2x2 panel showing all four primitives."""
     panel_w, panel_h = 480, 360
     gap = 18
-    total_w = panel_w * 3 + gap * 4
-    total_h = panel_h + gap * 3 + 96
+    total_w = panel_w * 2 + gap * 3
+    total_h = panel_h * 2 + gap * 3 + 96
 
     parts: list[str] = [
         f'<svg xmlns="http://www.w3.org/2000/svg" '
@@ -671,20 +952,21 @@ def _demo_svg() -> str:
         # Sub text: #7fdfff on #0a0a14 ≈ 13.4:1 contrast — passes 8:1.
         f'  <text x="{gap}" y="64" fill="#7fdfff" '
         f'font-family="ui-sans-serif,system-ui,sans-serif" '
-        f'font-size="13" opacity="0.78">'
-        f'Bridson Poisson-disk · value-noise flow field · '
-        f'value-noise grain tile. Deterministic; SVG-first.</text>',
+        f'font-size="16" font-weight="500">'
+        f'Poisson-disk · value-noise flow and grain · harmonic waves. '
+        f'Deterministic; SVG-first.</text>',
     ]
 
     panels = [
         ("dots", "Bridson Poisson-disk dot field"),
         ("flow", "Value-noise streamlines (LIC-style)"),
         ("grain", "Value-noise grain (SVG pattern tile)"),
+        ("wavefield", "Seeded harmonic contour layers"),
     ]
 
     for idx, (kind, caption) in enumerate(panels):
-        x_off = gap + idx * (panel_w + gap)
-        y_off = 96 + gap
+        x_off = gap + (idx % 2) * (panel_w + gap)
+        y_off = 96 + gap + (idx // 2) * (panel_h + gap)
         cv = BBox(0, 0, panel_w, panel_h)
         parts.append(f'  <g transform="translate({x_off} {y_off})">')
         parts.append(
@@ -697,23 +979,30 @@ def _demo_svg() -> str:
         elif kind == "flow":
             p = flow(cv, density=18, noise_scale=0.006, length=80, seed=7)
             inner = p.svg(bg=None, fg="#7fdfff", stroke_width=0.7, opacity=0.7)
-        else:
+        elif kind == "grain":
             p = grain(cv, cell=3, tile_cells=64, noise_scale=0.5, seed=7)
             inner = p.svg(bg=None, fg="#e6e4d2", opacity_range=(0.06, 0.36))
+        else:
+            p = wavefield(cv, layers=4, samples=18, seed=7)
+            inner = p.svg(bg=None, title="Seeded harmonic contour layers")
         # Strip the outer <svg> wrapper so the inner content draws in
         # the panel's coordinate space.
         inner_body = _strip_outer_svg(inner)
         parts.append(inner_body)
-        # Caption + code label — same contrast-safe palette.
+        # A solid label band keeps contrast independent of generated artwork.
+        parts.append(
+            f'    <rect x="0" y="{panel_h - 66}" width="{panel_w}" '
+            f'height="66" fill="#0a0a14"/>'
+        )
         parts.append(
             f'    <text x="14" y="{panel_h - 38}" fill="#e6e4d2" '
             f'font-family="ui-sans-serif,system-ui,sans-serif" '
-            f'font-size="13" opacity="0.92">{_xml_escape(caption)}</text>'
+            f'font-size="16" font-weight="500">{_xml_escape(caption)}</text>'
         )
         parts.append(
-            f'    <text x="14" y="{panel_h - 18}" fill="#7fdfff" '
+            f'    <text x="14" y="{panel_h - 14}" fill="#7fdfff" '
             f'font-family="ui-monospace,monospace" '
-            f'font-size="11" opacity="0.65">'
+            f'font-size="16" font-weight="500">'
             f'{kind}(BBox(0, 0, {panel_w}, {panel_h}), seed=7)</text>'
         )
         parts.append("  </g>")
@@ -822,8 +1111,44 @@ def _selftest() -> int:
     g_again = grain(cv, cell=3, tile_cells=32, noise_scale=0.5, seed=4)
     assert g.values == g_again.values
 
+    # Wavefield — deterministic generated geometry + truthful series mode.
+    w = wavefield(cv, layers=4, samples=18, seed=5)
+    assert isinstance(w, WaveField)
+    assert w.source == "generated"
+    assert len(w.layers) == 4
+    assert all(len(layer.points) == 18 for layer in w.layers)
+    assert w == wavefield(cv, layers=4, samples=18, seed=5)
+    assert w != wavefield(cv, layers=4, samples=18, seed=6)
+    semantic = wavefield(
+        cv,
+        series=((-1.0, -0.25, 0.5, 1.0), (0.2, 0.0, -0.2, 0.0)),
+        amplitude=40,
+    )
+    assert semantic.source == "series"
+    assert semantic.layers[0].values == (-1.0, -0.25, 0.5, 1.0)
+    assert semantic.layers[0].points[-1][1] < semantic.layers[0].baseline_y
+    assert semantic.layers[0].curve_d.startswith("M ")
+    assert semantic.layers[0].area_d.endswith(" Z")
+
+    for bad in (
+        lambda: wavefield(cv, layers=0),
+        lambda: wavefield(cv, samples=3),
+        lambda: wavefield(cv, roughness=1.1),
+        lambda: wavefield(cv, smoothness=-0.1),
+        lambda: wavefield(cv, series=()),
+        lambda: wavefield(cv, series=((0.0,),)),
+        lambda: wavefield(cv, series=((0.0, 1.2),)),
+        lambda: wavefield(cv, layers=2, series=((0.0, 1.0),)),
+    ):
+        try:
+            bad()
+        except PatternError:
+            pass
+        else:
+            raise AssertionError("expected PatternError for invalid wavefield")
+
     # SVG output basics.
-    for prim in (p, f, g):
+    for prim in (p, f, g, w, semantic):
         svg = prim.svg()
         assert svg.startswith("<svg")
         assert svg.rstrip().endswith("</svg>")
@@ -838,10 +1163,16 @@ def _selftest() -> int:
     # before the <g>.
     assert no_bg.count("<rect") == 0
 
+    wave_svg = w.svg(title="Signal & field", fill_colors=())
+    assert "<title>Signal &amp; field</title>" in wave_svg
+    assert 'role="img"' in wave_svg
+    assert 'fill="none"' in wave_svg
+    assert 'data-source="generated"' in wave_svg
+
     # Demo renders without crashing.
     demo = _demo_svg()
     assert demo.startswith("<svg")
-    assert "dots(" in demo and "flow(" in demo and "grain(" in demo
+    assert all(f"{kind}(" in demo for kind in ("dots", "flow", "grain", "wavefield"))
 
     return 0
 
@@ -855,7 +1186,7 @@ def _main(argv: Sequence[str]) -> int:
     )
     p.add_argument("--demo", action="store_true",
                    help="render the 1x3 demo SVG (all three primitives)")
-    p.add_argument("--kind", choices=["dots", "flow", "grain"],
+    p.add_argument("--kind", choices=["dots", "flow", "grain", "wavefield"],
                    help="render a single primitive at full canvas")
     p.add_argument("--selftest", action="store_true",
                    help="run the assertion suite")
@@ -888,10 +1219,14 @@ def _main(argv: Sequence[str]) -> int:
             prim = flow(cv, density=18, noise_scale=0.005, length=80,
                         step=4, seed=args.seed)
             svg = prim.svg(bg=bg, fg=args.fg or "#7fdfff")
-        else:
+        elif args.kind == "grain":
             prim = grain(cv, cell=3, tile_cells=64, noise_scale=0.5,
                          seed=args.seed)
             svg = prim.svg(bg=bg, fg=args.fg or "#e6e4d2")
+        else:
+            prim = wavefield(cv, layers=4, samples=18, seed=args.seed)
+            colors = (args.fg,) if args.fg else None
+            svg = prim.svg(bg=bg, fill_colors=colors)
     elif args.demo:
         svg = _demo_svg()
     else:

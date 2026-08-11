@@ -1,6 +1,6 @@
 # muriel
 
-Importable Python assets for the [muriel skill](../plugins/muriel/skills/compose/SKILL.md). matplotlibrc blocks, APA-style reporting helpers, WCAG contrast audit, dimension constants, capture, and brand style guides — extracted from the [`channels/`](../plugins/muriel/skills/compose/channels/) subfiles so notebooks can `import` them instead of copy-pasting.
+Importable Python assets for the [muriel skill](../plugins/muriel/skills/compose/SKILL.md). matplotlibrc blocks, APA-style reporting helpers, WCAG contrast audit, dimension constants, capture, brand style guides, and deterministic SVG patterns — extracted from the [`channels/`](../plugins/muriel/skills/compose/channels/) subfiles so notebooks can `import` them instead of copy-pasting.
 
 ## Install
 

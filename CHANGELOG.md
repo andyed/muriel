@@ -6,6 +6,20 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **`muriel.patterns.wavefield()`** — clean-room, zero-dependency layered SVG
+  contours with two explicit modes: seeded harmonic synthesis for reproducible
+  visual structure, and caller-supplied normalized series for semantic signal
+  geometry. Returns frozen, inspectable layers with values, points, baselines,
+  and open/closed cubic paths; emits viewBox-first SVG with `<title>`/`<desc>`,
+  CSS-token fallbacks, and line-art support. Three generated proof artifacts
+  cover a decorative divider, an illustrative signal, and illustrative
+  uncertainty slices. Inspired by and credited to
+  [anup-a/svgwave](https://github.com/anup-a/svgwave), with no upstream code or
+  assets incorporated because its repository license prohibits modification
+  and commercial use despite an ISC label in `package.json`.
+
 ## [0.14.0] — 2026-08-07
 
 **A second body, and a broken mount.** Two things ship. The urgent one first: **if you installed muriel from a checkout, your install is probably broken and looks fine.** `install.sh` only ever *added* mounts, and its existence check was true for a dangling symlink and true for a stale directory alike — so a mount that pointed at a pre-migration path reported "already exists, leaving alone" indefinitely. Observed on the author's own machine: no muriel subagent resolved at all, and every deep reference `SKILL.md` links was unreachable from the installed skill. Re-run `./install.sh`; it now reports what is wrong and `--repair` fixes it without deleting anything. The feature: muriel gains a **design jury** — five seats with different loss functions and different evidence access, a split between defect finding and direction selection, and a ledger that scores each seat against what happened next. Long-form notes: [`releases/v0.14.0.md`](releases/v0.14.0.md).

@@ -64,6 +64,40 @@ Part of the [muriel](../SKILL.md) skill — see the top-level index for mission,
 - **OSEC phase diagram** — multi-band horizontal timeline from a gaze sequence
 - **Wordmark generation** — a branded wordmark border at any size from one source (but defer to acme-brand-guide for actual asset generation)
 
+### Layered wave fields
+
+Use `muriel.patterns.wavefield()` when smooth contours carry one of two explicit
+jobs: seeded visual structure, or caller-supplied normalized data. Keep those
+jobs named. A generated divider is not evidence; a semantic signal must retain
+its scale and source.
+
+```python
+from muriel.layout import BBox
+from muriel.patterns import wavefield
+
+# Reproducible visual structure.
+decorative = wavefield(
+    BBox(0, 0, 1200, 240), layers=3, samples=18, seed=23
+)
+open("divider.svg", "w").write(decorative.svg())
+
+# Meaningful geometry: values must already be normalized to [-1, 1].
+signal = wavefield(
+    BBox(0, 0, 1200, 420),
+    series=((-0.7, -0.2, 0.4, 0.9, 0.3, -0.4),),
+    amplitude=110,
+)
+open("signal.svg", "w").write(signal.svg(
+    title="Normalized phase signal",
+    desc="One normalized series; positive values rise above baseline.",
+))
+```
+
+The returned `WaveField.layers` expose normalized values, points, baselines,
+open `curve_d`, and bottom-closed `area_d` paths for annotation or composition.
+Same seed and parameters produce byte-identical geometry. Examples:
+[`examples/wavefield/`](../examples/wavefield/README.md).
+
 ## Conversion
 - **SVG → PNG:** `cairosvg input.svg -o out.png -W 1280 -H 720` or `rsvg-convert -w 1280 input.svg > out.png`
 - **SVG → PDF:** `cairosvg input.svg -o out.pdf` (for paper inclusion)
@@ -75,3 +109,4 @@ Part of the [muriel](../SKILL.md) skill — see the top-level index for mission,
 - **Don't ship SMIL animations without a CSS fallback.** Browser support has diverged since Firefox 2015.
 - **Don't rely on `<tspan>` alone for multi-line text.** Measure bbox, fall back to multiple `<text>` elements if layout matters.
 - **Don't nest `<g>` beyond two levels without a reason you can state in one sentence.**
+- **Don't describe generated waves as data.** Use `series=` for semantic contours and preserve the caller's normalized scale.

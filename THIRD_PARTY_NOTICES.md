@@ -3,6 +3,25 @@
 muriel incorporates work from the projects listed below. Their license terms
 are reproduced in full as required.
 
+## Acknowledged inspiration not incorporated
+
+### SVG Wave
+
+[`anup-a/svgwave`](https://github.com/anup-a/svgwave) made layered SVG-wave
+generation approachable and directly inspired the decision to add
+`muriel.patterns.wavefield()`.
+
+No SVG Wave source code, assets, dependencies, algorithms, UI, presets, or
+generated files are copied, translated, vendored, imported, or linked into
+muriel. The Muriel primitive is an independent Python implementation based on
+seeded harmonic synthesis, caller-supplied normalized series, and a standard
+Catmull-Rom-to-cubic interpolation construction.
+
+This separation is deliberate: SVG Wave's repository `LICENSE` prohibits
+commercial use and modification, while its `package.json` declares ISC. This
+notice credits the project as inspiration; it does not claim that its code is
+licensed for incorporation into Muriel.
+
 ---
 
 ## diagram-design
@@ -242,4 +261,3 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
-
