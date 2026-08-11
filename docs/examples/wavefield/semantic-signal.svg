@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid meet">
+  <title>Illustrative normalized signal band</title>
+  <desc>One caller-supplied normalized series. Positive values rise above the baseline; illustrative data, not a measurement.</desc>
+  <rect x="0" y="0" width="1200" height="420" fill="var(--mg-bg, #0a0a14)"/>
+  <path d="M 0 289.20 C 9.60 284.98 60.80 264.03 80 254 C 99.20 243.97 140.80 215.63 160 205.60 C 179.20 195.57 220.80 178.85 240 170.40 C 259.20 161.95 300.80 142.46 320 135.20 C 339.20 127.94 380.80 109.11 400 109.90 C 419.20 110.69 460.80 132.16 480 141.80 C 499.20 151.44 540.80 179.90 560 190.20 C 579.20 200.50 620.80 219.42 640 227.60 C 659.20 235.78 700.80 257.87 720 258.40 C 739.20 258.93 780.80 240.58 800 232 C 819.20 223.42 860.80 196.80 880 186.90 C 899.20 177 940.80 151.74 960 149.50 C 979.20 147.26 1020.80 161.73 1040 168.20 C 1059.20 174.67 1100.80 194.29 1120 203.40 C 1139.20 212.51 1190.40 239.22 1200 244.10 L 1200 420 L 0 420 Z" fill="#1d6878" fill-opacity="1.000" stroke="#7fdfff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-layer="0" data-source="series"/>
+</svg>
