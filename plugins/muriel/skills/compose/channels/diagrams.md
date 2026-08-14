@@ -94,6 +94,22 @@ python -m muriel.tools.diagrams.cycle  spec.json out.svg
 
 The JSON spec mirrors the Python kwargs. See each module's docstring for the schema.
 
+### Labels are measured; containers grow
+
+The geometry numbers in each generator — a 144px step box, a 168px lane gutter, a 160px pyramid apex — are **floors, not limits**. Every label is measured before it is drawn ([`muriel/tools/diagrams/_labels.py`](https://github.com/andyed/muriel/blob/main/muriel/tools/diagrams/_labels.py), built on [`muriel.layout.text_bbox`](https://github.com/andyed/muriel/blob/main/muriel/layout.py)), and when it doesn't fit, the container grows:
+
+| Situation | What happens |
+|---|---|
+| Multi-word label wider than its box | Wraps on **measured** width, breaking only between words |
+| Wrapping needs more rows than the box has | Box gets taller — uniformly, so the grid stays regular |
+| A single word wider than the box | Box gets wider; words are never split or hyphenated |
+| A label that would land off-canvas | Canvas grows around the figure, which keeps its size |
+| A pyramid label wider than its tier | `min_w` and `max_w` scale **together**, so the taper is preserved exactly — the taper is the argument, and flattening it to fit a word would change the claim |
+
+What never happens: text shrinking to fit, text clipping at a boundary, or a white-stroke halo painted behind a label that crosses something. That is `muriel.layout`'s rule — the data is the artifact, the label finds space around it — applied to a fixed grid.
+
+Growth is **strictly conditional**: a diagram whose labels already fit renders byte-for-byte as it did before this existed, which is what `tests/test_diagram_labels.py` asserts against every committed example. The same test reads rendered SVG back and fails on three defects the generators used to ship silently — labels overlapping each other, labels off the canvas, and labels spilling out of their own box.
+
 ## 2×2 matrix
 
 ```python

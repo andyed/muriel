@@ -34,6 +34,8 @@ from html import escape
 from pathlib import Path
 from typing import Optional, Union
 
+from ._labels import RATIO_MONO, RATIO_SANS_BOLD, grow_to_fit, text_width
+
 __all__ = ["layer_stack"]
 
 # Monospace stack for index tags / notes (the "technical" register).
@@ -162,12 +164,45 @@ def layer_stack(
         raise ValueError(f"focal index {focal_idx} out of range for {n} layers")
 
     # ── Geometry (all on a 4px grid) ────────────────────────────────
+    #
+    # Floors, not limits: the band grows if the text inside it needs the
+    # room. A stack whose labels already fit gets exactly these numbers.
     band_h   = 64
     band_x   = 180          # leaves a left margin for the axis
     band_w   = 680
+    name_off = 120          # name column offset when a tag is present
+    edge_pad = 20           # tag inset / note inset from the band edge
+    gap      = 24           # minimum clear space between name and note
     pad_top  = 48
     pad_bot  = 48
     title_h  = 72 if title else 0
+
+    # The tag eyebrow sits at the band's left edge and the name column
+    # starts at a fixed offset from it. A long tag runs into the name, so
+    # push the whole name column right — once, for every band, so the
+    # names stay in one vertical line.
+    for l in norm:
+        if l["tag"]:
+            tag_w = text_width(str(l["tag"]).upper(), 10,
+                               char_width_ratio=RATIO_MONO, letter_spacing=1.5)
+            name_off = grow_to_fit(name_off, edge_pad + tag_w + gap)
+
+    # The name is left-anchored inside the band and the note is
+    # right-anchored against its far edge, so the two grow toward each
+    # other. Size the band for the worst pairing rather than letting the
+    # longest name run straight through its own note.
+    need_w = band_w
+    for l in norm:
+        name_x = name_off if l["tag"] else 24
+        name_w = text_width(l["label"], 15, char_width_ratio=RATIO_SANS_BOLD)
+        note_w = (
+            text_width(l["note"], 10, char_width_ratio=RATIO_MONO) + edge_pad
+            if l["note"] else 0.0
+        )
+        need_w = max(need_w, name_x + name_w + gap + note_w)
+    band_w = grow_to_fit(band_w, need_w)
+    width = int(grow_to_fit(width, band_x + band_w + 48))
+
     y0       = title_h + pad_top
     stack_h  = n * band_h
     height   = y0 + stack_h + pad_bot
@@ -208,13 +243,13 @@ def layer_stack(
         # Index tag (mono eyebrow, far left inside band)
         if l["tag"]:
             parts.append(
-                f'<text x="{band_x + 20}" y="{mid + 4:.1f}" '
+                f'<text x="{band_x + edge_pad}" y="{mid + 4:.1f}" '
                 f'fill="{t["accent"] if is_focal else t["muted"]}" '
                 f'font-family="{_MONO}" font-size="10" letter-spacing="1.5" '
                 f'text-anchor="start">{escape(str(l["tag"]).upper())}</text>'
             )
         # Layer name (center-left of the band)
-        name_x = band_x + (120 if l["tag"] else 24)
+        name_x = band_x + (name_off if l["tag"] else 24)
         parts.append(
             f'<text x="{name_x}" y="{mid + 5:.1f}" fill="{t["ink"]}" '
             f'font-size="15" font-weight="600" text-anchor="start">'
@@ -223,7 +258,7 @@ def layer_stack(
         # Note (mono muted, far right inside band)
         if l["note"]:
             parts.append(
-                f'<text x="{band_x + band_w - 20}" y="{mid + 4:.1f}" '
+                f'<text x="{band_x + band_w - edge_pad}" y="{mid + 4:.1f}" '
                 f'fill="{t["muted"]}" font-family="{_MONO}" font-size="10" '
                 f'text-anchor="end">{escape(l["note"])}</text>'
             )

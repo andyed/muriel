@@ -24,6 +24,8 @@ from html import escape
 from pathlib import Path
 from typing import List, Optional, Sequence, Union
 
+from ._labels import RATIO_SANS, grow_to_fit, label_bbox, wrap_measured
+
 __all__ = ["cycle"]
 
 
@@ -83,21 +85,16 @@ def _polar(cx: float, cy: float, r: float, angle_deg: float) -> tuple[float, flo
     return cx + r * math.cos(a), cy + r * math.sin(a)
 
 
-def _wrap_label(text: str, max_chars: int = 14) -> list[str]:
-    """Greedy wrap on word boundaries for short cycle labels."""
-    words = text.split()
-    lines: list[str] = []
-    cur = ""
-    for w in words:
-        if not cur:
-            cur = w
-        elif len(cur) + 1 + len(w) <= max_chars:
-            cur = f"{cur} {w}"
-        else:
-            lines.append(cur)
-            cur = w
-    if cur:
-        lines.append(cur)
+# Target width for a wrapped step label, in SVG user units. The old rule
+# wrapped at 14 characters, which is a proxy for width and a poor one:
+# "Illuminate" and "WWWWWWWWWW" are the same length and nowhere near the
+# same size. This is the width that rule was reaching for.
+_LABEL_MAX_W = 126.0
+
+
+def _wrap_label(text: str, max_width: float = _LABEL_MAX_W) -> list[str]:
+    """Greedy wrap on measured width for short cycle labels."""
+    lines = wrap_measured(text, 15, max_width, char_width_ratio=RATIO_SANS)
     return lines or [""]
 
 
@@ -160,6 +157,46 @@ def cycle(
     base_angle = -90.0
     sweep = 360.0 if direction == "clockwise" else -360.0
     step_angle = sweep / n
+
+    # ── Grow the canvas until every radial label lands on it ────────
+    #
+    # Step labels sit outside the ring, anchored so they read outward, so
+    # the thing they overflow is the canvas itself — text rendered past
+    # the edge, invisible. Rather than pull the labels in (which would
+    # crowd the ring) or shrink them, keep the ring exactly as sized and
+    # pad the canvas around it. Growth is symmetric so the cycle stays
+    # centred; a diagram whose labels already fit gets no padding.
+    _placements = []
+    for i, step in enumerate(norm_steps):
+        a = base_angle + i * step_angle
+        lx, ly = _polar(cx, cy, R + label_offset, a)
+        cos_a = math.cos(math.radians(a))
+        anchor = "start" if cos_a > 0.2 else ("end" if cos_a < -0.2 else "middle")
+        _placements.append((_wrap_label(step["label"]), lx, ly, anchor))
+
+    _spill_x = _spill_y = 0.0
+    for lines, lx, ly, anchor in _placements:
+        for j, line in enumerate(lines):
+            box = label_bbox(line, 15, lx, ly + j * 18 + 5,
+                             text_anchor=anchor, char_width_ratio=RATIO_SANS)
+            _spill_x = max(_spill_x, -box.x0, box.x1 - width)
+            _spill_y = max(_spill_y, title_h - box.y0, box.y1 - height)
+    if _spill_x > 0:
+        pad = grow_to_fit(0, _spill_x + 16)
+        width = int(width + 2 * pad)
+        cx += pad
+    if _spill_y > 0:
+        pad = grow_to_fit(0, _spill_y + 16)
+        height = int(height + 2 * pad)
+        cy += pad
+    if _spill_x > 0 or _spill_y > 0:
+        # Positions are derived from the centre, so re-derive them once
+        # against the shifted centre rather than trying to patch offsets.
+        _placements = [
+            (lines,) + _polar(cx, cy, R + label_offset,
+                              base_angle + i * step_angle) + (anchor,)
+            for i, (lines, _, _, anchor) in enumerate(_placements)
+        ]
 
     parts: list[str] = []
     parts.append(
@@ -236,16 +273,10 @@ def cycle(
                 f'<g transform="translate({nx - 12:.1f}, {ny - 26:.1f}) scale(1)" '
                 f'fill="none" stroke="{t["accent"]}" stroke-width="1.5">{step["icon"]}</g>'
             )
-        # Label outside the node, in the radial direction
-        lx, ly = _polar(cx, cy, R + label_offset, a)
-        # Anchor based on quadrant so labels read outward
-        anchor = "middle"
-        cos_a = math.cos(math.radians(a))
-        if cos_a > 0.2:
-            anchor = "start"
-        elif cos_a < -0.2:
-            anchor = "end"
-        for j, line in enumerate(_wrap_label(step["label"])):
+        # Label outside the node, in the radial direction — pre-wrapped
+        # and pre-anchored above, so the canvas could be sized for it.
+        lines, lx, ly, anchor = _placements[i]
+        for j, line in enumerate(lines):
             parts.append(
                 f'<text x="{lx:.1f}" y="{ly + j * 18 + 5:.1f}" fill="{t["ink"]}" '
                 f'font-size="15" font-weight="500" text-anchor="{anchor}">'

@@ -42,6 +42,8 @@ from html import escape
 from pathlib import Path
 from typing import Optional, Union
 
+from ._labels import RATIO_MONO, RATIO_SANS_BOLD, grow_to_fit, text_width
+
 __all__ = ["pyramid"]
 
 _MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
@@ -179,12 +181,11 @@ def pyramid(
     tier_h   = 64
     min_w    = 160          # apex flat-top width (keeps labels legible)
     max_w    = 640
+    tier_pad = 16           # clear space inside a tier's sloped edges
+    ann_gap  = 20           # tier edge to right-hand annotation
     pad_top  = 48
     pad_bot  = 48
     title_h  = 72 if title else 0
-    y0       = title_h + pad_top
-    stack_h  = n * tier_h
-    height   = y0 + stack_h + pad_bot
     cx       = width / 2
 
     use_prop = proportional and all(l["value"] is not None for l in norm)
@@ -201,6 +202,78 @@ def pyramid(
         if orientation == "up":      # narrow at top, wide at base
             return min_w + (max_w - min_w) * frac
         return max_w - (max_w - min_w) * frac  # wide at top, narrow at base
+
+    def _span(i: int, top_off: float, bot_off: float) -> float:
+        """Narrowest width of tier ``i`` between two offsets into its height.
+
+        A tapered tier is a trapezoid, so "how much room is there" has no
+        single answer — it depends where in the tier you ask. Asking at
+        the flat edge would over-report the squeeze on one side and
+        under-report it on the other, growing figures that render fine.
+        Ask across the band the text actually occupies.
+        """
+        if use_prop:
+            return _tier_width(i)  # proportional mode draws rectangles
+        top_w = _boundary_width(i)
+        bot_w = _boundary_width(i + 1)
+        at = lambda off: top_w + (bot_w - top_w) * (off / tier_h)  # noqa: E731
+        return min(at(top_off), at(bot_off))
+
+    # ── Fit the labels, then scale the taper up to hold them ────────
+    #
+    # Widening one tier to fit its label would flatten the taper, and the
+    # taper *is* the argument — ordinal narrowing, or a proportional
+    # funnel. So when a label doesn't fit, scale min_w and max_w by the
+    # same factor: the shape is preserved exactly and the figure just
+    # gets bigger. A pyramid whose labels already fit is untouched.
+    #
+    # The offsets below mirror the baselines the renderer uses further
+    # down; ascent/descent come from muriel.layout's text metrics.
+    scale = 1.0
+    for i, l in enumerate(norm):
+        checks = []
+        if l["sublabel"]:
+            # label baseline at mid, sublabel baseline at mid + 16
+            checks.append((text_width(l["label"], 13,
+                                      char_width_ratio=RATIO_SANS_BOLD),
+                           32 - 10.4, 32 + 2.9))
+            checks.append((text_width(l["sublabel"], 10,
+                                      char_width_ratio=RATIO_MONO),
+                           48 - 8.0, 48 + 2.2))
+        else:
+            # label baseline at mid + 4
+            checks.append((text_width(l["label"], 13,
+                                      char_width_ratio=RATIO_SANS_BOLD),
+                           36 - 10.4, 36 + 2.9))
+        for needed, top_off, bot_off in checks:
+            avail = _span(i, top_off, bot_off)
+            if avail > 0 and needed > avail - 2 * tier_pad:
+                scale = max(scale, (needed + 2 * tier_pad) / avail)
+    if scale > 1.0:
+        min_w = grow_to_fit(min_w, min_w * scale)
+        max_w = grow_to_fit(max_w, max_w * scale)
+
+    # The widest tier has to land on the canvas with room for whatever
+    # sits beside it. Growth is symmetric because the stack is centred,
+    # so the margin is the worst of the three things that claim the side
+    # channel: bare canvas, the left-margin axis, and right-hand
+    # annotations.
+    widest_ann = max(
+        (text_width(l["annotation"], 11, char_width_ratio=RATIO_MONO)
+         for l in norm if l["annotation"]),
+        default=0.0,
+    )
+    side = 24.0
+    if axis_label:
+        side = max(side, 80.0)   # axis line at x=60 plus its rotated caption
+    if widest_ann:
+        side = max(side, ann_gap + widest_ann + 24)
+    width = int(grow_to_fit(width, max_w + 2 * side))
+    cx = width / 2
+
+    y0       = title_h + pad_top
+    stack_h  = n * tier_h
+    height   = y0 + stack_h + pad_bot
 
     parts: list[str] = []
     parts.append(
@@ -262,7 +335,7 @@ def pyramid(
         if l["annotation"]:
             edge = max(top_w, bot_w) / 2
             parts.append(
-                f'<text x="{cx + edge + 20:.1f}" y="{mid + 4:.1f}" '
+                f'<text x="{cx + edge + ann_gap:.1f}" y="{mid + 4:.1f}" '
                 f'fill="{t["muted"]}" font-family="{_MONO}" font-size="11" '
                 f'text-anchor="start">{escape(l["annotation"])}</text>'
             )

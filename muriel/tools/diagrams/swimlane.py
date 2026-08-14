@@ -40,6 +40,14 @@ from html import escape
 from pathlib import Path
 from typing import Optional, Union
 
+from ._labels import (
+    RATIO_MONO,
+    RATIO_SANS_BOLD,
+    fit_text,
+    grow_to_fit,
+    text_width,
+)
+
 __all__ = ["swimlane"]
 
 _MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
@@ -171,15 +179,59 @@ def swimlane(
     t = _resolve(brand)
 
     # ── Geometry (4px grid) ─────────────────────────────────────────
+    #
+    # These are the design's proportions, not hard limits. Every one of
+    # them is a floor that grows if the text needs the room — measured,
+    # on the grid, and uniformly so the lanes stay regular. A diagram
+    # whose labels already fit gets exactly these numbers.
     lane_h     = 96
     lane_label = 168           # left margin for lane eyebrow
     col_w      = 184
     box_w      = 144
     box_h      = 56
+    box_pad    = 10            # breathing room inside a step box
+    gutter_gap = 20            # eyebrow baseline to the grid edge
+    edge_pad   = 8             # keeps the eyebrow off the canvas edge
+    line_h     = 18            # step-label leading at font-size 13
     pad_top    = 48
     pad_bot    = 48
     pad_right  = 48
     title_h    = 72 if title else 0
+
+    # ── Fit the text, then grow what it doesn't fit in ──────────────
+    #
+    # The eyebrow is right-anchored at the gutter edge, so a lane name
+    # wider than the gutter runs off the left of the canvas entirely —
+    # not clipped by a box, just gone. Widen the gutter instead.
+    widest_lane = max(
+        text_width(label.upper(), 11,
+                   char_width_ratio=RATIO_MONO, letter_spacing=1.5)
+        for label in lane_labels
+    )
+    lane_label = grow_to_fit(lane_label, widest_lane + gutter_gap + edge_pad)
+
+    # Step labels wrap on measured width. A multi-word label that needs a
+    # third line grows the boxes taller; a single word wider than the box
+    # can't be wrapped at all, so it grows them wider. Both apply to every
+    # box, because a grid with one odd-sized cell reads as a mistake.
+    def _fit_steps(w: float) -> list:
+        return [
+            fit_text(s["label"], 13, w - 2 * box_pad, max_lines=2,
+                     char_width_ratio=RATIO_SANS_BOLD)
+            for s in norm
+        ]
+
+    fits = _fit_steps(box_w)
+    unbreakable = [f.width for f in fits if f.reason == "unbreakable-word"]
+    if unbreakable:
+        box_w = grow_to_fit(box_w, max(unbreakable) + 2 * box_pad)
+        fits = _fit_steps(box_w)
+
+    n_lines = max((len(f.lines) for f in fits), default=1)
+    box_h = grow_to_fit(box_h, n_lines * line_h + 20)
+    col_w = grow_to_fit(col_w, box_w + 40)
+    lane_h = grow_to_fit(lane_h, box_h + 40)
+
     y0         = title_h + pad_top
     grid_h     = n_lanes * lane_h
     width      = lane_label + n_cols * col_w + pad_right
@@ -260,7 +312,7 @@ def swimlane(
         )
 
     # ── Step boxes ──────────────────────────────────────────────────
-    for s in norm:
+    for s, fit in zip(norm, fits):
         cx = cell_cx(s["col"])
         cy = lane_cy(s["lane"])
         bx = cx - box_w / 2
@@ -272,28 +324,14 @@ def swimlane(
             f'<rect x="{bx:.1f}" y="{by:.1f}" width="{box_w}" height="{box_h}" '
             f'rx="4" fill="{fill}" stroke="{stroke}" stroke-width="{sw}"/>'
         )
-        # label (wrap to two lines if long)
-        words = s["label"].split()
-        line1, line2 = s["label"], ""
-        if len(s["label"]) > 16 and len(words) > 1:
-            mid = len(words) // 2
-            line1, line2 = " ".join(words[:mid]), " ".join(words[mid:])
-        if line2:
+        # Label: pre-wrapped on measured width, block-centred on the box.
+        # The single-line case lands on the same baseline it always did.
+        top = cy + 5 - (len(fit.lines) - 1) * line_h / 2
+        for li, line in enumerate(fit.lines):
             parts.append(
-                f'<text x="{cx:.1f}" y="{cy - 2:.1f}" fill="{t["ink"]}" '
-                f'font-size="13" font-weight="600" text-anchor="middle">'
-                f'{escape(line1)}</text>'
-            )
-            parts.append(
-                f'<text x="{cx:.1f}" y="{cy + 14:.1f}" fill="{t["ink"]}" '
-                f'font-size="13" font-weight="600" text-anchor="middle">'
-                f'{escape(line2)}</text>'
-            )
-        else:
-            parts.append(
-                f'<text x="{cx:.1f}" y="{cy + 5:.1f}" fill="{t["ink"]}" '
-                f'font-size="13" font-weight="600" text-anchor="middle">'
-                f'{escape(line1)}</text>'
+                f'<text x="{cx:.1f}" y="{top + li * line_h:.1f}" '
+                f'fill="{t["ink"]}" font-size="13" font-weight="600" '
+                f'text-anchor="middle">{escape(line)}</text>'
             )
 
     parts.append('</svg>')

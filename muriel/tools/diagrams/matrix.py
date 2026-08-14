@@ -25,6 +25,14 @@ from html import escape
 from pathlib import Path
 from typing import Optional, Sequence, Union
 
+from ._labels import (
+    RATIO_SANS,
+    RATIO_SANS_BOLD,
+    grow_to_fit,
+    text_width,
+    wrap_measured,
+)
+
 __all__ = ["matrix"]
 
 
@@ -139,6 +147,58 @@ def matrix(
     pad   = 80
     title_h = 60 if title else 0
     label_pad = 36   # space reserved for axis labels at each side
+    cell_pad = 18    # text inset from the cell's left edge
+    item_h = 22      # bullet leading
+    head_y = 30      # cell label baseline, from the cell's top
+    body_y = 58      # first bullet baseline, from the cell's top
+
+    def _chrome_w() -> float:
+        return 2 * pad + 2 * label_pad
+
+    bullet_w = 16    # width of the "• " prefix, used as the hang indent
+
+    def _wrap_cells(cw: float) -> list[list[list[str]]]:
+        """Per cell, the wrapped lines of each bullet."""
+        avail = cw - 2 * cell_pad - bullet_w
+        return [
+            [wrap_measured(item, 13, avail, char_width_ratio=RATIO_SANS)
+             for item in cell["items"]]
+            for cell in cells
+        ]
+
+    # ── Fit the cell contents, then grow the grid to hold them ──────
+    #
+    # Bullets are left-anchored inside their cell and wrap on measured
+    # width; a single word wider than the cell can't wrap, so it widens
+    # the grid. Rows of bullets that run past the cell's bottom edge make
+    # it taller. Both apply to all four cells, since a 2×2 whose cells
+    # are different sizes is no longer a 2×2.
+    cell_w = (width - _chrome_w()) / 2
+    wrapped = _wrap_cells(cell_w)
+
+    longest_word = 0.0
+    for cell in cells:
+        for item in cell["items"]:
+            for word in item.split():
+                longest_word = max(
+                    longest_word,
+                    text_width(word, 13, char_width_ratio=RATIO_SANS))
+    for cell in cells:
+        longest_word = max(
+            longest_word,
+            text_width(cell["label"], 15, char_width_ratio=RATIO_SANS_BOLD))
+    need_cell_w = longest_word + 2 * cell_pad + bullet_w
+    if need_cell_w > cell_w:
+        width = int(grow_to_fit(width, 2 * need_cell_w + _chrome_w()))
+        cell_w = (width - _chrome_w()) / 2
+        wrapped = _wrap_cells(cell_w)
+
+    max_rows = max((sum(len(lines) for lines in cell) for cell in wrapped),
+                   default=0)
+    need_cell_h = body_y + max_rows * item_h + cell_pad
+    min_height = int(2 * need_cell_h + 2 * pad + 2 * label_pad + title_h)
+    height = int(grow_to_fit(height, min_height))
+
     grid_x = pad + label_pad
     grid_y = pad + title_h + label_pad
     grid_w = width  - 2 * pad - 2 * label_pad
@@ -177,18 +237,28 @@ def matrix(
         cell = cells[i]
         # Label
         parts.append(
-            f'<text x="{cx + 18:.1f}" y="{cy + 30:.1f}" '
+            f'<text x="{cx + cell_pad:.1f}" y="{cy + head_y:.1f}" '
             f'fill="{t["accent"]}" font-size="15" font-weight="600" '
             f'letter-spacing="0.06em" text-transform="uppercase">'
             f'{escape(cell["label"])}</text>'
         )
-        # Items, one per line, max ~5 visible
-        for j, item in enumerate(cell["items"][:6]):
-            parts.append(
-                f'<text x="{cx + 18:.1f}" y="{cy + 58 + j * 22:.1f}" '
-                f'fill="{t["ink"]}" font-size="13">'
-                f'• {escape(item)}</text>'
-            )
+        # Items, pre-wrapped on measured width. Every item is rendered:
+        # the old code silently kept the first six, which reads as "these
+        # are the items" when it means "these are some of the items".
+        row = 0
+        for lines in wrapped[i]:
+            for k, line in enumerate(lines):
+                # Continuation rows hang-indent under the text, not
+                # under the bullet. Done with an x offset rather than
+                # leading spaces, which SVG collapses.
+                tx = cx + cell_pad + (0 if k == 0 else bullet_w)
+                body = f"\u2022 {escape(line)}" if k == 0 else escape(line)
+                parts.append(
+                    f'<text x="{tx:.1f}" '
+                    f'y="{cy + body_y + row * item_h:.1f}" '
+                    f'fill="{t["ink"]}" font-size="13">{body}</text>'
+                )
+                row += 1
 
     # Axis cross (over the cells, in muted ink so the dividing lines read clearly)
     cx_mid = grid_x + cell_w
