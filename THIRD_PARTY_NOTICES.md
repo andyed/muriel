@@ -35,6 +35,10 @@ convention — are adapted from the `diagram-design` Claude Code skill.
 
 - Source: https://github.com/cathrynlavery/diagram-design
 - Adapted: 2026-05 (diagram-design relicensed to MIT)
+- Upstream re-checked: 2026-08-13 — the three adapted references (`type-layers.md`,
+  `type-pyramid.md`, `type-swimlane.md`) are unchanged since the adaptation, so this
+  notice still describes what muriel carries. Upstream has grown substantially
+  elsewhere; the delta is summarised in the README's "Related prior art" entry.
 
 muriel's own contribution is the deterministic Python generators, the
 epistemic-precondition / anti-prescription gate on each diagram, the 8:1
