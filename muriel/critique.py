@@ -59,6 +59,7 @@ from __future__ import annotations
 
 import argparse
 import dataclasses
+import os
 import re
 import sys
 from pathlib import Path
@@ -304,20 +305,48 @@ def _parse_frontmatter(text: str) -> dict:
     return out
 
 
+def channel_dirs() -> list[Path]:
+    """Candidate locations for ``channels/*.md``, most specific first.
+
+    The channel docs ship with the *skill*, not the Python package, so where
+    they live depends on how muriel was installed. A bare ``pip install
+    muriel`` has no channel docs at all — that is not an error, it just means
+    the front-matter gates don't run.
+
+    ``MURIEL_CHANNELS_DIR`` overrides the search entirely.
+    """
+    override = os.environ.get("MURIEL_CHANNELS_DIR")
+    if override:
+        return [Path(override).expanduser()]
+    repo_root = Path(__file__).resolve().parent.parent
+    home = Path.home()
+    return [
+        # dev checkout / `pip install -e .` — the canonical location
+        repo_root / "plugins" / "muriel" / "skills" / "compose" / "channels",
+        # flat or vendored layout, and the pre-plugin repo shape
+        repo_root / "channels",
+        # `install.sh` symlink into ~/.claude/skills/
+        home / ".claude" / "skills" / "muriel" / "channels",
+        # `/plugin install muriel@andyed-muriel`
+        home / ".claude" / "plugins" / "cache" / "andyed-muriel"
+             / "skills" / "compose" / "channels",
+    ]
+
+
 def _load_channel_meta(channel: str) -> dict:
     """Load front-matter for ``channels/<channel>.md`` if present.
 
     Returns an empty dict when the file is missing or has no front-matter.
     Critique then proceeds without channel-specific gates.
     """
-    here = Path(__file__).resolve().parent.parent
-    chan_path = here / "channels" / f"{channel}.md"
-    if not chan_path.exists():
-        return {}
-    try:
-        return _parse_frontmatter(chan_path.read_text(encoding="utf-8"))
-    except Exception:
-        return {}
+    for base in channel_dirs():
+        chan_path = base / f"{channel}.md"
+        if chan_path.exists():
+            try:
+                return _parse_frontmatter(chan_path.read_text(encoding="utf-8"))
+            except Exception:
+                return {}
+    return {}
 
 
 # ── P0 honesty probe ──

@@ -26,6 +26,37 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   (MIT); its headline technique — link text as gradient SVG wordmarks — is
   explicitly not adopted.
 
+### Fixed
+
+- **Channel front-matter gates never ran.** `_load_channel_meta` resolved
+  `<repo-root>/channels/<name>.md`, but the channel docs live under
+  `plugins/muriel/skills/compose/channels/` and have since the plugin
+  migration. No layout put a `channels/` directory at repo root, so every
+  lookup returned `{}` for all eleven channels declaring front-matter, and
+  every gate `channels/SCHEMA.md` documents was inert while reporting nothing
+  wrong. Resolution now walks an ordered candidate list
+  (dev checkout, flat/vendored, `install.sh` symlink, plugin cache) with a
+  `MURIEL_CHANNELS_DIR` override, and degrades to no-gates on a bare
+  `pip install muriel` where the docs genuinely aren't shipped.
+  **Behavior change:** the `requires.audience: required` gate now actually
+  fires, which affects `gaze`, `heatmaps`, `infographics`, `readme`,
+  `science`, and `web`. Because `science` is the CLI default channel,
+  `muriel critique <file>` with no `--audience` now reports a failed check
+  where it previously reported nothing. That is what SCHEMA.md always
+  specified; pass `--audience` to clear it.
+- **`output.kinds` / `output.registers` enums had drifted from the channels
+  declaring them.** Turning the loader on surfaced it: `polish` emits
+  `css`/`tsx` and `spatial` emits `css`/`js`, none of which the SCHEMA.md
+  vocabulary listed. Widened the enums to match what the channels honestly
+  produce (and added the `interactive` register) rather than editing the
+  channels to under-declare their output. `css`/`js`/`tsx` route to
+  `muriel devibe`, so they have a real consumer.
+- **`tests/test_channel_meta.py`** guards all of the above: every
+  front-matter channel must load with its own name in the payload, declared
+  values must sit in the SCHEMA.md enums, and `peer_channels` must point at
+  channels that exist. The original bug was invisible because a dead path
+  returning `{}` looks identical to a channel with no front-matter.
+
 - **`muriel.patterns.wavefield()`** — clean-room, zero-dependency layered SVG
   contours with two explicit modes: seeded harmonic synthesis for reproducible
   visual structure, and caller-supplied normalized series for semantic signal

@@ -44,8 +44,8 @@ peer_channels:             # cross-links — sister channels, primitive layers
 | `requires.brand` | enum | no | `required` → critique fails without a loaded brand. `optional` → use brand if loaded. `none` → channel does not consume brand tokens. |
 | `requires.audience` | enum | no | `required` → critique fails without `--audience`. `optional` → audit if passed. `none` → no audience filter. |
 | `requires.reads` | list[string] | no | Importable muriel utilities the channel must use rather than reinvent. Critique can grep the rendered code for telltale bypasses. |
-| `output.kinds` | list[enum] | no | `svg`, `png`, `jpg`, `pdf`, `html`, `mp4`, `gif`, `txt`. Drives default checkers (e.g. SVG → contrast audit). |
-| `output.registers` | list[enum] | no | `paper`, `blog`, `social`, `app`, `terminal`, `presentation`, `editorial`. Used to suggest the right rcparams/dimension target. |
+| `output.kinds` | list[enum] | no | `svg`, `png`, `jpg`, `pdf`, `html`, `css`, `js`, `tsx`, `mp4`, `gif`, `txt`. Drives default checkers — SVG → contrast audit; `css` / `js` / `tsx` → `muriel devibe`. |
+| `output.registers` | list[enum] | no | `paper`, `blog`, `social`, `app`, `interactive`, `terminal`, `presentation`, `editorial`. Used to suggest the right rcparams/dimension target. |
 | `peer_channels` | list[string] | no | Sibling channels — primitive layers below, composition layers above, sister channels at the same tier. |
 
 ### Status semantics
