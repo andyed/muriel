@@ -204,6 +204,17 @@ CHECKLIST_BY_CHANNEL = {
         "**Safe area**: critical content within central 80% of the frame.",
         "**Single hero**: one headline at >= 36pt; subtitle ≤ 16pt.",
     ],
+    "readme": [
+        "**Badge budget**: 3-5 status badges, each clearing 8:1 on both the "
+        "light and dark GitHub theme families. Dependencies go in a table.",
+        "**Theme pairing**: every non-transparent asset ships as a "
+        "`<picture>` pair; no page background baked into the image.",
+        "**Squint the render**: capture the live page (`muriel capture`), "
+        "blur it (`muriel squint`), and confirm the surviving focal mass is "
+        "the project identity — not the badge row.",
+        "**No running text as image**: wordmarks may be assets; prose, link "
+        "text, and headers may not. Every image carries meaningful alt text.",
+    ],
 }
 
 

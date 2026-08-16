@@ -89,6 +89,7 @@ nav:
       - Gaze plots: channels/gaze.md
       - Terminal: channels/terminal.md
       - Polish: channels/polish.md
+      - README: channels/readme.md
   - Vocabularies:
       - Visible Language: vocabularies/visible-language.md
       - FUI (fictional UI): vocabularies/fui.md

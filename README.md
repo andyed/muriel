@@ -48,7 +48,7 @@ muriel is the grandmother to [marginalia](https://github.com/andyed/marginalia) 
 
 ## Channels
 
-Fourteen output channels, each with its own subfile under [`channels/`](plugins/muriel/skills/compose/channels/):
+Fifteen output channels, each with its own subfile under [`channels/`](plugins/muriel/skills/compose/channels/):
 
 - **Raster** (Pillow + `typeset.py`) — store assets, icons, banners, wordmarks, screenshot designs
 - **Vector / SVG** (`svgwrite`, `cairosvg`, Mermaid, Excalidraw) — paper figures, data-driven diagrams, scalable icons, flowcharts, and seeded or series-driven layered wave fields via `muriel.patterns.wavefield()`
@@ -64,6 +64,7 @@ Fourteen output channels, each with its own subfile under [`channels/`](plugins/
 - **Diagrams** (deterministic SVG) — rhetorical primitives: 2×2 matrix, N-step cycle, Venn shipped, plus Mermaid → SVG/ASCII and TeX → SVG (MathJax) Node-bridges; comparison pair, funnel, stack, DAG, spectrum, pyramid, heat-grid queued. Each preset carries an epistemic precondition + anti-prescription
 - **Spatial** (`muriel.spatial` + `render_assets/`) — depth scaffolding for layered typography + scalar-field topology. Static SVG perspective grids (1pt / 2pt / 3pt / iso) where `grid()` scaffolds *space*, plus `ridgemap()` — a sibling primitive that scaffolds *scalar fields* as stacked 1D slices (Joy Division / Harold Craft 1970 pulsar plot lineage). Three.js + CSS3DRenderer exemplars share one helper lib. Cooper VLW / Mackinlay-Robertson-Card / Dumais Data Mountain lineage. See [`channels/spatial.md`](plugins/muriel/skills/compose/channels/spatial.md).
 - **Polish** (CSS / TSX / HTML micro-interaction discipline) — UI polish + visual-detail rules: concentric border radius (`outer = inner + padding`), optical alignment, shadows-over-borders, scale-on-press (`0.96`, never below `0.95`), contextual icon animations (`scale 0.25→1` + `blur 4px→0` + `bounce: 0`), 40×40px hit area, no `transition: all`, tabular nums, `text-wrap: balance` / `pretty`, macOS font smoothing. 16 numbered rules, mined from [thedavidmurray/claude-make-interfaces-feel-better](https://github.com/thedavidmurray/claude-make-interfaces-feel-better) (MIT, archived) with muriel's 8:1 contrast floor still binding. See [`channels/polish.md`](plugins/muriel/skills/compose/channels/polish.md).
+- **README** (`muriel.capture` + `muriel.squint` + `muriel.aiism`) — repo front pages on a renderer you don't control. The GitHub sanitizer contract (what survives, what's stripped silently), badge budget, `<picture>` theme pairing across GitHub's five themes, and a squint pass on the *rendered* page so "does this have hierarchy" is testable rather than arguable. Structural AI-tell rules queued into `muriel.aiism`. See [`channels/readme.md`](plugins/muriel/skills/compose/channels/readme.md).
 
 Plus two cross-channel references used by every channel:
 

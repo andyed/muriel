@@ -8,6 +8,24 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`channels/readme.md` — repo front pages on a renderer you don't control.**
+  A README is a visual artifact rendered by a hostile, non-configurable
+  renderer, read once, at a glance, by someone deciding whether to close the
+  tab — and until now no channel owned it. Documents the GitHub sanitizer
+  contract (what survives, what is stripped silently, and six gotchas
+  including that the README's first screenful is not the *page's* first
+  screenful, and that "dark mode" is five themes so a baked page background
+  bands against dark dimmed). Ships a badge budget with an 8:1 floor on both
+  theme families, `<picture>` theme pairing, and a running-text-as-image
+  prohibition that keeps wordmarks legal and link text illegal. The channel's
+  distinguishing move is that the artifact is renderable: `muriel capture` the
+  live repo page, `muriel squint` the result, and the hierarchy claim becomes
+  testable rather than arguable. Structural AI-tell rules are spec'd in the
+  doc and queued into `muriel.aiism`. Renderer-contract observations credited
+  to [aza-ali/github-readme-crisp-links](https://github.com/aza-ali/github-readme-crisp-links)
+  (MIT); its headline technique — link text as gradient SVG wordmarks — is
+  explicitly not adopted.
+
 - **`muriel.patterns.wavefield()`** — clean-room, zero-dependency layered SVG
   contours with two explicit modes: seeded harmonic synthesis for reproducible
   visual structure, and caller-supplied normalized series for semantic signal

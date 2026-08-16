@@ -143,6 +143,7 @@ Read the channel that matches the primary output:
 | export dimensions, social cards, or style guide | [`channels/dimensions.md`](channels/dimensions.md) |
 | quantitative chart | [`channels/charts.md`](channels/charts.md) |
 | spatial or dimensional composition | [`channels/spatial.md`](channels/spatial.md) |
+| repo front page or markdown rendered by GitHub | [`channels/readme.md`](channels/readme.md) |
 
 Use a vocabulary only when it solves the task's specific visual grammar:
 [`vocabularies/`](vocabularies/).
