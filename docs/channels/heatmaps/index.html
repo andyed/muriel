@@ -901,6 +901,41 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1669,15 +1704,15 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typeset</span><span class="w"> </span><span class="kn">import</span> <span class="n">render_heatmap</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">heatmap</span> <span class="o">=</span> <span class="n">render_heatmap</span><span class="p">(</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">fixations</span><span class="p">,</span>              <span class="c1"># list of {&#39;x&#39;, &#39;y&#39;, &#39;d&#39;} dicts</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">fixations</span><span class="p">,</span>              <span class="c1"># list of {'x', 'y', 'd'} dicts</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">canvas_size</span><span class="o">=</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">800</span><span class="p">),</span> <span class="c1"># output dimensions</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">radius</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>              <span class="c1"># blob radius (controls bin coarseness)</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">blur</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>                 <span class="c1"># gaussian blur after binning</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;pink&quot;</span><span class="p">,</span>        <span class="c1"># &quot;pink&quot; (Tobii-style), &quot;heat&quot;, or (r,g,b) tuple</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">background</span><span class="o">=</span><span class="s2">&quot;serp.png&quot;</span><span class="p">,</span>  <span class="c1"># optional background image path</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">colormap</span><span class="o">=</span><span class="s2">"pink"</span><span class="p">,</span>        <span class="c1"># "pink" (Tobii-style), "heat", or (r,g,b) tuple</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">background</span><span class="o">=</span><span class="s2">"serp.png"</span><span class="p">,</span>  <span class="c1"># optional background image path</span>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">desaturate</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>         <span class="c1"># background desaturation (0=color, 1=gray)</span>
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">bg_opacity</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span>        <span class="c1"># background layer opacity</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="n">output</span><span class="o">=</span><span class="s2">&quot;heatmap.png&quot;</span><span class="p">,</span>   <span class="c1"># save path (None to just return Image)</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="n">output</span><span class="o">=</span><span class="s2">"heatmap.png"</span><span class="p">,</span>   <span class="c1"># save path (None to just return Image)</span>
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>

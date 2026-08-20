@@ -775,6 +775,41 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1962,13 +1997,13 @@ elapsed time, forgery path, and the named not-reproduced list. Then the counts
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Decision ID: &lt;id&gt;
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Isolation: subagent | inline (denial nominal)
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Order seen: &lt;option ids, permuted by
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  `printf &#39;%s&#39; &quot;&lt;decisionId&gt;forger&quot; | shasum`&gt;
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  `printf '%s' "&lt;decisionId&gt;forger" | shasum`&gt;
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Evidence seen: &lt;artifacts, intended use, generic component library&gt;
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Evidence denied: &lt;brand tokens, design system, artifact source&gt;
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Reasoning:
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  Elapsed: &lt;mm:ss per option — observation only, keys nothing&gt;
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  Forgery: &lt;path per option, plus its .forgery.md sidecar and render&gt;
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  Not reproduced: &lt;named list per option; empty list stated as &quot;none&quot;&gt;
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  Not reproduced: &lt;named list per option; empty list stated as "none"&gt;
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  Counts: F=&lt;n&gt; R=&lt;n&gt; Rs=&lt;n&gt; per option; convention=&lt;n&gt; encoding-optimal=&lt;n&gt;
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  Passes: &lt;drafts/revisions/renders spent per option; note if the ceiling bound&gt;
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  Render: &lt;fallback rung used, and the command&gt;
@@ -1977,15 +2012,15 @@ elapsed time, forgery path, and the named not-reproduced list. Then the counts
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>Ranking: &lt;option ids, least forgeable first&gt;  (omit if no alternatives)
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>Findings:
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>  - id: &lt;seat-local id&gt;
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    target: &lt;option id or &quot;artifact&quot;&gt;
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    rule: &lt;&quot;anti-slop: domain-specific decisions&quot; or the toolkit entry&gt;
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    target: &lt;option id or "artifact"&gt;
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    rule: &lt;"anti-slop: domain-specific decisions" or the toolkit entry&gt;
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    severity: CRITICAL | HIGH | MEDIUM | LOW
 <a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    evidence: &lt;the template-default decision AND the generic choice that
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>               replaced it, with the counterfeit&#39;s actual value and time&gt;
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>               replaced it, with the counterfeit's actual value and time&gt;
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    fix: &lt;one sentence, actionable&gt;
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    form_fatal: yes | no    (required on CRITICAL; see Two bodies)
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>Issue rank: &lt;finding ids, worst first, no ties&gt;  (single-artifact only)
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>Ship (this seat&#39;s loss only): yes | no           (single-artifact only)
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>Ship (this seat's loss only): yes | no           (single-artifact only)
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>Confidence: low | medium | high
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>Recused: hierarchy, contrast, typography quality, labeling, units, scale
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>         survival&lt;, plus any option you could not forge&gt;

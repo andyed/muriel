@@ -779,6 +779,41 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1750,21 +1785,21 @@
 </ul>
 <h2 id="quick-start-cdn-lifted-from-inside_the_math">Quick start (CDN, lifted from <code>inside_the_math</code>)<a class="headerlink" href="#quick-start-cdn-lifted-from-inside_the_math" title="Permanent link">&para;</a></h2>
 <p>The canonical setup is a <code>&lt;link&gt;</code> for CSS, a <code>&lt;script&gt;</code> for the engine, and a one-line auto-render call that walks the document for <code>$$…$$</code> (display) and <code>$…$</code> (inline) delimiters:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css&quot;</span><span class="p">&gt;</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">&lt;</span><span class="nt">script</span> <span class="na">defer</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">&lt;</span><span class="nt">script</span> <span class="na">defer</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js&quot;</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  <span class="na">onload</span><span class="o">=</span><span class="s">&quot;renderMathInElement(document.body, {</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">"stylesheet"</span> <span class="na">href</span><span class="o">=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"</span><span class="p">&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">&lt;</span><span class="nt">script</span> <span class="na">defer</span> <span class="na">src</span><span class="o">=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">&lt;</span><span class="nt">script</span> <span class="na">defer</span> <span class="na">src</span><span class="o">=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  <span class="na">onload</span><span class="o">=</span><span class="s">"renderMathInElement(document.body, {</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s">    delimiters: [</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s">      { left: &#39;$$&#39;, right: &#39;$$&#39;, display: true },</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s">      { left: &#39;$&#39;,  right: &#39;$&#39;,  display: false }</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s">      { left: '$$', right: '$$', display: true },</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s">      { left: '$',  right: '$',  display: false }</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s">    ]</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s">  });&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s">  });"</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </code></pre></div>
 <p><code>defer</code> matters — the engine and the contrib script must run after DOM parse, in order. The <code>onload</code> hook on the last script is what triggers the walk; everything's CDN-clean and no bundler is needed (matches muriel's no-bundler doctrine).</p>
 <h2 id="patterns-worth-knowing">Patterns worth knowing<a class="headerlink" href="#patterns-worth-knowing" title="Permanent link">&para;</a></h2>
 <h3 id="equation-blocks-as-designed-objects-eq-block">Equation blocks as designed objects (<code>.eq-block</code>)<a class="headerlink" href="#equation-blocks-as-designed-objects-eq-block" title="Permanent link">&para;</a></h3>
 <p>Inline <code>$$…$$</code> is fine for casual math, but a math-essay surface usually wants equations rendered as named, themed blocks. The <code>inside_the_math</code> pattern wraps each display equation in a <code>.eq-block</code> container, themes it from CSS variables, and (optionally) lays a thematic background image at low opacity behind it for sectional accent:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;eq-block&quot;</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"eq-block"</span><span class="p">&gt;</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  $$\vec{F}_{total} = \sum_{i=1}^{N} \frac{w_i (\vec{K}_i - \vec{P})}{|\vec{K}_i - \vec{P}|^p}$$
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 </code></pre></div>
@@ -1779,7 +1814,7 @@
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="k">overflow</span><span class="p">:</span><span class="w"> </span><span class="kc">hidden</span><span class="p">;</span>
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">}</span>
 <a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">.</span><span class="nc">eq-block</span><span class="p">::</span><span class="nd">before</span><span class="w"> </span><span class="p">{</span><span class="w">                        </span><span class="c">/* optional sectional background */</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="k">content</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span><span class="w"> </span><span class="k">position</span><span class="p">:</span><span class="w"> </span><span class="kc">absolute</span><span class="p">;</span><span class="w"> </span><span class="k">inset</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="k">content</span><span class="p">:</span><span class="w"> </span><span class="s1">''</span><span class="p">;</span><span class="w"> </span><span class="k">position</span><span class="p">:</span><span class="w"> </span><span class="kc">absolute</span><span class="p">;</span><span class="w"> </span><span class="k">inset</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="k">background-size</span><span class="p">:</span><span class="w"> </span><span class="kc">cover</span><span class="p">;</span><span class="w"> </span><span class="k">background-position</span><span class="p">:</span><span class="w"> </span><span class="kc">center</span><span class="p">;</span>
 <a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="k">opacity</span><span class="p">:</span><span class="w"> </span><span class="mf">.08</span><span class="p">;</span><span class="w"> </span><span class="k">pointer-events</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
 <a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="k">transition</span><span class="p">:</span><span class="w"> </span><span class="k">opacity</span><span class="w"> </span><span class="mf">.3</span><span class="kt">s</span><span class="p">;</span>
@@ -1797,10 +1832,10 @@
 <p>KaTeX supports <code>\tag{n}</code> and <code>\tag*{n}</code> inside an equation for explicit numbering, plus the <code>aligned</code> / <code>align</code> environments for multi-line numbered systems:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="sb">$$</span><span class="nb"> E </span><span class="o">=</span><span class="nb"> mc^</span><span class="m">2</span><span class="nb"> </span><span class="nv">\tag</span><span class="nb">{</span><span class="m">1</span><span class="nb">} </span><span class="s">$$</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">\begin</span><span class="nb">{</span>align<span class="nb">}</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  a <span class="nb">&amp;</span>= b + c <span class="k">\tag</span><span class="nb">{</span>2a<span class="nb">}</span> <span class="k">\\</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  d <span class="nb">&amp;</span>= e + f <span class="k">\tag</span><span class="nb">{</span>2b<span class="nb">}</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="k">\end</span><span class="nb">{</span>align<span class="nb">}</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">\begin</span><span class="nb">{align}</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nb">  a &amp;</span><span class="o">=</span><span class="nb"> b </span><span class="o">+</span><span class="nb"> c </span><span class="nv">\tag</span><span class="nb">{</span><span class="m">2</span><span class="nb">a} </span><span class="nv">\\</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nb">  d &amp;</span><span class="o">=</span><span class="nb"> e </span><span class="o">+</span><span class="nb"> f </span><span class="nv">\tag</span><span class="nb">{</span><span class="m">2</span><span class="nb">b}</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="k">\end</span><span class="nb">{align}</span>
 </code></pre></div>
 <p>For automatic numbering across an entire document, use the <a href="https://katex.org/docs/autorender.html"><code>auto-render</code></a> extension's <code>output: 'mathml'</code> with custom CSS counters, or render via the JS API and inject <code>\tag{}</code> from a counter. The <code>inside_the_math</code> essay does this manually per equation — fine for a one-off; tooling-worthy if it becomes routine.</p>
 <h3 id="color-and-emphasis-inside-math">Color and emphasis inside math<a class="headerlink" href="#color-and-emphasis-inside-math" title="Permanent link">&para;</a></h3>

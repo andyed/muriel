@@ -779,6 +779,41 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1517,6 +1552,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#host-native-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Host-native review
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#universal-constraints" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1767,6 +1813,30 @@ coding copilot or a default participant throughout the task.</p>
 <li>Hand the calling agent a <strong>Muriel delta</strong>: what changed, where it joined the
    solution, and what verified it.</li>
 </ol>
+<h2 id="host-native-review">Host-native review<a class="headerlink" href="#host-native-review" title="Permanent link">&para;</a></h2>
+<p>Within the human-visible slice already in scope:</p>
+<ul>
+<li>Diagnose the visible symptom and user consequence before inspecting
+  implementation syntax.</li>
+<li>Apply Muriel's judgment through the product's existing tokens, components,
+  spacing scale, and platform conventions. Do not import arbitrary values or
+  another product's visual language.</li>
+<li>Prefer hierarchy, alignment, and spacing over additional containers, borders,
+  shadows, or decorative chrome.</li>
+<li>Keep related controls perceptually compact while reserving larger separation
+  for genuinely distinct sections. Secondary actions must not compete visually
+  with the primary action.</li>
+<li>Review the surrounding composition, not only the changed component: rhythm,
+  hierarchy, density, alignment, responsive behavior, interaction states, and
+  whether the addition feels native to the product.</li>
+<li>Preserve intentional differences. Do not normalize a distinctive treatment
+  merely for consistency.</li>
+<li>Make high-confidence, in-scope improvements. Flag subjective or weakly
+  supported changes instead of silently redesigning.</li>
+<li>Before handoff, ask: <strong>What would the user probably ask me to clean up if they
+  reviewed this rendered state?</strong> Then ask: <strong>Am I applying design judgment, or
+  copying implementation details from a different context?</strong></li>
+</ul>
 <h2 id="universal-constraints">Universal constraints<a class="headerlink" href="#universal-constraints" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Preserve the project's brand and tokens. If none exist, use a restrained
@@ -1795,6 +1865,12 @@ coding copilot or a default participant throughout the task.</p>
 <li>arbitrary gradient blobs, glass effects, or generic dashboard chrome;</li>
 <li>a default font, palette, or component library applied without regard for the
   project's existing language;</li>
+<li>unnecessary containers around content already grouped by layout or hierarchy;</li>
+<li>inflated padding, control sizing, radius, or shadows that add visual weight
+  without meaning;</li>
+<li>redundant headings, labels, or explanatory copy;</li>
+<li>local polish that makes the changed component feel unlike its surroundings;</li>
+<li>consistency changes that erase intentional emphasis or product identity;</li>
 <li>visual polish that conceals unresolved interaction truth.</li>
 </ul>
 <p>The artifact should contain domain-specific decisions a competent generic
@@ -1860,6 +1936,10 @@ template would not have made.</p>
 <tr>
 <td>spatial or dimensional composition</td>
 <td><a href="../channels/spatial/"><code>channels/spatial.md</code></a></td>
+</tr>
+<tr>
+<td>repo front page or markdown rendered by GitHub</td>
+<td><a href="../channels/readme/"><code>channels/readme.md</code></a></td>
 </tr>
 </tbody>
 </table>

@@ -918,6 +918,41 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1702,15 +1737,15 @@
 <ul>
 <li><strong>Use <code>viewBox</code>, not fixed <code>width</code>/<code>height</code>.</strong> Scales without re-export.</li>
 <li><strong>CSS custom properties for theming</strong> — share the <code>--mg-*</code> prefix with marginalia so SVGs inherit the host page palette:
-  <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>&lt;svg viewBox=&quot;0 0 400 200&quot; role=&quot;img&quot;&gt;
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>&lt;svg viewBox="0 0 400 200" role="img"&gt;
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  &lt;title&gt;Phase decomposition&lt;/title&gt;
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  &lt;desc&gt;Survey phase (0-2s) followed by evaluate phase (2-8s).&lt;/desc&gt;
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  &lt;style&gt;
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    .axis { stroke: var(--mg-fg, #e6e4d2); stroke-width: 2; }
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    .data { fill: var(--mg-accent, #ff7); }
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  &lt;/style&gt;
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  &lt;line class=&quot;axis&quot; x1=&quot;20&quot; y1=&quot;180&quot; x2=&quot;380&quot; y2=&quot;180&quot;/&gt;
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  &lt;rect class=&quot;data&quot; x=&quot;20&quot; y=&quot;100&quot; width=&quot;80&quot; height=&quot;80&quot;/&gt;
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  &lt;line class="axis" x1="20" y1="180" x2="380" y2="180"/&gt;
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  &lt;rect class="data" x="20" y="100" width="80" height="80"/&gt;
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&lt;/svg&gt;
 </code></pre></div></li>
 <li><strong><code>&lt;title&gt;</code> and <code>&lt;desc&gt;</code></strong> are accessibility-required for paper figures.</li>
@@ -1736,7 +1771,7 @@ its scale and source.</p>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">decorative</span> <span class="o">=</span> <span class="n">wavefield</span><span class="p">(</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">BBox</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="mi">240</span><span class="p">),</span> <span class="n">layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">23</span>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">)</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;divider.svg&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">decorative</span><span class="o">.</span><span class="n">svg</span><span class="p">())</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nb">open</span><span class="p">(</span><span class="s2">"divider.svg"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">decorative</span><span class="o">.</span><span class="n">svg</span><span class="p">())</span>
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># Meaningful geometry: values must already be normalized to [-1, 1].</span>
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">signal</span> <span class="o">=</span> <span class="n">wavefield</span><span class="p">(</span>
@@ -1744,9 +1779,9 @@ its scale and source.</p>
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="n">series</span><span class="o">=</span><span class="p">((</span><span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">),),</span>
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    <span class="n">amplitude</span><span class="o">=</span><span class="mi">110</span><span class="p">,</span>
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">)</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;signal.svg&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">svg</span><span class="p">(</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Normalized phase signal&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;One normalized series; positive values rise above baseline.&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="nb">open</span><span class="p">(</span><span class="s2">"signal.svg"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">svg</span><span class="p">(</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    <span class="n">title</span><span class="o">=</span><span class="s2">"Normalized phase signal"</span><span class="p">,</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    <span class="n">desc</span><span class="o">=</span><span class="s2">"One normalized series; positive values rise above baseline."</span><span class="p">,</span>
 <a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="p">))</span>
 </code></pre></div>
 <p>The returned <code>WaveField.layers</code> expose normalized values, points, baselines,

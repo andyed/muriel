@@ -1073,6 +1073,41 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2232,38 +2267,38 @@
 <h3 id="per-library-detection-patterns">Per-library detection patterns<a class="headerlink" href="#per-library-detection-patterns" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>RECHARTS
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  &lt;Legend /&gt;                                 → remove; add direct labels
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  &lt;CartesianGrid /&gt;                          → &lt;CartesianGrid stroke=&quot;none&quot; /&gt;
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  &lt;Pie&gt; / &lt;PieChart&gt;                         → &lt;BarChart layout=&quot;vertical&quot;&gt;
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  fill=&quot;url(#gradient...)&quot;                   → fill=&quot;#444&quot;
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  &lt;YAxis yAxisId=&quot;right&quot; /&gt;                  → two &lt;LineChart&gt; stacked
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  stroke=&quot;#e41a1c&quot; or other Tufte color      → stroke=&quot;#8b0000&quot; (muriel-strict)
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  &lt;CartesianGrid /&gt;                          → &lt;CartesianGrid stroke="none" /&gt;
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  &lt;Pie&gt; / &lt;PieChart&gt;                         → &lt;BarChart layout="vertical"&gt;
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  fill="url(#gradient...)"                   → fill="#444"
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  &lt;YAxis yAxisId="right" /&gt;                  → two &lt;LineChart&gt; stacked
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  stroke="#e41a1c" or other Tufte color      → stroke="#8b0000" (muriel-strict)
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  &lt;Area fillOpacity={0.3+} /&gt;                → &lt;Line /&gt; or fillOpacity={0.05}
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  fill=&quot;#666&quot; / stroke=&quot;#666&quot;                → fill=&quot;#444&quot; / stroke=&quot;#444&quot;
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  fill="#666" / stroke="#666"                → fill="#444" / stroke="#444"
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>ECHARTS
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  type: &#39;pie&#39;                                → type: &#39;bar&#39;, horizontal
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  type: 'pie'                                → type: 'bar', horizontal
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  splitLine: { show: true }                  → splitLine: { show: false }
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  legend: { show: true }                     → legend: { show: false } + endLabel
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  series.areaStyle.opacity &gt;= 0.3            → opacity: 0.05 or remove
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>  visualMap with rainbow                     → single-hue sequential
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>  textStyle.color: &#39;#666&#39;                    → &#39;#444&#39;
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>  textStyle.color: '#666'                    → '#444'
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>CHART.JS
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>  type: &#39;pie&#39; / &#39;doughnut&#39;                  → type: &#39;bar&#39;, indexAxis: &#39;y&#39;
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>  type: 'pie' / 'doughnut'                  → type: 'bar', indexAxis: 'y'
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>  grid.display: true                         → grid.display: false
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>  border.display: true                       → border.display: false
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>  plugins.legend.display: true               → display: false + datalabels plugin
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>  backgroundColor: &#39;rgba(R,G,B,0.5)&#39;         → &#39;rgba(68,68,68,0.8)&#39; (#444)
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>  backgroundColor: 'rgba(R,G,B,0.5)'         → 'rgba(68,68,68,0.8)' (#444)
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>PLOTLY
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>  go.Pie(...)                                → go.Bar(orientation=&#39;h&#39;, ...)
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>  go.Pie(...)                                → go.Bar(orientation='h', ...)
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>  showlegend=True                            → showlegend=False + annotations
 <a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>  showgrid=True                              → showgrid=False
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>  plot_bgcolor=&#39;white&#39; / &#39;#ffffff&#39;           → plot_bgcolor=&#39;#fffff8&#39;
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>  font.color=&#39;#666&#39;                          → font.color=&#39;#444&#39;
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>  plot_bgcolor='white' / '#ffffff'           → plot_bgcolor='#fffff8'
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>  font.color='#666'                          → font.color='#444'
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
 <a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>D3/SVG/HTML
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>  &lt;rect class=&quot;background&quot; fill=&quot;white&quot; /&gt;   → remove or fill=&#39;#fffff8&#39;
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>  &lt;rect class="background" fill="white" /&gt;   → remove or fill='#fffff8'
 <a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>  .grid line { stroke-opacity: 0.5+; }       → 0.08–0.12, horizontal only
 <a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>  rainbow scale (d3.interpolateRainbow)      → d3.interpolateViridis
 <a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>  text { fill: #666; }                       → fill: #444

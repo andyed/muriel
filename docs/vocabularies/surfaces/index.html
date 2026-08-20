@@ -779,6 +779,41 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1725,11 +1760,11 @@
 <h2 id="channels-vs-surfaces-why-both">Channels vs surfaces — why both<a class="headerlink" href="#channels-vs-surfaces-why-both" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>channels (substrates)              surfaces (composed archetypes)
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>───────────────────────            ────────────────────────────────
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>channels/raster.md     ←─┐         &quot;Swiss International deck&quot;
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>channels/svg.md          ├──→ compose →  &quot;NYT-style data-chart frame&quot;
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>channels/web.md          │              &quot;PRD spec page&quot;
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>channels/charts.md       │              &quot;Twitter share card&quot;
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>channels/polish.md     ←─┘              &quot;Brutalist web prototype&quot;
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>channels/raster.md     ←─┐         "Swiss International deck"
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>channels/svg.md          ├──→ compose →  "NYT-style data-chart frame"
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>channels/web.md          │              "PRD spec page"
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>channels/charts.md       │              "Twitter share card"
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>channels/polish.md     ←─┘              "Brutalist web prototype"
 </code></pre></div>
 <p>A channel tells you <em>how to emit pixels for this substrate at muriel's rigor</em>. A surface tells you <em>what composition to reach for when the brief is "make me a deck"</em>. The same channel (HTML+CSS via <code>channels/web.md</code>) underwrites many surfaces (decks, magazine articles, dashboards, share cards, PRDs).</p>
 <p>muriel today ships fourteen channels and one example surface (<code>examples/scrutinizer-ridgemap/</code>). The surface vocabulary lives <em>here</em> because formalizing the layer above channels is a queued direction, not shipped code — but the concept is already in use in the wider Claude-skill ecosystem and worth naming.</p>
@@ -1807,19 +1842,19 @@
 <h3 id="1-typed-frontmatter-per-surface">1. Typed frontmatter per surface<a class="headerlink" href="#1-typed-frontmatter-per-surface" title="Permanent link">&para;</a></h3>
 <p>Each html-anything skill ships YAML frontmatter with fields muriel doesn't currently emit on channels:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deck-swiss-international</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">en_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Swiss</span><span class="nv"> </span><span class="s">International</span><span class="nv"> </span><span class="s">Deck&quot;</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">zh_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;瑞士国际主义</span><span class="nv"> </span><span class="s">Deck&quot;</span><span class="w">      </span><span class="c1"># ← bilingual title (CJK-first instances exist too)</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">emoji</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;🟦&quot;</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;16</span><span class="nv"> </span><span class="s">列网格</span><span class="nv"> </span><span class="s">+</span><span class="nv"> </span><span class="s">单一饱和</span><span class="nv"> </span><span class="s">accent</span><span class="nv"> </span><span class="s">+</span><span class="nv"> </span><span class="s">22</span><span class="nv"> </span><span class="s">个锁死版面&quot;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">en_name</span><span class="p">:</span><span class="w"> </span><span class="s">"Swiss</span><span class="nv"> </span><span class="s">International</span><span class="nv"> </span><span class="s">Deck"</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">zh_name</span><span class="p">:</span><span class="w"> </span><span class="s">"瑞士国际主义</span><span class="nv"> </span><span class="s">Deck"</span><span class="w">      </span><span class="c1"># ← bilingual title (CJK-first instances exist too)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">emoji</span><span class="p">:</span><span class="w"> </span><span class="s">"🟦"</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"16</span><span class="nv"> </span><span class="s">列网格</span><span class="nv"> </span><span class="s">+</span><span class="nv"> </span><span class="s">单一饱和</span><span class="nv"> </span><span class="s">accent</span><span class="nv"> </span><span class="s">+</span><span class="nv"> </span><span class="s">22</span><span class="nv"> </span><span class="s">个锁死版面"</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slides</span><span class="w">                  </span><span class="c1"># surface family</span>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nt">scenario</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">marketing</span><span class="w">               </span><span class="c1"># what brief this serves</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nt">aspect_hint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;16:9</span><span class="nv"> </span><span class="s">横向翻页&quot;</span><span class="w">        </span><span class="c1"># canvas hint</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nt">aspect_hint</span><span class="p">:</span><span class="w"> </span><span class="s">"16:9</span><span class="nv"> </span><span class="s">横向翻页"</span><span class="w">        </span><span class="c1"># canvas hint</span>
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nt">featured</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span><span class="w">                       </span><span class="c1"># registry sort weight</span>
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nt">recommended</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">                     </span><span class="c1"># featured-in-defaults rank</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;swiss&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;grid&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;international&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;ikb&quot;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"swiss"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"grid"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"international"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"ikb"</span><span class="p p-Indicator">]</span>
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="nt">example_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sample-swiss-international</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="nt">example_source_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://github.com/op7418/guizang-ppt-skill&quot;</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="nt">example_source_label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;op7418/guizang-ppt-skill&quot;</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="nt">example_source_url</span><span class="p">:</span><span class="w"> </span><span class="s">"https://github.com/op7418/guizang-ppt-skill"</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="nt">example_source_label</span><span class="p">:</span><span class="w"> </span><span class="s">"op7418/guizang-ppt-skill"</span>
 </code></pre></div>
 <p>What's transferable to muriel channels — fields worth considering for a <code>kind: surface</code> schema extension in <a href="../../channels/SCHEMA/"><code>channels/SCHEMA.md</code></a>: <code>scenario</code> (what brief), <code>aspect_hint</code> (canvas), <code>example_source_url</code> + <code>example_source_label</code> (lineage citation as data, not prose).</p>
 <h3 id="2-absolute-rules-per-surface-locked-down-hex-locked-down-grid">2. Absolute rules per surface (locked-down hex / locked-down grid)<a class="headerlink" href="#2-absolute-rules-per-surface-locked-down-hex-locked-down-grid" title="Permanent link">&para;</a></h3>

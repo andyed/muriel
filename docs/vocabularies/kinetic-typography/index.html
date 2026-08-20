@@ -779,6 +779,41 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1753,14 +1788,14 @@
 <h2 id="calling-iblipper-headlessly-for-stills">Calling iblipper headlessly for stills<a class="headerlink" href="#calling-iblipper-headlessly-for-stills" title="Permanent link">&para;</a></h2>
 <p>iblipper exposes a <code>/render.html</code> route that mounts its renderer with no app shell — no Landing, FAQ, composer, gestures, IAP, splash. The page reads a JSON config from <code>?config=&lt;encoded JSON&gt;</code>, renders to canvas, and sets <code>window.__renderReady = true</code> after a configurable hold so a screenshot driver can capture the "held moment" of the entry animation. Pixel-identical to the in-app iBlipper output because it <em>is</em> the same renderer.</p>
 <p><strong>Minimum config:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Maximum signal&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;emotion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;emphatic&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;fgColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#ffeb3b&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;bgColor&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#0a0a0f&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;wpm&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">250</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1200</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">630</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;density&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;holdMs&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">700</span><span class="w"> </span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Maximum signal"</span><span class="p">,</span><span class="w"> </span><span class="nt">"emotion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"emphatic"</span><span class="p">,</span><span class="w"> </span><span class="nt">"fgColor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#ffeb3b"</span><span class="p">,</span><span class="w"> </span><span class="nt">"bgColor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#0a0a0f"</span><span class="p">,</span><span class="w"> </span><span class="nt">"wpm"</span><span class="p">:</span><span class="w"> </span><span class="mi">250</span><span class="p">,</span><span class="w"> </span><span class="nt">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">1200</span><span class="p">,</span><span class="w"> </span><span class="nt">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">630</span><span class="p">,</span><span class="w"> </span><span class="nt">"density"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nt">"holdMs"</span><span class="p">:</span><span class="w"> </span><span class="mi">700</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <p><strong>Capture pattern (raw chrome, no automation library):</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">ENCODED</span><span class="o">=</span><span class="k">$(</span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CONFIG</span><span class="s2">&quot;</span><span class="k">)</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="s2">&quot;/Applications/Google Chrome.app/Contents/MacOS/Google Chrome&quot;</span><span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">ENCODED</span><span class="o">=</span><span class="k">$(</span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONFIG</span><span class="s2">"</span><span class="k">)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="s2">"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--headless<span class="o">=</span>new<span class="w"> </span>--hide-scrollbars<span class="w"> </span>--window-size<span class="o">=</span><span class="m">1200</span>,630<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--virtual-time-budget<span class="o">=</span><span class="m">1500</span><span class="w"> </span>--screenshot<span class="o">=</span>out.png<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="s2">&quot;http://localhost:5173/render.html?config=</span><span class="nv">$ENCODED</span><span class="s2">&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="s2">"http://localhost:5173/render.html?config=</span><span class="nv">$ENCODED</span><span class="s2">"</span>
 </code></pre></div>
 <p><code>--virtual-time-budget</code> lets Chrome run a fast clock for the page so the entry animation runs to <code>holdMs</code> quickly; ~1500ms is plenty of headroom for <code>holdMs ≤ 1100</code>.</p>
 <p><strong>Key knobs.</strong></p>
@@ -1802,11 +1837,11 @@
 <p>iBlipper's break-finder picks a balanced line arrangement automatically, with a built-in disparity cap that prevents function-word amplification (so "AT THE" can't be larger than "QUESTION"). For most stills the default is fine — let it choose.</p>
 <p>When you need <em>specific</em> phrase boundaries, <strong>embed <code>\n</code> directly in <code>text</code></strong>. Density-100 mode preserves them as hard line breaks; the renderer treats each <code>\n</code>-separated paragraph independently and the cross-paragraph cap keeps sizes consistent. This is the documented escape hatch:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>// Auto-balance — break-finder decides:
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>{ &quot;text&quot;: &quot;AI is fast at the wrong question.&quot;, &quot;density&quot;: 100, ... }
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>{ "text": "AI is fast at the wrong question.", "density": 100, ... }
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>// Renders as: AI IS / FAST AT / THE WRONG / QUESTION.
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>// Explicit phrase boundary at the comma:
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>{ &quot;text&quot;: &quot;AI is fast,\nat the wrong question.&quot;, &quot;density&quot;: 100, ... }
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>{ "text": "AI is fast,\nat the wrong question.", "density": 100, ... }
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>// Forces: AI IS FAST / AT THE WRONG QUESTION.
 </code></pre></div>
 <p><strong>Heuristics for where to put <code>\n</code>:</strong></p>

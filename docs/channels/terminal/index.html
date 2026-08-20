@@ -894,6 +894,41 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1681,7 +1716,7 @@
 <h2 id="animated-effects-when-the-terminal-is-the-artifact">Animated effects — when the terminal IS the artifact<a class="headerlink" href="#animated-effects-when-the-terminal-is-the-artifact" title="Permanent link">&para;</a></h2>
 <p>Static primitives above cover the common case (numbers in prose, README badges, log summaries). When the terminal output <em>is</em> the artifact — installer ceremonies, demo openings, deploy banners, README captures shown as GIFs — animation is what carries the message, and the substrate is <strong><a href="https://github.com/ChrisBuilds/terminaltexteffects">TerminalTextEffects</a> (TTE)</strong> (MIT, Python, <code>pip install terminaltexteffects</code>). A library of ~100 named effects (matrix, decrypt, scattered, rain, sweep, vhsTape, …) that take a string and play it into the terminal as a single composed animation. ANSI-escape backend; no curses, no ncurses dependency.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">terminaltexteffects.effects.effect_decrypt</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decrypt</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">effect</span> <span class="o">=</span> <span class="n">Decrypt</span><span class="p">(</span><span class="s2">&quot;muriel v0.8.0 — the rigorous round-trip&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">effect</span> <span class="o">=</span> <span class="n">Decrypt</span><span class="p">(</span><span class="s2">"muriel v0.8.0 — the rigorous round-trip"</span><span class="p">)</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">with</span> <span class="n">effect</span><span class="o">.</span><span class="n">terminal_output</span><span class="p">()</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">effect</span><span class="p">:</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        <span class="n">out</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>

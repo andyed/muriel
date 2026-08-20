@@ -775,6 +775,41 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1710,7 +1745,7 @@ no verdict — you are a seat, and aggregation belongs to the chair
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>Ranking: &lt;option ids, best first&gt;  (omit if no alternatives)
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>Findings:
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  - id: &lt;seat-local id&gt;
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    target: &lt;option id or &quot;artifact&quot;&gt;
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    target: &lt;option id or "artifact"&gt;
 <a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    rule: &lt;named rule a–d from the four above&gt;
 <a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    severity: CRITICAL | HIGH | MEDIUM | LOW
 <a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>    evidence: &lt;which level, what was lost or invented, at which size it
@@ -1718,7 +1753,7 @@ no verdict — you are a seat, and aggregation belongs to the chair
 <a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>    fix: &lt;one sentence, actionable&gt;
 <a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>    form_fatal: yes | no    (required on CRITICAL; see Two bodies)
 <a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>Issue rank: &lt;finding ids, worst first, no ties&gt;  (single-artifact only)
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>Ship (this seat&#39;s loss only): yes | no           (single-artifact only)
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>Ship (this seat's loss only): yes | no           (single-artifact only)
 <a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>Confidence: low | medium | high
 <a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>Recused: full-size hierarchy, contrast ratios, labeling correctness,
 <a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>  terminology, distinctiveness, brand voice
@@ -1739,7 +1774,7 @@ assigns the permutation from <code>printf '%s' "&lt;decisionId&gt;thumbnail" | s
 Record it verbatim.</p>
 <p>If the chair supplied none, derive it yourself from the named digest —
 your seat id is <code>thumbnail</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;%s&#39;</span><span class="w"> </span><span class="s2">&quot;&lt;decisionId&gt;thumbnail&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>shasum
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'%s'</span><span class="w"> </span><span class="s2">"&lt;decisionId&gt;thumbnail"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>shasum
 </code></pre></div>
 <p>Sort the option ids lexicographically, read the first eight hex digits of
 the digest as an integer <code>n</code>, and take permutation number <code>n mod k!</code> of
