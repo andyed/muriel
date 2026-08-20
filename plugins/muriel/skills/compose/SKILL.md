@@ -90,6 +90,31 @@ coding copilot or a default participant throughout the task.
 7. Hand the calling agent a **Muriel delta**: what changed, where it joined the
    solution, and what verified it.
 
+## Host-native review
+
+Within the human-visible slice already in scope:
+
+- Diagnose the visible symptom and user consequence before inspecting
+  implementation syntax.
+- Apply Muriel's judgment through the product's existing tokens, components,
+  spacing scale, and platform conventions. Do not import arbitrary values or
+  another product's visual language.
+- Prefer hierarchy, alignment, and spacing over additional containers, borders,
+  shadows, or decorative chrome.
+- Keep related controls perceptually compact while reserving larger separation
+  for genuinely distinct sections. Secondary actions must not compete visually
+  with the primary action.
+- Review the surrounding composition, not only the changed component: rhythm,
+  hierarchy, density, alignment, responsive behavior, interaction states, and
+  whether the addition feels native to the product.
+- Preserve intentional differences. Do not normalize a distinctive treatment
+  merely for consistency.
+- Make high-confidence, in-scope improvements. Flag subjective or weakly
+  supported changes instead of silently redesigning.
+- Before handoff, ask: **What would the user probably ask me to clean up if they
+  reviewed this rendered state?** Then ask: **Am I applying design judgment, or
+  copying implementation details from a different context?**
+
 ## Universal constraints
 
 - Preserve the project's brand and tokens. If none exist, use a restrained
@@ -119,6 +144,12 @@ Do not ship:
 - arbitrary gradient blobs, glass effects, or generic dashboard chrome;
 - a default font, palette, or component library applied without regard for the
   project's existing language;
+- unnecessary containers around content already grouped by layout or hierarchy;
+- inflated padding, control sizing, radius, or shadows that add visual weight
+  without meaning;
+- redundant headings, labels, or explanatory copy;
+- local polish that makes the changed component feel unlike its surroundings;
+- consistency changes that erase intentional emphasis or product identity;
 - visual polish that conceals unresolved interaction truth.
 
 The artifact should contain domain-specific decisions a competent generic
