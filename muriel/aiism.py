@@ -1,16 +1,37 @@
 """
 muriel.aiism — anti-AI-tell prose audit for paper drafts.
 
-Codifies the stylistic tics that flag a passage as AI-drafted to a careful
-reader: em-dash addiction, "load-bearing" / "structurally" / "materially"
-intensifiers, definitional clefts ("the locus of X" / "the unit at which Y"),
-"What X is Y" constructions, "not X but Y" parallelism, "already-Y"
-compounds, mid-paragraph bold, repeated re-italicization of technical terms,
-overlong clause-stacked sentences, copula-avoidance verbs ("serves as",
-"stands as"), significance-inflation phrases ("a testament to", "underscores
-the importance"), prescriptive narrator framing ("It is important to
-note"), padded-vocabulary clusters, and hard artifacts of LLM tooling
-(oaicite tokens, knowledge-cutoff disclaimers, sandbox paths).
+What this module actually detects, as of the v0.10.0 licence purge:
+
+- Project-specific phrase tics (12 single-phrase rules) — definitional clefts
+  ("the locus of X", "the unit at which Y"), "not just X but Y" parallelism,
+  "earn their keep", "in observational register", bare "regime".
+- Intensifier repetition (5 repeated-phrase rules) — "load-bearing",
+  "structurally", "materially", "meaningfully", "already-Y" compounds, each
+  with its own max_count.
+- Doubled "What X is Y" clefts within 220 characters (1 proximity rule).
+- Hard artifacts of LLM tooling (8 rules) — oaicite tokens, turn tokens,
+  sandbox paths, ChatGPT URLs, knowledge-cutoff disclaimers, refusal
+  preambles.
+- Three structural heuristics — overlong clause-stacked sentences, em-dash
+  density per line, mid-paragraph bold density.
+
+What it does NOT detect, despite what earlier versions of this docstring
+claimed: copula-avoidance verbs ("serves as", "stands as"),
+significance-inflation phrases ("a testament to", "underscores the
+importance"), prescriptive narrator framing ("It is important to note"),
+padded-vocabulary clusters, throat-clearing temporal openers, and
+anthropomorphized research verbs. Those rules were removed in v0.10.0 and
+the docstring was not updated with them, so it advertised detectors that had
+not existed for several releases. CLUSTER_RULES and PATTERN_RULES are both
+empty tables for the same reason.
+
+That coverage now lives downstream: science-agent's aiism-rules.json v6
+rebuilt copula-avoidance, significance-inflation, participial significance
+tails, actorless-evidence, and citation-aware weasel-attribution from
+MIT-licensed sources. If you want those checks, run science-agent's
+prose-audit, which loads this module as an optional second source for .md
+and .ipynb input.
 
 Sources for phrase lists:
 - Local critique of paper-v4 (project-specific tics)
@@ -255,7 +276,11 @@ PROXIMITY_RULES: list[tuple[str, str, str, str, int]] = [
 ]
 
 # Pattern rules that flag every occurrence (not count-thresholded).
-PATTERN_RULES: list[tuple[str, str, str, str, int]] = []
+PATTERN_RULES: list[tuple[str, str, str, str, int]] = [
+    # Emptied in 0.10.0 along with CLUSTER_RULES: every entry was derived from
+    # the Vale/Wikipedia CC-BY-SA-4.0 word lists. The engine below is retained
+    # so first-party entries fire without a code change. See CHANGELOG.
+]
 
 
 # Heuristic: long-sentence detector. Naive sentence split on . ! ? followed

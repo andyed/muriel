@@ -6,6 +6,23 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- **`aiism` docstring advertised detectors that were deleted three releases
+  ago.** The module header still listed copula-avoidance verbs ("serves as",
+  "stands as"), significance-inflation phrases ("a testament to",
+  "underscores the importance"), prescriptive narrator framing, padded-
+  vocabulary clusters, and repeated re-italicization as things `aiism`
+  detects. All were removed in 0.10.0 with the CC-BY-SA-4.0 purge, and the
+  docstring was never updated, so anyone reading it — or any agent loading it
+  as context — believed the audit covered ground it had not covered since.
+  The header now states the real inventory (12 single-phrase, 5 repeated-
+  phrase, 1 proximity, 8 hard-artifact rules, 3 structural heuristics), names
+  the removed detectors explicitly as *not* implemented, and points to
+  science-agent's `aiism-rules.json` v6, which rebuilt that coverage from
+  MIT-licensed sources. `PATTERN_RULES` also gained the removal comment
+  `CLUSTER_RULES` already had, so neither empty table reads as an oversight.
+
 ### Added
 
 - **`channels/readme.md` — repo front pages on a renderer you don't control.**
