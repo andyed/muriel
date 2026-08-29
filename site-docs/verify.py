@@ -109,6 +109,64 @@ def main():
         if not results["search_present"]:
             results["errors"].append("search input not found")
 
+        # Repository action: visible in the desktop header, then repeated in
+        # Material's mobile drawer so GitHub stays close at hand at every size.
+        repo_url = "https://github.com/andyed/muriel"
+        header_repo = page.locator(".md-header__source a.md-source")
+        results["github_header_present"] = header_repo.count() == 1
+        results["github_header_href"] = (
+            header_repo.get_attribute("href") if header_repo.count() else None)
+        results["github_header_label"] = (
+            header_repo.inner_text() if header_repo.count() else None)
+        repo_box = header_repo.bounding_box() if header_repo.count() else None
+        results["github_header_visible"] = bool(
+            repo_box
+            and repo_box["x"] >= 0
+            and repo_box["y"] >= 0
+            and repo_box["x"] + repo_box["width"] <= 1440
+            and repo_box["y"] + repo_box["height"] <= 1000
+            and repo_box["width"] >= 40
+            and repo_box["height"] >= 40)
+        if not results["github_header_present"]:
+            results["errors"].append("desktop header missing GitHub repository action")
+        elif results["github_header_href"] != repo_url:
+            results["errors"].append(
+                f"desktop GitHub action has wrong target: {results['github_header_href']!r}")
+        if "andyed/muriel" not in (results["github_header_label"] or ""):
+            results["errors"].append("desktop GitHub action has no visible repository label")
+        if not results["github_header_visible"]:
+            results["errors"].append("desktop GitHub action is not visibly tappable")
+
+        mobile = browser.new_page(viewport={"width": 390, "height": 844})
+        mobile.goto(f"{BASE}/", wait_until="networkidle")
+        mobile.locator(".md-header label[for='__drawer']").click()
+        mobile.wait_for_timeout(400)  # let the drawer's transform settle
+        mobile_repo = mobile.locator(".md-nav__source a.md-source")
+        mobile_repo_box = mobile_repo.bounding_box() if mobile_repo.count() else None
+        results["github_mobile_present"] = mobile_repo.count() == 1
+        results["github_mobile_href"] = (
+            mobile_repo.get_attribute("href") if mobile_repo.count() else None)
+        results["github_mobile_label"] = (
+            mobile_repo.inner_text() if mobile_repo.count() else None)
+        results["github_mobile_visible"] = bool(
+            mobile_repo_box
+            and mobile_repo_box["x"] >= 0
+            and mobile_repo_box["y"] >= 0
+            and mobile_repo_box["x"] + mobile_repo_box["width"] <= 390
+            and mobile_repo_box["y"] + mobile_repo_box["height"] <= 844
+            and mobile_repo_box["width"] >= 40
+            and mobile_repo_box["height"] >= 40)
+        if not results["github_mobile_present"]:
+            results["errors"].append("mobile drawer missing GitHub repository action")
+        elif results["github_mobile_href"] != repo_url:
+            results["errors"].append(
+                f"mobile GitHub action has wrong target: {results['github_mobile_href']!r}")
+        if "andyed/muriel" not in (results["github_mobile_label"] or ""):
+            results["errors"].append("mobile GitHub action has no visible repository label")
+        if not results["github_mobile_visible"]:
+            results["errors"].append("mobile GitHub action is not visibly tappable")
+        mobile.close()
+
         # Left-nav must list channels + vocabularies
         nav_text = page.inner_text(".md-nav--primary")
         for needle in ["Spatial", "Charts", "Infographics", "Science",
@@ -208,6 +266,9 @@ def main():
     # ---- Report ----
     print("=== STRUCTURE ===")
     for k in ["body_bg", "search_present", "nav_has_channels", "nav_has_vocab",
+              "github_header_present", "github_header_href", "github_header_label",
+              "github_header_visible", "github_mobile_present", "github_mobile_href",
+              "github_mobile_label", "github_mobile_visible",
               "gallery_link_present", "spatial_rendered", "spatial_h1",
               "vocab_rendered",
               "home_links_to_gallery", "home_links_to_spatial", "home_links_to_skill",

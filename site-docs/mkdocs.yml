@@ -4,6 +4,8 @@ site_description: >-
   token schema, and an 8:1 contrast rule enforced at render time.
 site_url: https://muriel.mindbendingpixels.com/
 site_author: Andy Edmonds
+repo_url: https://github.com/andyed/muriel
+repo_name: andyed/muriel
 
 # Prototype wiring: sources live in site-docs/src/ (mkdocs forbids the config
 # file from sitting inside docs_dir, so src is a child of site-docs/). Output is
@@ -37,6 +39,8 @@ theme:
   font:
     text: false      # use the system serif/sans stacks defined in muriel.css
     code: false
+  icon:
+    repo: fontawesome/brands/github
   features:
     - navigation.sections   # render top-level groups as bold sections
     - navigation.instant    # SPA-style instant nav
