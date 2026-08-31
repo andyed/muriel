@@ -31,3 +31,8 @@ render_assets/forgery/
 # muriel docs build (source venv + generated gallery copy + scratch build)
 /site-build/
 /site-docs/src/gallery/
+
+# Codex pre-pull backups — a tool's scratch copies of tracked files, written
+# next to source. Never commit-eligible: they preserve whatever was in the file
+# at backup time, including content since scrubbed from the tracked version.
+.codex-backups/
