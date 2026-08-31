@@ -738,6 +738,67 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#linked-displays-coordinated-analytic-views" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linked displays / coordinated analytic views
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Linked displays / coordinated analytic views">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#state-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#view-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        View roles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementation rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyst-use-cases-this-supports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analyst use cases this supports
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#marginalia-integration" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2025,6 +2086,76 @@
 </table>
 <h2 id="permalink-convention">Permalink convention<a class="headerlink" href="#permalink-convention" title="Permanent link">&para;</a></h2>
 <p>Demos with shareable state should follow a <strong>PermalinkManager</strong> pattern: URL hash encodes parameters, parsed on load, rewritten on change. One utility per project, referenced from every demo — if the project already has one, read it first and don't reinvent it.</p>
+<h2 id="linked-displays-coordinated-analytic-views">Linked displays / coordinated analytic views<a class="headerlink" href="#linked-displays-coordinated-analytic-views" title="Permanent link">&para;</a></h2>
+<p>Linked displays are not "several charts on one page." They are <strong>one analytic state projected through several complementary views</strong>. If each chart owns its own date range, filter, cursor, or selection, the interface will feel smart for 30 seconds and then become untrustworthy. Use this contract when building brushing/linking demos, executive analysis surfaces, visual history explorers, or model-debug dashboards:</p>
+<h3 id="state-contract">State contract<a class="headerlink" href="#state-contract" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>One central store.</strong> Keep <code>focusDate</code>, <code>rangeStart</code>, <code>rangeEnd</code>, active facet/lane, pinned entity, and preview entity in one object. Views read from it; views do not independently invent state.</li>
+<li><strong>Two interaction modes.</strong> Hover is a <strong>preview</strong>; click is a <strong>pin</strong>. The state bar should say which mode is active. <code>mouseout</code> clears previews back to the pinned state.</li>
+<li><strong>One global coordinate system.</strong> Context sparklines and small multiples use the same full x-domain even when the main view is zoomed. Draw the brushed range as an overlay; do not re-slice each metric chart.</li>
+<li><strong>Range is first-class.</strong> A brush should update all range-dependent views: event list, counts, metric start/end deltas, and mini-chart range bands.</li>
+<li><strong>Selection and range are different.</strong> A selected event/date drives point readouts; a brushed range drives aggregate summaries. Do not overload one cursor to mean both.</li>
+<li><strong>Visible state beats hidden magic.</strong> A small state bar (<code>focus</code>, <code>range</code>, <code>facet</code>, <code>mode</code>) is not chrome; it is the contract the analyst uses to trust the display.</li>
+</ul>
+<h3 id="view-roles">View roles<a class="headerlink" href="#view-roles" title="Permanent link">&para;</a></h3>
+<p>Design each view with a job:</p>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th>Job</th>
+<th>Interaction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Overview timeline/map</td>
+<td>Show distribution and clusters</td>
+<td>Brush range; hover preview; click pin</td>
+</tr>
+<tr>
+<td>Metric context strips</td>
+<td>Preserve common temporal context</td>
+<td>Cursor follows focus; band follows range</td>
+</tr>
+<tr>
+<td>Facet/count panel</td>
+<td>Show composition of the current range</td>
+<td>Click facet to lens/filter</td>
+</tr>
+<tr>
+<td>Detail/provenance card</td>
+<td>Explain the pinned entity</td>
+<td>Source link; caveats; local refs</td>
+</tr>
+<tr>
+<td>Range table</td>
+<td>Make filtered records inspectable</td>
+<td>Row click pins; source link opens</td>
+</tr>
+<tr>
+<td>Range summary</td>
+<td>Compare start/end values</td>
+<td>Uses range, not focus cursor</td>
+</tr>
+</tbody>
+</table>
+<h3 id="implementation-rules">Implementation rules<a class="headerlink" href="#implementation-rules" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>No dynamic markLine/markArea churn</strong> for every mousemove. Use DOM overlays for cursors/ranges on small charts; mutate cheap CSS <code>left/width</code> values.</li>
+<li><strong>Throttle high-frequency events</strong> with <code>requestAnimationFrame</code>; never rerender five charts on every pixel-crossing if a CSS overlay will do.</li>
+<li><strong>Stable domains are testable.</strong> In runtime tests, assert that every metric chart has the same x-axis min/max and that cursor/range overlays line up across all cards.</li>
+<li><strong>Expose a tiny debug API</strong> on <code>window</code> for tests (<code>setState</code>, <code>setRange</code>, <code>pinRecordById</code>, <code>previewDate</code>, <code>clearPreview</code>). Good demos are inspectable.</li>
+<li><strong>Avoid "state tunneling."</strong> If a metric chart hover changes the focus date, it must use the same <code>previewDate()</code> path as a timeline hover.</li>
+<li><strong>Labels must not become the data.</strong> Dense point labels should hide/declutter under overlap; details belong in hover/pin panels.</li>
+</ul>
+<h3 id="analyst-use-cases-this-supports">Analyst use cases this supports<a class="headerlink" href="#analyst-use-cases-this-supports" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Product-history review: select a launch/decision and see metric context around it.</li>
+<li>Funnel diagnosis: brush a cohort window; table, dropoff, source mix, and outcome views update together.</li>
+<li>Content or marketplace analysis: lens by source/type/segment while preserving one time base for supply and demand metrics.</li>
+<li>Experiment review: pin launch/decision dates; brush pre/post windows; inspect metric deltas without losing provenance.</li>
+</ul>
 <h2 id="marginalia-integration">Marginalia integration<a class="headerlink" href="#marginalia-integration" title="Permanent link">&para;</a></h2>
 <p>Wrap demos in marginalia callouts for editorial context:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">&lt;</span><span class="nt">aside</span> <span class="na">class</span><span class="o">=</span><span class="s">"mg-callout"</span> <span class="na">data-type</span><span class="o">=</span><span class="s">"tip"</span><span class="p">&gt;</span>
