@@ -59,6 +59,54 @@ class TestRegimeSuppression(unittest.TestCase):
         self.assertIn("seized", text[text.index("regime", text.index("regime") + 1):])
 
 
+class TestAnalystVoiceTells(unittest.TestCase):
+    """Two analyst-voice tells observed in decision memos."""
+
+    def test_priced_cost_flagged(self):
+        self.assertIn("phrase-priced-cost",
+                      _rules("The regression is a priced cost of the ship."))
+
+    def test_priced_cost_case_insensitive(self):
+        self.assertIn("phrase-priced-cost",
+                      _rules("Priced cost: the engagement regression."))
+
+    def test_plain_cost_not_flagged(self):
+        self.assertNotIn("phrase-priced-cost",
+                         _rules("The cost was pre-identified in the proposal."))
+
+    def test_declared_risk_names_flagged(self):
+        self.assertIn("phrase-document-part-as-actor",
+                      _rules("This is the cost the declared risk names."))
+
+    def test_pre_registration_named_flagged(self):
+        self.assertIn("phrase-document-part-as-actor",
+                      _rules("We accept the skip cost the pre-registration named."))
+
+    def test_risk_statement_names_flagged(self):
+        self.assertIn("phrase-document-part-as-actor",
+                      _rules("exactly the tradeoff the risk statement names"))
+
+    def test_qualified_comms_named_flagged(self):
+        self.assertIn("phrase-document-part-as-actor",
+                      _rules("the regression the kickoff memo named"))
+
+    def test_bare_comms_named_flagged(self):
+        self.assertIn("phrase-document-part-as-actor",
+                      _rules("the tradeoff the announcement names"))
+
+    def test_writeup_hyphen_variant_flagged(self):
+        self.assertIn("phrase-document-part-as-actor",
+                      _rules("the caveat the write-up named"))
+
+    def test_plain_actor_phrasing_not_flagged(self):
+        self.assertNotIn("phrase-document-part-as-actor",
+                         _rules("This was pre-identified as a risk when the work was proposed."))
+
+    def test_comms_without_inversion_not_flagged(self):
+        self.assertNotIn("phrase-document-part-as-actor",
+                         _rules("We sent the memo and named the owner."))
+
+
 class TestClearedCandidates(unittest.TestCase):
     def test_list_nonempty_and_well_formed(self):
         self.assertTrue(CLEARED_CANDIDATES)

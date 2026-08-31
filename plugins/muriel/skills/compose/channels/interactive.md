@@ -78,6 +78,48 @@ One file. No build. Marginalia handles editorial chrome. Demo lives at `<project
 ## Permalink convention
 Demos with shareable state should follow a **PermalinkManager** pattern: URL hash encodes parameters, parsed on load, rewritten on change. One utility per project, referenced from every demo — if the project already has one, read it first and don't reinvent it.
 
+## Linked displays / coordinated analytic views
+
+Linked displays are not "several charts on one page." They are **one analytic state projected through several complementary views**. If each chart owns its own date range, filter, cursor, or selection, the interface will feel smart for 30 seconds and then become untrustworthy. Use this contract when building brushing/linking demos, executive analysis surfaces, visual history explorers, or model-debug dashboards:
+
+### State contract
+
+- **One central store.** Keep `focusDate`, `rangeStart`, `rangeEnd`, active facet/lane, pinned entity, and preview entity in one object. Views read from it; views do not independently invent state.
+- **Two interaction modes.** Hover is a **preview**; click is a **pin**. The state bar should say which mode is active. `mouseout` clears previews back to the pinned state.
+- **One global coordinate system.** Context sparklines and small multiples use the same full x-domain even when the main view is zoomed. Draw the brushed range as an overlay; do not re-slice each metric chart.
+- **Range is first-class.** A brush should update all range-dependent views: event list, counts, metric start/end deltas, and mini-chart range bands.
+- **Selection and range are different.** A selected event/date drives point readouts; a brushed range drives aggregate summaries. Do not overload one cursor to mean both.
+- **Visible state beats hidden magic.** A small state bar (`focus`, `range`, `facet`, `mode`) is not chrome; it is the contract the analyst uses to trust the display.
+
+### View roles
+
+Design each view with a job:
+
+| View | Job | Interaction |
+|---|---|---|
+| Overview timeline/map | Show distribution and clusters | Brush range; hover preview; click pin |
+| Metric context strips | Preserve common temporal context | Cursor follows focus; band follows range |
+| Facet/count panel | Show composition of the current range | Click facet to lens/filter |
+| Detail/provenance card | Explain the pinned entity | Source link; caveats; local refs |
+| Range table | Make filtered records inspectable | Row click pins; source link opens |
+| Range summary | Compare start/end values | Uses range, not focus cursor |
+
+### Implementation rules
+
+- **No dynamic markLine/markArea churn** for every mousemove. Use DOM overlays for cursors/ranges on small charts; mutate cheap CSS `left/width` values.
+- **Throttle high-frequency events** with `requestAnimationFrame`; never rerender five charts on every pixel-crossing if a CSS overlay will do.
+- **Stable domains are testable.** In runtime tests, assert that every metric chart has the same x-axis min/max and that cursor/range overlays line up across all cards.
+- **Expose a tiny debug API** on `window` for tests (`setState`, `setRange`, `pinRecordById`, `previewDate`, `clearPreview`). Good demos are inspectable.
+- **Avoid "state tunneling."** If a metric chart hover changes the focus date, it must use the same `previewDate()` path as a timeline hover.
+- **Labels must not become the data.** Dense point labels should hide/declutter under overlap; details belong in hover/pin panels.
+
+### Analyst use cases this supports
+
+- Product-history review: select a launch/decision and see metric context around it.
+- Funnel diagnosis: brush a cohort window; table, dropoff, source mix, and outcome views update together.
+- Content or marketplace analysis: lens by source/type/segment while preserving one time base for supply and demand metrics.
+- Experiment review: pin launch/decision dates; brush pre/post windows; inspect metric deltas without losing provenance.
+
 ## Marginalia integration
 Wrap demos in marginalia callouts for editorial context:
 ```html

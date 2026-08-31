@@ -173,6 +173,14 @@ SINGLE_PHRASE_RULES: list[tuple[str, str, str, str]] = [
     # --- Loaded-vocabulary in current usage ---
     ("phrase-regime", r"\bregime[s]?\b", "warn",
      "'Regime' carries political connotations in current usage; for technical contexts prefer 'phase', 'mode', or 'state'."),
+
+    # --- Analyst-voice tells in decision memos ---
+    ("phrase-priced-cost", r"\bpriced\s+cost\b", "warn",
+     "Coined analyst-voice label on a cost/gain. Say 'the cost' plainly, or ground it in what was pre-identified."),
+    ("phrase-document-part-as-actor",
+     r"\bthe\s+\w+(?:\s+\w+)?\s+(?:the\s+)?(?:declared\s+risk|pre-?registration|risk\s+statement|(?:\w+\s+)?(?:email|memo|announcement|brief|write-?up))\s+nam(?:es?|ed)\b",
+     "warn",
+     "Document-part-as-actor inversion ('the cost the declared risk names'). Name the actor plainly: 'pre-identified as a risk when the work was proposed'."),
 ]
 
 
