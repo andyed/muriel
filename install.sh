@@ -12,6 +12,20 @@
 
 set -euo pipefail
 
+SKIP_PYTHON=0
+for arg in "$@"; do
+  case "$arg" in
+    --no-python) SKIP_PYTHON=1 ;;
+    -h|--help)
+      echo "usage: install.sh [--no-python]"
+      echo "  --no-python   skip the editable pip install (packaging/CI contexts"
+      echo "                that install the wheel themselves)"
+      exit 0
+      ;;
+    *) echo "unknown argument: $arg (try --help)" >&2; exit 2 ;;
+  esac
+done
+
 SRC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PLUGIN_SKILL_SRC="$SRC/plugins/muriel/skills/compose"
 PLUGIN_AGENT_SRC="$SRC/plugins/muriel/agents"
@@ -134,15 +148,50 @@ for stale in "$AGENT_DST_DIR"/muriel-*.md; do
   esac
 done
 
-# ── Python package (optional, editable) ────────────────────────────────
-if command -v pip >/dev/null 2>&1; then
-  read -r -p "Install muriel Python package with 'pip install -e' (y/N)? " yn
+# ── Python package (editable, default yes) ─────────────────────────────
+#
+# This used to prompt (y/N), defaulting to no, and the default is what people
+# took: as of 2026-08-31 no editable install had ever been made on the author's
+# machine. Two consequences, both silent.
+#
+# 1. Consumers reach the package by absolute `sys.path.insert` instead. Six such
+#    inserts exist in attentional-foraging/scripts, and they broke for three
+#    weeks in August when the skill mount was repointed at the plugin's skill
+#    directory — which is not a package root.
+# 2. The repo root is a PEP 420 implicit namespace package named `muriel`, so
+#    from a parent directory `import muriel` SUCCEEDS and yields an empty
+#    module. That defeats `try: import muriel / except ImportError` guards and
+#    turns a path error into a silent wrong answer.
+#
+# An editable install closes both: it puts a real `muriel` on sys.path with
+# priority over the namespace shadow, and it makes `importlib.metadata` the
+# version source the provenance stamp reads. Skippable with --no-python for
+# packaging or CI contexts that install the wheel themselves.
+if [ "${SKIP_PYTHON:-0}" = "1" ]; then
+  echo "✗ skipping Python install (--no-python)"
+elif command -v pip >/dev/null 2>&1; then
+  read -r -p "Install muriel Python package with 'pip install -e' (Y/n)? " yn
   case "$yn" in
-    [Yy]*) pip install -e "$SRC" && echo "✓ pip install -e complete" ;;
-    *)     echo "✗ skipping pip install (install later with: pip install -e $SRC)" ;;
+    [Nn]*)
+      echo "! skipped — muriel.provenance will not be importable without a"
+      echo "  sys.path hack, and 'import muriel' from a parent directory will"
+      echo "  resolve to an empty namespace package. Install later with:"
+      echo "    pip install -e $SRC"
+      ;;
+    *)
+      if pip install -e "$SRC"; then
+        echo "✓ pip install -e complete"
+      else
+        echo "! pip install -e failed — muriel.provenance stays unimportable."
+        echo "  Retry with: pip install -e $SRC"
+        NEEDS_REPAIR=1
+      fi
+      ;;
   esac
 else
   echo "✗ pip not found on PATH — skipping Python install"
+  echo "  muriel.provenance will not be importable until you run:"
+  echo "    pip install -e $SRC"
 fi
 
 echo ""

@@ -209,7 +209,9 @@ Motion policy (forced binary — utility or cinematic, nothing in between):
 See the module docstrings for the full APIs.
 """
 
-__version__ = "0.7.1"
+from ._version import get_version as _get_version
+
+__version__ = _get_version()
 __all__ = [
     "matplotlibrc_dark",
     "matplotlibrc_light",

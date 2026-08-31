@@ -1,0 +1,54 @@
+name: tests
+
+# muriel had no test CI until 2026-08-31 — only a docs build. In that window the
+# provenance module, which is imported across a repo boundary by seven scripts in
+# attentional-foraging, had zero coverage, and its version constant drifted eight
+# minor releases out of date while stamping research artifacts. A rename of
+# stamp_json would have shipped green.
+#
+# Runs on the oldest and newest supported interpreters because _version.py has a
+# 3.9 fallback path (tomllib is 3.11+) that only executes on old Pythons.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # Install the package rather than adding the repo to sys.path: that is the
+      # supported consumer path, and it is what makes importlib.metadata the
+      # version source the provenance stamp reads.
+      - name: install (editable)
+        run: pip install -e .
+
+      - name: version is derived, not hardcoded
+        run: |
+          python - <<'PY'
+          import re, pathlib, muriel
+          from muriel.provenance import MURIEL_VERSION
+          declared = re.search(r'(?m)^\s*version\s*=\s*"([^"]+)"',
+                               pathlib.Path("pyproject.toml").read_text()).group(1)
+          print(f"pyproject={declared} __version__={muriel.__version__} stamp={MURIEL_VERSION}")
+          assert muriel.__version__ == declared, "muriel.__version__ drifted from pyproject"
+          assert MURIEL_VERSION == declared, "provenance stamp drifted from pyproject"
+          PY
+
+      - name: unit tests
+        run: python -m unittest discover -s tests -t tests -p "test_*.py" -v
+
+      - name: package builds
+        run: |
+          pip install build
+          python -m build

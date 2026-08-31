@@ -55,7 +55,11 @@ Field semantics
 - ``run_utc`` — ISO-8601 UTC timestamp at stamp time.
 - ``h_ids`` / ``nb_k_ids`` — list[str]. The IDs this figure carries
   forward into a paper. Used by figure-freshness audits.
-- ``muriel_version`` — pinned for reproducibility.
+- ``muriel_version`` — the muriel release that produced the artifact,
+  resolved from installed package metadata (see ``muriel._version``).
+  Not a pinned constant: a stamp that misreports its own producer is
+  worse than no stamp. Sidecars written before 2026-08-31 read
+  ``0.6.0`` regardless of the version that actually wrote them.
 - ``schema_version`` — the provenance schema version. Bump when the
   field set changes; old sidecars stay readable.
 
@@ -75,6 +79,8 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Iterable, Optional
 
+from ._version import get_version
+
 try:
     from PIL import Image
     from PIL.PngImagePlugin import PngInfo
@@ -87,7 +93,12 @@ else:
 
 SCHEMA_VERSION = 1
 TEXT_KEY = "muriel:provenance"
-MURIEL_VERSION = "0.6.0"
+
+# Derived, never typed. This was pinned at "0.6.0" from 2026-05 to 2026-08-31
+# while the package moved to 0.14.0, so every artifact stamped in that window
+# claims a producing version that did not produce it. SCHEMA_VERSION is the
+# field that is deliberately pinned; this one must track reality.
+MURIEL_VERSION = get_version()
 
 
 @dataclass

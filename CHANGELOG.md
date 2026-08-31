@@ -8,6 +8,48 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **The provenance stamp was misreporting its own version, and had been since 0.6.0.**
+  `MURIEL_VERSION` was a hardcoded `"0.6.0"` in `muriel/provenance.py`, documented as
+  "pinned for reproducibility", while the package moved to 0.14.0 — and a third copy in
+  `muriel/__init__.py` read 0.7.1. Because a constant is uniformly wrong, the error was
+  invisible: **every artifact stamped between 2026-05 and 2026-08-31 records
+  `muriel_version: 0.6.0` regardless of what produced it**, including 22 research
+  sidecars in `attentional-foraging/scripts/output/` and the `Software:` tEXt key of
+  every stamped PNG. Those artifacts cannot be corrected without re-stamping; read
+  `0.6.0` in anything dated before 2026-08-31 as "version unrecorded", and do not read
+  the jump to 0.14.0 in later artifacts as evidence of regeneration.
+  All three literals are now replaced by `muriel/_version.py`, which resolves from
+  installed package metadata and falls back to parsing `pyproject.toml` for a bare
+  checkout (regex, not `tomllib`, because the package supports Python 3.9). The
+  sentinel is `0+unknown`, which reads as "provenance unavailable" rather than as a
+  release. `SCHEMA_VERSION` stays pinned — that is the field that should be constant.
+
+### Added
+
+- **Tests for `muriel.provenance`** (`tests/test_provenance.py`, 12 cases) — the module
+  every external repository imports had none, so a rename of `stamp_json` would have
+  shipped green. Covers the JSON round trip (payload preserved plus embedded
+  `_provenance`, flat sidecar, dataset hashing, unstamped files returning `None`), the
+  version-derivation invariants, and a by-name pin on the ten symbols other repos
+  import across the boundary. Verified two-sided: restoring the hardcoded version turns
+  two of them red. Suite is 181 → 193.
+- **Test CI** (`.github/workflows/tests.yml`) — muriel had only a docs build. Runs the
+  unit suite on Python 3.9 and 3.13 (3.9 exercises the `_version` fallback path),
+  asserts `pyproject` / `__version__` / stamp versions agree, and builds the package.
+
+### Changed
+
+- **`install.sh` installs the Python package by default** (`Y/n`, was `y/N`), with
+  `--no-python` to opt out. No editable install had ever been made on the author's
+  machine, which is why six consumer scripts in another repo reach muriel by absolute
+  `sys.path.insert` — and why they broke silently for three weeks when the skill mount
+  was repointed at `plugins/muriel/skills/compose`, which is not a package root. The
+  editable install also closes a PEP 420 namespace shadow: the repo root is itself an
+  implicit package named `muriel`, so from a parent directory `import muriel` succeeds
+  and yields an empty module, defeating `try/except ImportError` guards.
+
+### Fixed
+
 - **`aiism` docstring advertised detectors that were deleted three releases
   ago.** The module header still listed copula-avoidance verbs ("serves as",
   "stands as"), significance-inflation phrases ("a testament to",
