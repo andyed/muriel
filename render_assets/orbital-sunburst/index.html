@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Orbital Sunburst — hierarchy as depth · muriel</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #05080e;
+    --panel: #0a1019;
+    --ink: #f7f3e9;
+    --muted: #c5ced8;
+    --faint: #9aaabd;
+    --cyan: #8fe9ff;
+    --pink: #ff9fbd;
+    --amber: #ffd28a;
+    --green: #a7f3d0;
+    --line: rgba(143, 233, 255, 0.34);
+    --hairline: rgba(143, 233, 255, 0.16);
+    --sans: "Avenir Next", Avenir, "Helvetica Neue", Arial, sans-serif;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    background: var(--bg);
+  }
+
+  body {
+    min-height: 100svh;
+    color: var(--ink);
+    font-family: var(--sans);
+    overflow-x: hidden;
+    background-image:
+      linear-gradient(rgba(143, 233, 255, 0.024) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(143, 233, 255, 0.024) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+
+  button { font: inherit; }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .shell {
+    width: min(1540px, 100%);
+    min-height: 100svh;
+    margin: 0 auto;
+    padding: 26px clamp(18px, 3vw, 52px) 30px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 20px;
+  }
+
+  .masthead {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 18px;
+  }
+
+  .eyebrow,
+  .readout-label,
+  .plane-key,
+  .micro,
+  .kbd-help,
+  .branch-button .value {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .eyebrow {
+    color: var(--cyan);
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    margin: 0;
+    max-width: 820px;
+    font-size: clamp(34px, 4.2vw, 68px);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
+  h1 span { color: var(--pink); }
+
+  .masthead-copy {
+    max-width: 490px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  .workspace {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(620px, 1.55fr) minmax(330px, 0.72fr);
+    gap: clamp(18px, 2.4vw, 38px);
+  }
+
+  .stage-panel,
+  .inspector {
+    border: 1px solid var(--line);
+    background: rgba(5, 8, 14, 0.92);
+  }
+
+  .stage-panel {
+    min-height: min(760px, calc(100svh - 185px));
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stage-panel::before,
+  .stage-panel::after {
+    content: "";
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    pointer-events: none;
+    z-index: 8;
+  }
+
+  .stage-panel::before {
+    top: 9px;
+    left: 9px;
+    border-top: 2px solid var(--cyan);
+    border-left: 2px solid var(--cyan);
+  }
+
+  .stage-panel::after {
+    right: 9px;
+    bottom: 9px;
+    border-right: 2px solid var(--pink);
+    border-bottom: 2px solid var(--pink);
+  }
+
+  .stage-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 18px 22px 8px;
+    position: relative;
+    z-index: 9;
+  }
+
+  .mode-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .mode-state::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background: var(--green);
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+    box-shadow: 0 0 16px rgba(167, 243, 208, 0.8);
+  }
+
+  .micro {
+    color: var(--faint);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.55;
+    text-align: right;
+  }
+
+  .scene {
+    --tilt: 58deg;
+    --spin: -18deg;
+    --gap: 72px;
+    position: relative;
+    min-height: 500px;
+    perspective: 1120px;
+    perspective-origin: 50% 43%;
+    display: grid;
+    place-items: center;
+    touch-action: none;
+    cursor: grab;
+    outline: none;
+  }
+
+  .scene:active { cursor: grabbing; }
+
+  .scene:focus-visible::after {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 2px solid var(--amber);
+    pointer-events: none;
+    z-index: 12;
+  }
+
+  .rig {
+    width: min(68vw, 690px);
+    max-width: calc(100% - 42px);
+    aspect-ratio: 1;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--tilt)) rotateZ(var(--spin));
+    transition: transform 720ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+
+  .scene[data-dragging="true"] .rig { transition: none; }
+
+  .plane {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    transform: translateZ(calc(var(--level) * var(--gap)));
+    transform-origin: 50% 50%;
+    pointer-events: none;
+    transition: transform 720ms cubic-bezier(0.16, 1, 0.3, 1), opacity 280ms;
+    filter: drop-shadow(0 24px 20px rgba(0, 0, 0, 0.42));
+  }
+
+  .stage-panel[data-mode="sunburst"] .scene {
+    --tilt: 0deg;
+    --gap: 0px;
+  }
+
+  .stage-panel[data-mode="sunburst"] .plane { filter: none; }
+
+  .plate {
+    fill: rgba(8, 14, 23, 0.54);
+    stroke: rgba(143, 233, 255, 0.17);
+    stroke-width: 1.5;
+  }
+
+  .plate-core { fill: rgba(8, 14, 23, 0.88); }
+
+  .guide {
+    fill: none;
+    stroke: rgba(143, 233, 255, 0.26);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .guide.emphasis { stroke: rgba(255, 159, 189, 0.48); }
+
+  .tick {
+    stroke: rgba(143, 233, 255, 0.38);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .tick.major { stroke: rgba(255, 210, 138, 0.72); stroke-width: 1.5; }
+
+  .projection-anchor { fill: transparent; stroke: none; pointer-events: none; }
+
+  .segment {
+    --accent: var(--cyan);
+    fill: color-mix(in srgb, var(--accent) 12%, #08111c 88%);
+    stroke: color-mix(in srgb, var(--accent) 82%, white 18%);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: fill 180ms, stroke 180ms, opacity 180ms, filter 180ms;
+  }
+
+  .segment.is-lineage {
+    fill: color-mix(in srgb, var(--accent) 20%, #08111c 80%);
+    stroke-width: 2.6;
+  }
+
+  .segment.is-preview:not(.is-selected) {
+    fill: color-mix(in srgb, var(--accent) 25%, #08111c 75%);
+    stroke: var(--ink);
+    filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 72%, transparent));
+  }
+
+  .segment.is-active:not(.is-selected) {
+    fill: color-mix(in srgb, var(--accent) 30%, #08111c 70%);
+    stroke: var(--amber);
+    stroke-width: 3;
+    stroke-dasharray: 7 5;
+    filter: drop-shadow(0 0 12px rgba(255, 210, 138, 0.62));
+  }
+
+  .segment.is-selected {
+    fill: color-mix(in srgb, var(--accent) 36%, #08111c 64%);
+    stroke: var(--ink);
+    stroke-width: 3.5;
+    filter: drop-shadow(0 0 14px color-mix(in srgb, var(--accent) 78%, transparent));
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .segment:hover:not(.is-selected) {
+      fill: color-mix(in srgb, var(--accent) 25%, #08111c 75%);
+      stroke: var(--ink);
+      filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 72%, transparent));
+    }
+  }
+
+  .segment-label {
+    fill: var(--ink);
+    font-family: var(--sans);
+    font-size: 18px;
+    font-weight: 750;
+    letter-spacing: 0.01em;
+    paint-order: stroke;
+    stroke: rgba(5, 8, 14, 0.88);
+    stroke-width: 4px;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+
+  .segment-label.leaf { font-size: 16px; }
+
+  .text-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 9;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  .radial-text,
+  .radial-glyph {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--ink);
+    transform-origin: center;
+    will-change: transform;
+  }
+
+  .radial-text {
+    white-space: nowrap;
+    font-family: Arial, sans-serif;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0;
+    text-shadow:
+      -2px -2px 0 rgba(5, 8, 14, 0.96),
+       2px -2px 0 rgba(5, 8, 14, 0.96),
+      -2px  2px 0 rgba(5, 8, 14, 0.96),
+       2px  2px 0 rgba(5, 8, 14, 0.96),
+       0 0 8px rgba(5, 8, 14, 0.98);
+  }
+
+  .radial-text[data-carrier="outer"] {
+    padding: 5px 8px;
+    background: #08111c;
+    border: 1px solid color-mix(in srgb, var(--node-accent) 76%, white 24%);
+  }
+
+  .radial-text[data-script="rtl"] { direction: rtl; unicode-bidi: plaintext; }
+
+  .radial-glyph {
+    width: 22px;
+    height: 22px;
+    filter: drop-shadow(0 0 5px rgba(5, 8, 14, 0.96));
+  }
+
+  .radial-glyph svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .radial-glyph .ic-sec,
+  .radial-glyph .ic-secf {
+    color: var(--node-accent);
+    stroke: var(--node-accent);
+    fill: var(--node-accent);
+  }
+
+  .stack-labels {
+    position: absolute;
+    left: 20px;
+    bottom: 18px;
+    display: grid;
+    gap: 8px;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .plane-key {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .plane-key::before {
+    content: "";
+    width: 26px;
+    height: 2px;
+    background: var(--key-color, var(--cyan));
+  }
+
+  .plane-key:nth-child(2) { --key-color: var(--pink); }
+  .plane-key:nth-child(3) { --key-color: var(--amber); }
+
+  .drag-note {
+    position: absolute;
+    right: 20px;
+    bottom: 18px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .toolbar {
+    min-height: 66px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px 14px;
+    border-top: 1px solid var(--hairline);
+    position: relative;
+    z-index: 10;
+  }
+
+  .control {
+    min-width: 44px;
+    min-height: 44px;
+    border: 1px solid rgba(143, 233, 255, 0.48);
+    background: #08111c;
+    color: var(--ink);
+    padding: 9px 14px;
+    font-size: 15px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: border-color 160ms, background-color 160ms, transform 120ms;
+  }
+
+  .control:hover,
+  .control:focus-visible {
+    border-color: var(--pink);
+    background: #121522;
+    outline: none;
+  }
+
+  .control:active { transform: scale(0.96); }
+  .control[disabled] { color: var(--faint); cursor: not-allowed; }
+
+  .kbd-help {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .inspector {
+    padding: clamp(22px, 2.2vw, 34px);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .readout-label {
+    color: var(--cyan);
+    font-size: 11px;
+    font-weight: 800;
+    margin-bottom: 14px;
+  }
+
+  .crumbs {
+    min-height: 24px;
+    color: var(--muted);
+    font-size: 16px;
+    font-weight: 650;
+    line-height: 1.4;
+  }
+
+  .crumbs span { color: var(--pink); padding: 0 5px; }
+
+  .selection-title {
+    margin: 12px 0 8px;
+    font-size: clamp(30px, 3vw, 52px);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .selection-note {
+    min-height: 74px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.48;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    margin: 24px 0;
+  }
+
+  .metric { padding: 16px 0; }
+  .metric + .metric { border-left: 1px solid var(--hairline); padding-left: 18px; }
+
+  .metric strong {
+    display: block;
+    color: var(--ink);
+    font-size: 28px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .metric span {
+    display: block;
+    margin-top: 4px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .branches {
+    display: grid;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .branch-button {
+    min-height: 50px;
+    display: grid;
+    grid-template-columns: 12px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    border: 1px solid var(--hairline);
+    background: #08111c;
+    color: var(--ink);
+    padding: 10px 12px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .branch-button:hover,
+  .branch-button:focus-visible,
+  .branch-button[aria-current="true"] {
+    border-color: var(--branch-accent, var(--cyan));
+    outline: none;
+  }
+
+  .branch-button .mark {
+    width: 10px;
+    height: 10px;
+    background: var(--branch-accent, var(--cyan));
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  }
+
+  .branch-button .name { font-size: 16px; font-weight: 750; }
+  .branch-button .value { color: var(--muted); font-size: 10px; font-weight: 700; }
+
+  .type-panel {
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .type-controls {
+    display: grid;
+    gap: 12px;
+  }
+
+  .type-control {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr) 48px;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .type-control select {
+    grid-column: 2 / 4;
+    min-height: 44px;
+    width: 100%;
+    border: 1px solid rgba(143, 233, 255, 0.48);
+    background: #08111c;
+    color: var(--ink);
+    padding: 8px 36px 8px 10px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .type-control input[type="range"] {
+    width: 100%;
+    min-height: 44px;
+    accent-color: var(--pink);
+    cursor: pointer;
+  }
+
+  .type-control output {
+    color: var(--cyan);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 800;
+    text-align: right;
+  }
+
+  .type-proof {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .compact-choices {
+    display: none;
+    margin-top: 18px;
+  }
+
+  .compact-choices h2 {
+    margin: 0 0 10px;
+    color: var(--cyan);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .compact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .compact-grid button {
+    min-height: 48px;
+    border: 1px solid var(--hairline);
+    background: #08111c;
+    color: var(--ink);
+    padding: 8px 10px;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  .compact-grid button[aria-current="true"] { border-color: var(--amber); }
+
+  .encoding {
+    margin-top: auto;
+    padding-top: 24px;
+    color: var(--muted);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.48;
+  }
+
+  .encoding strong { color: var(--ink); }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  .footer span:last-child { text-align: right; }
+
+  @media (max-width: 1080px) {
+    .workspace { grid-template-columns: 1fr; }
+    .stage-panel { min-height: 700px; }
+    .inspector { min-height: 620px; }
+    .selection-note { min-height: 0; }
+    .encoding { margin-top: 24px; }
+  }
+
+  @media (max-width: 719px) {
+    .shell { padding: 18px 12px 24px; }
+    .masthead { display: block; }
+    .masthead-copy { margin-top: 14px; }
+    .stage-panel { min-height: 510px; }
+    .stage-head { padding: 16px 16px 6px; }
+    .scene { min-height: 350px; touch-action: pan-y; cursor: default; }
+    .rig { width: min(94vw, 410px); max-width: calc(100% - 8px); }
+    .segment-label, .text-overlay { display: none; }
+    .segment { pointer-events: none; }
+    .stack-labels, .drag-note, .kbd-help { display: none; }
+    .toolbar { padding-inline: 12px; }
+    .control { flex: 1; }
+    .inspector { padding: 22px 18px; min-height: 0; }
+    .compact-choices { display: block; }
+    .type-control { grid-template-columns: 94px minmax(0, 1fr) 44px; }
+    .footer { display: block; }
+    .footer span { display: block; text-align: left !important; }
+    .footer span + span { margin-top: 6px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rig, .plane, .segment, .control { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">muriel · interactive × spatial · demonstrator 04</div>
+      <h1>Orbital <span>Sunburst</span></h1>
+    </div>
+    <p class="masthead-copy">
+      One hierarchy, two projections. Collapse the planes for a conventional
+      sunburst; separate them to navigate the same structure as depth.
+    </p>
+  </header>
+
+  <section class="workspace" aria-label="Orbital Sunburst demo">
+    <div class="stage-panel" id="stagePanel" data-mode="stack">
+      <div class="stage-head">
+        <div class="mode-state" id="modeState">Depth stack</div>
+        <div class="micro" id="fixtureState">Psychodeli menu corpus<br>100 illustrative weight units</div>
+      </div>
+
+      <div class="scene" id="scene" tabindex="0" role="tree"
+           aria-label="Visual systems hierarchy. Use left and right for siblings, up toward children, down toward the parent, and Enter to select."
+           aria-activedescendant="treeitem-visual-systems" data-dragging="false">
+        <div class="rig" id="rig" aria-hidden="true">
+          <svg class="plane" id="plane0" style="--level: 0" viewBox="0 0 720 720"></svg>
+          <svg class="plane" id="plane1" style="--level: 1" viewBox="0 0 720 720"></svg>
+          <svg class="plane" id="plane2" style="--level: 2" viewBox="0 0 720 720"></svg>
+        </div>
+        <div class="text-overlay" id="textOverlay" aria-hidden="true"></div>
+        <div class="sr-only" id="semanticTree"></div>
+        <div class="stack-labels" aria-hidden="true">
+          <div class="plane-key">L2 · leaves</div>
+          <div class="plane-key">L1 · branches</div>
+          <div class="plane-key">L0 · root</div>
+        </div>
+        <div class="drag-note" aria-hidden="true">drag to orbit · click to align</div>
+      </div>
+
+      <div class="toolbar" aria-label="View controls">
+        <button class="control" id="modeToggle" type="button">Top view</button>
+        <button class="control" id="resetView" type="button">Reset</button>
+        <div class="kbd-help">← → siblings · ↑ child · ↓ parent · enter select · esc root</div>
+      </div>
+    </div>
+
+    <aside class="inspector" aria-labelledby="selectionTitle">
+      <div class="readout-label">Selection / lineage</div>
+      <div class="crumbs" id="crumbs">Visual systems</div>
+      <h2 class="selection-title" id="selectionTitle">Visual systems</h2>
+      <p class="selection-note" id="selectionNote">
+        A synthetic map for testing circular hierarchy, not a score of Muriel's channels.
+      </p>
+
+      <div class="metrics" aria-label="Selection metrics">
+        <div class="metric">
+          <strong id="weightValue">100</strong>
+          <span>demo weight</span>
+        </div>
+        <div class="metric">
+          <strong id="depthValue">00</strong>
+          <span>hierarchy depth</span>
+        </div>
+      </div>
+
+      <div class="readout-label">Primary branches</div>
+      <div class="branches" id="branches"></div>
+
+      <div class="type-panel" aria-labelledby="typeCarrierLabel">
+        <div class="readout-label" id="typeCarrierLabel">Pretext radial carrier</div>
+        <div class="type-controls">
+          <label class="type-control">
+            <span>Fixture</span>
+            <select id="textFixture">
+              <option value="psychodeli">Psychodeli menus</option>
+              <option value="muriel">Muriel hierarchy</option>
+              <option value="scripts">Script canaries</option>
+            </select>
+          </label>
+          <label class="type-control">
+            <span>Carrier</span>
+            <select id="textCarrier">
+              <option value="adaptive">Adaptive</option>
+              <option value="upright">Screen upright</option>
+              <option value="bow">Shallow bow</option>
+              <option value="arc">Circular rail</option>
+              <option value="spoke">Radial spoke</option>
+              <option value="outer">Outer callout</option>
+            </select>
+          </label>
+          <label class="type-control">
+            <span>Type tier</span>
+            <select id="textTierMode">
+              <option value="shared">Shared per ring</option>
+              <option value="local">Local maximum</option>
+            </select>
+          </label>
+          <label class="type-control">
+            <span>Fill</span>
+            <select id="textFill">
+              <option value="natural">Natural spacing</option>
+              <option value="balanced">Balanced fill</option>
+              <option value="space">Space filling</option>
+            </select>
+          </label>
+          <label class="type-control">
+            <span>Direction</span>
+            <select id="textDirection">
+              <option value="auto">Auto upright</option>
+              <option value="clockwise">Clockwise</option>
+              <option value="counter">Counter-clockwise</option>
+            </select>
+          </label>
+          <label class="type-control">
+            <span>Curvature</span>
+            <input id="textCurve" type="range" min="0" max="100" step="1" value="30">
+            <output id="textCurveValue" for="textCurve">30%</output>
+          </label>
+          <label class="type-control">
+            <span>Letter turn</span>
+            <input id="textTurn" type="range" min="0" max="20" step="1" value="8"
+                   title="Restrained 0–20% tangent follow; stronger turns make side labels harder to read.">
+            <output id="textTurnValue" for="textTurn">8%</output>
+          </label>
+        </div>
+        <p class="type-proof" id="typeProof">
+          Pretext chooses one legal physical type tier per ring; graphemes then
+          occupy the guarded arc while the full label remains semantic state.
+        </p>
+      </div>
+
+      <div class="compact-choices" id="compactChoices">
+        <h2 id="compactHeading">Spatial interfaces</h2>
+        <div class="compact-grid" id="compactGrid"></div>
+      </div>
+
+      <p class="encoding">
+        <strong>Encoding:</strong> angle = stable branch identity · arc = illustrative
+        weight · radius = hierarchy · Z = the same hierarchy separated for focus.
+        Text stays upright in this inspector; the circle carries selection geometry.
+      </p>
+    </aside>
+  </section>
+
+  <footer class="footer">
+    <span>Pointer · keyboard · touch-safe linear fallback · reduced-motion top view</span>
+    <span>One partition layout · immutable sector paths · vendored Pretext 0.0.5</span>
+  </footer>
+</main>
+
+<script type="module">
+  import {
+    prepareRichInline,
+    layoutNextRichInlineLineRange,
+    materializeRichInlineLineRange,
+  } from './pretext-rich-inline-0.0.5.min.js';
+
+  'use strict';
+
+  const NS = 'http://www.w3.org/2000/svg';
+  const CENTER = 360;
+  const TAU = Math.PI * 2;
+  const START_ANGLE = -Math.PI / 2;
+  const RINGS = [
+    { inner: 0, outer: 69 },
+    { inner: 88, outer: 174 },
+    { inner: 194, outer: 310 },
+  ];
+  const DEFAULT_VIEW = Object.freeze({ spin: -18, tilt: 58 });
+  const palette = ['#8fe9ff', '#ff9fbd', '#ffd28a', '#a7f3d0'];
+  const arcMeasure = document.createElement('canvas').getContext('2d');
+  const graphemeSegmenter = typeof Intl?.Segmenter === 'function'
+    ? new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+    : null;
+
+  // The weights are explicitly illustrative. They make area encoding visible
+  // without pretending to measure the quality or importance of Muriel channels.
+  const hierarchy = {
+    id: 'visual-systems',
+    name: 'Visual systems',
+    short: 'Visual systems',
+    note: 'A synthetic map for testing circular hierarchy, not a score of Muriel\'s channels.',
+    children: [
+      {
+        id: 'spatial', name: 'Spatial interfaces', short: 'Spatial',
+        note: 'Position and depth carry relationship, memory, or navigation.',
+        children: [
+          { id: 'orbital', name: 'Orbital stacks', short: 'Orbital', value: 12, note: 'Hierarchy becomes a navigable stack of aligned planes.' },
+          { id: 'perspective', name: 'Perspective planes', short: 'Perspective', value: 10, note: 'Foreshortening preserves focus while retaining surrounding context.' },
+          { id: 'memory', name: 'Memory maps', short: 'Memory maps', value: 9, note: 'Stable position becomes part of how an item is remembered.' },
+        ],
+      },
+      {
+        id: 'interaction', name: 'Interactive graphics', short: 'Interaction',
+        note: 'The representation answers back through direct manipulation.',
+        children: [
+          { id: 'radial', name: 'Radial commands', short: 'Radial', value: 10, note: 'Direction supports rapid command selection and spatial recall.' },
+          { id: 'probes', name: 'Parameter probes', short: 'Probes', value: 9, note: 'A reader changes one cause and watches the consequence.' },
+          { id: 'linked', name: 'Linked views', short: 'Linked', value: 8, note: 'Selection in one projection clarifies the same state elsewhere.' },
+        ],
+      },
+      {
+        id: 'evidence', name: 'Evidence graphics', short: 'Evidence',
+        note: 'Graphic form stays accountable to observation and measurement.',
+        children: [
+          { id: 'science', name: 'Scientific figures', short: 'Science', value: 9, note: 'Axes, units, uncertainty, and comparison remain explicit.' },
+          { id: 'gaze', name: 'Gaze plots', short: 'Gaze', value: 8, note: 'Attention traces expose sequence, fixation, and movement.' },
+          { id: 'density', name: 'Density maps', short: 'Density', value: 7, note: 'A field reveals concentration without claiming an individual path.' },
+        ],
+      },
+      {
+        id: 'media', name: 'Authored media', short: 'Media',
+        note: 'Composition and sequencing shape how an artifact is encountered.',
+        children: [
+          { id: 'motion', name: 'Motion systems', short: 'Motion', value: 7, note: 'Timing and continuity direct attention through change.' },
+          { id: 'editorial', name: 'Editorial web', short: 'Editorial', value: 6, note: 'Reading order and context turn assets into an argument.' },
+          { id: 'raster', name: 'Raster craft', short: 'Raster', value: 5, note: 'Pixel surfaces carry texture, imagery, and controlled atmosphere.' },
+        ],
+      },
+    ],
+  };
+
+  // Psychodeli's authored config labels are a production-shaped stress corpus,
+  // not a second source of behavior. IDs and sector geometry remain Muriel's;
+  // fixtures replace only projected copy and 24-grid glyphs.
+  const TEXT_FIXTURES = Object.freeze({
+    muriel: {
+      label: 'Muriel hierarchy',
+      source: 'Synthetic hierarchy',
+      nodes: {},
+    },
+    psychodeli: {
+      label: 'Psychodeli menus',
+      source: 'WEDGES · MORE_WEDGES · REACT_WEDGES · VIBE_WEDGES',
+      nodes: {
+        'visual-systems': { name: 'Psychodeli menu corpus', short: 'Psychodeli', note: 'Production labels and 24-grid glyphs exercise the same immutable sunburst sectors.' },
+        spatial: { name: 'Main pie', short: 'Main pie', note: 'The five-command launcher reduced to three representative stress cases.' },
+        orbital: { name: 'Vibe', short: 'Vibe', glyph: 'vibe' },
+        perspective: { name: 'Reactivity', short: 'Reactivity', glyph: 'camera' },
+        memory: { name: 'More', short: 'More', glyph: 'dots' },
+        interaction: { name: 'More pie', short: 'More pie', note: 'Multiword toggles test wrapping, shared tiers, and glyph/label separation.' },
+        radial: { name: 'Reduce flash', short: 'Reduce flash', glyph: 'shades' },
+        probes: { name: 'Stay awake', short: 'Stay awake', glyph: 'sun' },
+        linked: { name: 'Power', short: 'Power', glyph: 'power' },
+        evidence: { name: 'Reactivity pie', short: 'Reactivity', note: 'Sensor commands test short copy beside strongly recognizable glyphs.' },
+        science: { name: 'Audio', short: 'Audio', glyph: 'mic' },
+        gaze: { name: 'Video', short: 'Video', glyph: 'camera' },
+        density: { name: 'Live EQ', short: 'Live EQ', glyph: 'eq' },
+        media: { name: 'Vibe pie', short: 'Vibe pie', note: 'Dense creative controls test distinct silhouettes at real 22 px size.' },
+        motion: { name: 'Speed', short: 'Speed', glyph: 'speed' },
+        editorial: { name: 'Kaleido', short: 'Kaleido', glyph: 'kaleido' },
+        raster: { name: 'Evolve', short: 'Evolve', glyph: 'algo' },
+      },
+    },
+    scripts: {
+      label: 'Script canaries',
+      source: 'Latin · CJK · RTL · combining/emoji',
+      nodes: {
+        'visual-systems': { name: 'Script and glyph canaries', short: 'Canaries', note: 'A layout probe for shaping and segmentation; these are not product translations.' },
+        spatial: { name: 'Latin extensions', short: 'Latin', script: 'latin' },
+        orbital: { name: 'Café', short: 'Café', glyph: 'vibe', script: 'latin' },
+        perspective: { name: 'Ångström', short: 'Ångström', glyph: 'camera', script: 'latin' },
+        memory: { name: 'Crème', short: 'Crème', glyph: 'dots', script: 'latin' },
+        interaction: { name: '日本語', short: '日本語', script: 'cjk' },
+        radial: { name: '視覚', short: '視覚', glyph: 'shades', script: 'cjk' },
+        probes: { name: '音声入力', short: '音声入力', glyph: 'mic', script: 'cjk' },
+        linked: { name: '色', short: '色', glyph: 'color', script: 'cjk' },
+        evidence: { name: 'العربية', short: 'العربية', script: 'rtl' },
+        science: { name: 'الصوت', short: 'الصوت', glyph: 'mic', script: 'rtl' },
+        gaze: { name: 'الكاميرا', short: 'الكاميرا', glyph: 'camera', script: 'rtl' },
+        density: { name: 'المزيد', short: 'المزيد', glyph: 'dots', script: 'rtl' },
+        media: { name: 'Glyph canaries', short: 'Glyphs', script: 'complex' },
+        motion: { name: 'Launch 🚀', short: 'Launch 🚀', glyph: 'play', script: 'complex' },
+        editorial: { name: '⌘ K', short: '⌘ K', glyph: 'kaleido', script: 'complex' },
+        raster: { name: 'éclat', short: 'éclat', glyph: 'algo', script: 'complex' },
+      },
+    },
+  });
+
+  // Exact Psychodeli 24-grid paths for the fixture subset. Emoji remain only a
+  // shaping canary; primary command meaning uses deterministic SVG silhouettes.
+  const COMMAND_GLYPHS = Object.freeze({
+    speed: '<path d="M13 2 4 14h6l-1 8 9-12h-6z" fill="currentColor" stroke="none"/>',
+    color: '<circle cx="9" cy="10" r="5"/><circle cx="15" cy="10" r="5"/><circle cx="12" cy="15" r="5"/>',
+    play: '<path d="M7 5l12 7-12 7z" fill="currentColor" stroke="none"/>',
+    dots: '<circle cx="5" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.7" fill="currentColor" stroke="none"/>',
+    mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
+    camera: '<rect x="3" y="6.5" width="18" height="12.5" rx="2.5"/><circle cx="12" cy="13" r="3.3"/><path d="M8.5 6.5 10 4h4l1.5 2.5"/>',
+    shades: '<path class="ic-secf" d="M3.6 9.4h6.6v3.4a2.6 2.6 0 0 1-2.6 2.6H6.2a2.6 2.6 0 0 1-2.6-2.6zM13.8 9.4h6.6v3.4a2.6 2.6 0 0 1-2.6 2.6h-1.4a2.6 2.6 0 0 1-2.6-2.6z"/><path stroke-width="1.6" d="M3.6 9.4h6.6v3.4a2.6 2.6 0 0 1-2.6 2.6H6.2a2.6 2.6 0 0 1-2.6-2.6zM13.8 9.4h6.6v3.4a2.6 2.6 0 0 1-2.6 2.6h-1.4a2.6 2.6 0 0 1-2.6-2.6zM10.2 10.1c.7-.7 2.9-.7 3.6 0M3.6 9.8 1.8 8.5M20.4 9.8 22.2 8.5"/>',
+    sun: '<circle class="ic-secf" cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>',
+    power: '<path d="M12 3v9"/><path d="M6.6 7a8 8 0 1 0 10.8 0"/>',
+    eq: '<path d="M5 10v4M9.5 6v12M14 8v8M18.5 11v2"/>',
+    gyro: '<rect x="8.5" y="4.5" width="9" height="15" rx="2" transform="rotate(14 13 12)"/><path d="M4.5 15.5a9.5 9.5 0 0 0 2.6 3.4M19.5 8.5a9.5 9.5 0 0 0-2.6-3.4"/>',
+    kaleido: '<circle cx="12" cy="12" r="9"/><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/>',
+    vibe: '<circle class="ic-secf" cx="12" cy="12" r="2.2"/><path d="M15.6 8.4a5 5 0 0 1 0 7.2M8.4 8.4a5 5 0 0 0 0 7.2M18.4 5.6a9 9 0 0 1 0 12.8M5.6 5.6a9 9 0 0 0 0 12.8"/>',
+    algo: '<ellipse cx="12" cy="12" rx="9.5" ry="4.2" transform="rotate(-30 12 12)"/><ellipse cx="12" cy="12" rx="9.5" ry="4.2" transform="rotate(30 12 12)"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle class="ic-secf" cx="18.6" cy="7.6" r="1.9"/>',
+  });
+
+  const state = {
+    mode: 'stack',
+    selectedId: hierarchy.id,
+    activeId: hierarchy.id,
+    previewId: null,
+    spin: DEFAULT_VIEW.spin,
+    tilt: DEFAULT_VIEW.tilt,
+    compact: false,
+    drag: null,
+    suppressClickUntil: 0,
+    previewBlockedUntil: 0,
+    textFixture: 'psychodeli',
+    textCarrier: 'adaptive',
+    textTierMode: 'shared',
+    textFill: 'natural',
+    textDirection: 'auto',
+    textCurve: 0.3,
+    textTurn: 0.08,
+    textTiers: {},
+    textFailures: [],
+    textCarriers: {},
+    textOverflow: [],
+    textDepthViolations: [],
+    textMinPhysical: null,
+    glyphCount: 0,
+    maxLetterRotation: 0,
+  };
+
+  const nodes = [];
+  const byId = new Map();
+
+  function assignLayout(node, depth = 0, parent = null, x0 = 0, x1 = TAU, branch = 0) {
+    node.depth = depth;
+    node.parent = parent;
+    node.branch = branch;
+    node.value = node.children
+      ? node.children.reduce((sum, child) => sum + assignValue(child), 0)
+      : node.value;
+    node.x0 = x0;
+    node.x1 = x1;
+    nodes.push(node);
+    byId.set(node.id, node);
+
+    if (!node.children) return;
+    let cursor = x0;
+    for (let index = 0; index < node.children.length; index += 1) {
+      const child = node.children[index];
+      const span = (x1 - x0) * (child.value / node.value);
+      assignLayout(child, depth + 1, node, cursor, cursor + span, depth === 0 ? index : branch);
+      cursor += span;
+    }
+  }
+
+  function assignValue(node) {
+    if (!node.children) return node.value;
+    node.value = node.children.reduce((sum, child) => sum + assignValue(child), 0);
+    return node.value;
+  }
+
+  assignLayout(hierarchy);
+
+  const els = {
+    stagePanel: document.getElementById('stagePanel'),
+    modeState: document.getElementById('modeState'),
+    fixtureState: document.getElementById('fixtureState'),
+    scene: document.getElementById('scene'),
+    rig: document.getElementById('rig'),
+    modeToggle: document.getElementById('modeToggle'),
+    resetView: document.getElementById('resetView'),
+    crumbs: document.getElementById('crumbs'),
+    selectionTitle: document.getElementById('selectionTitle'),
+    selectionNote: document.getElementById('selectionNote'),
+    weightValue: document.getElementById('weightValue'),
+    depthValue: document.getElementById('depthValue'),
+    branches: document.getElementById('branches'),
+    semanticTree: document.getElementById('semanticTree'),
+    compactHeading: document.getElementById('compactHeading'),
+    compactGrid: document.getElementById('compactGrid'),
+    textOverlay: document.getElementById('textOverlay'),
+    textFixture: document.getElementById('textFixture'),
+    textCarrier: document.getElementById('textCarrier'),
+    textTierMode: document.getElementById('textTierMode'),
+    textFill: document.getElementById('textFill'),
+    textDirection: document.getElementById('textDirection'),
+    textCurve: document.getElementById('textCurve'),
+    textCurveValue: document.getElementById('textCurveValue'),
+    textTurn: document.getElementById('textTurn'),
+    textTurnValue: document.getElementById('textTurnValue'),
+    typeProof: document.getElementById('typeProof'),
+    planes: [0, 1, 2].map((depth) => document.getElementById(`plane${depth}`)),
+  };
+
+  function polar(radius, angle) {
+    return [CENTER + Math.cos(angle) * radius, CENTER + Math.sin(angle) * radius];
+  }
+
+  function annularSectorPath(inner, outer, start, end, gap = 0.012) {
+    const safeStart = start + gap;
+    const safeEnd = end - gap;
+    const large = safeEnd - safeStart > Math.PI ? 1 : 0;
+    const [ox0, oy0] = polar(outer, safeStart);
+    const [ox1, oy1] = polar(outer, safeEnd);
+    if (inner === 0 && end - start >= TAU - 0.05) {
+      return [
+        `M ${CENTER + outer} ${CENTER}`,
+        `A ${outer} ${outer} 0 1 1 ${CENTER - outer} ${CENTER}`,
+        `A ${outer} ${outer} 0 1 1 ${CENTER + outer} ${CENTER}`,
+        'Z',
+      ].join(' ');
+    }
+    if (inner === 0) {
+      return `M ${CENTER} ${CENTER} L ${ox0} ${oy0} A ${outer} ${outer} 0 ${large} 1 ${ox1} ${oy1} Z`;
+    }
+    const [ix1, iy1] = polar(inner, safeEnd);
+    const [ix0, iy0] = polar(inner, safeStart);
+    return [
+      `M ${ox0} ${oy0}`,
+      `A ${outer} ${outer} 0 ${large} 1 ${ox1} ${oy1}`,
+      `L ${ix1} ${iy1}`,
+      `A ${inner} ${inner} 0 ${large} 0 ${ix0} ${iy0}`,
+      'Z',
+    ].join(' ');
+  }
+
+  function annularPlatePath(inner, outer) {
+    const outerLeft = CENTER - outer;
+    const outerRight = CENTER + outer;
+    const innerLeft = CENTER - inner;
+    const innerRight = CENTER + inner;
+    return [
+      `M ${outerRight} ${CENTER}`,
+      `A ${outer} ${outer} 0 1 1 ${outerLeft} ${CENTER}`,
+      `A ${outer} ${outer} 0 1 1 ${outerRight} ${CENTER}`,
+      `M ${innerRight} ${CENTER}`,
+      `A ${inner} ${inner} 0 1 0 ${innerLeft} ${CENTER}`,
+      `A ${inner} ${inner} 0 1 0 ${innerRight} ${CENTER}`,
+      'Z',
+    ].join(' ');
+  }
+
+  function svgElement(tag, attributes = {}) {
+    const element = document.createElementNS(NS, tag);
+    for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, value);
+    return element;
+  }
+
+  function nodeAngle(node) {
+    return START_ANGLE + (node.x0 + node.x1) / 2;
+  }
+
+  function appendGuides(svg, depth) {
+    const ring = RINGS[depth];
+    svg.appendChild(svgElement('circle', {
+      cx: CENTER, cy: CENTER, r: 0.5,
+      class: 'projection-anchor projection-center',
+      'data-depth': depth,
+    }));
+    if (depth === 0) {
+      svg.appendChild(svgElement('circle', {
+        cx: CENTER, cy: CENTER, r: 74,
+        class: 'plate plate-core',
+      }));
+    } else {
+      // Each hierarchy level is a ring, not a translucent full disc. Leaving
+      // the centre physically open lets lower-Z levels remain visible through
+      // the stack instead of being washed by every plane above them.
+      svg.appendChild(svgElement('path', {
+        d: annularPlatePath(ring.inner - 14, ring.outer + 14),
+        class: 'plate plate-annulus',
+        'fill-rule': 'evenodd',
+      }));
+    }
+    svg.appendChild(svgElement('circle', {
+      cx: CENTER, cy: CENTER, r: ring.outer + 8, class: 'guide emphasis',
+    }));
+    if (depth > 0) {
+      svg.appendChild(svgElement('circle', {
+        cx: CENTER, cy: CENTER, r: ring.inner - 8, class: 'guide',
+      }));
+    }
+    if (depth === 2) {
+      for (let index = 0; index < 72; index += 1) {
+        const angle = START_ANGLE + (index / 72) * TAU;
+        const major = index % 6 === 0;
+        const [x0, y0] = polar(323, angle);
+        const [x1, y1] = polar(major ? 338 : 332, angle);
+        svg.appendChild(svgElement('line', {
+          x1: x0, y1: y0, x2: x1, y2: y1,
+          class: `tick${major ? ' major' : ''}`,
+        }));
+      }
+    }
+  }
+
+  function lerp(a, b, amount) {
+    return a + (b - a) * amount;
+  }
+
+  function signedAngle(angle) {
+    let value = angle;
+    while (value <= -Math.PI) value += TAU;
+    while (value > Math.PI) value -= TAU;
+    return value;
+  }
+
+  function graphemes(text) {
+    return graphemeSegmenter
+      ? Array.from(graphemeSegmenter.segment(text), ({ segment }) => segment)
+      : Array.from(text);
+  }
+
+  function fixtureCopy(node) {
+    return TEXT_FIXTURES[state.textFixture]?.nodes[node.id] || {};
+  }
+
+  function displayName(node) {
+    return fixtureCopy(node).name || node.name;
+  }
+
+  function displayShort(node) {
+    return fixtureCopy(node).short || node.short || node.name;
+  }
+
+  function displayNote(node) {
+    return fixtureCopy(node).note || node.note;
+  }
+
+  function displayScript(node) {
+    return fixtureCopy(node).script || 'latin';
+  }
+
+  function displayGlyph(node) {
+    return fixtureCopy(node).glyph || null;
+  }
+
+  function isWholeRunScript(node) {
+    return ['rtl', 'complex'].includes(displayScript(node));
+  }
+
+  function carrierCurve(carrier) {
+    if (carrier === 'upright' || carrier === 'spoke' || carrier === 'outer') return 0;
+    if (carrier === 'arc') return 1;
+    return Math.min(0.58, state.textCurve);
+  }
+
+  function adaptiveCarrierForRing(depth) {
+    const ringNodes = nodes.filter((node) => node.depth === depth);
+    const complex = ringNodes.some((node) => isWholeRunScript(node));
+    const multiword = ringNodes.filter((node) => /\s/u.test(displayShort(node).trim())).length;
+    // The stacked camera foreshortens the far side of the ring. Whole-run
+    // screen-upright labels are the recognition-first choice there; the
+    // flattened sunburst can safely recover the shallow circular bow.
+    if (state.mode === 'stack') return 'upright';
+    if (complex || multiword >= Math.ceil(ringNodes.length / 3)) return 'upright';
+    return 'bow';
+  }
+
+  function effectiveCarrier(node) {
+    if (state.textCarrier !== 'adaptive') {
+      return isWholeRunScript(node) && ['bow', 'arc'].includes(state.textCarrier)
+        ? 'upright'
+        : state.textCarrier;
+    }
+    return adaptiveCarrierForRing(node.depth);
+  }
+
+  function labelCapacity(node, radius, carrier) {
+    const guardedSpan = Math.max(0, node.x1 - node.x0 - 0.09);
+    const arc = radius * guardedSpan;
+    const chord = 2 * radius * Math.sin(guardedSpan / 2);
+    if (carrier === 'outer') return Math.max(chord, 170);
+    if (carrier === 'spoke') {
+      const ring = RINGS[node.depth];
+      return Math.max(0, (ring.outer - ring.inner) * 0.72);
+    }
+    return Math.max(0, lerp(chord, arc, carrierCurve(carrier)) * 0.84);
+  }
+
+  function labelSpecs(node, fontSize) {
+    const text = displayShort(node);
+    if (isWholeRunScript(node)) {
+      return [{ text, font: `800 ${fontSize}px Arial`, break: 'never' }];
+    }
+    return text.split(/\s+/u).filter(Boolean).map((word, index) => ({
+      text: `${index ? ' ' : ''}${word}`,
+      font: `800 ${fontSize}px Arial`,
+      break: 'never',
+    }));
+  }
+
+  function prepareLabelLines(node, fontSize, capacity, carrier) {
+    const specs = labelSpecs(node, fontSize);
+    const prepared = prepareRichInline(specs);
+    const maxLines = ['upright', 'outer'].includes(carrier) && !isWholeRunScript(node) ? 2 : 1;
+    let cursor = { itemIndex: 0, segmentIndex: 0, graphemeIndex: 0 };
+    const lines = [];
+    for (let index = 0; index < maxLines; index += 1) {
+      const range = layoutNextRichInlineLineRange(prepared, capacity, cursor);
+      if (!range) return null;
+      const line = materializeRichInlineLineRange(prepared, range);
+      if (line.width > capacity + 0.01) return null;
+      lines.push(line);
+      cursor = range.end;
+      if (cursor.itemIndex >= specs.length) return lines;
+    }
+    return null;
+  }
+
+  function labelRail(node, physical, carrier, scale) {
+    const ring = RINGS[node.depth];
+    const fontSize = physical / scale;
+    const glyph = displayGlyph(node);
+    const glyphSize = 22 / scale;
+    const outerPad = 7 / scale;
+    // Keep the icon and recognition text on visibly separate rails after the
+    // tilted plane is projected back into screen space.
+    const gap = 18 / scale;
+    const glyphRadius = ring.outer - outerPad - glyphSize / 2;
+    const labelRadius = carrier === 'outer'
+      ? ring.outer + 18 / scale
+      : glyph
+        ? glyphRadius - glyphSize / 2 - gap - fontSize / 2
+        : (ring.inner + ring.outer) / 2;
+    return { fontSize, glyphSize, glyphRadius, labelRadius };
+  }
+
+  function composeNodeAtTier(node, physical, scale, carrierOverride = null) {
+    const carrier = carrierOverride || effectiveCarrier(node);
+    const rail = labelRail(node, physical, carrier, scale);
+    const capacity = labelCapacity(node, rail.labelRadius, carrier);
+    const lines = prepareLabelLines(node, rail.fontSize, capacity, carrier);
+    if (!lines) return null;
+    return { node, physical, carrier, capacity, lines, ...rail };
+  }
+
+  function ringComposition(depth) {
+    const svg = els.planes[depth];
+    const scale = Math.max(0.01, svg.getBoundingClientRect().width / 720);
+    const ringNodes = nodes.filter((node) => node.depth === depth);
+    const physicalTiers = depth === 1 ? [24, 22, 20, 18, 16] : [20, 18, 16];
+    if (state.textTierMode === 'local') {
+      const compositions = ringNodes.map((node) => {
+        for (const physical of physicalTiers) {
+          const composition = composeNodeAtTier(node, physical, scale);
+          if (composition) return composition;
+        }
+        return composeNodeAtTier(node, 16, scale, 'outer');
+      });
+      return {
+        compositions,
+        minPhysical: Math.min(...compositions.filter(Boolean).map(({ physical }) => physical)),
+        maxPhysical: Math.max(...compositions.filter(Boolean).map(({ physical }) => physical)),
+      };
+    }
+    for (const physical of physicalTiers) {
+      const compositions = ringNodes.map((node) => composeNodeAtTier(node, physical, scale));
+      if (compositions.every(Boolean)) {
+        return { compositions, minPhysical: physical, maxPhysical: physical };
+      }
+    }
+    const compositions = ringNodes.map((node) => composeNodeAtTier(node, 16, scale, 'outer'));
+    return { compositions, minPhysical: 16, maxPhysical: 16 };
+  }
+
+  function textTraversal(midAngle) {
+    if (state.textDirection === 'clockwise') return 1;
+    if (state.textDirection === 'counter') return -1;
+    const forwardTangent = signedAngle(midAngle + Math.PI / 2);
+    return Math.abs(forwardTangent) <= Math.PI / 2 ? 1 : -1;
+  }
+
+  function lineUnits(line, fontSize) {
+    const units = [];
+    line.fragments.forEach((fragment) => {
+      graphemes(fragment.text).forEach((character, index) => {
+        units.push({
+          character,
+          gapBefore: index === 0 ? fragment.gapBefore : 0,
+        });
+      });
+    });
+    while (units.length && /^\s$/u.test(units[0].character)) units.shift();
+    while (units.length && /^\s$/u.test(units.at(-1).character)) units.pop();
+
+    let cursor = 0;
+    let runStart = 0;
+    let runText = '';
+    arcMeasure.font = `800 ${fontSize}px Arial`;
+    for (const unit of units) {
+      if (unit.gapBefore) {
+        cursor += unit.gapBefore;
+        runStart = cursor;
+        runText = '';
+      }
+      const before = arcMeasure.measureText(runText).width;
+      runText += unit.character;
+      const after = arcMeasure.measureText(runText).width;
+      unit.center = runStart + (before + after) / 2;
+      cursor = runStart + after;
+    }
+    return { units, width: cursor };
+  }
+
+  let projectionItems = [];
+  let occlusionAnchors = new Map();
+  let projectionFrame = 0;
+  let projectionUntil = 0;
+
+  function appendProjectionAnchor(group, node, x, y, kind) {
+    const anchor = svgElement('circle', {
+      cx: x, cy: y, r: 0.65,
+      class: 'projection-anchor',
+      'data-node-id': node.id,
+      'data-anchor-kind': kind,
+    });
+    group.appendChild(anchor);
+    return anchor;
+  }
+
+  function appendOcclusionAnchor(node) {
+    if (node.depth >= RINGS.length - 1 || occlusionAnchors.has(node.id)) return;
+    const blockerRing = RINGS[node.depth + 1];
+    const [x, y] = polar(blockerRing.inner - 14, nodeAngle(node));
+    const anchor = svgElement('circle', {
+      cx: x, cy: y, r: 0.65,
+      class: 'projection-anchor pretext-occlusion-anchor',
+      'data-node-id': node.id,
+      'data-blocking-depth': node.depth + 1,
+    });
+    els.planes[node.depth + 1].appendChild(anchor);
+    occlusionAnchors.set(node.id, anchor);
+  }
+
+  function lineText(line) {
+    return line.fragments.map((fragment, index) => {
+      const needsSpace = index > 0 && fragment.gapBefore > 0 && !/^\s/u.test(fragment.text);
+      return `${needsSpace ? ' ' : ''}${fragment.text}`;
+    }).join('').trim();
+  }
+
+  function spreadForLine(composition, line) {
+    if (state.textFill === 'natural') return 1;
+    const targetRatio = state.textFill === 'space' ? 0.76 : 0.48;
+    const maximumSpread = state.textFill === 'space' ? 1.65 : 1.25;
+    const targetWidth = Math.max(line.width, composition.capacity * targetRatio);
+    return Math.max(1, Math.min(maximumSpread, targetWidth / Math.max(line.width, 1)));
+  }
+
+  function appendWholeLine(group, composition, line, lineIndex) {
+    const { node, carrier, physical, labelRadius } = composition;
+    const mid = nodeAngle(node);
+    const [x, y] = polar(labelRadius, mid);
+    const anchor = appendProjectionAnchor(group, node, x, y, 'line');
+    const element = document.createElement('span');
+    const text = lineText(line);
+    const characterCount = Math.max(1, graphemes(text).length - 1);
+    const spread = isWholeRunScript(node) ? 1 : spreadForLine(composition, line);
+    const tracking = Math.max(0, (line.width * spread - line.width) / characterCount);
+    element.className = 'radial-text radial-text-run';
+    element.setAttribute('aria-hidden', 'true');
+    element.textContent = text;
+    element.dataset.nodeId = node.id;
+    element.dataset.carrier = carrier;
+    element.dataset.script = displayScript(node);
+    element.dataset.fontPhysical = physical;
+    element.style.fontSize = `${physical}px`;
+    element.style.letterSpacing = `${tracking * (physical / composition.fontSize)}px`;
+    element.style.setProperty('--node-accent', palette[node.branch]);
+    els.textOverlay.appendChild(element);
+    projectionItems.push({
+      anchor, element, node, carrier,
+      lineOffset: (lineIndex - (composition.lines.length - 1) / 2) * physical * 1.08,
+      kind: 'run',
+    });
+  }
+
+  function appendCurvedLine(group, composition, line) {
+    const { node, carrier, physical, fontSize, labelRadius } = composition;
+    const mid = nodeAngle(node);
+    const direction = textTraversal(mid);
+    const curve = carrierCurve(carrier);
+    const { units, width } = lineUnits(line, fontSize);
+    const spread = spreadForLine(composition, line);
+    const [horizontalCenterX, horizontalCenterY] = polar(labelRadius, mid);
+    const centerTangent = {
+      x: (1 - curve) + curve * direction * -Math.sin(mid),
+      y: curve * direction * Math.cos(mid),
+    };
+    const centerSpeed = Math.max(0.35, Math.hypot(centerTangent.x, centerTangent.y));
+
+    for (const unit of units) {
+      if (/^\s$/u.test(unit.character)) continue;
+      const offset = (unit.center - width / 2) * spread;
+      let x;
+      let y;
+      if (carrier === 'spoke') {
+        [x, y] = polar(labelRadius + offset, mid);
+      } else {
+        const pathOffset = offset / centerSpeed;
+        const horizontalX = horizontalCenterX + pathOffset;
+        const horizontalY = horizontalCenterY;
+        const arcAngle = mid + direction * pathOffset / labelRadius;
+        const [arcX, arcY] = polar(labelRadius, arcAngle);
+        x = lerp(horizontalX, arcX, curve);
+        y = lerp(horizontalY, arcY, curve);
+      }
+      const anchor = appendProjectionAnchor(group, node, x, y, 'letter');
+      const element = document.createElement('span');
+      element.className = 'radial-text radial-text-letter';
+      element.setAttribute('aria-hidden', 'true');
+      element.textContent = unit.character;
+      element.dataset.nodeId = node.id;
+      element.dataset.carrier = carrier;
+      element.dataset.script = displayScript(node);
+      element.dataset.fontPhysical = physical;
+      element.style.fontSize = `${physical}px`;
+      element.style.setProperty('--node-accent', palette[node.branch]);
+      els.textOverlay.appendChild(element);
+      projectionItems.push({ anchor, element, node, carrier, lineOffset: 0, kind: 'letter' });
+    }
+  }
+
+  function appendCommandGlyph(group, composition) {
+    const name = displayGlyph(composition.node);
+    const markup = COMMAND_GLYPHS[name];
+    if (!markup) return;
+    const [x, y] = polar(composition.glyphRadius, nodeAngle(composition.node));
+    const anchor = appendProjectionAnchor(group, composition.node, x, y, 'glyph');
+    const element = document.createElement('span');
+    element.className = 'radial-glyph';
+    element.setAttribute('aria-hidden', 'true');
+    element.dataset.nodeId = composition.node.id;
+    element.dataset.glyph = name;
+    element.style.setProperty('--node-accent', palette[composition.node.branch]);
+    element.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${markup}</svg>`;
+    els.textOverlay.appendChild(element);
+    projectionItems.push({
+      anchor, element, node: composition.node,
+      carrier: composition.carrier, lineOffset: 0, kind: 'glyph',
+    });
+    state.glyphCount += 1;
+  }
+
+  function normalizeUprightDegrees(value) {
+    let degrees = value;
+    while (degrees > 90) degrees -= 180;
+    while (degrees < -90) degrees += 180;
+    return degrees;
+  }
+
+  function projectionPoint(anchor, sceneRect) {
+    const rect = anchor.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2 - sceneRect.left,
+      y: rect.top + rect.height / 2 - sceneRect.top,
+    };
+  }
+
+  function rectsOverlap(a, b) {
+    const width = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+    const height = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+    return width > 3 && height > 3;
+  }
+
+  function auditTextProjection(sceneRect) {
+    const labels = [...els.textOverlay.querySelectorAll('.radial-text')];
+    const nodeRects = new Map();
+    state.textOverflow = [];
+    state.textMinPhysical = labels.length
+      ? Math.min(...labels.map((label) => Number(label.dataset.fontPhysical)))
+      : null;
+    for (const label of labels) {
+      const rect = label.getBoundingClientRect();
+      if (rect.left < sceneRect.left - 2 || rect.right > sceneRect.right + 2
+          || rect.top < sceneRect.top - 2 || rect.bottom > sceneRect.bottom + 2) {
+        state.textOverflow.push(label.dataset.nodeId);
+      }
+      const id = label.dataset.nodeId;
+      const prior = nodeRects.get(id);
+      nodeRects.set(id, prior ? {
+        left: Math.min(prior.left, rect.left), top: Math.min(prior.top, rect.top),
+        right: Math.max(prior.right, rect.right), bottom: Math.max(prior.bottom, rect.bottom),
+      } : rect);
+    }
+    const entries = [...nodeRects.entries()];
+    state.textOverlapCount = 0;
+    for (let a = 0; a < entries.length; a += 1) {
+      for (let b = a + 1; b < entries.length; b += 1) {
+        const firstNode = byId.get(entries[a][0]);
+        const secondNode = byId.get(entries[b][0]);
+        if (firstNode.depth === secondNode.depth && rectsOverlap(entries[a][1], entries[b][1])) {
+          state.textOverlapCount += 1;
+        }
+      }
+    }
+  }
+
+  function projectTextOverlay() {
+    if (state.compact) return;
+    const sceneRect = els.scene.getBoundingClientRect();
+    const centers = new Map(els.planes.map((svg, depth) => [
+      depth,
+      projectionPoint(svg.querySelector('.projection-center'), sceneRect),
+    ]));
+    state.maxLetterRotation = 0;
+    const projectedByNode = new Map();
+    for (const item of projectionItems) {
+      const point = projectionPoint(item.anchor, sceneRect);
+      const center = centers.get(item.node.depth);
+      const radialDegrees = Math.atan2(point.y - center.y, point.x - center.x) * 180 / Math.PI;
+      const tangentDegrees = normalizeUprightDegrees(radialDegrees + 90);
+      let rotation = 0;
+      if (item.carrier === 'spoke' && item.kind !== 'glyph') {
+        rotation = normalizeUprightDegrees(radialDegrees);
+      } else if (['bow', 'arc'].includes(item.carrier) && item.kind === 'letter') {
+        rotation = tangentDegrees * state.textTurn;
+      }
+      state.maxLetterRotation = Math.max(state.maxLetterRotation, Math.abs(rotation));
+      item.element.dataset.rotation = rotation.toFixed(3);
+      item.screenX = point.x;
+      item.screenY = point.y + item.lineOffset;
+      item.element.style.left = `${item.screenX}px`;
+      item.element.style.top = `${item.screenY}px`;
+      item.element.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+      const group = projectedByNode.get(item.node.id) || [];
+      group.push(item);
+      projectedByNode.set(item.node.id, group);
+    }
+
+    // Perspective can collapse two distinct radial rails into almost the same
+    // screen coordinate. Reinstate a physical-pixel gap without changing the
+    // partition geometry or the text's carrier shape.
+    for (const items of projectedByNode.values()) {
+      const glyph = items.find((item) => item.kind === 'glyph');
+      const textItems = items.filter((item) => item.kind !== 'glyph');
+      if (!glyph || !textItems.length) continue;
+      const center = centers.get(glyph.node.depth);
+      const radialX = glyph.screenX - center.x;
+      const radialY = glyph.screenY - center.y;
+      const radialLength = Math.max(1, Math.hypot(radialX, radialY));
+      const unitX = radialX / radialLength;
+      const unitY = radialY / radialLength;
+      const textX = textItems.reduce((sum, item) => sum + item.screenX, 0) / textItems.length;
+      const textY = textItems.reduce((sum, item) => sum + item.screenY, 0) / textItems.length;
+      const outward = glyph.carrier === 'outer' ? 1 : -1;
+      const signedDistance = ((textX - glyph.screenX) * unitX + (textY - glyph.screenY) * unitY) * outward;
+      const physical = Number(textItems[0].element.dataset.fontPhysical || 16);
+      const minimumDistance = 11 + physical / 2 + 7;
+      const correction = Math.max(0, minimumDistance - signedDistance) * outward;
+      for (const item of textItems) {
+        item.screenX += unitX * correction;
+        item.screenY += unitY * correction;
+        item.element.style.left = `${item.screenX}px`;
+        item.element.style.top = `${item.screenY}px`;
+      }
+    }
+
+    // A screen-upright label still belongs to one Z shelf. Keep its painted
+    // bounds inside the inner edge of the next, nearer annulus so the overlay
+    // cannot visually jump in front of a higher hierarchy plane.
+    state.textDepthViolations = [];
+    for (const [nodeId, items] of projectedByNode.entries()) {
+      const blockerAnchor = occlusionAnchors.get(nodeId);
+      if (!blockerAnchor || items.some((item) => item.carrier === 'outer')) continue;
+      const blocker = projectionPoint(blockerAnchor, sceneRect);
+      const center = centers.get(items[0].node.depth);
+      const outwardX = blocker.x - center.x;
+      const outwardY = blocker.y - center.y;
+      const outwardLength = Math.max(1, Math.hypot(outwardX, outwardY));
+      const unitX = outwardX / outwardLength;
+      const unitY = outwardY / outwardLength;
+      const blockerExtent = blocker.x * unitX + blocker.y * unitY;
+      const paintedExtent = () => Math.max(...items.flatMap((item) => {
+        const rect = item.element.getBoundingClientRect();
+        const left = rect.left - sceneRect.left;
+        const right = rect.right - sceneRect.left;
+        const top = rect.top - sceneRect.top;
+        const bottom = rect.bottom - sceneRect.top;
+        return [
+          left * unitX + top * unitY,
+          right * unitX + top * unitY,
+          right * unitX + bottom * unitY,
+          left * unitX + bottom * unitY,
+        ];
+      }));
+      const clearance = 5;
+      const correction = Math.max(0, paintedExtent() - blockerExtent + clearance);
+      for (const item of items) {
+        item.screenX -= unitX * correction;
+        item.screenY -= unitY * correction;
+        item.element.style.left = `${item.screenX}px`;
+        item.element.style.top = `${item.screenY}px`;
+      }
+      if (paintedExtent() > blockerExtent - clearance + 0.5) {
+        state.textDepthViolations.push(nodeId);
+      }
+    }
+    auditTextProjection(sceneRect);
+  }
+
+  function scheduleProjection(duration = 0) {
+    projectionUntil = Math.max(projectionUntil, performance.now() + duration);
+    if (projectionFrame) return;
+    const frame = (now) => {
+      projectTextOverlay();
+      if (now < projectionUntil) projectionFrame = requestAnimationFrame(frame);
+      else projectionFrame = 0;
+    };
+    projectionFrame = requestAnimationFrame(frame);
+  }
+
+  function renderTextLayout() {
+    els.planes.forEach((svg) => svg.querySelectorAll(
+      '.pretext-label-group, .pretext-occlusion-anchor'
+    ).forEach((group) => group.remove()));
+    els.textOverlay.replaceChildren();
+    projectionItems = [];
+    occlusionAnchors = new Map();
+    state.textFailures = [];
+    state.textTiers = {};
+    state.textTierRanges = {};
+    state.textCarriers = {};
+    state.textOverflow = [];
+    state.glyphCount = 0;
+    for (const depth of [1, 2]) {
+      const ring = ringComposition(depth);
+      state.textTiers[depth] = ring.minPhysical;
+      state.textTierRanges[depth] = [ring.minPhysical, ring.maxPhysical];
+      for (const composition of ring.compositions) {
+        if (!composition) {
+          state.textFailures.push(`level ${depth}`);
+          continue;
+        }
+        state.textCarriers[composition.carrier] = (state.textCarriers[composition.carrier] || 0) + 1;
+        appendOcclusionAnchor(composition.node);
+        const group = svgElement('g', {
+          class: 'pretext-label-group',
+          'data-node-id': composition.node.id,
+          'data-carrier': composition.carrier,
+          'data-font-physical': composition.physical,
+          'aria-hidden': 'true',
+        });
+        els.planes[depth].appendChild(group);
+        appendCommandGlyph(group, composition);
+        if (['upright', 'outer'].includes(composition.carrier) || isWholeRunScript(composition.node)) {
+          composition.lines.forEach((line, lineIndex) => appendWholeLine(group, composition, line, lineIndex));
+        } else {
+          composition.lines.forEach((line) => appendCurvedLine(group, composition, line));
+        }
+      }
+    }
+    const tierOne = state.textTierRanges[1]?.join('–') || 'stop';
+    const tierTwo = state.textTierRanges[2]?.join('–') || 'stop';
+    els.typeProof.textContent = state.textFailures.length
+      ? `Pretext stopped: ${[...new Set(state.textFailures)].join(', ')} cannot hold every label at the 16 px physical floor.`
+      : `Pretext ${state.textTierMode} tiers: ${tierOne} px branches · ${tierTwo} px leaves · ${state.glyphCount} upright glyphs · ${TEXT_FIXTURES[state.textFixture].source}.`;
+    scheduleProjection(850);
+  }
+
+  function renderPlanes() {
+    for (let depth = 0; depth <= 2; depth += 1) {
+      const svg = els.planes[depth];
+      appendGuides(svg, depth);
+      const ring = RINGS[depth];
+      for (const node of nodes.filter((candidate) => candidate.depth === depth)) {
+        const path = svgElement('path', {
+          id: `sector-${node.id}`,
+          class: 'segment',
+          d: annularSectorPath(ring.inner, ring.outer, START_ANGLE + node.x0, START_ANGLE + node.x1),
+          'data-node-id': node.id,
+          'data-depth': node.depth,
+          'aria-label': `${node.name}, ${node.value} illustrative weight units`,
+          style: `--accent: ${palette[node.branch]}`,
+        });
+        path.addEventListener('pointerenter', () => previewNode(node.id));
+        path.addEventListener('pointerleave', () => previewNode(null));
+        path.addEventListener('click', () => {
+          if (performance.now() < state.suppressClickUntil) return;
+          selectNode(node.id, { align: true, focus: true });
+        });
+        svg.appendChild(path);
+      }
+    }
+  }
+
+  function lineage(node) {
+    const chain = [];
+    let cursor = node;
+    while (cursor) {
+      chain.unshift(cursor);
+      cursor = cursor.parent;
+    }
+    return chain;
+  }
+
+  function displayNode() {
+    return byId.get(state.previewId || state.selectedId);
+  }
+
+  function renderState() {
+    const selected = byId.get(state.selectedId);
+    const shown = displayNode();
+    const selectedLineage = new Set(lineage(selected).map((node) => node.id));
+    const shownLineage = new Set(lineage(shown).map((node) => node.id));
+
+    els.stagePanel.dataset.mode = state.mode;
+    els.modeState.textContent = state.mode === 'stack' ? 'Depth stack' : 'Top-view sunburst';
+    els.fixtureState.innerHTML = `${TEXT_FIXTURES[state.textFixture].label}<br>100 illustrative weight units`;
+    els.modeToggle.textContent = state.mode === 'stack' ? 'Top view' : 'Explode depth';
+    els.scene.setAttribute('aria-activedescendant', `treeitem-${state.activeId}`);
+    els.scene.setAttribute('aria-label', `${TEXT_FIXTURES[state.textFixture].label}. Use left and right for siblings, up toward children, down toward the parent, and Enter to select.`);
+    els.scene.style.setProperty('--spin', `${state.spin}deg`);
+    els.scene.style.setProperty('--tilt', `${state.tilt}deg`);
+
+    for (const path of document.querySelectorAll('.segment')) {
+      const id = path.dataset.nodeId;
+      path.classList.toggle('is-selected', id === state.selectedId);
+      path.classList.toggle('is-active', id === state.activeId);
+      path.classList.toggle('is-preview', id === state.previewId);
+      path.classList.toggle('is-lineage', selectedLineage.has(id) || shownLineage.has(id));
+    }
+
+    for (const item of els.semanticTree.querySelectorAll('[role="treeitem"]')) {
+      const itemNode = byId.get(item.dataset.nodeId);
+      item.setAttribute('aria-selected', String(item.dataset.nodeId === state.selectedId));
+      item.textContent = `${displayName(itemNode)}, ${itemNode.value} illustrative weight units`;
+    }
+
+    for (const path of document.querySelectorAll('.segment')) {
+      const pathNode = byId.get(path.dataset.nodeId);
+      path.setAttribute('aria-label', `${displayName(pathNode)}, ${pathNode.value} illustrative weight units`);
+    }
+
+    const shownChain = lineage(shown);
+    els.crumbs.innerHTML = shownChain
+      .map((node) => displayName(node))
+      .join('<span aria-hidden="true">›</span>');
+    els.selectionTitle.textContent = displayName(shown);
+    els.selectionNote.textContent = displayNote(shown);
+    els.weightValue.textContent = String(shown.value).padStart(2, '0');
+    els.depthValue.textContent = String(shown.depth).padStart(2, '0');
+
+    for (const button of els.branches.querySelectorAll('button')) {
+      const branch = byId.get(button.dataset.nodeId);
+      button.setAttribute('aria-current', String(lineage(selected).some((node) => node.id === branch.id)));
+      button.querySelector('.name').textContent = displayName(branch);
+    }
+
+    renderCompactChoices(selected);
+    scheduleProjection(850);
+  }
+
+  function previewNode(id) {
+    if (state.compact) return;
+    // A committed sector rotates into the working position. Ignore synthetic
+    // pointer-enter events caused by that movement so the inspector does not
+    // immediately describe whichever neighbor travels under a stationary mouse.
+    if (performance.now() < state.previewBlockedUntil) return;
+    state.previewId = id;
+    renderState();
+  }
+
+  function alignToNode(node) {
+    const degrees = (nodeAngle(node) * 180) / Math.PI;
+    state.spin = -90 - degrees;
+  }
+
+  function selectNode(id, { align = true, focus = false } = {}) {
+    const node = byId.get(id);
+    if (!node) return;
+    state.selectedId = id;
+    state.activeId = id;
+    state.previewId = null;
+    if (align && !state.compact) {
+      state.previewBlockedUntil = performance.now() + 850;
+      alignToNode(node);
+    }
+    renderState();
+    if (focus && !state.compact) els.scene.focus({ preventScroll: true });
+  }
+
+  function renderBranches() {
+    for (const branch of hierarchy.children) {
+      const button = document.createElement('button');
+      button.className = 'branch-button';
+      button.type = 'button';
+      button.dataset.nodeId = branch.id;
+      button.style.setProperty('--branch-accent', palette[branch.branch]);
+      button.innerHTML = [
+        '<span class="mark" aria-hidden="true"></span>',
+        `<span class="name">${displayName(branch)}</span>`,
+        `<span class="value">${branch.value} u</span>`,
+      ].join('');
+      button.addEventListener('click', () => selectNode(branch.id, { align: true }));
+      els.branches.appendChild(button);
+    }
+  }
+
+  function renderSemanticTree() {
+    for (const node of nodes) {
+      const siblings = node.parent ? node.parent.children : [hierarchy];
+      const item = document.createElement('div');
+      item.id = `treeitem-${node.id}`;
+      item.dataset.nodeId = node.id;
+      item.setAttribute('role', 'treeitem');
+      item.setAttribute('aria-level', String(node.depth + 1));
+      item.setAttribute('aria-posinset', String(siblings.indexOf(node) + 1));
+      item.setAttribute('aria-setsize', String(siblings.length));
+      item.setAttribute('aria-selected', String(node.id === state.selectedId));
+      if (node.children) item.setAttribute('aria-expanded', 'true');
+      item.textContent = `${displayName(node)}, ${node.value} illustrative weight units`;
+      els.semanticTree.appendChild(item);
+    }
+  }
+
+  function selectedBranch(node) {
+    if (node.depth === 0) return hierarchy.children[0];
+    if (node.depth === 1) return node;
+    return node.parent;
+  }
+
+  function renderCompactChoices(selected) {
+    const branch = selectedBranch(selected);
+    els.compactHeading.textContent = displayName(branch);
+    els.compactGrid.replaceChildren();
+    for (const leaf of branch.children) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = displayName(leaf);
+      button.setAttribute('aria-current', String(leaf.id === selected.id));
+      button.addEventListener('click', () => selectNode(leaf.id, { align: false }));
+      els.compactGrid.appendChild(button);
+    }
+  }
+
+  function siblingStep(node, delta) {
+    const siblings = node.parent ? node.parent.children : [hierarchy];
+    const index = siblings.indexOf(node);
+    return siblings[(index + delta + siblings.length) % siblings.length];
+  }
+
+  function onKeyDown(event) {
+    const active = byId.get(state.activeId);
+    let next = null;
+    if (event.key === 'ArrowLeft') next = siblingStep(active, -1);
+    if (event.key === 'ArrowRight') next = siblingStep(active, 1);
+    // Match Psychodeli's physical ring grammar: Up travels outward into the
+    // authored child branch; Down returns inward to its owning parent.
+    if (event.key === 'ArrowUp') next = active.children ? active.children[0] : active;
+    if (event.key === 'ArrowDown') next = active.parent || active;
+    if (event.key === 'Home') next = active.parent ? active.parent.children[0] : hierarchy;
+    if (event.key === 'End') next = active.parent ? active.parent.children.at(-1) : hierarchy;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      selectNode(hierarchy.id, { align: false });
+      return;
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      selectNode(state.activeId, { align: true });
+      return;
+    }
+    if (!next || next.id === active.id) return;
+    event.preventDefault();
+    state.activeId = next.id;
+    state.previewId = next.id;
+    renderState();
+  }
+
+  function setMode(mode) {
+    state.mode = mode;
+    if (mode === 'sunburst') state.tilt = 0;
+    else state.tilt = DEFAULT_VIEW.tilt;
+    renderState();
+    if (state.textCarrier === 'adaptive') scheduleTextLayout();
+  }
+
+  function resetView() {
+    state.spin = DEFAULT_VIEW.spin;
+    state.tilt = state.mode === 'stack' ? DEFAULT_VIEW.tilt : 0;
+    state.selectedId = hierarchy.id;
+    state.activeId = hierarchy.id;
+    state.previewId = null;
+    renderState();
+  }
+
+  function beginDrag(event) {
+    if (state.compact || event.button !== 0) return;
+    state.drag = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      spin: state.spin,
+      tilt: state.tilt,
+      moved: false,
+    };
+  }
+
+  function moveDrag(event) {
+    if (!state.drag || state.drag.pointerId !== event.pointerId) return;
+    const dx = event.clientX - state.drag.x;
+    const dy = event.clientY - state.drag.y;
+    if (Math.hypot(dx, dy) > 5 && !state.drag.moved) {
+      state.drag.moved = true;
+      // Capture only once the gesture is actually a drag. Capturing on every
+      // pointerdown retargets a stationary sector click to the scene in Chrome.
+      els.scene.setPointerCapture(event.pointerId);
+    }
+    if (!state.drag.moved) return;
+    els.scene.dataset.dragging = 'true';
+    state.spin = state.drag.spin + dx * 0.24;
+    if (state.mode === 'stack') {
+      state.tilt = Math.max(36, Math.min(72, state.drag.tilt - dy * 0.16));
+    }
+    renderState();
+  }
+
+  function endDrag(event) {
+    if (!state.drag || state.drag.pointerId !== event.pointerId) return;
+    if (state.drag.moved) state.suppressClickUntil = performance.now() + 260;
+    state.drag = null;
+    els.scene.dataset.dragging = 'false';
+    if (els.scene.hasPointerCapture(event.pointerId)) els.scene.releasePointerCapture(event.pointerId);
+  }
+
+  function updateCompactState() {
+    const compact = window.matchMedia('(max-width: 719px)').matches;
+    if (compact === state.compact) return;
+    state.compact = compact;
+    els.scene.tabIndex = compact ? -1 : 0;
+    els.modeToggle.disabled = compact;
+    els.modeToggle.title = compact ? 'The phone layout uses the top-view plus linear controls.' : '';
+    if (compact) setMode('sunburst');
+    else renderState();
+  }
+
+  let textLayoutFrame = 0;
+  function scheduleTextLayout() {
+    cancelAnimationFrame(textLayoutFrame);
+    textLayoutFrame = requestAnimationFrame(() => {
+      textLayoutFrame = requestAnimationFrame(renderTextLayout);
+    });
+  }
+
+  function updateTextSettings() {
+    state.textFixture = els.textFixture.value;
+    state.textCarrier = els.textCarrier.value;
+    state.textTierMode = els.textTierMode.value;
+    state.textFill = els.textFill.value;
+    state.textDirection = els.textDirection.value;
+    state.textCurve = Number(els.textCurve.value) / 100;
+    state.textTurn = Number(els.textTurn.value) / 100;
+    els.textCurveValue.textContent = `${Math.round(state.textCurve * 100)}%`;
+    els.textTurnValue.textContent = `${Math.round(state.textTurn * 100)}%`;
+    renderState();
+    scheduleTextLayout();
+  }
+
+  function onResize() {
+    updateCompactState();
+    scheduleTextLayout();
+  }
+
+  els.modeToggle.addEventListener('click', () => {
+    setMode(state.mode === 'stack' ? 'sunburst' : 'stack');
+  });
+  els.resetView.addEventListener('click', resetView);
+  els.scene.addEventListener('keydown', onKeyDown);
+  els.scene.addEventListener('pointerdown', beginDrag);
+  els.scene.addEventListener('pointermove', moveDrag);
+  els.scene.addEventListener('pointerup', endDrag);
+  els.scene.addEventListener('pointercancel', endDrag);
+  els.textFixture.addEventListener('change', updateTextSettings);
+  els.textCarrier.addEventListener('change', updateTextSettings);
+  els.textTierMode.addEventListener('change', updateTextSettings);
+  els.textFill.addEventListener('change', updateTextSettings);
+  els.textDirection.addEventListener('change', updateTextSettings);
+  els.textCurve.addEventListener('input', updateTextSettings);
+  els.textTurn.addEventListener('input', updateTextSettings);
+  window.addEventListener('resize', onResize, { passive: true });
+
+  renderPlanes();
+  renderSemanticTree();
+  renderBranches();
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    state.mode = 'sunburst';
+    state.tilt = 0;
+  }
+  updateCompactState();
+  renderState();
+  if (document.fonts?.load) {
+    await Promise.all([
+      document.fonts.load('800 24px Arial'),
+      document.fonts.load('800 16px Arial'),
+    ]);
+  }
+  scheduleTextLayout();
+
+  // A small stable inspection surface lets the gallery verifier test geometry,
+  // state, and interaction without reaching into private closure variables.
+  window.__orbitalSunburstAudit = () => {
+    const paths = [...document.querySelectorAll('.segment')];
+    const pathData = paths.map((path) => path.getAttribute('d'));
+    const controlBoxes = [...document.querySelectorAll('button, select, input')]
+      .filter((control) => control.offsetParent !== null)
+      .map((control) => {
+        const box = control.getBoundingClientRect();
+        return {
+          label: control.textContent?.trim() || control.id,
+          width: box.width,
+          height: box.height,
+        };
+      });
+    return {
+      mode: state.mode,
+      selectedId: state.selectedId,
+      activeId: state.activeId,
+      nodeCount: nodes.length,
+      pathCount: paths.length,
+      uniquePathCount: new Set(pathData).size,
+      rootDiscClosed: !document.querySelector('#sector-visual-systems')
+        ?.getAttribute('d')?.includes(`L ${CENTER} ${CENTER}`),
+      annularPlateCount: document.querySelectorAll('.plate-annulus').length,
+      corePlateCount: document.querySelectorAll('.plate-core').length,
+      branchCount: hierarchy.children.length,
+      leafCount: nodes.filter((node) => !node.children).length,
+      compact: state.compact,
+      controlsAtLeast44: controlBoxes.every((box) => box.width >= 44 && box.height >= 44),
+      controlBoxes,
+      textFixture: state.textFixture,
+      textCarrier: state.textCarrier,
+      textTierMode: state.textTierMode,
+      textFill: state.textFill,
+      textDirection: state.textDirection,
+      textCurve: state.textCurve,
+      textTurn: state.textTurn,
+      textTiers: state.textTiers,
+      textTierRanges: state.textTierRanges,
+      textCarriers: state.textCarriers,
+      textFailures: state.textFailures,
+      textOverflow: [...new Set(state.textOverflow)],
+      textDepthViolations: [...new Set(state.textDepthViolations)],
+      textOverlapCount: state.textOverlapCount || 0,
+      textMinPhysical: state.textMinPhysical,
+      maxLetterRotation: state.maxLetterRotation,
+      textGlyphCount: document.querySelectorAll('.radial-text').length,
+      textCharacterCount: nodes
+        .filter((node) => node.depth > 0)
+        .reduce((sum, node) => sum + graphemes(displayShort(node)).length, 0),
+      commandGlyphCount: state.glyphCount,
+      rtlRunCount: document.querySelectorAll('.radial-text[data-script="rtl"]').length,
+    };
+  };
+</script>
+</body>
+</html>

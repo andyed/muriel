@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="en" data-mg-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Muriel annular FUI console — sensor instrument case</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='24' fill='none' stroke='%238fe9ff' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23ffb1c9'/%3E%3C/svg%3E">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #05080e;
+    --panel: #0b121c;
+    --panel-strong: #101b28;
+    --ink: #f6f3e7;
+    --muted: #a9d5dd;
+    --cyan: #8fe9ff;
+    --mint: #a7f3d0;
+    --amber: #ffd28a;
+    --pink: #ffb1c9;
+    --line: #3a6573;
+    --line-strong: #5d9bad;
+    --danger: #ffb3a7;
+    --focus: #ffe29e;
+    --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { min-height: 100%; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at 38% 42%, #08243a 0, var(--bg) 38rem),
+      var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  button { font: inherit; }
+
+  .page {
+    width: min(1500px, 100%);
+    margin: 0 auto;
+    padding: 28px clamp(18px, 3vw, 46px) 34px;
+  }
+
+  header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 28px;
+    align-items: end;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .eyebrow,
+  .mode-stamp,
+  .section-label,
+  .axis-note,
+  .stage-status {
+    margin: 0;
+    color: var(--cyan);
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 8px 0 0;
+    max-width: 15ch;
+    font-family: var(--mono);
+    font-size: clamp(32px, 4.5vw, 68px);
+    line-height: 0.94;
+    letter-spacing: -0.055em;
+    text-transform: uppercase;
+  }
+
+  .deck {
+    max-width: 48rem;
+    margin: 16px 0 0;
+    color: var(--ink);
+    font-size: 18px;
+    font-weight: 550;
+  }
+
+  .mode-stamp {
+    min-width: 248px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--pink);
+    background: var(--panel);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  .mode-stamp strong { color: var(--pink); }
+
+  .console {
+    display: grid;
+    grid-template-columns: minmax(610px, 1fr) minmax(350px, 420px);
+    gap: clamp(20px, 3vw, 42px);
+    align-items: start;
+    padding-top: 26px;
+  }
+
+  .instrument-shell {
+    position: relative;
+    min-width: 0;
+    border: 1px solid var(--line);
+    background:
+      linear-gradient(90deg, transparent 49.88%, #315766 49.88%, #315766 50.12%, transparent 50.12%),
+      linear-gradient(transparent 49.88%, #315766 49.88%, #315766 50.12%, transparent 50.12%),
+      #030916;
+    box-shadow: inset 0 0 0 1px #142735;
+    overflow: hidden;
+  }
+
+  .instrument-shell::before,
+  .instrument-shell::after {
+    content: "";
+    position: absolute;
+    z-index: 4;
+    width: 32px;
+    height: 32px;
+    pointer-events: none;
+    border-color: var(--cyan);
+  }
+
+  .instrument-shell::before {
+    inset: -1px auto auto -1px;
+    border-top: 2px solid;
+    border-left: 2px solid;
+  }
+
+  .instrument-shell::after {
+    inset: auto -1px -1px auto;
+    border-right: 2px solid;
+    border-bottom: 2px solid;
+  }
+
+  .stage-topline {
+    position: absolute;
+    z-index: 5;
+    inset: 18px 18px auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    pointer-events: none;
+  }
+
+  .axis-note { color: var(--muted); }
+  .stage-status { color: var(--mint); }
+
+  #instrument {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    outline: none;
+    touch-action: manipulation;
+  }
+
+  #instrument:focus-visible {
+    box-shadow: inset 0 0 0 3px var(--focus);
+  }
+
+  .field-fill { fill: #020713; }
+  .grid-line { fill: none; stroke: var(--line); vector-effect: non-scaling-stroke; }
+  .grid-line.strong { stroke: var(--line-strong); }
+  .axis-spoke { stroke: #315766; vector-effect: non-scaling-stroke; }
+  .density-tick { stroke: #3a7f94; stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .density-tick.medium { stroke: #5cc9e5; stroke-width: 1.5; }
+  .density-tick.strong { stroke: var(--cyan); stroke-width: 2.5; filter: drop-shadow(0 0 4px #00d9ff); }
+  .return-tick { stroke: #4d9db2; stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .return-tick.strong { stroke: var(--cyan); stroke-width: 2; }
+  .energy-arc { fill: none; stroke: var(--cyan); stroke-width: 13; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 6px #00d9ff); }
+  .energy-arc.watch { stroke: var(--amber); filter: drop-shadow(0 0 5px #c88f3c); }
+  .energy-arc.priority { stroke: var(--pink); filter: drop-shadow(0 0 5px #d85d86); }
+  .gate-spoke { stroke: var(--cyan); stroke-width: 5; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 4px #00d9ff); }
+  .micro-block { fill: var(--cyan); filter: drop-shadow(0 0 4px #00d9ff); }
+  .central-void { fill: #01030b; stroke: #276275; stroke-width: 2; vector-effect: non-scaling-stroke; }
+  .central-glow { fill: none; stroke: #17485c; stroke-width: 18; vector-effect: non-scaling-stroke; }
+  .zone-arc { fill: none; stroke-width: 12; vector-effect: non-scaling-stroke; }
+  .zone-arc.quiet { stroke: #3d6e7c; }
+  .zone-arc.relay { stroke: #8c6e47; }
+  .sweep { fill: #1b5264; fill-opacity: 0.34; stroke: none; }
+  .sweep-line { stroke: var(--cyan); stroke-width: 2; vector-effect: non-scaling-stroke; }
+  .uncertainty { fill: none; stroke-width: 2; stroke-dasharray: 4 5; vector-effect: non-scaling-stroke; }
+  .trail-dot { fill: #5d9bad; }
+  .contact-hit { fill: transparent; cursor: pointer; pointer-events: all; }
+  .contact-mark { vector-effect: non-scaling-stroke; stroke-width: 3; }
+  .contact[data-status="nominal"] .contact-mark { fill: #0d3541; stroke: var(--cyan); }
+  .contact[data-status="watch"] .contact-mark { fill: #3e3016; stroke: var(--amber); }
+  .contact[data-status="priority"] .contact-mark { fill: #421b2c; stroke: var(--pink); }
+  .contact.is-active .contact-mark { fill: var(--ink); stroke: var(--focus); }
+  .contact-core { fill: var(--ink); }
+  .contact.is-active .contact-core { fill: var(--bg); }
+  .selected-orbit { fill: none; stroke: var(--focus); stroke-width: 2; stroke-dasharray: 5 5; vector-effect: non-scaling-stroke; }
+  .leader { fill: none; stroke: var(--focus); stroke-width: 1.5; vector-effect: non-scaling-stroke; pointer-events: none; }
+
+  .readable-svg {
+    fill: var(--muted);
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .readable-svg.value { fill: var(--ink); font-size: 26px; }
+  .readable-svg.active { fill: var(--focus); }
+
+  .mobile-axis {
+    display: none;
+    margin: 0;
+    padding: 14px 18px 18px;
+    border-top: 1px solid var(--line);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .panel {
+    display: grid;
+    gap: 20px;
+    min-width: 0;
+  }
+
+  .panel-section {
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+
+  .panel-section:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .inspector {
+    padding: 20px;
+    background: var(--panel-strong);
+    border-left: 4px solid var(--cyan);
+  }
+
+  .inspector[data-status="watch"] { border-left-color: var(--amber); }
+  .inspector[data-status="priority"] { border-left-color: var(--pink); }
+
+  .contact-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: baseline;
+    margin-top: 10px;
+  }
+
+  .contact-title h2 {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 30px;
+    line-height: 1;
+  }
+
+  .status-word {
+    color: var(--cyan);
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .inspector[data-status="watch"] .status-word { color: var(--amber); }
+  .inspector[data-status="priority"] .status-word { color: var(--pink); }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin: 22px 0 0;
+  }
+
+  .metric { margin: 0; }
+  .metric dt {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .metric dd {
+    margin: 3px 0 0;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 25px;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .contact-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .contact-button,
+  .control {
+    min-height: 48px;
+    border: 1px solid var(--line);
+    border-radius: 0;
+    background: var(--panel);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .contact-button {
+    display: grid;
+    grid-template-columns: 16px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+    padding: 10px 12px;
+    text-align: left;
+  }
+
+  .contact-button:hover,
+  .contact-button[aria-pressed="true"] {
+    border-color: var(--focus);
+    background: #172331;
+  }
+
+  .contact-button:focus-visible,
+  .control:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .shape {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--cyan);
+  }
+  .shape.watch { border-color: var(--amber); transform: rotate(45deg); }
+  .shape.priority {
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-bottom: 14px solid var(--pink);
+    border-top: 0;
+  }
+
+  .contact-code {
+    display: block;
+    font-family: var(--mono);
+    font-size: 17px;
+    font-weight: 800;
+  }
+  .contact-meta {
+    display: block;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .contact-state {
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .control {
+    padding: 10px;
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  .control:hover,
+  .control[aria-pressed="true"] { border-color: var(--cyan); background: #163141; }
+
+  .legend {
+    display: grid;
+    gap: 8px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .legend li { display: flex; gap: 10px; align-items: center; }
+  .legend b { color: var(--muted); font-family: var(--mono); }
+
+  .footnote {
+    margin: 18px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 550;
+  }
+
+  @media (max-width: 1060px) {
+    header { grid-template-columns: 1fr; }
+    .mode-stamp { width: fit-content; }
+    .console { grid-template-columns: 1fr; }
+    .instrument-shell { width: min(760px, 100%); margin: 0 auto; }
+    .panel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .panel-section:first-child { grid-column: 1 / -1; }
+  }
+
+  @media (max-width: 680px) {
+    .page { padding-inline: 14px; }
+    .mode-stamp { min-width: 0; width: 100%; }
+    .stage-topline { position: static; padding: 14px 16px 0; flex-direction: column; gap: 4px; }
+    .panel { grid-template-columns: 1fr; }
+    .panel-section:first-child { grid-column: auto; }
+    .readable-svg { display: none; }
+    .mobile-axis { display: block; }
+    .controls { grid-template-columns: 1fr; }
+    .contact-hit { pointer-events: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sweep, .sweep-line { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div>
+      <p class="eyebrow">Muriel · annular interface case 02</p>
+      <h1>Sensor fusion instrument</h1>
+      <p class="deck">A circular interface with declared polar semantics: angle is bearing, radius is range, and every moving layer has an owner.</p>
+    </div>
+    <p class="mode-stamp"><strong>SIMULATED</strong><br>deterministic telemetry<br>not an operational display</p>
+  </header>
+
+  <main class="console">
+    <section class="instrument-shell" aria-label="Polar sensor instrument">
+      <div class="stage-topline" aria-hidden="true">
+        <p class="axis-note">Angle → bearing · radius → range</p>
+        <p class="stage-status" id="scan-status">Scan 000° · running</p>
+      </div>
+      <svg id="instrument" viewBox="0 0 720 720" role="group" tabindex="0"
+           aria-labelledby="instrument-title instrument-desc"
+           data-angle-meaning="bearing" data-radius-meaning="range">
+        <title id="instrument-title">Simulated polar sensor instrument</title>
+        <desc id="instrument-desc">Angle encodes bearing in degrees and radius encodes range from zero to one hundred kilometres. Arrow keys step between contacts by bearing; Home and End select the nearest and farthest contact; Enter pins the current contact.</desc>
+        <defs>
+          <radialGradient id="field-glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#143746" stop-opacity="0.48"/>
+            <stop offset="58%" stop-color="#0a1d28" stop-opacity="0.34"/>
+            <stop offset="100%" stop-color="#071019" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle class="field-fill" cx="360" cy="360" r="314"/>
+        <circle cx="360" cy="360" r="312" fill="url(#field-glow)"/>
+        <g id="grid" data-role="axis" aria-hidden="true"></g>
+        <g id="density" data-role="history" aria-hidden="true"></g>
+        <g id="energy" data-role="context" aria-hidden="true"></g>
+        <g id="zones" data-role="context" aria-hidden="true"></g>
+        <path id="sweep" class="sweep" data-role="feedback" aria-hidden="true"></path>
+        <line id="sweep-line" class="sweep-line" data-role="feedback" aria-hidden="true"></line>
+        <g id="trails" data-role="history" aria-hidden="true"></g>
+        <g id="contacts" data-role="data"></g>
+        <g id="selection" data-role="feedback" aria-hidden="true"></g>
+        <circle class="central-glow" cx="360" cy="360" r="126" aria-hidden="true"/>
+        <circle class="central-void" cx="360" cy="360" r="116" aria-hidden="true"/>
+        <g id="labels" data-role="axis-labels" aria-hidden="true"></g>
+      </svg>
+      <p class="mobile-axis">Polar plot summary: bearing runs clockwise from north; range runs from 0 to 100 km. Use the contact list below the instrument on narrow screens.</p>
+    </section>
+
+    <aside class="panel" aria-label="Instrument inspector and controls">
+      <section class="panel-section inspector" id="inspector" data-status="nominal" aria-live="polite">
+        <p class="section-label">Pinned contact</p>
+        <div class="contact-title">
+          <h2 id="selected-code">ARC-07</h2>
+          <span class="status-word" id="selected-status">nominal</span>
+        </div>
+        <dl class="metrics">
+          <div class="metric"><dt>Bearing</dt><dd id="selected-bearing">032°</dd></div>
+          <div class="metric"><dt>Range</dt><dd id="selected-range">38 km</dd></div>
+          <div class="metric"><dt>Closing</dt><dd id="selected-speed">+1.8 km/s</dd></div>
+          <div class="metric"><dt>Confidence</dt><dd id="selected-confidence">96%</dd></div>
+        </dl>
+      </section>
+
+      <section class="panel-section">
+        <p class="section-label">Canonical contacts</p>
+        <div class="contact-list" id="contact-list"></div>
+      </section>
+
+      <section class="panel-section">
+        <p class="section-label">Sampling phase</p>
+        <div class="controls">
+          <button class="control" id="pause" type="button" aria-pressed="false">Pause</button>
+          <button class="control" id="step" type="button">Step +15°</button>
+          <button class="control" id="reset" type="button">Reset</button>
+        </div>
+        <ul class="legend" aria-label="Contact status legend">
+          <li><span class="shape" aria-hidden="true"></span><b>Circle</b> nominal track</li>
+          <li><span class="shape watch" aria-hidden="true"></span><b>Diamond</b> observation watch</li>
+          <li><span class="shape priority" aria-hidden="true"></span><b>Triangle</b> priority review</li>
+        </ul>
+        <p class="footnote">The outer comb is last-pass return strength; bright rail segments summarize track confidence by bearing sector. Range gates, confidence arcs, and the scan sweep are context—not controls. The list and plot project the same records.</p>
+      </section>
+    </aside>
+  </main>
+</div>
+
+<script>
+(() => {
+  'use strict'
+
+  const NS = 'http://www.w3.org/2000/svg'
+  const CX = 360
+  const CY = 360
+  const INNER = 128
+  const OUTER = 292
+  const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+
+  const contacts = Object.freeze([
+    { id: 'ARC-07', bearing: 32, range: 38, speed: 1.8, confidence: 96, uncertainty: 5, status: 'nominal' },
+    { id: 'KITE-12', bearing: 88, range: 72, speed: -0.6, confidence: 84, uncertainty: 8, status: 'watch' },
+    { id: 'MICA-03', bearing: 151, range: 54, speed: 0.2, confidence: 91, uncertainty: 6, status: 'nominal' },
+    { id: 'EMBER-09', bearing: 218, range: 81, speed: 2.4, confidence: 77, uncertainty: 11, status: 'priority' },
+    { id: 'VANE-22', bearing: 286, range: 63, speed: -1.1, confidence: 89, uncertainty: 7, status: 'watch' },
+    { id: 'LUX-04', bearing: 334, range: 26, speed: 0.7, confidence: 98, uncertainty: 4, status: 'nominal' },
+  ])
+
+  const state = {
+    activeId: contacts[0].id,
+    pinnedId: contacts[0].id,
+    scan: 0,
+    paused: prefersReducedMotion.matches,
+    lastFrame: performance.now(),
+  }
+
+  const $ = id => document.getElementById(id)
+  const svgEl = (tag, attrs = {}) => {
+    const node = document.createElementNS(NS, tag)
+    for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value)
+    return node
+  }
+
+  const polar = (bearing, range) => {
+    const angle = (bearing - 90) * Math.PI / 180
+    const radius = INNER + (range / 100) * (OUTER - INNER)
+    return { x: CX + Math.cos(angle) * radius, y: CY + Math.sin(angle) * radius, radius }
+  }
+
+  const pointAtRadius = (bearing, radius) => {
+    const angle = (bearing - 90) * Math.PI / 180
+    return { x: CX + Math.cos(angle) * radius, y: CY + Math.sin(angle) * radius }
+  }
+
+  const annularPath = (inner, outer, start, end) => {
+    const a = pointAtRadius(start, outer)
+    const b = pointAtRadius(end, outer)
+    const c = pointAtRadius(end, inner)
+    const d = pointAtRadius(start, inner)
+    const span = ((end - start) % 360 + 360) % 360
+    const large = span > 180 ? 1 : 0
+    return `M ${a.x.toFixed(2)} ${a.y.toFixed(2)} A ${outer} ${outer} 0 ${large} 1 ${b.x.toFixed(2)} ${b.y.toFixed(2)} L ${c.x.toFixed(2)} ${c.y.toFixed(2)} A ${inner} ${inner} 0 ${large} 0 ${d.x.toFixed(2)} ${d.y.toFixed(2)} Z`
+  }
+
+  const openArc = (radius, start, end) => {
+    const a = pointAtRadius(start, radius)
+    const b = pointAtRadius(end, radius)
+    const span = ((end - start) % 360 + 360) % 360
+    return `M ${a.x.toFixed(2)} ${a.y.toFixed(2)} A ${radius} ${radius} 0 ${span > 180 ? 1 : 0} 1 ${b.x.toFixed(2)} ${b.y.toFixed(2)}`
+  }
+
+  function drawGrid() {
+    const grid = $('grid')
+    for (const range of [25, 50, 75, 100]) {
+      const radius = INNER + (range / 100) * (OUTER - INNER)
+      grid.appendChild(svgEl('circle', {
+        cx: CX, cy: CY, r: radius.toFixed(2),
+        class: `grid-line${range === 100 ? ' strong' : ''}`,
+      }))
+    }
+    grid.appendChild(svgEl('circle', { cx: CX, cy: CY, r: INNER, class: 'grid-line strong' }))
+
+    for (let bearing = 0; bearing < 360; bearing += 5) {
+      const major = bearing % 30 === 0
+      const p0 = pointAtRadius(bearing, major ? OUTER - 16 : OUTER - 8)
+      const p1 = pointAtRadius(bearing, OUTER + (major ? 11 : 4))
+      grid.appendChild(svgEl('line', {
+        x1: p0.x.toFixed(2), y1: p0.y.toFixed(2),
+        x2: p1.x.toFixed(2), y2: p1.y.toFixed(2),
+        class: major ? 'grid-line strong' : 'grid-line',
+      }))
+      if (major) {
+        const spokeStart = pointAtRadius(bearing, INNER + 8)
+        const spokeEnd = pointAtRadius(bearing, OUTER - 20)
+        grid.appendChild(svgEl('line', {
+          x1: spokeStart.x.toFixed(2), y1: spokeStart.y.toFixed(2),
+          x2: spokeEnd.x.toFixed(2), y2: spokeEnd.y.toFixed(2), class: 'axis-spoke',
+        }))
+      }
+    }
+  }
+
+  const angularDistance = (a, b) => Math.abs((((a - b) % 360) + 540) % 360 - 180)
+
+  function signalAt(bearing) {
+    return contacts.reduce((sum, contact) => {
+      const distance = angularDistance(bearing, contact.bearing)
+      const spread = Math.max(5, contact.uncertainty * 1.8)
+      return sum + (contact.confidence / 100) * Math.exp(-(distance * distance) / (2 * spread * spread))
+    }, 0)
+  }
+
+  function drawDensity() {
+    const density = $('density')
+    for (let bearing = 0; bearing < 360; bearing += 2.5) {
+      const signal = Math.min(1, signalAt(bearing))
+      const inner = 246 - signal * 13
+      const outer = 272
+      const p0 = pointAtRadius(bearing, inner)
+      const p1 = pointAtRadius(bearing, outer)
+      const strength = signal > 0.64 ? ' strong' : signal > 0.28 ? ' medium' : ''
+      density.appendChild(svgEl('line', {
+        x1: p0.x.toFixed(2), y1: p0.y.toFixed(2),
+        x2: p1.x.toFixed(2), y2: p1.y.toFixed(2),
+        class: `density-tick${strength}`,
+      }))
+    }
+
+    for (let bearing = 0; bearing < 360; bearing += 3.75) {
+      const signal = Math.min(1, signalAt(bearing))
+      const p0 = pointAtRadius(bearing, INNER + 12)
+      const p1 = pointAtRadius(bearing, INNER + 20 + signal * 28)
+      density.appendChild(svgEl('line', {
+        x1: p0.x.toFixed(2), y1: p0.y.toFixed(2),
+        x2: p1.x.toFixed(2), y2: p1.y.toFixed(2),
+        class: signal > 0.45 ? 'return-tick strong' : 'return-tick',
+      }))
+    }
+  }
+
+  function drawEnergy() {
+    const energy = $('energy')
+    for (const contact of contacts) {
+      energy.appendChild(svgEl('path', {
+        d: openArc(214, contact.bearing - 18, contact.bearing + 18),
+        class: `energy-arc${contact.status === 'nominal' ? '' : ` ${contact.status}`}`,
+      }))
+      const bearing = contact.bearing
+      const p0 = pointAtRadius(bearing, 199)
+      const p1 = pointAtRadius(bearing, 228)
+      energy.appendChild(svgEl('line', {
+        x1: p0.x.toFixed(2), y1: p0.y.toFixed(2),
+        x2: p1.x.toFixed(2), y2: p1.y.toFixed(2), class: 'gate-spoke',
+      }))
+      const block = pointAtRadius(bearing + 18, 236)
+      energy.appendChild(svgEl('rect', {
+        x: (block.x - 4).toFixed(2), y: (block.y - 4).toFixed(2),
+        width: 8, height: 8, class: 'micro-block',
+        transform: `rotate(${bearing + 18} ${block.x.toFixed(2)} ${block.y.toFixed(2)})`,
+      }))
+    }
+  }
+
+  function drawLabels() {
+    const labels = $('labels')
+    for (let bearing = 0; bearing < 360; bearing += 30) {
+      const p = pointAtRadius(bearing, OUTER + 30)
+      const text = svgEl('text', {
+        x: p.x.toFixed(2), y: (p.y + 6).toFixed(2),
+        'text-anchor': 'middle', class: 'readable-svg',
+      })
+      text.textContent = String(bearing).padStart(3, '0') + '°'
+      labels.appendChild(text)
+    }
+    for (const range of [25, 50, 75, 100]) {
+      const radius = INNER + (range / 100) * (OUTER - INNER)
+      const text = svgEl('text', {
+        x: (CX + 8).toFixed(2), y: (CY - radius + 22).toFixed(2), class: 'readable-svg',
+      })
+      text.textContent = `${range} km`
+      labels.appendChild(text)
+    }
+
+    const centreLabel = svgEl('text', {
+      x: CX, y: CY - 3, 'text-anchor': 'middle', class: 'readable-svg',
+    })
+    centreLabel.textContent = 'ORIGIN'
+    labels.appendChild(centreLabel)
+    const centreValue = svgEl('text', {
+      x: CX, y: CY + 24, 'text-anchor': 'middle', class: 'readable-svg value',
+    })
+    centreValue.textContent = '0 km'
+    labels.appendChild(centreValue)
+
+    const resolution = svgEl('text', { x: 28, y: 116, class: 'readable-svg value' })
+    resolution.textContent = '2.5°'
+    labels.appendChild(resolution)
+    const resolutionLabel = svgEl('text', { x: 28, y: 142, class: 'readable-svg' })
+    resolutionLabel.textContent = 'ANGULAR RESOLUTION'
+    labels.appendChild(resolutionLabel)
+    const trackCount = svgEl('text', { x: 692, y: 116, 'text-anchor': 'end', class: 'readable-svg value' })
+    trackCount.textContent = String(contacts.length).padStart(2, '0')
+    labels.appendChild(trackCount)
+    const trackLabel = svgEl('text', { x: 692, y: 142, 'text-anchor': 'end', class: 'readable-svg' })
+    trackLabel.textContent = 'TRACKS'
+    labels.appendChild(trackLabel)
+  }
+
+  function drawZones() {
+    const zones = $('zones')
+    const quiet = svgEl('path', { d: openArc(OUTER + 18, 250, 310), class: 'zone-arc quiet' })
+    const relay = svgEl('path', { d: openArc(OUTER + 18, 62, 112), class: 'zone-arc relay' })
+    zones.append(quiet, relay)
+  }
+
+  function contactShape(contact, point) {
+    if (contact.status === 'watch') {
+      const size = 12
+      return svgEl('path', {
+        d: `M ${point.x} ${point.y - size} L ${point.x + size} ${point.y} L ${point.x} ${point.y + size} L ${point.x - size} ${point.y} Z`,
+        class: 'contact-mark',
+      })
+    }
+    if (contact.status === 'priority') {
+      const size = 14
+      return svgEl('path', {
+        d: `M ${point.x} ${point.y - size} L ${point.x + size} ${point.y + size} L ${point.x - size} ${point.y + size} Z`,
+        class: 'contact-mark',
+      })
+    }
+    return svgEl('circle', { cx: point.x, cy: point.y, r: 11, class: 'contact-mark' })
+  }
+
+  function drawContacts() {
+    const tracks = $('contacts')
+    const trails = $('trails')
+    for (const contact of contacts) {
+      const point = polar(contact.bearing, contact.range)
+      const group = svgEl('g', {
+        class: 'contact',
+        'data-id': contact.id,
+        'data-status': contact.status,
+        'data-geometry': `${point.x.toFixed(2)},${point.y.toFixed(2)}`,
+        'aria-label': `${contact.id}, ${contact.status}, bearing ${contact.bearing} degrees, range ${contact.range} kilometres, confidence ${contact.confidence} percent`,
+      })
+      group.appendChild(svgEl('circle', {
+        cx: point.x.toFixed(2), cy: point.y.toFixed(2), r: 34,
+        class: 'contact-hit',
+      }))
+      group.appendChild(contactShape(contact, point))
+      group.appendChild(svgEl('circle', {
+        cx: point.x.toFixed(2), cy: point.y.toFixed(2), r: 3.5, class: 'contact-core',
+      }))
+      const uncertainty = svgEl('path', {
+        d: openArc(point.radius + 18, contact.bearing - contact.uncertainty, contact.bearing + contact.uncertainty),
+        class: 'uncertainty',
+        stroke: contact.status === 'priority' ? 'var(--pink)' : contact.status === 'watch' ? 'var(--amber)' : 'var(--cyan)',
+      })
+      group.appendChild(uncertainty)
+      group.addEventListener('pointerenter', () => preview(contact.id))
+      group.addEventListener('pointerleave', restorePinned)
+      group.addEventListener('click', () => pin(contact.id))
+      tracks.appendChild(group)
+
+      for (let step = 1; step <= 3; step++) {
+        const previous = polar(contact.bearing - contact.speed * step * 1.7, Math.max(0, contact.range - contact.speed * step * 0.7))
+        trails.appendChild(svgEl('circle', {
+          cx: previous.x.toFixed(2), cy: previous.y.toFixed(2), r: String(4 - step * 0.65), class: 'trail-dot',
+        }))
+      }
+    }
+  }
+
+  function buildList() {
+    const list = $('contact-list')
+    for (const contact of contacts) {
+      const button = document.createElement('button')
+      button.type = 'button'
+      button.className = 'contact-button'
+      button.dataset.id = contact.id
+      button.setAttribute('aria-pressed', 'false')
+      button.setAttribute('aria-label', `Pin ${contact.id}, ${contact.status}, bearing ${contact.bearing} degrees, range ${contact.range} kilometres`)
+      const shape = document.createElement('span')
+      shape.className = `shape ${contact.status}`.trim()
+      shape.setAttribute('aria-hidden', 'true')
+      const copy = document.createElement('span')
+      copy.innerHTML = `<span class="contact-code">${contact.id}</span><span class="contact-meta">${String(contact.bearing).padStart(3, '0')}° · ${contact.range} km</span>`
+      const status = document.createElement('span')
+      status.className = 'contact-state'
+      status.textContent = contact.status
+      button.append(shape, copy, status)
+      button.addEventListener('pointerenter', () => preview(contact.id))
+      button.addEventListener('pointerleave', restorePinned)
+      button.addEventListener('focus', () => preview(contact.id))
+      button.addEventListener('blur', restorePinned)
+      button.addEventListener('click', () => pin(contact.id))
+      list.appendChild(button)
+    }
+  }
+
+  function selectedContact() {
+    return contacts.find(contact => contact.id === state.activeId) || contacts[0]
+  }
+
+  function preview(id) {
+    state.activeId = id
+    renderSelection()
+  }
+
+  function restorePinned() {
+    state.activeId = state.pinnedId
+    renderSelection()
+  }
+
+  function pin(id) {
+    state.pinnedId = id
+    state.activeId = id
+    renderSelection()
+  }
+
+  function renderSelection() {
+    const contact = selectedContact()
+    document.querySelectorAll('.contact').forEach(node => node.classList.toggle('is-active', node.dataset.id === contact.id))
+    document.querySelectorAll('.contact-button').forEach(button => button.setAttribute('aria-pressed', button.dataset.id === state.pinnedId ? 'true' : 'false'))
+
+    const point = polar(contact.bearing, contact.range)
+    const selection = $('selection')
+    selection.replaceChildren()
+    selection.appendChild(svgEl('circle', {
+      cx: point.x.toFixed(2), cy: point.y.toFixed(2), r: 26, class: 'selected-orbit',
+    }))
+    const elbowX = point.x < CX ? 94 : 626
+    const elbowY = Math.max(86, Math.min(630, point.y - 34))
+    selection.appendChild(svgEl('path', {
+      d: `M ${point.x.toFixed(2)} ${point.y.toFixed(2)} L ${((point.x + elbowX) / 2).toFixed(2)} ${elbowY.toFixed(2)} L ${elbowX} ${elbowY}`,
+      class: 'leader',
+    }))
+    const label = svgEl('text', {
+      x: elbowX, y: elbowY - 10,
+      'text-anchor': point.x < CX ? 'start' : 'end',
+      class: 'readable-svg active',
+    })
+    label.textContent = `${contact.id} · ${contact.range} km`
+    selection.appendChild(label)
+
+    $('inspector').dataset.status = contact.status
+    $('selected-code').textContent = contact.id
+    $('selected-status').textContent = contact.status
+    $('selected-bearing').textContent = `${String(contact.bearing).padStart(3, '0')}°`
+    $('selected-range').textContent = `${contact.range} km`
+    $('selected-speed').textContent = `${contact.speed >= 0 ? '+' : ''}${contact.speed.toFixed(1)} km/s`
+    $('selected-confidence').textContent = `${contact.confidence}%`
+  }
+
+  function stepBearing(delta) {
+    const ordered = [...contacts].sort((a, b) => a.bearing - b.bearing)
+    const index = ordered.findIndex(contact => contact.id === state.activeId)
+    const next = ordered[(index + delta + ordered.length) % ordered.length]
+    preview(next.id)
+  }
+
+  $('instrument').addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft') { event.preventDefault(); stepBearing(-1) }
+    if (event.key === 'ArrowRight') { event.preventDefault(); stepBearing(1) }
+    if (event.key === 'Home') {
+      event.preventDefault()
+      preview([...contacts].sort((a, b) => a.range - b.range)[0].id)
+    }
+    if (event.key === 'End') {
+      event.preventDefault()
+      preview([...contacts].sort((a, b) => b.range - a.range)[0].id)
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      pin(state.activeId)
+    }
+    if (event.key === 'Escape') {
+      event.preventDefault()
+      restorePinned()
+    }
+  })
+
+  function updateSweep() {
+    $('sweep').setAttribute('d', annularPath(INNER, OUTER, state.scan - 16, state.scan))
+    const end = pointAtRadius(state.scan, OUTER)
+    const start = pointAtRadius(state.scan, INNER)
+    $('sweep-line').setAttribute('x1', start.x.toFixed(2))
+    $('sweep-line').setAttribute('y1', start.y.toFixed(2))
+    $('sweep-line').setAttribute('x2', end.x.toFixed(2))
+    $('sweep-line').setAttribute('y2', end.y.toFixed(2))
+    $('scan-status').textContent = `Scan ${String(Math.round(state.scan) % 360).padStart(3, '0')}° · ${state.paused ? 'paused' : 'running'}`
+  }
+
+  function setPaused(paused) {
+    state.paused = paused
+    $('pause').setAttribute('aria-pressed', paused ? 'true' : 'false')
+    $('pause').textContent = paused ? 'Resume' : 'Pause'
+    updateSweep()
+  }
+
+  $('pause').addEventListener('click', () => setPaused(!state.paused))
+  $('step').addEventListener('click', () => {
+    setPaused(true)
+    state.scan = (state.scan + 15) % 360
+    updateSweep()
+  })
+  $('reset').addEventListener('click', () => {
+    state.scan = 0
+    pin(contacts[0].id)
+    setPaused(prefersReducedMotion.matches)
+  })
+
+  prefersReducedMotion.addEventListener?.('change', event => setPaused(event.matches || state.paused))
+
+  function frame(now) {
+    const dt = Math.min(0.05, (now - state.lastFrame) / 1000)
+    state.lastFrame = now
+    if (!state.paused) {
+      state.scan = (state.scan + dt * 11) % 360
+      updateSweep()
+    }
+    requestAnimationFrame(frame)
+  }
+
+  drawGrid()
+  drawDensity()
+  drawEnergy()
+  drawZones()
+  drawLabels()
+  drawContacts()
+  buildList()
+  renderSelection()
+  updateSweep()
+  requestAnimationFrame(frame)
+
+  const geometrySnapshot = [...document.querySelectorAll('.contact')].map(node => node.dataset.geometry)
+  window.__annularFuiAudit = () => {
+    const svgRect = $('instrument').getBoundingClientRect()
+    const viewScale = svgRect.width / 720
+    const targetDiameters = [...document.querySelectorAll('.contact-hit')].map(node => Number(node.getAttribute('r')) * 2 * viewScale)
+    const controls = [...document.querySelectorAll('button')].map(node => node.getBoundingClientRect())
+    const readable = [...document.querySelectorAll('body p, body button, body dt, body dd, body h1, body h2, .contact-code, .contact-meta, .contact-state')]
+      .filter(node => node.getBoundingClientRect().width > 0)
+      .map(node => parseFloat(getComputedStyle(node).fontSize))
+    const currentGeometry = [...document.querySelectorAll('.contact')].map(node => node.dataset.geometry)
+    return {
+      case: 'sensor-fusion-instrument',
+      simulatedLabel: document.body.textContent.includes('SIMULATED'),
+      angleMeaning: $('instrument').dataset.angleMeaning,
+      radiusMeaning: $('instrument').dataset.radiusMeaning,
+      contactCount: contacts.length,
+      linearEquivalentCount: document.querySelectorAll('.contact-button').length,
+      targetMinPhysical: Math.round(Math.min(...targetDiameters) * 10) / 10,
+      controlsAtLeast44: controls.every(rect => rect.width >= 44 && rect.height >= 44),
+      textMinPhysical: Math.min(...readable),
+      geometryStable: geometrySnapshot.every((value, index) => value === currentGeometry[index]),
+      activeId: state.activeId,
+      pinnedId: state.pinnedId,
+      scanPaused: state.paused,
+      responsiveLinearPrimary: matchMedia('(max-width: 680px)').matches
+        ? getComputedStyle(document.querySelector('.mobile-axis')).display !== 'none'
+        : true,
+    }
+  }
+})()
+</script>
+</body>
+</html>

@@ -202,6 +202,10 @@ Optional deep references:
 - [`references/radial-menus.md`](references/radial-menus.md) — stable pie-menu
   geometry, radial input parity, 24-grid glyph grammar, renderer-independent
   Pretext composition, and DOM/SVG materialization for annular sectors.
+- [`references/annular-interfaces.md`](references/annular-interfaces.md) — shared
+  polar semantics, stable geometry, layer ownership, motion, accessibility, and
+  responsive fallbacks across radial menus, instruments, gauges, timelines,
+  hierarchies, and reticles; includes a distinct FUI sensor-console case.
 
 ## Verification and handoff
 

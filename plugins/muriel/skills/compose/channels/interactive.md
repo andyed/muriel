@@ -365,6 +365,15 @@ for Pot Luck.
 
 When the output wants to feel like telemetry — live stats, mission clocks, bearing readouts, signal traces — reach for the FUI vocabulary. The full grammar, substrate decision table, and common-failure list live in [`vocabularies/fui.md`](../vocabularies/fui.md); this section is the interactive-channel seam.
 
+A circular silhouette is not automatically a radial menu. Before rendering a
+ring-heavy FUI, declare what angle, radius, centre, each ring, and each motion
+mean. Load
+[`references/annular-interfaces.md`](../references/annular-interfaces.md) for the
+shared polar contract and its distinction between directional commands, sensor
+plots, gauges, cyclic timelines, hierarchies, and reticles. Load the stricter
+[`references/radial-menus.md`](../references/radial-menus.md) only when sectors
+are commands.
+
 **Canonical stack** (lifted from the vocabulary's substrate decision):
 
 - **HTML + CSS Grid** for layout and text, with `font-variant-numeric: tabular-nums` on any changing digits.
@@ -379,6 +388,15 @@ When the output wants to feel like telemetry — live stats, mission clocks, bea
 2. **Radial compass** — SVG rings + 36 tick marks + rotating needle.
 3. **Canvas waveform** — scrolling signal trace with RMS/peak readouts.
 4. **Staggered reveal** — CSS animation across the four blocks at 120ms intervals.
+
+**Runnable circular-instrument case:
+[`examples/annular-fui-console.html`](../examples/annular-fui-console.html).**
+Angle is bearing, radius is range, and the centre is a simulated sensor origin.
+The SVG polar plot and HTML contact list share one deterministic record set;
+pointer hover previews, click pins, keyboard steps by declared bearing/range
+semantics, and the phone view promotes the linear equivalent when embedded SVG
+labels would fall below the physical type floor. The sweep is sampling feedback,
+not a control or ambient animation.
 
 Corner brackets via `::before` / `::after`. Scan-line overlay via `repeating-linear-gradient`. `prefers-reduced-motion` fallback baked in. Every text element clears 8:1 against `#0a0a0f`. Swap the four CSS custom properties at the top for a brand's palette and the composition inherits.
 

@@ -40,7 +40,8 @@ Pre-flight question for any spatial composition: *if I flattened the scene to a 
 | 4 | Layered DOM × perspective grid | `render_assets/spatial-typography/` | Cooper VLW homage — receding planes of DOM type, navigable, on a horizon-anchored grid. Base exemplar for the lib. |
 | 5 | Data Mountain (MSR) | `render_assets/mindbendingpixels-mountain/` + `render_assets/sciprogfi-agentchan-mountain/` | Dumais et al. (2001) spatial-memory index — tilted plane group with click-to-focus zones; cards arranged on the slope so spatial position carries identity. Two brand skins (psychodeli + sciprogfi/agentchan). |
 | 6 | Perspective Wall | `render_assets/perspective-wall/` + `render_assets/sciprogfi-lux-mesh-wall/` | Mackinlay / Robertson / Card (1991) focus + context — central card readable, peripheral cards foreshortened against the receding wall. Two brand skins (psychodeli + sciprogfi/OHC mesh). |
-| 7 | Demo gallery | `render_assets/index.html` | Single page indexing every exemplar with kicker / tag / lineage / source link. |
+| 7 | Orbital Sunburst | `render_assets/orbital-sunburst/` | One partition layout projected two ways: conventional top-view sunburst and an exploded 3D hierarchy stack with pointer, keyboard, orbit, and phone-safe linear controls. |
+| 8 | Demo gallery | `render_assets/index.html` | Single page indexing every exemplar with kicker / tag / lineage / source link. |
 
 **Queued.** `muriel.spatial.typeset_scene()` — Python emitter that consumes a `PerspectiveGrid` and a list of DOM blocks and writes a `.html` artifact ready to drop into `render_assets/<name>/index.html`. Closes the design.md → brand.toml → CSS-3D-typography loop so the static SVG grid and the interactive scene share their coordinate system by construction, not by hand-port.
 
@@ -143,6 +144,80 @@ Each exemplar in `render_assets/<name>/index.html` is self-contained: an importm
 
 The two-renderer stack (`#webgl` underneath, `#css3d` on top) is intentional: WebGL handles the grid / horizon / atmospheric layer at GPU speed; CSS3DRenderer carries the DOM cards so text stays selectable, copyable, and screen-reader-addressable. `pointer-events` is gated on the HUD so floating-corner brand chrome doesn't absorb clicks meant for cards that overlap it in screen space.
 
+## The orbital-sunburst path — hierarchy becomes depth
+
+`render_assets/orbital-sunburst/index.html` is the interactive bridge between a
+sunburst chart and a stacked circular interface. It deliberately avoids a
+second data model: one recursive partition assigns immutable angles and annular
+sector paths, then CSS perspective either collapses every hierarchy level into
+a normal top view or separates those same SVG planes along Z.
+
+The separated planes are annuli, not translucent full discs. Every higher
+level cuts out its centre so the lower hierarchy remains physically visible
+through the stack. A projected label is then constrained to the screen-space
+inner edge of the next, nearer annulus: upright type may counter the camera,
+but it cannot paint in front of a hierarchy shelf it does not own. Outer
+callouts are the explicit exception because leaving the ring is their contract.
+
+Use this pattern when all four claims are true:
+
+- containment is recursive and useful to inspect;
+- sibling weight is meaningful enough to earn arc length;
+- separating levels reduces occlusion or improves depth navigation; and
+- a selected lineage can remain explicit in an upright inspector or breadcrumb.
+
+The interaction grammar is select, rotate into the working position, move among
+siblings, and move up or down hierarchy depth. Left/Right step siblings;
+Up moves outward to the first authored child and Down returns inward to the
+owning parent; Enter commits; Escape returns to root. Pointer hover may
+preview but never changes the sector path. Drag orbits the projection, not the
+data. On a phone or under reduced motion, collapse to the top view and provide
+44 px linear controls for the same canonical nodes.
+
+Psychodeli's consumer pie supplies the state and flyout precedent. Keep hover as
+a reversible preview, keyboard focus as an active navigation target, and
+selected/live as persistent canonical state; never let a stationary cursor turn
+a neighbor selected after the ring rotates. Prefer authored parent/child
+ownership over nearest-angle geometry for Up/Down. Treat flyout shapes as
+different interaction contracts: an upright inspector explains the current
+lineage, a static accessory petal is a quick action owned by one spoke, a flown
+DOM chip may cross the SVG boundary, and a replacement sub-pie transfers focus
+and gives the hub Back semantics. Do not infer ownership from visual proximity.
+
+The demo vendors Pretext 0.0.5 as a layout layer over the stable sectors. Its
+text carrier is selectable rather than implicit: adaptive, screen-upright,
+shallow bow, circular rail, radial spoke, and outer callout. Adaptive chooses
+whole-run upright text in the foreshortened 3D stack and recovers a shallow bow
+when the hierarchy is flat. After the SVG anchors receive CSS perspective, a
+screen-space pass restores a physical icon-to-label gap; target paths remain
+untouched. This avoids the common error of proving clearance in world space
+while glyphs collide in the rendered camera.
+
+Type can be shared per peer ring or locally maximized, with a hard 16 px
+physical floor. Natural, balanced, and space-filling tracking are separate
+choices. Direction (automatic upright, clockwise, counter-clockwise),
+line-to-arc curvature, and restrained letter turn remain independent controls.
+Complex scripts are never decomposed into individually positioned characters:
+Arabic/RTL and CJK shaping canaries stay whole screen-upright runs. Latin arc
+carriers use cumulative-prefix kerning and grapheme segmentation, so combining
+marks and emoji remain atomic. The complete text stays in the semantic tree and
+inspector; projected decoration is `aria-hidden`.
+
+The production stress fixture projects labels from Psychodeli's `WEDGES`,
+`MORE_WEDGES`, `REACT_WEDGES`, and `VIBE_WEDGES` sets onto the immutable demo
+partition. Its two-tone command marks use the same deterministic 24-grid SVG
+grammar as the pie; emoji appears only in the explicit script canary, never as
+the command-icon system. The fixture copies labels and glyph paths for layout
+proof, not Psychodeli's canonical menu state or flyout behavior. Typography may
+move; target geometry and product state may not.
+
+Keep sunburst and radial-menu semantics separate. A sunburst encodes recursive
+containment and proportional weight; a radial menu encodes directional command
+selection. A circular silhouette does not make them interchangeable. Do not
+explode a sunburst into depth when Z would be decorative, when foreshortening
+would conceal a quantitative comparison, or when upright labels and a flat
+fallback cannot carry the full choice.
+
 ### Palette tokens
 
 `_lib/spatial.css` exposes the demo base palette as CSS custom properties at `:root` — every exemplar overrides `--bg` and adds its own card classes, but pulls font stacks and accent colours from this floor:
@@ -195,6 +270,7 @@ muriel/spatial.py                                  # static SVG perspective grid
 render_assets/_lib/spatial.css                     # shared base palette + HUD
 render_assets/_lib/spatial.js                      # createScene / Mountain / FocusController / planeToWorld
 render_assets/index.html                           # gallery
+render_assets/orbital-sunburst/index.html          # shared 2D sunburst / 3D hierarchy-stack instrument
 render_assets/spatial-typography/index.html        # Cooper VLW exemplar
 render_assets/mindbendingpixels-mountain/          # Data Mountain (psychodeli skin)
 render_assets/sciprogfi-agentchan-mountain/        # Data Mountain (sciprogfi/agentchan skin)

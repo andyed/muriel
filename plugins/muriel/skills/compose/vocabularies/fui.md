@@ -40,6 +40,30 @@ Don't reach for it when:
 - **Restrained palette** — one dominant accent hue (cyan, amber, red) on near-black. Matches the universal OLED rule.
 - **Glitch / noise accents** — used as *punctuation*, never as ambient texture.
 
+### Circular grammar is semantic, not a skin
+
+The circular displays associated with FUI do not share one interaction model.
+Use **ring**, **pie**, or **radial menu** only when direction selects a command.
+A bearing/range instrument, cyclic timeline, annular gauge, hierarchy, and
+reticle may look related while making different claims.
+
+Before adding concentric geometry, declare:
+
+- what angle means and where zero sits;
+- what radius means and whether area is perceptually relevant;
+- what the centre represents;
+- the source, update cadence, and interaction of each ring; and
+- a linear equivalent for exact reading, accessibility, and narrow screens.
+
+Keep data paths and hit paths stable while state paint and scan feedback move.
+A sweep belongs to sampling phase; a pulse belongs to a sample or alarm; a
+trail belongs to a named history window. If a moving ring has no owner, remove
+it. Load
+[`references/annular-interfaces.md`](../references/annular-interfaces.md) for
+the full shared contract and its two worked cases. Load
+[`references/radial-menus.md`](../references/radial-menus.md) for the specialized
+command-selector compositor.
+
 ## Substrate decision
 
 | Layer | Pick | Why |
@@ -75,6 +99,14 @@ Don't reach for it when:
 Also demonstrates: corner brackets via `::before`/`::after`, scan-line overlay via `repeating-linear-gradient`, `prefers-reduced-motion` fallback, 8:1 contrast on every text element, brand-token CSS custom properties (overridable from a `StyleGuide.to_css_vars()` drop-in).
 
 Open it directly in a browser: `open examples/fui-scaffold.html` (macOS) or the equivalent.
+
+**[`examples/annular-fui-console.html`](../examples/annular-fui-console.html)** is
+the second circular-interface case after the radial command selector. Its
+deterministic simulated sensor records map bearing to angle and range to radius;
+confidence, trails, range gates, and the scan sweep retain distinct layer roles.
+The same records feed a keyboard- and touch-safe linear contact list, proving
+that FUI grammar can remain legible and accessible without pretending every
+ring is a menu.
 
 ## Reference archives
 

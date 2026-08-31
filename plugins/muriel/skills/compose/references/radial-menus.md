@@ -26,6 +26,12 @@ product's state, commands, gating, and side effects in its canonical owner. A
 future shared library may implement this contract; the contract does not require
 either product to adopt a speculative common runtime.
 
+This is also one specialization of the broader
+[`annular-interfaces.md`](annular-interfaces.md) contract. Use the broader
+reference when angle or radius encodes bearing, range, time, magnitude,
+hierarchy, or targeting rather than a directional command. A circular silhouette
+does not make those instruments menus.
+
 ## Use gate
 
 Choose a radial menu when spatial recall or rapid directional selection is part
