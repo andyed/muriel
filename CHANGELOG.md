@@ -26,6 +26,15 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`muriel.typeset.pink_colormap`** — the pink density ramp was inline inside
+  `render_heatmap`, so a consumer holding its own density field (a per-cell
+  statistic rather than a fixation list) had nothing to import and hand-extracted
+  it instead; `attentional-foraging/scripts/render_max_lfhf_heatmap.py` carried a
+  copy. Two copies of a color ramp do not announce their drift — the figures just
+  stop matching. Now one function with two callers, verified byte-identical
+  (`render_heatmap` output hash unchanged across the extraction) and pinned by
+  `tests/test_typeset_colormap.py`, including a guard that `render_heatmap` still
+  delegates rather than re-implementing.
 - **Tests for `muriel.provenance`** (`tests/test_provenance.py`, 12 cases) — the module
   every external repository imports had none, so a rename of `stamp_json` would have
   shipped green. Covers the JSON round trip (payload preserved plus embedded

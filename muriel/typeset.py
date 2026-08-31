@@ -358,6 +358,48 @@ def generate_from_manifest(manifest_path):
     return outputs
 
 
+def pink_colormap(density_arr):
+    """Map a normalized density array to muriel's pink ramp, as RGBA uint8.
+
+    Transparent → light pink → hot pink → deep magenta, the monochrome
+    magenta ramp Tobii-style gaze heatmaps use. Input must be normalized to
+    [0, 1]; output has shape ``(h, w, 4)``.
+
+    Split out of ``render_heatmap`` so callers that already hold a density
+    field — a per-cell statistic, say, rather than a fixation list — can get
+    the same ramp without reimplementing it. It was extracted by hand into
+    ``attentional-foraging/scripts/render_max_lfhf_heatmap.py`` precisely
+    because there was nothing importable, and a hand copy of a color ramp
+    drifts silently: the figures simply stop matching each other.
+    """
+    import numpy as np  # lazy, matching render_heatmap — numpy is optional
+
+    h, w = density_arr.shape
+    rgba = np.zeros((h, w, 4), dtype=np.uint8)
+    # Gamma pushes midtones toward the peaks, raising contrast where it counts.
+    d_gamma = density_arr ** 0.7
+    for c in range(3):
+        low = [255, 210, 240][c]   # very light pink at low density
+        mid = [230, 60, 140][c]    # hot pink at medium density
+        high = [180, 20, 80][c]    # deep magenta at peak
+        rgba[:, :, c] = np.where(
+            density_arr > 0.01,
+            np.where(
+                d_gamma < 0.5,
+                (low + (mid - low) * d_gamma * 2).astype(np.uint8),
+                (mid + (high - mid) * (d_gamma - 0.5) * 2).astype(np.uint8),
+            ),
+            0
+        )
+    # Alpha: ramp up faster, saturate earlier.
+    rgba[:, :, 3] = np.where(
+        density_arr > 0.01,
+        np.minimum(240, (d_gamma * 300).astype(np.uint16)).astype(np.uint8),
+        0
+    )
+    return rgba
+
+
 def render_heatmap(fixations, *, background=None, canvas_size=(1280, 1024),
                    radius=40, blur=30, colormap="pink", desaturate=0.7,
                    output=None, bg_opacity=0.35):
@@ -445,28 +487,7 @@ def render_heatmap(fixations, *, background=None, canvas_size=(1280, 1024),
     # Apply colormap
     rgba = np.zeros((h, w, 4), dtype=np.uint8)
     if colormap == "pink":
-        # Monochrome pink/magenta: transparent → light pink → hot pink → deep magenta
-        # Apply gamma to increase contrast at peaks
-        d_gamma = density_arr ** 0.7  # push midtones toward peaks
-        for c in range(3):
-            low = [255, 210, 240][c]   # very light pink at low density
-            mid = [230, 60, 140][c]    # hot pink at medium density
-            high = [180, 20, 80][c]    # deep magenta at peak
-            rgba[:, :, c] = np.where(
-                density_arr > 0.01,
-                np.where(
-                    d_gamma < 0.5,
-                    (low + (mid - low) * d_gamma * 2).astype(np.uint8),
-                    (mid + (high - mid) * (d_gamma - 0.5) * 2).astype(np.uint8),
-                ),
-                0
-            )
-        # Alpha: ramp up faster, saturate earlier
-        rgba[:, :, 3] = np.where(
-            density_arr > 0.01,
-            np.minimum(240, (d_gamma * 300).astype(np.uint16)).astype(np.uint8),
-            0
-        )
+        rgba = pink_colormap(density_arr)
     elif colormap == "heat":
         # Classic: transparent → yellow → red → dark red
         for c in range(3):
