@@ -30,8 +30,15 @@ jobs:
       # Install the package rather than adding the repo to sys.path: that is the
       # supported consumer path, and it is what makes importlib.metadata the
       # version source the provenance stamp reads.
-      - name: install (editable)
-        run: pip install -e .
+      #
+      # `raster` (Pillow + numpy) and pytest are TEST dependencies here, not
+      # runtime ones — muriel declares no required deps on purpose. They are
+      # installed explicitly because a developer machine has them lying around
+      # from other work and a clean runner does not: without them
+      # test_typeset_colormap skips and test_diagram_labels / test_patterns
+      # error, which is precisely the drift a clean CI exists to catch.
+      - name: install (editable, with test extras)
+        run: pip install -e '.[raster]' pytest
 
       - name: version is derived, not hardcoded
         run: |

@@ -19,10 +19,18 @@ try:
 except ImportError:  # pragma: no cover - numpy is optional for the package
     np = None
 
-from muriel.typeset import pink_colormap
+# muriel declares no required dependencies; raster work lives behind the
+# `raster` extra (Pillow + numpy) and `muriel.typeset` imports PIL at module
+# level. Skip rather than error when the extra is absent, so a bare
+# `pip install -e .` still runs a green suite.
+try:
+    from muriel.typeset import pink_colormap
+except ImportError:  # pragma: no cover - raster extra not installed
+    pink_colormap = None
 
 
-@unittest.skipIf(np is None, "numpy not installed")
+@unittest.skipIf(np is None or pink_colormap is None,
+                 "requires the `raster` extra (Pillow + numpy)")
 class TestPinkColormap(unittest.TestCase):
     def test_shape_and_dtype(self):
         out = pink_colormap(np.zeros((7, 11)))
@@ -64,7 +72,7 @@ class TestPinkColormap(unittest.TestCase):
 
     def test_render_heatmap_still_uses_this_ramp(self):
         """Guards the extraction: render_heatmap must delegate, not re-implement."""
-        from muriel import typeset
+        from muriel import typeset  # noqa: F401 - guarded by skipIf above
 
         called = {}
         original = typeset.pink_colormap

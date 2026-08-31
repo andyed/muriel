@@ -13,13 +13,19 @@
 set -euo pipefail
 
 SKIP_PYTHON=0
+REPAIR=0
 for arg in "$@"; do
   case "$arg" in
     --no-python) SKIP_PYTHON=1 ;;
+    --repair)    REPAIR=1 ;;
     -h|--help)
-      echo "usage: install.sh [--no-python]"
+      echo "usage: install.sh [--repair] [--no-python]"
+      echo "  --repair      move a legacy non-symlink mount aside and replace it"
+      echo "                with a single directory symlink"
       echo "  --no-python   skip the editable pip install (packaging/CI contexts"
       echo "                that install the wheel themselves)"
+      echo
+      echo "env: PYTHON=/path/to/python   interpreter to install into (default: python3)"
       exit 0
       ;;
     *) echo "unknown argument: $arg (try --help)" >&2; exit 2 ;;
@@ -78,8 +84,6 @@ fi
 # So: verify where a mount actually points, not merely that something is
 # there. Repoint what we own; never silently delete what we do not.
 NEEDS_REPAIR=0
-REPAIR=0
-[ "${1:-}" = "--repair" ] && REPAIR=1
 
 mount_dir() {
   mount_src="$1"; mount_dst="$2"; mount_label="$3"
@@ -167,34 +171,72 @@ done
 # priority over the namespace shadow, and it makes `importlib.metadata` the
 # version source the provenance stamp reads. Skippable with --no-python for
 # packaging or CI contexts that install the wheel themselves.
+#
+# Install via `<interpreter> -m pip`, never bare `pip`. On a machine with
+# pyenv, Homebrew and venvs in play these disagree: on the author's laptop
+# `pip` is pyenv 3.10 while `python3` is Homebrew 3.14, so bare `pip` installed
+# muriel into an interpreter the jury agents never run, and
+# `python -m muriel.squint` kept failing with the install apparently done.
+# Override with PYTHON=/path/to/python.
+PY_FAILED=0
+PYBIN="${PYTHON:-python3}"
 if [ "${SKIP_PYTHON:-0}" = "1" ]; then
   echo "✗ skipping Python install (--no-python)"
-elif command -v pip >/dev/null 2>&1; then
+elif ! command -v "$PYBIN" >/dev/null 2>&1; then
+  echo "✗ interpreter '$PYBIN' not found — skipping Python install"
+  echo "  set PYTHON=/path/to/python and re-run"
+elif ! "$PYBIN" -m pip --version >/dev/null 2>&1; then
+  echo "✗ $PYBIN has no pip — skipping Python install"
+  echo "  install with uv instead:  uv pip install -e $SRC --python $PYBIN"
+else
+  echo "Python target: $("$PYBIN" -c 'import sys,platform; print(platform.python_version(), "at", sys.executable)')"
   read -r -p "Install muriel Python package with 'pip install -e' (Y/n)? " yn
   case "$yn" in
     [Nn]*)
       echo "! skipped — muriel.provenance will not be importable without a"
       echo "  sys.path hack, and 'import muriel' from a parent directory will"
       echo "  resolve to an empty namespace package. Install later with:"
-      echo "    pip install -e $SRC"
+      echo "    $PYBIN -m pip install -e $SRC"
       ;;
     *)
-      if pip install -e "$SRC"; then
+      # Homebrew/system pythons are PEP 668 "externally managed" and refuse a
+      # plain install. Retry into the USER site, which never touches the
+      # managed tree — that is the combination pip itself recommends when
+      # overriding, and it is trivially reversible with `pip uninstall muriel`.
+      # Without this fallback the default path fails on every Homebrew machine.
+      if "$PYBIN" -m pip install -e "$SRC" 2>/tmp/muriel-pip-err.$$; then
         echo "✓ pip install -e complete"
+        rm -f /tmp/muriel-pip-err.$$
+      elif grep -q "externally-managed-environment" /tmp/muriel-pip-err.$$ 2>/dev/null; then
+        echo "  (interpreter is externally managed — retrying into your user site)"
+        if "$PYBIN" -m pip install -e "$SRC" --user --break-system-packages; then
+          echo "✓ pip install -e complete (user site; system tree untouched)"
+        else
+          echo "! pip install failed — muriel.provenance stays unimportable."
+          echo "  Options:"
+          echo "    • install into a venv:  $PYBIN -m venv .venv && .venv/bin/pip install -e $SRC"
+          echo "    • or with uv:           uv pip install -e $SRC --python $PYBIN"
+          PY_FAILED=1
+        fi
+        rm -f /tmp/muriel-pip-err.$$
       else
         echo "! pip install -e failed — muriel.provenance stays unimportable."
-        echo "  Retry with: pip install -e $SRC"
-        NEEDS_REPAIR=1
+        sed 's/^/    /' /tmp/muriel-pip-err.$$ | tail -5
+        echo "  Retry with: $PYBIN -m pip install -e $SRC"
+        rm -f /tmp/muriel-pip-err.$$
+        PY_FAILED=1
       fi
       ;;
   esac
-else
-  echo "✗ pip not found on PATH — skipping Python install"
-  echo "  muriel.provenance will not be importable until you run:"
-  echo "    pip install -e $SRC"
 fi
 
 echo ""
+if [ "$PY_FAILED" -eq 1 ]; then
+  echo "! Python package not installed — muriel.provenance is unimportable and"
+  echo "  the jury seats that call muriel.squint will fail. Skills/agents are"
+  echo "  mounted regardless; fix the install with one of the options above."
+  exit 1
+fi
 if [ "$NEEDS_REPAIR" -eq 1 ]; then
   echo "! Install incomplete — a legacy mount is still in place."
   echo "  Re-run with:  $0 --repair"
