@@ -13,6 +13,11 @@
 //   FocusController              — click-to-focus animation (mountain demos)
 //   startRenderLoop({...})       — parallax + auto-orbit + render
 //   THREE, CSS3DObject           — re-exports
+//
+// For fields of more than a few hundred items, one CSS3DObject per item is the
+// wrong shape — see instanced.js (GPU quads) and hybrid.js (a small DOM pool
+// lent to whatever is close enough to read). This module stays the scene,
+// camera, geometry and camera-motion layer for both.
 
 import * as THREE from 'three';
 import {
@@ -29,34 +34,52 @@ export function createScene({
   lookAt     = [0, 130, -300],
   near       = 1,
   far        = 8000,
+  // Size to this element instead of the window. A full-page demo wants the
+  // window; a scene embedded in an app pane needs the pane, or it renders at
+  // viewport size behind a smaller container and every pointer coordinate is
+  // wrong. Accepts an element or a selector.
+  container  = null,
 } = {}) {
+  const box = typeof container === 'string'
+    ? document.querySelector(container)
+    : container;
+  const measure = () => (box
+    ? { w: box.clientWidth || 1, h: box.clientHeight || 1 }
+    : { w: window.innerWidth, h: window.innerHeight });
+
   const scene = new THREE.Scene();
   scene.background = null;
 
-  const camera = new THREE.PerspectiveCamera(
-    fov, window.innerWidth / window.innerHeight, near, far,
-  );
+  let { w, h } = measure();
+  const camera = new THREE.PerspectiveCamera(fov, w / h, near, far);
   camera.position.set(...cameraPos);
   camera.lookAt(...lookAt);
 
   const webglRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   webglRenderer.setPixelRatio(window.devicePixelRatio || 1);
-  webglRenderer.setSize(window.innerWidth, window.innerHeight);
+  webglRenderer.setSize(w, h);
   webglRenderer.setClearColor(0x000000, 0);
   document.querySelector(webglMount).appendChild(webglRenderer.domElement);
 
   const cssRenderer = new CSS3DRenderer();
-  cssRenderer.setSize(window.innerWidth, window.innerHeight);
+  cssRenderer.setSize(w, h);
   document.querySelector(cssMount).appendChild(cssRenderer.domElement);
 
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+  const resize = () => {
+    ({ w, h } = measure());
+    camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    webglRenderer.setSize(window.innerWidth, window.innerHeight);
-    cssRenderer.setSize(window.innerWidth, window.innerHeight);
-  });
+    webglRenderer.setSize(w, h);
+    cssRenderer.setSize(w, h);
+  };
+  window.addEventListener('resize', resize);
+  // A container can change size without the window doing so — a collapsing
+  // sidebar, a detail panel opening. ResizeObserver catches what resize misses.
+  if (box && typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(resize).observe(box);
+  }
 
-  return { scene, camera, webglRenderer, cssRenderer };
+  return { scene, camera, webglRenderer, cssRenderer, resize, measure };
 }
 
 // ─── Mountain — tilted grid plane + zones ───────────────────────────
@@ -132,6 +155,78 @@ export class Mountain {
       v * this.cosT,
     );
   }
+
+  /**
+   * Lay out a whole corpus on the slope, front to back.
+   *
+   * The original Data Mountain (Robertson / Czerwinski / Larson / Robbins /
+   * Thiel / van Dantzich, UIST 1998) had the *user* place ~100 pages by hand —
+   * the spatial memory being tested was theirs. A corpus of thousands cannot be
+   * hand-placed, so the slope has to earn its depth some other way: order
+   * carries the meaning, and depth carries the ordering.
+   *
+   * Rows are justified — each row filled to the plane's width — with the target
+   * height shrinking toward the back. That is the same rule a flat justified
+   * wall uses, with one addition: because far rows are smaller AND further up
+   * the tilted plane, they foreshorten twice, so a back row costs very little
+   * screen area while staying present as context. That double falloff is the
+   * whole reason to put a wall on a slope rather than leave it flat.
+   *
+   * @param {number} count
+   * @param {(i:number) => number} aspectOf  width/height of item i
+   * @returns {Array<{u:number, v:number, w:number, h:number, row:number, depth:number}>}
+   *   `depth` is 0 at the front edge and 1 at the back, for consumers that want
+   *   to dim, thin, or drop detail with distance.
+   */
+  arrange(count, aspectOf, {
+    width = 1900, depth = 1700,
+    frontH = 210, backH = 64,
+    gap = 16, rowGap = 26,
+  } = {}) {
+    const out = [];
+    const halfW = width / 2;
+    let v = 0;            // 0 at the front edge, negative going back
+    let i = 0;
+    let row = 0;
+
+    while (i < count) {
+      // Depth drives the row's target height. Estimated from v before the row
+      // is packed, which is what makes the falloff smooth rather than stepped.
+      const t = Math.min(1, -v / depth);
+      const targetH = frontH + (backH - frontH) * t;
+
+      // Fill the row: take items until their combined width at targetH exceeds
+      // the plane, then scale the row's height so it fits exactly.
+      const start = i;
+      let sumAspect = 0;
+      while (i < count) {
+        sumAspect += aspectOf(i);
+        i++;
+        const w = sumAspect * targetH + gap * (i - start - 1);
+        if (w >= width) break;
+      }
+      const n = i - start;
+      const h = (width - gap * (n - 1)) / sumAspect;
+      // A short final row keeps the target height instead of stretching one
+      // orphan across the full plane.
+      const rowH = (i >= count && h > targetH * 1.45) ? targetH : h;
+
+      let u = -halfW;
+      for (let k = start; k < i; k++) {
+        const w = aspectOf(k) * rowH;
+        out.push({
+          u: u + w / 2, v, w, h: rowH, row,
+          depth: Math.min(1, -v / depth),
+        });
+        u += w + gap;
+      }
+
+      v -= rowH + rowGap;
+      row++;
+      if (-v > depth * 3) break;   // ran off the back of the plane
+    }
+    return out;
+  }
 }
 
 // ─── Standalone grid + horizon helpers ──────────────────────────────
@@ -174,7 +269,15 @@ export function addHorizon(scene, {
 
 // ─── CSS3D wrapper ──────────────────────────────────────────────────
 
-export function makePlane(html, {
+/**
+ * Wrap markup or a node in a CSS3DObject.
+ *
+ * Pass a string for authored markup you control. Pass a Node — or an array of
+ * them — for anything derived from data you did not write: the string path
+ * goes through innerHTML, and a consumer rendering scraped third-party titles
+ * must not have an innerHTML path available to it at all.
+ */
+export function makePlane(content, {
   x = 0, y = 0, z = 0,
   rotX = 0, rotY = 0, rotZ = 0,
   className = 'plane',
@@ -183,7 +286,9 @@ export function makePlane(html, {
   const el = document.createElement('div');
   el.className = className;
   if (width) el.style.width = width + 'px';
-  el.innerHTML = html;
+  if (typeof content === 'string') el.innerHTML = content;
+  else if (Array.isArray(content)) el.append(...content);
+  else if (content) el.append(content);
   const obj = new CSS3DObject(el);
   obj.position.set(x, y, z);
   if (rotX) obj.rotation.x = rotX;
@@ -268,6 +373,12 @@ export function startRenderLoop({
   lookYAmount     = 40,
   beforeRender    = null,      // hook for per-card lerps etc.
   onKeydown       = null,      // hook for app-specific key handling
+  // Depth-order the CSS3D cards. The default walks the scene and writes a
+  // zIndex for every visible card, every frame — correct and cheap for the
+  // dozen-card demos, and quadratically wrong past a few hundred, where it
+  // becomes thousands of style writes per frame. A high-count consumer passes
+  // its own (see HybridField.sort, which is bounded by the DOM pool).
+  sortDom         = null,
 } = {}) {
   const cam = {
     mx: 0, my: 0, dolly: 0,
@@ -322,12 +433,16 @@ export function startRenderLoop({
     // opacity/filter (e.g. the distance-dimming .dim-* classes) stack in DOM
     // order and a far card can sit above the focused one. Harmless for
     // non-flattened cards (3D position still wins).
-    scene.traverse((o) => {
-      if (o.element && o.visible) {
-        o.element.style.zIndex =
-          String(Math.round(1e6 - camera.position.distanceTo(o.getWorldPosition(_zTmp))));
-      }
-    });
+    if (sortDom) {
+      sortDom(camera);
+    } else {
+      scene.traverse((o) => {
+        if (o.element && o.visible) {
+          o.element.style.zIndex =
+            String(Math.round(1e6 - camera.position.distanceTo(o.getWorldPosition(_zTmp))));
+        }
+      });
+    }
     webglRenderer.render(scene, camera);
     cssRenderer.render(scene, camera);
     requestAnimationFrame(tick);

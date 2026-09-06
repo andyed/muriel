@@ -36,3 +36,6 @@ render_assets/forgery/
 # next to source. Never commit-eligible: they preserve whatever was in the file
 # at backup time, including content since scrubbed from the tracked version.
 .codex-backups/
+
+# check.mjs (render_assets) needs playwright; deps stay out of the tree
+node_modules/

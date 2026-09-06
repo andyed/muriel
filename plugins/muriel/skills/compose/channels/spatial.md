@@ -42,6 +42,54 @@ Pre-flight question for any spatial composition: *if I flattened the scene to a 
 | 6 | Perspective Wall | `render_assets/perspective-wall/` + `render_assets/sciprogfi-lux-mesh-wall/` | Mackinlay / Robertson / Card (1991) focus + context — central card readable, peripheral cards foreshortened against the receding wall. Two brand skins (psychodeli + sciprogfi/OHC mesh). |
 | 7 | Orbital Sunburst | `render_assets/orbital-sunburst/` | One partition layout projected two ways: conventional top-view sunburst and an exploded 3D hierarchy stack with pointer, keyboard, orbit, and phone-safe linear controls. |
 | 8 | Demo gallery | `render_assets/index.html` | Single page indexing every exemplar with kicker / tag / lineage / source link. |
+| 9 | High-count tile field | `render_assets/_lib/atlas.js` + `instanced.js` | The whole corpus as ONE instanced draw call over a two-tier texture atlas (`far`: every item at 64px; `near`: an LRU pool of 256px slots). VRAM is bounded by the tier sizes, not the item count. |
+| 10 | Pixel/DOM hybrid | `render_assets/_lib/hybrid.js` | A fixed pool of real DOM elements lent to whatever is close enough to read, swapped against their quads. Keeps selectable text, links, and keyboard focus at a DOM budget that does not grow with the corpus. |
+| 11 | Data Mountain at field scale | `render_assets/data-mountain-field/` | 2,500 tiles on the slope: 4 draw calls, 12 DOM elements, 103 MB of atlas. Ships `check.mjs`, which asserts the budget is bounded and fails if it is not. |
+
+## Scale — when one element per item stops working
+
+The first four runtime exemplars give every item its own `CSS3DObject`. That is
+the right shape for a dozen cards and the wrong shape by two orders of magnitude
+past it: every card is a DOM element carrying its own `matrix3d`, individually
+composited, and `startRenderLoop`'s depth-sort pass walked the scene writing a
+`zIndex` for each one on every frame.
+
+The fix is not a faster DOM. It is noticing that **focus+context layouts only
+ever demand legibility from a few items at a time** — which is the observation
+the Perspective Wall and the Data Mountain were built on in the first place. So
+the field splits into three tiers:
+
+| tier | population | backing | carries |
+|---|---|---|---|
+| far | the whole corpus | one atlas, 64px per tile | colour and shape |
+| near | a fixed LRU pool (~256) | 256px atlas slots | a recognizable image |
+| DOM | a fixed pool (~12) | real elements | selectable text, links, keyboard focus |
+
+Only the far atlas grows with the corpus, at 16 KB per item. The near and DOM
+budgets are constants. Measured on `data-mountain-field/` at 2,500 items: **4
+draw calls, 12 DOM elements, 103 MB of atlas** — and the same numbers at 25,000
+items apart from the far atlas.
+
+`spatial.js` gained three scale affordances, all backward compatible:
+
+- `startRenderLoop({ sortDom })` — replaces the default `scene.traverse()`
+  depth-sort, which is correct and cheap for the dozen-card demos and quadratic
+  past a few hundred. `HybridField.sort` is bounded by the DOM pool.
+- `makePlane(nodeOrString, …)` — a Node (or array of them) skips the innerHTML
+  path entirely, so a consumer rendering scraped third-party titles can stay on
+  `textContent`.
+- `createScene({ container })` — sizes to an element rather than the window,
+  with a `ResizeObserver`, for scenes embedded in an app pane.
+
+And `Mountain.arrange(count, aspectOf, …)` lays a whole corpus on the slope in
+justified rows whose target height falls toward the back — the same rule a flat
+justified wall uses, except that far rows shrink *and* foreshorten, so a back
+row costs almost no screen area while staying present as context. That double
+falloff is the reason to put a wall on a slope rather than leave it flat.
+
+**Anti-pattern.** Do not raise `poolSize` to "just fit everything." The pool
+being small is the design, not a limitation of it; a pool the size of the corpus
+is one element per item again, wearing a hybrid's clothes.
 
 **Queued.** `muriel.spatial.typeset_scene()` — Python emitter that consumes a `PerspectiveGrid` and a list of DOM blocks and writes a `.html` artifact ready to drop into `render_assets/<name>/index.html`. Closes the design.md → brand.toml → CSS-3D-typography loop so the static SVG grid and the interactive scene share their coordinate system by construction, not by hand-port.
 

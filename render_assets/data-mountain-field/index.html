@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Mountain — field scale</title>
+<link rel="stylesheet" href="../_lib/spatial.css">
+<style>
+  /* The shared spatial.css tiers --ink-dim (6.96:1) and --ink-faint (2.09:1)
+   * both sit under muriel's 8:1 floor on this background. Overridden here to
+   * clear it: 0.72 alpha measures 8.22:1, and the faint tier is dropped —
+   * a third contrast step does not fit above the floor, so the HUD separates
+   * its tiers by size and letterspacing instead. */
+  :root {
+    --ink-dim: rgba(230, 228, 210, 0.72);
+    --ink-faint: rgba(230, 228, 210, 0.72);
+    --hot: #ffd166;
+  }
+  #hud .cite { font-size: 9px; letter-spacing: 0.08em; }
+
+  .stat { display: flex; gap: 6px; justify-content: flex-end; }
+  .stat b { color: var(--cyan); font-weight: 500; min-width: 62px; text-align: right; }
+  .stat.warn b { color: var(--hot); }
+
+  /* A promoted card — a real DOM element, lent to whatever is close enough to
+   * read. Authored at 320px wide (HybridField.basePx) and scaled into world
+   * units, so type is authored at honest sizes. */
+  .hybrid-card {
+    width: 320px;
+    background: #0d1017;
+    border: 1px solid rgba(127, 223, 255, 0.55);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    font-family: var(--sans);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.75);
+  }
+  .hybrid-card.focused {
+    border-color: var(--hot);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9);
+  }
+  .hybrid-card .thumb {
+    /* Shaped by the quad this card replaced, not a fixed ratio — see
+     * HybridField, which sets --tile-aspect on promotion. */
+    display: block; width: 100%;
+    aspect-ratio: var(--tile-aspect, 4 / 3);
+    object-fit: cover; background: #1b2430;
+  }
+  .hybrid-card .body { padding: 10px 12px 12px; }
+  .hybrid-card .t {
+    font-size: 15px; line-height: 1.25; color: var(--ink);
+    font-weight: 600;
+  }
+  .hybrid-card .m {
+    margin-top: 5px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-dim);          /* 8.22:1 */
+    letter-spacing: 0.03em;
+  }
+</style>
+</head>
+<body>
+
+<div id="webgl"></div>
+<div id="css3d"></div>
+
+<div id="hud">
+  <div class="row">
+    <div>
+      <div style="font-family:var(--mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink)">
+        Data Mountain — field scale
+      </div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);margin-top:4px">
+        every tile is a GPU quad · a dozen are real DOM
+      </div>
+    </div>
+    <div class="meta">
+      <div class="stat"><span>items</span><b id="s-items">—</b></div>
+      <div class="stat"><span>draw calls</span><b id="s-draws">—</b></div>
+      <div class="stat"><span>DOM cards</span><b id="s-dom">—</b></div>
+      <div class="stat"><span>near tier</span><b id="s-near">—</b></div>
+      <div class="stat"><span>atlas VRAM</span><b id="s-vram">—</b></div>
+      <div class="stat" id="s-frame-row"><span>frame</span><b id="s-frame">—</b></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="hint">
+      <kbd>move</kbd> parallax &nbsp; <kbd>scroll</kbd> dolly &nbsp;
+      <kbd>space</kbd> orbit &nbsp; <kbd>click</kbd> focus &nbsp; <kbd>esc</kbd> release
+    </div>
+    <div class="cite">
+      after <em>Robertson, Czerwinski, Larson, Robbins, Thiel, van Dantzich</em> —
+      Data Mountain, UIST 1998. The original placed ~100 pages by hand;
+      this carries <em id="cite-n">—</em> auto-arranged, to test the rendering
+      contract rather than the memory claim.
+    </div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import {
+  createScene, Mountain, addFloorGrid, addHorizon, startRenderLoop, THREE,
+} from '../_lib/spatial.js';
+import { TileField } from '../_lib/instanced.js';
+import { HybridField } from '../_lib/hybrid.js';
+
+const COUNT = Number(new URLSearchParams(location.search).get('n') || 2500);
+
+/* ─── Synthetic corpus ───────────────────────────────────────────────
+ *
+ * Self-contained on purpose: the point under test is the rendering
+ * contract at count, and a demo that needs 2,500 network images cannot
+ * be run as a check. Sources are generated once and shared across items;
+ * the atlas still keys by item index, so slot allocation and LRU eviction
+ * behave exactly as they would with 2,500 distinct URLs.
+ */
+const PALETTE = [
+  '#7fdfff', '#ff5fa2', '#d2b06a', '#8affc1', '#c9a7ff',
+  '#ffb066', '#66d9e8', '#ff8a8a', '#a0e57a', '#e5e5e5',
+];
+const SOURCES = [];
+function buildSources(n = 120) {
+  for (let i = 0; i < n; i++) {
+    const c = document.createElement('canvas');
+    c.width = 256; c.height = 192;
+    const g = c.getContext('2d');
+    const a = PALETTE[i % PALETTE.length];
+    const b = PALETTE[(i * 7 + 3) % PALETTE.length];
+    const grad = g.createLinearGradient(0, 0, 256, 192);
+    grad.addColorStop(0, a);
+    grad.addColorStop(1, b);
+    g.fillStyle = grad;
+    g.fillRect(0, 0, 256, 192);
+    // A little structure so tier changes are visible rather than a flat wash.
+    g.globalAlpha = 0.35;
+    g.fillStyle = '#07070d';
+    for (let k = 0; k < 5; k++) {
+      g.fillRect((i * 37 + k * 51) % 220, (i * 17 + k * 29) % 150, 34, 26);
+    }
+    SOURCES.push(c.toDataURL('image/jpeg', 0.72));
+  }
+}
+buildSources();
+
+// Aspect ratios spread the way real clippings do — mostly landscape, a long
+// tail of banners and phone shots. A field of identical squares would hide
+// exactly the layout bugs this is meant to surface.
+const aspects = new Float32Array(COUNT);
+for (let i = 0; i < COUNT; i++) {
+  const r = (Math.sin(i * 12.9898) * 43758.5453) % 1;
+  const u = Math.abs(r);
+  aspects[i] = u < 0.10 ? 0.6 + u * 1.2
+             : u < 0.85 ? 1.15 + u * 0.75
+             : 2.0 + u * 1.6;
+}
+const aspectOf = (i) => aspects[i];
+
+/* ─── Scene ──────────────────────────────────────────────────────────── */
+
+const { scene, camera, webglRenderer, cssRenderer } = createScene({
+  cameraPos: [0, 210, 900],
+  lookAt: [0, 120, -420],
+  far: 12000,
+});
+const mountain = new Mountain({ scene, width: 2400, depth: 2600, cols: 34, rows: 30 });
+addHorizon(scene);
+addFloorGrid(scene, { opacity: 0.10 });
+
+const field = new TileField({
+  scene,
+  count: COUNT,
+  // The camera sits ~900 world units from the FRONT row and ~3,500 from the
+  // back, so these thresholds are calibrated against that range, not guessed.
+  // A near distance under ~900 promotes nothing at all.
+  nearDistance: 2050,
+  nearSlots: 256,
+  resolve: (i, tier) => SOURCES[(i * 31 + (tier === 'near' ? 0 : 1)) % SOURCES.length],
+});
+
+// Place the corpus on the slope, then hand the same coordinates to the mesh.
+const placed = mountain.arrange(COUNT, aspectOf, {
+  width: 2400, depth: 2600, frontH: 190, backH: 58,
+});
+const tilt = new THREE.Quaternion()
+  .setFromEuler(new THREE.Euler(mountain.tilt, 0, 0));
+for (let i = 0; i < placed.length; i++) {
+  const p = placed[i];
+  const w = mountain.planeToWorld(p.u, p.v, p.h);
+  field.place(i, w.x, w.y, w.z, p.w, p.h, tilt);
+}
+// Items beyond what fits on the slope are parked far behind the camera rather
+// than left at the origin, where they would pile into one bright blob.
+for (let i = placed.length; i < COUNT; i++) field.place(i, 0, -9999, 0, 1, 1);
+field.layout();
+
+/* ─── The DOM tier ───────────────────────────────────────────────────── */
+
+const hybrid = new HybridField({
+  scene, field,
+  poolSize: 12,
+  basePx: 320,
+  promoteDistance: 1180,
+  build(index, el) {
+    // textContent / setAttribute only — no innerHTML path. A consumer whose
+    // titles come from scraped pages inherits that guarantee from the lib.
+    const img = document.createElement('img');
+    img.className = 'thumb';
+    img.src = SOURCES[(index * 31) % SOURCES.length];
+    img.alt = '';
+    img.draggable = false;
+
+    const body = document.createElement('div');
+    body.className = 'body';
+    const t = document.createElement('div');
+    t.className = 't';
+    t.textContent = `Item ${index}`;
+    const m = document.createElement('div');
+    m.className = 'm';
+    m.textContent = `row ${placed[index]?.row ?? '—'} · aspect ${aspectOf(index).toFixed(2)}`;
+    body.append(t, m);
+
+    el.append(img, body);
+    el.setAttribute('aria-label', `Item ${index}`);
+  },
+  onActivate(index) {
+    hybrid.setFocus(hybrid.focused === index ? -1 : index);
+  },
+});
+
+/* ─── Picking ────────────────────────────────────────────────────────── */
+
+const raycaster = new THREE.Raycaster();
+const ndc = new THREE.Vector2();
+webglRenderer.domElement.addEventListener('click', (e) => {
+  const r = webglRenderer.domElement.getBoundingClientRect();
+  ndc.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+  ndc.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+  raycaster.setFromCamera(ndc, camera);
+  const hit = field.pick(raycaster);
+  hybrid.setFocus(hit);
+});
+
+/* ─── HUD ────────────────────────────────────────────────────────────── */
+
+const $ = (id) => document.getElementById(id);
+$('s-items').textContent = COUNT.toLocaleString();
+$('cite-n').textContent = `${COUNT.toLocaleString()} tiles`;
+$('s-vram').textContent = `${(field.bytes / 1048576).toFixed(0)} MB`;
+
+let nearCount = 0;
+let frames = 0, accum = 0, last = performance.now();
+
+startRenderLoop({
+  scene, camera, webglRenderer, cssRenderer,
+  basePos: new THREE.Vector3(0, 210, 900),
+  lookTarget: new THREE.Vector3(0, 120, -420),
+  dollyRange: [-500, 1400],
+  // Bounded by the DOM pool instead of walking the scene every frame.
+  sortDom: (cam) => hybrid.sort(cam),
+  beforeRender: (now) => {
+    nearCount = field.update(camera, now);
+    hybrid.update(camera);
+
+    const dt = now - last; last = now;
+    accum += dt; frames++;
+    if (accum >= 500) {
+      $('s-frame').textContent = `${(accum / frames).toFixed(1)} ms`;
+      $('s-frame-row').classList.toggle('warn', accum / frames > 16.7);
+      accum = 0; frames = 0;
+      $('s-draws').textContent = String(webglRenderer.info.render.calls);
+      $('s-dom').textContent = String(hybrid.live.size);
+      $('s-near').textContent = String(nearCount);
+    }
+  },
+  onKeydown: (e) => {
+    if (e.code === 'Escape') hybrid.setFocus(-1);
+  },
+});
+
+// Exposed for check.mjs — measurements a screenshot cannot make.
+window.__field = { field, hybrid, renderer: webglRenderer, count: COUNT };
+</script>
+</body>
+</html>
