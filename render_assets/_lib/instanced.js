@@ -27,6 +27,7 @@ attribute float aRow;
 
 uniform float uRowOffset[MAX_ROWS];
 uniform float uRowAngle[MAX_ROWS];
+uniform float uWrapSpan;
 
 varying vec2  vUv;
 varying float vSlot;
@@ -56,6 +57,18 @@ void main() {
   local = vec3(ca * local.x + sa * local.z, local.y, -sa * local.x + ca * local.z);
 
   centre.x += uRowOffset[row];
+  // Wrap the CENTRE, never the vertices: the quad has already been rebuilt
+  // around it, so the whole tile crosses the seam in one step instead of
+  // tearing in half.
+  if (uWrapSpan > 0.0) {
+    // Do not name this "half" -- that is a reserved word in GLSL ES, and the
+    // shader then silently fails to compile, leaving every CPU-side assertion
+    // passing over a field that is not being drawn at all.
+    // (No backticks in here either: this comment lives inside a JS template
+    // literal, and one would end the string.)
+    float halfSpan = uWrapSpan * 0.5;
+    centre.x = mod(centre.x + halfSpan, uWrapSpan) - halfSpan;
+  }
 
   gl_Position = projectionMatrix * modelViewMatrix * vec4(centre + local, 1.0);
 }
@@ -169,6 +182,7 @@ export class TileField {
         emptyColor: { value: new THREE.Color(emptyColor) },
         uRowOffset: { value: new Float32Array(MAX_ROWS) },
         uRowAngle:  { value: new Float32Array(MAX_ROWS) },
+        uWrapSpan:  { value: 0 },
       },
     });
 
@@ -269,6 +283,7 @@ export class TileField {
     this.motion.update(dt);
     this.material.uniforms.uRowOffset.value.set(this.motion.offsets);
     this.material.uniforms.uRowAngle.value.set(this.motion.angles);
+    this.material.uniforms.uWrapSpan.value = this.motion.wrapSpan || 0;
   }
 
   /**
@@ -281,8 +296,10 @@ export class TileField {
    */
   worldCentre(index, out) {
     const c = this.centres;
-    const dx = this.motion ? this.motion.offsetFor(this.rows[index]) : 0;
-    return out.set(c[index * 3] + dx, c[index * 3 + 1], c[index * 3 + 2]);
+    const x = this.motion
+      ? this.motion.wrapX(c[index * 3], this.rows[index])
+      : c[index * 3];
+    return out.set(x, c[index * 3 + 1], c[index * 3 + 2]);
   }
 
   /** World width of an instance — how wide its DOM twin must be scaled. */

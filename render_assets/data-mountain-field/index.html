@@ -281,8 +281,13 @@ applyMountain(true);
 // Rows slide right and left and their tiles sweep through an angle. Rows are
 // phase-shifted, which is what makes it a travelling wave rather than the whole
 // field moving as one slab — a uniform slide reads as a camera pan.
-const motion = new RowMotion({ slide: 30, slideRate: 0.16, slidePhase: 0.6,
-                               sweep: 0.13, sweepRate: 0.11, sweepPhase: 0.9 });
+// Rows PAN — each scrolls continuously at its own rate and wraps. wrapSpan is
+// the row's own content width, so a tile leaving the right edge re-enters at
+// the left; the camera frames narrower than that span so the seam is off-screen.
+const motion = new RowMotion({
+  mode: 'pan', speed: 30, speedVariance: 0.5, wrapSpan: 2400,
+  sweep: 0.10, sweepRate: 0.11, sweepPhase: 0.9,
+});
 field.setMotion(motion);
 respectReducedMotion(motion);
 

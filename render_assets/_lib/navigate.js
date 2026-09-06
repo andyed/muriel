@@ -120,10 +120,21 @@ export class FieldNavigator {
     if (this.selection < 0) return this.selectFirstVisible();
     this._project(this.selection, this._sel);
 
+    // Horizontal movement stays in its own row.
+    //
+    // Screen-space alone was enough while rows sat in tidy columns. Once rows
+    // PAN at independent rates they no longer line up, so "left" can land on a
+    // neighbouring row that happens to have drifted into the gap — and Home/End
+    // then walk diagonally across the field. The row tag is the ground truth
+    // about what a row is; screen space only decides the order within it.
+    const rows = this.field.rows;
+    const lockRow = dx !== 0 && dy === 0 && rows ? rows[this.selection] : null;
+
     let best = -1;
     let bestScore = Infinity;
     for (let i = 0; i < this.field.count; i++) {
       if (i === this.selection) continue;
+      if (lockRow !== null && rows[i] !== lockRow) continue;
       this._project(i, this._v);
       // Behind the camera, or outside the frustum in depth.
       if (this._v.z < -1 || this._v.z > 1) continue;

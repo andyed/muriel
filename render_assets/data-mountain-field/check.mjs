@@ -98,17 +98,26 @@ const mo = await page.evaluate(() => {
   const { field, motion } = window.__field;
   const V = field._pc.constructor;
   motion.setEnabled(true);
-  // Drive the amplitude far past a tile's own width for the duration of the
-  // test. At the demo's 30-unit amplitude a front-row tile is ~285 units wide,
-  // so aiming at the static position still lands inside the same tile and the
-  // "does pick respect motion" assertion below would pass for free.
-  const realSlide = motion.slide;
-  motion.slide = 900;
   motion.update(1200);
-  field.applyMotion(0);
 
+  // Force a displacement far past a tile's own width, by writing the offset
+  // array directly rather than through a mode-specific amplitude knob — the
+  // assertion below is about pick/render agreement, and must not silently stop
+  // testing anything when the motion mode changes. At the demo's real ~30-unit
+  // offset a 285-unit-wide tile still covers its own static position, so the
+  // test would pass for free.
+  // Read the real wave before forcing anything — measuring spread on the
+  // forced array reports 0 and "fails" a working field.
   const offs = Array.from(motion.offsets.slice(0, 12));
   const spread = Math.max(...offs) - Math.min(...offs);
+  const realOffsets = Float32Array.from(motion.offsets);
+  // Push the uniforms FIRST, then overwrite the offsets. applyMotion() calls
+  // motion.update() on the way in, which recomputes the array — writing the
+  // forced values before it silently discarded them, and the assertion below
+  // then tested an ordinary frame while claiming to test a displaced one.
+  field.applyMotion(0);
+  for (let r = 0; r < motion.offsets.length; r++) motion.offsets[r] = 700;
+  field.material.uniforms.uRowOffset.value.set(motion.offsets);
 
   // Pick a tile that is actually on screen and meaningfully displaced.
   const cam = window.__field.__camera;
@@ -134,10 +143,12 @@ const mo = await page.evaluate(() => {
     hitAtStatic: field.pickAt(still.x, still.y, cam),
     ndcDrift: Math.abs(moved.x - still.x),
     tileWidth: field.sizes[probe * 2],
-    slide: motion.slide,
+    slide: 700,
+    mode: motion.mode,
+    wrapSpan: motion.wrapSpan,
     disables: (() => { motion.setEnabled(false);
       const z = motion.offsets.every((v) => v === 0); motion.setEnabled(true); return z; })(),
-    _restore: (motion.slide = realSlide, true),
+    _restore: (motion.offsets.set(realOffsets), true),
   };
 });
 
@@ -152,6 +163,12 @@ if (mo.skipped) {
      'aiming at the static layout position misses the moved tile',
      `hit ${mo.hitAtStatic}, tile ${mo.tileWidth.toFixed(0)}u wide vs ${mo.slide}u slide`);
   ok(mo.disables, 'motion can be disabled for reduced-motion');
+  // A pan that grows without bound loses float precision, and the float32
+  // uniform loses it before the JS double that computed it — so the two halves
+  // would silently drift apart after a few minutes of idling.
+  ok(mo.mode !== 'pan' || mo.wrapSpan > 0,
+     'a panning field wraps rather than growing without bound',
+     `${mo.mode}, span ${mo.wrapSpan}`);
 }
 
 // ── keyboard ──────────────────────────────────────────────────────────────

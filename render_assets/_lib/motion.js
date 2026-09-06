@@ -9,10 +9,17 @@
 //
 // Two rules the implementation is built around:
 //
-// 1. OSCILLATE, DON'T MARQUEE. "Slide right and left" is a bounded sweep, and
-//    that is lucky: a wrapping marquee has to move a quad's CENTRE across the
-//    seam atomically, or the vertices on either side of it wrap on different
-//    frames and the quad tears across the screen. A bounded sweep has no seam.
+// 1. PAN WRAPS, AND THE WRAP MUST BE ATOMIC. Rows scroll continuously rather
+//    than sweeping back and forth. A quad's CENTRE has to cross the seam in one
+//    step — wrap the vertices independently and the quad tears in half across
+//    the screen. The field shader displaces the centre and rebuilds the quad
+//    around it, so this holds by construction.
+//
+//    The real constraint of a marquee is the other one: the row's content must
+//    be WIDER than the visible frame, or the viewer watches tiles vanish at one
+//    edge and reappear at the other. `wrapSpan` is the loop length; frame the
+//    camera inside it. `oscillate` is kept for fields that cannot afford the
+//    off-screen margin.
 //
 // 2. ONE SOURCE OF TRUTH. The displacement is computed here, in JS, once per
 //    frame, into a small per-ROW array — then handed to the shader as a
@@ -44,11 +51,14 @@ export class RowMotion {
    * @param {boolean} [opts.alternate] flip direction on odd rows
    */
   constructor({
+    mode = 'pan',
+    speed = 34, speedVariance = 0.45, wrapSpan = 0,
     slide = 26, slideRate = 0.22, slidePhase = 0.55,
     sweep = 0.10, sweepRate = 0.17, sweepPhase = 0.8,
     alternate = true,
   } = {}) {
     Object.assign(this, {
+      mode, speed, speedVariance, wrapSpan,
       slide, slideRate, slidePhase, sweep, sweepRate, sweepPhase, alternate,
     });
     this.offsets = new Float32Array(MAX_ROWS);
@@ -65,13 +75,27 @@ export class RowMotion {
       return;
     }
     this.time += dt / 1000;
+    const span = this.wrapSpan;
+
     for (let r = 0; r < MAX_ROWS; r++) {
-      // Sublinear row scaling keeps far rows from swinging as far as near ones
-      // in world units — they already foreshorten, so an equal world-space
-      // amplitude reads as the back of the field barely moving.
       const dir = this.alternate && (r & 1) ? -1 : 1;
-      this.offsets[r] = dir * this.slide *
-        Math.sin(this.time * this.slideRate * Math.PI * 2 + r * this.slidePhase);
+
+      if (this.mode === 'pan') {
+        // Each row scrolls at its own rate. Uniform speed reads as one sliding
+        // slab — a camera pan — and the whole point is that rows are separate.
+        const rate = this.speed * (1 + this.speedVariance * hash01(r));
+        let x = dir * this.time * rate;
+        // Kept inside one span rather than growing without bound: an offset in
+        // the millions loses float precision, and a float32 uniform loses it
+        // sooner than the JS double that computed it, so the two halves would
+        // drift apart after a few minutes of idling.
+        if (span > 0) x = ((x % span) + span) % span;
+        this.offsets[r] = x;
+      } else {
+        this.offsets[r] = dir * this.slide *
+          Math.sin(this.time * this.slideRate * Math.PI * 2 + r * this.slidePhase);
+      }
+
       this.angles[r] = dir * this.sweep *
         Math.sin(this.time * this.sweepRate * Math.PI * 2 + r * this.sweepPhase);
     }
@@ -83,6 +107,21 @@ export class RowMotion {
   }
 
   offsetFor(row) { return this.offsets[RowMotion.slot(row)]; }
+
+  /**
+   * Apply this row's offset to a base x, wrapping into the loop.
+   *
+   * The CPU mirror of the shader's wrap. Everything positional on the CPU side
+   * goes through here, so a click during a pan lands on the tile that is drawn
+   * rather than the one the static layout claims.
+   */
+  wrapX(baseX, row) {
+    const x = baseX + this.offsetFor(row);
+    const span = this.wrapSpan;
+    if (!span) return x;
+    const half = span / 2;
+    return ((((x + half) % span) + span) % span) - half;
+  }
   angleFor(row) { return this.angles[RowMotion.slot(row)]; }
 
   /** Fade the motion out — for a screenshot, a test, or reduced-motion. */
@@ -90,6 +129,12 @@ export class RowMotion {
     this.enabled = on;
     if (!on) { this.offsets.fill(0); this.angles.fill(0); }
   }
+}
+
+/** Stable per-row jitter so a row keeps its own speed across reloads. */
+function hash01(r) {
+  const v = Math.sin((r + 1) * 127.1) * 43758.5453;
+  return v - Math.floor(v);
 }
 
 /**
