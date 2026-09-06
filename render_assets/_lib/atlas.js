@@ -215,7 +215,14 @@ export class AtlasPair {
     this.lastSeen = new Float64Array(count);
     this._nearOwner = new Int32Array(this.near.capacity).fill(-1);
 
-    this._queue = [];
+    // Two queues, near drained first. One LIFO queue looks right — the most
+    // recent request is nearest what the user is looking at — and is exactly
+    // wrong on the initial load, where every request arrives in one burst in
+    // index order. LIFO then serves the BACK of the field first and the front
+    // last: measured on a 727-clip corpus, 0 of the 39 front-of-field tiles had
+    // loaded after 20 seconds while the back was fully resident.
+    this._nearQueue = [];
+    this._farQueue = [];
     this._inflight = 0;
     this._concurrency = concurrency;
     this._failed = new Set();
@@ -285,15 +292,18 @@ export class AtlasPair {
   }
 
   _enqueue(index, tier, slot) {
-    this._queue.push({ index, tier, slot });
+    (tier === 'near' ? this._nearQueue : this._farQueue).push({ index, tier, slot });
     this._pump();
   }
 
   _pump() {
-    while (this._inflight < this._concurrency && this._queue.length) {
-      // LIFO: the most recent request is the one closest to what the user is
-      // looking at now. A FIFO queue services a stale pan for seconds.
-      const job = this._queue.pop();
+    while (this._inflight < this._concurrency) {
+      // Near before far: the near tier IS the set the camera is close to, so
+      // this serves what is on screen rather than whatever was requested last.
+      // Within a tier, LIFO — a fresh request during a pan beats a stale one.
+      const q = this._nearQueue.length ? this._nearQueue : this._farQueue;
+      if (!q.length) return;
+      const job = q.pop();
       const slots = job.tier === 'far' ? this.farSlot : this.nearSlot;
       // The slot may have been reassigned while queued.
       if (slots[job.index] !== job.slot) continue;
@@ -347,6 +357,7 @@ export class AtlasPair {
   dispose() {
     this.far.dispose();
     this.near.dispose();
-    this._queue.length = 0;
+    this._nearQueue.length = 0;
+    this._farQueue.length = 0;
   }
 }
