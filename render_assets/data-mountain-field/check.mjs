@@ -25,7 +25,15 @@ const browser = await chromium.launch({
 });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 const errors = [];
-page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+// The ?fail= fixture loads deliberately-bad URLs; those resource errors are the
+// point of it, not a regression. Everything else still counts.
+const EXPECTED_LOAD_FAILURE = /Failed to load resource|ERR_INVALID_URL/;
+const fixtureActive = /[?&]fail=[1-9]/.test(url || '');
+page.on('console', (m) => {
+  if (m.type() !== 'error') return;
+  if (fixtureActive && EXPECTED_LOAD_FAILURE.test(m.text())) return;
+  errors.push(m.text());
+});
 page.on('pageerror', (e) => errors.push(String(e)));
 
 await page.goto(url, { waitUntil: 'networkidle' });
@@ -53,6 +61,24 @@ const stats = await page.evaluate(() => {
     farDistinctSlots: new Set(Array.from(field.atlases.farSlot).filter((s) => s >= 0)).size,
     farResidentRaw: Array.from(field.atlases.farSlot).filter((s) => s >= 0).length,
     suppressed: Array.from(field._suppressed).filter(Boolean).length,
+    // The RENDERED slot per instance, which is what the shader samples. The
+    // farSlot/nearSlot arrays above are bookkeeping and were correct while the
+    // screen was wrong: a slotless instance clamped to 0 renders slot 0's
+    // image, and only the attribute the GPU reads shows that.
+    aliasing: (() => {
+      const slot = field.aSlot.array;
+      const tier = field.aTier.array;
+      const hist = new Map();
+      let slotless = 0;
+      for (let i = 0; i < field.count; i++) {
+        if (field._suppressed[i]) continue;
+        if (slot[i] < 0) { slotless++; continue; }
+        const key = `${tier[i] > 0.5 ? 'n' : 'f'}:${slot[i]}`;
+        hist.set(key, (hist.get(key) || 0) + 1);
+      }
+      const worst = Math.max(0, ...hist.values());
+      return { worst, slotless };
+    })(),
   };
 });
 
@@ -81,6 +107,13 @@ ok(stats.nearResident <= stats.nearCapacity, 'near tier respects its pool', `${s
 // duplicate per evict until the free-list/detach split.
 ok(stats.nearResident === stats.nearDistinctSlots, 'no two items share a near slot', `${stats.nearResident} holders / ${stats.nearDistinctSlots} slots`);
 ok(stats.farResidentRaw === stats.farDistinctSlots, 'no two items share a far slot', `${stats.farResidentRaw} holders / ${stats.farDistinctSlots} slots`);
+// The assertion that actually protects the screen. Two instances rendering the
+// same slot in the same tier means the corpus is showing one image several
+// times — which is what a slotless instance clamped to 0 produced, invisibly to
+// every bookkeeping-level check above.
+ok(stats.aliasing.worst <= 1,
+   'no two rendered instances sample the same atlas slot',
+   `worst ${stats.aliasing.worst} instances on one slot, ${stats.aliasing.slotless} slotless`);
 ok(stats.nearResident > 0, 'near tier promoted something', `${stats.nearResident} resident`);
 ok(stats.farResident > stats.nearResident, 'far tier carries the bulk', `${stats.farResident} far vs ${stats.nearResident} near`);
 ok(stats.suppressed === stats.domCards, 'each DOM card suppresses exactly its quad', `${stats.suppressed} vs ${stats.domCards}`);

@@ -90,6 +90,16 @@ varying vec2  vFit;
 void main() {
   if (vOpacity < 0.004) discard;          // DOM twin owns this one
 
+  // No slot: this tile has no image — the load failed, or it has not been
+  // requested yet. It must render as ABSENT. Clamping a missing slot to 0
+  // instead makes every such tile display slot 0's picture, so a corpus with
+  // failures renders as hundreds of copies of one image and looks like a
+  // shader bug rather than missing data.
+  if (vSlot < 0.0) {
+    gl_FragColor = vec4(emptyColor, 1.0);
+    return;
+  }
+
   // Sample the letterboxed sub-rect the atlas actually drew into, centred in
   // the slot, so a slot whose image is a different aspect than the quad shows
   // the picture uncropped rather than stretched.
@@ -518,7 +528,10 @@ export class TileField {
       const farSlot = this.atlases.request(i, 'far', now);
       if (tier[i] !== 0 || slots[i] !== farSlot) {
         tier[i] = 0;
-        slots[i] = Math.max(0, farSlot);
+        // -1 propagates to the shader as "no image". It must NOT be clamped to
+        // 0: slot 0 is a real tile, and aliasing every slotless instance onto
+        // it renders the corpus as many copies of whichever image landed there.
+        slots[i] = farSlot;
         this._tierDirty = true;
         this._copyFit(i, 'far', farSlot);
       }

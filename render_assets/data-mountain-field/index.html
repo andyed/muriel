@@ -150,6 +150,8 @@ import { FieldNavigator } from '../_lib/navigate.js';
 import { RowMotion, respectReducedMotion } from '../_lib/motion.js';
 
 const COUNT = Number(new URLSearchParams(location.search).get('n') || 2500);
+/** Fixture: 1-in-N tiles fail to load, so the no-image path is reachable. */
+const FAIL_EVERY = Number(new URLSearchParams(location.search).get('fail') || 0);
 
 /* ─── Synthetic corpus ───────────────────────────────────────────────
  *
@@ -248,7 +250,14 @@ const field = new TileField({
   // A near distance under ~900 promotes nothing at all.
   nearDistance: 3100,
   nearSlots: 256,
-  resolve: (i, tier) => SOURCES[(i * 31 + (tier === 'near' ? 0 : 1)) % SOURCES.length],
+  // ?fail=N makes 1-in-N tiles unresolvable. A demo whose images always load
+  // cannot exercise the no-slot path at all, and the assertion guarding it
+  // would pass forever without ever being tested — which is exactly how a
+  // slotless instance clamped to slot 0 shipped, rendering a whole corpus as
+  // copies of one image.
+  resolve: (i, tier) => (FAIL_EVERY && i % FAIL_EVERY === 0)
+    ? 'data:image/png;base64,not-a-real-image'
+    : SOURCES[(i * 31 + (tier === 'near' ? 0 : 1)) % SOURCES.length],
 });
 
 // Place the corpus on the slope, then hand the same coordinates to the mesh.
