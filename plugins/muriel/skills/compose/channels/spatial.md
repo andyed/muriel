@@ -45,7 +45,8 @@ Pre-flight question for any spatial composition: *if I flattened the scene to a 
 | 9 | High-count tile field | `render_assets/_lib/atlas.js` + `instanced.js` | The whole corpus as ONE instanced draw call over a two-tier texture atlas (`far`: every item at 64px; `near`: an LRU pool of 256px slots). VRAM is bounded by the tier sizes, not the item count. |
 | 10 | Pixel/DOM hybrid | `render_assets/_lib/hybrid.js` | A fixed pool of real DOM elements lent to whatever is close enough to read, swapped against their quads. Keeps selectable text, links, and keyboard focus at a DOM budget that does not grow with the corpus. |
 | 11 | Piles | `render_assets/_lib/piles.js` | Mander / Salomon / Wong (CHI 1992) casual organization. Groups become stacks placed on the surface; click spreads a pile in place and collapses it back. Membership is supplied as index lists, so a facet-derived grouping and a hand-made pile are the same object, and an item may sit in several piles — which a folder tree cannot represent. |
-| 12 | Data Mountain at field scale | `render_assets/data-mountain-field/` | 2,500 tiles on the slope: 4 draw calls, 12 DOM elements, 103 MB of atlas. Ships `check.mjs`, which asserts the budget is bounded and fails if it is not. |
+| 12 | Keyboard navigation | `render_assets/_lib/navigate.js` | Roving-selection listbox over the field: one tab stop, arrows move in SCREEN space, Home/End/PageUp/PageDown, Tab between piles, type-ahead by pile label, `aria-activedescendant` + a live region. The selection is always promoted to DOM, so focus lands on a real element. |
+| 13 | Data Mountain at field scale | `render_assets/data-mountain-field/` | 2,500 tiles on the slope: 4 draw calls, 12 DOM elements, 103 MB of atlas. Ships `check.mjs`, which asserts the budget is bounded and fails if it is not. |
 
 ## Scale — when one element per item stops working
 
@@ -110,6 +111,35 @@ decorative:
 
 Pile *count* should stay in the dozens — there is one label element per pile. A
 facet with 200 values wants a different treatment than piling.
+
+### Keyboard, and why the hybrid earns its keep
+
+"A GPU quad cannot be focused" is the standing objection to drawing an interface
+as pixels, and the DOM tier is the answer: `navigate.js` keeps the *selection*
+promoted, so the thing the keyboard points at is a real element with a real
+focus ring that a screen reader can read. Navigation drives promotion, not the
+reverse.
+
+The model is a listbox with a roving active descendant — one tab stop, not
+2,500. Elements are transient (a pool entry is a different item a moment later),
+so focus lives on the container and `aria-activedescendant` names the current
+card. This is the same contract a virtualized list uses, for the same reason.
+
+Movement is computed in **screen space**, never in the layout's coordinates. The
+same corpus is a slope in one layout and a grid of piles in another; "right"
+means something different on each, and different again after an orbit.
+Projecting to the camera gets all of that for free and requires no layout to
+describe its own topology. Two things that bite:
+
+- **The direction cone multiplies, it does not divide.** `perp <= along * CONE`.
+  Dividing widens ~29° to ~61°, which on a receding slope is enough for "right"
+  to reach two rows nearer the camera — so a Home/End sweep curves off its row.
+- **Freeze the camera during a sweep.** Home/End are repeated steps; moving the
+  camera between them redefines "right" partway through, and the sweep bends.
+  `onSelect` fires once, at the end.
+
+A live region is mandatory, not polish: the visual feedback for "the selection
+moved" is a camera move, which conveys precisely nothing to a screen reader.
 
 **Anti-pattern.** Do not raise `poolSize` to "just fit everything." The pool
 being small is the design, not a limitation of it; a pool the size of the corpus

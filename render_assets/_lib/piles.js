@@ -232,6 +232,106 @@ export class PileLayout {
     });
   }
 
+  /**
+   * Create an empty pile. Returns its index.
+   *
+   * Piling is casual organization: you make the heap first and name it later,
+   * or never. So a pile with no members and no label is a legal, expected
+   * state, not an error to guard against.
+   */
+  createPile(label = '', { u = 0, v = 0, w = 220, h = 150 } = {}) {
+    this.piles.push({ label, indices: [], u, v, w, h, state: PILED });
+    return this.piles.length - 1;
+  }
+
+  /**
+   * Move an item into a pile. `exclusive` false leaves existing memberships
+   * alone, which is what tags want; true is the desk metaphor, where a thing
+   * is in one heap because it is a physical object.
+   */
+  assign(itemIndex, pileIndex, { exclusive = true } = {}) {
+    if (exclusive) {
+      for (const pile of this.piles) {
+        const at = pile.indices.indexOf(itemIndex);
+        if (at >= 0) pile.indices.splice(at, 1);
+      }
+    }
+    const target = this.piles[pileIndex];
+    if (!target || target.indices.includes(itemIndex)) return;
+    target.indices.push(itemIndex);
+  }
+
+  /** Remove an item from a pile. */
+  unassign(itemIndex, pileIndex) {
+    const pile = this.piles[pileIndex];
+    if (!pile) return;
+    const at = pile.indices.indexOf(itemIndex);
+    if (at >= 0) pile.indices.splice(at, 1);
+  }
+
+  /**
+   * Capture pile membership as portable view state.
+   *
+   * Keyed by a caller-supplied stable key, NEVER by instance index. Indices are
+   * positions in whatever array the field was built from this session — they
+   * change when the corpus is filtered, re-sorted, or grows by one clip, so
+   * index-keyed state silently reassigns every pile the next time it loads.
+   *
+   * Choose the key carefully: it has to survive whatever the underlying store
+   * lets a user do. A filename or a title is usually the WRONG choice, because
+   * renaming is exactly the thing people do to notes.
+   *
+   * This is view state, not data — an annotation over the corpus rather than a
+   * property of any item in it. That is what lets several views hold different
+   * piles over the same items, which a per-item field cannot express.
+   *
+   * @param {(index:number) => string} keyOf
+   */
+  serialize(keyOf) {
+    return {
+      version: 1,
+      piles: this.piles.map((pile) => ({
+        label: pile.label,
+        u: +pile.u.toFixed(1),
+        v: +pile.v.toFixed(1),
+        keys: pile.indices.map(keyOf).filter(Boolean),
+      })),
+    };
+  }
+
+  /**
+   * Rebuild piles from view state.
+   *
+   * Keys that no longer resolve are dropped and REPORTED rather than silently
+   * skipped — a pile quietly losing members as notes get renamed looks like
+   * nothing at all until the pile is empty.
+   *
+   * @param {object} state from serialize()
+   * @param {(key:string) => number} indexOf  -1 when the key is unknown
+   * @returns {{restored:number, orphaned:string[]}}
+   */
+  restore(state, indexOf) {
+    if (!state || state.version !== 1 || !Array.isArray(state.piles)) {
+      return { restored: 0, orphaned: [] };
+    }
+    const orphaned = [];
+    let restored = 0;
+    this.piles = state.piles.map((p) => {
+      const indices = [];
+      for (const key of p.keys || []) {
+        const i = indexOf(key);
+        if (i >= 0) { indices.push(i); restored++; }
+        else orphaned.push(key);
+      }
+      return {
+        label: p.label || '', indices,
+        u: p.u || 0, v: p.v || 0,
+        w: 220, h: 150, state: PILED,
+      };
+    });
+    return { restored, orphaned };
+  }
+
   /** Which pile an item index belongs to, or -1. First match wins. */
   pileOf(itemIndex) {
     for (let p = 0; p < this.piles.length; p++) {

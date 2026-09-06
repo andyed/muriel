@@ -50,6 +50,7 @@ export class HybridField {
     basePx = 320,
     promoteDistance = null,
     className = 'hybrid-card',
+    idPrefix = 'hybrid-card',
     onActivate = null,
     billboard = false,
   }) {
@@ -70,8 +71,13 @@ export class HybridField {
       const el = document.createElement('div');
       el.className = className;
       el.style.width = `${basePx}px`;
+      // Focus lives on the container, not on the cards: the cards are transient
+      // (a pool entry is a different item a second from now), so they must never
+      // become tab stops. `aria-activedescendant` names the current one, which
+      // is why each needs a stable id.
+      el.id = `${idPrefix}-${i}`;
       el.tabIndex = -1;
-      el.setAttribute('role', 'button');
+      el.setAttribute('role', 'option');
       const obj = new CSS3DObject(el);
       obj.visible = false;
       // CSS3D objects are always in the scene; visibility does the work. Adding
@@ -97,7 +103,20 @@ export class HybridField {
 
   /** Pin an item to the DOM tier regardless of distance. -1 clears. */
   setFocus(index) {
+    if (this.focused === index) return;
+    const prev = this.live.get(this.focused);
+    if (prev) prev.el.setAttribute('aria-selected', 'false');
     this.focused = index;
+  }
+
+  /**
+   * The live element standing in for an item, or null when it is currently a
+   * quad. Null is a normal answer, not a failure — most of the corpus is
+   * pixels at any moment.
+   */
+  elementFor(index) {
+    const entry = this.live.get(index);
+    return entry ? entry.el : null;
   }
 
   /**
@@ -162,6 +181,7 @@ export class HybridField {
     // whatever element carries the image.
     const aspect = this.field.aspectOf(index);
     entry.el.style.setProperty('--tile-aspect', String(aspect));
+    entry.el.setAttribute('aria-selected', index === this.focused ? 'true' : 'false');
     this.build(index, entry.el, aspect);
     entry.obj.visible = true;
     this.field.suppress(index, true);

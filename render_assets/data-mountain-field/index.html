@@ -39,6 +39,19 @@
     border-color: var(--hot);
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9);
   }
+  /* Keyboard selection. Distinct from the mouse-focus ring above because the
+   * keyboard user has no cursor to tell them where they are — this is their
+   * only position indicator, so it is heavier, not lighter. */
+  .hybrid-card[aria-selected="true"] {
+    outline: 4px solid var(--hot);
+    outline-offset: 3px;
+    border-color: var(--hot);
+  }
+  #css3d:focus { outline: none; }
+  #css3d:focus-visible { outline: none; }
+  /* A visible affordance that the field itself holds focus, since the selected
+   * card may be mid-flight when focus first lands. */
+  #css3d:focus-visible ~ #hud .kbd-hint { color: var(--hot); }
   .hybrid-card .thumb {
     /* Shaped by the quad this card replaced, not a fixed ratio — see
      * HybridField, which sets --tile-aspect on promotion. */
@@ -100,9 +113,11 @@
   </div>
   <div class="row">
     <div class="hint">
-      <kbd>move</kbd> parallax &nbsp; <kbd>scroll</kbd> dolly &nbsp;
-      <kbd>space</kbd> orbit &nbsp; <kbd>m</kbd> mountain &nbsp; <kbd>p</kbd> piles &nbsp;
-      <kbd>click</kbd> focus / open pile &nbsp; <kbd>esc</kbd> release
+      <span class="kbd-hint"><kbd>tab</kbd> enter field &nbsp;
+      <kbd>← ↑ ↓ →</kbd> move &nbsp; <kbd>home</kbd>/<kbd>end</kbd> row ends &nbsp;
+      <kbd>pgup</kbd>/<kbd>pgdn</kbd> jump &nbsp; <kbd>tab</kbd> next pile &nbsp;
+      <kbd>a-z</kbd> jump to pile &nbsp; <kbd>enter</kbd> open &nbsp;
+      <kbd>esc</kbd> release &nbsp; <kbd>m</kbd>/<kbd>p</kbd> layout</span>
     </div>
     <div class="cite">
       after <em>Robertson, Czerwinski, Larson, Robbins, Thiel, van Dantzich</em> —
@@ -129,6 +144,7 @@ import {
 import { TileField } from '../_lib/instanced.js';
 import { HybridField } from '../_lib/hybrid.js';
 import { PileLayout, SPREAD } from '../_lib/piles.js';
+import { FieldNavigator } from '../_lib/navigate.js';
 
 const COUNT = Number(new URLSearchParams(location.search).get('n') || 2500);
 
@@ -400,15 +416,76 @@ startRenderLoop({
       if (pileLayout.spreadPile >= 0) pileLayout.collapse(pileLayout.spreadPile);
       else hybrid.setFocus(-1);
     }
-    if (e.key === 'p') setMode('piles');
-    if (e.key === 'm') setMode('mountain');
+    // Layout keys live on window; skip them while the field has focus, where
+    // the same letters are type-ahead. Otherwise typing "m" to reach the
+    // `mountain`-ish pile silently changes layout instead.
+    if (document.activeElement !== document.getElementById('css3d')) {
+      if (e.key === 'p') setMode('piles');
+      if (e.key === 'm') setMode('mountain');
+    }
+  },
+});
+
+/* ─── Keyboard ───────────────────────────────────────────────────────────
+ *
+ * The field is one tab stop, not 2,500. Arrows move a roving selection that is
+ * always promoted to a real DOM element, so the thing the keyboard is pointing
+ * at is genuinely focusable and readable rather than a painted rectangle.
+ */
+const nav = new FieldNavigator({
+  field, hybrid, camera,
+  container: document.getElementById('css3d'),
+  labelOf: (i) => {
+    const pile = mode === 'piles' ? pileLayout.pileOf(i) : -1;
+    const where = pile >= 0
+      ? `in pile ${pileLayout.piles[pile].label}`
+      : `row ${placed[i]?.row ?? '?'}`;
+    return `Item ${i}, ${topicOf(i)}, ${where}`;
+  },
+  onSelect: (i, centre) => {
+    // Keep the selection on screen. Without this, arrowing off the visible
+    // region navigates into content the viewer cannot see — the selection is
+    // still correct and completely useless.
+    lookTarget.set(centre.x, centre.y, centre.z);
+    basePos.set(centre.x * 0.35, centre.y + 240, centre.z + 1250);
+  },
+  onActivate: (i) => {
+    if (mode === 'piles') {
+      const pile = pileLayout.pileOf(i);
+      if (pile >= 0) { pileLayout.toggle(pile); renderPileLabels(); return; }
+    }
+    hybrid.setFocus(hybrid.focused === i ? -1 : i);
+  },
+  onEscape: () => {
+    if (pileLayout.spreadPile >= 0) { pileLayout.collapse(pileLayout.spreadPile); renderPileLabels(); }
+    else hybrid.setFocus(-1);
+  },
+  onGroupStep: (dir) => {
+    if (mode !== 'piles' || !pileLayout.piles.length) return;
+    const cur = pileLayout.pileOf(nav.selection);
+    const next = ((cur < 0 ? 0 : cur + dir) + pileLayout.piles.length) % pileLayout.piles.length;
+    const pile = pileLayout.piles[next];
+    if (pile.indices.length) {
+      nav.select(pile.indices[pile.indices.length - 1]);   // the top of the pile
+      nav.announce(`Pile ${pile.label}, ${pile.indices.length} items`);
+    }
+  },
+  onTypeAhead: (prefix) => {
+    if (mode !== 'piles') return null;
+    const hit = pileLayout.piles.findIndex((q) => q.label.toLowerCase().startsWith(prefix));
+    if (hit < 0) return null;
+    const pile = pileLayout.piles[hit];
+    if (!pile.indices.length) return null;
+    nav.select(pile.indices[pile.indices.length - 1]);
+    nav.announce(`Pile ${pile.label}, ${pile.indices.length} items`);
+    return hit;
   },
 });
 
 // Exposed for check.mjs — measurements a screenshot cannot make.
 window.__field = {
   field, hybrid, renderer: webglRenderer, count: COUNT,
-  piles: pileLayout, groups, setMode, getMode: () => mode,
+  piles: pileLayout, groups, setMode, getMode: () => mode, nav,
 };
 </script>
 </body>
