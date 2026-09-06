@@ -182,50 +182,73 @@ export class Mountain {
     width = 1900, depth = 1700,
     frontH = 210, backH = 64,
     gap = 16, rowGap = 26,
+    fit = true,
   } = {}) {
+    if (!fit) return this._pack(count, aspectOf, { width, depth, frontH, backH, gap, rowGap }, 1).out;
+
+    // Fit every item inside `depth`. Without this the row profile clamps at the
+    // back and rows simply keep marching past the plane: at 2,500 items a
+    // 2,600-deep slope ran to 7,242 and stranded 36% of the corpus off the end,
+    // while the surviving ramp was so long the tilt read as a flat floor.
+    //
+    // Shrinking the height profile puts more items per row AND makes each row
+    // shallower, so depth used falls monotonically as scale falls — which is
+    // what makes a binary search valid here.
+    let lo = 0.04, hi = 1;
+    let best = this._pack(count, aspectOf, { width, depth, frontH, backH, gap, rowGap }, lo);
+    if (this._pack(count, aspectOf, { width, depth, frontH, backH, gap, rowGap }, hi).usedDepth <= depth) {
+      best = this._pack(count, aspectOf, { width, depth, frontH, backH, gap, rowGap }, hi);
+    } else {
+      for (let i = 0; i < 18; i++) {
+        const mid = (lo + hi) / 2;
+        const trial = this._pack(count, aspectOf, { width, depth, frontH, backH, gap, rowGap }, mid);
+        if (trial.usedDepth <= depth) { best = trial; lo = mid; } else { hi = mid; }
+      }
+    }
+    return best.out;
+  }
+
+  /**
+   * One packing pass at a given height scale.
+   * @returns {{out: Array, usedDepth: number}} every item placed, and how deep
+   *   the slope had to be to hold them.
+   */
+  _pack(count, aspectOf, o, scale) {
+    const { width, depth, gap, rowGap } = o;
+    const frontH = o.frontH * scale;
+    const backH = o.backH * scale;
     const out = [];
     const halfW = width / 2;
-    let v = 0;            // 0 at the front edge, negative going back
+    let v = 0;
     let i = 0;
     let row = 0;
 
     while (i < count) {
-      // Depth drives the row's target height. Estimated from v before the row
-      // is packed, which is what makes the falloff smooth rather than stepped.
       const t = Math.min(1, -v / depth);
       const targetH = frontH + (backH - frontH) * t;
 
-      // Fill the row: take items until their combined width at targetH exceeds
-      // the plane, then scale the row's height so it fits exactly.
       const start = i;
       let sumAspect = 0;
       while (i < count) {
         sumAspect += aspectOf(i);
         i++;
-        const w = sumAspect * targetH + gap * (i - start - 1);
-        if (w >= width) break;
+        if (sumAspect * targetH + gap * (i - start - 1) >= width) break;
       }
       const n = i - start;
       const h = (width - gap * (n - 1)) / sumAspect;
-      // A short final row keeps the target height instead of stretching one
-      // orphan across the full plane.
       const rowH = (i >= count && h > targetH * 1.45) ? targetH : h;
 
       let u = -halfW;
       for (let k = start; k < i; k++) {
         const w = aspectOf(k) * rowH;
-        out.push({
-          u: u + w / 2, v, w, h: rowH, row,
-          depth: Math.min(1, -v / depth),
-        });
+        out.push({ u: u + w / 2, v, w, h: rowH, row, depth: Math.min(1, -v / depth) });
         u += w + gap;
       }
 
       v -= rowH + rowGap;
       row++;
-      if (-v > depth * 3) break;   // ran off the back of the plane
     }
-    return out;
+    return { out, usedDepth: -v };
   }
 }
 

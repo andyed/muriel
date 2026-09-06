@@ -78,7 +78,7 @@
       <div class="stat"><span>items</span><b id="s-items">—</b></div>
       <div class="stat"><span>draw calls</span><b id="s-draws">—</b></div>
       <div class="stat"><span>DOM cards</span><b id="s-dom">—</b></div>
-      <div class="stat"><span>near tier</span><b id="s-near">—</b></div>
+      <div class="stat"><span>near resident / eligible</span><b id="s-near">—</b></div>
       <div class="stat"><span>atlas VRAM</span><b id="s-vram">—</b></div>
       <div class="stat" id="s-frame-row"><span>frame</span><b id="s-frame">—</b></div>
     </div>
@@ -167,11 +167,19 @@ const aspectOf = (i) => aspects[i];
 /* ─── Scene ──────────────────────────────────────────────────────────── */
 
 const { scene, camera, webglRenderer, cssRenderer } = createScene({
-  cameraPos: [0, 210, 900],
-  lookAt: [0, 120, -420],
+  cameraPos: [0, 330, 1500],
+  lookAt: [0, 520, -900],
   far: 12000,
 });
-const mountain = new Mountain({ scene, width: 2400, depth: 2600, cols: 34, rows: 30 });
+// Steeper than the lib default (~21°). A shallow slope carrying 2,500 tiles
+// reads as a floor: the rows recede faster than they rise, so there is no
+// visible landform. ~38° is what makes it a mountain you look UP, and it also
+// buys the vertical separation that keeps upright cards from occluding the row
+// behind them.
+const mountain = new Mountain({
+  scene, tilt: Math.PI * 0.21, y: 40,
+  width: 2400, depth: 2600, cols: 34, rows: 30,
+});
 addHorizon(scene);
 addFloorGrid(scene, { opacity: 0.10 });
 
@@ -181,25 +189,29 @@ const field = new TileField({
   // The camera sits ~900 world units from the FRONT row and ~3,500 from the
   // back, so these thresholds are calibrated against that range, not guessed.
   // A near distance under ~900 promotes nothing at all.
-  nearDistance: 2050,
+  nearDistance: 3100,
   nearSlots: 256,
   resolve: (i, tier) => SOURCES[(i * 31 + (tier === 'near' ? 0 : 1)) % SOURCES.length],
 });
 
 // Place the corpus on the slope, then hand the same coordinates to the mesh.
+// arrange({ fit: true }) sizes the row profile so the WHOLE corpus lands inside
+// `depth` — no item is stranded off the back of the plane.
 const placed = mountain.arrange(COUNT, aspectOf, {
   width: 2400, depth: 2600, frontH: 190, backH: 58,
 });
-const tilt = new THREE.Quaternion()
-  .setFromEuler(new THREE.Euler(mountain.tilt, 0, 0));
+if (placed.length !== COUNT) {
+  console.error(`arrange placed ${placed.length} of ${COUNT}`);
+}
+// Cards stand UPRIGHT on the slope rather than lying in its surface — that is
+// the Data Mountain, and it is the whole difference between a hillside of
+// billboards and a tiled floor. No rotation: the quads face +Z, and the slope
+// shows through the rising y of each successive row.
 for (let i = 0; i < placed.length; i++) {
   const p = placed[i];
   const w = mountain.planeToWorld(p.u, p.v, p.h);
-  field.place(i, w.x, w.y, w.z, p.w, p.h, tilt);
+  field.place(i, w.x, w.y, w.z, p.w, p.h);
 }
-// Items beyond what fits on the slope are parked far behind the camera rather
-// than left at the origin, where they would pile into one bright blob.
-for (let i = placed.length; i < COUNT; i++) field.place(i, 0, -9999, 0, 1, 1);
 field.layout();
 
 /* ─── The DOM tier ───────────────────────────────────────────────────── */
@@ -208,7 +220,7 @@ const hybrid = new HybridField({
   scene, field,
   poolSize: 12,
   basePx: 320,
-  promoteDistance: 1180,
+  promoteDistance: 1800,
   build(index, el) {
     // textContent / setAttribute only — no innerHTML path. A consumer whose
     // titles come from scraped pages inherits that guarantee from the lib.
@@ -261,8 +273,8 @@ let frames = 0, accum = 0, last = performance.now();
 
 startRenderLoop({
   scene, camera, webglRenderer, cssRenderer,
-  basePos: new THREE.Vector3(0, 210, 900),
-  lookTarget: new THREE.Vector3(0, 120, -420),
+  basePos: new THREE.Vector3(0, 330, 1500),
+  lookTarget: new THREE.Vector3(0, 520, -900),
   dollyRange: [-500, 1400],
   // Bounded by the DOM pool instead of walking the scene every frame.
   sortDom: (cam) => hybrid.sort(cam),
@@ -278,7 +290,12 @@ startRenderLoop({
       accum = 0; frames = 0;
       $('s-draws').textContent = String(webglRenderer.info.render.calls);
       $('s-dom').textContent = String(hybrid.live.size);
-      $('s-near').textContent = String(nearCount);
+      // Two different numbers: how many items are inside nearDistance, and how
+      // many actually hold a 256px slot. They differ whenever the pool is the
+      // binding constraint, which is most of the time — reporting only the
+      // first would overstate what is actually resident by 5x.
+      const resident = field.atlases.nearSlot.reduce((n, s) => n + (s >= 0 ? 1 : 0), 0);
+      $('s-near').textContent = `${resident} / ${nearCount}`;
     }
   },
   onKeydown: (e) => {

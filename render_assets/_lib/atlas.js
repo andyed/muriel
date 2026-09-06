@@ -89,12 +89,27 @@ export class TileAtlas {
     return this._free.length ? this._free.pop() : -1;
   }
 
-  /** Return a slot to the pool and clear it so a stale image cannot show. */
-  free(slot) {
+  /**
+   * Wipe a slot's pixels without returning it to the pool.
+   *
+   * Split from free() because eviction hands the slot straight to its next
+   * owner: doing that via free() puts the slot on the free list AND in the new
+   * owner's hands, so the next alloc() hands the same slot to a second item and
+   * two tiles sample the same pixels. Every eviction leaked one duplicate.
+   */
+  clear(slot) {
     if (slot < 0 || slot >= this.capacity) return;
     const { x, y } = this.slotRect(slot);
     this.ctx.clearRect(x, y, this.tilePx, this.tilePx);
+    this.fits[slot * 2] = 1;
+    this.fits[slot * 2 + 1] = 1;
     this._dirty = true;
+  }
+
+  /** Return a slot to the pool and clear it so a stale image cannot show. */
+  free(slot) {
+    if (slot < 0 || slot >= this.capacity) return;
+    this.clear(slot);
     this._free.push(slot);
   }
 
@@ -240,13 +255,22 @@ export class AtlasPair {
     this._nearOwner[slot] = -1;
   }
 
-  /** Evict the coldest resident near slot. @returns {number} freed slot, or -1 */
+  /**
+   * Detach the coldest resident near slot and hand it straight to the caller.
+   *
+   * The slot deliberately does NOT go back on the free list — it is being
+   * reassigned, not released. See TileAtlas.clear().
+   *
+   * @returns {number} the detached slot, or -1 when everything is hot
+   */
   _evictNear(now) {
     let coldest = -1;
     let coldestAt = Infinity;
     for (let slot = 0; slot < this._nearOwner.length; slot++) {
       const owner = this._nearOwner[slot];
-      if (owner < 0) return slot;                    // shouldn't happen; take it
+      // An unowned slot belongs to the free list, and alloc() would already
+      // have handed it out; taking it here would hand out the same slot twice.
+      if (owner < 0) continue;
       const seen = this.lastSeen[owner];
       // Never evict something touched this frame — that thrashes under a pan.
       if (now - seen < 16) continue;
@@ -254,7 +278,7 @@ export class AtlasPair {
     }
     if (coldest < 0) return -1;
     const owner = this._nearOwner[coldest];
-    this.near.free(coldest);
+    this.near.clear(coldest);
     this.nearSlot[owner] = -1;
     this._nearOwner[coldest] = -1;
     return coldest;

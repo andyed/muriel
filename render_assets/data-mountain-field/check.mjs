@@ -49,6 +49,9 @@ const stats = await page.evaluate(() => {
     nearCapacity: field.atlases.near.capacity,
     farResident: Array.from(field.atlases.farSlot).filter((s) => s >= 0).length,
     nearResident: Array.from(field.atlases.nearSlot).filter((s) => s >= 0).length,
+    nearDistinctSlots: new Set(Array.from(field.atlases.nearSlot).filter((s) => s >= 0)).size,
+    farDistinctSlots: new Set(Array.from(field.atlases.farSlot).filter((s) => s >= 0)).size,
+    farResidentRaw: Array.from(field.atlases.farSlot).filter((s) => s >= 0).length,
     suppressed: Array.from(field._suppressed).filter(Boolean).length,
   };
 });
@@ -73,6 +76,11 @@ ok(stats.domNodesInScene <= DOM_CEILING, 'DOM budget is a constant, not a functi
 ok(stats.domNodesInScene <= stats.poolSize, 'DOM cards within the configured pool', `${stats.domNodesInScene} ≤ ${stats.poolSize}`);
 ok(stats.domCards > 0, 'the DOM tier is actually populated', `${stats.domCards} live`);
 ok(stats.nearResident <= stats.nearCapacity, 'near tier respects its pool', `${stats.nearResident} ≤ ${stats.nearCapacity}`);
+// Two items sharing one slot sample the same pixels and BOTH look plausible on
+// screen, so nothing but a count catches it. Eviction leaked exactly one
+// duplicate per evict until the free-list/detach split.
+ok(stats.nearResident === stats.nearDistinctSlots, 'no two items share a near slot', `${stats.nearResident} holders / ${stats.nearDistinctSlots} slots`);
+ok(stats.farResidentRaw === stats.farDistinctSlots, 'no two items share a far slot', `${stats.farResidentRaw} holders / ${stats.farDistinctSlots} slots`);
 ok(stats.nearResident > 0, 'near tier promoted something', `${stats.nearResident} resident`);
 ok(stats.farResident > stats.nearResident, 'far tier carries the bulk', `${stats.farResident} far vs ${stats.nearResident} near`);
 ok(stats.suppressed === stats.domCards, 'each DOM card suppresses exactly its quad', `${stats.suppressed} vs ${stats.domCards}`);
