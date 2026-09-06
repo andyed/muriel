@@ -206,14 +206,16 @@ export class HybridField {
    * promoted card to face the viewer would tear it out of the scene geometry.
    */
   _position(camera) {
-    const c = this.field.centres;
     for (const [index, entry] of this.live) {
-      entry.obj.position.set(c[index * 3], c[index * 3 + 1], c[index * 3 + 2]);
+      // worldCentre, not centres: while rows are sliding, `centres` is the
+      // static layout and a DOM twin placed there detaches from its own quad.
+      this.field.worldCentre(index, this._tmp);
+      entry.obj.position.copy(this._tmp);
       // CSS3D renders one CSS pixel per world unit, so an element authored at
       // basePx wide covers basePx world units at scale 1.
       entry.obj.scale.setScalar(this.field.widthOf(index) / this.basePx);
       if (this.billboard) entry.obj.quaternion.copy(camera.quaternion);
-      else this.field.orientationOf(index, entry.obj.quaternion);
+      else this.field.worldOrientation(index, entry.obj.quaternion);
       entry.el.classList.toggle('focused', index === this.focused);
     }
   }

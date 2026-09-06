@@ -108,6 +108,7 @@
       <div class="stat"><span>atlas VRAM</span><b id="s-vram">—</b></div>
       <div class="stat"><span>layout</span><b id="s-mode">mountain</b></div>
       <div class="stat"><span>in flight</span><b id="s-moving">0</b></div>
+      <div class="stat"><span>motion</span><b id="s-motion">on</b></div>
       <div class="stat" id="s-frame-row"><span>frame</span><b id="s-frame">—</b></div>
     </div>
   </div>
@@ -117,6 +118,7 @@
       <kbd>← ↑ ↓ →</kbd> move &nbsp; <kbd>home</kbd>/<kbd>end</kbd> row ends &nbsp;
       <kbd>pgup</kbd>/<kbd>pgdn</kbd> jump &nbsp; <kbd>tab</kbd> next pile &nbsp;
       <kbd>a-z</kbd> jump to pile &nbsp; <kbd>enter</kbd> open &nbsp;
+      <kbd>0</kbd> motion &nbsp;
       <kbd>esc</kbd> release &nbsp; <kbd>m</kbd>/<kbd>p</kbd> layout</span>
     </div>
     <div class="cite">
@@ -145,6 +147,7 @@ import { TileField } from '../_lib/instanced.js';
 import { HybridField } from '../_lib/hybrid.js';
 import { PileLayout, SPREAD } from '../_lib/piles.js';
 import { FieldNavigator } from '../_lib/navigate.js';
+import { RowMotion, respectReducedMotion } from '../_lib/motion.js';
 
 const COUNT = Number(new URLSearchParams(location.search).get('n') || 2500);
 
@@ -251,8 +254,10 @@ const field = new TileField({
 // Place the corpus on the slope, then hand the same coordinates to the mesh.
 // arrange({ fit: true }) sizes the row profile so the WHOLE corpus lands inside
 // `depth` — no item is stranded off the back of the plane.
+const OVERLAP = Number(new URLSearchParams(location.search).get('overlap') || 0);
 const placed = mountain.arrange(COUNT, aspectOf, {
   width: 2400, depth: 2600, frontH: 190, backH: 58,
+  overlap: OVERLAP,
 });
 if (placed.length !== COUNT) {
   console.error(`arrange placed ${placed.length} of ${COUNT}`);
@@ -267,10 +272,19 @@ function applyMountain(immediate) {
     const w = mountain.planeToWorld(p.u, p.v, p.h);
     if (immediate) field.place(i, w.x, w.y, w.z, p.w, p.h);
     else field.moveTo(i, w.x, w.y, w.z, p.w, p.h);
+    field.setRow(i, p.row);
   }
   if (immediate) field.layout();
 }
 applyMountain(true);
+
+// Rows slide right and left and their tiles sweep through an angle. Rows are
+// phase-shifted, which is what makes it a travelling wave rather than the whole
+// field moving as one slab — a uniform slide reads as a camera pan.
+const motion = new RowMotion({ slide: 30, slideRate: 0.16, slidePhase: 0.6,
+                               sweep: 0.13, sweepRate: 0.11, sweepPhase: 0.9 });
+field.setMotion(motion);
+respectReducedMotion(motion);
 
 const pileLayout = new PileLayout({ field, surface: mountain, aspectOf });
 let mode = 'mountain';
@@ -317,8 +331,7 @@ webglRenderer.domElement.addEventListener('click', (e) => {
   const r = webglRenderer.domElement.getBoundingClientRect();
   ndc.x = ((e.clientX - r.left) / r.width) * 2 - 1;
   ndc.y = -((e.clientY - r.top) / r.height) * 2 + 1;
-  raycaster.setFromCamera(ndc, camera);
-  const hit = field.pick(raycaster);
+  const hit = field.pickAt(ndc.x, ndc.y, camera);
   if (mode === 'piles' && hit >= 0) {
     const pile = pileLayout.pileOf(hit);
     if (pile >= 0) { pileLayout.toggle(pile); renderPileLabels(); return; }
@@ -391,6 +404,7 @@ startRenderLoop({
   sortDom: (cam) => hybrid.sort(cam),
   beforeRender: (now) => {
     const dt = now - last; last = now;
+    field.applyMotion(dt);
     field.tick(dt);
     nearCount = field.update(camera, now);
     hybrid.update(camera);
@@ -419,6 +433,10 @@ startRenderLoop({
     // Layout keys live on window; skip them while the field has focus, where
     // the same letters are type-ahead. Otherwise typing "m" to reach the
     // `mountain`-ish pile silently changes layout instead.
+    if (e.key === '0') {
+      motion.setEnabled(!motion.enabled);
+      $('s-motion').textContent = motion.enabled ? 'on' : 'off';
+    }
     if (document.activeElement !== document.getElementById('css3d')) {
       if (e.key === 'p') setMode('piles');
       if (e.key === 'm') setMode('mountain');
@@ -485,7 +503,8 @@ const nav = new FieldNavigator({
 // Exposed for check.mjs — measurements a screenshot cannot make.
 window.__field = {
   field, hybrid, renderer: webglRenderer, count: COUNT,
-  piles: pileLayout, groups, setMode, getMode: () => mode, nav,
+  piles: pileLayout, groups, setMode, getMode: () => mode, nav, motion,
+  __camera: camera,
 };
 </script>
 </body>

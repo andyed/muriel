@@ -16,12 +16,17 @@
 
 import * as THREE from 'three';
 import { AtlasPair } from './atlas.js';
+import { MAX_ROWS } from './motion.js';
 
 const VERT = /* glsl */`
 attribute float aSlot;
 attribute float aTier;
 attribute float aOpacity;
 attribute vec2  aFit;
+attribute float aRow;
+
+uniform float uRowOffset[MAX_ROWS];
+uniform float uRowAngle[MAX_ROWS];
 
 varying vec2  vUv;
 varying float vSlot;
@@ -35,7 +40,24 @@ void main() {
   vTier = aTier;
   vOpacity = aOpacity;
   vFit = aFit;
-  gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(position, 1.0);
+
+  int row = int(clamp(aRow, 0.0, float(MAX_ROWS - 1)));
+
+  // Displace the instance CENTRE, then rebuild the quad around it. Applying the
+  // offset to each vertex independently would be identical here, but rotating
+  // is not: a per-vertex angle shears the quad instead of turning it.
+  vec3 centre = instanceMatrix[3].xyz;
+  vec3 local  = (instanceMatrix * vec4(position, 1.0)).xyz - centre;
+
+  float a = uRowAngle[row];
+  float ca = cos(a), sa = sin(a);
+  // Turn about Y — the tiles pivot like slats, which is the axis that reads as
+  // foreshortening. About Z they would spin in place and read as broken.
+  local = vec3(ca * local.x + sa * local.z, local.y, -sa * local.x + ca * local.z);
+
+  centre.x += uRowOffset[row];
+
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(centre + local, 1.0);
 }
 `;
 
@@ -82,6 +104,8 @@ void main() {
 }
 `;
 
+const AXIS_Y = new THREE.Vector3(0, 1, 0);
+
 export class TileField {
   /**
    * @param {object} opts
@@ -112,10 +136,12 @@ export class TileField {
     this.aTier = new THREE.InstancedBufferAttribute(new Float32Array(count), 1);
     this.aOpacity = new THREE.InstancedBufferAttribute(new Float32Array(count).fill(1), 1);
     this.aFit = new THREE.InstancedBufferAttribute(new Float32Array(count * 2).fill(1), 2);
+    this.aRow = new THREE.InstancedBufferAttribute(new Float32Array(count), 1);
     geo.setAttribute('aSlot', this.aSlot);
     geo.setAttribute('aTier', this.aTier);
     geo.setAttribute('aOpacity', this.aOpacity);
     geo.setAttribute('aFit', this.aFit);
+    geo.setAttribute('aRow', this.aRow);
 
     // Tiles are photographs: effectively opaque, with the only non-opaque
     // fragments being suppressed instances and unloaded slots, both of which
@@ -130,6 +156,7 @@ export class TileField {
     this.material = new THREE.ShaderMaterial({
       vertexShader: VERT,
       fragmentShader: FRAG,
+      defines: { MAX_ROWS },
       transparent: blend,
       depthWrite: !blend,
       depthTest: true,
@@ -140,6 +167,8 @@ export class TileField {
         farGrid:    { value: new THREE.Vector2(this.atlases.far.cols, this.atlases.far.rows) },
         nearGrid:   { value: new THREE.Vector2(this.atlases.near.cols, this.atlases.near.rows) },
         emptyColor: { value: new THREE.Color(emptyColor) },
+        uRowOffset: { value: new Float32Array(MAX_ROWS) },
+        uRowAngle:  { value: new Float32Array(MAX_ROWS) },
       },
     });
 
@@ -163,11 +192,20 @@ export class TileField {
     // Animation targets, and the set of instances actually in flight. The set
     // is the point: piles spread, filters re-lay the field, and none of that
     // should cost anything for the instances holding still.
+    this.rows = new Float32Array(count);
+    this.motion = null;
     this._targets = new Float32Array(count * 6);
     this.targetRot = new Float32Array(count * 4);
     this._moving = new Set();
     this._qa = new THREE.Quaternion();
     this._qb = new THREE.Quaternion();
+    this._qRow = new THREE.Quaternion();
+    this._qw = new THREE.Quaternion();
+    this._pc = new THREE.Vector3();
+    this._corner = [
+      new THREE.Vector3(), new THREE.Vector3(),
+      new THREE.Vector3(), new THREE.Vector3(),
+    ];
     this._tierDirty = false;
     this._suppressed = new Uint8Array(count);   // 1 = a DOM twin owns it
 
@@ -210,6 +248,43 @@ export class TileField {
     }
   }
 
+  /** Tag an instance with the row it belongs to, for row-wise motion. */
+  setRow(index, row) {
+    this.aRow.array[index] = row;
+    this.rows[index] = row;
+    this.aRow.needsUpdate = true;
+  }
+
+  /** Attach a RowMotion. Pass null to stop animating. */
+  setMotion(motion) {
+    this.motion = motion;
+  }
+
+  /**
+   * Push the current row displacement to the GPU. Call once per frame, before
+   * anything reads worldCentre().
+   */
+  applyMotion(dt = 16.7) {
+    if (!this.motion) return;
+    this.motion.update(dt);
+    this.material.uniforms.uRowOffset.value.set(this.motion.offsets);
+    this.material.uniforms.uRowAngle.value.set(this.motion.angles);
+  }
+
+  /**
+   * Where an instance actually IS on screen, base layout plus row motion.
+   *
+   * Everything that addresses items by position must go through this rather
+   * than reading `centres` directly — picking, DOM promotion, keyboard
+   * navigation. `centres` is the static layout, and while the field is moving
+   * that is a place nothing is.
+   */
+  worldCentre(index, out) {
+    const c = this.centres;
+    const dx = this.motion ? this.motion.offsetFor(this.rows[index]) : 0;
+    return out.set(c[index * 3] + dx, c[index * 3 + 1], c[index * 3 + 2]);
+  }
+
   /** World width of an instance — how wide its DOM twin must be scaled. */
   widthOf(index) { return this.sizes[index * 2]; }
 
@@ -219,7 +294,7 @@ export class TileField {
     return h > 0 ? this.sizes[index * 2] / h : 1;
   }
 
-  /** Copy an instance's orientation into `out`. */
+  /** Copy an instance's placed orientation into `out`. */
   orientationOf(index, out) {
     return out.set(
       this.rotations[index * 4],
@@ -227,6 +302,70 @@ export class TileField {
       this.rotations[index * 4 + 2],
       this.rotations[index * 4 + 3],
     );
+  }
+
+  /**
+   * Orientation including the row's angle sweep — what the quad is ACTUALLY
+   * showing. A DOM twin using orientationOf() instead sits flat while the
+   * quads around it turn, which is more conspicuous than no animation at all.
+   */
+  worldOrientation(index, out) {
+    this.orientationOf(index, out);
+    if (!this.motion) return out;
+    const a = this.motion.angleFor(this.rows[index]);
+    if (!a) return out;
+    this._qRow.setFromAxisAngle(AXIS_Y, a);
+    return out.premultiply(this._qRow);
+  }
+
+  /**
+   * Which instance is under a point in normalized device coords, or -1.
+   *
+   * CPU-side rather than three.js raycasting, because raycasting tests the
+   * INSTANCE MATRIX and the instance matrix is the static layout — the row
+   * displacement lives in the vertex shader. Raycasting a moving field misses
+   * by however far the row has drifted, silently and only while it moves.
+   *
+   * Projects the four corners of each quad and does a point-in-quad test, so it
+   * respects the row angle as well as the offset. ~4 projections per instance
+   * on a click, which is nothing at this count.
+   */
+  pickAt(ndcX, ndcY, camera) {
+    let best = -1;
+    let bestDepth = Infinity;
+
+    for (let i = 0; i < this.count; i++) {
+      if (this._suppressed[i]) continue;      // DOM twin takes the click
+      this.worldCentre(i, this._pc);
+      this.worldOrientation(i, this._qw);
+      const hw = this.sizes[i * 2] / 2;
+      const hh = this.sizes[i * 2 + 1] / 2;
+
+      let inside = true;
+      let depth = 0;
+      for (let k = 0; k < 4; k++) {
+        const sx = (k === 0 || k === 3) ? -hw : hw;
+        const sy = (k < 2) ? hh : -hh;
+        this._corner[k].set(sx, sy, 0).applyQuaternion(this._qw).add(this._pc).project(camera);
+        depth += this._corner[k].z;
+      }
+      depth /= 4;
+      if (depth < -1 || depth > 1) continue;
+
+      // Convex point-in-quad: the point must be on the same side of all edges.
+      let sign = 0;
+      for (let k = 0; k < 4 && inside; k++) {
+        const a = this._corner[k];
+        const b = this._corner[(k + 1) % 4];
+        const cross = (b.x - a.x) * (ndcY - a.y) - (b.y - a.y) * (ndcX - a.x);
+        if (cross === 0) continue;
+        const s = cross > 0 ? 1 : -1;
+        if (sign === 0) sign = s;
+        else if (s !== sign) inside = false;
+      }
+      if (inside && depth < bestDepth) { bestDepth = depth; best = i; }
+    }
+    return best;
   }
 
   /** Commit placements and recompute bounds for raycasting. */
@@ -394,14 +533,17 @@ export class TileField {
   }
 
   /**
-   * Which instance is under a normalized-device-coords pointer, or -1.
-   * O(count) triangle tests — fine on click, throttle it on hover.
+   * Raycast pick. Correct only for a field with no row motion — see pickAt(),
+   * which is what a moving field must use.
    */
   pick(raycaster) {
+    if (this.motion && this.motion.enabled) {
+      console.warn('[TileField] pick() ignores row motion; use pickAt(ndcX, ndcY, camera)');
+    }
     const hits = raycaster.intersectObject(this.mesh, false);
     for (const hit of hits) {
       if (hit.instanceId === undefined) continue;
-      if (this._suppressed[hit.instanceId]) continue;   // DOM twin takes the click
+      if (this._suppressed[hit.instanceId]) continue;
       return hit.instanceId;
     }
     return -1;

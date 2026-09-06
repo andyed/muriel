@@ -89,7 +89,72 @@ ok(stats.vramMB < 130, 'atlas VRAM within budget', `${stats.vramMB} MB`);
 // Screenshot last and best-effort: SwiftShader needs a long time to compose a
 // 2,500-instance frame, and a capture timeout must not discard the numbers.
 try {
-  // ── keyboard ──────────────────────────────────────────────────────────────
+  // ── motion ────────────────────────────────────────────────────────────────
+// The whole risk of shader-side motion is that the CPU stops knowing where
+// anything is. These assert the two halves agree: that the wave is real, and
+// that a click still lands on the tile the viewer sees rather than the one the
+// static layout claims.
+const mo = await page.evaluate(() => {
+  const { field, motion } = window.__field;
+  const V = field._pc.constructor;
+  motion.setEnabled(true);
+  // Drive the amplitude far past a tile's own width for the duration of the
+  // test. At the demo's 30-unit amplitude a front-row tile is ~285 units wide,
+  // so aiming at the static position still lands inside the same tile and the
+  // "does pick respect motion" assertion below would pass for free.
+  const realSlide = motion.slide;
+  motion.slide = 900;
+  motion.update(1200);
+  field.applyMotion(0);
+
+  const offs = Array.from(motion.offsets.slice(0, 12));
+  const spread = Math.max(...offs) - Math.min(...offs);
+
+  // Pick a tile that is actually on screen and meaningfully displaced.
+  const cam = window.__field.__camera;
+  let probe = -1;
+  const p = new V();
+  for (let i = 0; i < field.count; i++) {
+    if (Math.abs(motion.offsetFor(field.rows[i])) < 8) continue;
+    field.worldCentre(i, p).project(cam);
+    if (Math.abs(p.x) < 0.5 && Math.abs(p.y) < 0.5 && p.z > -1 && p.z < 1) { probe = i; break; }
+  }
+  if (probe < 0) return { skipped: true, spread };
+
+  const moved = new V(); field.worldCentre(probe, moved).project(cam);
+  const c = field.centres;
+  const still = new V(moved.x, moved.y, moved.z);
+  still.set(c[probe * 3], c[probe * 3 + 1], c[probe * 3 + 2]).project(cam);
+
+  return {
+    spread,
+    allRowsIdentical: spread < 1e-6,
+    probe,
+    hitAtMoved: field.pickAt(moved.x, moved.y, cam),
+    hitAtStatic: field.pickAt(still.x, still.y, cam),
+    ndcDrift: Math.abs(moved.x - still.x),
+    tileWidth: field.sizes[probe * 2],
+    slide: motion.slide,
+    disables: (() => { motion.setEnabled(false);
+      const z = motion.offsets.every((v) => v === 0); motion.setEnabled(true); return z; })(),
+    _restore: (motion.slide = realSlide, true),
+  };
+});
+
+if (mo.skipped) {
+  console.log(' --   motion probe skipped (no displaced tile on screen)');
+} else {
+  ok(!mo.allRowsIdentical, 'rows are phase-shifted, not one sliding slab', `spread ${mo.spread.toFixed(1)}u`);
+  ok(mo.hitAtMoved === mo.probe, 'a click lands on the tile where it is DRAWN', `hit ${mo.hitAtMoved}, wanted ${mo.probe}`);
+  // The point of pickAt existing: raycasting the instance matrix tests the
+  // static layout, so aiming at where the tile USED to be must not hit it.
+  ok(mo.hitAtStatic !== mo.probe,
+     'aiming at the static layout position misses the moved tile',
+     `hit ${mo.hitAtStatic}, tile ${mo.tileWidth.toFixed(0)}u wide vs ${mo.slide}u slide`);
+  ok(mo.disables, 'motion can be disabled for reduced-motion');
+}
+
+// ── keyboard ──────────────────────────────────────────────────────────────
 // The point of the DOM tier is that the selection is a REAL element. These
 // assert the whole chain: container is a listbox, focus lands, arrows move,
 // and aria-activedescendant actually resolves to a live option — a nav that

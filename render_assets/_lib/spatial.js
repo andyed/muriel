@@ -183,7 +183,14 @@ export class Mountain {
     frontH = 210, backH = 64,
     gap = 16, rowGap = 26,
     fit = true,
+    overlap = 0,
   } = {}) {
+    // Negative gap shingles the tiles like roof slates or a fanned deck. It is
+    // a real information channel and not only a look: overlap orders the row,
+    // because what covers what is unambiguous, where a gapped row is just
+    // adjacency. It needs the depth buffer to be correct, which is why the
+    // field stopped alpha-blending.
+    if (overlap) gap = -Math.abs(overlap);
     if (!fit) return this._pack(count, aspectOf, { width, depth, frontH, backH, gap, rowGap }, 1).out;
 
     // Fit every item inside `depth`. Without this the row profile clamps at the

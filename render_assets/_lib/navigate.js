@@ -100,10 +100,13 @@ export class FieldNavigator {
     });
   }
 
-  /** Project an instance centre to normalized device coords. */
+  /**
+   * Project an instance centre to normalized device coords.
+   * Uses the DISPLACED centre — arrow keys have to move between the tiles the
+   * viewer can see, not the ones the static layout says are there.
+   */
   _project(index, out) {
-    const c = this.field.centres;
-    out.set(c[index * 3], c[index * 3 + 1], c[index * 3 + 2]);
+    this.field.worldCentre(index, out);
     out.project(this.camera);
     return out;
   }
@@ -161,8 +164,7 @@ export class FieldNavigator {
     this.hybrid.setFocus(index);
     this.hybrid.update(this.camera);
 
-    const c = this.field.centres;
-    this._sel.set(c[index * 3], c[index * 3 + 1], c[index * 3 + 2]);
+    this.field.worldCentre(index, this._sel);
     // Suppressed mid-run: moving the camera between the steps of a Home/End
     // sweep changes what "right" means in screen space partway through, and the
     // sweep curves off its own row. Fired once, at the end.
@@ -256,8 +258,7 @@ export class FieldNavigator {
       this._sweeping = false;
     }
     if (this.onSelect && this.selection >= 0) {
-      const c = this.field.centres;
-      this._sel.set(c[this.selection * 3], c[this.selection * 3 + 1], c[this.selection * 3 + 2]);
+      this.field.worldCentre(this.selection, this._sel);
       this.onSelect(this.selection, this._sel);
     }
   }

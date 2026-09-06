@@ -46,7 +46,8 @@ Pre-flight question for any spatial composition: *if I flattened the scene to a 
 | 10 | Pixel/DOM hybrid | `render_assets/_lib/hybrid.js` | A fixed pool of real DOM elements lent to whatever is close enough to read, swapped against their quads. Keeps selectable text, links, and keyboard focus at a DOM budget that does not grow with the corpus. |
 | 11 | Piles | `render_assets/_lib/piles.js` | Mander / Salomon / Wong (CHI 1992) casual organization. Groups become stacks placed on the surface; click spreads a pile in place and collapses it back. Membership is supplied as index lists, so a facet-derived grouping and a hand-made pile are the same object, and an item may sit in several piles — which a folder tree cannot represent. |
 | 12 | Keyboard navigation | `render_assets/_lib/navigate.js` | Roving-selection listbox over the field: one tab stop, arrows move in SCREEN space, Home/End/PageUp/PageDown, Tab between piles, type-ahead by pile label, `aria-activedescendant` + a live region. The selection is always promoted to DOM, so focus lands on a real element. |
-| 13 | Data Mountain at field scale | `render_assets/data-mountain-field/` | 2,500 tiles on the slope: 4 draw calls, 12 DOM elements, 103 MB of atlas. Ships `check.mjs`, which asserts the budget is bounded and fails if it is not. |
+| 13 | Row motion | `render_assets/_lib/motion.js` | Rows slide right and left and their tiles sweep through an angle, phase-shifted per row so it reads as a travelling wave. Displacement is computed in JS into a per-row uniform array, so the shader and the CPU agree on where everything is. Honours `prefers-reduced-motion`. |
+| 14 | Data Mountain at field scale | `render_assets/data-mountain-field/` | 2,500 tiles on the slope: 4 draw calls, 12 DOM elements, 103 MB of atlas. Ships `check.mjs`, which asserts the budget is bounded and fails if it is not. |
 
 ## Scale — when one element per item stops working
 
@@ -140,6 +141,40 @@ describe its own topology. Two things that bite:
 
 A live region is mandatory, not polish: the visual feedback for "the selection
 moved" is a camera move, which conveys precisely nothing to a screen reader.
+
+### Motion, and the trap under it
+
+Sliding rows are not decoration. A static field of 2,500 rectangles reads as
+texture; the same field with rows drifting at different rates reads as *depth*,
+because relative motion is the strongest depth cue after occlusion — and a
+layout that already varies scale with distance gets parallax for free.
+
+Three rules, all learned the hard way:
+
+- **Oscillate, don't marquee.** "Slide right and left" is a bounded sweep, which
+  is fortunate: a wrapping marquee must move a quad's *centre* across the seam
+  atomically, or vertices either side of it wrap on different frames and the
+  quad tears across the screen.
+- **Phase-shift per row.** At zero phase the field moves as one slab, which
+  reads as a camera pan rather than as rows.
+- **Rotate about Y, and rotate the centre.** Turning about Z spins tiles in
+  place and reads as broken; applying the angle per-vertex shears the quad
+  instead of turning it.
+
+**The trap.** The obvious implementation computes the wave in the vertex shader
+from a time uniform — and then the CPU no longer knows where anything is.
+Picking, DOM promotion and keyboard navigation would all address the static
+layout while the viewer sees the moving one, so every click misses by however
+far its row has drifted: silently, and only while the field is moving. So the
+displacement is computed **once per frame in JS**, into a ~64-float per-row
+array handed to the shader as a uniform. Everything positional goes through
+`TileField.worldCentre()` / `worldOrientation()`, and `pickAt()` replaces
+raycasting, which tests the instance matrix and therefore the static layout.
+
+**Overlap** (`arrange({ overlap })`) shingles the tiles like roof slates. It is
+an information channel, not only a look: overlap *orders* a row, because what
+covers what is unambiguous where adjacency is not. It depends on the field
+using the depth buffer rather than alpha blending.
 
 **Anti-pattern.** Do not raise `poolSize` to "just fit everything." The pool
 being small is the design, not a limitation of it; a pool the size of the corpus
