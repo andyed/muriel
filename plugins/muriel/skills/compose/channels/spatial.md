@@ -44,7 +44,8 @@ Pre-flight question for any spatial composition: *if I flattened the scene to a 
 | 8 | Demo gallery | `render_assets/index.html` | Single page indexing every exemplar with kicker / tag / lineage / source link. |
 | 9 | High-count tile field | `render_assets/_lib/atlas.js` + `instanced.js` | The whole corpus as ONE instanced draw call over a two-tier texture atlas (`far`: every item at 64px; `near`: an LRU pool of 256px slots). VRAM is bounded by the tier sizes, not the item count. |
 | 10 | Pixel/DOM hybrid | `render_assets/_lib/hybrid.js` | A fixed pool of real DOM elements lent to whatever is close enough to read, swapped against their quads. Keeps selectable text, links, and keyboard focus at a DOM budget that does not grow with the corpus. |
-| 11 | Data Mountain at field scale | `render_assets/data-mountain-field/` | 2,500 tiles on the slope: 4 draw calls, 12 DOM elements, 103 MB of atlas. Ships `check.mjs`, which asserts the budget is bounded and fails if it is not. |
+| 11 | Piles | `render_assets/_lib/piles.js` | Mander / Salomon / Wong (CHI 1992) casual organization. Groups become stacks placed on the surface; click spreads a pile in place and collapses it back. Membership is supplied as index lists, so a facet-derived grouping and a hand-made pile are the same object, and an item may sit in several piles — which a folder tree cannot represent. |
+| 12 | Data Mountain at field scale | `render_assets/data-mountain-field/` | 2,500 tiles on the slope: 4 draw calls, 12 DOM elements, 103 MB of atlas. Ships `check.mjs`, which asserts the budget is bounded and fails if it is not. |
 
 ## Scale — when one element per item stops working
 
@@ -86,6 +87,29 @@ justified rows whose target height falls toward the back — the same rule a fla
 justified wall uses, except that far rows shrink *and* foreshorten, so a back
 row costs almost no screen area while staying present as context. That double
 falloff is the reason to put a wall on a slope rather than leave it flat.
+
+### Piles
+
+Piling is the other half of the scale answer. A slope shows you 2,500 things;
+it does not tell you which ones belong together. `piles.js` groups them into
+stacks, and because a pile, a spread pile, and a re-sorted field are all just
+"some instances move to new matrices", the whole vocabulary costs one animated
+subset rather than any scene-graph work — `TileField.tick()` writes only
+instances actually in flight, so a settled field costs nothing.
+
+Two things the implementation insists on, both load-bearing rather than
+decorative:
+
+- **Jitter is deterministic, never random.** A pile that reshuffles its own
+  cards each time it collapses destroys the spatial memory the metaphor runs
+  on — you found that item last time by remembering it stuck out on the left.
+- **Piles carry labels.** Mander et al. leaned on the top item as a visual
+  proxy, which works for a desk of documents you wrote yourself and not at all
+  for a facet value like `firmware`. Without a label, one heap of coloured
+  rectangles is indistinguishable from another.
+
+Pile *count* should stay in the dozens — there is one label element per pile. A
+facet with 200 values wants a different treatment than piling.
 
 **Anti-pattern.** Do not raise `poolSize` to "just fit everything." The pool
 being small is the design, not a limitation of it; a pool the size of the corpus

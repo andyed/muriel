@@ -51,6 +51,19 @@
     font-size: 15px; line-height: 1.25; color: var(--ink);
     font-weight: 600;
   }
+  /* Pile labels. A heap of coloured rectangles is not identifiable without
+   * one, so these are load-bearing, not chrome. */
+  .pile-label {
+    font-family: var(--mono);
+    text-align: center;
+    color: var(--ink);                /* 15.7:1 on --bg */
+    white-space: nowrap;
+    text-shadow: 0 2px 10px #07070d, 0 0 3px #07070d;
+    pointer-events: none;
+  }
+  .pile-label .n { font-size: 26px; letter-spacing: 0.10em; text-transform: uppercase; }
+  .pile-label .c { font-size: 20px; color: var(--cyan); margin-left: 10px; }
+
   .hybrid-card .m {
     margin-top: 5px;
     font-family: var(--mono); font-size: 11px;
@@ -80,13 +93,16 @@
       <div class="stat"><span>DOM cards</span><b id="s-dom">—</b></div>
       <div class="stat"><span>near resident / eligible</span><b id="s-near">—</b></div>
       <div class="stat"><span>atlas VRAM</span><b id="s-vram">—</b></div>
+      <div class="stat"><span>layout</span><b id="s-mode">mountain</b></div>
+      <div class="stat"><span>in flight</span><b id="s-moving">0</b></div>
       <div class="stat" id="s-frame-row"><span>frame</span><b id="s-frame">—</b></div>
     </div>
   </div>
   <div class="row">
     <div class="hint">
       <kbd>move</kbd> parallax &nbsp; <kbd>scroll</kbd> dolly &nbsp;
-      <kbd>space</kbd> orbit &nbsp; <kbd>click</kbd> focus &nbsp; <kbd>esc</kbd> release
+      <kbd>space</kbd> orbit &nbsp; <kbd>m</kbd> mountain &nbsp; <kbd>p</kbd> piles &nbsp;
+      <kbd>click</kbd> focus / open pile &nbsp; <kbd>esc</kbd> release
     </div>
     <div class="cite">
       after <em>Robertson, Czerwinski, Larson, Robbins, Thiel, van Dantzich</em> —
@@ -108,10 +124,11 @@
 
 <script type="module">
 import {
-  createScene, Mountain, addFloorGrid, addHorizon, startRenderLoop, THREE,
+  createScene, Mountain, addFloorGrid, addHorizon, startRenderLoop, makePlane, THREE,
 } from '../_lib/spatial.js';
 import { TileField } from '../_lib/instanced.js';
 import { HybridField } from '../_lib/hybrid.js';
+import { PileLayout, SPREAD } from '../_lib/piles.js';
 
 const COUNT = Number(new URLSearchParams(location.search).get('n') || 2500);
 
@@ -164,11 +181,32 @@ for (let i = 0; i < COUNT; i++) {
 }
 const aspectOf = (i) => aspects[i];
 
+// A synthetic facet to group by — standing in for clipwall's tags/source/kind.
+// Deliberately uneven: real facets are long-tailed, and a pile layout that only
+// looks right with equal-sized groups is not a pile layout.
+const TOPICS = ['govee','nanoleaf','hue','wled','lifx','twinkly','diy',
+                'game-room','studio','ambient','teardown','firmware'];
+const topicOf = (i) => TOPICS[Math.floor(Math.abs(Math.sin(i * 3.1) * 1e4)) % TOPICS.length];
+const groups = TOPICS.map((label) => ({ label, indices: [] }));
+for (let i = 0; i < COUNT; i++) groups[TOPICS.indexOf(topicOf(i))].indices.push(i);
+groups.sort((a, b) => b.indices.length - a.indices.length);
+
 /* ─── Scene ──────────────────────────────────────────────────────────── */
 
+// Per-layout framing. The two layouts occupy completely different volumes — a
+// 2,000-deep slope rising to y 1,616, versus a shallow 2,400-wide field of
+// piles — so a camera framed for one sits INSIDE the other. Held as live
+// Vector3s because startRenderLoop reads them by reference each frame.
+const FRAMING = {
+  mountain: { pos: [0, 330, 1500], look: [0, 520, -900], near: 3100, promote: 1800 },
+  piles:    { pos: [0, 760, 2850], look: [0, 700, -600], near: 3400, promote: 2100 },
+};
+const basePos = new THREE.Vector3(...FRAMING.mountain.pos);
+const lookTarget = new THREE.Vector3(...FRAMING.mountain.look);
+
 const { scene, camera, webglRenderer, cssRenderer } = createScene({
-  cameraPos: [0, 330, 1500],
-  lookAt: [0, 520, -900],
+  cameraPos: FRAMING.mountain.pos,
+  lookAt: FRAMING.mountain.look,
   far: 12000,
 });
 // Steeper than the lib default (~21°). A shallow slope carrying 2,500 tiles
@@ -207,12 +245,19 @@ if (placed.length !== COUNT) {
 // the Data Mountain, and it is the whole difference between a hillside of
 // billboards and a tiled floor. No rotation: the quads face +Z, and the slope
 // shows through the rising y of each successive row.
-for (let i = 0; i < placed.length; i++) {
-  const p = placed[i];
-  const w = mountain.planeToWorld(p.u, p.v, p.h);
-  field.place(i, w.x, w.y, w.z, p.w, p.h);
+function applyMountain(immediate) {
+  for (let i = 0; i < placed.length; i++) {
+    const p = placed[i];
+    const w = mountain.planeToWorld(p.u, p.v, p.h);
+    if (immediate) field.place(i, w.x, w.y, w.z, p.w, p.h);
+    else field.moveTo(i, w.x, w.y, w.z, p.w, p.h);
+  }
+  if (immediate) field.layout();
 }
-field.layout();
+applyMountain(true);
+
+const pileLayout = new PileLayout({ field, surface: mountain, aspectOf });
+let mode = 'mountain';
 
 /* ─── The DOM tier ───────────────────────────────────────────────────── */
 
@@ -258,8 +303,58 @@ webglRenderer.domElement.addEventListener('click', (e) => {
   ndc.y = -((e.clientY - r.top) / r.height) * 2 + 1;
   raycaster.setFromCamera(ndc, camera);
   const hit = field.pick(raycaster);
+  if (mode === 'piles' && hit >= 0) {
+    const pile = pileLayout.pileOf(hit);
+    if (pile >= 0) { pileLayout.toggle(pile); renderPileLabels(); return; }
+  }
   hybrid.setFocus(hit);
 });
+
+// One CSS3D label per pile — 12 elements, a constant alongside the hybrid
+// pool. Built from nodes, never innerHTML, matching the field's posture.
+const labelObjs = [];
+function renderPileLabels() {
+  for (const o of labelObjs) { o.visible = false; }
+  if (mode !== 'piles') return;
+  const anchors = pileLayout.labelAnchors();
+  anchors.forEach((a, i) => {
+    let obj = labelObjs[i];
+    if (!obj) {
+      const n = document.createElement('span'); n.className = 'n';
+      const c = document.createElement('span'); c.className = 'c';
+      obj = makePlane([n, c], { className: 'pile-label' });
+      obj.userData.parts = { n, c };
+      scene.add(obj);
+      labelObjs[i] = obj;
+    }
+    obj.userData.parts.n.textContent = a.label;
+    obj.userData.parts.c.textContent = String(a.count);
+    obj.position.set(a.x, a.y, a.z);
+    obj.scale.setScalar(Math.max(0.9, a.width / 420));
+    obj.visible = true;
+  });
+}
+
+function setMode(next) {
+  if (next === mode) return;
+  mode = next;
+  hybrid.setFocus(-1);
+  if (mode === 'piles') pileLayout.arrange(groups, { width: 2400, depth: 2600 });
+  else applyMountain(false);
+
+  const f = FRAMING[mode];
+  basePos.set(...f.pos);
+  lookTarget.set(...f.look);
+  // Snap rather than lerp. The render loop eases the camera toward basePos at a
+  // fixed fraction per frame, which is right for parallax drift and wrong for a
+  // layout change: the two layouts occupy different volumes, so easing between
+  // them flies the camera THROUGH the content for the duration.
+  camera.position.set(...f.pos);
+  field.nearDistance = f.near;
+  hybrid.promoteDistance = f.promote;
+  renderPileLabels();
+  $('s-mode').textContent = mode;
+}
 
 /* ─── HUD ────────────────────────────────────────────────────────────── */
 
@@ -273,21 +368,23 @@ let frames = 0, accum = 0, last = performance.now();
 
 startRenderLoop({
   scene, camera, webglRenderer, cssRenderer,
-  basePos: new THREE.Vector3(0, 330, 1500),
-  lookTarget: new THREE.Vector3(0, 520, -900),
+  basePos,
+  lookTarget,
   dollyRange: [-500, 1400],
   // Bounded by the DOM pool instead of walking the scene every frame.
   sortDom: (cam) => hybrid.sort(cam),
   beforeRender: (now) => {
+    const dt = now - last; last = now;
+    field.tick(dt);
     nearCount = field.update(camera, now);
     hybrid.update(camera);
 
-    const dt = now - last; last = now;
     accum += dt; frames++;
     if (accum >= 500) {
       $('s-frame').textContent = `${(accum / frames).toFixed(1)} ms`;
       $('s-frame-row').classList.toggle('warn', accum / frames > 16.7);
       accum = 0; frames = 0;
+      $('s-moving').textContent = String(field.moving);
       $('s-draws').textContent = String(webglRenderer.info.render.calls);
       $('s-dom').textContent = String(hybrid.live.size);
       // Two different numbers: how many items are inside nearDistance, and how
@@ -299,12 +396,20 @@ startRenderLoop({
     }
   },
   onKeydown: (e) => {
-    if (e.code === 'Escape') hybrid.setFocus(-1);
+    if (e.code === 'Escape') {
+      if (pileLayout.spreadPile >= 0) pileLayout.collapse(pileLayout.spreadPile);
+      else hybrid.setFocus(-1);
+    }
+    if (e.key === 'p') setMode('piles');
+    if (e.key === 'm') setMode('mountain');
   },
 });
 
 // Exposed for check.mjs — measurements a screenshot cannot make.
-window.__field = { field, hybrid, renderer: webglRenderer, count: COUNT };
+window.__field = {
+  field, hybrid, renderer: webglRenderer, count: COUNT,
+  piles: pileLayout, groups, setMode, getMode: () => mode,
+};
 </script>
 </body>
 </html>

@@ -76,7 +76,7 @@ void main() {
   // A slot that has not loaded yet is transparent. Painting a flat placeholder
   // rather than discarding keeps the field's shape legible while it streams —
   // a wall that pops into existence tile by tile reads as broken.
-  if (c.a < 0.02) c = vec4(emptyColor, 0.55);
+  if (c.a < 0.02) c = vec4(emptyColor, 1.0);
 
   gl_FragColor = vec4(c.rgb, c.a * vOpacity);
 }
@@ -100,6 +100,7 @@ export class TileField {
     nearDistance = 1400,
     nearSlots = 256, farPx = 64, nearPx = 256,
     emptyColor = 0x1b2430,
+    blend = false,
   }) {
     this.count = count;
     this.nearDistance = nearDistance;
@@ -116,14 +117,23 @@ export class TileField {
     geo.setAttribute('aOpacity', this.aOpacity);
     geo.setAttribute('aFit', this.aFit);
 
+    // Tiles are photographs: effectively opaque, with the only non-opaque
+    // fragments being suppressed instances and unloaded slots, both of which
+    // discard outright. So they get the depth buffer rather than blending —
+    // an InstancedMesh cannot sort its instances, and instance order here runs
+    // FRONT to BACK, meaning a blended field paints far tiles over near ones.
+    // Invisible while rows barely overlap; fatal for a pile, which is nothing
+    // but overlap.
+    //
+    // `blend: true` restores the old alpha-blended path for consumers that want
+    // smooth per-instance fades and can accept the ordering artifacts.
     this.material = new THREE.ShaderMaterial({
       vertexShader: VERT,
       fragmentShader: FRAG,
-      transparent: true,
-      // Written but not tested against: the field is drawn back-to-front by
-      // the camera-distance sort, and depth-writing transparent quads punch
-      // holes in whatever draws after them.
-      depthWrite: false,
+      transparent: blend,
+      depthWrite: !blend,
+      depthTest: true,
+      alphaTest: blend ? 0 : 0.5,
       uniforms: {
         farAtlas:   { value: this.atlases.far.texture },
         nearAtlas:  { value: this.atlases.near.texture },
@@ -150,6 +160,14 @@ export class TileField {
     this.centres = new Float32Array(count * 3);
     this.sizes = new Float32Array(count * 2);
     this.rotations = new Float32Array(count * 4);
+    // Animation targets, and the set of instances actually in flight. The set
+    // is the point: piles spread, filters re-lay the field, and none of that
+    // should cost anything for the instances holding still.
+    this._targets = new Float32Array(count * 6);
+    this.targetRot = new Float32Array(count * 4);
+    this._moving = new Set();
+    this._qa = new THREE.Quaternion();
+    this._qb = new THREE.Quaternion();
     this._tierDirty = false;
     this._suppressed = new Uint8Array(count);   // 1 = a DOM twin owns it
 
@@ -176,6 +194,20 @@ export class TileField {
     this.rotations[index * 4 + 1] = this._q.y;
     this.rotations[index * 4 + 2] = this._q.z;
     this.rotations[index * 4 + 3] = this._q.w;
+
+    // Targets mirror the placement unless moveTo() overrides them. Without
+    // this, an instance that was only ever placed directly has an all-zero
+    // target, and settle() teleports it to the origin at zero size — invisible,
+    // silent, and indistinguishable from a failed load.
+    if (!this._moving.has(index)) {
+      const t = this._targets;
+      t[index * 6] = x; t[index * 6 + 1] = y; t[index * 6 + 2] = z;
+      t[index * 6 + 3] = width; t[index * 6 + 4] = height;
+      this.targetRot[index * 4] = this._q.x;
+      this.targetRot[index * 4 + 1] = this._q.y;
+      this.targetRot[index * 4 + 2] = this._q.z;
+      this.targetRot[index * 4 + 3] = this._q.w;
+    }
   }
 
   /** World width of an instance — how wide its DOM twin must be scaled. */
@@ -202,6 +234,86 @@ export class TileField {
     this.mesh.instanceMatrix.needsUpdate = true;
     this.mesh.computeBoundingSphere();
   }
+
+  /**
+   * Animate an instance toward a new placement.
+   *
+   * Piles spread and collapse, groups re-sort, a facet filter re-lays the
+   * field — all of which are the same operation: some subset of instances move
+   * to new places while everything else holds still. Only moving instances are
+   * written, so a settled field costs nothing per frame, and a spreading pile
+   * costs its own member count rather than the corpus.
+   */
+  moveTo(index, x, y, z, width, height, rotation = null) {
+    const t = this._targets;
+    t[index * 6] = x; t[index * 6 + 1] = y; t[index * 6 + 2] = z;
+    t[index * 6 + 3] = width; t[index * 6 + 4] = height;
+    if (rotation) {
+      this.targetRot[index * 4] = rotation.x;
+      this.targetRot[index * 4 + 1] = rotation.y;
+      this.targetRot[index * 4 + 2] = rotation.z;
+      this.targetRot[index * 4 + 3] = rotation.w;
+    } else {
+      this.targetRot[index * 4] = this.rotations[index * 4];
+      this.targetRot[index * 4 + 1] = this.rotations[index * 4 + 1];
+      this.targetRot[index * 4 + 2] = this.rotations[index * 4 + 2];
+      this.targetRot[index * 4 + 3] = this.rotations[index * 4 + 3];
+    }
+    this._moving.add(index);
+  }
+
+  /** Snap an instance to its target immediately, cancelling any motion. */
+  settle(index) {
+    const t = this._targets;
+    this._qa.set(this.targetRot[index * 4], this.targetRot[index * 4 + 1],
+                 this.targetRot[index * 4 + 2], this.targetRot[index * 4 + 3]);
+    this.place(index, t[index * 6], t[index * 6 + 1], t[index * 6 + 2],
+               t[index * 6 + 3], t[index * 6 + 4], this._qa);
+    this._moving.delete(index);
+  }
+
+  /**
+   * Advance in-flight placements. `ease` is the fraction of the remaining
+   * distance covered this frame — frame-rate corrected so the motion does not
+   * change speed with the refresh rate.
+   *
+   * @returns {number} instances still moving
+   */
+  tick(dt = 16.7, ease = 0.14) {
+    if (!this._moving.size) return 0;
+    const k = 1 - Math.pow(1 - ease, dt / 16.7);
+    const t = this._targets;
+    const c = this.centres;
+    const s = this.sizes;
+
+    for (const i of this._moving) {
+      const dx = t[i * 6] - c[i * 3];
+      const dy = t[i * 6 + 1] - c[i * 3 + 1];
+      const dz = t[i * 6 + 2] - c[i * 3 + 2];
+      const dw = t[i * 6 + 3] - s[i * 2];
+      const dh = t[i * 6 + 4] - s[i * 2 + 1];
+
+      // Settle on a threshold in world units rather than never quite arriving.
+      // Without it every animated instance stays in the moving set forever and
+      // rewrites its matrix on every frame for the life of the page.
+      if (Math.abs(dx) + Math.abs(dy) + Math.abs(dz) + Math.abs(dw) + Math.abs(dh) < 0.5) {
+        this.settle(i);
+        continue;
+      }
+      this._qa.set(this.rotations[i * 4], this.rotations[i * 4 + 1],
+                   this.rotations[i * 4 + 2], this.rotations[i * 4 + 3]);
+      this._qb.set(this.targetRot[i * 4], this.targetRot[i * 4 + 1],
+                   this.targetRot[i * 4 + 2], this.targetRot[i * 4 + 3]);
+      this._qa.slerp(this._qb, k);
+      this.place(i,
+        c[i * 3] + dx * k, c[i * 3 + 1] + dy * k, c[i * 3 + 2] + dz * k,
+        s[i * 2] + dw * k, s[i * 2 + 1] + dh * k, this._qa);
+    }
+    this.mesh.instanceMatrix.needsUpdate = true;
+    return this._moving.size;
+  }
+
+  get moving() { return this._moving.size; }
 
   /**
    * Hide an instance because a DOM element is standing in for it. The instance
