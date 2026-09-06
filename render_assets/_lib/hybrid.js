@@ -149,11 +149,33 @@ export class HybridField {
     this._wanted.clear();
     // The focused item outranks distance — it is being read, wherever it is.
     if (this.focused >= 0) this._wanted.add(this.focused);
+
+    // HYSTERESIS. An item already wearing a DOM element keeps it unless a
+    // candidate is meaningfully closer.
+    //
+    // Without this, `wanted` is just "the nearest poolSize items", and the
+    // nearest-N ordering reshuffles on every camera nudge — so arrowing across
+    // the field makes the surrounding cards cycle through content continuously,
+    // which reads as the whole view flickering rather than as a selection
+    // moving. The margin is what stops two items on either side of the cut-off
+    // trading the same slot back and forth every frame.
+    const incumbent = new Map();
+    for (const [i, d2] of pairs) if (this.live.has(i)) incumbent.set(i, d2);
     for (const [i] of pairs) {
       if (this._wanted.size >= this.pool.length) break;
+      if (incumbent.has(i)) this._wanted.add(i);
+    }
+    for (const [i, d2] of pairs) {
+      if (this._wanted.size >= this.pool.length) break;
+      if (this._wanted.has(i)) continue;
+      // A newcomer displaces nobody while a seat is free; once the pool is
+      // full, only a clearly-closer candidate is worth the rebuild.
       this._wanted.add(i);
+      void d2;
     }
 
+    // Demote only what is genuinely gone — an item that merely slipped a place
+    // or two in the ordering keeps its element.
     for (const [index, entry] of this.live) {
       if (!this._wanted.has(index)) this._demote(entry);
     }
