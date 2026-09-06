@@ -46,7 +46,7 @@ Pre-flight question for any spatial composition: *if I flattened the scene to a 
 | 10 | Pixel/DOM hybrid | `render_assets/_lib/hybrid.js` | A fixed pool of real DOM elements lent to whatever is close enough to read, swapped against their quads. Keeps selectable text, links, and keyboard focus at a DOM budget that does not grow with the corpus. |
 | 11 | Piles | `render_assets/_lib/piles.js` | Mander / Salomon / Wong (CHI 1992) casual organization. Groups become stacks placed on the surface; click spreads a pile in place and collapses it back. Membership is supplied as index lists, so a facet-derived grouping and a hand-made pile are the same object, and an item may sit in several piles — which a folder tree cannot represent. |
 | 12 | Keyboard navigation | `render_assets/_lib/navigate.js` | Roving-selection listbox over the field: one tab stop, arrows move in SCREEN space, Home/End/PageUp/PageDown, Tab between piles, type-ahead by pile label, `aria-activedescendant` + a live region. The selection is always promoted to DOM, so focus lands on a real element. |
-| 13 | Row motion | `render_assets/_lib/motion.js` | Rows slide right and left and their tiles sweep through an angle, phase-shifted per row so it reads as a travelling wave. Displacement is computed in JS into a per-row uniform array, so the shader and the CPU agree on where everything is. Honours `prefers-reduced-motion`. |
+| 13 | Row motion | `render_assets/_lib/motion.js` | Rows pan continuously — each at its own rate, wrapping — and their tiles sweep through an angle. `mode: 'oscillate'` is the bounded alternative. Displacement is computed in JS into a per-row uniform array, so the shader and the CPU agree on where everything is. Honours `prefers-reduced-motion`. |
 | 14 | Data Mountain at field scale | `render_assets/data-mountain-field/` | 2,500 tiles on the slope: 4 draw calls, 12 DOM elements, 103 MB of atlas. Ships `check.mjs`, which asserts the budget is bounded and fails if it is not. |
 
 ## Scale — when one element per item stops working
@@ -151,12 +151,16 @@ layout that already varies scale with distance gets parallax for free.
 
 Three rules, all learned the hard way:
 
-- **Oscillate, don't marquee.** "Slide right and left" is a bounded sweep, which
-  is fortunate: a wrapping marquee must move a quad's *centre* across the seam
-  atomically, or vertices either side of it wrap on different frames and the
-  quad tears across the screen.
-- **Phase-shift per row.** At zero phase the field moves as one slab, which
-  reads as a camera pan rather than as rows.
+- **Wrap the centre, never the vertices.** Rows pan continuously and wrap, so a
+  quad's *centre* must cross the seam in one step; wrap the vertices
+  independently and the quad tears in half across the screen. The shader
+  displaces the centre and rebuilds the quad around it, so this holds by
+  construction. The real marquee constraint is the other one and is not solved,
+  only documented: a row's content must be **wider than the frame**, or tiles
+  visibly pop at the seam. `mode: 'oscillate'` is the bounded fallback for
+  fields that cannot afford that off-screen margin.
+- **Give each row its own rate.** At a uniform rate the field moves as one slab,
+  which reads as a camera pan rather than as rows.
 - **Rotate about Y, and rotate the centre.** Turning about Z spins tiles in
   place and reads as broken; applying the angle per-vertex shears the quad
   instead of turning it.
@@ -171,10 +175,39 @@ array handed to the shader as a uniform. Everything positional goes through
 `TileField.worldCentre()` / `worldOrientation()`, and `pickAt()` replaces
 raycasting, which tests the instance matrix and therefore the static layout.
 
+**Keep the offset bounded.** A pan that grows without limit loses float
+precision — and the float32 uniform loses it before the JS double that computed
+it, so the two halves silently drift apart after a few minutes of idling.
+
 **Overlap** (`arrange({ overlap })`) shingles the tiles like roof slates. It is
 an information channel, not only a look: overlap *orders* a row, because what
 covers what is unambiguous where adjacency is not. It depends on the field
 using the depth buffer rather than alpha blending.
+
+### What the checks had to learn
+
+`data-mountain-field/check.mjs` is 29 assertions, and four of them exist because
+an earlier version passed while the screen was wrong. The pattern is worth
+naming, because it recurred all the way through this channel's development:
+**every one asserted on internal state that was correct, while the rendered
+output was not.**
+
+- *DOM budget.* Bounded against the configured pool — vacuous, since the
+  regression it guards against is a consumer configuring a pool the size of the
+  corpus. Now bounded absolutely.
+- *Pick/render agreement.* Drove displacement via a mode-specific amplitude
+  knob, at a magnitude smaller than a tile's own width, so aiming at the static
+  position still hit the right tile and the test passed for free.
+- *Atlas slot aliasing.* Asserted on the `farSlot` bookkeeping array, which
+  correctly held `-1` for a failed tile — while the `aSlot` attribute the GPU
+  samples had clamped that `-1` to slot 0, so a whole corpus rendered as copies
+  of one image. Now asserts on the **rendered** slot.
+- *The no-slot path itself.* Unreachable, because the demo's synthetic sources
+  always load. `?fail=N` makes 1-in-N tiles unresolvable so the path is
+  exercised at all.
+
+If an assertion has never been seen to fail, it is a comment. Every one of these
+now ships with the mutation that trips it.
 
 **Anti-pattern.** Do not raise `poolSize` to "just fit everything." The pool
 being small is the design, not a limitation of it; a pool the size of the corpus

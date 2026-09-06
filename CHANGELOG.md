@@ -6,6 +6,87 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **A pixel/DOM hybrid tile field, so the `spatial` channel scales past a few
+  hundred items.** The four original runtime exemplars give every item its own
+  `CSS3DObject` — right for a dozen cards, wrong by two orders of magnitude past
+  it, and `startRenderLoop`'s depth sort walked the whole scene writing a
+  `zIndex` per card per frame (~149k style writes/sec at 2,500 items). The fix
+  is not a faster DOM: focus+context layouts only demand legibility from a few
+  items at once, which is the observation the Perspective Wall and Data Mountain
+  were built on. Three tiers — every item a GPU quad on a 64px atlas, a
+  ~256-slot LRU pool of 256px slots for what is near, and ~12 real DOM elements
+  lent to what is close enough to read. Only the far atlas grows with the
+  corpus, at 16 KB per item. Measured at 2,500 items: **4 draw calls, 12 DOM
+  elements, 103 MB of atlas.** New: `_lib/atlas.js`, `_lib/instanced.js`,
+  `_lib/hybrid.js`.
+- **Piles** (`_lib/piles.js`) — Mander / Salomon / Wong (CHI 1992) casual
+  organization. Groups become stacks; click spreads one in place. Membership is
+  supplied as index lists, so a facet-derived grouping and a hand-made pile are
+  the same object and an item may sit in several. Jitter is deterministic: a
+  pile that reshuffles its cards on every collapse destroys the spatial memory
+  the metaphor runs on. Piles carry labels, because a facet value has no useful
+  visual proxy.
+- **Keyboard navigation** (`_lib/navigate.js`) — a roving-selection listbox:
+  one tab stop, arrows, Home/End, PageUp/PageDown, Tab between piles,
+  type-ahead, `aria-activedescendant` and a live region. The selection is always
+  promoted to DOM, which is what makes "a GPU quad cannot be focused" stop being
+  true. Movement is computed in screen space, so it works unchanged across
+  layouts and after an orbit.
+- **Row motion** (`_lib/motion.js`) — rows pan continuously at independent
+  rates, tiles sweep through an angle, and `arrange({ overlap })` shingles them.
+  Relative motion is the strongest depth cue after occlusion. Honours
+  `prefers-reduced-motion`.
+- **Pile view state** — `serialize()` / `restore()` keyed by a caller-supplied
+  stable key, never instance index. Unresolvable keys are reported rather than
+  dropped.
+- `Mountain.arrange()` lays a whole corpus on the slope in justified rows whose
+  target height falls toward the back, fitting the count inside the plane.
+- `data-mountain-field/` exemplar and its 29-assertion `check.mjs`.
+
+### Changed
+
+- `startRenderLoop({ sortDom })`, `makePlane(node)` and
+  `createScene({ container })` — three scale affordances on `spatial.js`, all
+  backward compatible. The existing four exemplars are untouched.
+- The tile field uses the depth buffer rather than alpha blending. An
+  `InstancedMesh` cannot sort its instances and `arrange()` fills them front to
+  back, so a blended field painted far tiles over near ones — invisible while
+  rows barely overlap, fatal for a pile.
+
+### Fixed
+
+- **A tile with no atlas slot rendered slot 0's image.** `Math.max(0, farSlot)`
+  clamped the "no slot" sentinel onto a real slot, so on a corpus with load
+  failures the field drew as hundreds of copies of one picture. Every
+  bookkeeping-level assertion passed throughout, because the `farSlot` array
+  correctly held `-1`; the aliasing was one layer later, in the attribute the
+  GPU samples.
+- **Atlas eviction leaked a duplicate slot every time.** `_evictNear` returned a
+  slot to the caller *and* pushed it back on the free list, so the next `alloc()`
+  handed the same slot to a second item and two tiles sampled the same pixels —
+  both entirely plausible on screen. Measured: 268 holders against a 256-slot
+  pool.
+- **The mountain was a carpet.** `arrange()`'s height profile clamped at the
+  back, so rows marched past the plane: 911 of 2,500 tiles stranded off the end,
+  and the surviving ramp so long the tilt read flat.
+- **The loader served the field backwards.** One LIFO queue is right during a
+  pan and wrong on the initial burst, where requests arrive in index order — the
+  back of the field loaded first. Near tier now drains before far.
+- **DOM cards traded content on every camera nudge**, because the promoted set
+  was recomputed as "the nearest N" with no hysteresis. Navigating read as the
+  view flickering rather than as a selection moving.
+- `place()` now keeps the animation target in sync — an instance only ever
+  placed directly had an all-zero target, and `settle()` teleported it to the
+  origin at zero size.
+- Shared `spatial.css` contrast is documented as failing the 8:1 floor:
+  `--ink-dim` measures **6.26:1** and `--ink-faint` **2.09:1** on `--bg`, both
+  carrying readable text. The new exemplar overrides them locally (0.72 alpha =
+  8.22:1) and drops the third tier, which cannot exist above the floor on that
+  ground. The shared tokens are left alone — changing them restyles all four
+  existing demos, and that is a call for their author.
+
 ### Fixed
 
 - **The provenance stamp was misreporting its own version, and had been since 0.6.0.**
