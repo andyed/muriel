@@ -38,6 +38,8 @@ export class PileLayout {
    * @param {(i:number) => number} opts.aspectOf
    * @param {number} [opts.stackOffset] world units each card in a pile is
    *   nudged, so the stack reads as depth rather than one card.
+   * @param {number} [opts.faceCount] members shown as a contact sheet on the
+   *   face of a collapsed pile (0 = a single cover, the pre-2026-09 look)
    * @param {number} [opts.maxVisibleInPile] cards drawn proud of the stack
    *   before the rest are hidden behind the top of it.
    */
@@ -45,12 +47,14 @@ export class PileLayout {
     field, surface = null, aspectOf,
     stackOffset = 3.2,
     maxVisibleInPile = 24,
+    faceCount = 6,
   }) {
     this.field = field;
     this.surface = surface;
     this.aspectOf = aspectOf;
     this.stackOffset = stackOffset;
     this.maxVisibleInPile = maxVisibleInPile;
+    this.faceCount = faceCount;
 
     /** @type {Array<{label:string, indices:number[], u:number, v:number, w:number, h:number, state:string}>} */
     this.piles = [];
@@ -127,15 +131,56 @@ export class PileLayout {
    * unjittered stack of identical rectangles is indistinguishable from a
    * single item, which loses the "how big is this pile" glance.
    */
+  /**
+   * The members shown on a collapsed pile's face: up to faceCount, sampled
+   * evenly through the pile's order (positions 0, n/K, 2n/K …). Samples, not
+   * centroids: a pile that is mostly one thing shows that, a mixed pile shows
+   * the mix. One cover told you nothing about 134 others.
+   */
+  faceOf(pileIndex) {
+    const pile = this.piles[pileIndex];
+    if (!pile || !this.faceCount) return [];
+    const n = pile.indices.length, k = Math.min(this.faceCount, n);
+    return Array.from({ length: k }, (_, j) => pile.indices[Math.floor(j * n / k)]);
+  }
+
+  /** Cell geometry of the face grid inside the pile's footprint: [cols, rows]. */
+  _faceGrid(count) {
+    const cols = count <= 1 ? 1 : count <= 4 ? 2 : 3;
+    return [cols, Math.ceil(count / cols)];
+  }
+
   collapse(pileIndex, immediate = false) {
     const pile = this.piles[pileIndex];
     if (!pile) return;
     pile.state = PILED;
     if (this.spreadPile === pileIndex) this.spreadPile = -1;
 
+    // The face: a contact sheet of sampled members laid in cells over the
+    // footprint, nearest the camera, each contained in its cell with its own
+    // proportions. Everything else stacks behind as before.
+    const face = this.faceOf(pileIndex), faceSet = new Set(face);
+    const [cols, rows] = this._faceGrid(face.length);
+    const cellW = pile.w / cols, cellH = pile.h / rows, inset = 0.94;
+    const faceZ = (this.maxVisibleInPile + 1) * this.stackOffset;
+    face.forEach((i, j) => {
+      const col = j % cols, row = Math.floor(j / cols);
+      const aspect = this.aspectOf(i);
+      const h = Math.min(cellH * inset, (cellW * inset) / aspect), w = h * aspect;
+      const u = pile.u - pile.w / 2 + cellW * (col + 0.5);
+      const v = pile.v + (rows - 1) * cellH / 2 - row * cellH; // row 0 on top, centred on the pile
+      const p = this._world(u, v, h);
+      this._q.identity();
+      // Distinct depth per cell so no two face cards are coplanar.
+      const z = p.z + faceZ + j * 0.2;
+      if (immediate) this.field.place(i, p.x, p.y, z, w, h, this._q);
+      else this.field.moveTo(i, p.x, p.y, z, w, h, this._q);
+    });
+
     const n = pile.indices.length;
     for (let k = 0; k < n; k++) {
       const i = pile.indices[k];
+      if (faceSet.has(i)) continue;
       // Deepest card first, so the LAST member drawn is the top of the pile.
       const depth = n - 1 - k;
       const shown = Math.min(depth, this.maxVisibleInPile);
@@ -149,7 +194,12 @@ export class PileLayout {
       );
       // Push each card proud of the one beneath along +Z so the depth buffer
       // orders the stack correctly whatever the instance order happens to be.
-      const z = p.z + (this.maxVisibleInPile - shown) * this.stackOffset;
+      // Cap the visible fan, not depth ordering. Putting every overflow card
+      // on the same plane makes overlapping textures fight in the depth
+      // buffer. One world unit keeps the tail distinct at ordinary camera
+      // distances without extending its footprint across the surface.
+      const overflow = Math.max(0, depth - this.maxVisibleInPile);
+      const z = p.z + (this.maxVisibleInPile - shown) * this.stackOffset - overflow;
       this._q.setFromAxisAngle(UP_Z, jitter.r * 0.05);
 
       if (immediate) this.field.place(i, p.x, p.y, z, w, pile.h, this._q);
@@ -181,8 +231,19 @@ export class PileLayout {
 
     // Centre the spread on the pile so it opens where it sits.
     const rows = Math.ceil(n / cols);
-    const cellW = cardH * 1.5 + gap;
-    const originU = pile.u - (cols - 1) * cellW / 2;
+    // Mixed-aspect imagery needs each column's actual widest card. A fixed
+    // 1.5-aspect cell makes even ordinary 16:9 screenshots overlap.
+    const columnWidths = new Array(cols).fill(0);
+    for (let k = 0; k < n; k++) {
+      columnWidths[k % cols] = Math.max(columnWidths[k % cols], cardH * this.aspectOf(pile.indices[k]));
+    }
+    const totalWidth = columnWidths.reduce((sum, w) => sum + w, 0) + Math.max(0, cols - 1) * gap;
+    let left = pile.u - totalWidth / 2;
+    const columnCentres = columnWidths.map((w) => {
+      const centre = left + w / 2;
+      left += w + gap;
+      return centre;
+    });
     const originV = pile.v + (rows - 1) * (cardH + gap) / 2;
 
     for (let k = 0; k < n; k++) {
@@ -190,7 +251,7 @@ export class PileLayout {
       const col = k % cols;
       const row = Math.floor(k / cols);
       const w = cardH * this.aspectOf(i);
-      const p = this._world(originU + col * cellW, originV - row * (cardH + gap), cardH);
+      const p = this._world(columnCentres[col], originV - row * (cardH + gap), cardH);
       this._q.identity();
       this.field.moveTo(i, p.x, p.y, p.z, w, cardH, this._q);
     }

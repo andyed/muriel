@@ -40,6 +40,9 @@ export class HybridField {
    * @param {number} [opts.basePx] authoring width of a pool element, in CSS px
    * @param {number} [opts.promoteDistance] world distance inside which an item
    *   is eligible for DOM. Defaults to a third of the field's near distance.
+   * @param {(index:number) => boolean} [opts.eligible] whether an item may be
+   *   automatically promoted. Useful for excluding buried pile members;
+   *   explicitly focused items still take precedence.
    * @param {string} [opts.className]
    * @param {(index:number, el:HTMLElement) => void} [opts.onActivate]
    *   Click/Enter on a promoted card.
@@ -49,6 +52,7 @@ export class HybridField {
     poolSize = 12,
     basePx = 320,
     promoteDistance = null,
+    eligible = () => true,
     className = 'hybrid-card',
     idPrefix = 'hybrid-card',
     onActivate = null,
@@ -61,6 +65,7 @@ export class HybridField {
     this.onActivate = onActivate;
     this.billboard = billboard;
     this.promoteDistance = promoteDistance ?? field.nearDistance / 3;
+    this.eligible = eligible;
 
     this.focused = -1;
     /** index -> pool entry, for the items currently wearing a DOM element. */
@@ -133,6 +138,7 @@ export class HybridField {
 
     this._candidates.length = 0;
     for (let i = 0; i < this.field.count; i++) {
+      if (!this.eligible(i)) continue;
       const dx = c[i * 3] - cx, dy = c[i * 3 + 1] - cy, dz = c[i * 3 + 2] - cz;
       const d2 = dx * dx + dy * dy + dz * dz;
       if (d2 <= limit2) this._candidates.push(i, d2);
