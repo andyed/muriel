@@ -69,6 +69,8 @@ test('a collapsed pile wears a contact sheet: sampled members in cells over the 
   const cellArea = (wide.piles.piles[0].w / 3) * (wide.piles.piles[0].h / 3);
   for (const i of wf) { const c = wide.positions.get(i); assert.ok(c.w * c.h > cellArea * 0.85, 'a matching member fills most of its cell'); }
   const one = fixture([1.5]); assert.deepEqual(one.piles.faceOf(0), [0]);
+  const empty = fixture([1.5]); empty.piles.piles[0].indices = []; assert.deepEqual(empty.piles.faceOf(0), [], 'a pile filtered to nothing has no face');
+  empty.piles.collapse(0, true); // and collapsing it is harmless
   const five = fixture(new Array(5).fill(1)); assert.equal(five.piles.faceOf(0).length, 4, 'four to eight members show a 2×2 sheet');
   const bare = new (piles.constructor)({ field: { place() {}, moveTo() {}, layout() {} }, aspectOf: () => 1, faceCount: 0 });
   bare.arrange([{ label: 'x', indices: [0, 1, 2] }]); assert.deepEqual(bare.faceOf(0), [], 'faceCount 0 restores the single-cover look');

@@ -141,8 +141,8 @@ export class PileLayout {
    */
   faceOf(pileIndex) {
     const pile = this.piles[pileIndex];
-    if (!pile || !this.faceCount) return [];
-    const n = pile.indices.length;
+    const n = pile?.indices.length || 0;
+    if (!n || !this.faceCount) return []; // an empty pile (filtered to nothing) has no face
     // Only a full square grid tiles the footprint: 1, 4 or 9 members; 3×3 once
     // a pile is large enough (24+) for nine samples to say more than four.
     const k = n >= 24 && this.faceCount >= 9 ? 9 : n >= 4 && this.faceCount >= 4 ? 4 : 1;
