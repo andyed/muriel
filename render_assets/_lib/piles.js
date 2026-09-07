@@ -39,7 +39,9 @@ export class PileLayout {
    * @param {number} [opts.stackOffset] world units each card in a pile is
    *   nudged, so the stack reads as depth rather than one card.
    * @param {number} [opts.faceCount] members shown as a contact sheet on the
-   *   face of a collapsed pile (0 = a single cover, the pre-2026-09 look)
+   *   face of a collapsed pile: a square grid (4 or 9), so cells share the
+   *   footprint's proportions and members that match the pile's average
+   *   aspect tile it without gaps (0 = a single cover, the pre-2026-09 look)
    * @param {number} [opts.maxVisibleInPile] cards drawn proud of the stack
    *   before the rest are hidden behind the top of it.
    */
@@ -47,7 +49,7 @@ export class PileLayout {
     field, surface = null, aspectOf,
     stackOffset = 3.2,
     maxVisibleInPile = 24,
-    faceCount = 6,
+    faceCount = 9,
   }) {
     this.field = field;
     this.surface = surface;
@@ -140,14 +142,17 @@ export class PileLayout {
   faceOf(pileIndex) {
     const pile = this.piles[pileIndex];
     if (!pile || !this.faceCount) return [];
-    const n = pile.indices.length, k = Math.min(this.faceCount, n);
+    const n = pile.indices.length;
+    // Only a full square grid tiles the footprint: 1, 4 or 9 members; 3×3 once
+    // a pile is large enough (24+) for nine samples to say more than four.
+    const k = n >= 24 && this.faceCount >= 9 ? 9 : n >= 4 && this.faceCount >= 4 ? 4 : 1;
     return Array.from({ length: k }, (_, j) => pile.indices[Math.floor(j * n / k)]);
   }
 
-  /** Cell geometry of the face grid inside the pile's footprint: [cols, rows]. */
+  /** Cell geometry of the face grid inside the pile's footprint: [cols, rows], square. */
   _faceGrid(count) {
-    const cols = count <= 1 ? 1 : count <= 4 ? 2 : 3;
-    return [cols, Math.ceil(count / cols)];
+    const cols = Math.max(1, Math.ceil(Math.sqrt(count)));
+    return [cols, Math.max(1, Math.ceil(count / cols))];
   }
 
   collapse(pileIndex, immediate = false) {
@@ -168,7 +173,9 @@ export class PileLayout {
       const aspect = this.aspectOf(i);
       const h = Math.min(cellH * inset, (cellW * inset) / aspect), w = h * aspect;
       const u = pile.u - pile.w / 2 + cellW * (col + 0.5);
-      const v = pile.v + (rows - 1) * cellH / 2 - row * cellH; // row 0 on top, centred on the pile
+      // A card stands on its plane point (the surface lifts it by h/2), so the
+      // cell's bottom line places the card at the cell's centre; row 0 on top.
+      const v = pile.v + (rows - 1 - row) * cellH + (cellH - h) / 2;
       const p = this._world(u, v, h);
       this._q.identity();
       // Distinct depth per cell so no two face cards are coplanar.

@@ -16,7 +16,8 @@ function fixture(aspects, { tilted = false } = {}) {
   const positions = new Map();
   const record = (i, x, y, z, w, h) => positions.set(i, { x, y, z, w, h });
   const field = { place: record, moveTo: record, layout() {} };
-  const surface = { planeToWorld: (x, y, h) => ({ x, y: tilted ? -y * .6 + h / 2 : y, z: tilted ? y * .8 : 0 }) };
+  // Cards stand on their plane point: the surface lifts them by half their height.
+  const surface = { planeToWorld: (x, y, h) => ({ x, y: tilted ? -y * .6 + h / 2 : y + h / 2, z: tilted ? y * .8 : 0 }) };
   const piles = new PileLayout({ field, surface, aspectOf: (i) => aspects[i] });
   piles.arrange([{ label: 'screenshots', indices: aspects.map((_, i) => i) }]);
   return { piles, positions };
@@ -46,14 +47,15 @@ test('a collapsed pile wears a contact sheet: sampled members in cells over the 
   const aspects = new Array(134).fill(0).map((_, i) => (i % 3 === 0 ? 0.7 : 16 / 9));
   const { piles, positions } = fixture(aspects);
   const pile = piles.piles[0], face = piles.faceOf(0);
-  assert.equal(face.length, 6);
-  assert.deepEqual(face, [0, 22, 44, 67, 89, 111], 'samples are spread evenly through the pile order');
+  assert.equal(face.length, 9, 'a large pile shows a 3×3 sheet');
+  assert.deepEqual(face, [0, 14, 29, 44, 59, 74, 89, 104, 119], 'samples are spread evenly through the pile order');
+  const cover = { y: pile.v + pile.h / 2 }; // the footprint's centre in world y (cards stand on v)
   const stackedZ = Math.max(...[...positions.entries()].filter(([i]) => !face.includes(i)).map(([, p]) => p.z));
   const cells = face.map((i) => positions.get(i));
   for (const c of cells) {
     assert.ok(c.z > stackedZ, 'face cards are nearest the camera');
     assert.ok(c.x - c.w / 2 >= pile.u - pile.w / 2 - 1e-6 && c.x + c.w / 2 <= pile.u + pile.w / 2 + 1e-6, 'inside the footprint horizontally');
-    assert.ok(c.y - c.h / 2 >= pile.v - pile.h / 2 - 1e-6 && c.y + c.h / 2 <= pile.v + pile.h / 2 + 1e-6, 'inside the footprint vertically');
+    assert.ok(c.y - c.h / 2 >= cover.y - pile.h / 2 - 1e-6 && c.y + c.h / 2 <= cover.y + pile.h / 2 + 1e-6, 'inside the footprint vertically');
   }
   for (let a = 0; a < cells.length; a++) for (let b = a + 1; b < cells.length; b++) {
     const p = cells[a], q = cells[b];
@@ -61,8 +63,13 @@ test('a collapsed pile wears a contact sheet: sampled members in cells over the 
     assert.ok(apart, 'face cards never overlap');
   }
   assert.ok(Math.abs(positions.get(0).w / positions.get(0).h - 0.7) < 1e-6, 'a portrait member keeps its proportions in its cell');
-  assert.ok(Math.abs(positions.get(22).w / positions.get(22).h - 16 / 9) < 1e-6);
+  assert.ok(Math.abs(positions.get(14).w / positions.get(14).h - 16 / 9) < 1e-6);
+  // Members matching the pile's average aspect fill their cells: a square sheet of 16:9 covers in a 16:9 footprint.
+  const wide = fixture(new Array(40).fill(16 / 9)); const wf = wide.piles.faceOf(0); assert.equal(wf.length, 9);
+  const cellArea = (wide.piles.piles[0].w / 3) * (wide.piles.piles[0].h / 3);
+  for (const i of wf) { const c = wide.positions.get(i); assert.ok(c.w * c.h > cellArea * 0.85, 'a matching member fills most of its cell'); }
   const one = fixture([1.5]); assert.deepEqual(one.piles.faceOf(0), [0]);
+  const five = fixture(new Array(5).fill(1)); assert.equal(five.piles.faceOf(0).length, 4, 'four to eight members show a 2×2 sheet');
   const bare = new (piles.constructor)({ field: { place() {}, moveTo() {}, layout() {} }, aspectOf: () => 1, faceCount: 0 });
   bare.arrange([{ label: 'x', indices: [0, 1, 2] }]); assert.deepEqual(bare.faceOf(0), [], 'faceCount 0 restores the single-cover look');
   // Spreading and collapsing again yields the same face.
@@ -71,10 +78,11 @@ test('a collapsed pile wears a contact sheet: sampled members in cells over the 
 });
 
 test('mixed wide and portrait cards spread without overlap and remain centred', () => {
-  const { piles, positions } = fixture([4, .6, 16 / 9, .8, 3, 1]);
+  const aspects = [4, .6, 16 / 9, .8, 3, 1];
+  const { piles, positions } = fixture(aspects);
   const gap = 14;
   piles.spread(0, { columns: 3, gap });
-  const cards = [...positions.values()];
+  const cards = aspects.map((_, i) => positions.get(i)); // by member index, not insertion order
   for (let row = 0; row < 2; row++) {
     for (let col = 1; col < 3; col++) {
       const prev = cards[row * 3 + col - 1], next = cards[row * 3 + col];
