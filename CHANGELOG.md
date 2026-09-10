@@ -8,6 +8,41 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **Drawable DOM cards as an atlas tile source (Chrome-only, opt-in).**
+  `AtlasPair` takes `resolveSource(index, tier)`, tried before `resolve`: it
+  returns an image source drawn synchronously into the slot, `null` to fall
+  through to the image path for that tier, or the new exported `RETRY` sentinel
+  to be asked again next frame. New `cards.js` exports `CardHost` — one
+  `drawable` DOM card per item plus `capture(index)` — and `supported()`.
+  `TileField` passes the option through; `TileAtlas` gains `slotCoverage()`.
+  With it wired, a tier's tiles come from live DOM cards via Chrome's
+  HTML-in-Canvas API instead of from thumbnails, so the text in a tile stays in
+  find-in-page, text selection and the accessibility tree, and a find match can
+  be wired to move the camera. Nothing changes without `resolveSource`: the
+  image path is untouched and is still the only path in every other browser.
+  Measurements and the constraints the design is shaped by are in
+  `render_assets/html-in-canvas-probe/RESULTS.md`.
+
+  Three things are load-bearing and easy to undo by accident. **The card is
+  captured, never scaled into place**: `drawElementImage` is not `drawImage`,
+  and whatever scale sits on the context it paints across the whole canvas
+  (`canvasSize × scale`, measured at four scales), so the host bitmap is
+  exactly one card, the card is drawn into it at scale 1, and that canvas is
+  letterboxed into the slot by the ordinary `draw()` path — which is also why
+  the atlas stays a plain canvas despite an element only being drawable into
+  its nearest ancestor `<canvas layoutsubtree>`. **The host must be genuinely
+  painted**: `opacity: 0`, `visibility: hidden` and `left: -100vw` make
+  `drawElementImage` a silent no-op that returns a matrix and paints nothing,
+  so `.card-host` is `opacity: 0.01`, which still paints while fully occluded.
+  And **cards are stacked at the host's origin** rather than laid out, because
+  a host taller than the viewport loses paint records for its entire subtree.
+
+  Both silent failure modes have a defence: `AtlasPair` reads back its first
+  source draw and permanently falls back to images if it came back blank, so a
+  bad host placement degrades to the old behaviour rather than to an empty
+  field, and `RETRY` keeps the startup race — the compositor has not painted
+  the host yet — from being recorded as a permanent per-tile failure.
+
 - **A pixel/DOM hybrid tile field, so the `spatial` channel scales past a few
   hundred items.** The four original runtime exemplars give every item its own
   `CSS3DObject` — right for a dozen cards, wrong by two orders of magnitude past

@@ -141,6 +141,10 @@ export class TileField {
    * @param {number} [opts.farPx]
    * @param {number} [opts.nearPx]
    * @param {number|string} [opts.emptyColor] placeholder for unloaded slots
+   * @param {(index:number, tier:'far'|'near') => (CanvasImageSource|null)} [opts.resolveSource]
+   *   Optional synchronous tile source tried before `resolve`; see AtlasPair
+   *   and cards.js.
+   * @param {number} [opts.sourceDrawsPerPump]
    */
   constructor({
     scene, count, resolve,
@@ -148,11 +152,14 @@ export class TileField {
     nearSlots = 256, farPx = 64, nearPx = 256,
     emptyColor = 0x1b2430,
     blend = false,
+    resolveSource = null, sourceDrawsPerPump = 16,
   }) {
     this.count = count;
     this.nearDistance = nearDistance;
 
-    this.atlases = new AtlasPair({ count, farPx, nearPx, nearSlots, resolve });
+    this.atlases = new AtlasPair({
+      count, farPx, nearPx, nearSlots, resolve, resolveSource, sourceDrawsPerPump,
+    });
 
     const geo = new THREE.PlaneGeometry(1, 1);
     this.aSlot = new THREE.InstancedBufferAttribute(new Float32Array(count), 1);

@@ -92,3 +92,23 @@ html, body {
   text-align: right;
 }
 #hud .cite em { color: var(--ink-dim); font-style: normal; }
+
+/* --- Drawable card host (cards.js) ---------------------------------------
+   The host must be PAINTED for its cards to have paint records: `opacity: 0`,
+   `visibility: hidden`, `clip-path: inset(100%)` and `left: -100vw` all make
+   drawElementImage a silent no-op. `opacity: 0.01` paints in full, and stays
+   invisible in practice because an opaque WebGL canvas sits over it — measured
+   to still paint while fully occluded, so the veil is belt AND braces.
+
+   Do NOT give .card-host a height that grows with the card count, and do not
+   un-stack .drawable-card. cards.js sets the stacking inline for that reason;
+   a host taller than the viewport blanks its entire subtree.               */
+canvas.card-host {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  opacity: 0.01;
+  pointer-events: none;
+  overflow: hidden;
+}

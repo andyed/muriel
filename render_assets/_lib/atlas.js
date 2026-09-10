@@ -27,6 +27,16 @@
 
 import * as THREE from 'three';
 
+/**
+ * Sentinel a `resolveSource` may return to mean "not yet, ask me again next
+ * frame" — distinct from `null`, which means "never; use the image path".
+ *
+ * It exists for the drawable-card source in cards.js: a DOM card has no paint
+ * record until the compositor has painted its host, and treating that startup
+ * window as a permanent failure would blank every tile requested during it.
+ */
+export const RETRY = Symbol('muriel.atlas.retry');
+
 /** Atlas dimension cap. 4096 is universally supported; 8192 is not. */
 const MAX_ATLAS_PX = 4096;
 
@@ -160,6 +170,24 @@ export class TileAtlas {
   }
 
   /**
+   * Count non-transparent pixels in a slot. Deliberately not called per tile —
+   * a readback stalls the context — but a caller checking one canary draw wants
+   * it, because the drawable path's failure mode is a silent blank.
+   */
+  slotCoverage(slot) {
+    if (slot < 0 || slot >= this.capacity) return 0;
+    const { x, y, w, h } = this.slotRect(slot);
+    let opaque = 0;
+    try {
+      const d = this.ctx.getImageData(x, y, w, h).data;
+      for (let i = 3; i < d.length; i += 4) if (d[i] > 0) opaque++;
+    } catch {
+      return -1;   // tainted or unreadable; the caller must not read this as 0
+    }
+    return opaque / (w * h);
+  }
+
+  /**
    * Push pending canvas writes to the GPU, at most once per `uploadMs`.
    * Call once per frame; it self-throttles.
    */
@@ -199,12 +227,43 @@ export class AtlasPair {
    * @param {number} [opts.nearSlots]    near-tier pool size (flat VRAM budget)
    * @param {(item:any, tier:'far'|'near') => (string|null)} opts.resolve
    * @param {number} [opts.concurrency]  simultaneous image loads
+   * @param {(index:number, tier:'far'|'near') => (CanvasImageSource|RETRY|null)} [opts.resolveSource]
+   *   Optional second source, tried before `resolve`. Returning an image source
+   *   (a canvas, typically) draws that tier's tile from it SYNCHRONOUSLY, with
+   *   no network. Returning `null` falls through to `resolve`, so a consumer
+   *   can source the near tier this way and leave the far tier on images.
+   *   Returning `RETRY` requeues the job for the next frame.
+   *
+   *   This is how drawable DOM cards reach the atlas — see cards.js. It is
+   *   deliberately typed as an image source rather than an element, because
+   *   `drawElementImage` cannot place an element into a sub-rect: whatever
+   *   scale is on the context, it paints across the whole canvas. The card is
+   *   captured into a card-sized canvas first, and that canvas is what arrives
+   *   here, where the ordinary letterboxing in `draw()` handles it.
+   * @param {number} [opts.sourceDrawsPerPump] cap on synchronous source draws
+   *   per `_pump()`. These cost no network and so never wait on `_inflight`;
+   *   without a cap a 2,500-card first frame would draw the whole corpus in one
+   *   task. 16 is well inside a frame.
+   * @param {number} [opts.sourceRetries] frames to keep retrying a tile whose
+   *   source answered RETRY before giving up and using an image. 120 is ~2s at
+   *   60fps; a card host is normally ready in two frames.
    */
   constructor({
     count, farPx = 64, nearPx = 256, nearSlots = 256,
     resolve, concurrency = 8,
+    resolveSource = null, sourceDrawsPerPump = 16, sourceRetries = 120,
   }) {
     this.resolve = resolve;
+    this.resolveSource = resolveSource;
+    this.sourceDrawsPerPump = sourceDrawsPerPump;
+    // Set once the canary draw comes back blank: the source path "worked" (no
+    // throw) and painted nothing, which is exactly what an unpainted card host
+    // looks like. From then on every job takes the image path, so a bad host
+    // placement degrades to today's behaviour rather than to an empty field.
+    this.sourcePathBlank = false;
+    this._sourceCanaryDone = false;
+    this._notReady = new Map();
+    this.sourceRetries = sourceRetries;
     this.far = new TileAtlas({ tilePx: farPx, capacity: count });
     this.near = new TileAtlas({ tilePx: nearPx, capacity: nearSlots });
 
@@ -297,6 +356,10 @@ export class AtlasPair {
   }
 
   _pump() {
+    // Source jobs are synchronous and never touch `_inflight`, so they cannot
+    // be governed by the concurrency window the way image loads are — without
+    // its own budget this loop would drain the entire queue in one task.
+    let sourceDraws = 0;
     while (this._inflight < this._concurrency) {
       // Near before far: the near tier IS the set the camera is close to, so
       // this serves what is on screen rather than whatever was requested last.
@@ -307,8 +370,89 @@ export class AtlasPair {
       const slots = job.tier === 'far' ? this.farSlot : this.nearSlot;
       // The slot may have been reassigned while queued.
       if (slots[job.index] !== job.slot) continue;
+
+      const source = this._sourceFor(job);
+      if (source === RETRY) {
+        if (this._countRetry(job)) { q.push(job); return; }
+        // Out of patience. A host that never paints falls back to the image
+        // path rather than leaving a hole — the tile loses its text, not its
+        // pixels.
+        this._load(job);
+        continue;
+      }
+      if (source) {
+        if (sourceDraws >= this.sourceDrawsPerPump) {
+          q.push(job);   // back on top; flush() pumps again next frame
+          return;
+        }
+        sourceDraws++;
+        this._drawSourceJob(job, source);
+        continue;
+      }
       this._load(job);
     }
+  }
+
+  /** The image source for a job, RETRY, or null to take the image path. */
+  _sourceFor({ index, tier }) {
+    if (!this.resolveSource || this.sourcePathBlank) return null;
+    try {
+      return this.resolveSource(index, tier) ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  /** @returns {boolean} true while this job still has retries left. */
+  _countRetry({ index, tier }) {
+    const key = `${tier}:${index}`;
+    const tries = (this._notReady.get(key) ?? 0) + 1;
+    this._notReady.set(key, tries);
+    return tries <= this.sourceRetries;
+  }
+
+  /** The one cleanup path for a tile that cannot be produced. */
+  _failJob({ index, tier, slot }) {
+    const slots = tier === 'far' ? this.farSlot : this.nearSlot;
+    this._failed.add(`${tier}:${index}`);
+    if (slots[index] !== slot) return;
+    (tier === 'far' ? this.far : this.near).free(slot);
+    slots[index] = -1;
+    if (tier === 'near') this._nearOwner[slot] = -1;
+  }
+
+  /**
+   * Draw one tile from a synchronous source: no `_inflight`, no network, no
+   * callback ordering to get wrong. Failure follows the SAME path as an image
+   * error, so there is one cleanup contract rather than two.
+   */
+  _drawSourceJob({ index, tier, slot }, source) {
+    const slots = tier === 'far' ? this.farSlot : this.nearSlot;
+    if (slots[index] !== slot) return;            // reassigned while queued
+
+    const atlas = tier === 'far' ? this.far : this.near;
+    const ok = atlas.draw(slot, source);
+
+    if (ok && !this._sourceCanaryDone) {
+      // The one readback we pay for. A card host that is not painted produces a
+      // blank capture and reports success, so without this the whole field
+      // would come up empty with every check passing.
+      this._sourceCanaryDone = true;
+      if (atlas.slotCoverage(slot) === 0) {
+        this.sourcePathBlank = true;
+        atlas.clear(slot);
+        slots[index] = -1;
+        if (tier === 'near') this._nearOwner[slot] = -1;
+        this.request(index, tier);              // reissue down the image path
+        return;
+      }
+    }
+
+    if (ok) {
+      if (this.onTileReady) this.onTileReady(index, tier);
+      return;
+    }
+    this._failJob({ index, tier, slot });
   }
 
   _load({ index, tier, slot }) {
@@ -328,12 +472,7 @@ export class AtlasPair {
         const atlas = tier === 'far' ? this.far : this.near;
         if (atlas.draw(slot, img) && this.onTileReady) this.onTileReady(index, tier);
       } else if (!ok) {
-        this._failed.add(`${tier}:${index}`);
-        if (slots[index] === slot) {
-          (tier === 'far' ? this.far : this.near).free(slot);
-          slots[index] = -1;
-          if (tier === 'near') this._nearOwner[slot] = -1;
-        }
+        this._failJob({ index, tier, slot });
       }
       this._pump();
     };
@@ -346,6 +485,12 @@ export class AtlasPair {
   flush(now = performance.now()) {
     const a = this.far.flush(now);
     const b = this.near.flush(now);
+    // Source jobs left over from the per-pump cap have no completion callback
+    // to restart the queue the way an image load does, so the frame loop is
+    // what drains them.
+    if (this.resolveSource && (this._nearQueue.length || this._farQueue.length)) {
+      this._pump();
+    }
     return a || b;
   }
 
