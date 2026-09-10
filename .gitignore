@@ -39,3 +39,9 @@ render_assets/forgery/
 
 # check.mjs (render_assets) needs playwright; deps stay out of the tree
 node_modules/
+
+# HTML-in-Canvas probe — a Chrome-flag capability experiment run against
+# `feat/html-in-canvas-probe`, not library source. The findings that survived
+# are vendored into muriel.spatial (cards.js) and written up in clipwall's
+# docs/HTML_IN_CANVAS_RESULTS.md; this folder is the bench it ran on.
+render_assets/html-in-canvas-probe/
