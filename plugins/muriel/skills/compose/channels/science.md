@@ -323,6 +323,12 @@ Jayawardena RIPA2 filter (see Methods §2.3).
 
 ~90 words. Tells you exactly what you're looking at and what it means. Body prose can add context, interpretation, and references without re-explaining the figure.
 
+### Prose anti-slop pass (editorial + explainer outputs)
+
+For the prose-heavy outputs of this channel — notebook editorial, research explainers, blog posts that present empirical results — run the **Prose anti-slop (AI writing tells)** checklist in the [top-level index](../SKILL.md#prose-anti-slop-ai-writing-tells) after the editorial pass above. It catches the textual tells (throat-clearing openers, "not X, it's Y" contrasts, vague declaratives, adverb crutches, false agency) that this channel's stats-reporting rules don't address.
+
+Mind the **register carve-out** documented there: it does not override scientific convention. Passive voice in methods sections stays; detection-limit hedging ("not detected at this granularity") is required precision, not softening to strip. Where a prose-tell rule fights the reporting rules in this channel, the reporting rule wins.
+
 ## LaTeX / BibTeX bridge
 
 For paper submissions, matplotlib figures need to round-trip into a LaTeX build.
