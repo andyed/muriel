@@ -238,3 +238,23 @@ class TestStructuralRhetoric(unittest.TestCase):
                 "approach, the loud chord but not the far one, the repeat but\n"
                 "not the return.")
         self.assertIn("structure-tricolon", _rules(text))
+
+    def test_bold_leading_list_items_is_a_definition_list(self):
+        """A bullet opening with a bold term is the house idiom, not
+        mid-sentence emphasis. Regression: fired 7x on the author's own
+        LISTENING_PRINCIPLES before leading spans were excluded."""
+        text = ("- **Anchor the root pie in a corner** when drilling.\n"
+                "- **Progressive, not simultaneous.** L1 and L2 stay visible.\n"
+                "- **Battery management** uses the existing Power dive.\n")
+        self.assertNotIn("bold-overuse", _rules(text))
+
+    def test_bold_table_cells_are_column_labels(self):
+        text = ("| 1 | **Opt into AV** | one tap | mic |\n"
+                "| 2 | **Listen only** | react to music | mic |\n"
+                "| 3 | **Console** | power user | system |\n")
+        self.assertNotIn("bold-overuse", _rules(text))
+
+    def test_mid_paragraph_bold_still_flagged(self):
+        text = ("This paragraph uses **bold** in the middle, then **more bold** "
+                "here, and **still more** at the end.")
+        self.assertIn("bold-overuse", _rules(text))

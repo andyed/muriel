@@ -330,6 +330,8 @@ _ANTITHESIS_RE = re.compile(
 _SEGMENT_SPLIT = re.compile(r"\s*[;,]\s*|\s+and\s+|\s+or\s+")
 
 _LIST_OR_TABLE_LINE = re.compile(r"\s*(?:[-*+>|]|\d+[.)])\s")
+# Whitespace, optionally one list marker or quote arrow, and nothing else.
+_LEADING_MARKER = re.compile(r"\s*(?:(?:[-*+>]|\d+[.)])\s+)?$")
 
 # Openers too common to mean anything when repeated.
 _ANAPHORA_STOPWORDS = frozenset({
@@ -602,6 +604,24 @@ def _audit_em_dash_density(text: str, source: str) -> list[Finding]:
     return out
 
 
+def _leads_its_line(para: str, start: int) -> bool:
+    """True when the span at ``start`` opens its line, allowing for a list
+    marker or blockquote arrow.
+
+    A bullet that leads with a bold term is a definition list, which is the
+    house idiom in several of these documents. The rule is about bold used
+    mid-sentence for emphasis, so a leading span is not density."""
+    line_start = para.rfind("\n", 0, start) + 1
+    return _LEADING_MARKER.match(para[line_start:start]) is not None
+
+
+def _in_table_row(para: str, start: int) -> bool:
+    """True when the span sits inside a pipe-table row. Bold cells across a
+    row are column labels, not emphasis inside a sentence."""
+    line_start = para.rfind("\n", 0, start) + 1
+    return para[line_start:].lstrip().startswith("|")
+
+
 def _audit_bold_density(text: str, source: str) -> list[Finding]:
     """Flag mid-paragraph bold (more than one **...** span per paragraph,
     or a bold span that does not start at the beginning of its paragraph)."""
@@ -609,7 +629,9 @@ def _audit_bold_density(text: str, source: str) -> list[Finding]:
     paragraphs = re.split(r"\n\s*\n", source)
     offset = 0
     for para in paragraphs:
-        bolds = list(re.finditer(r"\*\*([^*\n]{2,})\*\*", para))
+        bolds = [m for m in re.finditer(r"\*\*([^*\n]{2,})\*\*", para)
+                 if not _leads_its_line(para, m.start())
+                 and not _in_table_row(para, m.start())]
         if len(bolds) >= 3:
             m = bolds[0]
             line, col = _line_col(source, offset + m.start())
