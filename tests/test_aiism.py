@@ -145,3 +145,96 @@ class TestPipelineIntact(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestStructuralRhetoric(unittest.TestCase):
+    """Shape detectors added 2026-09-20: rule of three, antithesis density,
+    and cross-sentence anaphora. Positive cases are generated prose caught in
+    a live audit; negative cases are real sentences from the author's own
+    documents, which must stay clean."""
+
+    def test_repeated_contrast_marker_is_a_tricolon(self):
+        text = ("Read frame by frame, a signal yields the drop but not the approach, "
+                "the loud chord but not the far one, the repeat but not the return.")
+        self.assertIn("structure-tricolon", _rules(text))
+
+    def test_repeated_marker_is_warn_not_info(self):
+        text = ("It gives the drop but not the approach, the chord but not the distance, "
+                "the repeat but not the return.")
+        sev = [f.severity for f in audit_text(text) if f.rule == "structure-tricolon"]
+        self.assertEqual(sev, ["warn"])
+
+    def test_participial_triad_flagged(self):
+        text = ("The picture follows the music, leaning into a build, holding through "
+                "a lull, treating a returning hook differently from a first hearing.")
+        self.assertIn("structure-tricolon", _rules(text))
+
+    def test_mixed_contrast_segments_flagged(self):
+        text = ("Each number is the engine's own reading, not an independent annotation; "
+                "each citation marks design lineage, never validation; and a detector "
+                "that is wired to nothing is reported rather than omitted.")
+        self.assertIn("structure-tricolon", _rules(text))
+
+    def test_plain_list_of_three_is_not_a_tricolon(self):
+        self.assertNotIn("structure-tricolon", _rules("The palette uses red, green, and blue."))
+
+    def test_technical_three_item_list_is_clean(self):
+        text = ("Ten times a second, one row records audio measurements, model outputs, "
+                "and shader parameters.")
+        self.assertNotIn("structure-tricolon", _rules(text))
+
+    def test_single_earned_contrast_is_clean(self):
+        text = ("A chord can therefore be smooth but far from home, or locally abrasive "
+                "while remaining in the key.")
+        self.assertNotIn("structure-tricolon", _rules(text))
+
+    def test_antithesis_density_flags_a_stacked_paragraph(self):
+        text = ("It is not a meter but an instrument. The point is the shape rather than "
+                "the level. We built a mechanism, not a model. It reports the failure "
+                "instead of hiding it.")
+        self.assertIn("density-antithesis", _rules(text))
+
+    def test_antithesis_density_allows_two(self):
+        text = ("The engine reads shape rather than level. It reports the failure "
+                "instead of hiding it.")
+        self.assertNotIn("density-antithesis", _rules(text))
+
+    def test_subordinator_anaphora_pair_flagged(self):
+        text = ("Where the literature had a model, we run it. Where it had a finding, "
+                "we built a mechanism that respects it.")
+        self.assertIn("structure-anaphora", _rules(text))
+
+    def test_terse_emphatic_repetition_is_not_anaphora(self):
+        text = 'No false profundity. No "remarkably" or "fascinatingly."'
+        self.assertNotIn("structure-anaphora", _rules(text))
+
+    def test_common_opener_repetition_is_clean(self):
+        text = ("The engine records the session. The file closes when the song changes. "
+                "The next artifact begins.")
+        self.assertNotIn("structure-anaphora", _rules(text))
+
+    def test_authors_own_prose_stays_clean(self):
+        text = ("A build matters before it peaks. A consonant chord can remain unstable "
+                "because it sits far from tonic. The same motif carries different "
+                "information when it returns.")
+        new = {"structure-tricolon", "density-antithesis", "structure-anaphora"}
+        self.assertEqual([r for r in _rules(text) if r in new], [])
+
+    def test_contrast_across_list_items_is_not_a_stack(self):
+        """Three bullets that each contain a contrast are three statements,
+        not a rhetorical stack. Regression: this fired on the author's own
+        CONSUMER_UX_PRINCIPLES before list lines were excluded."""
+        text = (
+            "- Progressive, not simultaneous. L1 and L2 stay visible.\n"
+            "- The bloom uses the diagonal instead of a cramped sliver.\n"
+            "- Battery uses the existing Power dive rather than a new surface.\n"
+        )
+        self.assertNotIn("density-antithesis", _rules(text))
+
+    def test_wrapped_prose_is_still_scanned(self):
+        """Regression: a line-based scan hid every sentence that spanned a
+        wrap, which is most of them in hard-wrapped Markdown."""
+        text = ("Read frame by frame, a signal yields the drop but not the\n"
+                "approach, the loud chord but not the far one, the repeat but\n"
+                "not the return.")
+        self.assertIn("structure-tricolon", _rules(text))

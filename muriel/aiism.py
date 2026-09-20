@@ -13,8 +13,13 @@ What this module actually detects, as of the v0.10.0 licence purge:
 - Hard artifacts of LLM tooling (8 rules) — oaicite tokens, turn tokens,
   sandbox paths, ChatGPT URLs, knowledge-cutoff disclaimers, refusal
   preambles.
-- Three structural heuristics — overlong clause-stacked sentences, em-dash
-  density per line, mid-paragraph bold density.
+- Six structural heuristics — overlong clause-stacked sentences, em-dash
+  density per line, mid-paragraph bold density, triadic parallelism
+  (rule of three), antithesis density per paragraph, and cross-sentence
+  anaphora. The last three are
+  shape rules with no phrase data, added 2026-09-20 after a live audit found
+  both tells in prose this module and science-agent's prose-audit had each
+  reported clean.
 
 What it does NOT detect, despite what earlier versions of this docstring
 claimed: copula-avoidance verbs ("serves as", "stands as"),
@@ -302,6 +307,44 @@ _SENT_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[A-Z\[(])")
 LONG_SENTENCE_WARN = 45
 LONG_SENTENCE_ERROR = 65
 
+# Structural rhetoric thresholds. Both detectors below are shape rules, not
+# phrase lists, so no licensed rule data is involved — which is why they can
+# exist here at all after the v0.10.0 purge emptied the phrase tables.
+TRICOLON_MIN_SEGMENTS = 3
+ANTITHESIS_PARA_INFO = 3
+ANTITHESIS_PARA_WARN = 4
+
+# Checked in order; the first hit wins, so "but not" beats bare "not".
+_CONTRAST_MARKERS = ("but not", "rather than", "instead of", "not just",
+                     "not merely", "never", "without", "not")
+
+_ANTITHESIS_RE = re.compile(
+    r"\bnot\s+(?:just|only|merely)\b"
+    r"|\bnot\s+\w+(?:\s+\w+){0,3}\s+but\b"
+    r"|,\s*not\s+\w"
+    r"|\brather than\b"
+    r"|\binstead of\b",
+    re.I,
+)
+
+_SEGMENT_SPLIT = re.compile(r"\s*[;,]\s*|\s+and\s+|\s+or\s+")
+
+_LIST_OR_TABLE_LINE = re.compile(r"\s*(?:[-*+>|]|\d+[.)])\s")
+
+# Openers too common to mean anything when repeated.
+_ANAPHORA_STOPWORDS = frozenset({
+    "the", "a", "an", "it", "this", "that", "these", "those", "there",
+    "they", "we", "i", "you", "he", "she", "in", "on", "at", "for", "to",
+    "and", "but", "so", "as", "its", "their", "our", "his", "her",
+})
+# A closed grammatical class, not a phrase list: clause-initial subordinators
+# and determiners whose repetition across sentences is deliberate rhetoric.
+_ANAPHORA_RHETORICAL = frozenset({
+    "where", "when", "what", "whether", "because", "if", "every", "each",
+    "either", "neither", "both", "some", "most", "none", "one", "first",
+    "second", "third", "not", "no", "never", "nothing", "everything",
+})
+
 
 # ---------------------------------------------------------------------------
 # Markdown awareness
@@ -577,6 +620,168 @@ def _audit_bold_density(text: str, source: str) -> list[Finding]:
     return out
 
 
+def _segment_marker(segment: str) -> str | None:
+    """Return the first contrast marker present in ``segment``, if any."""
+    low = segment.lower()
+    for marker in _CONTRAST_MARKERS:
+        if re.search(r"\b" + re.escape(marker) + r"\b", low):
+            return marker
+    return None
+
+
+def _audit_tricolon(text: str, source: str) -> list[Finding]:
+    """Flag triadic parallelism: three or more syntactically parallel
+    segments inside one sentence.
+
+    The rule of three is the most reliable structural signature of generated
+    prose, and no phrase table can see it — the words differ every time, only
+    the shape repeats. Two forms are detected:
+
+    - a repeated contrast marker across three segments ("X but not A, Y but
+      not B, Z but not C"), which is deliberate rhetorical parallelism;
+    - three segments opening with participles ("leaning..., holding...,
+      treating...").
+
+    A plain list of three short noun phrases is not a tricolon and does not
+    fire; segments must carry at least two words each.
+
+    Scans by paragraph with internal newlines folded, not by line. Prose
+    hard-wrapped at a column would otherwise hide every sentence that spans
+    a line break, which is most of them in a wrapped Markdown document."""
+    out = []
+    offset = 0
+    for para in re.split(r"\n\s*\n", source):
+        stripped = para.lstrip()
+        if not stripped or stripped.startswith(("#", "|", "-", "*", ">")):
+            offset += len(para) + 2
+            continue
+        folded = re.sub(r"\s+", " ", para).strip()
+        for sent in _SENT_SPLIT.split(folded):
+            sent = sent.strip()
+            if not sent:
+                continue
+
+            segments = [seg.strip() for seg in _SEGMENT_SPLIT.split(sent) if seg.strip()]
+            segments = [seg for seg in segments if len(seg.split()) >= 2]
+            if len(segments) < TRICOLON_MIN_SEGMENTS:
+                continue
+
+            # Anchor on the sentence opening, which rarely straddles a wrap.
+            anchor = para.find(sent[:28])
+            pos = offset + (anchor if anchor >= 0 else 0)
+            line_no, col = _line_col(source, pos)
+
+            markers = [_segment_marker(seg) for seg in segments]
+            present = [m for m in markers if m]
+            if len(present) >= TRICOLON_MIN_SEGMENTS:
+                repeated = max(set(present), key=present.count)
+                if present.count(repeated) >= TRICOLON_MIN_SEGMENTS:
+                    out.append(Finding(
+                        line_no, col, "warn", "structure-tricolon",
+                        f'Triadic parallelism: "{repeated}" repeated across '
+                        f"{present.count(repeated)} segments of one sentence. "
+                        "Break the pattern — give one of them its own sentence.",
+                        _excerpt(text, pos)))
+                    continue
+                out.append(Finding(
+                    line_no, col, "info", "structure-tricolon",
+                    f"{len(present)} contrasting segments in one sentence. "
+                    "Three-part contrast reads as authored rhythm, not argument.",
+                    _excerpt(text, pos)))
+                continue
+
+            participles = [seg for seg in segments
+                           if len(seg.split()[0]) >= 5
+                           and seg.split()[0].lower().endswith("ing")]
+            if len(participles) >= TRICOLON_MIN_SEGMENTS:
+                out.append(Finding(
+                    line_no, col, "info", "structure-tricolon",
+                    f"{len(participles)} participial phrases in parallel. "
+                    "Vary the construction or drop one.",
+                    _excerpt(text, pos)))
+        offset += len(para) + 2
+    return out
+
+
+def _audit_antithesis_density(text: str, source: str) -> list[Finding]:
+    """Flag paragraphs built on repeated antithesis ("not X but Y", "rather
+    than", "instead of", "X, not Y").
+
+    One contrast is an argument. Three in a paragraph is a house style, and
+    it is the house style of a language model: the shape supplies emphasis
+    the content has not earned."""
+    out = []
+    offset = 0
+    for para in re.split(r"\n\s*\n", source):
+        # A list is not a paragraph. Contrast in three separate bullets is
+        # three independent statements, not a rhetorical stack, so blank the
+        # item lines while keeping offsets intact.
+        scanned = "\n".join(
+            " " * len(ln) if _LIST_OR_TABLE_LINE.match(ln) else ln
+            for ln in para.split("\n")
+        )
+        hits = list(_ANTITHESIS_RE.finditer(scanned))
+        if len(hits) >= ANTITHESIS_PARA_INFO:
+            severity = "warn" if len(hits) >= ANTITHESIS_PARA_WARN else "info"
+            first = hits[0]
+            line, col = _line_col(source, offset + first.start())
+            out.append(Finding(
+                line, col, severity, "density-antithesis",
+                f"{len(hits)} antithesis constructions in one paragraph. "
+                "Keep the contrast that carries information; state the rest plainly.",
+                _excerpt(text, offset + first.start())))
+        offset += len(para) + 2
+    return out
+
+
+def _audit_anaphora(text: str, source: str) -> list[Finding]:
+    """Flag consecutive sentences opening with the same word.
+
+    Parallel sentence openings are the cross-sentence form of the rule of
+    three, and the form most likely to survive an edit pass that only looks
+    at sentences one at a time. Three in a row is flagged outright. Two is
+    flagged only when the shared opener is a clause-initial subordinator
+    ("Where ... Where ..."), where the repetition is unambiguously chosen."""
+    out = []
+    offset = 0
+    for para in re.split(r"\n\s*\n", source):
+        stripped = para.lstrip()
+        if not stripped or stripped.startswith(("#", "|", "-", "*", ">")):
+            offset += len(para) + 2
+            continue
+        sentences = [sent.strip() for sent in _SENT_SPLIT.split(para) if sent.strip()]
+        run_word, run_len, run_start = None, 0, 0
+        for i, sent in enumerate(sentences + [""]):
+            words = re.findall(r"[A-Za-z']+", sent)
+            first = words[0].lower() if words else None
+            if first is not None and first == run_word:
+                run_len += 1
+                continue
+            if run_word and run_word not in _ANAPHORA_STOPWORDS:
+                rhetorical = run_word in _ANAPHORA_RHETORICAL
+                # A pair only counts when both sentences are full clauses.
+                # "No false profundity. No 'remarkably'." is deliberate
+                # emphasis in a style guide, not a generated cadence.
+                substantial = all(
+                    len(sentences[j].split()) >= 6
+                    for j in range(run_start, min(run_start + run_len, len(sentences)))
+                )
+                if run_len >= 3 or (run_len == 2 and rhetorical and substantial):
+                    pos = para.find(sentences[run_start][:40])
+                    pos = offset + (pos if pos >= 0 else 0)
+                    line, col = _line_col(source, pos)
+                    out.append(Finding(
+                        line, col,
+                        "warn" if run_len >= 3 else "info",
+                        "structure-anaphora",
+                        f'{run_len} consecutive sentences open with "{run_word}". '
+                        "Recast one of them.",
+                        _excerpt(text, pos)))
+            run_word, run_len, run_start = first, 1, i
+        offset += len(para) + 2
+    return out
+
+
 def audit_text(text: str, *, locked_spans: list[tuple[int, int]] | None = None) -> list[Finding]:
     """Run every rule against ``text`` and return findings sorted by location.
 
@@ -591,6 +796,9 @@ def audit_text(text: str, *, locked_spans: list[tuple[int, int]] | None = None) 
     findings += _audit_pattern_rules(text, source)
     findings += _audit_long_sentences(text, source)
     findings += _audit_bold_density(text, source)
+    findings += _audit_tricolon(text, source)
+    findings += _audit_antithesis_density(text, source)
+    findings += _audit_anaphora(text, source)
     findings += _audit_em_dash_density(text, source)
     findings += _audit_proximity_pairs(text, source)
     findings += _audit_cluster_rules(text, source)
