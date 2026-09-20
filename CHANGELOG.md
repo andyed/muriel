@@ -8,6 +8,37 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`aiism` detects three rhetorical shapes a phrase table cannot see.**
+  `structure-tricolon` flags three or more parallel segments in one sentence,
+  as `warn` when one contrast marker repeats across three of them ("X but not
+  A, Y but not B, Z but not C") and `info` for mixed contrasts or a
+  participial triad. `density-antithesis` flags three or more antithesis
+  constructions in a paragraph. `structure-anaphora` flags consecutive
+  sentences opening with the same word, three outright and two only for a
+  clause-initial subordinator where both are full clauses.
+
+  These are the coverage `rule-of-three` and `binary-contrast` lost when the
+  v0.10.0 purge emptied the phrase tables, recovered without reopening the
+  licence question: they are **shape** rules, so they carry no phrase data at
+  all. The words differ every time and only the structure repeats, which is
+  exactly why no phrase list ever caught them.
+
+  Calibrated against the corpus they protect rather than against intuition.
+  Across 15,144 words of this author's own documents the three rules fire
+  zero times; on the generated prose that prompted them, 6.83 per thousand
+  words. A fourth rule was measured and rejected: a document-level antithesis
+  rate does not separate the populations (author 5.6–8.7 per thousand,
+  generated 10.5), while paragraph-local stacking does. science-agent's
+  `prose-audit` picks all three up through its existing optional-muriel path,
+  so `.md` gains them with no change on that side.
+
+  Two implementation constraints are load-bearing. **Scan by paragraph with
+  newlines folded, never by line**: a line-based scan hides every sentence
+  that spans a wrap, which is most of them in hard-wrapped Markdown, and it
+  silently *inflates* a clean result on the author corpus. **A list is not a
+  paragraph**: contrast in three separate bullets is three statements, not a
+  rhetorical stack.
+
 - **Drawable DOM cards as an atlas tile source (Chrome-only, opt-in).**
   `AtlasPair` takes `resolveSource(index, tier)`, tried before `resolve`: it
   returns an image source drawn synchronously into the slot, `null` to fall
@@ -91,6 +122,15 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   rows barely overlap, fatal for a pile.
 
 ### Fixed
+
+- **`bold-overuse` counted list markers and table cells.** The rule's docstring
+  says mid-paragraph bold; the implementation counted every bold span in a
+  paragraph, and a Markdown bullet list or pipe table is one paragraph. So the
+  definition-list idiom tripped it: a bullet opening with a bold term, or a row
+  of bold table cells. Measured on the author's own documents it fired 28
+  times, nearly all of them that idiom, and now fires 11, the remainder genuine
+  mid-sentence bold. Leading spans and pipe-table rows no longer count toward
+  density.
 
 - **A tile with no atlas slot rendered slot 0's image.** `Math.max(0, farSlot)`
   clamped the "no slot" sentinel onto a real slot, so on a corpus with load
