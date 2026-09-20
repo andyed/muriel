@@ -37,6 +37,9 @@ import * as THREE from 'three';
  */
 export const RETRY = Symbol('muriel.atlas.retry');
 
+/** Dirty slots per flush above which one whole-canvas upload beats per-slot copies. */
+const PARTIAL_UPLOAD_MAX = 4;
+
 /** Atlas dimension cap. 4096 is universally supported; 8192 is not. */
 const MAX_ATLAS_PX = 4096;
 
@@ -84,6 +87,13 @@ export class TileAtlas {
 
     this._dirty = false;
     this._lastUpload = 0;
+    // Slots drawn or cleared since the last upload. With a renderer attached,
+    // flush() uploads just these rectangles; without one, or when most of the
+    // atlas is dirty anyway, it re-uploads the whole canvas.
+    this._dirtySlots = new Set();
+    this._scratch = null;      // tile-sized canvas + texture for sub-rect uploads
+    this.renderer = null;      // a THREE.WebGLRenderer, for copyTextureToTexture
+    this.uploadedBytes = 0;    // by the last flush, for the budget readout
     this._free = [];
     for (let i = this.capacity - 1; i >= 0; i--) this._free.push(i);
 
@@ -114,6 +124,7 @@ export class TileAtlas {
     this.fits[slot * 2] = 1;
     this.fits[slot * 2 + 1] = 1;
     this._dirty = true;
+    this._dirtySlots.add(slot);
   }
 
   /** Return a slot to the pool and clear it so a stale image cannot show. */
@@ -166,6 +177,7 @@ export class TileAtlas {
       return false;
     }
     this._dirty = true;
+    this._dirtySlots.add(slot);
     return true;
   }
 
@@ -193,10 +205,64 @@ export class TileAtlas {
    */
   flush(now = performance.now()) {
     if (!this._dirty || now - this._lastUpload < this.uploadMs) return false;
-    this.texture.needsUpdate = true;
     this._dirty = false;
     this._lastUpload = now;
+    this.uploadedBytes = this._upload();
+    this._dirtySlots.clear();
     return true;
+  }
+
+  /**
+   * Push the dirty slots to the GPU and return the bytes sent.
+   *
+   * `texture.needsUpdate` re-uploads the WHOLE canvas: 64 MB for a 4096² near
+   * atlas, on every flush, for as long as tiles keep landing — measured at
+   * 5 GB of upload to stream one 1,800-item corpus, and the main-thread stall
+   * that goes with each. With a renderer attached, each dirty slot is instead
+   * copied through a tile-sized scratch canvas and texSubImage2D'd into place:
+   * 256 KB per near tile, 16 KB per far tile.
+   *
+   * The whole-canvas path stays for three cases: no renderer (a consumer that
+   * never attached one, or a headless test), the texture not yet on the GPU
+   * (its first upload has to be the whole thing anyway), and a flush with more
+   * than a handful of dirty slots, where one upload beats the copies.
+   */
+  _upload() {
+    const whole = this.canvas.width * this.canvas.height * 4;
+    const tileBytes = this.tilePx * this.tilePx * 4;
+    const gpuResident = this.renderer?.properties?.get(this.texture)?.__webglTexture;
+    // Measured in headed Chrome on the music atlas: a per-slot copy costs about
+    // 1 ms of main thread (canvas → texSubImage2D readback) however small the
+    // slot, while a whole-canvas upload is handed off to the GPU process and
+    // costs the main thread almost nothing. So the per-slot path is for the
+    // common idle case — a tile or two landing on a settled field — and a burst
+    // (a zoom re-tiering hundreds of near slots) takes the whole upload.
+    if (!this.renderer || !gpuResident || this._dirtySlots.size > PARTIAL_UPLOAD_MAX) {
+      this.texture.needsUpdate = true;
+      return whole;
+    }
+    if (!this._scratch) {
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = this.tilePx;
+      // The texture wrapper exists only so copyTextureToTexture has an
+      // `.image`; it is never uploaded on its own. flipY must match the atlas
+      // texture's, since the copy runs under the destination's unpack state.
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.flipY = this.texture.flipY;
+      this._scratch = { canvas, ctx: canvas.getContext('2d'), texture, position: new THREE.Vector2() };
+    }
+    const { canvas, ctx, texture, position } = this._scratch;
+    for (const slot of this._dirtySlots) {
+      const { x, y, w, h } = this.slotRect(slot);
+      ctx.clearRect(0, 0, w, h);
+      ctx.drawImage(this.canvas, x, y, w, h, 0, 0, w, h);
+      // texSubImage2D addresses rows from the bottom of the texture, and the
+      // atlas was uploaded flipped (canvas row 0 at the top of the texture),
+      // so the slot's canvas y maps to height − y − tile.
+      position.set(x, this.texture.flipY ? this.canvas.height - y - h : y);
+      this.renderer.copyTextureToTexture(texture, this.texture, null, position);
+    }
+    return this._dirtySlots.size * tileBytes;
   }
 
   /** Bytes of VRAM this atlas occupies, for budget reporting. */
@@ -207,6 +273,7 @@ export class TileAtlas {
   dispose() {
     this.texture.dispose();
     this.canvas.width = this.canvas.height = 0;
+    if (this._scratch) { this._scratch.texture.dispose(); this._scratch.canvas.width = this._scratch.canvas.height = 0; this._scratch = null; }
   }
 }
 
@@ -481,10 +548,20 @@ export class AtlasPair {
     img.src = url;
   }
 
+  /**
+   * Attach the renderer that owns the atlas textures, enabling per-slot
+   * uploads. Optional: without it every flush re-uploads whole canvases.
+   */
+  setRenderer(renderer) {
+    this.far.renderer = renderer;
+    this.near.renderer = renderer;
+  }
+
   /** Flush both atlases. Call once per frame. */
   flush(now = performance.now()) {
     const a = this.far.flush(now);
     const b = this.near.flush(now);
+    this.uploadedBytes = (a ? this.far.uploadedBytes : 0) + (b ? this.near.uploadedBytes : 0);
     // Source jobs left over from the per-pump cap have no completion callback
     // to restart the queue the way an image load does, so the frame loop is
     // what drains them.

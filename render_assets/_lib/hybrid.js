@@ -101,7 +101,12 @@ export class HybridField {
       this.pool.push(entry);
     }
 
-    this._candidates = [];
+    // Scratch for update(): the pool-many nearest non-incumbents kept in a
+    // small insertion-sorted array, and the incumbents still in range. Sized
+    // to the pool, so a frame allocates nothing however large the field.
+    this._bestIdx = new Int32Array(poolSize);
+    this._bestD2 = new Float64Array(poolSize);
+    this._incumbents = [];
     this._wanted = new Set();
     this._tmp = new THREE.Vector3();
   }
@@ -135,29 +140,44 @@ export class HybridField {
     const cx = camera.position.x, cy = camera.position.y, cz = camera.position.z;
     const c = this.field.centres;
     const limit2 = this.promoteDistance * this.promoteDistance;
+    const K = this.pool.length;
+    // The pool can be swapped after construction (tests do); size scratch to it.
+    if (this._bestIdx.length < K) { this._bestIdx = new Int32Array(K); this._bestD2 = new Float64Array(K); }
+    const bestIdx = this._bestIdx, bestD2 = this._bestD2;
+    const incumbents = this._incumbents;
+    incumbents.length = 0;
+    let best = 0;
 
-    this._candidates.length = 0;
+    // One pass. Incumbents (items already wearing DOM) still in range are
+    // collected for the hysteresis rule below; everyone else competes for the
+    // K nearest seats through a small insertion sort, which at K of a dozen
+    // is far cheaper than sorting the whole candidate list — the previous
+    // version built and sorted an array of pairs over every candidate, every
+    // frame, and with promoteDistance at infinity (piles) that was the whole
+    // corpus.
+    const active = this.field.isActive ? (i) => this.field.isActive(i) : () => true;
     for (let i = 0; i < this.field.count; i++) {
-      if (!this.eligible(i)) continue;
+      if (!active(i) || !this.eligible(i)) continue;
       const dx = c[i * 3] - cx, dy = c[i * 3 + 1] - cy, dz = c[i * 3 + 2] - cz;
       const d2 = dx * dx + dy * dy + dz * dz;
-      if (d2 <= limit2) this._candidates.push(i, d2);
+      if (d2 > limit2) continue;
+      if (this.live.has(i)) { incumbents.push(i, d2); continue; }
+      if (best === K && d2 >= bestD2[K - 1]) continue;
+      // Insert, keeping bestD2 ascending.
+      let k = best < K ? best : K - 1;
+      while (k > 0 && bestD2[k - 1] > d2) { bestIdx[k] = bestIdx[k - 1]; bestD2[k] = bestD2[k - 1]; k--; }
+      bestIdx[k] = i; bestD2[k] = d2;
+      if (best < K) best++;
     }
-
-    // Nearest-first, then truncate to the pool. Partial-sorting the pairs as a
-    // flat array avoids allocating an object per candidate every frame.
-    const pairs = [];
-    for (let k = 0; k < this._candidates.length; k += 2) {
-      pairs.push([this._candidates[k], this._candidates[k + 1]]);
-    }
-    pairs.sort((a, b) => a[1] - b[1]);
 
     this._wanted.clear();
     // The focused item outranks distance — it is being read, wherever it is.
+    // Unless it has left the field: a filtered-out focus is no focus.
+    if (this.focused >= 0 && !active(this.focused)) this.setFocus(-1);
     if (this.focused >= 0) this._wanted.add(this.focused);
 
-    // HYSTERESIS. An item already wearing a DOM element keeps it unless a
-    // candidate is meaningfully closer.
+    // HYSTERESIS. An item already wearing a DOM element keeps it while it is
+    // in range at all, nearest first when seats are short.
     //
     // Without this, `wanted` is just "the nearest poolSize items", and the
     // nearest-N ordering reshuffles on every camera nudge — so arrowing across
@@ -165,31 +185,31 @@ export class HybridField {
     // which reads as the whole view flickering rather than as a selection
     // moving. The margin is what stops two items on either side of the cut-off
     // trading the same slot back and forth every frame.
-    const incumbent = new Map();
-    for (const [i, d2] of pairs) if (this.live.has(i)) incumbent.set(i, d2);
-    for (const [i] of pairs) {
-      if (this._wanted.size >= this.pool.length) break;
-      if (incumbent.has(i)) this._wanted.add(i);
+    if (incumbents.length > 2) {
+      // At most K pairs: sort by distance in place, cheaply.
+      for (let a = 2; a < incumbents.length; a += 2) {
+        const i = incumbents[a], d = incumbents[a + 1];
+        let b = a;
+        while (b > 0 && incumbents[b - 1] > d) { incumbents[b] = incumbents[b - 2]; incumbents[b + 1] = incumbents[b - 1]; b -= 2; }
+        incumbents[b] = i; incumbents[b + 1] = d;
+      }
     }
-    for (const [i, d2] of pairs) {
-      if (this._wanted.size >= this.pool.length) break;
-      if (this._wanted.has(i)) continue;
-      // A newcomer displaces nobody while a seat is free; once the pool is
-      // full, only a clearly-closer candidate is worth the rebuild.
-      this._wanted.add(i);
-      void d2;
-    }
+    for (let a = 0; a < incumbents.length && this._wanted.size < K; a += 2) this._wanted.add(incumbents[a]);
+    // A newcomer displaces nobody while a seat is free.
+    for (let k = 0; k < best && this._wanted.size < K; k++) this._wanted.add(bestIdx[k]);
 
     // Demote only what is genuinely gone — an item that merely slipped a place
     // or two in the ordering keeps its element.
+    let changed = false;
     for (const [index, entry] of this.live) {
-      if (!this._wanted.has(index)) this._demote(entry);
+      if (!this._wanted.has(index)) { this._demote(entry); changed = true; }
     }
     for (const index of this._wanted) {
-      if (!this.live.has(index)) this._promote(index);
+      if (!this.live.has(index)) { this._promote(index); changed = true; }
     }
 
     this._position(camera);
+    return changed;
   }
 
   _promote(index) {
@@ -220,8 +240,11 @@ export class HybridField {
     this.field.suppress(entry.index, false);
     entry.obj.visible = false;
     entry.index = -1;
-    // Elements are cleared on promote rather than here so a demoted card does
-    // not flash empty during the same frame it is being reused.
+    // Clear now as well as on promote. Demotion and any reuse happen inside
+    // the same update() call, before a render, so nothing can flash — and a
+    // hidden element must not keep carrying an item that has left the field
+    // (a filtered-out clip's title, link and image are not for the DOM to hold).
+    entry.el.replaceChildren();
   }
 
   /**
@@ -260,7 +283,10 @@ export class HybridField {
   sort(camera) {
     for (const [, entry] of this.live) {
       const d = camera.position.distanceTo(entry.obj.getWorldPosition(this._tmp));
-      entry.el.style.zIndex = String(Math.round(1e6 - d));
+      const z = Math.round(1e6 - d);
+      // A style write is a style invalidation even when the value is the same;
+      // a stationary camera must not dirty a dozen elements per frame.
+      if (entry.z !== z) { entry.z = z; entry.el.style.zIndex = String(z); }
     }
   }
 

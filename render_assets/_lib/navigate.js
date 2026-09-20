@@ -134,6 +134,7 @@ export class FieldNavigator {
     let bestScore = Infinity;
     for (let i = 0; i < this.field.count; i++) {
       if (i === this.selection) continue;
+      if (this.field.isActive && !this.field.isActive(i)) continue;
       if (lockRow !== null && rows[i] !== lockRow) continue;
       this._project(i, this._v);
       // Behind the camera, or outside the frustum in depth.
@@ -158,6 +159,7 @@ export class FieldNavigator {
     let best = -1;
     let bestScore = Infinity;
     for (let i = 0; i < this.field.count; i++) {
+      if (this.field.isActive && !this.field.isActive(i)) continue;
       this._project(i, this._v);
       if (this._v.z < -1 || this._v.z > 1) continue;
       const score = this._v.x * this._v.x + this._v.y * this._v.y;
@@ -169,6 +171,7 @@ export class FieldNavigator {
 
   select(index) {
     if (index < 0 || index >= this.field.count) return;
+    if (this.field.isActive && !this.field.isActive(index)) return;   // hidden items cannot be the selection
     this.selection = index;
     // Pin it to the DOM tier: this is what makes the selection a real element
     // rather than a rectangle, and it is why the hybrid exists.

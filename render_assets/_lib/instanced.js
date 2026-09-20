@@ -239,8 +239,54 @@ export class TileField {
     ];
     this._tierDirty = false;
     this._suppressed = new Uint8Array(count);   // 1 = a DOM twin owns it
+    // Membership. An inactive instance is not drawn, not picked, not promoted
+    // and not navigated, but it KEEPS its far-atlas slot and its placement, so
+    // a filter that narrows and widens the field costs attribute writes rather
+    // than a rebuild and a reload. Indices are therefore stable for the life
+    // of the field, which is what makes them safe to keep.
+    this._active = new Uint8Array(count).fill(1);
+    this.activeCount = count;
+    // Scratch for the per-frame tier pass: squared distances, the near
+    // candidates, and a generation stamp marking which of them won a slot this
+    // frame. Stamps rather than a cleared flag array, so a frame costs one
+    // increment instead of a fill.
+    this._d2 = new Float32Array(count);
+    this._nearIdx = new Int32Array(count);
+    this._chosenAt = new Uint32Array(count);
+    this._gen = 0;
+    // Anything that changes what the next render would show — matrices,
+    // per-instance attributes, an atlas upload — sets this. A consumer that
+    // renders on demand reads it through takeDirty(); one that renders every
+    // frame can ignore it.
+    this._dirty = true;
 
     this.atlases.onTileReady = (index, tier) => this._onTileReady(index, tier);
+  }
+
+  /**
+   * Whether the field has changed since the last call, and clear the flag.
+   * "Changed" means the GPU would draw something different: an instance
+   * moved, a tier or fit was rewritten, a DOM twin took or returned a quad,
+   * or an atlas uploaded. Camera motion is the consumer's to track.
+   */
+  takeDirty() {
+    const dirty = this._dirty;
+    this._dirty = false;
+    return dirty;
+  }
+
+  /**
+   * Attach the renderer drawing this field so atlas flushes upload only the
+   * slots that changed (see TileAtlas._upload). Without it the whole atlas
+   * canvas goes up on every flush.
+   */
+  setRenderer(renderer) { this.atlases.setRenderer(renderer); }
+
+  /** Push pending atlas pixels to the GPU (self-throttled). True if it uploaded. */
+  flush(now = performance.now()) {
+    const uploaded = this.atlases.flush(now);
+    if (uploaded) this._dirty = true;
+    return uploaded;
   }
 
   /**
@@ -254,6 +300,7 @@ export class TileField {
     this._s.set(width, height, 1);
     this._m.compose(this._p, this._q, this._s);
     this.mesh.setMatrixAt(index, this._m);
+    this._dirty = true;
     this.centres[index * 3] = x;
     this.centres[index * 3 + 1] = y;
     this.centres[index * 3 + 2] = z;
@@ -284,6 +331,7 @@ export class TileField {
     this.aRow.array[index] = row;
     this.rows[index] = row;
     this.aRow.needsUpdate = true;
+    this._dirty = true;
   }
 
   /** Attach a RowMotion. Pass null to stop animating. */
@@ -369,7 +417,7 @@ export class TileField {
     let bestDepth = Infinity;
 
     for (let i = 0; i < this.count; i++) {
-      if (this._suppressed[i]) continue;      // DOM twin takes the click
+      if (this._suppressed[i] || !this._active[i]) continue;      // DOM twin takes the click; hidden takes nothing
       this.worldCentre(i, this._pc);
       this.worldOrientation(i, this._qw);
       const hw = this.sizes[i * 2] / 2;
@@ -406,6 +454,7 @@ export class TileField {
   layout() {
     this.mesh.instanceMatrix.needsUpdate = true;
     this.mesh.computeBoundingSphere();
+    this._dirty = true;
   }
 
   /**
@@ -483,6 +532,7 @@ export class TileField {
         s[i * 2] + dw * k, s[i * 2 + 1] + dh * k, this._qa);
     }
     this.mesh.instanceMatrix.needsUpdate = true;
+    this._dirty = true;
     return this._moving.size;
   }
 
@@ -496,8 +546,32 @@ export class TileField {
     const v = on ? 1 : 0;
     if (this._suppressed[index] === v) return;
     this._suppressed[index] = v;
-    this.aOpacity.array[index] = on ? 0 : 1;
+    this._writeOpacity(index);
+  }
+
+  /**
+   * Include or exclude an instance from the field without disposing anything.
+   * An excluded instance keeps its placement, its far slot AND its near slot:
+   * hiding is not eviction. The tier pass stops touching it, so it is the
+   * coldest thing in the near pool and the LRU reclaims it first when shown
+   * items need the space — and not before, so a scope that narrows and
+   * widens again draws nothing new.
+   */
+  setActive(index, on) {
+    const v = on ? 1 : 0;
+    if (this._active[index] === v) return;
+    this._active[index] = v;
+    this.activeCount += v ? 1 : -1;
+    this._writeOpacity(index);
+  }
+
+  isActive(index) { return this._active[index] === 1; }
+
+  /** Drawn iff active and not standing behind a DOM twin. */
+  _writeOpacity(index) {
+    this.aOpacity.array[index] = this._active[index] && !this._suppressed[index] ? 1 : 0;
     this.aOpacity.needsUpdate = true;
+    this._dirty = true;
   }
 
   /**
@@ -510,14 +584,44 @@ export class TileField {
     const c = this.centres;
     const tier = this.aTier.array;
     const slots = this.aSlot.array;
-    let resident = 0;
+    const d2s = this._d2, nearIdx = this._nearIdx, chosenAt = this._chosenAt;
+    const budget = this.atlases.near.capacity;
+    const gen = ++this._gen;
 
+    // Pass one: distances, and who is inside the near band at all.
+    let candidates = 0;
     for (let i = 0; i < this.count; i++) {
-      if (this._suppressed[i]) continue;
+      if (this._suppressed[i] || !this._active[i]) continue;
       const dx = c[i * 3] - cx, dy = c[i * 3 + 1] - cy, dz = c[i * 3 + 2] - cz;
       const d2 = dx * dx + dy * dy + dz * dz;
+      d2s[i] = d2;
+      if (d2 <= near2) nearIdx[candidates++] = i;
+    }
 
-      if (d2 <= near2) {
+    // The near pool is a fixed budget. From an overview the band can hold the
+    // whole corpus, and asking the pool for every one of them, every frame,
+    // was the spatial view's largest cost: each refused request scanned all
+    // 256 slots for something to evict and found nothing, so a 1,800-item
+    // field did ~460,000 slot scans per frame. Instead, spend the budget on
+    // the nearest `budget` candidates and ask for nothing else. Quickselect
+    // partitions in place, O(n) on average, and leaves the winners in the
+    // first `budget` positions of nearIdx in no particular order.
+    if (candidates > budget) this._selectNearest(nearIdx, candidates, budget, d2s);
+    const chosen = Math.min(candidates, budget);
+    for (let k = 0; k < chosen; k++) chosenAt[nearIdx[k]] = gen;
+
+    // Pass two: assign tiers.
+    let resident = 0;
+    for (let i = 0; i < this.count; i++) {
+      if (!this._active[i]) continue;
+      if (this._suppressed[i]) {
+        // A DOM twin is standing in, but the far tile is still the item's
+        // picture the moment the twin leaves: keep the corpus complete.
+        if (this.atlases.farSlot[i] < 0) this.atlases.request(i, 'far', now);
+        continue;
+      }
+
+      if (chosenAt[i] === gen) {
         resident++;
         const slot = this.atlases.request(i, 'near', now);
         if (slot >= 0) {
@@ -525,9 +629,16 @@ export class TileField {
             tier[i] = 1; slots[i] = slot; this._tierDirty = true;
             this._copyFit(i, 'near', slot);
           }
+          // The far atlas is the WHOLE corpus resident, near tier or not: a
+          // near tile is a cache entry that eviction can take at any time,
+          // and an item that then has no far tile has no picture at all —
+          // which is how a scope that widens again came to reload. One 16 KB
+          // load per item, once, is the price of never reloading.
+          if (this.atlases.farSlot[i] < 0) this.atlases.request(i, 'far', now);
           continue;
         }
-        // Pool exhausted — fall through to the far tier rather than blanking.
+        // Everything in the pool is hotter (touched this frame) — fall
+        // through to the far tier rather than blanking.
       } else if (this.atlases.nearSlot[i] >= 0) {
         this.atlases.releaseNear(i);
       }
@@ -548,10 +659,42 @@ export class TileField {
       this.aTier.needsUpdate = true;
       this.aSlot.needsUpdate = true;
       this._tierDirty = false;
+      this._dirty = true;
     }
-    this.atlases.flush(now);
+    this.flush(now);
     return resident;
   }
+
+  /**
+   * Partition `idx[0..n)` so the `k` entries with the smallest `key[idx]`
+   * occupy idx[0..k). Iterative quickselect with median-of-three pivots; no
+   * allocation, no full sort. Average O(n); the field is thousands of items
+   * and this runs once per frame during camera motion.
+   */
+  _selectNearest(idx, n, k, key) {
+    let lo = 0, hi = n - 1;
+    while (lo < hi) {
+      // Median of three, to dodge the sorted-input worst case: a field placed
+      // in reading order IS sorted by distance from many camera positions.
+      const mid = (lo + hi) >> 1;
+      if (key[idx[mid]] < key[idx[lo]]) this._swap(idx, lo, mid);
+      if (key[idx[hi]] < key[idx[lo]]) this._swap(idx, lo, hi);
+      if (key[idx[hi]] < key[idx[mid]]) this._swap(idx, mid, hi);
+      const pivot = key[idx[mid]];
+      let i = lo, j = hi;
+      while (i <= j) {
+        while (key[idx[i]] < pivot) i++;
+        while (key[idx[j]] > pivot) j--;
+        if (i <= j) { this._swap(idx, i, j); i++; j--; }
+      }
+      // Recurse only into the side that holds the k-th boundary.
+      if (k - 1 <= j) hi = j;
+      else if (k - 1 >= i) lo = i;
+      else break;
+    }
+  }
+
+  _swap(a, i, j) { const t = a[i]; a[i] = a[j]; a[j] = t; }
 
   _copyFit(index, tier, slot) {
     if (slot < 0) return;
@@ -559,6 +702,7 @@ export class TileField {
     this.aFit.array[index * 2] = atlas.fits[slot * 2];
     this.aFit.array[index * 2 + 1] = atlas.fits[slot * 2 + 1];
     this.aFit.needsUpdate = true;
+    this._dirty = true;
   }
 
   _onTileReady(index, tier) {
