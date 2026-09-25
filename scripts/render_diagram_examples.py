@@ -28,6 +28,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
 from muriel.tools.diagrams.cycle import cycle  # noqa: E402
+from muriel.tools.diagrams.dendrogram import dendrogram  # noqa: E402
 from muriel.tools.diagrams.layer_stack import layer_stack  # noqa: E402
 from muriel.tools.diagrams.matrix import matrix  # noqa: E402
 from muriel.tools.diagrams.pyramid import pyramid  # noqa: E402
@@ -95,6 +96,25 @@ def render_examples(out_dir: Path) -> dict[str, str]:
             axes=(("low LF/HF", "high LF/HF"), ("satisficer", "optimizer")),
             title="Sat/opt × LF/HF — orthogonal axes",
             out_path=out_dir / "matrix-sat-opt.svg"),
+        "dendrogram-eye-movements.svg": dendrogram(
+            {"label": "Eye-movement events", "sublabel": "oculomotor record",
+             "children": [
+                 {"label": "Fixation", "sublabel": "gaze held", "children": [
+                     {"label": "Microsaccade", "focal": True},
+                     "Drift", "Tremor"]},
+                 {"label": "Saccade", "sublabel": "ballistic shift",
+                  "children": ["Reflexive", "Volitional"]},
+                 {"label": "Smooth pursuit", "sublabel": "tracks a target",
+                  "children": ["Open-loop", "Closed-loop"]},
+                 {"label": "Blink", "sublabel": "lid closure",
+                  "children": ["Spontaneous", "Reflex", "Voluntary"]}]},
+            title="Eye-movement events",
+            desc=("Taxonomy of eye-movement events in four classes: fixation, "
+                  "saccade, smooth pursuit and blink, each split into its "
+                  "subtypes. Fixation is not stillness: it contains three "
+                  "movements of its own, microsaccades, drift and tremor, and "
+                  "the microsaccade is the event under discussion."),
+            out_path=out_dir / "dendrogram-eye-movements.svg"),
     }
 
 

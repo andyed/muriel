@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="dendrogram-eye-movements-title dendrogram-eye-movements-desc" viewBox="0 0 1552 452" width="1552" height="452" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
+<title id="dendrogram-eye-movements-title">Eye-movement events</title>
+<desc id="dendrogram-eye-movements-desc">Taxonomy of eye-movement events in four classes: fixation, saccade, smooth pursuit and blink, each split into its subtypes. Fixation is not stillness: it contains three movements of its own, microsaccades, drift and tremor, and the microsaccade is the event under discussion.</desc>
+<rect width="1552" height="452" fill="#0a0a0f"/>
+<text x="48" y="48.0" fill="#e6e4d2" font-size="20" font-weight="600" text-anchor="start">Eye-movement events</text>
+<g data-layer="connectors" fill="none">
+<line data-edge="stem" data-from="n0" x1="776.0" y1="172.0" x2="776.0" y2="204.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="bus" data-from="n0" x1="258.0" y1="204.0" x2="1294.0" y2="204.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n0" data-to="n1" x1="258.0" y1="204.0" x2="258.0" y2="236.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n0" data-to="n5" x1="628.0" y1="204.0" x2="628.0" y2="236.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n0" data-to="n8" x1="924.0" y1="204.0" x2="924.0" y2="236.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n0" data-to="n11" x1="1294.0" y1="204.0" x2="1294.0" y2="236.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="stem" data-from="n1" x1="258.0" y1="288.0" x2="258.0" y2="320.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="bus" data-from="n1" x1="110.0" y1="320.0" x2="406.0" y2="320.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n1" data-to="n2" x1="110.0" y1="320.0" x2="110.0" y2="352.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n1" data-to="n3" x1="258.0" y1="320.0" x2="258.0" y2="352.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n1" data-to="n4" x1="406.0" y1="320.0" x2="406.0" y2="352.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="stem" data-from="n5" x1="628.0" y1="288.0" x2="628.0" y2="320.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="bus" data-from="n5" x1="554.0" y1="320.0" x2="702.0" y2="320.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n5" data-to="n6" x1="554.0" y1="320.0" x2="554.0" y2="352.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n5" data-to="n7" x1="702.0" y1="320.0" x2="702.0" y2="352.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="stem" data-from="n8" x1="924.0" y1="288.0" x2="924.0" y2="320.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="bus" data-from="n8" x1="850.0" y1="320.0" x2="998.0" y2="320.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n8" data-to="n9" x1="850.0" y1="320.0" x2="850.0" y2="352.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n8" data-to="n10" x1="998.0" y1="320.0" x2="998.0" y2="352.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="stem" data-from="n11" x1="1294.0" y1="288.0" x2="1294.0" y2="320.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="bus" data-from="n11" x1="1146.0" y1="320.0" x2="1442.0" y2="320.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n11" data-to="n12" x1="1146.0" y1="320.0" x2="1146.0" y2="352.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n11" data-to="n13" x1="1294.0" y1="320.0" x2="1294.0" y2="352.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+<line data-edge="drop" data-from="n11" data-to="n14" x1="1442.0" y1="320.0" x2="1442.0" y2="352.0" stroke="rgba(176, 176, 196, 0.55)" stroke-width="1"/>
+</g>
+<g data-node="n0" data-depth="0">
+<rect x="686.0" y="120.0" width="180.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.32)" stroke-width="1"/>
+<text x="776.0" y="142.5" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Eye-movement events</text>
+<text x="776.0" y="158.5" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">oculomotor record</text>
+</g>
+<g data-node="n1" data-depth="1" data-parent="n0">
+<rect x="168.0" y="236.0" width="180.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.32)" stroke-width="1"/>
+<text x="258.0" y="258.5" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Fixation</text>
+<text x="258.0" y="274.5" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">gaze held</text>
+</g>
+<g data-node="n2" data-depth="2" data-parent="n1" data-focal="true">
+<rect x="48.0" y="352.0" width="124.0" height="52.0" rx="4" fill="rgba(125, 212, 228, 0.12)" stroke="#7dd4e4" stroke-width="1.5"/>
+<text x="110.0" y="382.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Microsaccade</text>
+</g>
+<g data-node="n3" data-depth="2" data-parent="n1">
+<rect x="196.0" y="352.0" width="124.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.14)" stroke-width="1"/>
+<text x="258.0" y="382.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Drift</text>
+</g>
+<g data-node="n4" data-depth="2" data-parent="n1">
+<rect x="344.0" y="352.0" width="124.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.14)" stroke-width="1"/>
+<text x="406.0" y="382.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Tremor</text>
+</g>
+<g data-node="n5" data-depth="1" data-parent="n0">
+<rect x="538.0" y="236.0" width="180.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.32)" stroke-width="1"/>
+<text x="628.0" y="258.5" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Saccade</text>
+<text x="628.0" y="274.5" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">ballistic shift</text>
+</g>
+<g data-node="n6" data-depth="2" data-parent="n5">
+<rect x="492.0" y="352.0" width="124.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.14)" stroke-width="1"/>
+<text x="554.0" y="382.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Reflexive</text>
+</g>
+<g data-node="n7" data-depth="2" data-parent="n5">
+<rect x="640.0" y="352.0" width="124.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.14)" stroke-width="1"/>
+<text x="702.0" y="382.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Volitional</text>
+</g>
+<g data-node="n8" data-depth="1" data-parent="n0">
+<rect x="834.0" y="236.0" width="180.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.32)" stroke-width="1"/>
+<text x="924.0" y="258.5" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Smooth pursuit</text>
+<text x="924.0" y="274.5" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">tracks a target</text>
+</g>
+<g data-node="n9" data-depth="2" data-parent="n8">
+<rect x="788.0" y="352.0" width="124.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.14)" stroke-width="1"/>
+<text x="850.0" y="382.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Open-loop</text>
+</g>
+<g data-node="n10" data-depth="2" data-parent="n8">
+<rect x="936.0" y="352.0" width="124.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.14)" stroke-width="1"/>
+<text x="998.0" y="382.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Closed-loop</text>
+</g>
+<g data-node="n11" data-depth="1" data-parent="n0">
+<rect x="1204.0" y="236.0" width="180.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.32)" stroke-width="1"/>
+<text x="1294.0" y="258.5" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Blink</text>
+<text x="1294.0" y="274.5" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">lid closure</text>
+</g>
+<g data-node="n12" data-depth="2" data-parent="n11">
+<rect x="1084.0" y="352.0" width="124.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.14)" stroke-width="1"/>
+<text x="1146.0" y="382.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Spontaneous</text>
+</g>
+<g data-node="n13" data-depth="2" data-parent="n11">
+<rect x="1232.0" y="352.0" width="124.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.14)" stroke-width="1"/>
+<text x="1294.0" y="382.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Reflex</text>
+</g>
+<g data-node="n14" data-depth="2" data-parent="n11">
+<rect x="1380.0" y="352.0" width="124.0" height="52.0" rx="4" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.14)" stroke-width="1"/>
+<text x="1442.0" y="382.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Voluntary</text>
+</g>
+</svg>

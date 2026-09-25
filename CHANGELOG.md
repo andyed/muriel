@@ -8,6 +8,17 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`dendrogram`: tree / hierarchy diagram generator.**
+  `muriel.tools.diagrams.dendrogram(tree, orientation="down"|"right", …)`
+  draws a nested `{label, sublabel, focal, children}` tree as a contour-based
+  tidy tree: parents centred on their first and last child, no subtree
+  overlap, ranks evenly spaced and never skipped, at most two box widths, and
+  elbow-bus connectors with no diagonals. Budget is 4 levels, 5 children per
+  node and a measured leaf-axis extent; `collapse_over=` folds overflow
+  siblings into a `+N more` node. A node shared by two parents raises (use
+  `dag`), and so does a tree that never branches. Nodes carry `data-depth`.
+  Example: `dendrogram-eye-movements.svg`.
+
 - **Diagram SVGs carry an accessible-figure contract, and `muriel
   diagram-check` enforces it.** Every generator in `muriel.tools.diagrams`
   (matrix, cycle, layer_stack, pyramid, swimlane, foveal_overlay,

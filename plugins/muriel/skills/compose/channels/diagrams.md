@@ -74,6 +74,7 @@ Ordered by how often each structure carries a real argument in research, product
 | 9 | Pyramid | Each level depends on the one below; apex is rare or important. | **Shipped** — `muriel.tools.diagrams.pyramid` (`orientation="up"`) |
 | 10 | Comparison heat-grid | Dense `n × m` comparison; small multiples for categorical evals. | Queued |
 | 11 | Swimlane | Cross-functional process; the handoffs between actors are the point. | **Shipped** — `muriel.tools.diagrams.swimlane` |
+| 12 | **Tree (dendrogram)** | Containment: each node has exactly one parent, and what X decomposes into, recursively, is the claim. Hierarchy family, unweighted member. | **Shipped** — `muriel.tools.diagrams.dendrogram` |
 
 **Explicitly excluded.** Process arrows, list-with-chevrons, interconnected blocks, radial gear cosmetics, target-with-concentric-rings as decoration. If a SmartArt category exists only to ornament a list, this channel will never ship it.
 
@@ -90,7 +91,7 @@ Several diagram forms have an existing home elsewhere in muriel. The native gene
 | Flowchart / generic DAG | — | **Mermaid** `flowchart` today; native **causal DAG** is queued (catalog #6) for when arrow-direction is the load-bearing claim. |
 | Timeline | — | **ECharts** time-axis + band overlays ([`echarts.md`](../vocabularies/echarts.md)), the `svg.md` OSEC phase diagram, or the infographics **Timeline** template ([`infographics.md`](infographics.md)). All predate this channel. |
 | Single-actor process flow | swimlane (degenerate) | infographics **Process** template — lighter when there are no lanes. Use swimlane only when ownership/handoffs are the argument. |
-| Tree / org-chart | — | **ECharts** `tree` series (interactive) or the infographics **Hierarchical** template. |
+| Tree / org-chart | **`dendrogram`** (static tree; hierarchy family, unweighted) | **ECharts** `tree` series when the tree must collapse/expand interactively, or the infographics **Hierarchical** template for a quick doc graphic. |
 | Nested hierarchy (proportional) | — | Queued **hierarchy family** — sunburst / treemap / dendrogram (see [`TODO.md`](../../../../../TODO.md) #45), ECharts-backed. |
 | Magnitude flow | — | Queued **Sankey** primitive ([`TODO.md`](../../../../../TODO.md) #44). |
 
@@ -298,6 +299,47 @@ Reach for this only when ownership is the argument — see [the provider table](
 - Don't let a step span two lanes — every step has one owner. Shared ownership is a process smell, not a diagram feature.
 - Don't snake the flow — if arrows backtrack to read in order, re-sequence the steps so progression runs forward.
 
+## Tree (dendrogram)
+
+```python
+from muriel.tools.diagrams import dendrogram
+
+dendrogram(
+    {"label": "Eye-movement events", "sublabel": "oculomotor record",
+     "children": [
+         {"label": "Fixation", "sublabel": "gaze held", "children": [
+             {"label": "Microsaccade", "focal": True}, "Drift", "Tremor"]},
+         {"label": "Saccade", "sublabel": "ballistic shift",
+          "children": ["Reflexive", "Volitional"]},
+         {"label": "Smooth pursuit", "sublabel": "tracks a target",
+          "children": ["Open-loop", "Closed-loop"]},
+         {"label": "Blink", "sublabel": "lid closure",
+          "children": ["Spontaneous", "Reflex", "Voluntary"]}]},
+    orientation="down",          # or "right": root at left, leaves stacked
+    collapse_over=None,          # 2–5: fold overflow siblings into "+N more"
+    title="Eye-movement events",
+    out_path="examples/diagrams/dendrogram-eye-movements.svg",
+)
+```
+
+The **hierarchy family's** unweighted member. The tree is nested dicts `{label, sublabel?, focal?, children}`; a bare string is a leaf, and child order is drawing order. Budget: **4 levels** (root + 3 tiers) and **5 children per node**, plus a leaf-axis extent (1920px down, 1440px right) checked *after* the labels are measured, so the leaf budget tracks real box sizes rather than a count. Over budget raises with the options: `collapse_over=`, `orientation="right"`, or split into an overview plus one figure per subtree.
+
+**Layout.** A contour-based tidy tree (Reingold–Tilford style, no threads): each child subtree is pushed along the leaf axis until it clears its left neighbour at every shared depth, and each parent is centred exactly on the midpoint of its first and last child. Deterministic, and subtrees cannot overlap. Ranks are evenly spaced and never skipped: a shallow leaf stays at its own depth rather than dropping to the bottom row. Boxes are 120–180px wide and 40–52px tall, at most **two widths**, assigned per rank so every row (or column) is regular. A name past 180px wraps to two lines; one unbreakable word wider than that grows the box past 180, because text never escapes.
+
+**Connectors** are an elbow bus drawn before the nodes: a stem from the parent to a bus halfway across the rank gap, one bus spanning the children, one drop into each child. No diagonals. Each is a `<line data-edge="stem|bus|drop" data-from data-to>`, and each node a `<g data-node data-depth data-parent>`, so the structure can be read back from the file.
+
+**`collapse_over=k`** keeps a crowded node's first `k − 1` children and folds the rest, subtrees included, into one dashed `+N more` leaf (`data-collapsed="N"`). The folded names are listed in the default `<desc>`. Order children by importance first. A fold that would hide the focal node raises.
+
+**One accent**, on the root or one critical leaf. A middle-tier focal raises, and so does a second one.
+
+**Not a clustering dendrogram.** Rank spacing encodes depth, not merge distance. Output from hierarchical clustering, where linkage height is the finding, belongs on a real axis (`scipy.cluster.hierarchy.dendrogram`).
+
+**Anti-prescriptions** (also in the docstring):
+
+- A node with two parents is a DAG: use the `dag` generator. A node object reused under two parents raises; a label repeated under two parents warns.
+- If the leaf proportions matter, use `treemap` (or a sunburst). When leaf weights are roughly equal, area carries no signal and the tree reads faster.
+- One path with no branching is a process: use `swimlane` or the infographics Process template. The generator refuses a tree that never branches.
+
 ## Design discipline
 
 The generators bake in the editorial-diagram discipline that keeps SVG from reading as AI-generated SmartArt:
@@ -382,6 +424,7 @@ Both examples below render to `examples/diagrams/`:
 - [`layers-tcpip.svg`](../examples/diagrams/layers-tcpip.svg) — a 4-layer dependency stack with the Transport layer as the focal band and an "abstraction ↑" axis; the stack shape is honest because each layer genuinely depends on the one below.
 - [`funnel-q2.svg`](../examples/diagrams/funnel-q2.svg) — a proportional acquisition funnel; tier widths are driven by real counts (`proportional=True`), so the visual drop-off matches the `−%` annotations rather than faking a taper.
 - [`swimlane-release.svg`](../examples/diagrams/swimlane-release.svg) — a 4-lane release pipeline; same-lane steps connect with a muted arrow, cross-lane handoffs are drawn in the accent because the handoffs are the claim.
+- [`dendrogram-eye-movements.svg`](../examples/diagrams/dendrogram-eye-movements.svg) — a four-class eye-movement taxonomy with subtypes; the tree is honest because every subtype has one parent and no leaf weight is claimed. The accent is on one critical leaf, the microsaccade.
 
 ## Mermaid in HTML — the zoom/pan/expand shell
 

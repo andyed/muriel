@@ -73,6 +73,13 @@ Two verification ideas were adapted from the same repository (upstream commit
   test in `agents/muriel-critique.md`, paraphrase `references/semantic-patterns.md`,
   `references/output-spec.md`, `references/primitive-annotation.md`, and the
   skill's SKILL.md.
+- **Tree** — `muriel/tools/diagrams/dendrogram.py` takes its node proportions
+  (120–180 × 40–52, at most two widths), the orthogonal elbow-bus connectors
+  drawn before the nodes, the 4-level / 5-children budget, the no-skipped-levels
+  rule and the single accent on the root or one critical leaf from
+  `references/type-tree.md`. The contour-based tidy-tree placement, the
+  measured leaf-extent budget, `collapse_over`, and the DAG / treemap / process
+  routing gates are muriel's.
 
 The code is muriel's own (ElementTree rather than the source's `HTMLParser`,
 and wired into `muriel diagram-check`); no source files were copied.
