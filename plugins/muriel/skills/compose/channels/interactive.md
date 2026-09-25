@@ -380,14 +380,14 @@ are commands.
 - **SVG** for thin-stroke geometry — compass rings, corner brackets, grid overlays, leader lines.
 - **Canvas2D + rAF** for tickers, waveforms, and anything that re-draws per frame.
 - **CSS `repeating-linear-gradient`** for scan-line overlays; **WebGL2 fragment shader** if the post-process needs to vary spatially (glitch, chromatic aberration).
-- Motion from muriel's brand tokens: `--mg-duration-reveal`, `--mg-ease-emphasis`, plus a project-local `--mg-stagger` (80–200ms).
+- Motion from muriel's brand tokens: `--mg-duration-reveal`, `--mg-ease-emphasis`, plus a project-local `--mg-stagger` (100 ms).
 
 **Runnable scaffold: [`examples/fui-scaffold.html`](../examples/fui-scaffold.html).** Open in a browser. Single file, no build. Four primitives on one screen:
 
 1. **Data ticker** — rAF counter with leading zeros, mission clock, packet hex.
 2. **Radial compass** — SVG rings + 36 tick marks + rotating needle.
 3. **Canvas waveform** — scrolling signal trace with RMS/peak readouts.
-4. **Staggered reveal** — CSS animation across the four blocks at 120ms intervals.
+4. **Staggered reveal** — CSS animation across the four blocks at 100 ms intervals.
 
 **Runnable circular-instrument case:
 [`examples/annular-fui-console.html`](../examples/annular-fui-console.html).**

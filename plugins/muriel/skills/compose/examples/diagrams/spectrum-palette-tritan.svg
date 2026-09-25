@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="spectrum-palette-tritan-title spectrum-palette-tritan-desc" viewBox="0 0 900 476" width="900" height="476" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
+<title id="spectrum-palette-tritan-title">Palette warmth under a tritan simulation</title>
+<desc id="spectrum-palette-tritan-desc">Mean CIELAB b* (blue negative, yellow positive) of six muriel palettes, as designed and after muriel.cvd's tritan simulation. The three palettes farthest from neutral move furthest toward it: Wong from 17.4 to 5.3, Nord Aurora from 16.8 to 8.8, Nord Frost from -16.2 to -7.5. The three near neutral move 4 units or less. Rows sorted by signed change.</desc>
+<defs><marker id="spectrum-palette-tritan-pole" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8" fill="none" stroke="rgba(230, 228, 210, 0.45)" stroke-width="1.2"/></marker><marker id="spectrum-palette-tritan-chg" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="rgba(230, 228, 210, 0.55)"/></marker><marker id="spectrum-palette-tritan-chg-focal" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#7dd4e4"/></marker></defs>
+<rect width="900" height="476" fill="#0a0a0f"/>
+<text x="24" y="40" fill="#e6e4d2" font-size="20" font-weight="600">Palette warmth under a tritan simulation</text>
+<text x="180.0" y="92" fill="#e6e4d2" font-size="12" font-weight="600" text-anchor="start" data-pole="left">cooler (blue)</text>
+<text x="776.4" y="92" fill="#e6e4d2" font-size="12" font-weight="600" text-anchor="end" data-pole="right">warmer (yellow)</text>
+<line x1="288.7" y1="88" x2="652.8" y2="88" stroke="rgba(230, 228, 210, 0.45)" stroke-width="1" marker-start="url(#spectrum-palette-tritan-pole)" marker-end="url(#spectrum-palette-tritan-pole)"/>
+<g class="spectrum-plot" data-min="-20.0" data-max="20.0" data-x0="180.000" data-x1="776.400">
+<line x1="180.000" y1="116" x2="180.000" y2="364" stroke="rgba(230, 228, 210, 0.10)" stroke-width="1"/>
+<line x1="329.100" y1="116" x2="329.100" y2="364" stroke="rgba(230, 228, 210, 0.10)" stroke-width="1"/>
+<line x1="478.200" y1="116" x2="478.200" y2="364" stroke="rgba(230, 228, 210, 0.10)" stroke-width="1"/>
+<line x1="627.300" y1="116" x2="627.300" y2="364" stroke="rgba(230, 228, 210, 0.10)" stroke-width="1"/>
+<line x1="776.400" y1="116" x2="776.400" y2="364" stroke="rgba(230, 228, 210, 0.10)" stroke-width="1"/>
+<line x1="478.200" y1="116" x2="478.200" y2="364" stroke="rgba(230, 228, 210, 0.45)" stroke-width="1" data-zero="true"/>
+<line x1="180.000" y1="364" x2="776.400" y2="364" stroke="rgba(230, 228, 210, 0.45)" stroke-width="1"/>
+<line x1="180.000" y1="364" x2="180.000" y2="368" stroke="rgba(230, 228, 210, 0.45)" stroke-width="1"/>
+<text x="180.00" y="382" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="middle">−20</text>
+<line x1="329.100" y1="364" x2="329.100" y2="368" stroke="rgba(230, 228, 210, 0.45)" stroke-width="1"/>
+<text x="329.10" y="382" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="middle">−10</text>
+<line x1="478.200" y1="364" x2="478.200" y2="368" stroke="rgba(230, 228, 210, 0.45)" stroke-width="1"/>
+<text x="478.20" y="382" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="middle">0</text>
+<line x1="627.300" y1="364" x2="627.300" y2="368" stroke="rgba(230, 228, 210, 0.45)" stroke-width="1"/>
+<text x="627.30" y="382" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="middle">10</text>
+<line x1="776.400" y1="364" x2="776.400" y2="368" stroke="rgba(230, 228, 210, 0.45)" stroke-width="1"/>
+<text x="776.40" y="382" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="middle">20</text>
+<text x="478.2" y="398" fill="#b0b0c4" font-size="11" text-anchor="middle">mean CIELAB b*</text>
+<text x="836.4" y="92" fill="#b0b0c4" font-size="11" text-anchor="start">change</text>
+<g class="spectrum-row" data-label="Nord Frost" data-start="-16.2" data-end="-7.5" data-direction="increase">
+<text x="164.0" y="140.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="end">Nord Frost</text>
+<line x1="241.658" y1="136" x2="359.375" y2="136" stroke="rgba(230, 228, 210, 0.55)" stroke-width="1.5" marker-end="url(#spectrum-palette-tritan-chg)"/>
+<circle cx="236.658" cy="136" r="5" fill="#0a0a0f" stroke="#e6e4d2" stroke-width="1.5" data-role="start"/>
+<circle cx="366.375" cy="136" r="5" fill="#e6e4d2" data-role="end"/>
+<text x="226.66" y="140" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="end">−16.2</text>
+<text x="376.38" y="140" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="start">−7.5</text>
+<text x="836.4" y="140" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">+8.7</text>
+</g>
+<g class="spectrum-row" data-label="IBM" data-start="3.4" data-end="7.4" data-direction="increase">
+<text x="164.0" y="180.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="end">IBM</text>
+<line x1="533.894" y1="176" x2="581.534" y2="176" stroke="rgba(230, 228, 210, 0.55)" stroke-width="1.5" marker-end="url(#spectrum-palette-tritan-chg)"/>
+<circle cx="528.894" cy="176" r="5" fill="#0a0a0f" stroke="#e6e4d2" stroke-width="1.5" data-role="start"/>
+<circle cx="588.534" cy="176" r="5" fill="#e6e4d2" data-role="end"/>
+<text x="518.89" y="180" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="end">3.4</text>
+<text x="598.53" y="180" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="start">7.4</text>
+<text x="836.4" y="180" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">+4.0</text>
+</g>
+<g class="spectrum-row" data-label="Catppuccin Mocha" data-start="-4.1" data-end="-0.4" data-direction="increase">
+<text x="164.0" y="220.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="end">Catppuccin Mocha</text>
+<line x1="422.069" y1="216" x2="465.236" y2="216" stroke="rgba(230, 228, 210, 0.55)" stroke-width="1.5" marker-end="url(#spectrum-palette-tritan-chg)"/>
+<circle cx="417.069" cy="216" r="5" fill="#0a0a0f" stroke="#e6e4d2" stroke-width="1.5" data-role="start"/>
+<circle cx="472.236" cy="216" r="5" fill="#e6e4d2" data-role="end"/>
+<text x="407.07" y="220" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="end">−4.1</text>
+<text x="482.24" y="220" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="start">−0.4</text>
+<text x="836.4" y="220" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">+3.7</text>
+</g>
+<g class="spectrum-row" data-label="Tol high-contrast" data-start="10.6" data-end="7.4" data-direction="decrease">
+<text x="164.0" y="260.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="end">Tol high-contrast</text>
+<line x1="631.246" y1="256" x2="595.534" y2="256" stroke="rgba(230, 228, 210, 0.55)" stroke-width="1.5" marker-end="url(#spectrum-palette-tritan-chg)"/>
+<circle cx="636.246" cy="256" r="5" fill="#0a0a0f" stroke="#e6e4d2" stroke-width="1.5" data-role="start"/>
+<circle cx="588.534" cy="256" r="5" fill="#e6e4d2" data-role="end"/>
+<text x="578.53" y="260" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="end">7.4</text>
+<text x="646.25" y="260" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="start">10.6</text>
+<text x="836.4" y="260" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">−3.2</text>
+</g>
+<g class="spectrum-row" data-label="Nord Aurora" data-start="16.8" data-end="8.8" data-direction="decrease">
+<text x="164.0" y="300.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="end">Nord Aurora</text>
+<line x1="723.688" y1="296" x2="616.408" y2="296" stroke="rgba(230, 228, 210, 0.55)" stroke-width="1.5" marker-end="url(#spectrum-palette-tritan-chg)"/>
+<circle cx="728.688" cy="296" r="5" fill="#0a0a0f" stroke="#e6e4d2" stroke-width="1.5" data-role="start"/>
+<circle cx="609.408" cy="296" r="5" fill="#e6e4d2" data-role="end"/>
+<text x="599.41" y="300" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="end">8.8</text>
+<text x="738.69" y="300" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="start">16.8</text>
+<text x="836.4" y="300" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">−8.0</text>
+</g>
+<g class="spectrum-row" data-label="Wong" data-start="17.4" data-end="5.3" data-direction="decrease" data-focal="true">
+<text x="164.0" y="340.0" fill="#7dd4e4" font-size="13" font-weight="600" text-anchor="end">Wong</text>
+<line x1="732.634" y1="336" x2="564.223" y2="336" stroke="#7dd4e4" stroke-width="1.5" marker-end="url(#spectrum-palette-tritan-chg-focal)"/>
+<circle cx="737.634" cy="336" r="5" fill="#0a0a0f" stroke="#7dd4e4" stroke-width="1.5" data-role="start"/>
+<circle cx="557.223" cy="336" r="5" fill="#7dd4e4" data-role="end"/>
+<text x="547.22" y="340" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="end">5.3</text>
+<text x="747.63" y="340" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="start">17.4</text>
+<text x="836.4" y="340" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">−12.1</text>
+</g>
+</g>
+<circle cx="185.0" cy="426" r="5" fill="#0a0a0f" stroke="#e6e4d2" stroke-width="1.5"/>
+<text x="196.0" y="430" fill="#b0b0c4" font-size="11">as designed</text>
+<circle cx="293.6" cy="426" r="5" fill="#e6e4d2"/>
+<text x="304.6" y="430" fill="#b0b0c4" font-size="11">tritan simulation</text>
+<text x="180.0" y="450" fill="#b0b0c4" font-size="11">Rows sorted by change (tritan simulation − as designed), largest increase first; axis −20 to 20.</text>
+</svg>

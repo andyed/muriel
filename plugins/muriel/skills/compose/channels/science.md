@@ -285,6 +285,7 @@ Performance improved in the new condition.
 
 Good:
 
+<!-- motion-exempt: not-motion (reaction times, block) -->
 ```
 The primary outcome — time to first fixation on the target AOI, measured in
 milliseconds from trial onset — decreased from M=842 ms (SD=210) in the

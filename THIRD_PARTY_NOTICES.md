@@ -56,6 +56,14 @@ Two verification ideas were adapted from the same repository (upstream commit
   positive size, `<title>` as the first child, a `<desc>`, slug-prefixed
   non-duplicate ids, and `aria-labelledby` naming the title then the desc. The
   60-character title bound follows `skills/diagram-design/scripts/self_check.py`.
+- **Slopegraph conventions** — `muriel/tools/diagrams/comparison_pair.py` follows
+  `references/type-line.md` (slopegraph variant): one scale shared by both
+  axes, a run narrower than the plot is tall, dots and printed values at both
+  ends, no gridlines, muted lines plus one weighted accent, and labels bound to
+  their series by `data-*` attributes. The shared-scale and no-jitter checks in
+  `tests/test_diagram_comparison_pair.py` follow `scripts/verify-slopegraph.py`.
+  The label-spreading policy (labels move, endpoints never do) and the trace
+  form are muriel's own.
 - **Relative-error fidelity check** — `tests/test_diagram_fidelity.py` checks
   proportional funnel widths as *relative* error against the values, the
   framing of `scripts/verify-treemap.py`'s area-fidelity invariant, applied to
@@ -67,12 +75,36 @@ Two verification ideas were adapted from the same repository (upstream commit
   and `muriel/motion.py` (`validate_mode`, `validate_flash_rate`,
   `validate_sequence_shape`). The upstream clock tokens and pinned controller
   were not adopted.
+- **Treemap** — `muriel/tools/diagrams/treemap.py` follows `references/type-treemap.md`
+  for geometry and conventions: squarified layout, 4–8 cells with a named
+  "Other", 4px gutters, the large / medium / small / sliver label tiers with a
+  16px top-left inset, the rank-ordered ink ramp with one accent cell, and
+  `data-share` on every cell. `tests/test_diagram_treemap.py` checks area as
+  relative error per cell, the invariant of `scripts/verify-treemap.py`, at a
+  4% bound. The gutter-compensating weight correction is muriel's own; no
+  source files were copied.
 - **Diagram guidance** — behaviour-first pattern routing, the generator
   admission rule, callout discipline, the global node/arrow budget, and the
   redraw degrade ladder in `channels/diagrams.md`, plus the per-element removal
   test in `agents/muriel-critique.md`, paraphrase `references/semantic-patterns.md`,
   `references/output-spec.md`, `references/primitive-annotation.md`, and the
   skill's SKILL.md.
+- **Sankey conventions** (adapted 2026-09-24) — `muriel/tools/diagrams/sankey.py`
+  follows `references/type-sankey.md` for the 12px node bar, one global
+  px-per-unit scale, midline Bézier control points, the single accent path
+  painted last, column-specific label placement and the 3-stage / 8-node /
+  12-flow budget; `tests/test_diagram_sankey.py` checks the invariants named in
+  `scripts/verify-sankey.py` (conservation, stage totals, ribbon width
+  constancy, relative value fidelity, square-on arrival). Bars are not rounded
+  to the 4px grid, sub-4px flows raise rather than fold, and ribbons are
+  written as flattened polylines so the contrast audit can score the labels.
+- **Tree** — `muriel/tools/diagrams/dendrogram.py` takes its node proportions
+  (120–180 × 40–52, at most two widths), the orthogonal elbow-bus connectors
+  drawn before the nodes, the 4-level / 5-children budget, the no-skipped-levels
+  rule and the single accent on the root or one critical leaf from
+  `references/type-tree.md`. The contour-based tidy-tree placement, the
+  measured leaf-extent budget, `collapse_over`, and the DAG / treemap / process
+  routing gates are muriel's.
 - **Comparison heat-grid** — `muriel/tools/diagrams/heat_grid.py` takes its
   cell geometry (116×56, 4px gap, 80px minimum width), the 3–7 row / 3–8 column
   budget, the single ink ramp with a single accent focal cell excluded from the
@@ -82,6 +114,39 @@ Two verification ideas were adapted from the same repository (upstream commit
   `scripts/verify-heatmap.py`'s `data-row` / `data-col` / `data-value` binding
   and monotone-fill check (±0.03). The per-brand ramp-ceiling solve for 8:1
   value labels, the quantized stepped legend and the n/a cells are muriel's.
+- **Cycle hub** (adapted 2026-09-24) — the `hub=` option of
+  `muriel/tools/diagrams/cycle.py` follows `references/type-loop.md`: one
+  central accumulated-state node drawn inverted (ink fill, paper text), dashed
+  write-back spokes as true radii from each station's inner edge that stop a
+  6px marker gap short of the hub, drawn beneath the stations, "one hub" and
+  "a hub is state, not a step". The spoke-subset selection, the ring growth
+  that keeps an 18px minimum spoke, and the measured hub box are muriel's.
+- **Icon build pipeline** — `scripts/build_diagram_icons.py` adapts the
+  structure of `scripts/build-icons.py` (a curated slot → upstream-id
+  manifest with one-line blurbs, fetch with a local vendor cache,
+  normalize, emit a committed artifact). The icon source differs (Lucide,
+  not Tabler) and so does the normalization: muriel keeps inner markup only,
+  strips presentation attributes, and rewrites primitives as `<path>`.
+- **Causal / dependency DAG** — `muriel/tools/diagrams/dag.py` takes from
+  `references/type-dependency.md` the ranked layers (120px pitch), the
+  160×56 `rx=6` node box, the `N in` fan-in badge in a small `rx=2` box, the
+  budget (9 nodes, 14 edges, 4 ranks, 1 highlighted cycle), the single dashed
+  `5,4` accent back-edge routed around the outside of the stack, and the
+  tree-shaped-data anti-pattern. It takes from SKILL.md's connector rules the
+  orthogonal elbows with `r=8` corners, attach points ≥12px apart on a shared
+  side, no transit behind a non-endpoint box, and drawing edges before nodes.
+  The layout algorithm (longest-path ranking, barycenter ordering with
+  adjacent swaps, isotonic-regression placement, per-channel jog tracks), the
+  forward-cycle and tree-precondition errors, and the single-accent rule
+  (upstream allows two) are muriel's.
+- **Spectrum** — `muriel/tools/diagrams/spectrum.py` takes its dumbbell
+  conventions from `references/type-bar.md`'s dumbbell variant: horizontal
+  rows on one shared scale, hollow reference end and solid end, connector drawn
+  before the dots, unsnapped data coordinates, value labels placed outside the
+  pair by geometry with the floor exception, never-truncate / never-clamp, and
+  a stated row order; `references/type-line.md` for the shared-scale rule. The
+  two named poles, the explicit `zero=` choice for a scale that excludes zero,
+  the change arrowhead, the `extent` mode and the 8:1 tokens are muriel's.
 
 The code is muriel's own (ElementTree rather than the source's `HTMLParser`,
 and wired into `muriel diagram-check`); apart from the extractor below, no
@@ -303,6 +368,69 @@ used in any form — muriel's lane is deterministic SVG.
 MIT License
 
 Copyright (c) 2026 Jim Liu
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+---
+
+## Lucide icons
+
+The 30 glyphs in `muriel/tools/diagrams/icons/glyphs.py` are generated from
+Lucide icons by `scripts/build_diagram_icons.py`: the outer `<svg>` and all
+presentation attributes are removed and each primitive is rewritten as an
+equivalent `<path>`; the geometry is otherwise unchanged. The source SVGs are
+vendored unmodified in `muriel/tools/diagrams/icons/vendor/lucide/`, with
+Lucide's LICENSE. Some of the glyphs used (`clock`, `database`, `link`,
+`lock`, `search`, `target`, `zoom-in`) are derived from Feather and fall under
+the MIT notice below.
+
+- Source: https://lucide.dev — npm package `lucide-static`
+- Version: 1.48.0 (pinned in `muriel/tools/diagrams/icons/_manifest.py`)
+- License: ISC; Feather-derived icons MIT
+
+```
+ISC License
+
+Copyright (c) 2026 Lucide Icons and Contributors
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+---
+
+The following Lucide icons are derived from the Feather project:
+
+airplay, alert-circle, alert-octagon, alert-triangle, aperture, arrow-down-circle, arrow-down-left, arrow-down-right, arrow-down, arrow-left-circle, arrow-left, arrow-right-circle, arrow-right, arrow-up-circle, arrow-up-left, arrow-up-right, arrow-up, at-sign, calendar, cast, check, chevron-down, chevron-left, chevron-right, chevron-up, chevrons-down, chevrons-left, chevrons-right, chevrons-up, circle, clipboard, clock, code, columns, command, compass, corner-down-left, corner-down-right, corner-left-down, corner-left-up, corner-right-down, corner-right-up, corner-up-left, corner-up-right, crosshair, database, divide-circle, divide-square, dollar-sign, download, external-link, feather, frown, hash, headphones, help-circle, info, italic, key, layout, life-buoy, link-2, link, loader, lock, log-in, log-out, maximize, meh, minimize, minimize-2, minus-circle, minus-square, minus, monitor, moon, more-horizontal, more-vertical, move, music, navigation-2, navigation, octagon, pause-circle, percent, plus-circle, plus-square, plus, power, radio, rss, search, server, share, shopping-bag, sidebar, smartphone, smile, square, table-2, tablet, target, terminal, trash-2, trash, triangle, tv, type, upload, x-circle, x-octagon, x-square, x, zoom-in, zoom-out
+
+The MIT License (MIT) (for the icons listed above)
+
+Copyright (c) 2013-present Cole Bemis
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

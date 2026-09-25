@@ -143,10 +143,10 @@ high = "0 18px 56px rgba(0,0,0,0.60)"
 
 [motion]
 duration_instant  = 0
-duration_fast     = 120
-duration_normal   = 240
-duration_slow     = 480
-duration_reveal   = 800
+duration_fast     = 100    # utility transition (muriel.motion binary: <=100 | >=1500)
+duration_normal   = 100    # the binary has no middle; collapses onto fast
+duration_slow     = 1500   # cinematic
+duration_reveal   = 1500   # cinematic reveal
 easing_default    = "cubic-bezier(0.2, 0.0, 0.2, 1.0)"
 easing_emphasis   = "cubic-bezier(0.4, 0.0, 0.2, 1.0)"
 easing_snappy     = "cubic-bezier(0.6, 0.0, 0.2, 1.0)"
@@ -212,7 +212,7 @@ min_contrast_ratio   = 8.0
 min_hit_target_px    = 44
 focus_ring_color     = "accent_ink"
 focus_ring_width_px  = 3
-motion_reduce_policy = "collapse-to-zero"
+motion_reduce_policy = "collapse-to-zero"   # | "keep-fast" (alias "reduce") | "keep-linear"
 
 
 [dependencies]

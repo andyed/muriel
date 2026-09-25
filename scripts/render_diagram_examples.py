@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """render_diagram_examples.py — regenerate the committed diagram examples.
 
-The specs below are the single source of truth for the five SVGs in
+The specs below are the single source of truth for the SVGs in
 ``plugins/muriel/skills/compose/examples/diagrams/``. The byte-identity test
 in ``tests/test_diagram_labels.py`` renders from these same specs, so a
 generator change that alters an example fails that test until this script is
@@ -27,18 +27,64 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
+from muriel.tools.diagrams.comparison_pair import comparison_pair  # noqa: E402
 from muriel.tools.diagrams.cycle import cycle  # noqa: E402
+from muriel.tools.diagrams.dendrogram import dendrogram  # noqa: E402
+from muriel.tools.diagrams.dag import dag  # noqa: E402
 from muriel.tools.diagrams.heat_grid import heat_grid  # noqa: E402
 from muriel.tools.diagrams.layer_stack import layer_stack  # noqa: E402
 from muriel.tools.diagrams.matrix import matrix  # noqa: E402
 from muriel.tools.diagrams.pyramid import pyramid  # noqa: E402
+from muriel.tools.diagrams.sankey import sankey  # noqa: E402
+from muriel.tools.diagrams.spectrum import spectrum  # noqa: E402
 from muriel.tools.diagrams.swimlane import swimlane  # noqa: E402
+from muriel.tools.diagrams.treemap import treemap  # noqa: E402
 
 EXAMPLES = REPO_ROOT / "plugins/muriel/skills/compose/examples/diagrams"
 MIRRORS = (
     REPO_ROOT / "docs/examples/diagrams",
     REPO_ROOT / "site-build/examples/diagrams",
 )
+
+
+def _spectrum_palette_tritan(out_dir: Path) -> str:
+    """Mean CIELAB b* of six shipped palettes, as designed and under
+    muriel.cvd's tritan simulation. Computed from muriel's own palette and
+    CVD code at render time, so the example cannot drift from them."""
+    from muriel.cvd import _linear_rgb_to_lab, _to_linear_rgb, simulate
+    from muriel.palettes import PALETTES
+
+    def b_star(color) -> float:
+        return _linear_rgb_to_lab(_to_linear_rgb(color))[2]
+
+    names = {"wong": "Wong", "nord_aurora": "Nord Aurora",
+             "tol_hc": "Tol high-contrast", "ibm": "IBM",
+             "catppuccin_mocha": "Catppuccin Mocha",
+             "nord_frost": "Nord Frost"}
+    items = []
+    for key, label in names.items():
+        pal = PALETTES[key]
+        items.append({
+            "label": label,
+            "start": round(sum(b_star(c) for c in pal) / len(pal), 1),
+            "end": round(sum(b_star(simulate(c, "tritan")) for c in pal)
+                         / len(pal), 1),
+        })
+    return spectrum(
+        items,
+        scale={"min": -20, "max": 20, "left_pole": "cooler (blue)",
+               "right_pole": "warmer (yellow)", "unit": "b*",
+               "label": "mean CIELAB b*"},
+        series=("as designed", "tritan simulation"),
+        sort="delta", show_delta=True, focal=0,
+        title="Palette warmth under a tritan simulation",
+        desc=("Mean CIELAB b* (blue negative, yellow positive) of six muriel "
+              "palettes, as designed and after muriel.cvd's tritan "
+              "simulation. The three palettes farthest from neutral move "
+              "furthest toward it: Wong from 17.4 to 5.3, Nord Aurora from "
+              "16.8 to 8.8, Nord Frost from -16.2 to -7.5. The three near "
+              "neutral move 4 units or less. Rows sorted by signed change."),
+        out_path=out_dir / "spectrum-palette-tritan.svg")
 
 
 def render_examples(out_dir: Path) -> dict[str, str]:
@@ -96,6 +142,108 @@ def render_examples(out_dir: Path) -> dict[str, str]:
             axes=(("low LF/HF", "high LF/HF"), ("satisficer", "optimizer")),
             title="Sat/opt × LF/HF — orthogonal axes",
             out_path=out_dir / "matrix-sat-opt.svg"),
+        # Illustrative values, not measured data: the shape of a result
+        # page where an answer box takes clicks from the top organic slot.
+        "comparison-pair-serp.svg": comparison_pair(
+            [{"label": "Position 1", "a": 38.0, "b": 31.5},
+             {"label": "Position 2", "a": 16.5, "b": 17.0},
+             {"label": "Position 3", "a": 10.2, "b": 11.8},
+             {"label": "Position 4", "a": 7.1, "b": 8.0},
+             {"label": "Position 5", "a": 5.4, "b": 5.6},
+             {"label": "Position 6", "a": 4.3, "b": 4.1}],
+            states=("Ten links", "With answer box"),
+            focal="Position 1",
+            scale={"min": 0, "max": 40, "unit": "% of clicks"},
+            value_format="{:.1f}",
+            title="Click share by result position (illustrative)",
+            desc=("Illustrative slopegraph, not measured data. Adding an "
+                  "answer box lowers position 1's click share from 38.0% "
+                  "to 31.5%; positions 2 to 5 each gain between 0.2 and "
+                  "1.6 points, and position 6 is roughly flat."),
+            out_path=out_dir / "comparison-pair-serp.svg"),
+        "comparison-pair-trace.svg": comparison_pair(
+            [{"label": "Account in good standing", "a": "PASS", "b": "PASS"},
+             {"label": "Within refund window", "a": "PASS", "b": "PASS"},
+             {"label": "Amount under auto-limit", "a": "PASS", "b": "FAIL"},
+             {"label": "Fraud score", "a": "PASS", "b": "NOT REACHED"},
+             {"label": "Auto-approve", "a": "PASS", "b": "NOT REACHED"}],
+            states=("Request A", "Request B"),
+            title="Why two refund requests end differently",
+            desc=("Two refund requests pass the same first two rules; "
+                  "request B fails the auto-limit check, so the fraud score "
+                  "and auto-approval are never reached for it."),
+            out_path=out_dir / "comparison-pair-trace.svg"),
+        "sankey-search-sessions.svg": sankey(
+            ["Query", "First action", "Outcome"],
+            [{"id": "sessions", "stage": "Query", "label": "Search sessions",
+              "value": 10000},
+             {"id": "organic", "stage": "First action",
+              "label": "Organic click", "value": 5800},
+             {"id": "ad", "stage": "First action", "label": "Ad click",
+              "value": 1400},
+             {"id": "noclick", "stage": "First action", "label": "No click",
+              "value": 2800},
+             {"id": "satisfied", "stage": "Outcome", "label": "Satisfied",
+              "value": 6100},
+             {"id": "reformulated", "stage": "Outcome",
+              "label": "Reformulated", "value": 2700},
+             {"id": "abandoned", "stage": "Outcome", "label": "Abandoned",
+              "value": 1200}],
+            [{"src": "sessions", "dst": "organic", "value": 5800},
+             {"src": "sessions", "dst": "ad", "value": 1400},
+             {"src": "sessions", "dst": "noclick", "value": 2800},
+             {"src": "organic", "dst": "satisfied", "value": 4600},
+             {"src": "organic", "dst": "reformulated", "value": 1200},
+             {"src": "ad", "dst": "satisfied", "value": 700},
+             {"src": "ad", "dst": "reformulated", "value": 700},
+             {"src": "noclick", "dst": "satisfied", "value": 800},
+             {"src": "noclick", "dst": "reformulated", "value": 800},
+             {"src": "noclick", "dst": "abandoned", "value": 1200}],
+            focal=["sessions", "ad", "reformulated"],
+            unit="sessions",
+            title="Search sessions: first action to outcome",
+            desc=("Illustrative counts. Of 10,000 search sessions, 5,800 "
+                  "start with an organic click, 1,400 with an ad click and "
+                  "2,800 with no click. Half of the ad clicks (700 of 1,400) "
+                  "end in a reformulated query, against about one in five "
+                  "organic clicks (1,200 of 5,800). Of the no-click "
+                  "sessions, 800 end satisfied on the results page itself."),
+            out_path=out_dir / "sankey-search-sessions.svg"),
+        "treemap-serp.svg": treemap(
+            [{"label": "Organic results", "value": 7.42},
+             {"label": "Ads", "value": 2.91, "focal": True,
+              "sublabel": "top and bottom blocks"},
+             {"label": "Knowledge panel", "value": 1.84},
+             {"label": "Related searches", "value": 0.97},
+             {"label": "Navigation", "value": 0.61},
+             {"label": "Pagination", "value": 0.22}],
+            title="Fixation time by SERP region (illustrative)", unit=" s",
+            desc=("Illustrative treemap of mean fixation time per trial by "
+                  "search-results-page region, area proportional to time: "
+                  "organic results take about half of all fixation time "
+                  "(7.42 of 13.97 s), ads about a fifth (2.91 s), and the "
+                  "knowledge panel, related searches, navigation and "
+                  "pagination share the remaining quarter."),
+            out_path=out_dir / "treemap-serp.svg"),
+        "dendrogram-eye-movements.svg": dendrogram(
+            {"label": "Eye-movement events", "sublabel": "oculomotor record",
+             "children": [
+                 {"label": "Fixation", "sublabel": "gaze held", "children": [
+                     {"label": "Microsaccade", "focal": True},
+                     "Drift", "Tremor"]},
+                 {"label": "Saccade", "sublabel": "ballistic shift",
+                  "children": ["Reflexive", "Volitional"]},
+                 {"label": "Smooth pursuit", "sublabel": "tracks a target",
+                  "children": ["Open-loop", "Closed-loop"]},
+                 {"label": "Blink", "sublabel": "lid closure",
+                  "children": ["Spontaneous", "Reflex", "Voluntary"]}]},
+            title="Eye-movement events",
+            desc=("Taxonomy of eye-movement events in four classes: fixation, "
+                  "saccade, smooth pursuit and blink, each split into its "
+                  "subtypes. Fixation is not stillness: it contains three "
+                  "movements of its own, microsaccades, drift and tremor, and "
+                  "the microsaccade is the event under discussion."),
+            out_path=out_dir / "dendrogram-eye-movements.svg"),
         "heat-grid-dwell.svg": heat_grid(
             ["Position 1", "Position 2", "Position 3", "Position 4",
              "Position 5", "Position 6–10"],
@@ -117,6 +265,59 @@ def render_examples(out_dir: Path) -> dict[str, str]:
                   "is 588 ms and is excluded from the scale. Position 4 "
                   "local has no measurement."),
             out_path=out_dir / "heat-grid-dwell.svg"),
+        "cycle-experiment-icons.svg": cycle(
+            [{"label": "Observe", "icon": "observe"},
+             {"label": "Hypothesize", "icon": "idea"},
+             {"label": "Test", "icon": "test"},
+             {"label": "Measure", "icon": "measure"},
+             {"label": "Learn", "icon": "learn"}],
+            title="Experiment loop",
+            desc=("Clockwise five-step experiment loop: observe, hypothesize, "
+                  "test, measure, learn, then observe again. Each step has "
+                  "an icon that repeats its label."),
+            out_path=out_dir / "cycle-experiment-icons.svg"),
+        "cycle-agent-hub.svg": cycle(
+            [{"label": "Capture", "icon": "observe"},
+             {"label": "Research", "icon": "search"},
+             {"label": "Decide", "icon": "decide"},
+             {"label": "Act", "icon": "ship"},
+             {"label": "Measure", "icon": "chart"},
+             {"label": "Learn", "icon": "learn"}],
+            hub={"label": "Shared memory",
+                 "sublabel": "one record, every pass",
+                 "steps": ["Capture", "Decide", "Measure", "Learn"]},
+            title="Agent operating loop",
+            desc=("Clockwise six-step agent loop — capture, research, decide, "
+                  "act, measure, learn — around a shared memory. Capture, "
+                  "decide, measure and learn write back to the memory; "
+                  "research and act only read from it, so they have no "
+                  "write-back spoke."),
+            out_path=out_dir / "cycle-agent-hub.svg"),
+        "dag-serp-causal.svg": dag(
+            [{"id": "amb", "label": "Query ambiguity",
+              "sublabel": "intent entropy"},
+             {"id": "layout", "label": "SERP layout", "sublabel": "module mix"},
+             {"id": "ads", "label": "Ad density", "sublabel": "ads above fold"},
+             {"id": "dwell", "label": "Dwell time", "sublabel": "per result"},
+             {"id": "click", "label": "Click"},
+             {"id": "sat", "label": "Satisfaction",
+              "sublabel": "post-task survey"}],
+            [{"src": "amb", "dst": "dwell"},
+             {"src": "layout", "dst": "dwell"},
+             {"src": "dwell", "dst": "click"},
+             {"src": "ads", "dst": "click"},
+             {"src": "click", "dst": "sat"},
+             {"src": "sat", "dst": "amb", "back": True,
+              "label": "reformulation"}],
+            title="Causal model of SERP satisfaction",
+            desc=("Illustrative causal model, not a fitted one. Query "
+                  "ambiguity and SERP layout both drive dwell time; dwell "
+                  "time and ad density both drive the click; the click "
+                  "drives post-task satisfaction. One feedback edge: low "
+                  "satisfaction leads to a reformulated, differently "
+                  "ambiguous next query."),
+            out_path=out_dir / "dag-serp-causal.svg"),
+        "spectrum-palette-tritan.svg": _spectrum_palette_tritan(out_dir),
     }
 
 

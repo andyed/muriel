@@ -619,7 +619,7 @@ def _selftest() -> int:
         "radii":   {"sm": 4, "pill": 9999},
         "elevation": {"low": "0 1px 2px rgba(0,0,0,0.30)"},
         "motion": {
-            "duration_fast":   120,
+            "duration_fast":   100,
             "easing_default":  "cubic-bezier(0.2, 0.0, 0.2, 1.0)",
             "easing_linear":   "linear",
             "motion_preference": "respect-prefers-reduced-motion",
@@ -658,7 +658,7 @@ def _selftest() -> int:
     assert tokens["dimension"]["radius"]["pill"]["$value"] == "9999px"
 
     # duration + cubicBezier.
-    assert tokens["duration"]["fast"]["$value"] == "120ms"
+    assert tokens["duration"]["fast"]["$value"] == "100ms"
     assert tokens["cubicBezier"]["default"]["$value"] == [0.2, 0.0, 0.2, 1.0]
     assert tokens["cubicBezier"]["linear"]["$value"] == [0.0, 0.0, 1.0, 1.0]
 

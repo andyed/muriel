@@ -8,6 +8,100 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **Diagram icon library: 30 curated Lucide glyphs, and named icons on
+  `cycle`.** `muriel.tools.diagrams.icons.GLYPHS` maps process-verb and
+  concept slots (`observe`, `measure`, `decide`, `refresh`, `test`, `ship`,
+  `database`, `brain`, …; aliases like `eye`, `iterate`) to inner SVG markup
+  from `lucide-static` 1.48.0 (ISC). `scripts/build_diagram_icons.py`
+  fetches into a committed vendor cache, strips colour/stroke attributes,
+  rewrites primitives as `<path>` so the label and contrast checks cannot
+  mistake a glyph for a container, and writes `glyphs.py` deterministically
+  (`--check` for CI). A cycle step's `icon` now takes a slot name (unknown
+  names raise with close matches) or raw markup as before; icons scale from
+  the brand's `[iconography] default_size` and `stroke_px`, sit above a
+  16 px step number instead of on top of it, and are `aria-hidden`.
+  Example: `cycle-experiment-icons.svg`.
+
+- **`cycle(hub=…)` — shared state the steps write back to.** One inverted
+  central node (label + sublabel, measured and wrapped) with dashed,
+  neutral write-back spokes from every step or a named subset, drawn beneath
+  the nodes; the ring grows when the hub would crowd the spokes or arcs.
+  Exclusive with `center=`. Docstring and `channels/diagrams.md` carry the
+  precondition (one durable store every spoked step reads or writes) and
+  anti-prescriptions. Adapted from diagram-design's Loop type. Example:
+  `cycle-agent-hub.svg`.
+
+- **`comparison_pair` diagram generator.** One item set under exactly two
+  states. Numeric values draw a slopegraph: two axes on one declared, shared
+  scale, values and a signed delta printed at the ends, one weighted focal
+  line, and labels that spread apart with leader ticks while the endpoints
+  stay exact. Status words draw a trace pair that marks the first divergence.
+  Budgets: 2–10 items (slope), 3–6 rules (trace), exactly two states.
+  Examples: `comparison-pair-serp.svg`, `comparison-pair-trace.svg`.
+- **The motion duration binary is scoped to transitions, with sequence
+  timing.** `muriel.motion.validate_duration(ms, kind="transition")` holds
+  transitions (interpolated change of position, opacity, size, color) to
+  ≤100 ms or ≥1500 ms. `kind="hold"`, `"spring"` and `"press"` are exempt,
+  each with a one-line reason in `EXEMPTION_REASONS` and polish-rules.md; a
+  hold given `after_transition_ms` must still be ≥ that transition.
+  `validate_spring(bounce, stiffness)` checks spring physics instead of the
+  emergent duration (bounce stays 0). `validate_sequence_timing(steps,
+  transition_ms, hold_ms, mode)` checks a stepped sequence and caps a timed
+  `reveal` at `SEQUENCE_MAX_MS` (8000 ms of holds, so 5 steps at 1500 ms); a
+  `step` sequence is user-driven and has no total. New constants
+  `STEP_TRANSITION_MS` = 100, `STEP_HOLD_MS` = 1500, and
+  `StyleGuide.to_css_vars()` emits `--<prefix>motion-transition: 100ms` /
+  `--<prefix>motion-hold: 1500ms`.
+
+- **Uncanny-duration doc audit.** `muriel.motion.scan_duration_literals` /
+  `untagged_uncanny_literals` find ms, s, range, TOML `duration_* =` and JS
+  `duration: 0.3` literals. `tests/test_motion.py` fails on any 101–1499 ms
+  literal in the compose docs that lacks a `motion-exempt:
+  hold|spring|press|not-motion` tag, and checks itself against a planted
+  fixture. `not-motion` covers latency budgets, reaction times, event rates
+  and cited counterexamples.
+
+- **`muriel.tools.diagrams.sankey` — conserved magnitude flow across 2–3
+  stages.** Validates before drawing (equal stage totals, in = out per node,
+  adjacent-stage flows, ≤8 nodes / ≤12 flows) and raises with the numbers;
+  one px-per-unit scale for every bar and ribbon, per-flow slices stacked by
+  the other end's position, midline-control ribbons written as polylines so
+  `muriel diagram-check` can verify the contrast under every label, one
+  accent path named in a legend, `data-value` on every bar and ribbon, JSON
+  CLI. Example: `sankey-search-sessions.svg`; conservation is recomputed from
+  the file in `tests/test_diagram_sankey.py`.
+- **`muriel.tools.diagrams.treemap` — squarified part-of-whole treemap,
+  the first native member of the hierarchy family.** 4–8 cells (more raises;
+  `max_cells=` collapses the tail into a named "Other"), 4px gutters with a
+  weight correction that holds every cell's drawn area within 4% relative
+  error of its share, `data-value`/`data-share` on every cell, and measured
+  label tiers (large / medium / small / sliver) with a legend for every part
+  whose value is not printed in place. Never clips, floors, rotates, resizes
+  for a label, or drops a cell. Example: `examples/diagrams/treemap-serp.svg`.
+- **`dendrogram`: tree / hierarchy diagram generator.**
+  `muriel.tools.diagrams.dendrogram(tree, orientation="down"|"right", …)`
+  draws a nested `{label, sublabel, focal, children}` tree as a contour-based
+  tidy tree: parents centred on their first and last child, no subtree
+  overlap, ranks evenly spaced and never skipped, at most two box widths, and
+  elbow-bus connectors with no diagonals. Budget is 4 levels, 5 children per
+  node and a measured leaf-axis extent; `collapse_over=` folds overflow
+  siblings into a `+N more` node. A node shared by two parents raises (use
+  `dag`), and so does a tree that never branches. Nodes carry `data-depth`.
+  Example: `dendrogram-eye-movements.svg`.
+- **`dag`: causal / dependency DAG diagram generator.**
+  `muriel.tools.diagrams.dag(nodes, edges, direction="down"|"right", …)` ranks
+  nodes by longest-path depth. It orders each rank with barycenter sweeps and
+  adjacent swaps, deterministic by input order. Edges are routed as orthogonal
+  `r=8` elbows, each horizontal jog on its own track between ranks, so no
+  connector passes behind a box it does not connect; attach points on one side
+  are ≥12px apart. Nodes with two or more inputs get an `N in` badge. One edge
+  may be marked `back=True` and is drawn as a dashed accent loop around the
+  stack. A forward cycle raises and names the cycle, as do unknown ids,
+  self-loops, over-budget specs (9 nodes, 14 edges, 4 ranks, 1 back-edge) and
+  single-parent (tree) data, which has an `allow_tree=True` escape. Nodes carry
+  `data-rank`; edges carry `data-src` / `data-dst`. Example:
+  `dag-serp-causal.svg`.
+
 - **`heat_grid`: comparison heat-grid diagram generator.**
   `muriel.tools.diagrams.heat_grid(rows, cols, values, …)` draws 3–7 × 3–8
   cells of one unsigned quantity on a single ink opacity ramp, quantized to a
@@ -18,6 +112,16 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   `data-value`. With printed values, the ramp ceiling is solved per brand so
   every label clears 8:1 on its composited cell. Example:
   `heat-grid-dwell.svg`.
+
+- **`spectrum`: items on one shared scale between two named poles.**
+  `muriel.tools.diagrams.spectrum(items, scale=…)` draws 1–10 rows as points
+  or as start → end dumbbells (`range_kind="change"`: hollow start, filled
+  end, arrowhead; `"extent"`: a min–max span). Positions are exact and
+  checked to 0.5px; values outside the scale raise, and a scale that excludes
+  zero raises until `zero=True` or `zero=False` is chosen. Sort by input,
+  value or signed change, with the order printed under the axis; optional
+  delta column (`pts` for `%`). Rows carry `data-value` / `data-start` /
+  `data-end`. Example: `spectrum-palette-tritan.svg`.
 
 - **`muriel diagram-export --strict`: SVG-1.1 colours for PowerPoint-class
   importers.** `strict_svg()` rewrites `rgba()`, `transparent` and
@@ -42,11 +146,10 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   `muriel.tools.diagrams.__all__` is missing from `channels/diagrams.md`; the
   Scrutinizer overlays are now documented.
 
-### Fixed (diagrams)
-
 - **Venn counts get a measured contrast ratio.** Sets are emitted as real
   `<circle>` elements instead of Bézier region paths, so `diagram-check`
   scores every count (lowest 8.53:1) instead of failing them as unverified.
+
 - **Decorative pattern textures** (`DotField`, `FlowField`, `Grain`) emit
   `aria-hidden="true" focusable="false"`.
 
@@ -171,6 +274,25 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- **Motion defaults moved to the two ends of the binary.**
+  `styleguide.Motion` and both example brand TOMLs: `duration_fast` 120 →
+  100, `duration_normal` 240 → 100, `duration_slow` 480 → 1500,
+  `duration_reveal` 800 → 1500 (`duration_instant` stays 0). Docs follow:
+  polish rule 11 enter 400 ms → 100 ms with a 100 ms stagger (hero words 80
+  → 100 ms); rule 12 exit 150 ms → 100 ms; rule 13's CSS cross-fade fallback
+  at 100 ms; rule 18's exit "linear under 150 ms" → "≤ 100 ms"; charts rule 18
+  "200–500ms" → 100 ms for data-update transitions, ≥1500 ms for narrative
+  reveals; FUI stagger 80–200 / 120 ms → 100 ms and the scaffold's
+  `--mg-duration-reveal` 800 → 1500 ms; hover transitions in muriel-brand.md
+  (0.2s) and katex.md (.3s) → 0.1s. Rule 13's spring `duration: 0.3` and rule
+  14's 150 ms press stay, tagged exempt.
+
+- **One `motion_reduce_policy` vocabulary.** `muriel.motion.REDUCE_POLICIES`
+  (`collapse-to-zero`, `keep-fast`, `keep-linear`) is shared by
+  `styleguide.A11y` and polish rule 20. `reduce`, the name rule 20 used, is
+  accepted as an alias of `keep-fast`; the loader stores the canonical name
+  and warns, without failing, on an unknown value.
+
 - **`contrast.audit_svg` reads SVG presentation attributes.** It previously
   parsed only `<style>` CSS, so on muriel's own diagram SVGs, which colour
   text with `fill="…"`, it found no text and reported a clean audit. It now
@@ -191,6 +313,11 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   rows barely overlap, fatal for a pile.
 
 ### Fixed
+
+- **`cycle`: a wrapped label above the ring no longer lands on its node.**
+  Lines stacked downward from the anchor, so the top step's second line hit
+  its own circle; centred labels above the ring now grow upward.
+  Single-line labels are unchanged.
 
 - **`pyramid(proportional=True)` was not proportional.** Widths were
   `min_w + (max_w − min_w) · v/vmax`, a 160 px floor under every bar, so the

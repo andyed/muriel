@@ -50,7 +50,7 @@ all      = [
 muriel = "muriel.__main__:main"
 
 [tool.setuptools]
-packages = ["muriel", "muriel.detectors", "muriel.diagrams", "muriel.math", "muriel.tools", "muriel.uipromax", "render_assets"]
+packages = ["muriel", "muriel.detectors", "muriel.diagrams", "muriel.math", "muriel.tools", "muriel.tools.diagrams", "muriel.tools.diagrams.icons", "muriel.uipromax", "render_assets"]
 
 [tool.setuptools.package-data]
 # Ship the Node bridges + npm manifests with the package. The npm
@@ -62,3 +62,5 @@ packages = ["muriel", "muriel.detectors", "muriel.diagrams", "muriel.math", "mur
 # The ui-ux-pro-max corpus: verbatim MIT CSVs + their license (see
 # muriel/uipromax/__init__.py and THIRD_PARTY_NOTICES.md).
 "muriel.uipromax" = ["data/*.csv", "LICENSE.txt"]
+# Lucide license travels with the glyphs derived from it (ISC; see THIRD_PARTY_NOTICES.md).
+"muriel.tools.diagrams.icons" = ["vendor/lucide/LICENSE*"]

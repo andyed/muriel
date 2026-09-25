@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="dag-serp-causal-title dag-serp-causal-desc" viewBox="0 0 780.0 592.0" width="780.0" height="592.0" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
+<title id="dag-serp-causal-title">Causal model of SERP satisfaction</title>
+<desc id="dag-serp-causal-desc">Illustrative causal model, not a fitted one. Query ambiguity and SERP layout both drive dwell time; dwell time and ad density both drive the click; the click drives post-task satisfaction. One feedback edge: low satisfaction leads to a reformulated, differently ambiguous next query.</desc>
+<defs><marker id="dag-serp-causal-arrow" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 z" fill="rgba(176, 176, 196, 0.70)"/></marker><marker id="dag-serp-causal-arrow-back" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 z" fill="#7dd4e4"/></marker></defs>
+<rect width="780.0" height="592.0" fill="#0a0a0f"/>
+<text x="48" y="48" fill="#e6e4d2" font-size="20" font-weight="600" text-anchor="start">Causal model of SERP satisfaction</text>
+<path d="M 129.1 168.0 L 129.1 186.0 Q 129.1 194.0 137.1 194.0 L 229.4 194.0 Q 237.4 194.0 237.4 202.0 L 237.4 231.0" fill="none" stroke="rgba(176, 176, 196, 0.70)" stroke-width="1.25" marker-end="url(#dag-serp-causal-arrow)" data-src="amb" data-dst="dwell"/>
+<path d="M 329.1 168.0 L 329.1 198.0 Q 329.1 206.0 321.1 206.0 L 298.8 206.0 Q 290.8 206.0 290.8 214.0 L 290.8 231.0" fill="none" stroke="rgba(176, 176, 196, 0.70)" stroke-width="1.25" marker-end="url(#dag-serp-causal-arrow)" data-src="layout" data-dst="dwell"/>
+<path d="M 264.1 288.0 L 264.1 306.0 Q 264.1 314.0 272.1 314.0 L 326.4 314.0 Q 334.4 314.0 334.4 322.0 L 334.4 351.0" fill="none" stroke="rgba(176, 176, 196, 0.70)" stroke-width="1.25" marker-end="url(#dag-serp-causal-arrow)" data-src="dwell" data-dst="click"/>
+<path d="M 529.1 168.0 L 529.1 224.0 Q 529.1 232.0 529.1 240.0 L 529.1 280.0 Q 529.1 288.0 529.1 296.0 L 529.1 318.0 Q 529.1 326.0 521.1 326.0 L 395.8 326.0 Q 387.8 326.0 387.8 334.0 L 387.8 351.0" fill="none" stroke="rgba(176, 176, 196, 0.70)" stroke-width="1.25" marker-end="url(#dag-serp-causal-arrow)" data-src="ads" data-dst="click"/>
+<path d="M 361.1 408.0 L 361.1 471.0" fill="none" stroke="rgba(176, 176, 196, 0.70)" stroke-width="1.25" marker-end="url(#dag-serp-causal-arrow)" data-src="click" data-dst="sat"/>
+<path d="M 361.1 528.0 L 361.1 536.0 Q 361.1 544.0 369.1 544.0 L 629.1 544.0 Q 637.1 544.0 637.1 536.0 L 637.1 104.0 Q 637.1 96.0 629.1 96.0 L 136.6 96.0 Q 129.1 96.0 129.1 103.5 L 129.1 111.0" fill="none" stroke="#7dd4e4" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#dag-serp-causal-arrow-back)" data-src="sat" data-dst="amb" data-back="true"/>
+<text x="645.1" y="323.2" fill="#7dd4e4" font-size="11" text-anchor="start">reformulation</text>
+<g data-id="amb" data-rank="0">
+<rect x="49.1" y="112.0" width="160.0" height="56.0" rx="6" fill="#0a0a0f"/>
+<rect x="49.1" y="112.0" width="160.0" height="56.0" rx="6" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.30)" stroke-width="1"/>
+<text x="129.1" y="136.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Query ambiguity</text>
+<text x="129.1" y="152.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">intent entropy</text>
+</g>
+<g data-id="layout" data-rank="0">
+<rect x="249.1" y="112.0" width="160.0" height="56.0" rx="6" fill="#0a0a0f"/>
+<rect x="249.1" y="112.0" width="160.0" height="56.0" rx="6" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.30)" stroke-width="1"/>
+<text x="329.1" y="136.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">SERP layout</text>
+<text x="329.1" y="152.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">module mix</text>
+</g>
+<g data-id="ads" data-rank="0">
+<rect x="449.1" y="112.0" width="160.0" height="56.0" rx="6" fill="#0a0a0f"/>
+<rect x="449.1" y="112.0" width="160.0" height="56.0" rx="6" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.30)" stroke-width="1"/>
+<text x="529.1" y="136.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Ad density</text>
+<text x="529.1" y="152.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">ads above fold</text>
+</g>
+<g data-id="dwell" data-rank="1">
+<rect x="184.1" y="232.0" width="160.0" height="56.0" rx="6" fill="#0a0a0f"/>
+<rect x="184.1" y="232.0" width="160.0" height="56.0" rx="6" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.30)" stroke-width="1"/>
+<text x="264.1" y="256.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Dwell time</text>
+<text x="264.1" y="272.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">per result</text>
+<rect x="307.1" y="237.0" width="32.0" height="14" rx="2" fill="#0a0a0f" stroke="rgba(230, 228, 210, 0.14)" stroke-width="1"/>
+<text x="323.1" y="247.5" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="middle">2 in</text>
+</g>
+<g data-id="click" data-rank="2">
+<rect x="281.1" y="352.0" width="160.0" height="56.0" rx="6" fill="#0a0a0f"/>
+<rect x="281.1" y="352.0" width="160.0" height="56.0" rx="6" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.30)" stroke-width="1"/>
+<text x="361.1" y="383.8" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Click</text>
+<rect x="404.1" y="357.0" width="32.0" height="14" rx="2" fill="#0a0a0f" stroke="rgba(230, 228, 210, 0.14)" stroke-width="1"/>
+<text x="420.1" y="367.5" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="middle">2 in</text>
+</g>
+<g data-id="sat" data-rank="3">
+<rect x="281.1" y="472.0" width="160.0" height="56.0" rx="6" fill="#0a0a0f"/>
+<rect x="281.1" y="472.0" width="160.0" height="56.0" rx="6" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.30)" stroke-width="1"/>
+<text x="361.1" y="496.0" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Satisfaction</text>
+<text x="361.1" y="512.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">post-task survey</text>
+</g>
+</svg>
