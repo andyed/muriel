@@ -68,7 +68,7 @@ Ordered by how often each structure carries a real argument in research, product
 | 3 | **Comparison pair** | Same items under exactly two states on one shared scale — the smallest Tufte small-multiple. | **Shipped** — `muriel.tools.diagrams.comparison_pair` (slopegraph; trace pair for status words) |
 | 4 | Phase / funnel | Sequential narrowing; later phases are subsets of earlier. | **Shipped** — `muriel.tools.diagrams.pyramid` (`orientation="down"`) |
 | 5 | Layered stack | Higher layers depend on / abstract over lower; reading direction encodes hierarchy. | **Shipped** — `muriel.tools.diagrams.layer_stack` |
-| 6 | Causal DAG | What causes what; arrow direction is load-bearing. | Queued |
+| 6 | **Causal DAG** | What causes what; arrow direction is load-bearing, and at least one node has two parents. | **Shipped** — `muriel.tools.diagrams.dag` |
 | 7 | Venn / Euler | Categorical intersection; area-proportional. | **Shipped** — `muriel.tools.venn` |
 | 8 | Spectrum | Position between two poles is the encoding. | Queued |
 | 9 | Pyramid | Each level depends on the one below; apex is rare or important. | **Shipped** — `muriel.tools.diagrams.pyramid` (`orientation="up"`) |
@@ -90,7 +90,7 @@ Several diagram forms have an existing home elsewhere in muriel. The native gene
 | Sequence / interaction | — | **Mermaid** `sequenceDiagram` via `mmdc` ([`svg.md`](svg.md)). Prefer Mermaid; only port to native SVG if a paper figure forbids the Mermaid aesthetic. |
 | State machine | — | **Mermaid** `stateDiagram-v2`. Same call. |
 | ER / data model | — | **Mermaid** `erDiagram`. Same call. |
-| Flowchart / generic DAG | — | **Mermaid** `flowchart` today; native **causal DAG** is queued (catalog #6) for when arrow-direction is the load-bearing claim. |
+| Flowchart / generic DAG | causal DAG (`dag`) | **Mermaid** `flowchart` for a general flowchart. The native [causal DAG](#causal--dependency-dag) is for when arrow direction is the load-bearing claim and a node has two parents. |
 | Timeline | — | **ECharts** time-axis + band overlays ([`echarts.md`](../vocabularies/echarts.md)), the `svg.md` OSEC phase diagram, or the infographics **Timeline** template ([`infographics.md`](infographics.md)). All predate this channel. |
 | Single-actor process flow | swimlane (degenerate) | infographics **Process** template — lighter when there are no lanes. Use swimlane only when ownership/handoffs are the argument. |
 | Tree / org-chart | **`dendrogram`** (static tree; hierarchy family, unweighted) | **ECharts** `tree` series when the tree must collapse/expand interactively, or the infographics **Hierarchical** template for a quick doc graphic. |
@@ -100,7 +100,7 @@ Several diagram forms have an existing home elsewhere in muriel. The native gene
 
 Rule of thumb: **Mermaid** for node-link relational diagrams (sequence, state, ER, flowchart), **ECharts** when the diagram is data-driven or interactive (timeline, tree, treemap, sunburst), and **this channel** when the output is a static editorial SVG whose geometry encodes a specific rhetorical claim.
 
-**Pending decision — a transcode route.** For sequence, state, ER, and flowchart the table offers two routes: render as Mermaid, or port to native SVG when a paper figure forbids the Mermaid look. A middle route is under consideration: extract the structure from the Mermaid source (nodes, edges, direction, labels), then redraw it by hand in muriel tokens under the [global budget](#budget-and-callouts-for-hand-drawn-diagrams) — or through the causal DAG generator once it ships. This is **not shipped and not decided**; it is the open question in [`TODO.md`](../../../../../TODO.md)'s diagram-design re-survey item. Until it is settled, the two existing routes stand. (Idea from diagram-design's Mermaid importer, MIT.)
+**Pending decision — a transcode route.** For sequence, state, ER, and flowchart the table offers two routes: render as Mermaid, or port to native SVG when a paper figure forbids the Mermaid look. A middle route is under consideration: extract the structure from the Mermaid source (nodes, edges, direction, labels), then redraw it by hand in muriel tokens under the [global budget](#budget-and-callouts-for-hand-drawn-diagrams) — or through the [causal DAG generator](#causal--dependency-dag), which now exists. The transcode route itself is **not shipped and not decided**; it is the open question in [`TODO.md`](../../../../../TODO.md)'s diagram-design re-survey item. Until it is settled, the two existing routes stand. (Idea from diagram-design's Mermaid importer, MIT.)
 
 When the Mermaid diagram is rendered into an **HTML page** (not exported to a flat SVG) and it's large enough to render unreadable, wrap it in the [zoom/pan/expand shell](#mermaid-in-html--the-zoompanexpand-shell) below — a complex flowchart squeezed into a fixed column is illegible without it.
 
@@ -384,6 +384,7 @@ comparison_pair(
 - The story is position on one continuous scale, not change between states → **spectrum**.
 - Items with no shared scale → a **table**. A slope between unlike units means nothing.
 - Don't nudge endpoints to make room. Crowded labels mean the values are close, which is part of the data.
+
 ## Sankey
 
 ```python
@@ -507,6 +508,47 @@ The **hierarchy family's** unweighted member. The tree is nested dicts `{label, 
 - If the leaf proportions matter, use `treemap` (or a sunburst). When leaf weights are roughly equal, area carries no signal and the tree reads faster.
 - One path with no branching is a process: use `swimlane` or the infographics Process template. The generator refuses a tree that never branches.
 
+## Causal / dependency DAG
+
+```python
+from muriel.tools.diagrams import dag
+
+dag(
+    nodes=[
+        {"id": "amb",    "label": "Query ambiguity", "sublabel": "intent entropy"},
+        {"id": "layout", "label": "SERP layout",     "sublabel": "module mix"},
+        {"id": "ads",    "label": "Ad density",      "sublabel": "ads above fold"},
+        {"id": "dwell",  "label": "Dwell time",      "sublabel": "per result"},
+        {"id": "click",  "label": "Click"},
+        {"id": "sat",    "label": "Satisfaction",    "sublabel": "post-task survey"},
+    ],
+    edges=[
+        {"src": "amb",    "dst": "dwell"},
+        {"src": "layout", "dst": "dwell"},
+        {"src": "dwell",  "dst": "click"},
+        {"src": "ads",    "dst": "click"},
+        {"src": "click",  "dst": "sat"},
+        {"src": "sat",    "dst": "amb", "back": True, "label": "reformulation"},
+    ],
+    direction="down",          # or "right"
+    title="Causal model of SERP satisfaction",
+    out_path="examples/diagrams/dag-serp-causal.svg",
+)
+```
+
+**Nodes** are dicts `{"id", "label", "sublabel", "focal"}` (or bare id strings). **Edges** are dicts `{"src", "dst", "label", "back"}` (or `(src, dst)` pairs). Each node's rank is its **longest-path depth** from the sources. Within a rank, nodes are ordered by a barycenter heuristic plus adjacent swaps to reduce crossings. Ties break by input order, so one spec always renders one file. Connectors are orthogonal elbows with `r=8` corners, and every horizontal jog gets its own track in the channel between ranks, so no connector passes behind a box it does not connect. An edge spanning several ranks drops through a gap between boxes. Attach points on one box side are ≥12px apart. A node with two or more inputs carries an `N in` badge. Nodes are emitted as `<g data-id data-rank>` and edges as `<path data-src data-dst>`, for scripted inspection.
+
+**Validation raises, naming the problem:** unknown ids, self-loops, duplicate edges, and a cycle among forward edges (the message spells out the cycle, e.g. `a → b → c → a`). A loop may be drawn only as **one** edge marked `back=True`. That edge must close a real cycle; it is drawn dashed in the accent around the outside of the stack, and it is the figure's one accent, so it cannot be combined with `focal`. **Budget:** ≤9 nodes, ≤14 edges, ≤4 ranks, ≤1 back-edge. Going over raises with split guidance: overview plus detail, split at a hub node, or collapse a leaf cluster. An edge `label` sits beside the connector's source end, on whichever side no other connector uses; if neither side is free the call raises instead of overprinting.
+
+**Precondition gate.** If every node has at most one parent and there is no back-edge, the data is a tree, and `dag` raises. The message suggests a dendrogram, or a process/swimlane for a single chain. Pass `allow_tree=True` only when arrow direction is itself the claim.
+
+**Anti-prescriptions** (also in the docstring):
+
+- Single-parent hierarchy → dendrogram / hierarchy. A DAG layout implies a convergence the data doesn't have.
+- Linear sequence → process or swimlane.
+- Edges that mean association ("correlates with") are not arrows. Use a matrix, a heat grid, or a list of pairs.
+- One feedback loop at most. Two loops compete and neither reads, so split the figure.
+
 ## Design discipline
 
 The generators bake in the editorial-diagram discipline that keeps SVG from reading as AI-generated SmartArt:
@@ -594,6 +636,7 @@ Both examples below render to `examples/diagrams/`:
 - [`sankey-search-sessions.svg`](../examples/diagrams/sankey-search-sessions.svg) — illustrative search-session counts, query → first action → outcome; the accent path is ad click → reformulated (half of ad clicks, against one in five organic clicks), and the no-click → satisfied ribbon shows good abandonment as its own volume.
 - [`dendrogram-eye-movements.svg`](../examples/diagrams/dendrogram-eye-movements.svg) — a four-class eye-movement taxonomy with subtypes; the tree is honest because every subtype has one parent and no leaf weight is claimed. The accent is on one critical leaf, the microsaccade.
 - [`heat-grid-dwell.svg`](../examples/diagrams/heat-grid-dwell.svg) — mean fixation dwell by SERP position × query intent (**illustrative values, not measured data**); the focal cell sits outside the scale, and one crossing with no measurement is drawn as n/a.
+- [`dag-serp-causal.svg`](../examples/diagrams/dag-serp-causal.svg) — an **illustrative** causal model of SERP satisfaction. Dwell time and the click each have two parents, which is what a tree or swimlane cannot draw. Ad density reaches the click through a gap in the dwell-time rank, and the one feedback edge (satisfaction → query ambiguity, via reformulation) runs dashed around the outside.
 
 ## Mermaid in HTML — the zoom/pan/expand shell
 

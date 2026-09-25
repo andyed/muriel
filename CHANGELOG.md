@@ -65,6 +65,19 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   siblings into a `+N more` node. A node shared by two parents raises (use
   `dag`), and so does a tree that never branches. Nodes carry `data-depth`.
   Example: `dendrogram-eye-movements.svg`.
+- **`dag`: causal / dependency DAG diagram generator.**
+  `muriel.tools.diagrams.dag(nodes, edges, direction="down"|"right", …)` ranks
+  nodes by longest-path depth. It orders each rank with barycenter sweeps and
+  adjacent swaps, deterministic by input order. Edges are routed as orthogonal
+  `r=8` elbows, each horizontal jog on its own track between ranks, so no
+  connector passes behind a box it does not connect; attach points on one side
+  are ≥12px apart. Nodes with two or more inputs get an `N in` badge. One edge
+  may be marked `back=True` and is drawn as a dashed accent loop around the
+  stack. A forward cycle raises and names the cycle, as do unknown ids,
+  self-loops, over-budget specs (9 nodes, 14 edges, 4 ranks, 1 back-edge) and
+  single-parent (tree) data, which has an `allow_tree=True` escape. Nodes carry
+  `data-rank`; edges carry `data-src` / `data-dst`. Example:
+  `dag-serp-causal.svg`.
 
 - **`heat_grid`: comparison heat-grid diagram generator.**
   `muriel.tools.diagrams.heat_grid(rows, cols, values, …)` draws 3–7 × 3–8

@@ -15,6 +15,7 @@ from muriel.tools.diagrams import (
     comparison_pair,
     cycle,
     dendrogram,
+    dag,
     engine_sectors_overlay,
     foveal_overlay,
     heat_grid,
@@ -107,6 +108,9 @@ GENERATORS = {
         ["r1", "r2", "r3"], ["c1", "c2", "c3"],
         [[1, 2, 3], [4, None, 6], [7, 8, 9]], focal=(2, 2),
         title="Heat grid", out_path=out),
+    "dag": lambda out: dag(
+        ["a", "b", "c", "d"], [("a", "c"), ("b", "c"), ("c", "d")],
+        title="DAG", out_path=out),
     "venn_single": _venn_single,
     "venn_panels": _venn_panels,
     "wavefield": _wavefield,
