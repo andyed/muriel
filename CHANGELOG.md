@@ -8,6 +8,15 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`muriel.tools.diagrams.treemap` — squarified part-of-whole treemap,
+  the first native member of the hierarchy family.** 4–8 cells (more raises;
+  `max_cells=` collapses the tail into a named "Other"), 4px gutters with a
+  weight correction that holds every cell's drawn area within 4% relative
+  error of its share, `data-value`/`data-share` on every cell, and measured
+  label tiers (large / medium / small / sliver) with a legend for every part
+  whose value is not printed in place. Never clips, floors, rotates, resizes
+  for a label, or drops a cell. Example: `examples/diagrams/treemap-serp.svg`.
+
 - **Diagram SVGs carry an accessible-figure contract, and `muriel
   diagram-check` enforces it.** Every generator in `muriel.tools.diagrams`
   (matrix, cycle, layer_stack, pyramid, swimlane, foveal_overlay,

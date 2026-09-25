@@ -74,6 +74,7 @@ Ordered by how often each structure carries a real argument in research, product
 | 9 | Pyramid | Each level depends on the one below; apex is rare or important. | **Shipped** — `muriel.tools.diagrams.pyramid` (`orientation="up"`) |
 | 10 | Comparison heat-grid | Dense `n × m` comparison; small multiples for categorical evals. | Queued |
 | 11 | Swimlane | Cross-functional process; the handoffs between actors are the point. | **Shipped** — `muriel.tools.diagrams.swimlane` |
+| 12 | **Treemap** | One whole split into 4–8 disjoint parts; area is each part's share. Hierarchy family, one level. | **Shipped** — `muriel.tools.diagrams.treemap` |
 
 **Explicitly excluded.** Process arrows, list-with-chevrons, interconnected blocks, radial gear cosmetics, target-with-concentric-rings as decoration. If a SmartArt category exists only to ornament a list, this channel will never ship it.
 
@@ -92,6 +93,7 @@ Several diagram forms have an existing home elsewhere in muriel. The native gene
 | Single-actor process flow | swimlane (degenerate) | infographics **Process** template — lighter when there are no lanes. Use swimlane only when ownership/handoffs are the argument. |
 | Tree / org-chart | — | **ECharts** `tree` series (interactive) or the infographics **Hierarchical** template. |
 | Nested hierarchy (proportional) | — | Queued **hierarchy family** — sunburst / treemap / dendrogram (see [`TODO.md`](../../../../../TODO.md) #45), ECharts-backed. |
+| Part-of-whole, one level (4–8 parts) | **`treemap`** — hierarchy family, shipped | **ECharts** `treemap` when the reader needs drill-down or more than one level. Native `treemap` does not nest yet. |
 | Magnitude flow | — | Queued **Sankey** primitive ([`TODO.md`](../../../../../TODO.md) #44). |
 
 Rule of thumb: **Mermaid** for node-link relational diagrams (sequence, state, ER, flowchart), **ECharts** when the diagram is data-driven or interactive (timeline, tree, treemap, sunburst), and **this channel** when the output is a static editorial SVG whose geometry encodes a specific rhetorical claim.
@@ -297,6 +299,40 @@ Reach for this only when ownership is the argument — see [the provider table](
 - Don't draw lanes you can't label — an unlabeled lane is a row with no actor; collapse it.
 - Don't let a step span two lanes — every step has one owner. Shared ownership is a process smell, not a diagram feature.
 - Don't snake the flow — if arrows backtrack to read in order, re-sequence the steps so progression runs forward.
+
+## Treemap
+
+```python
+from muriel.tools.diagrams import treemap
+
+treemap(
+    cells=[
+        {"label": "Organic results",  "value": 7.42},
+        {"label": "Ads",              "value": 2.91, "focal": True,
+         "sublabel": "top and bottom blocks"},
+        {"label": "Knowledge panel",  "value": 1.84},
+        {"label": "Related searches", "value": 0.97, "short": "Related"},
+        {"label": "Navigation",       "value": 0.61},
+        {"label": "Pagination",       "value": 0.22},
+    ],
+    unit=" s",
+    title="Fixation time by SERP region (illustrative)",
+    desc="Organic results take about half of all fixation time; ads a fifth.",
+    out_path="examples/diagrams/treemap-serp.svg",
+)
+```
+
+**Cells** is 4–8 dicts `{"label", "value", "focal", "sublabel", "short"}`, any order; they are drawn largest first in a **squarified** layout (Bruls, Huizing & van Wijk 2000), which keeps cells near-square so areas compare by eye. Values must be finite and positive — a zero or negative part raises rather than vanishing. More than 8 cells raises unless you pass `max_cells=` (4–8), which collapses the smallest parts into one cell named `other_label` (default `"Other"`) and lists what it absorbed in the default `<desc>` and in `data-members`. Nesting (a second level) is not supported yet.
+
+**Area is the only encoding, and it is checked.** Cells sit 4px apart; because a gutter takes a larger bite out of a small cell than a large one, the layout corrects its weights until every cell's drawn area is within 4% *relative* error of its true share (`tests/test_diagram_treemap.py`; the committed example is within 0.01%). Every cell rect carries `data-value` and `data-share`, so the check reads the file, not the arithmetic.
+
+**Label tiers** are picked per cell by measured fit, 16px in from the top-left: *large* — name, then `value · share`; *medium* — name and value; *small* — the name alone (or `short`); *sliver* — no text, only a locator dot if the cell is at least 12×12px. Every part whose value isn't printed in its cell gets a legend line under the plot with its name, value, share and, for a sliver, where it sits. Labels are never rotated and a cell is never resized to fit its label. Fill is a neutral ink ramp by rank (strongest on the largest); the one `focal` cell takes the accent tint and stroke. Name and value colours are chosen by computed contrast against every composited fill, so text clears 8:1 on light and dark brands alike.
+
+**Anti-prescriptions** (also in the docstring):
+
+- Don't use a treemap when the values are roughly equal — uniform area carries no signal. Use a list, or a dendrogram if the structure is the point. The generator warns when the largest value is within 25% of the smallest.
+- Don't use a treemap for parts that don't sum to a meaningful whole (overlapping categories, rates, independent measurements). Use a bar chart.
+- If several parts are only legible in the legend, the data wants a bar chart; the generator warns at three slivers.
 
 ## Design discipline
 
