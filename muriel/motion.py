@@ -19,6 +19,40 @@ Either the animation is invisible — the user processes it as instant
 Everything else reads as lag and dilutes both modes. Axium ships this
 as a stated policy; muriel adopts it as a check.
 
+What the binary governs (owner decision, 2026-09-24)
+----------------------------------------------------
+The binary governs **transitions**: an interpolated change of position,
+opacity, size, or color. ``validate_duration(ms)`` defaults to
+``kind="transition"`` and enforces it. Three kinds are exempt, each for a
+stated reason:
+
+* ``"hold"`` — a pause between steps is not motion; nothing interpolates,
+  so there is no lag to perceive. It must still be ≥ the transition it
+  follows (pass ``after_transition_ms``), or the next step starts before
+  the last one has landed.
+* ``"spring"`` — the duration emerges from physics parameters, so the
+  number is an output, not a choice. Validate the parameters instead
+  (:func:`validate_spring`: bounce stays ``0``, polish rule 13).
+* ``"press"`` — direct-manipulation feedback is coupled to the input; it
+  is a response, not a scheduled animation (polish rule 14's
+  ``scale(0.96)`` press, rule 20's touch opacity dip).
+
+Sequences (step-through and timed reveals) use
+:data:`STEP_TRANSITION_MS` (100) between states and :data:`STEP_HOLD_MS`
+(1500) on each state. :func:`validate_sequence_timing` checks both and caps
+a timed reveal at :data:`SEQUENCE_MAX_MS` (8000 ms total hold), so a reveal
+at 1500 ms holds runs at most 5 steps. A ``"step"`` sequence is
+user-driven and has no total.
+
+Token mapping
+-------------
+``muriel.styleguide.Motion`` defaults sit on the two ends:
+``duration_instant`` 0, ``duration_fast`` / ``duration_normal`` → 100
+(utility transitions), ``duration_slow`` / ``duration_reveal`` → 1500
+(cinematic). ``StyleGuide.to_css()`` also emits
+``--<prefix>motion-transition`` / ``--<prefix>motion-hold`` from the
+step constants (:data:`MOTION_CSS_TOKENS`).
+
 Beyond duration — property, easing, scale
 -----------------------------------------
 Duration is one axis. These three orthogonal axes are paraphrased from the
@@ -55,6 +89,9 @@ Usage
     validate_duration(80)     # OK — utility
     validate_duration(2000)   # OK — cinematic
     validate_duration(300)    # raises MotionPolicyError — uncanny zone
+    validate_duration(300, kind="press")                          # OK — exempt
+    validate_duration(1500, kind="hold", after_transition_ms=100)  # OK
+    validate_sequence_timing(5, 100, 1500, mode="reveal")         # OK — 7500 ms
 
     validate_properties(["transform", "opacity"])  # OK
     validate_properties("top")                     # raises MotionPropertyError
@@ -80,6 +117,21 @@ __all__ = [
     "is_uncanny",
     "classify",
     "validate_duration",
+    # Scope of the binary: transition vs exempt kinds; sequence timing.
+    "DURATION_KINDS",
+    "EXEMPT_KINDS",
+    "EXEMPTION_REASONS",
+    "STEP_TRANSITION_MS",
+    "STEP_HOLD_MS",
+    "SEQUENCE_MAX_MS",
+    "SEQUENCE_MODES",
+    "MOTION_CSS_TOKENS",
+    "validate_spring",
+    "validate_sequence_timing",
+    # prefers-reduced-motion response vocabulary.
+    "REDUCE_POLICIES",
+    "REDUCE_POLICY_ALIASES",
+    "normalize_reduce_policy",
     # Emil-inspired axes (orthogonal to the duration binary).
     "MotionPropertyError",
     "COMPOSITOR_SAFE_PROPERTIES",
@@ -131,20 +183,150 @@ def classify(ms: float) -> str:
     return "uncanny"
 
 
-def validate_duration(ms: float) -> None:
-    """Raise ``MotionPolicyError`` if ``ms`` is in the uncanny zone.
+# ─── Scope: which durations the binary governs ─────────────────────────────
 
-    Negative durations raise ``ValueError`` (not a motion-policy
-    violation — those are nonsense).
+DURATION_KINDS: tuple[str, ...] = ("transition", "hold", "spring", "press")
+"""Every kind :func:`validate_duration` accepts. Only ``transition`` is binary."""
+
+EXEMPTION_REASONS: dict[str, str] = {
+    "hold": "a pause between steps is not motion; it must be >= the transition it follows",
+    "spring": "duration emerges from physics params; validate stiffness/bounce, not duration",
+    "press": "direct-manipulation feedback is coupled to input, not a scheduled animation",
+}
+"""One-line reason per exempt kind. Mirrored in polish-rules.md (motion scope)."""
+
+EXEMPT_KINDS = frozenset(EXEMPTION_REASONS)
+
+STEP_TRANSITION_MS: int = UTILITY_MS
+"""Transition between two states of a sequence (utility end of the binary)."""
+
+STEP_HOLD_MS: int = CINEMATIC_MS
+"""Hold on each state of a timed sequence (cinematic end of the binary)."""
+
+SEQUENCE_MAX_MS: int = 8000
+"""Cap on total hold time for a timed ``reveal``: 5 steps at 1500 ms."""
+
+SEQUENCE_MODES: tuple[str, ...] = ("step", "reveal")
+
+MOTION_CSS_TOKENS: dict[str, str] = {
+    "motion-transition": f"{STEP_TRANSITION_MS}ms",
+    "motion-hold": f"{STEP_HOLD_MS}ms",
+}
+"""CSS custom properties (unprefixed names) emitted by ``StyleGuide.to_css``."""
+
+
+def validate_duration(
+    ms: float,
+    kind: str = "transition",
+    *,
+    after_transition_ms: float | None = None,
+) -> None:
+    """Raise ``MotionPolicyError`` if a ``transition`` is in the uncanny zone.
+
+    ``kind`` scopes the rule (see module docstring): ``"transition"`` is
+    held to the binary; ``"hold"``, ``"spring"``, ``"press"`` are exempt
+    (:data:`EXEMPTION_REASONS`). A ``"hold"`` given ``after_transition_ms``
+    must be ≥ that transition. Negative durations raise ``ValueError``
+    (not a motion-policy violation — those are nonsense), as does an
+    unknown ``kind``.
     """
+    if kind not in DURATION_KINDS:
+        raise ValueError(f"unknown duration kind {kind!r}; expected one of {DURATION_KINDS}")
     if ms < 0:
         raise ValueError(f"negative duration {ms}ms")
+    if kind == "hold":
+        if after_transition_ms is not None and ms < after_transition_ms:
+            raise MotionPolicyError(
+                f"hold {ms}ms is shorter than the {after_transition_ms}ms transition "
+                "it follows; the next step would start before this one lands."
+            )
+        return
+    if kind in EXEMPT_KINDS:
+        return
     if is_uncanny(ms):
         raise MotionPolicyError(
             f"{ms}ms is in the uncanny middle "
             f"({UTILITY_MS + 1}–{CINEMATIC_MS - 1}ms). "
             f"Pick utility (≤{UTILITY_MS}ms) or cinematic (≥{CINEMATIC_MS}ms)."
         )
+
+
+def validate_spring(bounce: float = 0.0, stiffness: float | None = None) -> None:
+    """Validate a spring by its physics, not its emergent duration.
+
+    ``bounce`` must be ``0`` (polish rule 13: bounce > 0 reads as
+    gimmicky). ``stiffness``, when given, must be finite and positive.
+    """
+    if bounce != 0:
+        raise MotionPolicyError(f"spring bounce {bounce} must be 0 (polish rule 13)")
+    if stiffness is not None and not (0 < stiffness < float("inf")):
+        raise ValueError(f"spring stiffness {stiffness} must be finite and > 0")
+
+
+def validate_sequence_timing(
+    steps: int,
+    transition_ms: float = STEP_TRANSITION_MS,
+    hold_ms: float = STEP_HOLD_MS,
+    mode: str = "step",
+) -> int | None:
+    """Validate a stepped sequence; return total hold ms for a reveal.
+
+    * ``transition_ms`` is a transition — held to the binary.
+    * ``hold_ms`` is exempt from the binary but must be ≥ ``transition_ms``.
+    * ``mode="reveal"`` (timed, auto-advancing): ``steps * hold_ms`` must be
+      ≤ :data:`SEQUENCE_MAX_MS`. ``mode="step"`` is user-driven — no total,
+      returns ``None``.
+    """
+    if mode not in SEQUENCE_MODES:
+        raise ValueError(f"unknown sequence mode {mode!r}; expected one of {SEQUENCE_MODES}")
+    if isinstance(steps, bool) or not isinstance(steps, int) or steps < 1:
+        raise ValueError(f"steps must be a positive int, got {steps!r}")
+    validate_duration(transition_ms, "transition")
+    validate_duration(hold_ms, "hold", after_transition_ms=transition_ms)
+    if mode == "step":
+        return None
+    total = int(steps * hold_ms)
+    if total > SEQUENCE_MAX_MS:
+        max_steps = int(SEQUENCE_MAX_MS // hold_ms) if hold_ms else steps
+        raise MotionPolicyError(
+            f"timed reveal holds {steps} x {hold_ms:g}ms = {total}ms, over the "
+            f"{SEQUENCE_MAX_MS}ms cap; at {hold_ms:g}ms holds a reveal caps at "
+            f"{max_steps} steps. Split it, or make it user-stepped (mode='step')."
+        )
+    return total
+
+
+# ─── prefers-reduced-motion response vocabulary ────────────────────────────
+#
+# One vocabulary for ``[a11y].motion_reduce_policy`` (styleguide.A11y) and
+# polish-rules.md rule 20. The code names are canonical; ``reduce`` is the
+# name polish-rules used before 2026-09-24 and stays accepted as an alias.
+
+REDUCE_POLICIES: dict[str, str] = {
+    "collapse-to-zero": "every duration to 0; state changes are instant (default)",
+    "keep-fast": "keep utility (<=100ms) opacity fades, transforms to identity, "
+                 "drop cinematic and decorative motion",
+    "keep-linear": "keep opacity fades at their durations with linear easing, "
+                   "transforms to identity, drop decorative motion",
+}
+
+REDUCE_POLICY_ALIASES: dict[str, str] = {"reduce": "keep-fast"}
+
+
+def normalize_reduce_policy(value: str) -> str:
+    """Return the canonical ``motion_reduce_policy`` for ``value``.
+
+    Resolves aliases (``reduce`` → ``keep-fast``). Raises ``ValueError`` on
+    an unknown policy.
+    """
+    key = str(value).strip().lower()
+    key = REDUCE_POLICY_ALIASES.get(key, key)
+    if key not in REDUCE_POLICIES:
+        raise ValueError(
+            f"unknown motion_reduce_policy {value!r}; expected one of "
+            f"{sorted(REDUCE_POLICIES)} (aliases: {REDUCE_POLICY_ALIASES})"
+        )
+    return key
 
 
 # ─── Motion quality axes (Emil-inspired; see module docstring) ─────────────
@@ -310,6 +492,26 @@ def _selftest() -> int:
     else:
         check("negative raises ValueError", False, "did not raise")
 
+    # ── Scope: exempt kinds + sequence timing ──
+    validate_duration(300, "press")
+    validate_duration(300, "spring")
+    validate_duration(1500, "hold", after_transition_ms=100)
+    try:
+        validate_duration(50, "hold", after_transition_ms=100)
+    except MotionPolicyError:
+        pass
+    else:
+        check("hold shorter than its transition raises", False, "did not raise")
+    check("reveal of 5 at 1500 ok",
+          validate_sequence_timing(5, 100, 1500, "reveal") == 7500)
+    try:
+        validate_sequence_timing(6, 100, 1500, "reveal")
+    except MotionPolicyError:
+        pass
+    else:
+        check("reveal of 6 at 1500 raises", False, "did not raise")
+    check("reduce aliases keep-fast", normalize_reduce_policy("reduce") == "keep-fast")
+
     # ── Emil-inspired axes ──
     # Property selection.
     check("transform is compositor-safe", is_compositor_safe("transform"))
@@ -366,6 +568,10 @@ def _format_policy() -> str:
         f"utility   : 0 – {UTILITY_MS} ms     (snappy, sub-perceptual)\n"
         f"cinematic : {CINEMATIC_MS} ms +   (slow, intentional, narrative)\n"
         f"uncanny   : {UTILITY_MS + 1} – {CINEMATIC_MS - 1} ms  (forbidden — reads as lag)\n"
+        "scope     : transitions only; exempt kinds —\n"
+        + "".join(f"            {k:<6} {r}\n" for k, r in EXEMPTION_REASONS.items())
+        + f"sequence  : transition {STEP_TRANSITION_MS} ms, hold {STEP_HOLD_MS} ms, "
+        f"timed reveal <= {SEQUENCE_MAX_MS} ms total hold\n"
         "\n"
         "quality axes (Emil-inspired, orthogonal to duration)\n"
         "----------------------------------------------------\n"

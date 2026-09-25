@@ -230,21 +230,22 @@ A drawer using keyframes for open/close snaps on rapid toggling. A drawer using 
 
 Don't animate a single container. Break enters into semantic chunks and stagger:
 
-- Title → description → CTA buttons, ~100ms between groups.
-- For hero titles, consider splitting into individual words at ~80ms stagger.
+- Title → description → CTA buttons, 100 ms between groups.
+- For hero titles, consider splitting into individual words at the same 100 ms stagger.
 - Combine `opacity` + `translateY(12px)` + `filter: blur(4px)` for the enter effect.
+- Each chunk's enter is a **transition** — 100 ms, the utility end of the duration binary (was 400 ms, which sits in the uncanny band). The stagger is a **hold**, start to start, and is ≥ the transition it follows, so each chunk lands before the next begins. For a slow, narrative entrance, go to the cinematic end (≥ 1500 ms) instead — never between.
 
 ```css
-.stagger-item { opacity: 0; transform: translateY(12px); filter: blur(4px); animation: fadeInUp 400ms ease-out forwards; }
-.stagger-item:nth-child(1) { animation-delay:   0ms; }
-.stagger-item:nth-child(2) { animation-delay: 100ms; }
-.stagger-item:nth-child(3) { animation-delay: 200ms; }
+.stagger-item { --stagger: 100ms; opacity: 0; transform: translateY(12px); filter: blur(4px); animation: fadeInUp 100ms ease-out forwards; }
+.stagger-item:nth-child(1) { animation-delay: calc(0 * var(--stagger)); }
+.stagger-item:nth-child(2) { animation-delay: calc(1 * var(--stagger)); }
+.stagger-item:nth-child(3) { animation-delay: calc(2 * var(--stagger)); }
 @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); filter: blur(0); } }
 ```
 
 ### 12. Subtle exit animations
 
-Exits should be quieter than enters — the user's focus is already moving to the next thing. Small fixed `translateY(-12px)` over `150ms` ease-in, not a full-height slide-out. Exception: when spatial context matters (a card returning to a list, a drawer to a screen edge), slide the full distance.
+Exits should be quieter than enters — the user's focus is already moving to the next thing. Small fixed `translateY(-12px)` over `100ms` ease-in, not a full-height slide-out. An exit is a transition, so it takes the utility end of the binary (was 150 ms); it is quieter by distance and easing, not by a slower clock. Exception: when spatial context matters (a card returning to a list, a drawer to a screen edge), slide the full distance.
 
 Never remove the exit entirely — popping out of existence loses the user's place.
 
@@ -255,9 +256,9 @@ When icons appear/disappear contextually (hover toolbars, state-change toggles),
 - `scale`: `0.25` → `1` (never `0.5`, never `0.6`)
 - `opacity`: `0` → `1`
 - `filter`: `blur(4px)` → `blur(0px)`
-- Motion: `{ type: "spring", duration: 0.3, bounce: 0 }` — **bounce must be `0`**, never `0.1` or higher
+- Motion: `{ type: "spring", duration: 0.3, bounce: 0 }` <!-- motion-exempt: spring --> — **bounce must be `0`**, never `0.1` or higher. A spring's duration is an output of its physics, so it is exempt from the duration binary; `muriel.motion.validate_spring` checks the bounce instead
 
-If the project has `motion`/`framer-motion` in `package.json`, use `AnimatePresence` with these values. If not, keep both icons in the DOM (one absolutely positioned, one in flow) and cross-fade via CSS transitions with `cubic-bezier(0.2, 0, 0, 1)` — don't add a motion dependency just for icon swaps.
+If the project has `motion`/`framer-motion` in `package.json`, use `AnimatePresence` with these values. If not, keep both icons in the DOM (one absolutely positioned, one in flow) and cross-fade via CSS transitions at 100 ms with `cubic-bezier(0.2, 0, 0, 1)` (a CSS cross-fade is a transition, not a spring — it takes the binary) — don't add a motion dependency just for icon swaps.
 
 The exact values are tuned: smaller scale values feel jarring, bounce > 0 reads as gimmicky, opacity-only feels lifeless.
 
@@ -266,9 +267,11 @@ The exact values are tuned: smaller scale values feel jarring, bounce > 0 reads 
 A subtle scale-down on click gives buttons tactile feedback. Always `scale(0.96)`. **Anything below `0.95` reads as exaggerated** — past that threshold the button feels like it's collapsing rather than depressing.
 
 ```css
-.button { transition-property: scale; transition-duration: 150ms; transition-timing-function: ease-out; }
+.button { transition-property: scale; transition-duration: 150ms; transition-timing-function: ease-out; } /* motion-exempt: press */
 .button:active { scale: 0.96; }
 ```
+
+Press feedback is exempt from the duration binary: it is coupled to the input, a response rather than a scheduled animation (`muriel.motion.validate_duration(ms, kind="press")`).
 
 Not every button needs this. Provide a `static` prop on the button component to disable scale for cases where the motion would be distracting (form submits inside dense layouts, primary-action buttons that already have other feedback).
 
@@ -298,7 +301,21 @@ Two coupled performance rules:
 
 ## Motion axes — easing, scale, budget
 
-Rules 18–22 cover the axes rules 10–16 leave open. Paraphrased from All-The-Vibes/ATV-Design's `emil-design-eng-inspired` (MIT). `muriel.motion` enforces the mechanical ones — `validate_properties`, `easing_for`, `validate_scale`. muriel's duration **binary** (`muriel.motion`: utility ≤ 100 ms / cinematic ≥ 1500 ms) deliberately overrides the source's 100–500 ms bands — don't import those.
+Rules 18–22 cover the axes rules 10–16 leave open. Paraphrased from All-The-Vibes/ATV-Design's `emil-design-eng-inspired` (MIT). `muriel.motion` enforces the mechanical ones — `validate_properties`, `easing_for`, `validate_scale`. muriel's duration **binary** (`muriel.motion`: utility ≤ 100 ms / cinematic ≥ 1500 ms) deliberately overrides the source's 100–500 ms bands <!-- motion-exempt: not-motion (cited counterexample) --> — don't import those.
+
+### Motion scope — what the binary governs
+
+The binary governs **transitions**: an interpolated change of position, opacity, size, or color. Everything in rules 11, 12, 18 and the reduced-motion dial is a transition and takes 100 ms or ≥ 1500 ms. Three kinds are exempt, each with a reason (`muriel.motion.EXEMPTION_REASONS`):
+
+| Kind | Why it is exempt | What is checked instead |
+|---|---|---|
+| **hold** | A pause between steps is not motion; nothing interpolates. | Must be ≥ the transition it follows. A stagger is a hold, start to start. |
+| **spring** | The duration emerges from physics parameters; it is an output, not a choice. | Stiffness / bounce — bounce stays `0` (rule 13). |
+| **press** | Direct-manipulation feedback is coupled to the input; a response, not a scheduled animation. | Scale (rule 14), and the touch opacity dip (rule 20). |
+
+Sequences use `STEP_TRANSITION_MS` (100) between states and `STEP_HOLD_MS` (1500) on each state; a timed reveal caps at `SEQUENCE_MAX_MS` (8000 ms of holds, so 5 steps at 1500 ms). A user-stepped sequence has no total. `muriel.motion.validate_sequence_timing(steps, transition_ms, hold_ms, mode)` checks all three. CSS: `--mg-motion-transition: 100ms`, `--mg-motion-hold: 1500ms` from `StyleGuide.to_css_vars()`.
+
+In these docs, a duration literal strictly between 100 and 1500 ms must carry an exemption tag on its line — `<!-- motion-exempt: hold|spring|press|not-motion -->` in prose, `/* motion-exempt: … */` in CSS, `# motion-exempt: …` in TOML. `not-motion` covers measurements that are not animation durations (latency budgets, reaction times, event rates, cited counterexamples). `tests/test_motion.py` fails on an untagged one.
 
 ### 18. Easing curve follows direction
 
@@ -307,7 +324,7 @@ The curve encodes the physical model the user applies to the motion. Pick by whe
 | Direction | Curve | Why |
 |---|---|---|
 | Entering / user-triggered (modal mount, toast in, click response) | `ease-out` | decelerates to rest — catches up to where the user expects it |
-| Leaving (modal dismiss, toast out) | `ease-in`, or linear under 150 ms | accelerates away; exit is less load-bearing |
+| Leaving (modal dismiss, toast out) | `ease-in`, or linear at ≤ 100 ms | accelerates away; exit is less load-bearing |
 | Repositioning on-screen / system-scheduled (list reorder, reflow) | `ease-in-out` | accelerates from one rest position, decelerates into the next |
 
 **Never `ease-in` for an entrance** — acceleration-on-appear reads as the element *avoiding* the user. `muriel.motion.easing_for("enter"|"exit"|"move")` returns the curve.
@@ -322,9 +339,15 @@ Distinct from press feedback (rule 14). A mounting modal/popover scales `0.95 �
 @media (hover: hover) and (pointer: fine) { .card:hover { /* … */ } }
 ```
 
-An unconditional `:hover` fires on tap on touch devices and sticks until the next tap ("stuck hover"). On touch there's no hover preview, so the press itself must carry weight — pair the `:active` scale (rule 14) with a brief opacity dip (`0.85` for ~80 ms).
+An unconditional `:hover` fires on tap on touch devices and sticks until the next tap ("stuck hover"). On touch there's no hover preview, so the press itself must carry weight — pair the `:active` scale (rule 14) with a brief opacity dip (`0.85` for ~80 ms) — press feedback, exempt from the binary like rule 14.
 
-**Reduced motion is a dial, not a kill switch.** `prefers-reduced-motion: reduce` means "don't parallax/slide me across the viewport," not "freeze everything." muriel brands pick the response via `[a11y].motion_reduce_policy`: the default `collapse-to-zero`, or the softer `reduce` (shorten to ~100 ms, drop transforms to identity, keep opacity). Either way, decorative/background motion goes.
+**Reduced motion is a dial, not a kill switch.** `prefers-reduced-motion: reduce` means "don't parallax/slide me across the viewport," not "freeze everything." muriel brands pick the response via `[a11y].motion_reduce_policy` (vocabulary in `muriel.motion.REDUCE_POLICIES`, shared with `muriel.styleguide.A11y`):
+
+- `collapse-to-zero` (default) — every duration to 0; state changes are instant.
+- `keep-fast` — keep utility (≤ 100 ms) opacity fades, drop transforms to identity, drop cinematic motion. `reduce`, the name this rule used before 2026-09-24, is accepted as an alias.
+- `keep-linear` — keep opacity fades at their durations with linear easing, drop transforms to identity.
+
+Whichever policy applies, decorative/background motion goes.
 
 ### 21. One load-bearing motion per interaction
 
@@ -381,8 +404,8 @@ If a screen fails these, the fix is composition (rules 23–26), not more micro-
 | Same border radius on parent and child | `outer = inner + padding` |
 | Icons look off-center | Optical adjustment (icon-side padding −2px, or fix SVG directly) |
 | Hard 1px borders for elevation | Three-layer `box-shadow` |
-| Jarring enter animations | Split into semantic chunks, stagger at ~100ms |
-| Dramatic exit animations | Small `translateY(-12px)`, `150ms` ease-in |
+| Jarring enter animations | Split into semantic chunks, 100ms enters, stagger at 100ms |
+| Dramatic exit animations | Small `translateY(-12px)`, `100ms` ease-in |
 | Icon swaps that pop without animation | `scale 0.25→1` + `opacity 0→1` + `blur 4px→0`, spring `bounce: 0` |
 | Buttons with no press feedback | `scale(0.96)` on `:active`, never below `0.95` |
 | Numbers that shift layout as they update | `font-variant-numeric: tabular-nums` |
@@ -415,8 +438,9 @@ Before declaring a UI surface done, walk through these:
 - [ ] Images carry a subtle `1px` inset outline
 - [ ] Text over translucent/blurred surfaces uses local per-line plates (computed for 8:1 over the brightest backdrop), not a panel-wide dark scrim
 - [ ] Interactive elements have ≥40×40px hit area (no overlapping hit areas)
-- [ ] Enter animations are split + staggered (~100ms between groups)
-- [ ] Exit animations are subtle (small `translateY`, shorter duration than enter)
+- [ ] Enter animations are split + staggered (100ms enters, 100ms between groups)
+- [ ] Exit animations are subtle (small `translateY`, 100ms — quieter by distance, not a slower clock)
+- [ ] Every transition is 100ms or ≥1500ms; any literal strictly between those is a tagged hold / spring / press
 - [ ] Contextual icon swaps use the canonical `scale 0.25→1` + `opacity` + `blur` recipe with `bounce: 0`
 - [ ] Buttons have `scale(0.96)` on press (with `static` opt-out where appropriate)
 - [ ] Default-state elements don't animate on page load (`initial={false}`)
