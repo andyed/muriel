@@ -14,6 +14,8 @@ Catalog (MVP):
     pyramid(tiers, *, orientation, ...)        → 4–6 tier pyramid / funnel.
     swimlane(lanes, steps, ...)                → cross-functional process
                                                   with per-actor lanes + handoffs.
+    heat_grid(rows, cols, values, ...)         → rows × columns comparison of an
+                                                  unsigned quantity (opacity ramp).
     foveal_overlay(*, verbosity, ...)          → Scrutinizer's UI overlay
                                                   (svg-overlay.js port: fovea
                                                   + parafovea + uniform grid).
@@ -36,10 +38,12 @@ from muriel.tools.diagrams.cycle import cycle
 from muriel.tools.diagrams.layer_stack import layer_stack
 from muriel.tools.diagrams.pyramid import pyramid
 from muriel.tools.diagrams.swimlane import swimlane
+from muriel.tools.diagrams.heat_grid import heat_grid
 from muriel.tools.diagrams.foveal_overlay import foveal_overlay
 from muriel.tools.diagrams.engine_sectors_overlay import engine_sectors_overlay
 
 __all__ = [
     "matrix", "cycle", "layer_stack", "pyramid", "swimlane",
     "foveal_overlay", "engine_sectors_overlay",
+    "heat_grid",
 ]
