@@ -120,6 +120,14 @@ __all__ = [
 ]
 
 
+# DotField / FlowField / Grain are decorative textures: they carry no
+# information a screen reader should announce, so their root is hidden
+# from the accessibility tree (and from keyboard focus in old IE/Edge SVG).
+# lint_a11y skips an aria-hidden root. WaveField is different — it takes a
+# title/desc and is emitted as role="img".
+_DECORATIVE = 'aria-hidden="true" focusable="false"'
+
+
 class PatternError(ValueError):
     """Raised when pattern parameters are inconsistent or out of range."""
 
@@ -205,7 +213,7 @@ class DotField:
             '<svg xmlns="http://www.w3.org/2000/svg" '
             f'viewBox="{_fmt(cv.x0)} {_fmt(cv.y0)} '
             f'{_fmt(cv.width)} {_fmt(cv.height)}" '
-            'preserveAspectRatio="xMidYMid meet">'
+            'preserveAspectRatio="xMidYMid meet" ' + _DECORATIVE + '>'
         ]
         if bg:
             out.append(
@@ -245,7 +253,7 @@ class FlowField:
             '<svg xmlns="http://www.w3.org/2000/svg" '
             f'viewBox="{_fmt(cv.x0)} {_fmt(cv.y0)} '
             f'{_fmt(cv.width)} {_fmt(cv.height)}" '
-            'preserveAspectRatio="xMidYMid meet">'
+            'preserveAspectRatio="xMidYMid meet" ' + _DECORATIVE + '>'
         ]
         if bg:
             out.append(
@@ -309,7 +317,7 @@ class Grain:
             '<svg xmlns="http://www.w3.org/2000/svg" '
             f'viewBox="{_fmt(cv.x0)} {_fmt(cv.y0)} '
             f'{_fmt(cv.width)} {_fmt(cv.height)}" '
-            'preserveAspectRatio="xMidYMid meet">'
+            'preserveAspectRatio="xMidYMid meet" ' + _DECORATIVE + '>'
         ]
         out.append("  <defs>")
         pat_id = f"grain-{self.seed}-{n}"

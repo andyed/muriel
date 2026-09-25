@@ -103,3 +103,30 @@ def test_wavefield_svg_rejects_invalid_render_parameters():
         field.svg(fill_opacity=1.1)
     with pytest.raises(PatternError):
         field.svg(stroke_width=-1)
+
+
+@pytest.mark.parametrize("build", [
+    lambda: __import__("muriel.patterns", fromlist=["dots"]).dots(
+        CANVAS, radius=40, seed=3),
+    lambda: __import__("muriel.patterns", fromlist=["flow"]).flow(
+        CANVAS, density=40, seed=3),
+    lambda: __import__("muriel.patterns", fromlist=["grain"]).grain(
+        CANVAS, cell=4, tile_cells=8, seed=3),
+], ids=["dots", "flow", "grain"])
+def test_decorative_textures_are_hidden_from_assistive_tech(build):
+    import xml.etree.ElementTree as ET
+
+    from muriel.tools.diagrams._a11y import lint_a11y
+    svg = build().svg()
+    root = ET.fromstring(svg)
+    assert root.get("aria-hidden") == "true"
+    assert root.get("focusable") == "false"
+    assert root.get("role") is None
+    assert root.find("{http://www.w3.org/2000/svg}title") is None
+    # decorative by declaration, so the figure contract does not apply
+    assert lint_a11y(svg) == []
+
+
+def test_wavefield_is_not_hidden():
+    svg = wavefield(CANVAS, layers=2).svg(title="Waves")
+    assert 'aria-hidden' not in svg and 'role="img"' in svg
