@@ -28,6 +28,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
 from muriel.tools.diagrams.cycle import cycle  # noqa: E402
+from muriel.tools.diagrams.dag import dag  # noqa: E402
 from muriel.tools.diagrams.heat_grid import heat_grid  # noqa: E402
 from muriel.tools.diagrams.layer_stack import layer_stack  # noqa: E402
 from muriel.tools.diagrams.matrix import matrix  # noqa: E402
@@ -117,6 +118,30 @@ def render_examples(out_dir: Path) -> dict[str, str]:
                   "is 588 ms and is excluded from the scale. Position 4 "
                   "local has no measurement."),
             out_path=out_dir / "heat-grid-dwell.svg"),
+        "dag-serp-causal.svg": dag(
+            [{"id": "amb", "label": "Query ambiguity",
+              "sublabel": "intent entropy"},
+             {"id": "layout", "label": "SERP layout", "sublabel": "module mix"},
+             {"id": "ads", "label": "Ad density", "sublabel": "ads above fold"},
+             {"id": "dwell", "label": "Dwell time", "sublabel": "per result"},
+             {"id": "click", "label": "Click"},
+             {"id": "sat", "label": "Satisfaction",
+              "sublabel": "post-task survey"}],
+            [{"src": "amb", "dst": "dwell"},
+             {"src": "layout", "dst": "dwell"},
+             {"src": "dwell", "dst": "click"},
+             {"src": "ads", "dst": "click"},
+             {"src": "click", "dst": "sat"},
+             {"src": "sat", "dst": "amb", "back": True,
+              "label": "reformulation"}],
+            title="Causal model of SERP satisfaction",
+            desc=("Illustrative causal model, not a fitted one. Query "
+                  "ambiguity and SERP layout both drive dwell time; dwell "
+                  "time and ad density both drive the click; the click "
+                  "drives post-task satisfaction. One feedback edge: low "
+                  "satisfaction leads to a reformulated, differently "
+                  "ambiguous next query."),
+            out_path=out_dir / "dag-serp-causal.svg"),
     }
 
 

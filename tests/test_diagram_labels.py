@@ -161,6 +161,7 @@ def _render_examples(tmp_path):
     "swimlane-release.svg", "layers-tcpip.svg", "funnel-q2.svg",
     "cycle-evolver.svg", "matrix-sat-opt.svg",
     "heat-grid-dwell.svg",
+    "dag-serp-causal.svg",
 ])
 def test_committed_example_is_byte_identical(tmp_path, name):
     """Growth is conditional: a diagram that fits is rendered unchanged."""

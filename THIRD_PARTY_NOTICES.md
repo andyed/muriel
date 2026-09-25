@@ -82,6 +82,18 @@ Two verification ideas were adapted from the same repository (upstream commit
   `scripts/verify-heatmap.py`'s `data-row` / `data-col` / `data-value` binding
   and monotone-fill check (±0.03). The per-brand ramp-ceiling solve for 8:1
   value labels, the quantized stepped legend and the n/a cells are muriel's.
+- **Causal / dependency DAG** — `muriel/tools/diagrams/dag.py` takes from
+  `references/type-dependency.md` the ranked layers (120px pitch), the
+  160×56 `rx=6` node box, the `N in` fan-in badge in a small `rx=2` box, the
+  budget (9 nodes, 14 edges, 4 ranks, 1 highlighted cycle), the single dashed
+  `5,4` accent back-edge routed around the outside of the stack, and the
+  tree-shaped-data anti-pattern. It takes from SKILL.md's connector rules the
+  orthogonal elbows with `r=8` corners, attach points ≥12px apart on a shared
+  side, no transit behind a non-endpoint box, and drawing edges before nodes.
+  The layout algorithm (longest-path ranking, barycenter ordering with
+  adjacent swaps, isotonic-regression placement, per-channel jog tracks), the
+  forward-cycle and tree-precondition errors, and the single-accent rule
+  (upstream allows two) are muriel's.
 
 The code is muriel's own (ElementTree rather than the source's `HTMLParser`,
 and wired into `muriel diagram-check`); no source files were copied.
