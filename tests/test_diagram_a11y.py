@@ -18,6 +18,7 @@ from muriel.tools.diagrams import (
     layer_stack,
     matrix,
     pyramid,
+    sankey,
     swimlane,
 )
 from muriel.tools.diagrams._a11y import TITLE_MAX, fit_title, lint_a11y, slugify
@@ -83,6 +84,13 @@ GENERATORS = {
     "venn_single": _venn_single,
     "venn_panels": _venn_panels,
     "wavefield": _wavefield,
+    "sankey": lambda out: sankey(
+        ["In", "Out"],
+        [{"id": "a", "stage": 0, "value": 3}, {"id": "b", "stage": 0, "value": 1},
+         {"id": "x", "stage": 1, "value": 2}, {"id": "y", "stage": 1, "value": 2}],
+        [{"src": "a", "dst": "x", "value": 2}, {"src": "a", "dst": "y", "value": 1},
+         {"src": "b", "dst": "y", "value": 1}],
+        focal=["a", "x"], title="Sankey", out_path=out),
 }
 
 

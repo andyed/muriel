@@ -73,6 +73,15 @@ Two verification ideas were adapted from the same repository (upstream commit
   test in `agents/muriel-critique.md`, paraphrase `references/semantic-patterns.md`,
   `references/output-spec.md`, `references/primitive-annotation.md`, and the
   skill's SKILL.md.
+- **Sankey conventions** (adapted 2026-09-24) — `muriel/tools/diagrams/sankey.py`
+  follows `references/type-sankey.md` for the 12px node bar, one global
+  px-per-unit scale, midline Bézier control points, the single accent path
+  painted last, column-specific label placement and the 3-stage / 8-node /
+  12-flow budget; `tests/test_diagram_sankey.py` checks the invariants named in
+  `scripts/verify-sankey.py` (conservation, stage totals, ribbon width
+  constancy, relative value fidelity, square-on arrival). Bars are not rounded
+  to the 4px grid, sub-4px flows raise rather than fold, and ribbons are
+  written as flattened polylines so the contrast audit can score the labels.
 
 The code is muriel's own (ElementTree rather than the source's `HTMLParser`,
 and wired into `muriel diagram-check`); no source files were copied.

@@ -8,6 +8,16 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`muriel.tools.diagrams.sankey` — conserved magnitude flow across 2–3
+  stages.** Validates before drawing (equal stage totals, in = out per node,
+  adjacent-stage flows, ≤8 nodes / ≤12 flows) and raises with the numbers;
+  one px-per-unit scale for every bar and ribbon, per-flow slices stacked by
+  the other end's position, midline-control ribbons written as polylines so
+  `muriel diagram-check` can verify the contrast under every label, one
+  accent path named in a legend, `data-value` on every bar and ribbon, JSON
+  CLI. Example: `sankey-search-sessions.svg`; conservation is recomputed from
+  the file in `tests/test_diagram_sankey.py`.
+
 - **Diagram SVGs carry an accessible-figure contract, and `muriel
   diagram-check` enforces it.** Every generator in `muriel.tools.diagrams`
   (matrix, cycle, layer_stack, pyramid, swimlane, foveal_overlay,

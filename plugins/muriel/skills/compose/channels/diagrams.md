@@ -74,6 +74,7 @@ Ordered by how often each structure carries a real argument in research, product
 | 9 | Pyramid | Each level depends on the one below; apex is rare or important. | **Shipped** — `muriel.tools.diagrams.pyramid` (`orientation="up"`) |
 | 10 | Comparison heat-grid | Dense `n × m` comparison; small multiples for categorical evals. | Queued |
 | 11 | Swimlane | Cross-functional process; the handoffs between actors are the point. | **Shipped** — `muriel.tools.diagrams.swimlane` |
+| 12 | **Sankey** | A conserved quantity splits and merges across 2–3 stages; ribbon thickness is the magnitude. | **Shipped** — `muriel.tools.diagrams.sankey` |
 
 **Explicitly excluded.** Process arrows, list-with-chevrons, interconnected blocks, radial gear cosmetics, target-with-concentric-rings as decoration. If a SmartArt category exists only to ornament a list, this channel will never ship it.
 
@@ -92,7 +93,7 @@ Several diagram forms have an existing home elsewhere in muriel. The native gene
 | Single-actor process flow | swimlane (degenerate) | infographics **Process** template — lighter when there are no lanes. Use swimlane only when ownership/handoffs are the argument. |
 | Tree / org-chart | — | **ECharts** `tree` series (interactive) or the infographics **Hierarchical** template. |
 | Nested hierarchy (proportional) | — | Queued **hierarchy family** — sunburst / treemap / dendrogram (see [`TODO.md`](../../../../../TODO.md) #45), ECharts-backed. |
-| Magnitude flow | — | Queued **Sankey** primitive ([`TODO.md`](../../../../../TODO.md) #44). |
+| Magnitude flow | **`sankey`** (2–3 stages) | **ECharts** `sankey` series when the flow is interactive or needs more than three stages. |
 
 Rule of thumb: **Mermaid** for node-link relational diagrams (sequence, state, ER, flowchart), **ECharts** when the diagram is data-driven or interactive (timeline, tree, treemap, sunburst), and **this channel** when the output is a static editorial SVG whose geometry encodes a specific rhetorical claim.
 
@@ -298,6 +299,52 @@ Reach for this only when ownership is the argument — see [the provider table](
 - Don't let a step span two lanes — every step has one owner. Shared ownership is a process smell, not a diagram feature.
 - Don't snake the flow — if arrows backtrack to read in order, re-sequence the steps so progression runs forward.
 
+## Sankey
+
+```python
+from muriel.tools.diagrams import sankey
+
+sankey(
+    stages=["Query", "First action", "Outcome"],
+    nodes=[
+        {"id": "sessions", "stage": "Query",        "label": "Search sessions", "value": 10000},
+        {"id": "organic",  "stage": "First action", "label": "Organic click",   "value": 5800},
+        {"id": "ad",       "stage": "First action", "label": "Ad click",        "value": 1400},
+        {"id": "noclick",  "stage": "First action", "label": "No click",        "value": 2800},
+        {"id": "satisfied",    "stage": "Outcome", "label": "Satisfied",    "value": 6100},
+        {"id": "reformulated", "stage": "Outcome", "label": "Reformulated", "value": 2700},
+        {"id": "abandoned",    "stage": "Outcome", "label": "Abandoned",    "value": 1200},
+    ],
+    flows=[
+        {"src": "sessions", "dst": "organic", "value": 5800},
+        {"src": "sessions", "dst": "ad",      "value": 1400},
+        {"src": "sessions", "dst": "noclick", "value": 2800},
+        {"src": "organic", "dst": "satisfied",    "value": 4600},
+        {"src": "organic", "dst": "reformulated", "value": 1200},
+        {"src": "ad",      "dst": "satisfied",    "value": 700},
+        {"src": "ad",      "dst": "reformulated", "value": 700},
+        {"src": "noclick", "dst": "satisfied",    "value": 800},
+        {"src": "noclick", "dst": "reformulated", "value": 800},
+        {"src": "noclick", "dst": "abandoned",    "value": 1200},
+    ],
+    focal=["sessions", "ad", "reformulated"],   # node path, or flow ids "src->dst"
+    unit="sessions",
+    title="Search sessions: first action to outcome",
+    out_path="examples/diagrams/sankey-search-sessions.svg",
+)
+```
+
+**Stages** is 2–3 column names, left to right; a fourth raises and suggests two linked Sankeys that share a stage. **Nodes** name their `stage` (name or index) and carry a `value`; order within a stage is kept, top to bottom. **Flows** join adjacent stages only. The call **validates conservation before drawing**: every stage must sum to the same total, and every node must send (and receive) exactly its value — a violation raises with the numbers (`'ad' is 1,400 but sends 1,300`). Volume that leaves the story is a named node in the last stage ("Abandoned"), never a leak between stages. Budget: ≤8 nodes, ≤12 flows, else it raises and suggests an "Other" node or a split.
+
+Bars are 12px wide and `value × k` tall with **one** `k` for the whole figure; heights are not rounded to the grid, because a bar that disagrees with its printed number is the one defect this chart cannot afford. Each flow takes its own slice of its source and target, stacked in the other end's vertical order so every bar is exactly saturated. Ribbons are single unstroked closed paths whose edges follow `M sx,y0 C mx,y0 mx,y1 tx,y1` — both control points on the midline, so a ribbon plugs into its bar flat — written as a 48-segment polyline so `diagram-check` can compute the colour under every label (a Bézier reduces to its bounding box in the contrast audit, and every middle-stage label would report unverified). Ordinary ribbons are `muted` at 0.18 opacity; the `focal` path is `accent` at 0.28, painted last, and **named in a legend line** so the highlight is carried by words as well as colour. No arrowheads. Labels: first stage outside left, last stage outside right, middle stage centred in the gutter above its bar; the gutter grows to hold the label and the corridors widen until no ribbon crosses one. A flow thinner than 4px grows the plot (to 640px of bar height), then **raises** — folding it into an invented "Other" band would be a claim about the data, so the spec makes it. Every bar and ribbon carries `data-value`; `tests/test_diagram_sankey.py` recomputes conservation (bar height ∝ value within 4%, in = out per node within 0.75px, stage heights within 1px) from the file alone.
+
+**Anti-prescriptions** (also in the docstring):
+
+- Equal weights → draw a DAG. If the flows are all the same size, or unmeasured, thickness encodes nothing.
+- No splits or merges → a proportional funnel (`pyramid(orientation="down", proportional=True)`).
+- A plain step sequence → a process diagram (`swimlane`, or the infographics Process template).
+- Don't colour per flow — one muted treatment, one accent path.
+
 ## Design discipline
 
 The generators bake in the editorial-diagram discipline that keeps SVG from reading as AI-generated SmartArt:
@@ -382,6 +429,7 @@ Both examples below render to `examples/diagrams/`:
 - [`layers-tcpip.svg`](../examples/diagrams/layers-tcpip.svg) — a 4-layer dependency stack with the Transport layer as the focal band and an "abstraction ↑" axis; the stack shape is honest because each layer genuinely depends on the one below.
 - [`funnel-q2.svg`](../examples/diagrams/funnel-q2.svg) — a proportional acquisition funnel; tier widths are driven by real counts (`proportional=True`), so the visual drop-off matches the `−%` annotations rather than faking a taper.
 - [`swimlane-release.svg`](../examples/diagrams/swimlane-release.svg) — a 4-lane release pipeline; same-lane steps connect with a muted arrow, cross-lane handoffs are drawn in the accent because the handoffs are the claim.
+- [`sankey-search-sessions.svg`](../examples/diagrams/sankey-search-sessions.svg) — illustrative search-session counts, query → first action → outcome; the accent path is ad click → reformulated (half of ad clicks, against one in five organic clicks), and the no-click → satisfied ribbon shows good abandonment as its own volume.
 
 ## Mermaid in HTML — the zoom/pan/expand shell
 

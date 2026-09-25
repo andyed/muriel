@@ -31,6 +31,7 @@ from muriel.tools.diagrams.cycle import cycle  # noqa: E402
 from muriel.tools.diagrams.layer_stack import layer_stack  # noqa: E402
 from muriel.tools.diagrams.matrix import matrix  # noqa: E402
 from muriel.tools.diagrams.pyramid import pyramid  # noqa: E402
+from muriel.tools.diagrams.sankey import sankey  # noqa: E402
 from muriel.tools.diagrams.swimlane import swimlane  # noqa: E402
 
 EXAMPLES = REPO_ROOT / "plugins/muriel/skills/compose/examples/diagrams"
@@ -95,6 +96,42 @@ def render_examples(out_dir: Path) -> dict[str, str]:
             axes=(("low LF/HF", "high LF/HF"), ("satisficer", "optimizer")),
             title="Sat/opt × LF/HF — orthogonal axes",
             out_path=out_dir / "matrix-sat-opt.svg"),
+        "sankey-search-sessions.svg": sankey(
+            ["Query", "First action", "Outcome"],
+            [{"id": "sessions", "stage": "Query", "label": "Search sessions",
+              "value": 10000},
+             {"id": "organic", "stage": "First action",
+              "label": "Organic click", "value": 5800},
+             {"id": "ad", "stage": "First action", "label": "Ad click",
+              "value": 1400},
+             {"id": "noclick", "stage": "First action", "label": "No click",
+              "value": 2800},
+             {"id": "satisfied", "stage": "Outcome", "label": "Satisfied",
+              "value": 6100},
+             {"id": "reformulated", "stage": "Outcome",
+              "label": "Reformulated", "value": 2700},
+             {"id": "abandoned", "stage": "Outcome", "label": "Abandoned",
+              "value": 1200}],
+            [{"src": "sessions", "dst": "organic", "value": 5800},
+             {"src": "sessions", "dst": "ad", "value": 1400},
+             {"src": "sessions", "dst": "noclick", "value": 2800},
+             {"src": "organic", "dst": "satisfied", "value": 4600},
+             {"src": "organic", "dst": "reformulated", "value": 1200},
+             {"src": "ad", "dst": "satisfied", "value": 700},
+             {"src": "ad", "dst": "reformulated", "value": 700},
+             {"src": "noclick", "dst": "satisfied", "value": 800},
+             {"src": "noclick", "dst": "reformulated", "value": 800},
+             {"src": "noclick", "dst": "abandoned", "value": 1200}],
+            focal=["sessions", "ad", "reformulated"],
+            unit="sessions",
+            title="Search sessions: first action to outcome",
+            desc=("Illustrative counts. Of 10,000 search sessions, 5,800 "
+                  "start with an organic click, 1,400 with an ad click and "
+                  "2,800 with no click. Half of the ad clicks (700 of 1,400) "
+                  "end in a reformulated query, against about one in five "
+                  "organic clicks (1,200 of 5,800). Of the no-click "
+                  "sessions, 800 end satisfied on the results page itself."),
+            out_path=out_dir / "sankey-search-sessions.svg"),
     }
 
 

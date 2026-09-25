@@ -20,6 +20,8 @@ Catalog (MVP):
     engine_sectors_overlay(*, verbosity, ...)  → Blauch et al. 2026 isotropic
                                                   cortical sectors cobweb
                                                   (the engine's sampling layout).
+    sankey(stages, nodes, flows, *, focal, ...) → 2–3 stage conserved
+                                                  magnitude flow.
 
 All write self-contained SVG, accept an optional ``StyleGuide``, and
 fall back to muriel's OLED palette. Every one writes the accessible-figure
@@ -38,8 +40,10 @@ from muriel.tools.diagrams.pyramid import pyramid
 from muriel.tools.diagrams.swimlane import swimlane
 from muriel.tools.diagrams.foveal_overlay import foveal_overlay
 from muriel.tools.diagrams.engine_sectors_overlay import engine_sectors_overlay
+from muriel.tools.diagrams.sankey import sankey
 
 __all__ = [
     "matrix", "cycle", "layer_stack", "pyramid", "swimlane",
     "foveal_overlay", "engine_sectors_overlay",
 ]
+__all__ += ["sankey"]
