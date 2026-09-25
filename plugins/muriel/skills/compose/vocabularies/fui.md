@@ -36,7 +36,7 @@ Don't reach for it when:
 - **Leader lines** — thin diagonal strokes from a data point to a typographic callout, like an engineering drawing.
 - **Scan lines** — subtle horizontal-line texture across the frame (~3% opacity, 2px period). Optional chromatic aberration for CRT nostalgia.
 - **Data tickers** — live-updating numbers, `requestAnimationFrame`-driven counters that roll or flicker between values.
-- **Animated reveals** — elements fade / translate / scale in with staggered 80–200ms delays, not instantly. `cubic-bezier(0.4, 0, 0.2, 1)` for the "precise machinery" feel; this is muriel's `--mg-ease-emphasis`.
+- **Animated reveals** — elements fade / translate / scale in with a 100 ms stagger between elements, not instantly (the stagger is a hold, start to start; `muriel.motion` exempts holds from the duration binary). `cubic-bezier(0.4, 0, 0.2, 1)` for the "precise machinery" feel; this is muriel's `--mg-ease-emphasis`.
 - **Restrained palette** — one dominant accent hue (cyan, amber, red) on near-black. Matches the universal OLED rule.
 - **Glitch / noise accents** — used as *punctuation*, never as ambient texture.
 
@@ -83,7 +83,7 @@ command-selector compositor.
 - **Decorative strokes below 55/255.** Muriel's universal rule: decorative elements need ≥55/255 on a dark background or they vanish on small screens. Thin-stroke grids at 10% opacity look right on a 5K display and disappear on a phone.
 - **SDF text alpha fades.** Never modulate alpha on Troika/BMFont SDF text — it breaks distance-field antialiasing. Cross-fade via RGB tween or scale instead. (See [`vocabularies/kinetic-typography.md`](kinetic-typography.md) for the canonical phrasing.)
 - **Fake data that reads as fake.** `Lorem 0923.88.Ipsum` is worse than `████`. Stylized blanks commit to being blanks; Lorem-style placeholders read as lazy worldbuilding.
-- **Everything animating at once.** If the reveal stagger collapses to zero, the composition reads as a pop-in, not as machinery waking up. Keep 80–200ms gaps between elements.
+- **Everything animating at once.** If the reveal stagger collapses to zero, the composition reads as a pop-in, not as machinery waking up. Keep a 100 ms stagger between elements.
 - **Chrome without content.** Corner brackets, scan lines, and thin-stroke grids don't substitute for information. A FUI block with nothing to say is a cosplay prop.
 - **Contrast drift mid-animation.** A reveal that tweens from `opacity: 0` passes through low-contrast states for several frames. If it dips below 8:1 for more than a frame on readable text, fix by tweening translate/scale instead.
 
@@ -94,7 +94,7 @@ command-selector compositor.
 1. **Data ticker** — `rAF`-driven counter with leading zeros, mission clock, packet hex, all tabular-nums.
 2. **Radial compass** — SVG thin-stroke rings, 36 tick marks (every 9th longer for cardinals), rotating needle bound to time.
 3. **Canvas waveform** — scrolling signal trace with RMS/peak readouts; shows how Canvas2D and SVG coexist inside the same HUD block.
-4. **Staggered reveal** — CSS animation using muriel's `--mg-duration-reveal` and `--mg-ease-emphasis` tokens with `--mg-stagger: 120ms` between blocks.
+4. **Staggered reveal** — CSS animation using muriel's `--mg-duration-reveal` and `--mg-ease-emphasis` tokens with `--mg-stagger: 100ms` between blocks.
 
 Also demonstrates: corner brackets via `::before`/`::after`, scan-line overlay via `repeating-linear-gradient`, `prefers-reduced-motion` fallback, 8:1 contrast on every text element, brand-token CSS custom properties (overridable from a `StyleGuide.to_css_vars()` drop-in).
 

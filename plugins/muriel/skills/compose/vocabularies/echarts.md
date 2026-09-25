@@ -187,7 +187,7 @@ player.addEventListener('timeupdate', () => {
 });
 ```
 
-- `timeupdate` fires ~4Hz on Chromium, ~250ms throttle. Not animation-smooth, but the eye reads it as "playing." For animation-smooth, use `requestAnimationFrame` and read `player.currentTime` each tick.
+- `timeupdate` fires ~4Hz on Chromium, ~250ms throttle <!-- motion-exempt: not-motion (event rate) -->. Not animation-smooth, but the eye reads it as "playing." For animation-smooth, use `requestAnimationFrame` and read `player.currentTime` each tick.
 - **Don't use `notMerge: true`** here — you want ECharts to diff the partial option, not blow away the series config and re-render from scratch every frame.
 - For seek-by-click on segment labels, the reverse direction works the same: `player.currentTime = segment.t[0]` and the next `timeupdate` triggers the playhead move. No need to manually drive both.
 

@@ -12,7 +12,10 @@ from pathlib import Path
 import pytest
 
 from muriel.tools.diagrams import (
+    comparison_pair,
     cycle,
+    dendrogram,
+    dag,
     engine_sectors_overlay,
     foveal_overlay,
     heat_grid,
@@ -21,6 +24,7 @@ from muriel.tools.diagrams import (
     pyramid,
     sankey,
     swimlane,
+    treemap,
 )
 from muriel.tools.diagrams._a11y import TITLE_MAX, fit_title, lint_a11y, slugify
 
@@ -78,14 +82,35 @@ GENERATORS = {
     "swimlane": lambda out: swimlane(
         ["A", "B"], [{"label": "go", "lane": "A"}, {"label": "stop", "lane": "B"}],
         out_path=out),
+    "dendrogram": lambda out: dendrogram(
+        {"label": "Root", "children": [{"label": "A", "children": ["a1", "a2"]},
+                                       "B"]}, out_path=out),
+    "dendrogram_right": lambda out: dendrogram(
+        {"label": "Root", "children": ["A", "B", "C"]},
+        orientation="right", collapse_over=2, title="Tree", out_path=out),
+    "comparison_pair_slope": lambda out: comparison_pair(
+        [{"label": "x", "a": 1.0, "b": 2.0}, {"label": "y", "a": 2.0, "b": 1.5}],
+        states=("A", "B"), out_path=out),
+    "comparison_pair_trace": lambda out: comparison_pair(
+        [{"label": "r1", "a": "PASS", "b": "PASS"},
+         {"label": "r2", "a": "PASS", "b": "FAIL"},
+         {"label": "r3", "a": "PASS", "b": "NOT REACHED"}],
+        states=("A", "B"), out_path=out),
     "foveal_overlay_l1": lambda out: foveal_overlay(verbosity=1, out_path=out),
     "foveal_overlay_l3": lambda out: foveal_overlay(verbosity=3, out_path=out),
     "engine_sectors_l1": lambda out: engine_sectors_overlay(verbosity=1, out_path=out),
     "engine_sectors_l3": lambda out: engine_sectors_overlay(verbosity=3, out_path=out),
+    "treemap": lambda out: treemap(
+        [{"label": "A", "value": 50}, {"label": "B", "value": 30, "focal": True},
+         {"label": "C", "value": 15}, {"label": "D", "value": 5}],
+        title="Treemap", out_path=out),
     "heat_grid": lambda out: heat_grid(
         ["r1", "r2", "r3"], ["c1", "c2", "c3"],
         [[1, 2, 3], [4, None, 6], [7, 8, 9]], focal=(2, 2),
         title="Heat grid", out_path=out),
+    "dag": lambda out: dag(
+        ["a", "b", "c", "d"], [("a", "c"), ("b", "c"), ("c", "d")],
+        title="DAG", out_path=out),
     "venn_single": _venn_single,
     "venn_panels": _venn_panels,
     "wavefield": _wavefield,

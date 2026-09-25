@@ -45,7 +45,7 @@ A pattern adds required parts and a tighter budget to a shape. It never brings a
 | Many sources competing for one constrained service | Queue / bottleneck | `swimlane` when owners matter; Mermaid `flowchart` otherwise | distinct sources; a queue with visible slots and a count; capacity with units (`8/hour`, not "high"); one service point; admitted and deferred outcomes | ≤5 sources, ≤5 slots, one bottleneck, ≤9 nodes; fold extra sources into a named cohort |
 | Defenses that reduce a risk without removing it | Defense in depth, residual risk | `layer_stack` | the incoming risk; each layer's mitigation and what escapes it; a final residual-risk statement | 4–5 layers (the pattern caps at 5, `layer_stack` floors at 4), one risk thread, ≤2 mitigations per layer |
 | One subject moving through phases, waits, retries, and terminal outcomes | Single-subject lifecycle | Mermaid `stateDiagram-v2` | a primary phase path; waits and retries kept off that path; cancellation and failure as separate terminal states; every transition labeled | 4–5 primary phases, ≤9 states, ≤10 transitions |
-| Why two similar requests end differently | Divergent policy traces | comparison pair (queued, catalog #3) — until it ships, hand-draw the pair under the [global budget](#budget-and-callouts-for-hand-drawn-diagrams) | the same ordered rules on both traces; per-rule status in words (`PASS` / `FAIL` / `SKIPPED` / `NOT REACHED`); the first divergence marked and labeled | exactly 2 traces, 3–6 rules, one marked divergence |
+| Why two similar requests end differently | Divergent policy traces | `comparison_pair` with status-word values (trace mode, see [Comparison pair](#comparison-pair)) | the same ordered rules on both traces; per-rule status in words (`PASS` / `FAIL` / `SKIPPED` / `NOT REACHED`); the first divergence marked and labeled | exactly 2 traces, 3–6 rules, one marked divergence |
 
 **State and outcome are carried by text.** `FAIL`, `blocked`, `residual: credential reuse` are words on the figure. Colour and position reinforce them and never carry them alone — with the colour stripped, a still frame must still say which path failed.
 
@@ -65,16 +65,18 @@ Ordered by how often each structure carries a real argument in research, product
 |---|---|---|---|
 | 1 | **2×2 matrix** | Two **independent** binary axes divide a population into four meaningful classes. | **Shipped** — `muriel.tools.diagrams.matrix` |
 | 2 | **Cycle (3–8 step)** | Iterative process with no exit; each step feeds the next. | **Shipped** — `muriel.tools.diagrams.cycle` |
-| 3 | Comparison pair | Same axes, one variable changed — the smallest Tufte small-multiple. | Queued |
+| 3 | **Comparison pair** | Same items under exactly two states on one shared scale — the smallest Tufte small-multiple. | **Shipped** — `muriel.tools.diagrams.comparison_pair` (slopegraph; trace pair for status words) |
 | 4 | Phase / funnel | Sequential narrowing; later phases are subsets of earlier. | **Shipped** — `muriel.tools.diagrams.pyramid` (`orientation="down"`) |
 | 5 | Layered stack | Higher layers depend on / abstract over lower; reading direction encodes hierarchy. | **Shipped** — `muriel.tools.diagrams.layer_stack` |
-| 6 | Causal DAG | What causes what; arrow direction is load-bearing. | Queued |
+| 6 | **Causal DAG** | What causes what; arrow direction is load-bearing, and at least one node has two parents. | **Shipped** — `muriel.tools.diagrams.dag` |
 | 7 | Venn / Euler | Categorical intersection; area-proportional. | **Shipped** — `muriel.tools.venn` |
 | 8 | Spectrum | Position between two poles is the encoding. | Queued |
 | 9 | Pyramid | Each level depends on the one below; apex is rare or important. | **Shipped** — `muriel.tools.diagrams.pyramid` (`orientation="up"`) |
 | 10 | **Comparison heat-grid** | Dense `n × m` comparison of one unsigned quantity; the pattern across rows × columns is the claim. | **Shipped** — `muriel.tools.diagrams.heat_grid` |
 | 11 | Swimlane | Cross-functional process; the handoffs between actors are the point. | **Shipped** — `muriel.tools.diagrams.swimlane` |
 | 12 | **Sankey** | A conserved quantity splits and merges across 2–3 stages; ribbon thickness is the magnitude. | **Shipped** — `muriel.tools.diagrams.sankey` |
+| 13 | **Treemap** | One whole split into 4–8 disjoint parts; area is each part's share. Hierarchy family, one level. | **Shipped** — `muriel.tools.diagrams.treemap` |
+| 14 | **Tree (dendrogram)** | Containment: each node has exactly one parent, and what X decomposes into, recursively, is the claim. Hierarchy family, unweighted member. | **Shipped** — `muriel.tools.diagrams.dendrogram` |
 
 **Explicitly excluded.** Process arrows, list-with-chevrons, interconnected blocks, radial gear cosmetics, target-with-concentric-rings as decoration. If a SmartArt category exists only to ornament a list, this channel will never ship it.
 
@@ -88,16 +90,17 @@ Several diagram forms have an existing home elsewhere in muriel. The native gene
 | Sequence / interaction | — | **Mermaid** `sequenceDiagram` via `mmdc` ([`svg.md`](svg.md)). Prefer Mermaid; only port to native SVG if a paper figure forbids the Mermaid aesthetic. |
 | State machine | — | **Mermaid** `stateDiagram-v2`. Same call. |
 | ER / data model | — | **Mermaid** `erDiagram`. Same call. |
-| Flowchart / generic DAG | — | **Mermaid** `flowchart` today; native **causal DAG** is queued (catalog #6) for when arrow-direction is the load-bearing claim. |
+| Flowchart / generic DAG | causal DAG (`dag`) | **Mermaid** `flowchart` for a general flowchart. The native [causal DAG](#causal--dependency-dag) is for when arrow direction is the load-bearing claim and a node has two parents. |
 | Timeline | — | **ECharts** time-axis + band overlays ([`echarts.md`](../vocabularies/echarts.md)), the `svg.md` OSEC phase diagram, or the infographics **Timeline** template ([`infographics.md`](infographics.md)). All predate this channel. |
 | Single-actor process flow | swimlane (degenerate) | infographics **Process** template — lighter when there are no lanes. Use swimlane only when ownership/handoffs are the argument. |
-| Tree / org-chart | — | **ECharts** `tree` series (interactive) or the infographics **Hierarchical** template. |
-| Nested hierarchy (proportional) | — | Queued **hierarchy family** — sunburst / treemap / dendrogram (see [`TODO.md`](../../../../../TODO.md) #45), ECharts-backed. |
+| Tree / org-chart | **`dendrogram`** (static tree; hierarchy family, unweighted) | **ECharts** `tree` series when the tree must collapse/expand interactively, or the infographics **Hierarchical** template for a quick doc graphic. |
+| Nested hierarchy (proportional, 2+ levels) | — (native `treemap` is one level; static sunburst queued, see [`TODO.md`](../../../../../TODO.md)) | **ECharts** `sunburst` / nested `treemap`. |
 | Magnitude flow | **`sankey`** (2–3 stages) | **ECharts** `sankey` series when the flow is interactive or needs more than three stages. |
+| Part-of-whole, one level (4–8 parts) | **`treemap`** — hierarchy family, shipped | **ECharts** `treemap` when the reader needs drill-down or more than one level. Native `treemap` does not nest yet. |
 
 Rule of thumb: **Mermaid** for node-link relational diagrams (sequence, state, ER, flowchart), **ECharts** when the diagram is data-driven or interactive (timeline, tree, treemap, sunburst), and **this channel** when the output is a static editorial SVG whose geometry encodes a specific rhetorical claim.
 
-**Pending decision — a transcode route.** For sequence, state, ER, and flowchart the table offers two routes: render as Mermaid, or port to native SVG when a paper figure forbids the Mermaid look. A middle route is under consideration: extract the structure from the Mermaid source (nodes, edges, direction, labels), then redraw it by hand in muriel tokens under the [global budget](#budget-and-callouts-for-hand-drawn-diagrams) — or through the causal DAG generator once it ships. This is **not shipped and not decided**; it is the open question in [`TODO.md`](../../../../../TODO.md)'s diagram-design re-survey item. Until it is settled, the two existing routes stand. (Idea from diagram-design's Mermaid importer, MIT.)
+**Pending decision — a transcode route.** For sequence, state, ER, and flowchart the table offers two routes: render as Mermaid, or port to native SVG when a paper figure forbids the Mermaid look. A middle route is under consideration: extract the structure from the Mermaid source (nodes, edges, direction, labels), then redraw it by hand in muriel tokens under the [global budget](#budget-and-callouts-for-hand-drawn-diagrams) — or through the [causal DAG generator](#causal--dependency-dag), which now exists. The transcode route itself is **not shipped and not decided**; it is the open question in [`TODO.md`](../../../../../TODO.md)'s diagram-design re-survey item. Until it is settled, the two existing routes stand. (Idea from diagram-design's Mermaid importer, MIT.)
 
 When the Mermaid diagram is rendered into an **HTML page** (not exported to a flat SVG) and it's large enough to render unreadable, wrap it in the [zoom/pan/expand shell](#mermaid-in-html--the-zoompanexpand-shell) below — a complex flowchart squeezed into a fixed column is illegible without it.
 
@@ -356,6 +359,54 @@ Reach for this only when ownership is the argument — see [the provider table](
 - Don't let a step span two lanes — every step has one owner. Shared ownership is a process smell, not a diagram feature.
 - Don't snake the flow — if arrows backtrack to read in order, re-sequence the steps so progression runs forward.
 
+## Comparison pair
+
+```python
+from muriel.tools.diagrams import comparison_pair
+
+# Slopegraph: numbers under two states, one shared scale
+comparison_pair(
+    items=[
+        {"label": "Position 1", "a": 38.0, "b": 31.5},
+        {"label": "Position 2", "a": 16.5, "b": 17.0},
+        {"label": "Position 3", "a": 10.2, "b": 11.8},
+        {"label": "Position 4", "a": 7.1,  "b": 8.0},
+    ],
+    states=("Ten links", "With answer box"),
+    focal="Position 1",
+    scale={"min": 0, "max": 40, "unit": "% of clicks"},
+    value_format="{:.1f}",
+    title="Click share by result position",
+    out_path="examples/diagrams/comparison-pair-serp.svg",
+)
+
+# Trace pair: status words for the same ordered rules
+comparison_pair(
+    items=[
+        {"label": "Within refund window",    "a": "PASS", "b": "PASS"},
+        {"label": "Amount under auto-limit", "a": "PASS", "b": "FAIL"},
+        {"label": "Fraud score",             "a": "PASS", "b": "NOT REACHED"},
+    ],
+    states=("Request A", "Request B"),
+    out_path="examples/diagrams/comparison-pair-trace.svg",
+)
+```
+
+**Items** are `{"label", "a", "b", "focal"}`, the same item under state A and state B. **States** must name exactly two. The mode is inferred from the values (`mode=` overrides): numbers draw a slopegraph, status words draw a trace pair.
+
+**Slopegraph** (2–10 items). Two axis rules on **one scale**, which both axes declare (`data-min`/`data-max`) and both use; there is no way to give the sides different scales. `scale` defaults to round bounds around the data, and an explicit `min`/`max` that clips a value raises. The scale is printed under the figure (`both axes: 0–40 (% of clicks)`) because there are no gridlines: every endpoint prints its value. The B side prints the signed change, `(+1.6)` / `(−6.5)`, so increase and decrease read without colour. Lines are muted; one `focal` item takes the accent at a heavier weight and is painted last. When values are close, the **labels** spread apart on a 16px pitch and a leader tick joins each displaced label to its true endpoint. The endpoint itself never moves: `tests/test_diagram_comparison_pair.py` holds every endpoint to the shared scale within 0.5px and fails on any label overlap. Two items identical at both ends raise; merge them into one line. Every line carries `data-a`/`data-b`, and every label carries `data-item` and `data-end`.
+
+**Trace pair** (3–6 rules). The same ordered rules for two subjects, with each status as a word in its own cell. The **first divergence**, computed from the data, gets the accent outline and a `first divergence` label. Traces that never diverge raise, because there is nothing to compare. This is the "divergent policy traces" row in the [behaviour table](#route-by-behaviour-then-by-shape).
+
+**Admission.** The nearest shipped primitive is `matrix`, which puts things side by side but has no value scale, so it cannot draw a slope or hold two axes to one scale. `swimlane` sequences steps under owners and cannot align two traces rule by rule.
+
+**Anti-prescriptions** (also in the docstring):
+
+- More than two states → a **line chart** (or a bump chart for rank). A slope from the first snapshot to the last hides the ones in between.
+- The story is position on one continuous scale, not change between states → **spectrum**.
+- Items with no shared scale → a **table**. A slope between unlike units means nothing.
+- Don't nudge endpoints to make room. Crowded labels mean the values are close, which is part of the data.
+
 ## Sankey
 
 ```python
@@ -401,6 +452,124 @@ Bars are 12px wide and `value × k` tall with **one** `k` for the whole figure; 
 - No splits or merges → a proportional funnel (`pyramid(orientation="down", proportional=True)`).
 - A plain step sequence → a process diagram (`swimlane`, or the infographics Process template).
 - Don't colour per flow — one muted treatment, one accent path.
+
+## Treemap
+
+```python
+from muriel.tools.diagrams import treemap
+
+treemap(
+    cells=[
+        {"label": "Organic results",  "value": 7.42},
+        {"label": "Ads",              "value": 2.91, "focal": True,
+         "sublabel": "top and bottom blocks"},
+        {"label": "Knowledge panel",  "value": 1.84},
+        {"label": "Related searches", "value": 0.97, "short": "Related"},
+        {"label": "Navigation",       "value": 0.61},
+        {"label": "Pagination",       "value": 0.22},
+    ],
+    unit=" s",
+    title="Fixation time by SERP region (illustrative)",
+    desc="Organic results take about half of all fixation time; ads a fifth.",
+    out_path="examples/diagrams/treemap-serp.svg",
+)
+```
+
+**Cells** is 4–8 dicts `{"label", "value", "focal", "sublabel", "short"}`, any order; they are drawn largest first in a **squarified** layout (Bruls, Huizing & van Wijk 2000), which keeps cells near-square so areas compare by eye. Values must be finite and positive — a zero or negative part raises rather than vanishing. More than 8 cells raises unless you pass `max_cells=` (4–8), which collapses the smallest parts into one cell named `other_label` (default `"Other"`) and lists what it absorbed in the default `<desc>` and in `data-members`. Nesting (a second level) is not supported yet.
+
+**Why not `pyramid(proportional=True)`.** A proportional funnel is the nearest primitive, and it encodes one dimension (bar width) down an ordered sequence in which each tier is a subset of the one above. Treemap parts are disjoint and unordered, and together they fill the whole. Drawing them as funnel bars would suggest an order and a nesting the data doesn't have, and with no enclosing whole the reader can't see how much each part takes.
+
+**Area is the only encoding, and it is checked.** Cells sit 4px apart; because a gutter takes a larger bite out of a small cell than a large one, the layout corrects its weights until every cell's drawn area is within 4% *relative* error of its true share (`tests/test_diagram_treemap.py`; the committed example is within 0.01%). Every cell rect carries `data-value` and `data-share`, so the check reads the file, not the arithmetic.
+
+**Label tiers** are picked per cell by measured fit, 16px in from the top-left: *large* — name, then `value · share`; *medium* — name and value; *small* — the name alone (or `short`); *sliver* — no text, only a locator dot if the cell is at least 12×12px. Every part whose value isn't printed in its cell gets a legend line under the plot with its name, value, share and, for a sliver, where it sits. Labels are never rotated and a cell is never resized to fit its label. Fill is a neutral ink ramp by rank (strongest on the largest); the one `focal` cell takes the accent tint and stroke. Name and value colours are chosen by computed contrast against every composited fill, so text clears 8:1 on light and dark brands alike.
+
+**Anti-prescriptions** (also in the docstring):
+
+- Don't use a treemap when the values are roughly equal — uniform area carries no signal. Use a list, or a dendrogram if the structure is the point. The generator warns when the largest value is within 25% of the smallest.
+- Don't use a treemap for parts that don't sum to a meaningful whole (overlapping categories, rates, independent measurements). Use a bar chart.
+- If several parts are only legible in the legend, the data wants a bar chart; the generator warns at three slivers.
+
+## Tree (dendrogram)
+
+```python
+from muriel.tools.diagrams import dendrogram
+
+dendrogram(
+    {"label": "Eye-movement events", "sublabel": "oculomotor record",
+     "children": [
+         {"label": "Fixation", "sublabel": "gaze held", "children": [
+             {"label": "Microsaccade", "focal": True}, "Drift", "Tremor"]},
+         {"label": "Saccade", "sublabel": "ballistic shift",
+          "children": ["Reflexive", "Volitional"]},
+         {"label": "Smooth pursuit", "sublabel": "tracks a target",
+          "children": ["Open-loop", "Closed-loop"]},
+         {"label": "Blink", "sublabel": "lid closure",
+          "children": ["Spontaneous", "Reflex", "Voluntary"]}]},
+    orientation="down",          # or "right": root at left, leaves stacked
+    collapse_over=None,          # 2–5: fold overflow siblings into "+N more"
+    title="Eye-movement events",
+    out_path="examples/diagrams/dendrogram-eye-movements.svg",
+)
+```
+
+The **hierarchy family's** unweighted member. The tree is nested dicts `{label, sublabel?, focal?, children}`; a bare string is a leaf, and child order is drawing order. Budget: **4 levels** (root + 3 tiers) and **5 children per node**, plus a leaf-axis extent (1920px down, 1440px right) checked *after* the labels are measured, so the leaf budget tracks real box sizes rather than a count. Over budget raises with the options: `collapse_over=`, `orientation="right"`, or split into an overview plus one figure per subtree.
+
+**Layout.** A contour-based tidy tree (Reingold–Tilford style, no threads): each child subtree is pushed along the leaf axis until it clears its left neighbour at every shared depth, and each parent is centred exactly on the midpoint of its first and last child. Deterministic, and subtrees cannot overlap. Ranks are evenly spaced and never skipped: a shallow leaf stays at its own depth rather than dropping to the bottom row. Boxes are 120–180px wide and 40–52px tall, at most **two widths**, assigned per rank so every row (or column) is regular. A name past 180px wraps to two lines; one unbreakable word wider than that grows the box past 180, because text never escapes.
+
+**Connectors** are an elbow bus drawn before the nodes: a stem from the parent to a bus halfway across the rank gap, one bus spanning the children, one drop into each child. No diagonals. Each is a `<line data-edge="stem|bus|drop" data-from data-to>`, and each node a `<g data-node data-depth data-parent>`, so the structure can be read back from the file.
+
+**`collapse_over=k`** keeps a crowded node's first `k − 1` children and folds the rest, subtrees included, into one dashed `+N more` leaf (`data-collapsed="N"`). The folded names are listed in the default `<desc>`. Order children by importance first. A fold that would hide the focal node raises.
+
+**One accent**, on the root or one critical leaf. A middle-tier focal raises, and so does a second one.
+
+**Not a clustering dendrogram.** Rank spacing encodes depth, not merge distance. Output from hierarchical clustering, where linkage height is the finding, belongs on a real axis (`scipy.cluster.hierarchy.dendrogram`).
+
+**Anti-prescriptions** (also in the docstring):
+
+- A node with two parents is a DAG: use the `dag` generator. A node object reused under two parents raises; a label repeated under two parents warns.
+- If the leaf proportions matter, use `treemap` (or a sunburst). When leaf weights are roughly equal, area carries no signal and the tree reads faster.
+- One path with no branching is a process: use `swimlane` or the infographics Process template. The generator refuses a tree that never branches.
+
+## Causal / dependency DAG
+
+```python
+from muriel.tools.diagrams import dag
+
+dag(
+    nodes=[
+        {"id": "amb",    "label": "Query ambiguity", "sublabel": "intent entropy"},
+        {"id": "layout", "label": "SERP layout",     "sublabel": "module mix"},
+        {"id": "ads",    "label": "Ad density",      "sublabel": "ads above fold"},
+        {"id": "dwell",  "label": "Dwell time",      "sublabel": "per result"},
+        {"id": "click",  "label": "Click"},
+        {"id": "sat",    "label": "Satisfaction",    "sublabel": "post-task survey"},
+    ],
+    edges=[
+        {"src": "amb",    "dst": "dwell"},
+        {"src": "layout", "dst": "dwell"},
+        {"src": "dwell",  "dst": "click"},
+        {"src": "ads",    "dst": "click"},
+        {"src": "click",  "dst": "sat"},
+        {"src": "sat",    "dst": "amb", "back": True, "label": "reformulation"},
+    ],
+    direction="down",          # or "right"
+    title="Causal model of SERP satisfaction",
+    out_path="examples/diagrams/dag-serp-causal.svg",
+)
+```
+
+**Nodes** are dicts `{"id", "label", "sublabel", "focal"}` (or bare id strings). **Edges** are dicts `{"src", "dst", "label", "back"}` (or `(src, dst)` pairs). Each node's rank is its **longest-path depth** from the sources. Within a rank, nodes are ordered by a barycenter heuristic plus adjacent swaps to reduce crossings. Ties break by input order, so one spec always renders one file. Connectors are orthogonal elbows with `r=8` corners, and every horizontal jog gets its own track in the channel between ranks, so no connector passes behind a box it does not connect. An edge spanning several ranks drops through a gap between boxes. Attach points on one box side are ≥12px apart. A node with two or more inputs carries an `N in` badge. Nodes are emitted as `<g data-id data-rank>` and edges as `<path data-src data-dst>`, for scripted inspection.
+
+**Validation raises, naming the problem:** unknown ids, self-loops, duplicate edges, and a cycle among forward edges (the message spells out the cycle, e.g. `a → b → c → a`). A loop may be drawn only as **one** edge marked `back=True`. That edge must close a real cycle; it is drawn dashed in the accent around the outside of the stack, and it is the figure's one accent, so it cannot be combined with `focal`. **Budget:** ≤9 nodes, ≤14 edges, ≤4 ranks, ≤1 back-edge. Going over raises with split guidance: overview plus detail, split at a hub node, or collapse a leaf cluster. An edge `label` sits beside the connector's source end, on whichever side no other connector uses; if neither side is free the call raises instead of overprinting.
+
+**Precondition gate.** If every node has at most one parent and there is no back-edge, the data is a tree, and `dag` raises. The message suggests a dendrogram, or a process/swimlane for a single chain. Pass `allow_tree=True` only when arrow direction is itself the claim.
+
+**Anti-prescriptions** (also in the docstring):
+
+- Single-parent hierarchy → dendrogram / hierarchy. A DAG layout implies a convergence the data doesn't have.
+- Linear sequence → process or swimlane.
+- Edges that mean association ("correlates with") are not arrows. Use a matrix, a heat grid, or a list of pairs.
+- One feedback loop at most. Two loops compete and neither reads, so split the figure.
 
 ## Design discipline
 
@@ -489,7 +658,9 @@ Both examples below render to `examples/diagrams/`:
 - [`funnel-q2.svg`](../examples/diagrams/funnel-q2.svg) — a proportional acquisition funnel; tier widths are driven by real counts (`proportional=True`), so the visual drop-off matches the `−%` annotations rather than faking a taper.
 - [`swimlane-release.svg`](../examples/diagrams/swimlane-release.svg) — a 4-lane release pipeline; same-lane steps connect with a muted arrow, cross-lane handoffs are drawn in the accent because the handoffs are the claim.
 - [`sankey-search-sessions.svg`](../examples/diagrams/sankey-search-sessions.svg) — illustrative search-session counts, query → first action → outcome; the accent path is ad click → reformulated (half of ad clicks, against one in five organic clicks), and the no-click → satisfied ribbon shows good abandonment as its own volume.
+- [`dendrogram-eye-movements.svg`](../examples/diagrams/dendrogram-eye-movements.svg) — a four-class eye-movement taxonomy with subtypes; the tree is honest because every subtype has one parent and no leaf weight is claimed. The accent is on one critical leaf, the microsaccade.
 - [`heat-grid-dwell.svg`](../examples/diagrams/heat-grid-dwell.svg) — mean fixation dwell by SERP position × query intent (**illustrative values, not measured data**); the focal cell sits outside the scale, and one crossing with no measurement is drawn as n/a.
+- [`dag-serp-causal.svg`](../examples/diagrams/dag-serp-causal.svg) — an **illustrative** causal model of SERP satisfaction. Dwell time and the click each have two parents, which is what a tree or swimlane cannot draw. Ad density reaches the click through a gap in the dwell-time rank, and the one feedback edge (satisfaction → query ambiguity, via reformulation) runs dashed around the outside.
 
 ## Mermaid in HTML — the zoom/pan/expand shell
 
@@ -560,7 +731,7 @@ Every color resolves through a `--mg-*` token (see [`style-guides.md`](style-gui
   font-size: 14px;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s ease;
+  transition: background 0.1s ease;
 }
 .zoom-controls button:hover { background: var(--mg-border); }
 .zoom-controls button:focus-visible {

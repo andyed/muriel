@@ -56,6 +56,14 @@ Two verification ideas were adapted from the same repository (upstream commit
   positive size, `<title>` as the first child, a `<desc>`, slug-prefixed
   non-duplicate ids, and `aria-labelledby` naming the title then the desc. The
   60-character title bound follows `skills/diagram-design/scripts/self_check.py`.
+- **Slopegraph conventions** — `muriel/tools/diagrams/comparison_pair.py` follows
+  `references/type-line.md` (slopegraph variant): one scale shared by both
+  axes, a run narrower than the plot is tall, dots and printed values at both
+  ends, no gridlines, muted lines plus one weighted accent, and labels bound to
+  their series by `data-*` attributes. The shared-scale and no-jitter checks in
+  `tests/test_diagram_comparison_pair.py` follow `scripts/verify-slopegraph.py`.
+  The label-spreading policy (labels move, endpoints never do) and the trace
+  form are muriel's own.
 - **Relative-error fidelity check** — `tests/test_diagram_fidelity.py` checks
   proportional funnel widths as *relative* error against the values, the
   framing of `scripts/verify-treemap.py`'s area-fidelity invariant, applied to
@@ -67,6 +75,14 @@ Two verification ideas were adapted from the same repository (upstream commit
   and `muriel/motion.py` (`validate_mode`, `validate_flash_rate`,
   `validate_sequence_shape`). The upstream clock tokens and pinned controller
   were not adopted.
+- **Treemap** — `muriel/tools/diagrams/treemap.py` follows `references/type-treemap.md`
+  for geometry and conventions: squarified layout, 4–8 cells with a named
+  "Other", 4px gutters, the large / medium / small / sliver label tiers with a
+  16px top-left inset, the rank-ordered ink ramp with one accent cell, and
+  `data-share` on every cell. `tests/test_diagram_treemap.py` checks area as
+  relative error per cell, the invariant of `scripts/verify-treemap.py`, at a
+  4% bound. The gutter-compensating weight correction is muriel's own; no
+  source files were copied.
 - **Diagram guidance** — behaviour-first pattern routing, the generator
   admission rule, callout discipline, the global node/arrow budget, and the
   redraw degrade ladder in `channels/diagrams.md`, plus the per-element removal
@@ -82,6 +98,13 @@ Two verification ideas were adapted from the same repository (upstream commit
   constancy, relative value fidelity, square-on arrival). Bars are not rounded
   to the 4px grid, sub-4px flows raise rather than fold, and ribbons are
   written as flattened polylines so the contrast audit can score the labels.
+- **Tree** — `muriel/tools/diagrams/dendrogram.py` takes its node proportions
+  (120–180 × 40–52, at most two widths), the orthogonal elbow-bus connectors
+  drawn before the nodes, the 4-level / 5-children budget, the no-skipped-levels
+  rule and the single accent on the root or one critical leaf from
+  `references/type-tree.md`. The contour-based tidy-tree placement, the
+  measured leaf-extent budget, `collapse_over`, and the DAG / treemap / process
+  routing gates are muriel's.
 - **Comparison heat-grid** — `muriel/tools/diagrams/heat_grid.py` takes its
   cell geometry (116×56, 4px gap, 80px minimum width), the 3–7 row / 3–8 column
   budget, the single ink ramp with a single accent focal cell excluded from the
@@ -104,6 +127,18 @@ Two verification ideas were adapted from the same repository (upstream commit
   normalize, emit a committed artifact). The icon source differs (Lucide,
   not Tabler) and so does the normalization: muriel keeps inner markup only,
   strips presentation attributes, and rewrites primitives as `<path>`.
+- **Causal / dependency DAG** — `muriel/tools/diagrams/dag.py` takes from
+  `references/type-dependency.md` the ranked layers (120px pitch), the
+  160×56 `rx=6` node box, the `N in` fan-in badge in a small `rx=2` box, the
+  budget (9 nodes, 14 edges, 4 ranks, 1 highlighted cycle), the single dashed
+  `5,4` accent back-edge routed around the outside of the stack, and the
+  tree-shaped-data anti-pattern. It takes from SKILL.md's connector rules the
+  orthogonal elbows with `r=8` corners, attach points ≥12px apart on a shared
+  side, no transit behind a non-endpoint box, and drawing edges before nodes.
+  The layout algorithm (longest-path ranking, barycenter ordering with
+  adjacent swaps, isotonic-regression placement, per-channel jog tracks), the
+  forward-cycle and tree-precondition errors, and the single-accent rule
+  (upstream allows two) are muriel's.
 
 The code is muriel's own (ElementTree rather than the source's `HTMLParser`,
 and wired into `muriel diagram-check`); no source files were copied.
