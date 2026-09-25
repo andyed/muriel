@@ -203,7 +203,29 @@ cycle(
 )
 ```
 
-**Steps** is a list of 3–8 entries. Each entry is a string or a dict `{"label": str, "icon": <svg-inner-markup or None>}`. The `icon` slot is a hook for an icon library — pass raw SVG path/group markup to render at the node. Icons are optional; the MVP renders cleanly with text labels alone.
+**Steps** is a list of 3–8 entries. Each entry is a string or a dict `{"label": str, "icon": <slot name | svg-inner-markup | None>}`. Icons are optional and never replace the label.
+
+**Icons** come from a curated set of 30 [Lucide](https://lucide.dev) glyphs (ISC), pinned to `lucide-static` 1.48.0 and listed in `muriel/tools/diagrams/icons/_manifest.py` — process verbs (`observe`, `measure`, `decide`, `refresh`, `search`, `filter`, `compare`, `test`, `learn`, `build`, `ship`, `review`, `alert`, `exchange`, `zoom-in`), actors (`user`, `users`), artifacts (`document`, `database`, `chart`, `message`, `link`, `layers`) and concepts (`clock`, `target`, `idea`, `lock`, `gear`, `flag`, `brain`). Aliases map the obvious nouns (`eye`, `flask`, `iterate`, `lightbulb`, …). An unknown name raises with close-match suggestions; anything containing `<` is treated as raw inner markup on a 24×24 grid, as before. The glyphs carry no colour: the node wraps them in a `<g>` with the accent stroke, round caps/joins, `aria-hidden="true"`, scaled to the brand's `[iconography] default_size` (24 px without one) with `stroke_px` held constant after scaling. With an icon, the step number shrinks to 16 px and sits under it. Regenerate with `python3 scripts/build_diagram_icons.py` (`--check` in CI, `--refresh` after bumping the pin).
+
+```python
+cycle(
+    [{"label": "Capture", "icon": "observe"}, {"label": "Research", "icon": "search"},
+     {"label": "Decide", "icon": "decide"}, {"label": "Act", "icon": "ship"},
+     {"label": "Measure", "icon": "chart"}, {"label": "Learn", "icon": "learn"}],
+    hub={"label": "Shared memory", "sublabel": "one record, every pass",
+         "steps": ["Capture", "Decide", "Measure", "Learn"]},
+    title="Agent operating loop",
+    out_path="examples/diagrams/cycle-agent-hub.svg",
+)
+```
+
+**Hub** (`hub=`, adapted from diagram-design's Loop type) puts one shared state in the middle — a memory, record, standard or evidence base — with dashed write-back spokes from the steps that write to it. `hub` is a string or `{"label", "sublabel", "steps": [index | label]}`; `steps` defaults to all. The hub is drawn inverted (ink fill, background-colour text, so it clears 8:1 whenever the brand's body text does) and its box is measured from its wrapped text; if the box would crowd the spokes or the ring arcs, the ring radius grows rather than the text shrinking. Spokes are neutral (`muted`, dashed `5 4`), drawn beneath the nodes, stop 6 px off the hub edge, and keep at least 18 px of visible length. `hub=` and `center=` are exclusive — both occupy the middle.
+
+- **Precondition for a hub:** one durable thing every spoked step genuinely reads or writes. If you can't name it, there is no hub.
+- Don't put a theme or slogan in the hub — that is a caption (`center=`). A hub claims data flows into it.
+- Don't draw the hub as an extra step; it is state, not an action.
+- Don't spoke every step by reflex. A spoke from a step that doesn't write is a false claim; pass `steps=`.
+- One hub. Two shared stores are two systems — draw two diagrams.
 
 **Direction** is `"clockwise"` (default) or `"counterclockwise"`. The first step always sits at the top.
 
@@ -460,6 +482,8 @@ Kept:      fixation path Tracker → I-VT → AOI join → Features
 Both examples below render to `examples/diagrams/`:
 
 - [`cycle-evolver.svg`](../examples/diagrams/cycle-evolver.svg) — a 5-step iteration loop with a centre label; honest re-rendering of the AI-generated reference image whose text was visibly mangled.
+- [`cycle-experiment-icons.svg`](../examples/diagrams/cycle-experiment-icons.svg) — a 5-step experiment loop with a named Lucide icon on every step.
+- [`cycle-agent-hub.svg`](../examples/diagrams/cycle-agent-hub.svg) — a 6-step agent loop around a shared-memory hub; only the four steps that write to the memory carry a spoke.
 - [`matrix-sat-opt.svg`](../examples/diagrams/matrix-sat-opt.svg) — sat/opt × LF/HF, the orthogonality finding from ETTAC 2026. The matrix-shape claim is testable: if the axes were correlated, the diagonal cells would dominate; here the off-diagonal cells (`OPTIMIZER + LOAD`, `SATISFICER + LOAD`) carry distinct content, which is the data justification for a 2×2 over a 1D scatter.
 - [`layers-tcpip.svg`](../examples/diagrams/layers-tcpip.svg) — a 4-layer dependency stack with the Transport layer as the focal band and an "abstraction ↑" axis; the stack shape is honest because each layer genuinely depends on the one below.
 - [`funnel-q2.svg`](../examples/diagrams/funnel-q2.svg) — a proportional acquisition funnel; tier widths are driven by real counts (`proportional=True`), so the visual drop-off matches the `−%` annotations rather than faking a taper.

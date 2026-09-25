@@ -154,6 +154,34 @@ def render_examples(out_dir: Path) -> dict[str, str]:
                   "is 588 ms and is excluded from the scale. Position 4 "
                   "local has no measurement."),
             out_path=out_dir / "heat-grid-dwell.svg"),
+        "cycle-experiment-icons.svg": cycle(
+            [{"label": "Observe", "icon": "observe"},
+             {"label": "Hypothesize", "icon": "idea"},
+             {"label": "Test", "icon": "test"},
+             {"label": "Measure", "icon": "measure"},
+             {"label": "Learn", "icon": "learn"}],
+            title="Experiment loop",
+            desc=("Clockwise five-step experiment loop: observe, hypothesize, "
+                  "test, measure, learn, then observe again. Each step has "
+                  "an icon that repeats its label."),
+            out_path=out_dir / "cycle-experiment-icons.svg"),
+        "cycle-agent-hub.svg": cycle(
+            [{"label": "Capture", "icon": "observe"},
+             {"label": "Research", "icon": "search"},
+             {"label": "Decide", "icon": "decide"},
+             {"label": "Act", "icon": "ship"},
+             {"label": "Measure", "icon": "chart"},
+             {"label": "Learn", "icon": "learn"}],
+            hub={"label": "Shared memory",
+                 "sublabel": "one record, every pass",
+                 "steps": ["Capture", "Decide", "Measure", "Learn"]},
+            title="Agent operating loop",
+            desc=("Clockwise six-step agent loop — capture, research, decide, "
+                  "act, measure, learn — around a shared memory. Capture, "
+                  "decide, measure and learn write back to the memory; "
+                  "research and act only read from it, so they have no "
+                  "write-back spoke."),
+            out_path=out_dir / "cycle-agent-hub.svg"),
     }
 
 

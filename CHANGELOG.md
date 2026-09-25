@@ -8,6 +8,29 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **Diagram icon library: 30 curated Lucide glyphs, and named icons on
+  `cycle`.** `muriel.tools.diagrams.icons.GLYPHS` maps process-verb and
+  concept slots (`observe`, `measure`, `decide`, `refresh`, `test`, `ship`,
+  `database`, `brain`, …; aliases like `eye`, `iterate`) to inner SVG markup
+  from `lucide-static` 1.48.0 (ISC). `scripts/build_diagram_icons.py`
+  fetches into a committed vendor cache, strips colour/stroke attributes,
+  rewrites primitives as `<path>` so the label and contrast checks cannot
+  mistake a glyph for a container, and writes `glyphs.py` deterministically
+  (`--check` for CI). A cycle step's `icon` now takes a slot name (unknown
+  names raise with close matches) or raw markup as before; icons scale from
+  the brand's `[iconography] default_size` and `stroke_px`, sit above a
+  16 px step number instead of on top of it, and are `aria-hidden`.
+  Example: `cycle-experiment-icons.svg`.
+
+- **`cycle(hub=…)` — shared state the steps write back to.** One inverted
+  central node (label + sublabel, measured and wrapped) with dashed,
+  neutral write-back spokes from every step or a named subset, drawn beneath
+  the nodes; the ring grows when the hub would crowd the spokes or arcs.
+  Exclusive with `center=`. Docstring and `channels/diagrams.md` carry the
+  precondition (one durable store every spoked step reads or writes) and
+  anti-prescriptions. Adapted from diagram-design's Loop type. Example:
+  `cycle-agent-hub.svg`.
+
 - **`muriel.tools.diagrams.sankey` — conserved magnitude flow across 2–3
   stages.** Validates before drawing (equal stage totals, in = out per node,
   adjacent-stage flows, ≤8 nodes / ≤12 flows) and raises with the numbers;
@@ -170,6 +193,11 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   rows barely overlap, fatal for a pile.
 
 ### Fixed
+
+- **`cycle`: a wrapped label above the ring no longer lands on its node.**
+  Lines stacked downward from the anchor, so the top step's second line hit
+  its own circle; centred labels above the ring now grow upward.
+  Single-line labels are unchanged.
 
 - **`pyramid(proportional=True)` was not proportional.** Widths were
   `min_w + (max_w − min_w) · v/vmax`, a 160 px floor under every bar, so the
