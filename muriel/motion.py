@@ -37,6 +37,22 @@ Emil-Kowalski-inspired motion principles in All-The-Vibes/ATV-Design
 * **Scale** — entrance transforms floor at ``0.95`` (a card stepping forward,
   not a black hole opening from ``0``); press feedback uses ``0.96``.
 
+Modes, flashing, sequence shape
+-------------------------------
+Structural checks for motion that explains a figure, adapted from
+diagram-design's animation contract (MIT, © 2025 Cathryn Lavery); see
+``references/polish-rules.md`` rules 28–29. None of them look at timing
+except the decorative-loop cycle floor (≥ 3000 ms, cinematic under the
+binary above):
+
+* **Mode** — ``none`` / ``reveal`` / ``step`` / ``loop``. Only ``reveal``
+  autoplays, and once; ``step`` is user-driven; ``loop`` is decorative and
+  never carries meaning. :func:`validate_mode`.
+* **Flash rate** — at most three flashes per second (WCAG 2.3.1).
+  :func:`validate_flash_rate`.
+* **Sequence shape** — 1–8 steps, ≤ 2 items entering per step, ≤ 12 items
+  total. :func:`validate_sequence_shape`.
+
 What muriel deliberately does NOT take from the source: its duration *bands*
 (100–500 ms). Those sit squarely in muriel's uncanny zone — the binary above
 overrides them. muriel also keeps press scale at ``0.96`` (its own tuned
@@ -50,6 +66,7 @@ Usage
         validate_duration, MotionPolicyError,
         validate_properties, easing_for, validate_scale,
         ENTRANCE_SCALE_FLOOR, PRESS_SCALE,
+        validate_mode, validate_flash_rate, validate_sequence_shape,
     )
 
     validate_duration(80)     # OK — utility
@@ -59,6 +76,11 @@ Usage
     validate_properties(["transform", "opacity"])  # OK
     validate_properties("top")                     # raises MotionPropertyError
     easing_for("enter")       # "ease-out"
+
+    validate_mode("reveal", autoplay=True, repeats=False, semantic=True)  # OK
+    validate_mode("step", autoplay=True, repeats=False, semantic=True)    # raises
+    validate_flash_rate(4, 1000)          # raises — over 3 flashes/s
+    validate_sequence_shape(5, [1, 2, 1, 1, 1])  # OK
 
 CLI
 ---
@@ -91,6 +113,16 @@ __all__ = [
     "validate_properties",
     "easing_for",
     "validate_scale",
+    # Mode / flash / sequence-shape contract (diagram-design, MIT).
+    "MOTION_MODES",
+    "LOOP_MIN_CYCLE_MS",
+    "MAX_FLASHES_PER_SECOND",
+    "MAX_SEQUENCE_STEPS",
+    "MAX_ITEMS_PER_STEP",
+    "MAX_SEQUENCE_ITEMS",
+    "validate_mode",
+    "validate_flash_rate",
+    "validate_sequence_shape",
 ]
 
 
@@ -263,6 +295,136 @@ def validate_scale(value: float, kind: str = "entrance") -> None:
         )
 
 
+# ─── Mode / flash / sequence-shape contract ────────────────────────────────
+#
+# Adapted from diagram-design's animation contract (MIT, © 2025 Cathryn
+# Lavery): references/animation.md and ADRs 0001 / 0003. Structural only —
+# the source's --motion-* clock tokens are NOT imported; how long a step or
+# hold lasts is unresolved against the duration binary above.
+
+MOTION_MODES = frozenset({"none", "reveal", "step", "loop"})
+
+# A decorative loop cycles no faster than this. Slower loops stay ambient;
+# faster ones start to pull the eye like an alert.
+LOOP_MIN_CYCLE_MS: int = 3000
+
+# WCAG 2.3.1 (Three Flashes or Below Threshold).
+MAX_FLASHES_PER_SECOND: int = 3
+
+MAX_SEQUENCE_STEPS: int = 8
+MAX_ITEMS_PER_STEP: int = 2
+MAX_SEQUENCE_ITEMS: int = 12
+
+
+def validate_mode(
+    mode: str,
+    *,
+    autoplay: bool,
+    repeats: bool,
+    semantic: bool,
+    cycle_ms: float | None = None,
+) -> None:
+    """Raise ``MotionPolicyError`` if a figure's motion mode breaks the contract.
+
+    ``autoplay``: motion starts without user action. ``repeats``: it plays
+    more than once without an explicit Replay. ``semantic``: the moving
+    elements carry meaning (state, values, order, outcomes). ``cycle_ms``:
+    one loop cycle, required for ``loop``.
+
+    * ``none``   — no motion at all: no autoplay, no repeat.
+    * ``reveal`` — the only autoplay mode; plays once.
+    * ``step``   — user-driven; never autoplays or repeats.
+    * ``loop``   — decorative only (``semantic=False``), cycle ≥ 3000 ms.
+    """
+    key = mode.strip().lower() if isinstance(mode, str) else mode
+    if key not in MOTION_MODES:
+        raise MotionPolicyError(
+            f"unknown motion mode {mode!r}; expected one of {sorted(MOTION_MODES)}"
+        )
+    if key == "none":
+        if autoplay or repeats:
+            raise MotionPolicyError(
+                "mode 'none' is a static figure; it cannot autoplay or repeat."
+            )
+    elif key == "reveal":
+        if repeats:
+            raise MotionPolicyError(
+                "mode 'reveal' plays once and ends on the complete frame; it "
+                "never repeats without an explicit Replay."
+            )
+    elif key == "step":
+        if autoplay:
+            raise MotionPolicyError(
+                "mode 'step' is user-driven; only 'reveal' may autoplay."
+            )
+        if repeats:
+            raise MotionPolicyError("mode 'step' does not repeat on its own.")
+    else:  # loop
+        if semantic:
+            raise MotionPolicyError(
+                "mode 'loop' is decorative only; a repeating motion must not "
+                "carry meaning. Use 'reveal' or 'step' for semantic motion."
+            )
+        if cycle_ms is None:
+            raise MotionPolicyError(
+                f"mode 'loop' needs cycle_ms (≥ {LOOP_MIN_CYCLE_MS}ms)."
+            )
+        if not (isinstance(cycle_ms, (int, float)) and cycle_ms == cycle_ms):
+            raise ValueError(f"cycle_ms must be a finite number, got {cycle_ms!r}")
+        if cycle_ms < LOOP_MIN_CYCLE_MS:
+            raise MotionPolicyError(
+                f"loop cycle {cycle_ms}ms is under the {LOOP_MIN_CYCLE_MS}ms "
+                "floor; faster loops pull the eye like an alert."
+            )
+
+
+def validate_flash_rate(transitions: int, window_ms: float) -> None:
+    """Raise ``MotionPolicyError`` if flashes exceed 3 per second (WCAG 2.3.1).
+
+    ``transitions`` counts flashes (general or red) observed within a window
+    of ``window_ms``. The check is on the rate: ``transitions / seconds``
+    must not exceed :data:`MAX_FLASHES_PER_SECOND`.
+    """
+    if transitions < 0:
+        raise ValueError(f"negative flash count {transitions}")
+    if not (window_ms > 0 and window_ms != float("inf")):
+        raise ValueError(f"window_ms must be a positive finite number, got {window_ms!r}")
+    rate = transitions / (window_ms / 1000.0)
+    if rate > MAX_FLASHES_PER_SECOND:
+        raise MotionPolicyError(
+            f"{transitions} flashes in {window_ms:g}ms is {rate:.2f}/s; "
+            f"WCAG 2.3.1 allows at most {MAX_FLASHES_PER_SECOND}/s."
+        )
+
+
+def validate_sequence_shape(steps: int, per_step) -> None:
+    """Raise ``MotionPolicyError`` if a reveal/step sequence is over budget.
+
+    Structural budgets only (no timing): ``1 ≤ steps ≤ 8``, at most 2 items
+    entering in any one step, at most 12 items in total. ``per_step`` lists
+    the item count entering at each step and must have ``steps`` entries.
+    """
+    counts = list(per_step)
+    if any(c < 0 for c in counts):
+        raise ValueError(f"negative item count in per_step {counts}")
+    if not (1 <= steps <= MAX_SEQUENCE_STEPS):
+        raise MotionPolicyError(
+            f"{steps} steps; a sequence has 1–{MAX_SEQUENCE_STEPS}. "
+            "Over budget means the static figure is too dense, not that motion should rescue it."
+        )
+    if len(counts) != steps:
+        raise ValueError(f"per_step has {len(counts)} entries for {steps} steps")
+    if max(counts) > MAX_ITEMS_PER_STEP:
+        raise MotionPolicyError(
+            f"{max(counts)} items enter in one step; at most {MAX_ITEMS_PER_STEP}."
+        )
+    total = sum(counts)
+    if total > MAX_SEQUENCE_ITEMS:
+        raise MotionPolicyError(
+            f"{total} items across the sequence; at most {MAX_SEQUENCE_ITEMS}."
+        )
+
+
 def _selftest() -> int:
     failures: list[str] = []
 
@@ -351,6 +513,41 @@ def _selftest() -> int:
         else:
             check(f"scale {bad} rejected", False, "did not raise")
 
+    # ── Mode / flash / sequence shape ──
+    validate_mode("none", autoplay=False, repeats=False, semantic=True)
+    validate_mode("reveal", autoplay=True, repeats=False, semantic=True)
+    validate_mode("step", autoplay=False, repeats=False, semantic=True)
+    validate_mode("loop", autoplay=True, repeats=True, semantic=False,
+                  cycle_ms=LOOP_MIN_CYCLE_MS)
+    for args, kw in (
+        (("step",), dict(autoplay=True, repeats=False, semantic=True)),
+        (("reveal",), dict(autoplay=True, repeats=True, semantic=True)),
+        (("loop",), dict(autoplay=True, repeats=True, semantic=True, cycle_ms=3000)),
+        (("loop",), dict(autoplay=True, repeats=True, semantic=False, cycle_ms=2999)),
+        (("carousel",), dict(autoplay=False, repeats=False, semantic=False)),
+    ):
+        try:
+            validate_mode(*args, **kw)
+        except MotionPolicyError:
+            pass
+        else:
+            check(f"validate_mode{args}{kw} rejected", False, "did not raise")
+    validate_flash_rate(3, 1000)
+    try:
+        validate_flash_rate(4, 1000)
+    except MotionPolicyError:
+        pass
+    else:
+        check("4 flashes/s rejected", False, "did not raise")
+    validate_sequence_shape(5, [1, 2, 1, 1, 1])
+    for steps, per in ((2, [3, 1]), (7, [2, 2, 2, 2, 2, 2, 1]), (0, []), (9, [1] * 9)):
+        try:
+            validate_sequence_shape(steps, per)
+        except MotionPolicyError:
+            pass
+        else:
+            check(f"sequence {steps}/{per} rejected", False, "did not raise")
+
     if failures:
         for f in failures:
             print(f"FAIL  {f}", file=sys.stderr)
@@ -374,6 +571,14 @@ def _format_policy() -> str:
         "easing   : enter → ease-out   exit → ease-in   move → ease-in-out\n"
         f"scale    : entrance floor {ENTRANCE_SCALE_FLOOR}, press {PRESS_SCALE} "
         "(not the source's 0.97)\n"
+        "\n"
+        "figure motion contract (diagram-design, structural only)\n"
+        "--------------------------------------------------------\n"
+        f"modes    : {sorted(MOTION_MODES)}; only reveal autoplays (once)\n"
+        f"loop     : decorative only, cycle ≥ {LOOP_MIN_CYCLE_MS} ms\n"
+        f"flash    : ≤ {MAX_FLASHES_PER_SECOND}/s (WCAG 2.3.1)\n"
+        f"sequence : 1–{MAX_SEQUENCE_STEPS} steps, ≤ {MAX_ITEMS_PER_STEP}/step, "
+        f"≤ {MAX_SEQUENCE_ITEMS} items\n"
     )
 
 
