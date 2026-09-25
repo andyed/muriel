@@ -664,7 +664,7 @@ Every color resolves through a `--mg-*` token (see [`style-guides.md`](style-gui
   font-size: 14px;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s ease;
+  transition: background 0.1s ease;
 }
 .zoom-controls button:hover { background: var(--mg-border); }
 .zoom-controls button:focus-visible {

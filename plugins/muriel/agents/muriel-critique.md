@@ -102,7 +102,7 @@ If `brand` is supplied:
 - **Colors.** Each text role in the artifact should match a token in `[colors]` or resolve via `[colors.aliases]`. Off-token colors are failures unless explicitly out of brand scope (e.g. a photograph).
 - **Typography.** Display and body families should match `[typography.display_family]` / `[typography.body_family]`.
 - **Ownership.** If `[rules.never_rebuild_image_generation_elsewhere]` is true and the artifact appears to regenerate a wordmark/monogram/logo, flag it regardless of visual quality.
-- **Motion.** If the artifact is animated and `[motion]` tokens exist, verify durations / easings are plausible. (You may not be able to measure exactly; flag if motion feels outside the token envelope — e.g. a 2-second reveal when the brand specifies 0.48s `duration_slow`.)
+- **Motion.** If the artifact is animated and `[motion]` tokens exist, verify durations / easings are plausible. (You may not be able to measure exactly; flag if motion feels outside the token envelope — e.g. a 300 ms slide when the brand specifies 100 ms `duration_fast` — the uncanny band `muriel.motion` forbids for transitions.)
 
 ### 4. Cross-channel visual judgment
 

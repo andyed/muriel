@@ -91,7 +91,7 @@ Self-contained — paste anywhere inside any HTML page on a dark background. Cli
     display: flex; align-items: center; gap: 8px;
     margin: 1rem auto 0; width: fit-content;
     text-decoration: none; user-select: none;
-    opacity: 0.78; transition: opacity 0.2s ease;
+    opacity: 0.78; transition: opacity 0.1s ease;
   }
   .muriel-credit:hover, .muriel-credit:focus { opacity: 1; }
   .muriel-credit .muriel-mark rect { fill: #e6e4d2; }

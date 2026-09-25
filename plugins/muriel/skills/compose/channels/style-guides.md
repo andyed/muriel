@@ -99,9 +99,9 @@ high = "0 18px 56px rgba(0,0,0,0.60)"
 
 # ── Motion ──
 [motion]
-duration_fast     = 120
-duration_normal   = 240
-duration_slow     = 480
+duration_fast     = 100    # utility transition
+duration_normal   = 100    # the binary has no middle
+duration_slow     = 1500   # cinematic
 easing_default    = "cubic-bezier(0.2, 0.0, 0.2, 1.0)"
 easing_emphasis   = "cubic-bezier(0.4, 0.0, 0.2, 1.0)"
 motion_preference = "respect-prefers-reduced-motion"
@@ -141,7 +141,7 @@ min_contrast_ratio   = 8.0
 min_hit_target_px    = 44
 focus_ring_color     = "accent_ink"   # raw-name, hex, or [colors.named] key
 focus_ring_width_px  = 3
-motion_reduce_policy = "collapse-to-zero"
+motion_reduce_policy = "collapse-to-zero"   # | "keep-fast" (alias "reduce") | "keep-linear"
 
 # ── Ownership rules ──
 [rules]
@@ -184,7 +184,7 @@ sg.radii["pill"]                            # → 9999
 sg.elevation["high"]                        # → '0 18px 56px rgba(0,0,0,0.60)'
 
 # Motion
-sg.motion.duration_normal                   # → 240
+sg.motion.duration_normal                   # → 100
 sg.motion.easing_default                    # → 'cubic-bezier(0.2, 0.0, 0.2, 1.0)'
 
 # Iconography / imagery

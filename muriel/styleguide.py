@@ -182,12 +182,19 @@ class Typography:
 
 @dataclass(frozen=True)
 class Motion:
-    """Duration tokens (ms) + easing curves. Consumed by kinetic/interactive/video."""
+    """Duration tokens (ms) + easing curves. Consumed by kinetic/interactive/video.
+
+    Defaults sit on the two ends of ``muriel.motion``'s duration binary
+    (2026-09-24; were 120 / 240 / 480 / 800, all in the uncanny band):
+    ``fast`` and ``normal`` are utility transitions (100 ms), ``slow`` and
+    ``reveal`` are cinematic (1500 ms). ``normal`` collapses onto ``fast``
+    because the binary has no middle; both names stay for compatibility.
+    """
     duration_instant: int = 0
-    duration_fast:    int = 120
-    duration_normal:  int = 240
-    duration_slow:    int = 480
-    duration_reveal:  int = 800
+    duration_fast:    int = 100
+    duration_normal:  int = 100
+    duration_slow:    int = 1500
+    duration_reveal:  int = 1500
     easing_default:   str = "cubic-bezier(0.2, 0.0, 0.2, 1.0)"
     easing_emphasis:  str = "cubic-bezier(0.4, 0.0, 0.2, 1.0)"
     easing_snappy:    str = "cubic-bezier(0.6, 0.0, 0.2, 1.0)"
@@ -277,8 +284,12 @@ class A11y:
     """
     Per-brand accessibility floors.
 
-    ``motion_reduce_policy`` values: ``'collapse-to-zero'``, ``'keep-fast'``,
-    ``'keep-linear'``.
+    ``motion_reduce_policy`` values (``muriel.motion.REDUCE_POLICIES``):
+    ``'collapse-to-zero'`` (default; every duration to 0), ``'keep-fast'``
+    (keep utility ≤100 ms opacity fades, transforms to identity), and
+    ``'keep-linear'`` (keep opacity fades at their durations, linear easing,
+    transforms to identity). ``'reduce'`` is accepted as an alias of
+    ``'keep-fast'``; the loader stores the canonical name.
 
     ``focus_ring_color`` may be a hex value, a raw-color name from
     ``[colors]``, or a named accent from ``[colors.named]``.
@@ -491,6 +502,11 @@ class StyleGuide:
             lines.append(f"  {prefix}duration-{k}: {getattr(m, f'duration_{k}')}ms;")
         for k in ("default", "emphasis", "snappy", "linear"):
             lines.append(f"  {prefix}ease-{k}: {getattr(m, f'easing_{k}')};")
+        # Sequence timing — policy constants from muriel.motion, not brand
+        # tokens: transition between states, hold on each state.
+        from muriel.motion import MOTION_CSS_TOKENS
+        for k, v in MOTION_CSS_TOKENS.items():
+            lines.append(f"  {prefix}{k}: {v};")
 
         # Type scale
         for role_name, role in self.typography.scale.items():
@@ -668,6 +684,21 @@ def _logo_variant(d: dict[str, Any]) -> LogoVariant:
     )
 
 
+def _reduce_policy(value: Any) -> str:
+    """Canonicalize ``[a11y].motion_reduce_policy``; warn (don't fail) on unknowns.
+
+    Aliases resolve (``reduce`` → ``keep-fast``). An unknown value was
+    silently accepted before 2026-09-24, so it is kept verbatim with a
+    stderr warning rather than breaking an existing brand file.
+    """
+    from muriel.motion import normalize_reduce_policy
+    try:
+        return normalize_reduce_policy(value)
+    except ValueError as e:
+        print(f"muriel.styleguide: WARN {e}", file=sys.stderr)
+        return str(value)
+
+
 def load_styleguide(path: Union[str, Path]) -> StyleGuide:
     """
     Load a brand.toml style guide from disk into a frozen ``StyleGuide``.
@@ -768,10 +799,10 @@ def load_styleguide(path: Union[str, Path]) -> StyleGuide:
     md = data.get("motion", {})
     motion = Motion(
         duration_instant=int(md.get("duration_instant", 0)),
-        duration_fast=int(md.get("duration_fast", 120)),
-        duration_normal=int(md.get("duration_normal", 240)),
-        duration_slow=int(md.get("duration_slow", 480)),
-        duration_reveal=int(md.get("duration_reveal", 800)),
+        duration_fast=int(md.get("duration_fast", Motion.duration_fast)),
+        duration_normal=int(md.get("duration_normal", Motion.duration_normal)),
+        duration_slow=int(md.get("duration_slow", Motion.duration_slow)),
+        duration_reveal=int(md.get("duration_reveal", Motion.duration_reveal)),
         easing_default=md.get("easing_default", "cubic-bezier(0.2, 0.0, 0.2, 1.0)"),
         easing_emphasis=md.get("easing_emphasis", "cubic-bezier(0.4, 0.0, 0.2, 1.0)"),
         easing_snappy=md.get("easing_snappy", "cubic-bezier(0.6, 0.0, 0.2, 1.0)"),
@@ -820,7 +851,7 @@ def load_styleguide(path: Union[str, Path]) -> StyleGuide:
         min_hit_target_px=int(ad.get("min_hit_target_px", 44)),
         focus_ring_color=ad.get("focus_ring_color"),
         focus_ring_width_px=int(ad.get("focus_ring_width_px", 3)),
-        motion_reduce_policy=ad.get("motion_reduce_policy", "collapse-to-zero"),
+        motion_reduce_policy=_reduce_policy(ad.get("motion_reduce_policy", "collapse-to-zero")),
     )
 
     # ── assets ──────────────────────────────────────────────────────────
