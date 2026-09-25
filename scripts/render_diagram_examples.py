@@ -28,11 +28,14 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
 from muriel.tools.diagrams.cycle import cycle  # noqa: E402
+from muriel.tools.diagrams.dendrogram import dendrogram  # noqa: E402
 from muriel.tools.diagrams.heat_grid import heat_grid  # noqa: E402
 from muriel.tools.diagrams.layer_stack import layer_stack  # noqa: E402
 from muriel.tools.diagrams.matrix import matrix  # noqa: E402
 from muriel.tools.diagrams.pyramid import pyramid  # noqa: E402
+from muriel.tools.diagrams.sankey import sankey  # noqa: E402
 from muriel.tools.diagrams.swimlane import swimlane  # noqa: E402
+from muriel.tools.diagrams.treemap import treemap  # noqa: E402
 
 EXAMPLES = REPO_ROOT / "plugins/muriel/skills/compose/examples/diagrams"
 MIRRORS = (
@@ -96,6 +99,77 @@ def render_examples(out_dir: Path) -> dict[str, str]:
             axes=(("low LF/HF", "high LF/HF"), ("satisficer", "optimizer")),
             title="Sat/opt × LF/HF — orthogonal axes",
             out_path=out_dir / "matrix-sat-opt.svg"),
+        "sankey-search-sessions.svg": sankey(
+            ["Query", "First action", "Outcome"],
+            [{"id": "sessions", "stage": "Query", "label": "Search sessions",
+              "value": 10000},
+             {"id": "organic", "stage": "First action",
+              "label": "Organic click", "value": 5800},
+             {"id": "ad", "stage": "First action", "label": "Ad click",
+              "value": 1400},
+             {"id": "noclick", "stage": "First action", "label": "No click",
+              "value": 2800},
+             {"id": "satisfied", "stage": "Outcome", "label": "Satisfied",
+              "value": 6100},
+             {"id": "reformulated", "stage": "Outcome",
+              "label": "Reformulated", "value": 2700},
+             {"id": "abandoned", "stage": "Outcome", "label": "Abandoned",
+              "value": 1200}],
+            [{"src": "sessions", "dst": "organic", "value": 5800},
+             {"src": "sessions", "dst": "ad", "value": 1400},
+             {"src": "sessions", "dst": "noclick", "value": 2800},
+             {"src": "organic", "dst": "satisfied", "value": 4600},
+             {"src": "organic", "dst": "reformulated", "value": 1200},
+             {"src": "ad", "dst": "satisfied", "value": 700},
+             {"src": "ad", "dst": "reformulated", "value": 700},
+             {"src": "noclick", "dst": "satisfied", "value": 800},
+             {"src": "noclick", "dst": "reformulated", "value": 800},
+             {"src": "noclick", "dst": "abandoned", "value": 1200}],
+            focal=["sessions", "ad", "reformulated"],
+            unit="sessions",
+            title="Search sessions: first action to outcome",
+            desc=("Illustrative counts. Of 10,000 search sessions, 5,800 "
+                  "start with an organic click, 1,400 with an ad click and "
+                  "2,800 with no click. Half of the ad clicks (700 of 1,400) "
+                  "end in a reformulated query, against about one in five "
+                  "organic clicks (1,200 of 5,800). Of the no-click "
+                  "sessions, 800 end satisfied on the results page itself."),
+            out_path=out_dir / "sankey-search-sessions.svg"),
+        "treemap-serp.svg": treemap(
+            [{"label": "Organic results", "value": 7.42},
+             {"label": "Ads", "value": 2.91, "focal": True,
+              "sublabel": "top and bottom blocks"},
+             {"label": "Knowledge panel", "value": 1.84},
+             {"label": "Related searches", "value": 0.97},
+             {"label": "Navigation", "value": 0.61},
+             {"label": "Pagination", "value": 0.22}],
+            title="Fixation time by SERP region (illustrative)", unit=" s",
+            desc=("Illustrative treemap of mean fixation time per trial by "
+                  "search-results-page region, area proportional to time: "
+                  "organic results take about half of all fixation time "
+                  "(7.42 of 13.97 s), ads about a fifth (2.91 s), and the "
+                  "knowledge panel, related searches, navigation and "
+                  "pagination share the remaining quarter."),
+            out_path=out_dir / "treemap-serp.svg"),
+        "dendrogram-eye-movements.svg": dendrogram(
+            {"label": "Eye-movement events", "sublabel": "oculomotor record",
+             "children": [
+                 {"label": "Fixation", "sublabel": "gaze held", "children": [
+                     {"label": "Microsaccade", "focal": True},
+                     "Drift", "Tremor"]},
+                 {"label": "Saccade", "sublabel": "ballistic shift",
+                  "children": ["Reflexive", "Volitional"]},
+                 {"label": "Smooth pursuit", "sublabel": "tracks a target",
+                  "children": ["Open-loop", "Closed-loop"]},
+                 {"label": "Blink", "sublabel": "lid closure",
+                  "children": ["Spontaneous", "Reflex", "Voluntary"]}]},
+            title="Eye-movement events",
+            desc=("Taxonomy of eye-movement events in four classes: fixation, "
+                  "saccade, smooth pursuit and blink, each split into its "
+                  "subtypes. Fixation is not stillness: it contains three "
+                  "movements of its own, microsaccades, drift and tremor, and "
+                  "the microsaccade is the event under discussion."),
+            out_path=out_dir / "dendrogram-eye-movements.svg"),
         "heat-grid-dwell.svg": heat_grid(
             ["Position 1", "Position 2", "Position 3", "Position 4",
              "Position 5", "Position 6–10"],

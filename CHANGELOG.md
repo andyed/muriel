@@ -31,6 +31,34 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   fixture. `not-motion` covers latency budgets, reaction times, event rates
   and cited counterexamples.
 
+- **`muriel.tools.diagrams.sankey` — conserved magnitude flow across 2–3
+  stages.** Validates before drawing (equal stage totals, in = out per node,
+  adjacent-stage flows, ≤8 nodes / ≤12 flows) and raises with the numbers;
+  one px-per-unit scale for every bar and ribbon, per-flow slices stacked by
+  the other end's position, midline-control ribbons written as polylines so
+  `muriel diagram-check` can verify the contrast under every label, one
+  accent path named in a legend, `data-value` on every bar and ribbon, JSON
+  CLI. Example: `sankey-search-sessions.svg`; conservation is recomputed from
+  the file in `tests/test_diagram_sankey.py`.
+- **`muriel.tools.diagrams.treemap` — squarified part-of-whole treemap,
+  the first native member of the hierarchy family.** 4–8 cells (more raises;
+  `max_cells=` collapses the tail into a named "Other"), 4px gutters with a
+  weight correction that holds every cell's drawn area within 4% relative
+  error of its share, `data-value`/`data-share` on every cell, and measured
+  label tiers (large / medium / small / sliver) with a legend for every part
+  whose value is not printed in place. Never clips, floors, rotates, resizes
+  for a label, or drops a cell. Example: `examples/diagrams/treemap-serp.svg`.
+- **`dendrogram`: tree / hierarchy diagram generator.**
+  `muriel.tools.diagrams.dendrogram(tree, orientation="down"|"right", …)`
+  draws a nested `{label, sublabel, focal, children}` tree as a contour-based
+  tidy tree: parents centred on their first and last child, no subtree
+  overlap, ranks evenly spaced and never skipped, at most two box widths, and
+  elbow-bus connectors with no diagonals. Budget is 4 levels, 5 children per
+  node and a measured leaf-axis extent; `collapse_over=` folds overflow
+  siblings into a `+N more` node. A node shared by two parents raises (use
+  `dag`), and so does a tree that never branches. Nodes carry `data-depth`.
+  Example: `dendrogram-eye-movements.svg`.
+
 - **`heat_grid`: comparison heat-grid diagram generator.**
   `muriel.tools.diagrams.heat_grid(rows, cols, values, …)` draws 3–7 × 3–8
   cells of one unsigned quantity on a single ink opacity ramp, quantized to a
