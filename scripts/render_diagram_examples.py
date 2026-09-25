@@ -29,10 +29,13 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from muriel.tools.diagrams.comparison_pair import comparison_pair  # noqa: E402
 from muriel.tools.diagrams.cycle import cycle  # noqa: E402
+from muriel.tools.diagrams.heat_grid import heat_grid  # noqa: E402
 from muriel.tools.diagrams.layer_stack import layer_stack  # noqa: E402
 from muriel.tools.diagrams.matrix import matrix  # noqa: E402
 from muriel.tools.diagrams.pyramid import pyramid  # noqa: E402
+from muriel.tools.diagrams.sankey import sankey  # noqa: E402
 from muriel.tools.diagrams.swimlane import swimlane  # noqa: E402
+from muriel.tools.diagrams.treemap import treemap  # noqa: E402
 
 EXAMPLES = REPO_ROOT / "plugins/muriel/skills/compose/examples/diagrams"
 MIRRORS = (
@@ -127,6 +130,79 @@ def render_examples(out_dir: Path) -> dict[str, str]:
                   "request B fails the auto-limit check, so the fraud score "
                   "and auto-approval are never reached for it."),
             out_path=out_dir / "comparison-pair-trace.svg"),
+        "sankey-search-sessions.svg": sankey(
+            ["Query", "First action", "Outcome"],
+            [{"id": "sessions", "stage": "Query", "label": "Search sessions",
+              "value": 10000},
+             {"id": "organic", "stage": "First action",
+              "label": "Organic click", "value": 5800},
+             {"id": "ad", "stage": "First action", "label": "Ad click",
+              "value": 1400},
+             {"id": "noclick", "stage": "First action", "label": "No click",
+              "value": 2800},
+             {"id": "satisfied", "stage": "Outcome", "label": "Satisfied",
+              "value": 6100},
+             {"id": "reformulated", "stage": "Outcome",
+              "label": "Reformulated", "value": 2700},
+             {"id": "abandoned", "stage": "Outcome", "label": "Abandoned",
+              "value": 1200}],
+            [{"src": "sessions", "dst": "organic", "value": 5800},
+             {"src": "sessions", "dst": "ad", "value": 1400},
+             {"src": "sessions", "dst": "noclick", "value": 2800},
+             {"src": "organic", "dst": "satisfied", "value": 4600},
+             {"src": "organic", "dst": "reformulated", "value": 1200},
+             {"src": "ad", "dst": "satisfied", "value": 700},
+             {"src": "ad", "dst": "reformulated", "value": 700},
+             {"src": "noclick", "dst": "satisfied", "value": 800},
+             {"src": "noclick", "dst": "reformulated", "value": 800},
+             {"src": "noclick", "dst": "abandoned", "value": 1200}],
+            focal=["sessions", "ad", "reformulated"],
+            unit="sessions",
+            title="Search sessions: first action to outcome",
+            desc=("Illustrative counts. Of 10,000 search sessions, 5,800 "
+                  "start with an organic click, 1,400 with an ad click and "
+                  "2,800 with no click. Half of the ad clicks (700 of 1,400) "
+                  "end in a reformulated query, against about one in five "
+                  "organic clicks (1,200 of 5,800). Of the no-click "
+                  "sessions, 800 end satisfied on the results page itself."),
+            out_path=out_dir / "sankey-search-sessions.svg"),
+        "treemap-serp.svg": treemap(
+            [{"label": "Organic results", "value": 7.42},
+             {"label": "Ads", "value": 2.91, "focal": True,
+              "sublabel": "top and bottom blocks"},
+             {"label": "Knowledge panel", "value": 1.84},
+             {"label": "Related searches", "value": 0.97},
+             {"label": "Navigation", "value": 0.61},
+             {"label": "Pagination", "value": 0.22}],
+            title="Fixation time by SERP region (illustrative)", unit=" s",
+            desc=("Illustrative treemap of mean fixation time per trial by "
+                  "search-results-page region, area proportional to time: "
+                  "organic results take about half of all fixation time "
+                  "(7.42 of 13.97 s), ads about a fifth (2.91 s), and the "
+                  "knowledge panel, related searches, navigation and "
+                  "pagination share the remaining quarter."),
+            out_path=out_dir / "treemap-serp.svg"),
+        "heat-grid-dwell.svg": heat_grid(
+            ["Position 1", "Position 2", "Position 3", "Position 4",
+             "Position 5", "Position 6–10"],
+            ["Navigational", "Informational", "Transactional", "Local"],
+            [[412, 588, 471, 436], [298, 521, 402, 365],
+             [241, 463, 318, 290], [187, 402, 265, None],
+             [164, 371, 228, 203], [118, 296, 176, 149]],
+            focal=(0, 1),
+            focal_note="informational queries hold the top result longest",
+            unit="mean fixation dwell (ms)", row_title="SERP position",
+            col_title="Query intent",
+            title="Where searchers dwell, by position and intent",
+            desc=("Illustrative values, not measured data. Heat grid of mean "
+                  "fixation dwell in milliseconds by SERP position (rows 1 "
+                  "to 6–10) and query intent (navigational, informational, "
+                  "transactional, local). Dwell falls with position in every "
+                  "intent column, and the informational column is highest at "
+                  "every position; the focal cell, position 1 informational, "
+                  "is 588 ms and is excluded from the scale. Position 4 "
+                  "local has no measurement."),
+            out_path=out_dir / "heat-grid-dwell.svg"),
     }
 
 

@@ -16,10 +16,13 @@ from muriel.tools.diagrams import (
     cycle,
     engine_sectors_overlay,
     foveal_overlay,
+    heat_grid,
     layer_stack,
     matrix,
     pyramid,
+    sankey,
     swimlane,
+    treemap,
 )
 from muriel.tools.diagrams._a11y import TITLE_MAX, fit_title, lint_a11y, slugify
 
@@ -89,9 +92,24 @@ GENERATORS = {
     "foveal_overlay_l3": lambda out: foveal_overlay(verbosity=3, out_path=out),
     "engine_sectors_l1": lambda out: engine_sectors_overlay(verbosity=1, out_path=out),
     "engine_sectors_l3": lambda out: engine_sectors_overlay(verbosity=3, out_path=out),
+    "treemap": lambda out: treemap(
+        [{"label": "A", "value": 50}, {"label": "B", "value": 30, "focal": True},
+         {"label": "C", "value": 15}, {"label": "D", "value": 5}],
+        title="Treemap", out_path=out),
+    "heat_grid": lambda out: heat_grid(
+        ["r1", "r2", "r3"], ["c1", "c2", "c3"],
+        [[1, 2, 3], [4, None, 6], [7, 8, 9]], focal=(2, 2),
+        title="Heat grid", out_path=out),
     "venn_single": _venn_single,
     "venn_panels": _venn_panels,
     "wavefield": _wavefield,
+    "sankey": lambda out: sankey(
+        ["In", "Out"],
+        [{"id": "a", "stage": 0, "value": 3}, {"id": "b", "stage": 0, "value": 1},
+         {"id": "x", "stage": 1, "value": 2}, {"id": "y", "stage": 1, "value": 2}],
+        [{"src": "a", "dst": "x", "value": 2}, {"src": "a", "dst": "y", "value": 1},
+         {"src": "b", "dst": "y", "value": 1}],
+        focal=["a", "x"], title="Sankey", out_path=out),
 }
 
 

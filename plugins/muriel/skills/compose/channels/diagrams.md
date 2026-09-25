@@ -72,8 +72,10 @@ Ordered by how often each structure carries a real argument in research, product
 | 7 | Venn / Euler | Categorical intersection; area-proportional. | **Shipped** — `muriel.tools.venn` |
 | 8 | Spectrum | Position between two poles is the encoding. | Queued |
 | 9 | Pyramid | Each level depends on the one below; apex is rare or important. | **Shipped** — `muriel.tools.diagrams.pyramid` (`orientation="up"`) |
-| 10 | Comparison heat-grid | Dense `n × m` comparison; small multiples for categorical evals. | Queued |
+| 10 | **Comparison heat-grid** | Dense `n × m` comparison of one unsigned quantity; the pattern across rows × columns is the claim. | **Shipped** — `muriel.tools.diagrams.heat_grid` |
 | 11 | Swimlane | Cross-functional process; the handoffs between actors are the point. | **Shipped** — `muriel.tools.diagrams.swimlane` |
+| 12 | **Sankey** | A conserved quantity splits and merges across 2–3 stages; ribbon thickness is the magnitude. | **Shipped** — `muriel.tools.diagrams.sankey` |
+| 13 | **Treemap** | One whole split into 4–8 disjoint parts; area is each part's share. Hierarchy family, one level. | **Shipped** — `muriel.tools.diagrams.treemap` |
 
 **Explicitly excluded.** Process arrows, list-with-chevrons, interconnected blocks, radial gear cosmetics, target-with-concentric-rings as decoration. If a SmartArt category exists only to ornament a list, this channel will never ship it.
 
@@ -92,7 +94,8 @@ Several diagram forms have an existing home elsewhere in muriel. The native gene
 | Single-actor process flow | swimlane (degenerate) | infographics **Process** template — lighter when there are no lanes. Use swimlane only when ownership/handoffs are the argument. |
 | Tree / org-chart | — | **ECharts** `tree` series (interactive) or the infographics **Hierarchical** template. |
 | Nested hierarchy (proportional) | — | Queued **hierarchy family** — sunburst / treemap / dendrogram (see [`TODO.md`](../../../../../TODO.md) #45), ECharts-backed. |
-| Magnitude flow | — | Queued **Sankey** primitive ([`TODO.md`](../../../../../TODO.md) #44). |
+| Magnitude flow | **`sankey`** (2–3 stages) | **ECharts** `sankey` series when the flow is interactive or needs more than three stages. |
+| Part-of-whole, one level (4–8 parts) | **`treemap`** — hierarchy family, shipped | **ECharts** `treemap` when the reader needs drill-down or more than one level. Native `treemap` does not nest yet. |
 
 Rule of thumb: **Mermaid** for node-link relational diagrams (sequence, state, ER, flowchart), **ECharts** when the diagram is data-driven or interactive (timeline, tree, treemap, sunburst), and **this channel** when the output is a static editorial SVG whose geometry encodes a specific rhetorical claim.
 
@@ -268,6 +271,41 @@ pyramid(
 - Don't fake funnel widths. If they aren't proportional to the counts, the reader sees a drop-off that isn't there — pass real `value`s or say in the caption that the taper is ordinal.
 - Don't highlight the base. Coral on the broad base dilutes the "apex = rare" signal.
 
+## Comparison heat-grid
+
+```python
+from muriel.tools.diagrams import heat_grid
+
+heat_grid(
+    rows=["Position 1", "Position 2", "Position 3", "Position 4",
+          "Position 5", "Position 6–10"],
+    cols=["Navigational", "Informational", "Transactional", "Local"],
+    values=[[412, 588, 471, 436], [298, 521, 402, 365],
+            [241, 463, 318, 290], [187, 402, 265, None],   # None = n/a cell
+            [164, 371, 228, 203], [118, 296, 176, 149]],
+    focal=(0, 1),                        # (row, col) — index or label
+    focal_note="informational queries hold the top result longest",
+    unit="mean fixation dwell (ms)",
+    row_title="SERP position", col_title="Query intent",
+    title="Where searchers dwell, by position and intent",
+    out_path="examples/diagrams/heat-grid-dwell.svg",
+)
+```
+
+**Rows** is 3–7 labels and **cols** 3–8, each unique; `values[r][c]` is one non-negative number per crossing, or `None` for a missing measurement, drawn as a hatched cell that says "n/a" (never a blank that reads as zero). A ragged table raises, and so does a negative value: signed data needs a diverging treatment, which this generator does not draw. Cells are 116×56 with a 4px gap and narrow toward 80px as columns grow; row labels are end-anchored in a left margin sized by measurement, and column labels wrap to two lines before a cell widens.
+
+Fill opacity on a single ink ramp is the only quantity channel. Cells are quantized to the legend's stepped swatches, with bin edges rounded to 1/2/2.5/5 × 10ⁿ near `steps` (default 5), so the legend is the scale rather than an impression of it. The `focal` cell is **excluded from the scale max**, so an outlier cannot flatten the field; it gets an accent stroke, and its value is stated in the legend key and the `<desc>`. Every cell rect carries `data-row`, `data-col`, `data-value` (`"n/a"` when missing) and, on the focal cell, `data-focal="true"`, so the values can be recomputed from the file.
+
+**The contrast constraint.** With `show_values=True` each value is printed in ink or paper, whichever clears 8:1 on the *composited* fill. Ink and paper are only ~15:1 apart, so across the middle of any ink-on-paper ramp neither clears 8:1 — on the OLED default, roughly 0.25–0.75 opacity. The ramp ceiling is therefore solved per brand, as the highest opacity below which every fill keeps a legible text colour: about 0.25 on the default, which makes a quieter ramp. `show_values=False` takes the text off the fill and uses the full 0.07–0.70 range. Choose that when the pattern matters more than the numbers.
+
+**Why not `matrix`.** `matrix` is a named 2×2 categorical decomposition: four classes, each with a label and bullets, and no number. A heat grid is N×M cells each holding one measured value. Stretching `matrix` would give it a quantity channel with no honest scale.
+
+**Anti-prescriptions** (also in the docstring):
+
+- One row or one column is a bar chart: length beats opacity for comparing magnitudes. The generator refuses fewer than 3 of either.
+- If the reader needs exact values more than the pattern, use a table.
+- No hue per row or column, no diverging ramp for unsigned data, no gradient legend, no silently dropped rows or columns.
+
 ## Swimlane
 
 ```python
@@ -345,6 +383,87 @@ comparison_pair(
 - The story is position on one continuous scale, not change between states → **spectrum**.
 - Items with no shared scale → a **table**. A slope between unlike units means nothing.
 - Don't nudge endpoints to make room. Crowded labels mean the values are close, which is part of the data.
+## Sankey
+
+```python
+from muriel.tools.diagrams import sankey
+
+sankey(
+    stages=["Query", "First action", "Outcome"],
+    nodes=[
+        {"id": "sessions", "stage": "Query",        "label": "Search sessions", "value": 10000},
+        {"id": "organic",  "stage": "First action", "label": "Organic click",   "value": 5800},
+        {"id": "ad",       "stage": "First action", "label": "Ad click",        "value": 1400},
+        {"id": "noclick",  "stage": "First action", "label": "No click",        "value": 2800},
+        {"id": "satisfied",    "stage": "Outcome", "label": "Satisfied",    "value": 6100},
+        {"id": "reformulated", "stage": "Outcome", "label": "Reformulated", "value": 2700},
+        {"id": "abandoned",    "stage": "Outcome", "label": "Abandoned",    "value": 1200},
+    ],
+    flows=[
+        {"src": "sessions", "dst": "organic", "value": 5800},
+        {"src": "sessions", "dst": "ad",      "value": 1400},
+        {"src": "sessions", "dst": "noclick", "value": 2800},
+        {"src": "organic", "dst": "satisfied",    "value": 4600},
+        {"src": "organic", "dst": "reformulated", "value": 1200},
+        {"src": "ad",      "dst": "satisfied",    "value": 700},
+        {"src": "ad",      "dst": "reformulated", "value": 700},
+        {"src": "noclick", "dst": "satisfied",    "value": 800},
+        {"src": "noclick", "dst": "reformulated", "value": 800},
+        {"src": "noclick", "dst": "abandoned",    "value": 1200},
+    ],
+    focal=["sessions", "ad", "reformulated"],   # node path, or flow ids "src->dst"
+    unit="sessions",
+    title="Search sessions: first action to outcome",
+    out_path="examples/diagrams/sankey-search-sessions.svg",
+)
+```
+
+**Stages** is 2–3 column names, left to right; a fourth raises and suggests two linked Sankeys that share a stage. **Nodes** name their `stage` (name or index) and carry a `value`; order within a stage is kept, top to bottom. **Flows** join adjacent stages only. The call **validates conservation before drawing**: every stage must sum to the same total, and every node must send (and receive) exactly its value — a violation raises with the numbers (`'ad' is 1,400 but sends 1,300`). Volume that leaves the story is a named node in the last stage ("Abandoned"), never a leak between stages. Budget: ≤8 nodes, ≤12 flows, else it raises and suggests an "Other" node or a split.
+
+Bars are 12px wide and `value × k` tall with **one** `k` for the whole figure; heights are not rounded to the grid, because a bar that disagrees with its printed number is the one defect this chart cannot afford. Each flow takes its own slice of its source and target, stacked in the other end's vertical order so every bar is exactly saturated. Ribbons are single unstroked closed paths whose edges follow `M sx,y0 C mx,y0 mx,y1 tx,y1` — both control points on the midline, so a ribbon plugs into its bar flat — written as a 48-segment polyline so `diagram-check` can compute the colour under every label (a Bézier reduces to its bounding box in the contrast audit, and every middle-stage label would report unverified). Ordinary ribbons are `muted` at 0.18 opacity; the `focal` path is `accent` at 0.28, painted last, and **named in a legend line** so the highlight is carried by words as well as colour. No arrowheads. Labels: first stage outside left, last stage outside right, middle stage centred in the gutter above its bar; the gutter grows to hold the label and the corridors widen until no ribbon crosses one. A flow thinner than 4px grows the plot (to 640px of bar height), then **raises** — folding it into an invented "Other" band would be a claim about the data, so the spec makes it. Every bar and ribbon carries `data-value`; `tests/test_diagram_sankey.py` recomputes conservation (bar height ∝ value within 4%, in = out per node within 0.75px, stage heights within 1px) from the file alone.
+
+**Anti-prescriptions** (also in the docstring):
+
+- Equal weights → draw a DAG. If the flows are all the same size, or unmeasured, thickness encodes nothing.
+- No splits or merges → a proportional funnel (`pyramid(orientation="down", proportional=True)`).
+- A plain step sequence → a process diagram (`swimlane`, or the infographics Process template).
+- Don't colour per flow — one muted treatment, one accent path.
+
+## Treemap
+
+```python
+from muriel.tools.diagrams import treemap
+
+treemap(
+    cells=[
+        {"label": "Organic results",  "value": 7.42},
+        {"label": "Ads",              "value": 2.91, "focal": True,
+         "sublabel": "top and bottom blocks"},
+        {"label": "Knowledge panel",  "value": 1.84},
+        {"label": "Related searches", "value": 0.97, "short": "Related"},
+        {"label": "Navigation",       "value": 0.61},
+        {"label": "Pagination",       "value": 0.22},
+    ],
+    unit=" s",
+    title="Fixation time by SERP region (illustrative)",
+    desc="Organic results take about half of all fixation time; ads a fifth.",
+    out_path="examples/diagrams/treemap-serp.svg",
+)
+```
+
+**Cells** is 4–8 dicts `{"label", "value", "focal", "sublabel", "short"}`, any order; they are drawn largest first in a **squarified** layout (Bruls, Huizing & van Wijk 2000), which keeps cells near-square so areas compare by eye. Values must be finite and positive — a zero or negative part raises rather than vanishing. More than 8 cells raises unless you pass `max_cells=` (4–8), which collapses the smallest parts into one cell named `other_label` (default `"Other"`) and lists what it absorbed in the default `<desc>` and in `data-members`. Nesting (a second level) is not supported yet.
+
+**Why not `pyramid(proportional=True)`.** A proportional funnel is the nearest primitive, and it encodes one dimension (bar width) down an ordered sequence in which each tier is a subset of the one above. Treemap parts are disjoint and unordered, and together they fill the whole. Drawing them as funnel bars would suggest an order and a nesting the data doesn't have, and with no enclosing whole the reader can't see how much each part takes.
+
+**Area is the only encoding, and it is checked.** Cells sit 4px apart; because a gutter takes a larger bite out of a small cell than a large one, the layout corrects its weights until every cell's drawn area is within 4% *relative* error of its true share (`tests/test_diagram_treemap.py`; the committed example is within 0.01%). Every cell rect carries `data-value` and `data-share`, so the check reads the file, not the arithmetic.
+
+**Label tiers** are picked per cell by measured fit, 16px in from the top-left: *large* — name, then `value · share`; *medium* — name and value; *small* — the name alone (or `short`); *sliver* — no text, only a locator dot if the cell is at least 12×12px. Every part whose value isn't printed in its cell gets a legend line under the plot with its name, value, share and, for a sliver, where it sits. Labels are never rotated and a cell is never resized to fit its label. Fill is a neutral ink ramp by rank (strongest on the largest); the one `focal` cell takes the accent tint and stroke. Name and value colours are chosen by computed contrast against every composited fill, so text clears 8:1 on light and dark brands alike.
+
+**Anti-prescriptions** (also in the docstring):
+
+- Don't use a treemap when the values are roughly equal — uniform area carries no signal. Use a list, or a dendrogram if the structure is the point. The generator warns when the largest value is within 25% of the smallest.
+- Don't use a treemap for parts that don't sum to a meaningful whole (overlapping categories, rates, independent measurements). Use a bar chart.
+- If several parts are only legible in the legend, the data wants a bar chart; the generator warns at three slivers.
 
 ## Design discipline
 
@@ -430,6 +549,8 @@ Both examples below render to `examples/diagrams/`:
 - [`layers-tcpip.svg`](../examples/diagrams/layers-tcpip.svg) — a 4-layer dependency stack with the Transport layer as the focal band and an "abstraction ↑" axis; the stack shape is honest because each layer genuinely depends on the one below.
 - [`funnel-q2.svg`](../examples/diagrams/funnel-q2.svg) — a proportional acquisition funnel; tier widths are driven by real counts (`proportional=True`), so the visual drop-off matches the `−%` annotations rather than faking a taper.
 - [`swimlane-release.svg`](../examples/diagrams/swimlane-release.svg) — a 4-lane release pipeline; same-lane steps connect with a muted arrow, cross-lane handoffs are drawn in the accent because the handoffs are the claim.
+- [`sankey-search-sessions.svg`](../examples/diagrams/sankey-search-sessions.svg) — illustrative search-session counts, query → first action → outcome; the accent path is ad click → reformulated (half of ad clicks, against one in five organic clicks), and the no-click → satisfied ribbon shows good abandonment as its own volume.
+- [`heat-grid-dwell.svg`](../examples/diagrams/heat-grid-dwell.svg) — mean fixation dwell by SERP position × query intent (**illustrative values, not measured data**); the focal cell sits outside the scale, and one crossing with no measurement is drawn as n/a.
 
 ## Mermaid in HTML — the zoom/pan/expand shell
 

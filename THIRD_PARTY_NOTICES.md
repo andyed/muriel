@@ -75,12 +75,38 @@ Two verification ideas were adapted from the same repository (upstream commit
   and `muriel/motion.py` (`validate_mode`, `validate_flash_rate`,
   `validate_sequence_shape`). The upstream clock tokens and pinned controller
   were not adopted.
+- **Treemap** — `muriel/tools/diagrams/treemap.py` follows `references/type-treemap.md`
+  for geometry and conventions: squarified layout, 4–8 cells with a named
+  "Other", 4px gutters, the large / medium / small / sliver label tiers with a
+  16px top-left inset, the rank-ordered ink ramp with one accent cell, and
+  `data-share` on every cell. `tests/test_diagram_treemap.py` checks area as
+  relative error per cell, the invariant of `scripts/verify-treemap.py`, at a
+  4% bound. The gutter-compensating weight correction is muriel's own; no
+  source files were copied.
 - **Diagram guidance** — behaviour-first pattern routing, the generator
   admission rule, callout discipline, the global node/arrow budget, and the
   redraw degrade ladder in `channels/diagrams.md`, plus the per-element removal
   test in `agents/muriel-critique.md`, paraphrase `references/semantic-patterns.md`,
   `references/output-spec.md`, `references/primitive-annotation.md`, and the
   skill's SKILL.md.
+- **Sankey conventions** (adapted 2026-09-24) — `muriel/tools/diagrams/sankey.py`
+  follows `references/type-sankey.md` for the 12px node bar, one global
+  px-per-unit scale, midline Bézier control points, the single accent path
+  painted last, column-specific label placement and the 3-stage / 8-node /
+  12-flow budget; `tests/test_diagram_sankey.py` checks the invariants named in
+  `scripts/verify-sankey.py` (conservation, stage totals, ribbon width
+  constancy, relative value fidelity, square-on arrival). Bars are not rounded
+  to the 4px grid, sub-4px flows raise rather than fold, and ribbons are
+  written as flattened polylines so the contrast audit can score the labels.
+- **Comparison heat-grid** — `muriel/tools/diagrams/heat_grid.py` takes its
+  cell geometry (116×56, 4px gap, 80px minimum width), the 3–7 row / 3–8 column
+  budget, the single ink ramp with a single accent focal cell excluded from the
+  scale, the 0.07 ramp floor and 0.70 ceiling, and the don'ts (hue per row,
+  diverging ramp for unsigned data, gradient legend, dropped rows) from
+  `references/type-heatmap.md`. `tests/test_diagram_heat_grid.py` follows
+  `scripts/verify-heatmap.py`'s `data-row` / `data-col` / `data-value` binding
+  and monotone-fill check (±0.03). The per-brand ramp-ceiling solve for 8:1
+  value labels, the quantized stepped legend and the n/a cells are muriel's.
 
 The code is muriel's own (ElementTree rather than the source's `HTMLParser`,
 and wired into `muriel diagram-check`); no source files were copied.
