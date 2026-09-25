@@ -58,6 +58,7 @@ __all__ = [
     "fit_text",
     "label_bbox",
     "grow_to_fit",
+    "connector_label_crossings",
     "verify_svg_labels",
 ]
 
@@ -505,3 +506,164 @@ def grow_to_fit(
     if required <= current:
         return current
     return float(grid * -(-required // grid))  # ceil-div onto the grid
+
+
+# ─── Connector-label clearance ──────────────────────────────────────
+#
+# muriel's rule: a connector label sits in clear space beside its line,
+# never on it with a halo or mask rect behind it. This reads a rendered
+# SVG back and reports every text box a connector segment passes through.
+
+_SKIP_SUBTREES = ("defs", "marker", "clipPath", "mask", "pattern", "symbol")
+_PATH_CMD_RE = re.compile(
+    r"[MmLlHhVvCcSsQqTtAaZz]|[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?")
+_ARITY = {"M": 2, "L": 2, "H": 1, "V": 1, "C": 6, "S": 4, "Q": 4, "T": 2,
+          "A": 7, "Z": 0}
+
+
+def _path_polyline(d: str) -> list[list[tuple[float, float]]]:
+    """Subpaths of ``d`` as point lists (curves by their control polygon).
+
+    A Bézier lies inside its control polygon's hull, so walking the control
+    points over-reports a crossing rather than missing one.
+    """
+    toks = _PATH_CMD_RE.findall(d or "")
+    subs: list[list[tuple[float, float]]] = []
+    cur: list[tuple[float, float]] = []
+    x = y = sx = sy = 0.0
+    cmd = None
+    i = 0
+    while i < len(toks):
+        if toks[i].isalpha():
+            cmd = toks[i]
+            i += 1
+            if cmd in "Zz":
+                if cur:
+                    cur.append((sx, sy))
+                x, y = sx, sy
+                continue
+        if cmd is None:
+            break
+        up, rel = cmd.upper(), cmd.islower()
+        n = _ARITY[up]
+        try:
+            a = [float(v) for v in toks[i:i + n]]
+        except ValueError:
+            break
+        if len(a) < n:
+            break
+        i += n
+        if up == "M":
+            if len(cur) > 1:
+                subs.append(cur)
+            x, y = (x + a[0], y + a[1]) if rel else (a[0], a[1])
+            sx, sy = x, y
+            cur = [(x, y)]
+            cmd = "l" if rel else "L"
+            continue
+        if up == "H":
+            x = x + a[0] if rel else a[0]
+        elif up == "V":
+            y = y + a[0] if rel else a[0]
+        else:
+            if up in "CSQ":
+                for k in range(0, n - 2, 2):
+                    cur.append((x + a[k], y + a[k + 1]) if rel
+                               else (a[k], a[k + 1]))
+            x, y = (x + a[-2], y + a[-1]) if rel else (a[-2], a[-1])
+        cur.append((x, y))
+    if len(cur) > 1:
+        subs.append(cur)
+    return subs
+
+
+def _segment_hits_box(p, q, box: BBox) -> bool:
+    """Liang–Barsky: does segment p→q pass through the (open) box?"""
+    (x0, y0), (x1, y1) = p, q
+    dx, dy = x1 - x0, y1 - y0
+    t0, t1 = 0.0, 1.0
+    for pk, qk in ((-dx, x0 - box.x0), (dx, box.x1 - x0),
+                   (-dy, y0 - box.y0), (dy, box.y1 - y0)):
+        if pk == 0:
+            if qk <= 0:
+                return False
+            continue
+        t = qk / pk
+        if pk < 0:
+            t0 = max(t0, t)
+        else:
+            t1 = min(t1, t)
+        if t0 >= t1:
+            return False
+    return True
+
+
+def _is_connector(el: ET.Element, tag: str) -> bool:
+    stroke = (el.get("stroke") or "").strip().lower()
+    style = (el.get("style") or "").replace(" ", "").lower()
+    if not stroke:
+        m = re.search(r"stroke:([^;]+)", style)
+        stroke = m.group(1) if m else ""
+    if stroke in ("", "none", "transparent"):
+        return False
+    if tag in ("line", "polyline"):
+        return True
+    fill = (el.get("fill") or "").strip().lower()
+    if not fill:
+        m = re.search(r"fill:([^;]+)", style)
+        fill = m.group(1) if m else ""
+    return fill in ("none", "transparent")  # an open stroked path
+
+
+def connector_label_crossings(
+    svg: Union[str, Path], *, inset: float = 0.5,
+) -> list[tuple[str, tuple[float, float, float, float]]]:
+    """Every (label, segment) where a connector passes through a label box.
+
+    A connector is a stroked ``<line>``, ``<polyline>``, or unfilled
+    ``<path>`` outside ``<defs>``/``<marker>``. Label boxes come from the
+    same read-back as :func:`verify_svg_labels`, shrunk by ``inset`` so a
+    line that only grazes a box edge does not count. Rotated labels and
+    anything under a transformed group are skipped: their boxes are not
+    where the glyphs land.
+    """
+    if isinstance(svg, Path) or (isinstance(svg, str)
+                                 and not svg.lstrip().startswith("<")):
+        svg = Path(svg).read_text(encoding="utf-8")
+    root = ET.fromstring(svg)
+    labels = [lbl for lbl in _parse_labels(root, None) if not lbl.rotated]
+
+    segments: list[tuple[tuple[float, float], tuple[float, float]]] = []
+
+    def walk(el: ET.Element, transformed: bool) -> None:
+        tag = el.tag.split("}", 1)[-1] if isinstance(el.tag, str) else ""
+        if tag in _SKIP_SUBTREES:
+            return
+        transformed = transformed or bool(el.get("transform"))
+        if not transformed and tag in ("line", "polyline", "path") \
+                and _is_connector(el, tag):
+            if tag == "line":
+                pts = [[(_float_attr(el, "x1"), _float_attr(el, "y1")),
+                        (_float_attr(el, "x2"), _float_attr(el, "y2"))]]
+            elif tag == "polyline":
+                nums = [float(v) for v in
+                        (el.get("points") or "").replace(",", " ").split()]
+                pts = [list(zip(nums[0::2], nums[1::2]))]
+            else:
+                pts = _path_polyline(el.get("d") or "")
+            for poly in pts:
+                segments.extend(zip(poly, poly[1:]))
+        for child in el:
+            walk(child, transformed)
+
+    walk(root, False)
+    hits = []
+    for lbl in labels:
+        b = lbl.bbox
+        box = BBox(b.x0 + inset, b.y0 + inset, b.x1 - inset, b.y1 - inset)
+        if box.x1 <= box.x0 or box.y1 <= box.y0:
+            continue
+        for p, q in segments:
+            if _segment_hits_box(p, q, box):
+                hits.append((lbl.text, (p[0], p[1], q[0], q[1])))
+    return hits

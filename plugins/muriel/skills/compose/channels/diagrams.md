@@ -157,6 +157,12 @@ What never happens: text shrinking to fit, text clipping at a boundary, or a whi
 
 Growth is **strictly conditional**: a diagram whose labels already fit renders byte-for-byte as it did before this existed, which is what `tests/test_diagram_labels.py` asserts against every committed example. The same test reads rendered SVG back and fails on three defects the generators used to ship silently — labels overlapping each other, labels off the canvas, and labels spilling out of their own box.
 
+### Connector labels sit beside the line
+
+A label that names an edge, handoff, or transition goes in **clear channel space beside its connector** — offset perpendicular to the line, on the side with room — never on the line. diagram-design (MIT) resolves the same collision the other way, with an opaque mask rect behind the label that cuts the stroke; muriel does not. A mask is a halo by another name: it hides where the line runs, and its fill becomes the text's background, which the contrast audit then has to trust. If there is no clear space beside the line, move the label **into the node** it leaves or enters, or into a **legend** keyed to the connector — do not shrink it, and do not paint under it.
+
+`muriel.tools.diagrams._labels.connector_label_crossings(svg)` reads a rendered SVG back and lists every label box a connector segment passes through (stroked `<line>`/`<polyline>`, unfilled `<path>`; curves checked by their control polygon, so it over-reports rather than misses). `tests/test_connector_labels.py` requires it to return nothing on every committed example. None of the shipped generators labels its connectors today — swimlane handoffs, cycle arrows, and matrix axes carry no edge text — so the rule binds generators that add edge labels and hand-drawn figures.
+
 ### The file carries its data
 
 Each generator writes the spec values it encodes as `data-*` attributes on the shape that encodes them, so the encoding can be recomputed from the SVG alone: pyramid/funnel tiers carry `data-index` and, when given, `data-value`; matrix cells carry `data-row` / `data-col`; layer-stack bands carry `data-index`; swimlane steps carry `data-lane` (row index) and `data-step` (flow order); Venn count labels carry `data-region` (the binary subset key) and `data-count`. `tests/test_diagram_fidelity.py` reads these back — the funnel's width ratios are checked against its own `data-value`s, not a copy of the spec.
