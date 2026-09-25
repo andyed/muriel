@@ -45,7 +45,7 @@ jobs:
       - name: Sync gallery from render_assets (single source; repoint images to live CDN)
         run: |
           rm -rf site-docs/src/gallery
-          cp -R render_assets site-docs/src/gallery
+          cp -RL render_assets site-docs/src/gallery  # -L: copy symlink targets; a relative link breaks once moved
           find site-docs/src/gallery -name '.DS_Store' -delete
           rm -f site-docs/src/gallery/__init__.py
           sed -i 's#\.\./\.\./\.\./mindbendingpixels-www/images/#https://mindbendingpixels.com/images/#g' \
