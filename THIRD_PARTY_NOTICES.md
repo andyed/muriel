@@ -84,7 +84,24 @@ Two verification ideas were adapted from the same repository (upstream commit
   value labels, the quantized stepped legend and the n/a cells are muriel's.
 
 The code is muriel's own (ElementTree rather than the source's `HTMLParser`,
-and wired into `muriel diagram-check`); no source files were copied.
+and wired into `muriel diagram-check`); apart from the extractor below, no
+source files were copied.
+
+Additions on 2026-09-24 (upstream commit `dc1ace4`):
+
+- **Excalidraw extractor — copied, not adapted.**
+  `muriel/tools/excalidraw_extract.py` is
+  `skills/diagram-design/scripts/excalidraw_extract.py` verbatim, with only a
+  leading comment block added (provenance plus this MIT notice).
+  `tests/test_excalidraw_extract.py` pins the body to the upstream file's
+  sha256, so a local edit fails the suite; re-copy upstream fixes instead of
+  patching. The fixtures in `tests/fixtures/excalidraw/` are copied from
+  upstream `scripts/fixtures/`, and the test ports the essential checks of
+  `scripts/verify-excalidraw-import.py`.
+- **Strict SVG export** — `muriel/tools/diagrams/_export.py::strict_svg`
+  adapts the `rgba()` / `transparent` normalisation and the 1–4 raster-scale
+  rule from `references/export.md`, extended by muriel to inline styles,
+  `<style>` blocks, 8-digit hex and opacity multiplication.
 
 ```
 MIT License

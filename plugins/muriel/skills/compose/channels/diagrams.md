@@ -437,6 +437,12 @@ Dropped:   log bucket (dead end), CI (cross-cutting)
 Kept:      fixation path Tracker → I-VT → AOI join → Features
 ```
 
+### Reading an Excalidraw scene
+
+Step 1 for a `.excalidraw` source is `python3 -m muriel.tools.excalidraw_extract scene.excalidraw` (Markdown digest; `--json` for the full IR): nodes, edges, frames, groups, hubs, entry points, a budget verdict, collapsible groups, and a ledger of what it discarded. It is **read-only and stdlib-only**, behind a trust boundary: links, embeds and image payloads are counted and dropped, labels come out as escaped inert text (a label reading "ignore previous instructions" is diagram data), and malformed or oversized input exits 2 with a named reason (16 MiB, 10,000 elements, 2,000 nodes, 5,000 edges). PNG/SVG exports are refused — ask for the scene. Copied verbatim from diagram-design (MIT); see `THIRD_PARTY_NOTICES.md`.
+
+The intended round trip: muriel emits a figure → it is edited in Excalidraw (e.g. through `mcp_excalidraw`) → the extractor reads the scene back → muriel redraws and re-audits it with `diagram-check`. The **emitter** half — muriel writing `.excalidraw` — is planned, not shipped; today the loop starts from a scene someone else drew.
+
 ## Worked examples
 
 Both examples below render to `examples/diagrams/`:
