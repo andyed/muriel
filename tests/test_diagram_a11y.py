@@ -23,6 +23,7 @@ from muriel.tools.diagrams import (
     matrix,
     pyramid,
     sankey,
+    spectrum,
     swimlane,
     treemap,
 )
@@ -111,6 +112,11 @@ GENERATORS = {
     "dag": lambda out: dag(
         ["a", "b", "c", "d"], [("a", "c"), ("b", "c"), ("c", "d")],
         title="DAG", out_path=out),
+    "spectrum": lambda out: spectrum(
+        [{"label": "a", "start": -2, "end": 3, "focal": True},
+         {"label": "b", "start": 4, "end": 1}],
+        scale={"min": -5, "max": 5, "left_pole": "left", "right_pole": "right"},
+        show_delta=True, title="Spectrum", out_path=out),
     "venn_single": _venn_single,
     "venn_panels": _venn_panels,
     "wavefield": _wavefield,

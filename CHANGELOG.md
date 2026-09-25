@@ -90,6 +90,16 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   every label clears 8:1 on its composited cell. Example:
   `heat-grid-dwell.svg`.
 
+- **`spectrum`: items on one shared scale between two named poles.**
+  `muriel.tools.diagrams.spectrum(items, scale=…)` draws 1–10 rows as points
+  or as start → end dumbbells (`range_kind="change"`: hollow start, filled
+  end, arrowhead; `"extent"`: a min–max span). Positions are exact and
+  checked to 0.5px; values outside the scale raise, and a scale that excludes
+  zero raises until `zero=True` or `zero=False` is chosen. Sort by input,
+  value or signed change, with the order printed under the axis; optional
+  delta column (`pts` for `%`). Rows carry `data-value` / `data-start` /
+  `data-end`. Example: `spectrum-palette-tritan.svg`.
+
 - **Diagram SVGs carry an accessible-figure contract, and `muriel
   diagram-check` enforces it.** Every generator in `muriel.tools.diagrams`
   (matrix, cycle, layer_stack, pyramid, swimlane, foveal_overlay,

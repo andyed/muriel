@@ -26,6 +26,9 @@ Catalog (MVP):
                                                   unsigned quantity (opacity ramp).
     dag(nodes, edges, *, direction, ...)       → causal / dependency DAG: ranked,
                                                   convergent nodes, ≤1 feedback edge.
+    spectrum(items, *, scale, ...)             → items (points or start→end
+                                                  dumbbells) on one shared scale
+                                                  between two named poles.
     foveal_overlay(*, verbosity, ...)          → Scrutinizer's UI overlay
                                                   (svg-overlay.js port: fovea
                                                   + parafovea + uniform grid).
@@ -55,6 +58,7 @@ from muriel.tools.diagrams.treemap import treemap
 from muriel.tools.diagrams.dendrogram import dendrogram
 from muriel.tools.diagrams.heat_grid import heat_grid
 from muriel.tools.diagrams.dag import dag
+from muriel.tools.diagrams.spectrum import spectrum
 from muriel.tools.diagrams.foveal_overlay import foveal_overlay
 from muriel.tools.diagrams.engine_sectors_overlay import engine_sectors_overlay
 from muriel.tools.diagrams.sankey import sankey
@@ -67,5 +71,6 @@ __all__ = [
     "dendrogram",
     "heat_grid",
     "dag",
+    "spectrum",
 ]
 __all__ += ["sankey"]
