@@ -15,6 +15,7 @@ Usage
     muriel --help                          # same
     muriel capture https://example.com     # responsive viewport-sweep screenshot
     muriel contrast audit page.svg         # WCAG 8:1 audit
+    muriel diagram-check fig.svg           # a11y + label + contrast gate
     muriel dimensions                      # print the dimensions registry
     muriel heroshot in.png out.png --tilt 12
     muriel tilt-shift raw.png hero.png
@@ -46,6 +47,7 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     "capture":        ("muriel.capture",                    "Responsive viewport-sweep screenshot via Playwright"),
     "contrast":       ("muriel.contrast",                   "WCAG 8:1 contrast audit on SVG / CSS / color pairs"),
     "cvd":            ("muriel.cvd",                        "Color-vision-deficiency separation report — can a colorblind reader tell these colors apart?"),
+    "diagram-check":  ("muriel.tools.diagrams.check",       "Rendered-SVG gate: accessible-figure lint + label geometry + 8:1 contrast (fails closed)"),
     "devibe":         ("muriel.devibe",                     "Scan web/UI source for AI-default 'vibe-coded' design tells (8:1-aware)"),
     "dimensions":     ("muriel.dimensions",                 "Print the dimensions registry (sizes, devices, paper)"),
     "doctor":         ("muriel.doctor",                     "Report muriel install state, extras, and model caches"),

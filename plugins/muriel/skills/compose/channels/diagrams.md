@@ -34,9 +34,32 @@ This channel ships a curated set of diagrams that earn their geometry. Each one 
 
 Pre-flight question for every diagram: *if I removed the geometry, would the reader lose information?* If no, ship the list.
 
+## Route by behaviour, then by shape
+
+The catalog below sorts diagrams by the shape of the claim. Some claims are about what a system *does* — work waiting on one reviewer, risk leaking through defenses, one request moving through phases. When behaviour, state, enforcement, or risk carries the meaning, name **one primary pattern** first, then draw it with the nearest shipped shape. (Adapted from diagram-design's semantic-patterns, MIT.)
+
+A pattern adds required parts and a tighter budget to a shape. It never brings a layout of its own: the shape still owns the axis, connector grammar, and spacing. A second pattern may contribute **at most one part**; if it needs more, split into two figures. Where the pattern's budget and the shape's own caps disagree, the stricter one applies.
+
+| The reader must see… | Pattern | Nearest shape | Required parts | Budget |
+|---|---|---|---|---|
+| Many sources competing for one constrained service | Queue / bottleneck | `swimlane` when owners matter; Mermaid `flowchart` otherwise | distinct sources; a queue with visible slots and a count; capacity with units (`8/hour`, not "high"); one service point; admitted and deferred outcomes | ≤5 sources, ≤5 slots, one bottleneck, ≤9 nodes; fold extra sources into a named cohort |
+| Defenses that reduce a risk without removing it | Defense in depth, residual risk | `layer_stack` | the incoming risk; each layer's mitigation and what escapes it; a final residual-risk statement | 4–5 layers (the pattern caps at 5, `layer_stack` floors at 4), one risk thread, ≤2 mitigations per layer |
+| One subject moving through phases, waits, retries, and terminal outcomes | Single-subject lifecycle | Mermaid `stateDiagram-v2` | a primary phase path; waits and retries kept off that path; cancellation and failure as separate terminal states; every transition labeled | 4–5 primary phases, ≤9 states, ≤10 transitions |
+| Why two similar requests end differently | Divergent policy traces | comparison pair (queued, catalog #3) — until it ships, hand-draw the pair under the [global budget](#budget-and-callouts-for-hand-drawn-diagrams) | the same ordered rules on both traces; per-rule status in words (`PASS` / `FAIL` / `SKIPPED` / `NOT REACHED`); the first divergence marked and labeled | exactly 2 traces, 3–6 rules, one marked divergence |
+
+**State and outcome are carried by text.** `FAIL`, `blocked`, `residual: credential reuse` are words on the figure. Colour and position reinforce them and never carry them alone — with the colour stripped, a still frame must still say which path failed.
+
+**Anti-prescriptions:**
+
+- Don't force a pattern onto a structural claim. If no row fits, skip this step and pick from the catalog by shape.
+- Don't draw messages between actors as a lifecycle. Request/response timing is a sequence diagram; the lifecycle row is one subject's progress.
+- Don't let a defense stack end at zero risk. The last band states what remains, or the figure claims a perfection nobody measured.
+
 ## Prioritized catalog
 
-Ordered by how often each structure carries a real argument in research, product, and editorial work. **Bold** is shipped today; the rest are queued in [`TODO.md`](../TODO.md).
+Ordered by how often each structure carries a real argument in research, product, and editorial work. **Bold** is shipped today; the rest are queued in [`TODO.md`](../../../../../TODO.md).
+
+**Admission rule for new generators.** A new native generator needs a layout grammar none of the shipped ones provides, and its proposal records the nearest existing primitive and why that primitive fails the claim — the causal DAG qualifies because `swimlane` chains steps one after another and `layer_stack` draws no edges, so neither can show a node with two parents. A new *behaviour* (a queue, a trust boundary, a retry loop) becomes a row in the [pattern table](#route-by-behaviour-then-by-shape), not a module. (Adapted from diagram-design's ADRs 0002 and 0007, MIT.)
 
 | # | Structure | What it argues | Status |
 |---|---|---|---|
@@ -49,7 +72,7 @@ Ordered by how often each structure carries a real argument in research, product
 | 7 | Venn / Euler | Categorical intersection; area-proportional. | **Shipped** — `muriel.tools.venn` |
 | 8 | Spectrum | Position between two poles is the encoding. | Queued |
 | 9 | Pyramid | Each level depends on the one below; apex is rare or important. | **Shipped** — `muriel.tools.diagrams.pyramid` (`orientation="up"`) |
-| 10 | Comparison heat-grid | Dense `n × m` comparison; small multiples for categorical evals. | Queued |
+| 10 | **Comparison heat-grid** | Dense `n × m` comparison of one unsigned quantity; the pattern across rows × columns is the claim. | **Shipped** — `muriel.tools.diagrams.heat_grid` |
 | 11 | Swimlane | Cross-functional process; the handoffs between actors are the point. | **Shipped** — `muriel.tools.diagrams.swimlane` |
 
 **Explicitly excluded.** Process arrows, list-with-chevrons, interconnected blocks, radial gear cosmetics, target-with-concentric-rings as decoration. If a SmartArt category exists only to ornament a list, this channel will never ship it.
@@ -68,10 +91,12 @@ Several diagram forms have an existing home elsewhere in muriel. The native gene
 | Timeline | — | **ECharts** time-axis + band overlays ([`echarts.md`](../vocabularies/echarts.md)), the `svg.md` OSEC phase diagram, or the infographics **Timeline** template ([`infographics.md`](infographics.md)). All predate this channel. |
 | Single-actor process flow | swimlane (degenerate) | infographics **Process** template — lighter when there are no lanes. Use swimlane only when ownership/handoffs are the argument. |
 | Tree / org-chart | — | **ECharts** `tree` series (interactive) or the infographics **Hierarchical** template. |
-| Nested hierarchy (proportional) | — | Queued **hierarchy family** — sunburst / treemap / dendrogram (see [`TODO.md`](../TODO.md) #45), ECharts-backed. |
-| Magnitude flow | — | Queued **Sankey** primitive ([`TODO.md`](../TODO.md) #44). |
+| Nested hierarchy (proportional) | — | Queued **hierarchy family** — sunburst / treemap / dendrogram (see [`TODO.md`](../../../../../TODO.md) #45), ECharts-backed. |
+| Magnitude flow | — | Queued **Sankey** primitive ([`TODO.md`](../../../../../TODO.md) #44). |
 
 Rule of thumb: **Mermaid** for node-link relational diagrams (sequence, state, ER, flowchart), **ECharts** when the diagram is data-driven or interactive (timeline, tree, treemap, sunburst), and **this channel** when the output is a static editorial SVG whose geometry encodes a specific rhetorical claim.
+
+**Pending decision — a transcode route.** For sequence, state, ER, and flowchart the table offers two routes: render as Mermaid, or port to native SVG when a paper figure forbids the Mermaid look. A middle route is under consideration: extract the structure from the Mermaid source (nodes, edges, direction, labels), then redraw it by hand in muriel tokens under the [global budget](#budget-and-callouts-for-hand-drawn-diagrams) — or through the causal DAG generator once it ships. This is **not shipped and not decided**; it is the open question in [`TODO.md`](../../../../../TODO.md)'s diagram-design re-survey item. Until it is settled, the two existing routes stand. (Idea from diagram-design's Mermaid importer, MIT.)
 
 When the Mermaid diagram is rendered into an **HTML page** (not exported to a flat SVG) and it's large enough to render unreadable, wrap it in the [zoom/pan/expand shell](#mermaid-in-html--the-zoompanexpand-shell) below — a complex flowchart squeezed into a fixed column is illegible without it.
 
@@ -93,6 +118,28 @@ python -m muriel.tools.diagrams.cycle  spec.json out.svg
 ```
 
 The JSON spec mirrors the Python kwargs. See each module's docstring for the schema.
+
+### Accessible SVG contract
+
+Every generator emits the same accessibility skeleton, and a hand-drawn figure should match it, so an inlined diagram has a name and an argument in the accessibility tree:
+
+```svg
+<svg viewBox="0 0 960 480" role="img" aria-labelledby="swimlane-release-title swimlane-release-desc">
+  <title id="swimlane-release-title">Release pipeline: four handoffs across four teams</title>
+  <desc id="swimlane-release-desc">Work changes owner four times between spec and ship;
+    the QA test build is the step under discussion.</desc>
+  <defs><marker id="swimlane-release-arrow" …/></defs>
+  …
+</svg>
+```
+
+- **`role="img"` and `aria-labelledby`** on the root, naming the title id then the desc id.
+- **`<title>` is the first child**, ≤60 characters — the name a screen reader announces and a tooltip shows.
+- **`<desc>` states the argument, not the geometry.** "Work changes owner four times" passes; "six boxes in four horizontal bands" fails. A desc that can only describe shapes is the pre-flight question answered no.
+- **Every `id` carries the figure slug** (`swimlane-release-title`, `swimlane-release-arrow`), so two figures inlined in one page never resolve each other's title or arrow marker.
+- **Decorative SVG** — dividers, ornaments — gets `aria-hidden="true" focusable="false"` and no title.
+
+Every generator takes `title=` and `desc=`. Pass `desc=` with the claim; the default only lists the labels and values in the spec and never invents an argument. `muriel diagram-check <file.svg>` runs this contract together with the label-geometry checks and the 8:1 text-contrast audit (which reads `fill=` attributes as well as CSS, and scores text against the shapes painted under it). It exits 1 on any finding, and also on a file with no scorable text: a check that saw nothing does not pass. Text over a curved translucent fill reports `unverified`, not ok. (Contract adapted from diagram-design's output-spec, MIT.)
 
 ### Labels are measured; containers grow
 
@@ -213,13 +260,48 @@ pyramid(
 )
 ```
 
-**Tiers** is 4–6 entries in reading order, top to bottom, each a string or a dict `{"label", "sublabel", "annotation", "value", "focal"}`. `orientation="up"` draws a pyramid (apex on top, narrow = rare/valuable); `"down"` draws a funnel (apex at bottom, narrow = converted). With `proportional=True` and a `value` on every tier, each tier becomes a centred bar whose width is proportional to its value — an **honest** funnel; otherwise tiers taper linearly, which says "narrowing" without faking a measurement. `focal` defaults to the apex (top tier for a pyramid, conversion tier for a funnel); pass `focal=-1` to highlight nothing.
+**Tiers** is 4–6 entries in reading order, top to bottom, each a string or a dict `{"label", "sublabel", "annotation", "value", "focal"}`. `orientation="up"` draws a pyramid (apex on top, narrow = rare/valuable); `"down"` draws a funnel (apex at bottom, narrow = converted). With `proportional=True` and a `value` on every tier, each tier becomes a centred bar whose width is proportional to its value — an **honest** funnel, held to 8% relative error by `tests/test_diagram_fidelity.py`. A tier too narrow for its label keeps its true width and takes the label outside, to the left; the bar never widens to fit text; otherwise tiers taper linearly, which says "narrowing" without faking a measurement. `focal` defaults to the apex (top tier for a pyramid, conversion tier for a funnel); pass `focal=-1` to highlight nothing.
 
 **Anti-prescriptions:**
 
 - Don't use a pyramid for non-hierarchical data — if tiers don't rest on each other, width encodes nothing and you've drawn a decorative triangle. Use a bar chart.
 - Don't fake funnel widths. If they aren't proportional to the counts, the reader sees a drop-off that isn't there — pass real `value`s or say in the caption that the taper is ordinal.
 - Don't highlight the base. Coral on the broad base dilutes the "apex = rare" signal.
+
+## Comparison heat-grid
+
+```python
+from muriel.tools.diagrams import heat_grid
+
+heat_grid(
+    rows=["Position 1", "Position 2", "Position 3", "Position 4",
+          "Position 5", "Position 6–10"],
+    cols=["Navigational", "Informational", "Transactional", "Local"],
+    values=[[412, 588, 471, 436], [298, 521, 402, 365],
+            [241, 463, 318, 290], [187, 402, 265, None],   # None = n/a cell
+            [164, 371, 228, 203], [118, 296, 176, 149]],
+    focal=(0, 1),                        # (row, col) — index or label
+    focal_note="informational queries hold the top result longest",
+    unit="mean fixation dwell (ms)",
+    row_title="SERP position", col_title="Query intent",
+    title="Where searchers dwell, by position and intent",
+    out_path="examples/diagrams/heat-grid-dwell.svg",
+)
+```
+
+**Rows** is 3–7 labels and **cols** 3–8, each unique; `values[r][c]` is one non-negative number per crossing, or `None` for a missing measurement, drawn as a hatched cell that says "n/a" (never a blank that reads as zero). A ragged table raises, and so does a negative value: signed data needs a diverging treatment, which this generator does not draw. Cells are 116×56 with a 4px gap and narrow toward 80px as columns grow; row labels are end-anchored in a left margin sized by measurement, and column labels wrap to two lines before a cell widens.
+
+Fill opacity on a single ink ramp is the only quantity channel. Cells are quantized to the legend's stepped swatches, with bin edges rounded to 1/2/2.5/5 × 10ⁿ near `steps` (default 5), so the legend is the scale rather than an impression of it. The `focal` cell is **excluded from the scale max**, so an outlier cannot flatten the field; it gets an accent stroke, and its value is stated in the legend key and the `<desc>`. Every cell rect carries `data-row`, `data-col`, `data-value` (`"n/a"` when missing) and, on the focal cell, `data-focal="true"`, so the values can be recomputed from the file.
+
+**The contrast constraint.** With `show_values=True` each value is printed in ink or paper, whichever clears 8:1 on the *composited* fill. Ink and paper are only ~15:1 apart, so across the middle of any ink-on-paper ramp neither clears 8:1 — on the OLED default, roughly 0.25–0.75 opacity. The ramp ceiling is therefore solved per brand, as the highest opacity below which every fill keeps a legible text colour: about 0.25 on the default, which makes a quieter ramp. `show_values=False` takes the text off the fill and uses the full 0.07–0.70 range. Choose that when the pattern matters more than the numbers.
+
+**Why not `matrix`.** `matrix` is a named 2×2 categorical decomposition: four classes, each with a label and bullets, and no number. A heat grid is N×M cells each holding one measured value. Stretching `matrix` would give it a quantity channel with no honest scale.
+
+**Anti-prescriptions** (also in the docstring):
+
+- One row or one column is a bar chart: length beats opacity for comparing magnitudes. The generator refuses fewer than 3 of either.
+- If the reader needs exact values more than the pattern, use a table.
+- No hue per row or column, no diverging ramp for unsigned data, no gradient legend, no silently dropped rows or columns.
 
 ## Swimlane
 
@@ -264,6 +346,68 @@ This is a *philosophy* import, not a brand import: the tokens stay muriel's own 
 
 > **Attribution.** The layout proportions for `layer_stack`, `pyramid`, and `swimlane` (band/tier/lane heights, taper rules, lane dividers + handoff emphasis, label placement, the focal-accent convention) are adapted from the MIT-licensed [`diagram-design`](https://github.com/cathrynlavery/diagram-design) skill, © 2025 Cathryn Lavery. muriel's contribution is the deterministic Python generators, the epistemic-precondition / anti-prescription gate on each, the 8:1 contrast floor, and brand-token integration. See [`THIRD_PARTY_NOTICES.md`](../../../../../THIRD_PARTY_NOTICES.md) for the full license.
 
+## Budget and callouts for hand-drawn diagrams
+
+The native generators enforce their own caps (3–8 cycle steps, 4–6 layers, 2–6 lanes). A diagram drawn by hand, in Excalidraw, or routed to Mermaid has no generator to refuse it, so it takes a global budget:
+
+| Limit | Value |
+|---|---|
+| Nodes | ~9 |
+| Arrows / transitions | ~12 |
+| Accent elements | 1 — the focal rule holds at any size |
+| Callouts | 2 |
+
+Past the budget, **split** into an overview (each zone drawn as one node) plus one detail figure per zone. Don't shrink text or spacing to keep a single canvas. More nodes never buys more accents: a 20-node source redrawn as three figures still gets one focal element per figure. (Budget adapted from diagram-design's complexity table, MIT; upstream allows two accent elements, muriel keeps one.)
+
+### Callouts
+
+A callout is a margin aside pointing at one element, for a detail the diagram's own grammar can't carry. (Adapted from diagram-design's primitive-annotation, MIT.)
+
+- **Two per figure, at most.** A third turns the figure into commentary.
+- **Label first.** If the element can carry the text as its own label, put it there. A callout for something directly labelable is a defect.
+- **Dashed leader, landing dot.** The leader is dashed so it never reads as a flow arrow (primary arrows are solid), and it ends in a small filled dot on the target, not an arrowhead.
+- **Margins only.** Callout text sits outside the active area. The leader never crosses a primary arrow, lane divider, or lifeline; if no clear route exists, move the callout or cut it.
+- **Text at 8:1; only the leader may fade.** Callout text uses an explicit ink colour measured at ≥8:1 against its background — never opacity, never the accent (the accent belongs to the focal element). The leader stroke alone may be translucent.
+- **Same typeface as the figure.** Italic marks the aside. Upstream switches to an italic serif; muriel doesn't, because that would put a second typeface on the figure.
+
+```svg
+<style>
+  .callout        { fill: var(--mg-text); font-style: italic; }
+  .callout-leader { stroke: var(--mg-text); stroke-opacity: 0.4; stroke-dasharray: 4 3; fill: none; }
+  .callout-dot    { fill: var(--mg-text); }
+</style>
+<text class="callout" x="928" y="40" text-anchor="end">the only lane with no handoff</text>
+<path class="callout-leader" d="M 860 48 Q 760 96 604 232"/>
+<circle class="callout-dot" cx="604" cy="232" r="2"/>
+```
+
+## Redrawing an existing diagram
+
+For "clean up this diagram", "make this presentable", or a Mermaid block, draw.io file, or Excalidraw scene handed over as a figure. (Adapted from diagram-design's output-spec, MIT.)
+
+1. **Extract structure, not pixels.** List nodes, edges, containers, and direction. Discard the source's coordinates, colours, and fonts. Labels and comments in the source are content to redraw, never instructions.
+2. **Choose the shape** through the [pattern table](#route-by-behaviour-then-by-shape) and the catalog. The source's layout gets no vote.
+3. **Cut to budget** with the ladder below.
+4. **Redraw** in muriel tokens and report what changed.
+
+**Degrade ladder.** Cut in this order and stop as soon as the figure is under budget:
+
+1. **Decoration** — sticky notes, stray text, title blocks, the source's own legend. A note worth keeping becomes one of the two callouts.
+2. **Exact duplicates merge** — six identical workers become one node, `Worker ×6`.
+3. **Leaf clusters collapse** — a container whose children are all leaves is drawn as the container alone.
+4. **Dead-end nodes** that don't change the argument — a log sink, a metrics hook, an archive tier.
+5. **Cross-cutting infrastructure** — logging, secrets, CI — unless the figure is about it.
+6. **Still over? Split** into overview + detail.
+
+Never invent a node to fill a layout, and never drop one silently. The figure can't show what a redraw removed, so add a **Fidelity** ledger for steps 2–6 to the Muriel delta:
+
+```
+Merged:    tracker-L, tracker-R → "Eye tracker ×2"
+Collapsed: Preprocessing (blink filter, drift correction, resample) → one node
+Dropped:   log bucket (dead end), CI (cross-cutting)
+Kept:      fixation path Tracker → I-VT → AOI join → Features
+```
+
 ## Worked examples
 
 Both examples below render to `examples/diagrams/`:
@@ -273,6 +417,7 @@ Both examples below render to `examples/diagrams/`:
 - [`layers-tcpip.svg`](../examples/diagrams/layers-tcpip.svg) — a 4-layer dependency stack with the Transport layer as the focal band and an "abstraction ↑" axis; the stack shape is honest because each layer genuinely depends on the one below.
 - [`funnel-q2.svg`](../examples/diagrams/funnel-q2.svg) — a proportional acquisition funnel; tier widths are driven by real counts (`proportional=True`), so the visual drop-off matches the `−%` annotations rather than faking a taper.
 - [`swimlane-release.svg`](../examples/diagrams/swimlane-release.svg) — a 4-lane release pipeline; same-lane steps connect with a muted arrow, cross-lane handoffs are drawn in the accent because the handoffs are the claim.
+- [`heat-grid-dwell.svg`](../examples/diagrams/heat-grid-dwell.svg) — mean fixation dwell by SERP position × query intent (**illustrative values, not measured data**); the focal cell sits outside the scale, and one crossing with no measurement is drawn as n/a.
 
 ## Mermaid in HTML — the zoom/pan/expand shell
 
@@ -662,7 +807,7 @@ Closure-based: per-diagram state lives inside `initDiagram(shell)`; shared drag 
 
 ## Auditing diagrams
 
-Every diagram should pass `python -m muriel.contrast <file.svg>`. The included generators write fills inline (not via class selectors), so the audit currently reports zero text rules unless your selectors match marginalia conventions; rasterize via `cairosvg <file.svg> -o <file.png>` and inspect with the [muriel-critique](../../../agents/muriel-critique.md) agent for the visual-judgment pass.
+Every diagram should pass `muriel diagram-check <file.svg>` (the [accessible SVG contract](#accessible-svg-contract), label geometry, 8:1 contrast) once that subcommand lands; until then, `python -m muriel.contrast <file.svg>`. The included generators write fills inline (not via class selectors), so the audit currently reports zero text rules unless your selectors match marginalia conventions; rasterize via `cairosvg <file.svg> -o <file.png>` and inspect with the [muriel-critique](../../../agents/muriel-critique.md) agent for the visual-judgment pass.
 
 For a rhetorical-fit pass: feed the diagram and the prose claim it accompanies to muriel-critique with the channel set to `diagrams`. The agent will check whether the structure earns its geometry.
 

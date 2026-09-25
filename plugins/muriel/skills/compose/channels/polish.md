@@ -105,6 +105,11 @@ authorize a parallel state model.
 - Give each interaction one load-bearing motion.
 - Gate hover behavior behind `(hover: hover) and (pointer: fine)`.
 - Treat reduced motion as a design mode, not an afterthought.
+- Static first: every meaningful element is visible before enhancement; only
+  `.motion-ready` selectors may hide it, and reduced motion, print, no-JS, and
+  static export all show the complete final frame.
+- One motion mode per figure (`none`/`reveal`/`step`/`loop`); only `reveal`
+  autoplays, once; loops are decorative, with cycles of at least 3s.
 - Use FLIP for reorders; do not animate `top`, `left`, `width`, or `height`.
 
 ## Composition check

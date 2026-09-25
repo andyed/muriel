@@ -8,6 +8,33 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`heat_grid`: comparison heat-grid diagram generator.**
+  `muriel.tools.diagrams.heat_grid(rows, cols, values, …)` draws 3–7 × 3–8
+  cells of one unsigned quantity on a single ink opacity ramp, quantized to a
+  stepped legend with numeric bounds. `None` values draw as explicit n/a
+  cells, and negative values, ragged tables and out-of-budget sizes raise. An
+  optional focal cell is excluded from the scale max and its value is stated
+  in the legend and `<desc>`. Every cell carries `data-row` / `data-col` /
+  `data-value`. With printed values, the ramp ceiling is solved per brand so
+  every label clears 8:1 on its composited cell. Example:
+  `heat-grid-dwell.svg`.
+
+- **Diagram SVGs carry an accessible-figure contract, and `muriel
+  diagram-check` enforces it.** Every generator in `muriel.tools.diagrams`
+  (matrix, cycle, layer_stack, pyramid, swimlane, foveal_overlay,
+  engine_sectors_overlay), `muriel.tools.venn` (SVG output) and
+  `WaveField.svg()` now write `role="img"`, `aria-labelledby`, and
+  slug-prefixed `<title>` (first child, 60 characters or fewer) and `<desc>`.
+  Each takes a new `desc=` argument for what the figure argues; the default
+  describes only what the spec contains (labels, values, axes) and states no
+  claim. `muriel diagram-check <svg…>` runs the new `lint_a11y`, the label
+  geometry check and the contrast audit, exits 1 on any finding, and **fails
+  closed**: a file with no `<text>`, or with text the audit could not colour,
+  fails instead of passing. Venn SVGs now keep their text as `<text>` rather
+  than outlined paths, so screen readers and the audit can read it.
+  `scripts/render_diagram_examples.py` regenerates the committed examples and
+  their `docs/` mirror; CI runs it with `--check`.
+
 - **`aiism` detects three rhetorical shapes a phrase table cannot see.**
   `structure-tricolon` flags three or more parallel segments in one sentence,
   as `warn` when one contrast marker repeats across three of them ("X but not
@@ -113,6 +140,17 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- **`contrast.audit_svg` reads SVG presentation attributes.** It previously
+  parsed only `<style>` CSS, so on muriel's own diagram SVGs, which colour
+  text with `fill="…"`, it found no text and reported a clean audit. It now
+  scores every `<text>`/`<tspan>` fill (inherited from `<g fill>` or inline
+  `style` too) against the background actually behind it: the page
+  background with each enclosing earlier rect, polygon, circle, ellipse or
+  straight-edged path composited over it, `rgba()`, `fill-opacity` and
+  `opacity` honoured. Text on a curved filled path is marked `unverified`
+  rather than passed. The first run found the TCP/IP layer-stack example's
+  muted note at 7.58:1 on its focal band; `layer_stack` and `pyramid` now
+  pick text colour per surface (muted if it clears 8:1 there, else ink).
 - `startRenderLoop({ sortDom })`, `makePlane(node)` and
   `createScene({ container })` — three scale affordances on `spatial.js`, all
   backward compatible. The existing four exemplars are untouched.
@@ -122,6 +160,18 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   rows barely overlap, fatal for a pile.
 
 ### Fixed
+
+- **`pyramid(proportional=True)` was not proportional.** Widths were
+  `min_w + (max_w − min_w) · v/vmax`, a 160 px floor under every bar, so the
+  funnel example's 100,000 / 24,000 / 9,000 / 2,083 drew at 1 / .43 / .32 /
+  .27 instead of 1 / .24 / .09 / .02. Width is now `max_w · v/vmax`; a bar
+  too narrow for its label keeps its width and the label moves outside it.
+  `tests/test_diagram_fidelity.py` holds every tier to 8 % relative error.
+  The committed `funnel-q2` example changed shape accordingly.
+- **CI never ran the plain-function test suites.** `unittest discover`
+  collects only `TestCase` classes, so `test_diagram_labels` and
+  `test_patterns` reported zero tests while CI stayed green. The workflow now
+  runs `python -m pytest tests`.
 
 - **`bold-overuse` counted list markers and table cells.** The rule's docstring
   says mid-paragraph bold; the implementation counted every bold span in a

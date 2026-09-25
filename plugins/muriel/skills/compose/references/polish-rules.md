@@ -347,7 +347,7 @@ An unconditional `:hover` fires on tap on touch devices and sticks until the nex
 - `keep-fast` — keep utility (≤ 100 ms) opacity fades, drop transforms to identity, drop cinematic motion. `reduce`, the name this rule used before 2026-09-24, is accepted as an alias.
 - `keep-linear` — keep opacity fades at their durations with linear easing, drop transforms to identity.
 
-Whichever policy applies, decorative/background motion goes.
+Whichever policy applies, decorative/background motion goes. The policy governs *how* motion degrades, never *whether* the end frame is complete: under any setting the reader lands on the full final frame immediately (rule 28).
 
 ### 21. One load-bearing motion per interaction
 
@@ -356,6 +356,32 @@ A single click/tap/drag-end should produce **one** motion that carries meaning. 
 ### 22. Reorders and expands use FLIP, not animated layout
 
 Rule 16 bans animating layout properties; FLIP is the technique that replaces them. To move an element to a new position, don't animate `top`/`left`/`height` — snapshot **F**irst and **L**ast positions, **I**nvert the delta with a `transform`, then transition the transform to identity (**P**lay). For accordions, prefer letting content settle into place; if height must animate, animate `max-height` with a generous ceiling and accept it's less crisp than FLIP.
+
+## Motion contract — static first, one mode per figure
+
+Rules 28–29 govern motion that *explains* a figure or diagram, as opposed to rules 10–22's tactile feedback. Adapted from diagram-design's animation contract (MIT, © 2025 Cathryn Lavery). Their timing comes from the motion scope above: 100 ms transitions between states, 1500 ms holds on each state, and a timed `reveal` capped at 8000 ms of holds (`validate_sequence_timing`). `muriel.motion` checks the structural parts — `validate_mode`, `validate_flash_rate`, `validate_sequence_shape`.
+
+### 28. Static first — motion explains a complete figure, never supplies missing meaning
+
+Every meaningful element (node, label, connector, value, status, outcome) is visible in the source before any enhancement runs. Only selectors scoped under a `.motion-ready` class may hide or displace it, and script adds `.motion-ready` only *after* setup succeeds — so a script error, a blocked script, or a slow load leaves the complete figure on screen.
+
+```css
+.motion-ready [data-motion-item] { opacity: 0; transform: translateY(8px); }
+.motion-ready [data-motion-item].is-visible { opacity: 1; transform: none; }
+```
+
+`prefers-reduced-motion: reduce`, print, no-JS, and static export (PNG/SVG/PDF capture) all present the complete final frame — never a blank or mid-sequence one. `[a11y].motion_reduce_policy` (rule 20) chooses how motion degrades; it never decides whether the end frame is complete. If a figure only makes sense while animating, the static figure is broken: fix its labels and structure, don't lean on motion to carry the meaning.
+
+### 29. Pick one mode: `none`, `reveal`, `step`, or `loop`
+
+| Mode | Behavior | Autoplay | Repeats | May carry meaning |
+|---|---|---|---|---|
+| `none` | Complete static figure; the default | — | — | yes (it is the figure) |
+| `reveal` | One ordered run that ends on the complete frame | yes, once | no | yes |
+| `step` | Reader advances through states with controls | no — user-driven | no | yes |
+| `loop` | One decorative token cycling (a flow hint) | yes | yes | **no** |
+
+`reveal` is the only mode that autoplays, and it plays once: no restart on viewport re-entry, tab return, or anything but an explicit Replay. `step` never advances on its own. Loops are decorative only — they never encode state, values, or outcomes — and each cycle lasts at least `3000ms`. Anything that repeats also stays under three flashes per second (WCAG 2.3.1). Keep the sequence small: 1–8 steps, at most 2 items entering per step, at most 12 marked items total. A timed `reveal` at the default 1500 ms hold fits at most 5 of those steps; a longer sequence is a `step` sequence.
 
 ## Composition rules — hierarchy, distribution, surface system
 
@@ -449,6 +475,8 @@ Before declaring a UI surface done, walk through these:
 - [ ] Easing matches direction — enter `ease-out`, exit `ease-in`, on-screen move `ease-in-out`
 - [ ] Entrance scale floors at `0.95` (not `0`); `:hover` gated behind `@media (hover: hover) and (pointer: fine)`
 - [ ] One load-bearing motion per interaction; reorders/expands use FLIP, not animated layout
+- [ ] Figure is complete with no JS, reduced motion, print, and static export; only `.motion-ready` selectors hide or displace (rule 28)
+- [ ] One motion mode; only `reveal` autoplays (once); loops are decorative with a ≥3000ms cycle (rule 29)
 - [ ] macOS font smoothing applied once at root
 - [ ] Dynamic numbers use `tabular-nums`
 - [ ] Headings use `text-wrap: balance`; body uses `text-wrap: pretty`
@@ -480,5 +508,6 @@ Hover and focus states are particularly likely to drop below 8:1 — verify both
 - [thedavidmurray/claude-make-interfaces-feel-better](https://github.com/thedavidmurray/claude-make-interfaces-feel-better) (MIT, archived May 2026) — Source for rules 1–16. The mathematical-precision framing (`outer = inner + padding`, exact `0.96` press value, exact `0.25` icon scale, `bounce: 0`) is preserved verbatim because the values are tuned, not arbitrary.
 - [All-The-Vibes/ATV-Design](https://github.com/All-The-Vibes/ATV-Design) `emil-design-eng-inspired` (MIT) — Source for rules 18–22 (easing-by-direction, entrance scale floor, hover-gating, motion budget, FLIP), itself a clean-room paraphrase of [emilkowalski/skill](https://github.com/emilkowalski/skill). muriel keeps its own duration binary and `0.96` press value over the source's bands and `0.97`.
 - [Dammyjay93/interface-design](https://github.com/Dammyjay93/interface-design) (MIT, Damola Akinleye) — Source for rules 23–27 (composition: focal point, type-scale ratio, 60/30/10, surface-elevation system, test battery). muriel **drops the source's low-opacity/muted-color hierarchy lever** — it conflicts with the 8:1 floor — and rebuilds the same hierarchy on weight + size + space. Its polish/motion section (concentric radius, tabular-nums, easing, hit area, etc.) was *not* imported: muriel rules 1–22 already cover it, more precisely.
+- diagram-design `references/animation.md` and ADRs 0001/0003 (MIT, © 2025 Cathryn Lavery) — Source for rules 28–29 (static-first enhancement, `.motion-ready` gating, the none/reveal/step/loop modes, reveal-only autoplay, the ≥3s decorative loop, the 8-step / 2-per-step / 12-item budget). Adapted from diagram-design's animation contract (MIT). muriel does **not** import its `--motion-*` clock tokens or its pinned controller.
 - [Material Design 3 Motion](https://m3.material.io/styles/motion) — Tangentially related; muriel intentionally does not adopt Material's broader motion vocabulary.
 - [Apple HIG — Motion](https://developer.apple.com/design/human-interface-guidelines/motion) — Read-only reference; cited by paraphrase per scholarly discipline (Apple-proprietary docs).

@@ -55,6 +55,58 @@ from typing import Dict, List, Optional, Sequence, Union
 __all__ = ["venn_single", "venn_panels"]
 
 
+# ─── Accessible SVG ──────────────────────────────────────────────────
+
+def _fmt_count(v: float) -> str:
+    v = float(v)
+    return f"{int(v):,}" if v.is_integer() else f"{v:,g}"
+
+
+def _regions_desc(subsets: Dict[str, float], labels: Sequence[str]) -> str:
+    """"A only 38, A and B only 6, all three 3" — straight from the spec."""
+    out = []
+    for key in sorted(subsets, key=lambda k: (-k.count("1"), k), reverse=True):
+        members = [labels[i] for i, b in enumerate(key) if b == "1"]
+        if not members:
+            continue
+        if len(members) == len(labels):
+            name = "all three" if len(labels) == 3 else "both"
+        else:
+            name = " and ".join(members) + " only"
+        out.append(f"{name} {_fmt_count(subsets[key])}")
+    return ", ".join(out)
+
+
+def _savefig(fig, out_path, *, dpi: int, facecolor: str) -> None:
+    """Save; SVG keeps its text as <text> rather than outlined paths.
+
+    matplotlib outlines glyphs by default, which leaves a screen reader
+    nothing to read and the contrast audit nothing to measure — the
+    diagram-check gate reports such a file as blind.
+    """
+    import matplotlib.pyplot as plt
+
+    rc = {"svg.fonttype": "none"} if Path(out_path).suffix.lower() == ".svg" else {}
+    with plt.rc_context(rc):
+        fig.savefig(str(out_path), dpi=dpi, bbox_inches="tight",
+                    facecolor=facecolor)
+
+
+def _write_accessible(out_path, *, kind: str, title: Optional[str],
+                      desc: str) -> None:
+    """matplotlib writes no <title>/<desc>; add the contract to SVG output."""
+    path = Path(out_path)
+    if path.suffix.lower() != ".svg":
+        return  # raster output has no accessible-name slot
+    from muriel.tools.diagrams._a11y import figure_slug, inject_a11y
+    text = path.read_text(encoding="utf-8")
+    path.write_text(
+        inject_a11y(text, slug=figure_slug(path, kind),
+                    title=title or "Venn diagram", desc=desc),
+        encoding="utf-8",
+    )
+
+
 # ─── Key normalization ───────────────────────────────────────────────
 
 def _normalize_venn3(sets: Dict[str, int], labels: Sequence[str]) -> Dict[str, float]:
@@ -200,6 +252,7 @@ def venn_single(
     figsize=(8, 6),
     dpi: int = 200,
     subset_labels: Optional[Dict[str, str]] = None,
+    desc: Optional[str] = None,
 ) -> str:
     """
     Render a single area-proportional Venn and save to ``out_path``.
@@ -208,6 +261,10 @@ def venn_single(
     sets. If ``labels`` is omitted, the three longest prefix keys become
     the set labels (convenient for ``{"muriel": N, "marginalia": N, ...}``
     inputs).
+
+    For ``.svg`` output the file carries the accessible-figure contract
+    (``role="img"``, ``<title>``, ``<desc>``). ``desc`` should say what
+    the overlap argues; the default only names the sets and region counts.
     """
     try:
         import matplotlib.pyplot as plt
@@ -237,9 +294,15 @@ def venn_single(
                        subset_labels=subset_labels, title=title)
     fig.tight_layout()
     Path(out_path).parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(str(out_path), dpi=dpi, bbox_inches="tight",
-                facecolor=_bg_color(brand))
+    _savefig(fig, out_path, dpi=dpi, facecolor=_bg_color(brand))
     plt.close(fig)
+    if desc is None:
+        from muriel.tools.diagrams._a11y import default_desc
+        desc = default_desc(
+            f"Area-proportional Venn diagram of {len(labels)} sets", title,
+            ["sets: " + ", ".join(labels),
+             "region sizes: " + _regions_desc(subsets, labels)])
+    _write_accessible(out_path, kind="venn", title=title, desc=desc)
     return str(out_path)
 
 
@@ -282,6 +345,7 @@ def _main(argv=None) -> int:
         brand=brand,
         title=spec.get("title"),
         out_path=args.output,
+        desc=spec.get("desc"),
     )
     print(f"→ {args.output}")
     return 0
@@ -295,10 +359,12 @@ def venn_panels(
     out_path: Union[str, Path] = "venn-panels.png",
     figsize=None,
     dpi: int = 200,
+    desc: Optional[str] = None,
 ) -> str:
     """
     Render two or more Venn diagrams side by side — the AF
-    "LAB vs WILD" pattern.
+    "LAB vs WILD" pattern. ``.svg`` output carries ``role="img"`` plus
+    ``<title>``/``<desc>``; pass ``desc`` to say what the comparison shows.
 
     Each entry in ``panels`` is a dict:
       {"sets": {...}, "labels": [a, b, (c)], "title": "...",
@@ -339,7 +405,18 @@ def venn_panels(
 
     fig.tight_layout()
     Path(out_path).parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(str(out_path), dpi=dpi, bbox_inches="tight",
-                facecolor=_bg_color(brand))
+    _savefig(fig, out_path, dpi=dpi, facecolor=_bg_color(brand))
     plt.close(fig)
+    if desc is None:
+        from muriel.tools.diagrams._a11y import default_desc
+        panel_txt = []
+        for spec in panels:
+            labels = spec["labels"]
+            normalizer = _normalize_venn3 if len(labels) == 3 else _normalize_venn2
+            subsets = normalizer(spec["sets"], labels)
+            head = spec.get("title") or " / ".join(labels)
+            panel_txt.append(f"{head}: {_regions_desc(subsets, labels)}")
+        desc = default_desc(f"{n} area-proportional Venn panels", title,
+                            panel_txt)
+    _write_accessible(out_path, kind="venn-panels", title=title, desc=desc)
     return str(out_path)

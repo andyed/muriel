@@ -77,7 +77,27 @@ Limitations
   matching. ``@media`` / ``@keyframes`` / ``@supports`` blocks are
   skipped (their bodies don't enter the audit). Nested selectors and
   CSS-nesting syntax beyond one level are not interpreted.
-- Alpha channel ignored — we assume opaque text on opaque background.
+- CSS rules: alpha channel ignored — opaque text on an opaque background
+  is assumed. SVG presentation attributes (``<text fill="…">``) are
+  alpha-composited: see below.
+
+SVG presentation attributes
+---------------------------
+
+``audit_svg`` also reads ``fill`` off ``<text>`` / ``<tspan>`` elements
+(and inherited from an ancestor ``<g fill>``, or an inline
+``style="fill:…"``), because muriel's own diagram generators write colour
+that way and a CSS-only audit reads such a file as having no text at all.
+Each text run is scored against the background actually behind it: the
+page background, with every earlier ``rect`` / ``polygon`` / ``circle`` /
+``ellipse`` / straight-edged ``path`` that contains the run composited over it (``rgba()``,
+``fill-opacity`` and ``opacity`` honoured), and the text colour's own
+alpha composited over that. The run is sampled at its start, middle and
+end and scored at the worst of the three. Shapes under a ``transform``
+are skipped. Elements whose fill comes from a CSS class are left to the
+CSS pass. Text over a filled *curved* path (arcs, Béziers — a wedge, a
+circle drawn as a path) cannot be scored exactly; those runs are marked
+``unverified`` on their entry rather than silently passed.
 """
 
 from __future__ import annotations
@@ -412,6 +432,15 @@ class SelectorEntry:
     status: Optional[str] = None    # 'PASS' | 'WARN' | 'FAIL' | 'SKIP'
     source: str = "css"             # 'css' | 'inline' | 'svg-attr'
     count: int = 1                  # for deduped inline entries
+    # Set for 'svg-attr' entries: the background actually behind that text
+    # (page bg with every enclosing shape composited over it). None means
+    # "score against the audit-wide background".
+    bg_rgb: Optional[tuple[int, int, int]] = None
+    # Set for 'svg-attr' entries whose text sits on a curved filled <path>
+    # (a wedge, a circle drawn as a path): the colour under it is not
+    # known, so the ratio shown is against what *is* known and may be
+    # optimistic. muriel diagram-check fails such runs as unverified.
+    unverified: bool = False
 
     @property
     def fill_hex(self) -> Optional[str]:
@@ -886,7 +915,7 @@ def _score_entries(entries: list[SelectorEntry], bg_rgb: tuple[int, int, int],
     for entry in entries:
         if entry.fill_rgb is None:
             continue
-        entry.ratio = contrast_ratio(entry.fill_rgb, bg_rgb)
+        entry.ratio = contrast_ratio(entry.fill_rgb, entry.bg_rgb or bg_rgb)
         if entry.role == "decorative":
             entry.passes = None
             entry.status = "SKIP"
@@ -1012,6 +1041,393 @@ def _legibility_check(rules: list[_CssRule]) -> list[LegibilityWarning]:
     return warnings
 
 
+# ─── SVG presentation-attribute pass ────────────────────────────────────
+
+_RGBA_ALPHA_RE = re.compile(
+    r"^rgba?\(\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?"
+    r"\s*[,/]\s*([\d.]+)(%?)\s*\)$",
+    re.IGNORECASE,
+)
+_SHAPE_TAGS = ("rect", "polygon", "circle", "ellipse")
+_TEXT_ELEMS = ("text", "tspan")
+
+
+def _color_alpha(value: str) -> float:
+    """Alpha carried inside a color value itself (rgba(), #RRGGBBAA, #RGBA)."""
+    v = value.strip()
+    m = _RGBA_ALPHA_RE.match(v)
+    if m:
+        a = float(m.group(1))
+        return max(0.0, min(1.0, a / 100.0 if m.group(2) else a))
+    if v.startswith("#"):
+        h = v[1:]
+        if len(h) == 8:
+            return int(h[6:8], 16) / 255.0
+        if len(h) == 4:
+            return int(h[3] * 2, 16) / 255.0
+    return 1.0
+
+
+def _composite(fg: tuple[int, int, int], alpha: float,
+               bg: tuple[int, int, int]) -> tuple[int, int, int]:
+    """Source-over: what an alpha-``alpha`` ``fg`` looks like on ``bg``."""
+    a = max(0.0, min(1.0, alpha))
+    return tuple(int(round(a * f + (1 - a) * b)) for f, b in zip(fg, bg))
+
+
+def _local_tag(tag) -> str:
+    return tag.split("}", 1)[-1] if isinstance(tag, str) else ""
+
+
+def _num(el: ET.Element, name: str, default: float = 0.0) -> float:
+    raw = el.get(name)
+    if raw is None:
+        return default
+    try:
+        return float(raw.strip().rstrip("px"))
+    except ValueError:
+        return default
+
+
+def _paint_props(el: ET.Element) -> dict[str, str]:
+    """fill / fill-opacity / opacity from attributes, inline style winning."""
+    props = {k: el.get(k) for k in ("fill", "fill-opacity", "opacity")
+             if el.get(k) is not None}
+    style = el.get("style")
+    if style:
+        decls, _ = _parse_declarations(_strip_css_comments(style))
+        for k in ("fill", "fill-opacity", "opacity"):
+            if k in decls:
+                props[k] = decls[k]
+    return props
+
+
+def _style_decl(el: ET.Element, name: str) -> Optional[str]:
+    style = el.get("style")
+    if not style:
+        return None
+    decls, _ = _parse_declarations(_strip_css_comments(style))
+    return decls.get(name)
+
+
+def _style_num(el: ET.Element, name: str) -> float:
+    raw = _style_decl(el, name)
+    if not raw:
+        return 0.0
+    try:
+        return float(raw.strip().rstrip("px"))
+    except ValueError:
+        return 0.0
+
+
+def _float_or(value: Optional[str], default: float = 1.0) -> float:
+    if value is None:
+        return default
+    v = value.strip()
+    try:
+        return float(v[:-1]) / 100.0 if v.endswith("%") else float(v)
+    except ValueError:
+        return default
+
+
+def _shape_contains(el: ET.Element, tag: str, x: float, y: float) -> bool:
+    if tag == "rect":
+        rx, ry = _num(el, "x"), _num(el, "y")
+        w, h = _num(el, "width"), _num(el, "height")
+        return w > 0 and h > 0 and rx <= x <= rx + w and ry <= y <= ry + h
+    if tag == "circle":
+        cx, cy, r = _num(el, "cx"), _num(el, "cy"), _num(el, "r")
+        return r > 0 and (x - cx) ** 2 + (y - cy) ** 2 <= r * r
+    if tag == "ellipse":
+        cx, cy = _num(el, "cx"), _num(el, "cy")
+        rx, ry = _num(el, "rx"), _num(el, "ry")
+        return (rx > 0 and ry > 0
+                and ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1.0)
+    if tag == "polygon":
+        raw = (el.get("points") or "").replace(",", " ").split()
+        try:
+            nums = [float(v) for v in raw]
+        except ValueError:
+            return False
+        if len(nums) < 6 or len(nums) % 2:
+            return False
+        return _point_in_poly(x, y, list(zip(nums[0::2], nums[1::2])))
+    if tag == "path":
+        geom = _path_geometry(el.get("d") or "")
+        if geom is None or geom[0] != "poly":
+            return False
+        return _point_in_poly(x, y, geom[1])
+    return False
+
+
+_PATH_TOKEN_RE = re.compile(
+    r"[MmLlHhVvCcSsQqTtAaZz]|[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?"
+)
+_PATH_ARITY = {"M": 2, "L": 2, "H": 1, "V": 1, "C": 6, "S": 4, "Q": 4,
+               "T": 2, "A": 7, "Z": 0}
+
+
+def _path_geometry(d: str):
+    """``("poly", vertices)`` for a straight-edged path, else ``("bbox", box)``.
+
+    A path made only of move/line segments is a polygon and can be tested
+    exactly (matplotlib draws its figure and axes backgrounds that way). A
+    path with curves or arcs is reduced to a conservative bounding box —
+    every endpoint and control point, arcs padded by their radii — which is
+    enough to know text *might* sit on it, not what colour is under it.
+    Returns ``None`` for an unparseable path.
+    """
+    tokens = _PATH_TOKEN_RE.findall(d or "")
+    pts: list[tuple[float, float]] = []
+    pad = 0.0
+    curved = False
+    cx = cy = sx = sy = 0.0
+    cmd = None
+    i = 0
+    try:
+        while i < len(tokens):
+            tok = tokens[i]
+            if tok.isalpha():
+                cmd = tok
+                i += 1
+                if cmd in "Zz":
+                    cx, cy = sx, sy
+                    continue
+            if cmd is None:
+                return None
+            up = cmd.upper()
+            n = _PATH_ARITY[up]
+            args = [float(v) for v in tokens[i:i + n]]
+            if len(args) < n:
+                break
+            i += n
+            rel = cmd.islower()
+            if up == "H":
+                cx = cx + args[0] if rel else args[0]
+            elif up == "V":
+                cy = cy + args[0] if rel else args[0]
+            elif up == "A":
+                curved = True
+                pad = max(pad, abs(args[0]), abs(args[1]))
+                cx, cy = (cx + args[5], cy + args[6]) if rel else (args[5], args[6])
+            else:
+                if up in "CSQ":
+                    curved = True
+                    for k in range(0, n - 2, 2):
+                        pts.append((cx + args[k], cy + args[k + 1]) if rel
+                                   else (args[k], args[k + 1]))
+                cx, cy = (cx + args[-2], cy + args[-1]) if rel else (args[-2], args[-1])
+            if up == "M":
+                sx, sy = cx, cy
+                if cmd == "M":
+                    cmd = "L"  # implicit lineto after a moveto
+                elif cmd == "m":
+                    cmd = "l"
+            pts.append((cx, cy))
+    except (ValueError, KeyError):
+        return None
+    if not curved:
+        return ("poly", pts) if len(pts) >= 3 else None
+    if not pts:
+        return None
+    xs = [x for x, _ in pts]
+    ys = [y for _, y in pts]
+    return ("bbox", (min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad))
+
+
+def _point_in_poly(x: float, y: float, poly) -> bool:
+    hit = False
+    for i in range(len(poly)):
+        x0, y0 = poly[i]
+        x1, y1 = poly[(i + 1) % len(poly)]
+        if (y0 > y) != (y1 > y):
+            if x < x0 + (y - y0) / (y1 - y0) * (x1 - x0):
+                hit = not hit
+    return hit
+
+
+def _css_fill_classes(rules: list[_CssRule]) -> set[str]:
+    """Class names some CSS rule assigns a fill to (CSS beats attributes)."""
+    out: set[str] = set()
+    for rule in rules:
+        if "fill" not in rule.declarations:
+            continue
+        for sel in rule.selectors:
+            out.update(re.findall(r"\.([A-Za-z0-9_-]+)", sel))
+    return out
+
+
+def _entries_from_svg_attributes(
+    svg_source: str,
+    rules: list[_CssRule],
+    var_table: dict[str, str],
+    page_bg: tuple[int, int, int],
+    *,
+    composite_shapes: bool = True,
+) -> tuple[list[SelectorEntry], int]:
+    """
+    Walk ``<text>`` / ``<tspan>`` runs and build one entry per distinct
+    (fill, background) pair, deduplicated with a count. Returns
+    ``(entries, text_runs_seen)``; the second number is every text run
+    found, scored or not, so a caller can tell "no text" from "no
+    attribute-colored text".
+    """
+    try:
+        root = ET.fromstring(svg_source)
+    except ET.ParseError:
+        return [], 0
+
+    css_classes = _css_fill_classes(rules)
+    grouped: dict[tuple, SelectorEntry] = {}
+    painted: list[tuple[ET.Element, str, tuple[int, int, int], float]] = []
+    runs = 0
+    curved_boxes: list[tuple[float, float, float, float]] = []
+
+    def resolve(raw: str) -> Optional[tuple[tuple[int, int, int], float]]:
+        val = _resolve_var(raw, var_table)
+        if val.strip().lower().startswith("url("):
+            return None
+        try:
+            rgb = parse_color(val)
+        except ValueError:
+            return None
+        if rgb is None:
+            return None
+        return rgb, _color_alpha(val)
+
+    def bg_at(x: float, y: float) -> tuple[int, int, int]:
+        bg = page_bg
+        if not composite_shapes:
+            return bg
+        for el, tag, rgb, alpha in painted:
+            if _shape_contains(el, tag, x, y):
+                bg = _composite(rgb, alpha, bg)
+        return bg
+
+    def walk(el: ET.Element, fill: Optional[str], fill_op: float,
+             op: float, transformed: bool, classes: tuple[str, ...]) -> None:
+        nonlocal runs
+        tag = _local_tag(el.tag)
+        if tag in ("defs", "clipPath", "mask", "pattern", "marker",
+                   "symbol", "title", "desc", "metadata", "style"):
+            return
+        props = _paint_props(el)
+        own_classes = tuple((el.get("class") or "").split())
+        classes = classes + own_classes
+        if "fill" in props:
+            fill = props["fill"]
+        fill_op = fill_op * _float_or(props.get("fill-opacity"))
+        op = op * _float_or(props.get("opacity"))
+        transformed = transformed or bool(el.get("transform"))
+
+        if tag == "path" and not transformed:
+            geom = _path_geometry(el.get("d") or "")
+            got = resolve(fill) if fill is not None else ((0, 0, 0), 1.0)
+            if geom is not None and got is not None and fill_op * op > 0:
+                if geom[0] == "poly":
+                    painted.append((el, "path", got[0], got[1] * fill_op * op))
+                else:
+                    curved_boxes.append(geom[1])
+        if tag in _SHAPE_TAGS and not transformed:
+            if fill is not None:
+                got = resolve(fill)
+                if got is not None:
+                    rgb, a = got
+                    painted.append((el, tag, rgb, a * fill_op * op))
+            elif not any(c in css_classes for c in classes):
+                painted.append((el, tag, (0, 0, 0), fill_op * op))
+
+        if tag in _TEXT_ELEMS:
+            direct = (el.text or "").strip()
+            if tag == "text":
+                direct = direct or "".join(
+                    (c.tail or "") for c in el).strip()
+            if direct:
+                runs += 1
+                styled_by_css = any(c in css_classes for c in classes)
+                if not (styled_by_css and "fill" not in props):
+                    raw = fill if fill is not None else "#000000"
+                    got = resolve(raw)
+                    if got is not None:
+                        _score_text_run(el, direct, raw, got, fill_op * op,
+                                        classes)
+        for child in el:
+            if isinstance(child.tag, str):
+                walk(child, fill, fill_op, op, transformed, classes)
+
+    def _score_text_run(el, text, raw, got, alpha_mult, classes):
+        rgb, a = got
+        # Anchor point comes from the nearest <text> with coordinates.
+        x = _num(el, "x", float("nan"))
+        y = _num(el, "y", float("nan"))
+        if x != x or y != y:  # NaN → a tspan without its own position
+            parent = text_positions.get(el)
+            x, y = parent if parent else (0.0, 0.0)
+        fs = (_num(el, "font-size", 0.0) or _style_num(el, "font-size")
+              or text_sizes.get(el, 16.0))
+        w = 0.55 * fs * len(text)
+        anchor = (el.get("text-anchor") or _style_decl(el, "text-anchor")
+                  or text_anchors.get(el, "start"))
+        x0 = {"middle": x - w / 2, "end": x - w}.get(anchor, x)
+        cy = y - 0.35 * fs
+        worst: Optional[tuple[float, tuple, tuple]] = None
+        samples = (x0 + 1, x0 + w / 2, x0 + w - 1)
+        unverified = any(
+            bx0 <= sx <= bx1 and by0 <= cy <= by1
+            for sx in samples
+            for bx0, by0, bx1, by1 in curved_boxes
+        )
+        for sx in samples:
+            bg = bg_at(sx, cy)
+            fg = _composite(rgb, a * alpha_mult, bg)
+            ratio = contrast_ratio(fg, bg)
+            if worst is None or ratio < worst[0]:
+                worst = (ratio, fg, bg)
+        _, fg, bg = worst
+        role = "text"
+        if classes and all(_selector_role("." + c) == "decorative"
+                           for c in classes):
+            role = "decorative"
+        key = (fg, bg, role, unverified)
+        if key in grouped:
+            grouped[key].count += 1
+            return
+        bg_hex = "#{:02x}{:02x}{:02x}".format(*bg)
+        snippet = text if len(text) <= 24 else text[:23] + "…"
+        grouped[key] = SelectorEntry(
+            selectors=[f"<text fill={raw.strip()}> on {bg_hex}"
+                       + (" (over a curved <path>: unverified)" if unverified else "")
+                       + f" “{snippet}”"],
+            fill=raw.strip(),
+            fill_rgb=fg,
+            role=role,
+            source="svg-attr",
+            bg_rgb=bg,
+            unverified=unverified,
+        )
+
+    # tspans inherit position / size / anchor from their <text>
+    text_positions: dict[ET.Element, tuple[float, float]] = {}
+    text_sizes: dict[ET.Element, float] = {}
+    text_anchors: dict[ET.Element, str] = {}
+    for t_el in root.iter():
+        if _local_tag(t_el.tag) != "text":
+            continue
+        pos = (_num(t_el, "x"), _num(t_el, "y"))
+        size = _num(t_el, "font-size", 0.0) or _style_num(t_el, "font-size") or 16.0
+        anch = t_el.get("text-anchor") or _style_decl(t_el, "text-anchor") or "start"
+        for sub in t_el.iter():
+            if sub is t_el:
+                continue
+            text_positions[sub] = (_num(sub, "x", pos[0]), _num(sub, "y", pos[1]))
+            text_sizes[sub] = _num(sub, "font-size", size)
+            text_anchors[sub] = sub.get("text-anchor", anch)
+
+    root_props = _paint_props(root)
+    walk(root, root_props.get("fill"), 1.0, 1.0, False, ())
+    return list(grouped.values()), runs
+
+
 # ─── Public audit functions ─────────────────────────────────────────────
 
 def audit_svg(
@@ -1021,7 +1437,8 @@ def audit_svg(
     print_table: bool = True,
 ) -> list[SelectorEntry]:
     """
-    Audit every CSS fill rule in an SVG file against a contrast threshold.
+    Audit every CSS fill rule, and every ``<text>``/``<tspan>`` colored by
+    a presentation attribute, in an SVG file against a contrast threshold.
 
     Parameters
     ----------
@@ -1032,14 +1449,18 @@ def audit_svg(
     background
         Override the background color. If ``None``, auto-detects ``.bg``
         class fill or the first ``<rect fill=...>`` attribute, falling
-        back to ``#000000``.
+        back to ``#000000``. An explicit background also switches off
+        per-text shape compositing: every attribute-colored text run is
+        scored against it as given.
     print_table
         If ``True``, prints a formatted audit table to stdout.
 
     Returns
     -------
     list[SelectorEntry]
-        One per CSS rule with a resolvable fill. Each entry has
+        One per CSS rule with a resolvable fill, then one per distinct
+        (text color, background) pair among attribute-colored text runs
+        (``source="svg-attr"``, ``bg_rgb`` set, ``count`` = runs). Each entry has
         ``ratio``, ``status`` and ``passes`` populated. Decorative
         entries have ``passes=None`` (exempt).
     """
@@ -1056,6 +1477,11 @@ def audit_svg(
         rules, var_table, properties=("fill",), source="css"
     )
     bg_rgb = _resolve_background_svg(entries, background, svg_source)
+    attr_entries, _runs = _entries_from_svg_attributes(
+        svg_source, rules, var_table, bg_rgb,
+        composite_shapes=background is None,
+    )
+    entries.extend(attr_entries)
     _score_entries(entries, bg_rgb, required)
 
     legibility = _legibility_check(rules)
@@ -1190,7 +1616,7 @@ def _print_audit_table(
         ratio_str = f"{entry.ratio:.2f}:1" if entry.ratio is not None else "—"
         fill_str = entry.fill_hex or entry.fill or "?"
         sel_str = entry.selector_display
-        if entry.source == "inline" and entry.count > 1:
+        if entry.source in ("inline", "svg-attr") and entry.count > 1:
             sel_str = f"{sel_str}  (×{entry.count})"
         if len(sel_str) > widths[4]:
             sel_str = sel_str[: widths[4] - 1] + "…"

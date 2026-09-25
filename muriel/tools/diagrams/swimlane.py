@@ -40,6 +40,7 @@ from html import escape
 from pathlib import Path
 from typing import Optional, Union
 
+from ._a11y import default_desc, figure_slug, svg_open
 from ._labels import (
     RATIO_MONO,
     RATIO_SANS_BOLD,
@@ -145,6 +146,7 @@ def swimlane(
     title: Optional[str] = None,
     brand=None,
     out_path: Union[str, Path] = "swimlane.svg",
+    desc: Optional[str] = None,
 ) -> str:
     """Render a cross-functional swimlane (2–6 lanes).
 
@@ -166,7 +168,12 @@ def swimlane(
     brand
         Optional ``muriel.styleguide.StyleGuide``.
     out_path
-        Where to write the SVG.
+        Where to write the SVG. Its stem also prefixes the accessible
+        ``<title>``/``<desc>`` ids.
+    desc
+        What the figure argues, for the SVG ``<desc>`` a screen reader
+        announces. Defaults to a conservative description built from the
+        title and the element labels — it states no claim of its own.
 
     Returns
     -------
@@ -244,10 +251,18 @@ def swimlane(
         return y0 + li * lane_h + lane_h / 2
 
     parts: list[str] = []
-    parts.append(
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
-        f'width="{width}" height="{height}" font-family="{escape(t["body_font"])}">'
-    )
+    if desc is None:
+        desc = default_desc(
+            f"Swimlane with {len(lane_labels)} lanes and {len(norm)} steps", title,
+            ["lanes, top to bottom: " + ", ".join(lane_labels),
+             "steps in flow order: " + ", ".join(
+                 f"{s['label']} ({lane_labels[s['lane']]})" for s in norm)])
+    parts.append(svg_open(
+        width=width, height=height,
+        slug=figure_slug(out_path, "swimlane"),
+        title=title or "Swimlane", desc=desc,
+        attrs=f'font-family="{escape(t["body_font"])}"',
+    ))
     parts.append(
         f'<defs>'
         f'<marker id="sl-flow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" '
@@ -377,6 +392,7 @@ def _main(argv=None) -> int:
         title=spec.get("title"),
         brand=brand,
         out_path=args.output,
+        desc=spec.get("desc"),
     )
     print(f"→ {args.output}")
     return 0

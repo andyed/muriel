@@ -51,6 +51,8 @@ from html import escape
 from pathlib import Path
 from typing import Optional, Union
 
+from muriel.tools.diagrams._a11y import default_desc, figure_slug, svg_open
+
 from muriel.tools.diagrams.foveal_overlay import compute_isotropic_sectors
 
 __all__ = ["engine_sectors_overlay", "fidelity_alpha"]
@@ -150,6 +152,8 @@ def engine_sectors_overlay(
     body_font: Optional[str] = None,
     out_path: Optional[Union[str, Path]] = None,
     brand=None,
+    title: Optional[str] = None,
+    desc: Optional[str] = None,
 ) -> str:
     """Render the Blauch isotropic-sectors cobweb as self-contained SVG.
 
@@ -196,6 +200,12 @@ def engine_sectors_overlay(
         If given, write the SVG to disk and return the markup.
     brand
         Optional ``muriel.styleguide.StyleGuide``.
+    title
+        Accessible name for the SVG ``<title>`` (not drawn). Defaults to
+        "Engine sectors overlay".
+    desc
+        What the figure argues, for the SVG ``<desc>``. Defaults to a
+        conservative description of the rendered parameters.
 
     Returns
     -------
@@ -244,11 +254,19 @@ def engine_sectors_overlay(
     cross_w   = max(1.0, 2.0 * scale)
 
     parts: list[str] = []
-    parts.append(
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {size} {size}" '
-        f'width="{size}" height="{size}" font-family="{escape(t["body_font"])}" '
-        f'shape-rendering="geometricPrecision">'
-    )
+    if desc is None:
+        desc = default_desc(
+            "Isotropic-sectors cobweb", None,
+            [f"{num_rings} cortical rings, magnification constant {cmf_a:g}",
+             f"empty inside the {fovea_radius_deg:g}° fovea",
+             f"field shown ±{eccentricity_max:g}° of visual angle"])
+    parts.append(svg_open(
+        width=size, height=size,
+        slug=figure_slug(out_path, "engine-sectors-overlay"),
+        title=title or "Engine sectors overlay", desc=desc,
+        attrs=(f'font-family="{escape(t["body_font"])}" '
+               f'shape-rendering="geometricPrecision"'),
+    ))
     parts.append(f'<rect width="{size}" height="{size}" fill="{t["bg"]}"/>')
 
     # ─── Engine cobweb: filled-wedge sectors ─────────────────────────

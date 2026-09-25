@@ -386,12 +386,17 @@ class WaveField:
         stroke_width: float = 1.1,
         title: str = "Layered wave field",
         desc: Optional[str] = None,
+        slug: Optional[str] = None,
     ) -> str:
         """Render a viewBox-first, accessible SVG document.
 
         Pass ``fill_colors=()`` for line art. Otherwise colors cycle across
         layers; defaults are restrained dark-to-cyan Muriel tokens. Motion is
         intentionally absent: a static export remains the canonical artifact.
+
+        ``slug`` prefixes the ``<title>``/``<desc>`` ids (default: derived
+        from ``title``); give each figure its own when several are inlined
+        into one page.
         """
         if not 0.0 <= fill_opacity <= 1.0:
             raise PatternError(
@@ -411,13 +416,21 @@ class WaveField:
             f"{len(self.layers)} smooth contour layers from {self.source} values; "
             f"seed {self.seed}."
         )
+        # The accessible-figure contract shared with the diagram generators
+        # (muriel.tools.diagrams._a11y): slug-prefixed ids named by
+        # aria-labelledby, title first, a <=60-char accessible name.
+        from muriel.tools.diagrams._a11y import fit_title, slugify
+
+        title, description = fit_title(title, description)
+        slug = slugify(slug or title, fallback="wavefield")
         out: list[str] = [
             '<svg xmlns="http://www.w3.org/2000/svg" role="img" '
+            f'aria-labelledby="{slug}-title {slug}-desc" '
             f'viewBox="{_fmt(cv.x0)} {_fmt(cv.y0)} '
             f'{_fmt(cv.width)} {_fmt(cv.height)}" '
             'preserveAspectRatio="xMidYMid meet">',
-            f"  <title>{_xml_escape(title)}</title>",
-            f"  <desc>{_xml_escape(description)}</desc>",
+            f'  <title id="{slug}-title">{_xml_escape(title)}</title>',
+            f'  <desc id="{slug}-desc">{_xml_escape(description)}</desc>',
         ]
         if bg:
             out.append(
@@ -1164,7 +1177,7 @@ def _selftest() -> int:
     assert no_bg.count("<rect") == 0
 
     wave_svg = w.svg(title="Signal & field", fill_colors=())
-    assert "<title>Signal &amp; field</title>" in wave_svg
+    assert '<title id="signal-field-title">Signal &amp; field</title>' in wave_svg
     assert 'role="img"' in wave_svg
     assert 'fill="none"' in wave_svg
     assert 'data-source="generated"' in wave_svg

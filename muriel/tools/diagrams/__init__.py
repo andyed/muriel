@@ -14,6 +14,8 @@ Catalog (MVP):
     pyramid(tiers, *, orientation, ...)        → 4–6 tier pyramid / funnel.
     swimlane(lanes, steps, ...)                → cross-functional process
                                                   with per-actor lanes + handoffs.
+    heat_grid(rows, cols, values, ...)         → rows × columns comparison of an
+                                                  unsigned quantity (opacity ramp).
     foveal_overlay(*, verbosity, ...)          → Scrutinizer's UI overlay
                                                   (svg-overlay.js port: fovea
                                                   + parafovea + uniform grid).
@@ -22,7 +24,11 @@ Catalog (MVP):
                                                   (the engine's sampling layout).
 
 All write self-contained SVG, accept an optional ``StyleGuide``, and
-fall back to muriel's OLED palette. Output is hand-rolled SVG (no
+fall back to muriel's OLED palette. Every one writes the accessible-figure
+contract (``role="img"``, slug-prefixed ``<title>``/``<desc>`` named by
+``aria-labelledby``; see ``_a11y``) and takes ``desc=`` for what the figure
+argues. ``muriel diagram-check`` (``check.py``) is the read-back gate:
+a11y lint, label geometry, 8:1 contrast. Output is hand-rolled SVG (no
 ``svgwrite`` dependency) for transparency: the file you ship is the
 file the agent wrote.
 """
@@ -32,10 +38,12 @@ from muriel.tools.diagrams.cycle import cycle
 from muriel.tools.diagrams.layer_stack import layer_stack
 from muriel.tools.diagrams.pyramid import pyramid
 from muriel.tools.diagrams.swimlane import swimlane
+from muriel.tools.diagrams.heat_grid import heat_grid
 from muriel.tools.diagrams.foveal_overlay import foveal_overlay
 from muriel.tools.diagrams.engine_sectors_overlay import engine_sectors_overlay
 
 __all__ = [
     "matrix", "cycle", "layer_stack", "pyramid", "swimlane",
     "foveal_overlay", "engine_sectors_overlay",
+    "heat_grid",
 ]

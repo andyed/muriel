@@ -42,6 +42,7 @@ from html import escape
 from pathlib import Path
 from typing import Optional, Union
 
+from ._a11y import default_desc, figure_slug, legible_on, svg_open
 from ._labels import RATIO_MONO, RATIO_SANS_BOLD, grow_to_fit, text_width
 
 __all__ = ["pyramid"]
@@ -121,6 +122,7 @@ def pyramid(
     axis_label: Optional[str] = None,
     out_path: Union[str, Path] = "pyramid.svg",
     width: int = 900,
+    desc: Optional[str] = None,
 ) -> str:
     """Render a 4–6 tier pyramid or funnel.
 
@@ -139,8 +141,12 @@ def pyramid(
     proportional
         When ``True`` and every tier carries a ``value``, each tier is
         drawn as a centred rectangle whose width is proportional to its
-        value — an honest funnel. Otherwise tiers taper linearly
-        (an ordinal narrowing, not a measurement).
+        value (``width = max_w * value / max(values)``) — an honest
+        funnel. A tier too narrow to hold its label keeps its true width
+        and the label moves outside the bar, to its left; the bar is
+        never widened to fit text, because that would misstate the
+        count. Otherwise tiers taper linearly (an ordinal narrowing, not
+        a measurement).
     title
         Optional heading above the figure.
     focal
@@ -153,7 +159,12 @@ def pyramid(
     brand
         Optional ``muriel.styleguide.StyleGuide``.
     out_path
-        Where to write the SVG.
+        Where to write the SVG. Its stem also prefixes the accessible
+        ``<title>``/``<desc>`` ids.
+    desc
+        What the figure argues, for the SVG ``<desc>`` a screen reader
+        announces. Defaults to a conservative description listing the
+        tiers and values from the spec — it states no claim of its own.
 
     Returns
     -------
@@ -183,6 +194,7 @@ def pyramid(
     max_w    = 640
     tier_pad = 16           # clear space inside a tier's sloped edges
     ann_gap  = 20           # tier edge to right-hand annotation
+    out_gap  = 12           # bar edge to an outside label (proportional mode)
     pad_top  = 48
     pad_bot  = 48
     title_h  = 72 if title else 0
@@ -191,10 +203,18 @@ def pyramid(
     use_prop = proportional and all(l["value"] is not None for l in norm)
 
     def _tier_width(i: int) -> float:
-        """Representative width of tier i (used in proportional mode)."""
-        vals = [l["value"] for l in norm]
+        """Width of tier i in proportional mode: width ∝ value.
+
+        No floor. An earlier version drew ``min_w + (max_w - min_w) * v/vmax``,
+        which put a 160px floor under every bar: a funnel of 100000 / 24000 /
+        9000 / 2100 drew at 1 / .43 / .32 / .27 when the data say
+        1 / .24 / .09 / .02 — a "proportional" funnel that understated the
+        drop-off fourfold at the bottom. A label that does not fit a narrow
+        bar is placed outside it instead (see below).
+        """
+        vals = [max(0.0, float(l["value"])) for l in norm]
         vmax = max(vals) or 1.0
-        return min_w + (max_w - min_w) * (norm[i]["value"] / vmax)
+        return max_w * (vals[i] / vmax)
 
     def _boundary_width(j: int) -> float:
         """Width at horizontal boundary j (0..n) for the tapered shape."""
@@ -230,7 +250,9 @@ def pyramid(
     # The offsets below mirror the baselines the renderer uses further
     # down; ascent/descent come from muriel.layout's text metrics.
     scale = 1.0
-    for i, l in enumerate(norm):
+    # Proportional mode never scales: its widths are the data. Labels that
+    # do not fit move outside their bar instead.
+    for i, l in enumerate(norm if not use_prop else []):
         checks = []
         if l["sublabel"]:
             # label baseline at mid, sublabel baseline at mid + 16
@@ -268,18 +290,64 @@ def pyramid(
         side = max(side, 80.0)   # axis line at x=60 plus its rotated caption
     if widest_ann:
         side = max(side, ann_gap + widest_ann + 24)
-    width = int(grow_to_fit(width, max_w + 2 * side))
+    # Proportional mode: which tiers are too narrow for their own label?
+    # Those labels sit outside the bar, right-anchored just left of it, so
+    # the bar keeps its true width. The half-canvas has to hold that label
+    # plus the left margin (bare edge, or the axis and its caption).
+    outside: set[int] = set()
+    half_needed = max_w / 2 + side
+    if use_prop:
+        left_margin = 80.0 if axis_label else 24.0
+        for i, l in enumerate(norm):
+            need = text_width(l["label"], 13, char_width_ratio=RATIO_SANS_BOLD)
+            if l["sublabel"]:
+                need = max(need, text_width(l["sublabel"], 10,
+                                            char_width_ratio=RATIO_MONO))
+            w_i = _tier_width(i)
+            if need > w_i - 2 * tier_pad:
+                outside.add(i)
+                half_needed = max(half_needed,
+                                  w_i / 2 + out_gap + need + left_margin)
+    width = int(grow_to_fit(width, 2 * half_needed))
     cx = width / 2
 
     y0       = title_h + pad_top
     stack_h  = n * tier_h
     height   = y0 + stack_h + pad_bot
 
+    kind = "Funnel" if orientation == "down" else "Pyramid"
+    if desc is None:
+        def _fmt_v(v) -> str:
+            v = float(v)
+            return f"{int(v):,}" if v.is_integer() else f"{v:,g}"
+
+        tier_txt = []
+        for l in norm:
+            extra = [x for x in (
+                l["sublabel"],
+                _fmt_v(l["value"]) if l["value"] is not None else None,
+                l["annotation"],
+            ) if x]
+            tier_txt.append(
+                f'{l["label"]} ({"; ".join(extra)})' if extra else l["label"]
+            )
+        desc = default_desc(
+            f"{kind} with {n} tiers",
+            title,
+            [
+                "top to bottom: " + ", ".join(tier_txt),
+                ("bar widths proportional to value" if use_prop
+                 else "tiers taper linearly; width is ordinal, not measured"),
+                (f"axis: {axis_label}" if axis_label else ""),
+            ],
+        )
     parts: list[str] = []
-    parts.append(
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
-        f'width="{width}" height="{height}" font-family="{escape(t["body_font"])}">'
-    )
+    parts.append(svg_open(
+        width=width, height=height,
+        slug=figure_slug(out_path, kind.lower()),
+        title=title or kind, desc=desc,
+        attrs=f'font-family="{escape(t["body_font"])}"',
+    ))
     parts.append(
         f'<defs><marker id="py-arrow" markerWidth="8" markerHeight="8" '
         f'refX="4" refY="7" orient="auto" markerUnits="strokeWidth">'
@@ -305,9 +373,12 @@ def pyramid(
         else:
             top_w = _boundary_width(i)
             bot_w = _boundary_width(i + 1)
+        # Proportional bars carry data in their width, and a 0.1px rounding
+        # step is a large share of a sliver; write x to 0.001px there.
+        xp = 3 if use_prop else 1
         pts = (
-            f"{cx - top_w / 2:.1f},{ty:.1f} {cx + top_w / 2:.1f},{ty:.1f} "
-            f"{cx + bot_w / 2:.1f},{by:.1f} {cx - bot_w / 2:.1f},{by:.1f}"
+            f"{cx - top_w / 2:.{xp}f},{ty:.1f} {cx + top_w / 2:.{xp}f},{ty:.1f} "
+            f"{cx + bot_w / 2:.{xp}f},{by:.1f} {cx - bot_w / 2:.{xp}f},{by:.1f}"
         )
         is_focal = (i == focal_idx)
         fill = t["focal_fill"] if is_focal else t["paper"]
@@ -317,18 +388,28 @@ def pyramid(
             f'<polygon points="{pts}" fill="{fill}" '
             f'stroke="{stroke}" stroke-width="{sw}"/>'
         )
-        # Primary label (centred)
+        # Primary label: centred in the tier, or — for a proportional bar
+        # too narrow to hold it — right-anchored just outside its left edge.
         has_sub = bool(l["sublabel"])
         ly = mid + (0 if not has_sub else -4)
+        if i in outside:
+            lx = cx - top_w / 2 - out_gap
+            anchor = "end"
+        else:
+            lx = cx
+            anchor = "middle"
         parts.append(
-            f'<text x="{cx:.1f}" y="{ly + 4:.1f}" fill="{t["ink"]}" '
-            f'font-size="13" font-weight="600" text-anchor="middle">'
+            f'<text x="{lx:.1f}" y="{ly + 4:.1f}" fill="{t["ink"]}" '
+            f'font-size="13" font-weight="600" text-anchor="{anchor}">'
             f'{escape(l["label"])}</text>'
         )
         if has_sub:
+            # Muted on a tinted (focal) tier can fall under 8:1; step up.
+            sub_fill = legible_on([t["muted"], t["ink"]],
+                                  t["bg"] if i in outside else fill, t["bg"])
             parts.append(
-                f'<text x="{cx:.1f}" y="{mid + 16:.1f}" fill="{t["muted"]}" '
-                f'font-family="{_MONO}" font-size="10" text-anchor="middle">'
+                f'<text x="{lx:.1f}" y="{mid + 16:.1f}" fill="{sub_fill}" '
+                f'font-family="{_MONO}" font-size="10" text-anchor="{anchor}">'
                 f'{escape(l["sublabel"])}</text>'
             )
         # Right-side annotation (e.g. funnel drop-off)
@@ -412,6 +493,7 @@ def _main(argv=None) -> int:
         focal=spec.get("focal"),
         axis_label=spec.get("axis_label"),
         out_path=args.output,
+        desc=spec.get("desc"),
     )
     print(f"→ {args.output}")
     return 0

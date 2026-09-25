@@ -24,6 +24,7 @@ from html import escape
 from pathlib import Path
 from typing import List, Optional, Sequence, Union
 
+from ._a11y import default_desc, figure_slug, svg_open
 from ._labels import RATIO_SANS, grow_to_fit, label_bbox, wrap_measured
 
 __all__ = ["cycle"]
@@ -110,6 +111,7 @@ def cycle(
     out_path: Union[str, Path] = "cycle.svg",
     width: int = 900,
     height: int = 700,
+    desc: Optional[str] = None,
 ) -> str:
     """Render an N-step iterative cycle (3–8 steps).
 
@@ -131,7 +133,12 @@ def cycle(
     brand
         Optional ``muriel.styleguide.StyleGuide``.
     out_path
-        Where to write the SVG.
+        Where to write the SVG. Its stem also prefixes the accessible
+        ``<title>``/``<desc>`` ids.
+    desc
+        What the figure argues, for the SVG ``<desc>`` a screen reader
+        announces. Defaults to a conservative description built from the
+        title and the element labels — it states no claim of its own.
 
     Returns
     -------
@@ -199,10 +206,17 @@ def cycle(
         ]
 
     parts: list[str] = []
-    parts.append(
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
-        f'width="{width}" height="{height}" font-family="{escape(t["body_font"])}">'
-    )
+    if desc is None:
+        desc = default_desc(
+            f"{direction.capitalize()} cycle with {n} steps", title,
+            [f"steps in order: " + ", ".join(s["label"] for s in norm_steps),
+             (f"centre: " + " ".join(center.split()) if center else "")])
+    parts.append(svg_open(
+        width=width, height=height,
+        slug=figure_slug(out_path, "cycle"),
+        title=title or "Cycle", desc=desc,
+        attrs=f'font-family="{escape(t["body_font"])}"',
+    ))
     # Arrow marker
     parts.append(
         f'<defs>'
@@ -321,6 +335,7 @@ def _main(argv=None) -> int:
         brand=brand,
         direction=spec.get("direction", "clockwise"),
         out_path=args.output,
+        desc=spec.get("desc"),
     )
     print(f"→ {args.output}")
     return 0

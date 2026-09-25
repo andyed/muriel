@@ -85,6 +85,8 @@ from html import escape
 from pathlib import Path
 from typing import Optional, Union
 
+from muriel.tools.diagrams._a11y import default_desc, figure_slug, svg_open
+
 __all__ = ["foveal_overlay", "compute_isotropic_sectors"]
 
 
@@ -276,6 +278,8 @@ def foveal_overlay(
     body_font: Optional[str] = None,
     out_path: Optional[Union[str, Path]] = None,
     brand=None,
+    title: Optional[str] = None,
+    desc: Optional[str] = None,
 ) -> str:
     """Render Scrutinizer's foveal overlay grid as self-contained SVG.
 
@@ -344,6 +348,12 @@ def foveal_overlay(
         If given, write the SVG to disk and return the markup.
     brand
         Optional ``muriel.styleguide.StyleGuide``.
+    title
+        Accessible name for the SVG ``<title>`` (not drawn). Defaults to
+        "Foveal overlay".
+    desc
+        What the figure argues, for the SVG ``<desc>``. Defaults to a
+        conservative description of the rendered parameters.
 
     Returns
     -------
@@ -389,11 +399,20 @@ def foveal_overlay(
     ring_step_px = fovea_r_px
 
     parts: list[str] = []
-    parts.append(
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {size} {size}" '
-        f'width="{size}" height="{size}" font-family="{escape(t["body_font"])}" '
-        f'shape-rendering="geometricPrecision">'
-    )
+    if desc is None:
+        desc = default_desc(
+            "Foveal overlay grid", None,
+            [f"fovea radius {fovea_radius_deg:g}°",
+             f"parafovea radius {parafovea_radius_deg:g}°",
+             f"{n_spokes} spokes" if verbosity >= 2 else "",
+             f"field shown ±{eccentricity_max:g}° of visual angle"])
+    parts.append(svg_open(
+        width=size, height=size,
+        slug=figure_slug(out_path, "foveal-overlay"),
+        title=title or "Foveal overlay", desc=desc,
+        attrs=(f'font-family="{escape(t["body_font"])}" '
+               f'shape-rendering="geometricPrecision"'),
+    ))
 
     # ─── halo-shadow filter — verbatim from svg-overlay.js initFilters() ──
     parts.append(

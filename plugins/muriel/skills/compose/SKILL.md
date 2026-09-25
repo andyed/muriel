@@ -187,7 +187,8 @@ Read the channel that matches the primary output:
 | Output | Primary channel |
 |---|---|
 | raster image, texture, sprite, photo treatment | [`channels/raster.md`](channels/raster.md) |
-| SVG, diagram, infographic | [`channels/svg.md`](channels/svg.md) |
+| named diagram form — 2×2 matrix, cycle, pyramid/funnel, layer stack, swimlane, Venn, flow/Sankey, treemap, heat-grid, DAG, tree, or a behaviour (queue, lifecycle, defense in depth) to diagram | [`channels/diagrams.md`](channels/diagrams.md) — Mermaid and ECharts forms are routed onward from its provider table |
+| general SVG, icon, wordmark, data-driven vector, infographic | [`channels/svg.md`](channels/svg.md) |
 | editorial HTML, printable page, static web capture | [`channels/web.md`](channels/web.md) |
 | explorable demo or parameter-driven interface | [`channels/interactive.md`](channels/interactive.md) |
 | application UI, hierarchy, typography, responsive polish | [`channels/polish.md`](channels/polish.md) |

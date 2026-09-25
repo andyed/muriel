@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 552" width="1320" height="552" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="swimlane-release-title swimlane-release-desc" viewBox="0 0 1320 552" width="1320" height="552" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
+<title id="swimlane-release-title">Release pipeline</title>
+<desc id="swimlane-release-desc">Swimlane with 4 lanes and 6 steps titled “Release pipeline”. Lanes, top to bottom: PM, Engineering, QA, Release; steps in flow order: Write spec (PM), Implement (Engineering), Review PR (Engineering), Test build (QA), Sign off (PM), Ship (Release).</desc>
 <defs><marker id="sl-flow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="rgba(176, 176, 196, 0.55)"/></marker><marker id="sl-handoff" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#7dd4e4"/></marker></defs>
 <rect width="1320" height="552" fill="#0a0a0f"/>
 <text x="168" y="48.0" fill="#e6e4d2" font-size="20" font-weight="600" text-anchor="start">Release pipeline</text>

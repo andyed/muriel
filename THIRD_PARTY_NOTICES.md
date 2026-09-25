@@ -46,6 +46,46 @@ contrast floor (stricter than the source's WCAG AA), and integration with
 muriel's brand tokens. The source's typefaces and colour system were **not**
 adopted.
 
+Two verification ideas were adapted from the same repository (upstream commit
+`dc1ace4`, 2026-09-19) on 2026-09-24:
+
+- **Accessible-SVG lint rules** — `muriel/tools/diagrams/_a11y.py::lint_a11y`
+  re-implements the rule set of `scripts/lint-skin.py::lint_accessible_svgs`
+  (with `scripts/test-lint-a11y.py` as the fixture model): skip
+  `aria-hidden="true"` SVGs; require `role="img"`, a four-number viewBox with
+  positive size, `<title>` as the first child, a `<desc>`, slug-prefixed
+  non-duplicate ids, and `aria-labelledby` naming the title then the desc. The
+  60-character title bound follows `skills/diagram-design/scripts/self_check.py`.
+- **Relative-error fidelity check** — `tests/test_diagram_fidelity.py` checks
+  proportional funnel widths as *relative* error against the values, the
+  framing of `scripts/verify-treemap.py`'s area-fidelity invariant, applied to
+  bar width instead of cell area.
+- **Motion contract** — the static-first rule, the none / reveal / step / loop
+  modes with reveal as the only autoplay, the 3 s decorative-loop floor, and the
+  8-step / 2-per-step / 12-item sequence budget follow `references/animation.md`
+  and ADRs 0001 / 0003. They land in `references/polish-rules.md` (rules 28–29)
+  and `muriel/motion.py` (`validate_mode`, `validate_flash_rate`,
+  `validate_sequence_shape`). The upstream clock tokens and pinned controller
+  were not adopted.
+- **Diagram guidance** — behaviour-first pattern routing, the generator
+  admission rule, callout discipline, the global node/arrow budget, and the
+  redraw degrade ladder in `channels/diagrams.md`, plus the per-element removal
+  test in `agents/muriel-critique.md`, paraphrase `references/semantic-patterns.md`,
+  `references/output-spec.md`, `references/primitive-annotation.md`, and the
+  skill's SKILL.md.
+- **Comparison heat-grid** — `muriel/tools/diagrams/heat_grid.py` takes its
+  cell geometry (116×56, 4px gap, 80px minimum width), the 3–7 row / 3–8 column
+  budget, the single ink ramp with a single accent focal cell excluded from the
+  scale, the 0.07 ramp floor and 0.70 ceiling, and the don'ts (hue per row,
+  diverging ramp for unsigned data, gradient legend, dropped rows) from
+  `references/type-heatmap.md`. `tests/test_diagram_heat_grid.py` follows
+  `scripts/verify-heatmap.py`'s `data-row` / `data-col` / `data-value` binding
+  and monotone-fill check (±0.03). The per-brand ramp-ceiling solve for 8:1
+  value labels, the quantized stepped legend and the n/a cells are muriel's.
+
+The code is muriel's own (ElementTree rather than the source's `HTMLParser`,
+and wired into `muriel diagram-check`); no source files were copied.
+
 ```
 MIT License
 

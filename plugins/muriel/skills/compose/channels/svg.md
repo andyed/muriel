@@ -32,6 +32,8 @@ Part of the [muriel](../SKILL.md) skill — see the top-level index for mission,
 - Anything embedded in a marginalia HTML page that should re-theme on light/dark switch
 - Statistical plots when matplotlib's SVG export is ugly
 
+Start a named diagram form (2×2, cycle, layer stack, swimlane, DAG, …) in [`diagrams.md`](diagrams.md); its provider table says whether the form is drawn by a native generator, Mermaid, or ECharts.
+
 ## Tooling
 - **Hand-rolled `<svg>` strings** — zero deps. Fine under 200 lines.
 - **`svgwrite`** or **`drawsvg`** (Python) — fluent API for procedural generation.

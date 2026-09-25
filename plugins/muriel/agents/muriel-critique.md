@@ -18,7 +18,7 @@ You will be given:
 
 - **`artifact`** — a path to a PNG / JPG / SVG / PDF. Always required. Read it via Read.
 - **`brand`** (optional) — path to a `brand.toml`. If present, read it and audit tokens.
-- **`channel`** (optional) — the name of a muriel channel (`raster`, `svg`, `web`, `interactive`, `video`, `terminal`, `heatmaps`, `gaze`, `science`, `dimensions`, `style-guides`). If present, read the corresponding `muriel/channels/<channel>.md` and apply its rules + anti-patterns.
+- **`channel`** (optional) — the name of a muriel channel (`raster`, `svg`, `diagrams`, `web`, `interactive`, `video`, `terminal`, `heatmaps`, `gaze`, `science`, `dimensions`, `style-guides`). If present, read the corresponding `muriel/channels/<channel>.md` and apply its rules + anti-patterns.
 - **`universal_rules_path`** (optional, default `muriel/SKILL.md`) — the universal rules document. Read it first.
 
 If paths are relative, resolve them against the current working directory. Use Glob to confirm paths exist before reading.
@@ -82,6 +82,18 @@ This step grounds your subsequent findings in what the image actually contains, 
 If `channel` is supplied, read `muriel/channels/<channel>.md`. Every bullet in the channel's `## Anti-patterns` section is a testable assertion. Run through them. Every `## Rules` or `## Patterns` bullet that maps onto a visible property is also a check.
 
 If `channel` is not supplied, infer the most likely channel from the artifact's aspect ratio, content type, and filename; read that channel's doc; state your inferred channel in the output.
+
+#### Diagram checks (channel `diagrams`, or any node-link figure)
+
+Run these on every diagram, including Mermaid renders and hand-drawn SVG. Rules live in `channels/diagrams.md` — cite the section.
+
+- **Per-element removal test** (Tufte, data-ink). For each node, arrow, and label, ask: would the reader lose anything if it were gone? Report each that fails:
+  - two nodes that always appear together, never separately → **merge** (`MEDIUM`);
+  - an arrow whose relationship the layout already states — adjacency, lane order, stacking → **drop** (`LOW`);
+  - a label that restates what shape or colour already signals → **drop** (`LOW`).
+  Name the specific element in the Evidence line; "some arrows are redundant" is not a finding.
+- **Callout cap** (`diagrams.md` § Callouts). More than 2 callouts → `HIGH`. A solid leader, or a leader that crosses a primary arrow, lane divider, or lifeline → `HIGH` (it reads as flow). A callout pointing at something that could be labeled directly → `MEDIUM`. Callout text below 8:1 or set with opacity falls under the universal 8:1 rule.
+- **Global budget** (`diagrams.md` § Budget and callouts for hand-drawn diagrams). A hand-drawn or Mermaid-routed figure past ~9 nodes or ~12 arrows that was not split into overview + detail → `MEDIUM`; `HIGH` when text or spacing was shrunk to keep it on one canvas. More than one accent element at any node count → `HIGH` (one-accent rule; more nodes never buys more accents). Native generators enforce their own caps — cite those instead when the figure came from one.
 
 ### 3. Brand token adherence
 
