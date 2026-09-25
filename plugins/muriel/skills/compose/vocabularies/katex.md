@@ -66,7 +66,7 @@ Inline `$$…$$` is fine for casual math, but a math-essay surface usually wants
   content: ''; position: absolute; inset: 0;
   background-size: cover; background-position: center;
   opacity: .08; pointer-events: none;
-  transition: opacity .3s;
+  transition: opacity .1s;
 }
 .eq-block:hover::before { opacity: .14; }
 .eq-block .katex-display { position: relative; z-index: 1; margin: 0; }

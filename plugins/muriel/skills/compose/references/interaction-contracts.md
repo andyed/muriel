@@ -139,7 +139,7 @@ the project's measured performance data and Muriel's existing motion rules.
 |---|---|
 | Up to about 100 ms | Synchronous local acknowledgment; no spinner flash |
 | About 100 ms–1 s <!-- motion-exempt: not-motion (latency budget) --> | Preserve layout; show local processing only if the delay is perceptible |
-| About 1–10 s | Show honest progress or indeterminate work; offer cancel when safe |
+| About 1–10 s <!-- motion-exempt: not-motion (latency budget) --> | Show honest progress or indeterminate work; offer cancel when safe |
 | Beyond about 10 s | Persist/background the job when possible; provide re-entry and completion status |
 
 Rules:

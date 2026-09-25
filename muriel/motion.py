@@ -128,6 +128,7 @@ CLI
 
 from __future__ import annotations
 
+import re
 import sys
 
 __all__ = [
@@ -154,6 +155,10 @@ __all__ = [
     "REDUCE_POLICIES",
     "REDUCE_POLICY_ALIASES",
     "normalize_reduce_policy",
+    # Doc audit: duration literals in prose / CSS / TOML.
+    "EXEMPT_TAGS",
+    "scan_duration_literals",
+    "untagged_uncanny_literals",
     # Emil-inspired axes (orthogonal to the duration binary).
     "MotionPropertyError",
     "COMPOSITOR_SAFE_PROPERTIES",
@@ -605,6 +610,97 @@ def validate_sequence_shape(steps: int, per_step) -> None:
         raise MotionPolicyError(
             f"{total} items across the sequence; at most {MAX_SEQUENCE_ITEMS}."
         )
+
+
+# ─── Doc audit: duration literals in the uncanny band ──────────────────────
+#
+# The binary only holds if the docs that teach it stop quoting 101–1499 ms
+# values. A literal in that band must carry ``motion-exempt: <tag>`` on its
+# line (``<!-- … -->`` in prose, ``/* … */`` in CSS, ``# …`` in TOML). A tag
+# on a line whose next non-blank line opens a ``` fence exempts that block.
+# ``not-motion`` covers numbers that are not animation durations (latency
+# budgets, reaction times, event rates, cited counterexamples).
+
+EXEMPT_TAGS = frozenset(EXEMPT_KINDS | {"not-motion"})
+
+_TAG_RE = re.compile(r"motion-exempt:\s*([a-z-]+)")
+_RANGE = r"\s?(?:–|-|to)\s?\d+(?:\.\d+)?"
+_LITERAL_RES = (
+    # 80–200ms / 100 ms–1 s: the range start carries the unit of the end.
+    (re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)" + _RANGE + r"\s?ms\b"), 1.0),
+    (re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)" + _RANGE + r"\s?s\b"), 1000.0),
+    (re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s?ms\b"), 1.0),
+    (re.compile(r"(?<![\w.])(\d*\.\d+|\d+)\s?s\b"), 1000.0),
+)
+# duration = 240 (TOML, ms) / duration: 0.3 (JS motion libs, seconds).
+_BARE_DURATION_RE = re.compile(
+    r"duration\w*[\"']?\s*[:=]\s*(\d*\.?\d+)(?!\d|\.\d|\s?m?s\b)"
+)
+
+
+def scan_duration_literals(text: str) -> list[tuple[int, str, float, str | None]]:
+    """Return ``(line_no, literal, ms, exempt_tag)`` for every duration literal.
+
+    ``exempt_tag`` is the ``motion-exempt`` tag covering the line (its own,
+    or a block tag on the line before a fenced block), else ``None``.
+    """
+    lines = text.splitlines()
+    covered: dict[int, str] = {}
+    in_block_tag: str | None = None
+    pending_tag: str | None = None
+    for i, line in enumerate(lines):
+        stripped = line.strip()
+        if stripped.startswith("```"):
+            if in_block_tag is not None:
+                covered[i] = in_block_tag
+                in_block_tag = None
+                continue
+            if pending_tag is not None:
+                in_block_tag, pending_tag = pending_tag, None
+                covered[i] = in_block_tag
+                continue
+        if in_block_tag is not None:
+            covered[i] = in_block_tag
+            continue
+        m = _TAG_RE.search(line)
+        if m:
+            covered[i] = m.group(1)
+            pending_tag = m.group(1)
+        elif stripped:
+            pending_tag = None
+
+    found: list[tuple[int, str, float, str | None]] = []
+    for i, line in enumerate(lines):
+        spans: list[tuple[int, int]] = []
+
+        def claim(m) -> bool:
+            a, b = m.span(1)
+            if any(a < e and s_ < b for s_, e in spans):
+                return False
+            spans.append(m.span(0))
+            return True
+
+        for k, (rx, scale) in enumerate(_LITERAL_RES):
+            for m in rx.finditer(line):
+                # Range patterns (first two) contribute only their start value;
+                # the end value carries its unit and the single patterns catch
+                # it, so ranges never claim the span.
+                if k < 2 or claim(m):
+                    found.append((i + 1, m.group(0), float(m.group(1)) * scale, covered.get(i)))
+        for m in _BARE_DURATION_RE.finditer(line):
+            if claim(m):
+                v = float(m.group(1))
+                ms = v * 1000.0 if v <= 10 else v
+                found.append((i + 1, m.group(0), ms, covered.get(i)))
+    return found
+
+
+def untagged_uncanny_literals(text: str) -> list[tuple[int, str, float]]:
+    """Uncanny-band literals with no valid ``motion-exempt`` tag."""
+    return [
+        (n, lit, ms) for n, lit, ms, tag in scan_duration_literals(text)
+        if is_uncanny(ms) and tag not in EXEMPT_TAGS
+    ]
 
 
 def _selftest() -> int:

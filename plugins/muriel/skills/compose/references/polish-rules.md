@@ -233,7 +233,7 @@ Don't animate a single container. Break enters into semantic chunks and stagger:
 - Title → description → CTA buttons, 100 ms between groups.
 - For hero titles, consider splitting into individual words at the same 100 ms stagger.
 - Combine `opacity` + `translateY(12px)` + `filter: blur(4px)` for the enter effect.
-- Each chunk's enter is a **transition** — 100 ms, the utility end of the duration binary (was 400 ms, which sits in the uncanny band). The stagger is a **hold**, start to start, and is ≥ the transition it follows, so each chunk lands before the next begins. For a slow, narrative entrance, go to the cinematic end (≥ 1500 ms) instead — never between.
+- Each chunk's enter is a **transition** — 100 ms, the utility end of the duration binary. The stagger is a **hold**, start to start, and is ≥ the transition it follows, so each chunk lands before the next begins. For a slow, narrative entrance, go to the cinematic end (≥ 1500 ms) instead — never between.
 
 ```css
 .stagger-item { --stagger: 100ms; opacity: 0; transform: translateY(12px); filter: blur(4px); animation: fadeInUp 100ms ease-out forwards; }
@@ -245,7 +245,7 @@ Don't animate a single container. Break enters into semantic chunks and stagger:
 
 ### 12. Subtle exit animations
 
-Exits should be quieter than enters — the user's focus is already moving to the next thing. Small fixed `translateY(-12px)` over `100ms` ease-in, not a full-height slide-out. An exit is a transition, so it takes the utility end of the binary (was 150 ms); it is quieter by distance and easing, not by a slower clock. Exception: when spatial context matters (a card returning to a list, a drawer to a screen edge), slide the full distance.
+Exits should be quieter than enters — the user's focus is already moving to the next thing. Small fixed `translateY(-12px)` over `100ms` ease-in, not a full-height slide-out. An exit is a transition, so it takes the utility end of the binary; it is quieter by distance and easing, not by a slower clock. Exception: when spatial context matters (a card returning to a list, a drawer to a screen edge), slide the full distance.
 
 Never remove the exit entirely — popping out of existence loses the user's place.
 

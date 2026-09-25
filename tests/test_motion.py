@@ -11,9 +11,22 @@ upstream source (duration binary over bands; 0.96 press scale over 0.97).
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
 
 from muriel import motion
+from muriel.styleguide import Motion, load_styleguide
 from muriel.motion import (
+    EXEMPTION_REASONS,
+    REDUCE_POLICIES,
+    REDUCE_POLICY_ALIASES,
+    SEQUENCE_MAX_MS,
+    STEP_HOLD_MS,
+    STEP_TRANSITION_MS,
+    normalize_reduce_policy,
+    scan_duration_literals,
+    untagged_uncanny_literals,
+    validate_sequence_timing,
+    validate_spring,
     CINEMATIC_MS,
     COMPOSITOR_SAFE_PROPERTIES,
     ENTRANCE_SCALE_FLOOR,
@@ -184,6 +197,186 @@ class SequenceShape(unittest.TestCase):
     def test_mismatched_per_step_raises_valueerror(self):
         with self.assertRaises(ValueError):
             validate_sequence_shape(3, [1, 1])
+
+
+# ─── Duration scope (owner decision 2026-09-24) ─────────────────────────────
+
+_REPO = Path(__file__).resolve().parent.parent
+_COMPOSE = _REPO / "plugins" / "muriel" / "skills" / "compose"
+_BRAND_EXAMPLES = (
+    _COMPOSE / "examples" / "muriel-brand.toml",
+    _COMPOSE / "examples" / "example-brand.toml",
+)
+_OLD_DEFAULTS = (120, 240, 480, 800)
+_DURATION_FIELDS = (
+    "duration_instant", "duration_fast", "duration_normal",
+    "duration_slow", "duration_reveal",
+)
+
+# Known uncanny literals in files this change may not edit. Each entry is
+# (relative path, literal) with the reason; the scan still fails on any
+# other hit in the same file, and fails if an entry goes stale.
+_KNOWN_DEBT = {
+    ("channels/diagrams.md", "0.15s"):
+        "zoom-button hover transition; owned by the diagrams worktree — migrate to 0.1s",
+}
+
+
+class MotionTokenDefaults(unittest.TestCase):
+    def test_old_defaults_gone_from_dataclass(self):
+        m = Motion()
+        values = {getattr(m, f) for f in _DURATION_FIELDS}
+        for old in _OLD_DEFAULTS:
+            self.assertNotIn(old, values)
+
+    def test_every_default_passes_validate_duration(self):
+        m = Motion()
+        for f in _DURATION_FIELDS:
+            validate_duration(getattr(m, f))  # kind="transition": the binary
+
+    def test_mapping(self):
+        m = Motion()
+        self.assertEqual((m.duration_fast, m.duration_normal), (100, 100))
+        self.assertEqual((m.duration_slow, m.duration_reveal), (1500, 1500))
+
+    def test_brand_examples_migrated(self):
+        for path in _BRAND_EXAMPLES:
+            sg = load_styleguide(path)
+            for f in _DURATION_FIELDS:
+                ms = getattr(sg.motion, f)
+                self.assertNotIn(ms, _OLD_DEFAULTS, f"{path.name} {f}")
+                validate_duration(ms)
+
+    def test_css_emits_sequence_tokens(self):
+        css = load_styleguide(_BRAND_EXAMPLES[0]).to_css_vars(prefix="--mg-")
+        self.assertIn("--mg-motion-transition: 100ms;", css)
+        self.assertIn("--mg-motion-hold: 1500ms;", css)
+        self.assertNotRegex(css, r"duration-\w+: (120|240|480|800)ms")
+
+
+class DurationKinds(unittest.TestCase):
+    def test_transition_is_default_and_binary(self):
+        with self.assertRaises(MotionPolicyError):
+            validate_duration(300)
+        with self.assertRaises(MotionPolicyError):
+            validate_duration(300, "transition")
+
+    def test_exempt_kinds_pass_in_the_band(self):
+        for kind in ("hold", "spring", "press"):
+            validate_duration(300, kind)
+            self.assertIn(kind, EXEMPTION_REASONS)
+
+    def test_hold_must_cover_its_transition(self):
+        validate_duration(1500, "hold", after_transition_ms=100)
+        validate_duration(100, "hold", after_transition_ms=100)
+        with self.assertRaises(MotionPolicyError):
+            validate_duration(50, "hold", after_transition_ms=100)
+
+    def test_unknown_kind_and_negative(self):
+        with self.assertRaises(ValueError):
+            validate_duration(100, "stagger")
+        with self.assertRaises(ValueError):
+            validate_duration(-1, "hold")
+
+    def test_spring_validates_physics(self):
+        validate_spring(bounce=0)
+        validate_spring(bounce=0, stiffness=300)
+        with self.assertRaises(MotionPolicyError):
+            validate_spring(bounce=0.1)
+        with self.assertRaises(ValueError):
+            validate_spring(stiffness=0)
+
+
+class SequenceTiming(unittest.TestCase):
+    def test_constants(self):
+        self.assertEqual((STEP_TRANSITION_MS, STEP_HOLD_MS, SEQUENCE_MAX_MS), (100, 1500, 8000))
+
+    def test_five_step_reveal_passes(self):
+        self.assertEqual(validate_sequence_timing(5, 100, 1500, "reveal"), 7500)
+
+    def test_six_step_reveal_fails(self):
+        with self.assertRaises(MotionPolicyError):
+            validate_sequence_timing(6, 100, 1500, "reveal")
+
+    def test_six_step_user_driven_passes(self):
+        self.assertIsNone(validate_sequence_timing(6, 100, 1500, "step"))
+
+    def test_uncanny_transition_fails(self):
+        with self.assertRaises(MotionPolicyError):
+            validate_sequence_timing(3, 480, 1500)
+
+    def test_hold_shorter_than_transition_fails(self):
+        with self.assertRaises(MotionPolicyError):
+            validate_sequence_timing(3, 100, 50)
+
+    def test_bad_mode_and_steps(self):
+        with self.assertRaises(ValueError):
+            validate_sequence_timing(3, 100, 1500, "loop")
+        with self.assertRaises(ValueError):
+            validate_sequence_timing(0, 100, 1500)
+
+
+class ReducePolicyVocabulary(unittest.TestCase):
+    def test_code_vocabulary(self):
+        self.assertEqual(set(REDUCE_POLICIES), {"collapse-to-zero", "keep-fast", "keep-linear"})
+
+    def test_reduce_alias(self):
+        self.assertEqual(normalize_reduce_policy("reduce"), "keep-fast")
+        self.assertEqual(normalize_reduce_policy("Keep-Linear"), "keep-linear")
+        with self.assertRaises(ValueError):
+            normalize_reduce_policy("freeze")
+
+    def test_polish_rules_names_every_policy(self):
+        text = (_COMPOSE / "references" / "polish-rules.md").read_text()
+        for name in (*REDUCE_POLICIES, *REDUCE_POLICY_ALIASES):
+            self.assertIn(f"`{name}`", text)
+
+
+class UncannyDocScan(unittest.TestCase):
+    """Fail-closed: every compose doc duration in 101–1499 ms is tagged exempt."""
+
+    PLANTED = (
+        "Stagger at 120ms between groups.\n"                       # untagged ms
+        "transition: opacity 0.25s ease;\n"                        # untagged s
+        "Use `{ duration: 0.4 }` here.\n"                          # bare seconds
+        "duration_slow = 480\n"                                    # TOML ms
+        "Gaps of 80–200ms.\n"                                      # range end
+        "press lands in 150ms <!-- motion-exempt: press -->\n"     # tagged: ok
+        "wrong tag 300ms <!-- motion-exempt: stagger -->\n"        # bad tag
+        "<!-- motion-exempt: not-motion -->\n"
+        "```\nRT fell from 842 ms to 671 ms\n```\n"                # block tag: ok
+        "Utility 100ms, cinematic 1500ms.\n"                       # ends: ok
+    )
+
+    def _docs(self):
+        files = sorted([*_COMPOSE.rglob("*.md"), *_COMPOSE.rglob("*.toml")])
+        return [(p.relative_to(_COMPOSE).as_posix(), p.read_text()) for p in files]
+
+    def test_planted_fixture_trips(self):
+        hits = untagged_uncanny_literals(self.PLANTED)
+        self.assertEqual(
+            [lit for _, lit, _ in hits],
+            ["120ms", "0.25s", "duration: 0.4", "duration_slow = 480", "200ms", "300ms"],
+        )
+
+    def test_scanner_is_not_blind(self):
+        docs = self._docs()
+        self.assertGreater(len(docs), 20, "compose doc glob found too few files")
+        total = sum(len(scan_duration_literals(t)) for _, t in docs)
+        self.assertGreater(total, 30, "scanner found almost no duration literals")
+
+    def test_compose_docs_have_no_untagged_uncanny_durations(self):
+        seen_debt = set()
+        offenders = []
+        for rel, text in self._docs():
+            for line_no, lit, ms in untagged_uncanny_literals(text):
+                if (rel, lit) in _KNOWN_DEBT:
+                    seen_debt.add((rel, lit))
+                    continue
+                offenders.append(f"{rel}:{line_no}: {lit} ({ms:g} ms)")
+        self.assertEqual(offenders, [], "untagged uncanny-band durations:\n" + "\n".join(offenders))
+        stale = set(_KNOWN_DEBT) - seen_debt
+        self.assertFalse(stale, f"_KNOWN_DEBT entries no longer present, remove them: {stale}")
 
 
 if __name__ == "__main__":

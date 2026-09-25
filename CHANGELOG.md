@@ -8,6 +8,29 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **The motion duration binary is scoped to transitions, with sequence
+  timing.** `muriel.motion.validate_duration(ms, kind="transition")` holds
+  transitions (interpolated change of position, opacity, size, color) to
+  ≤100 ms or ≥1500 ms. `kind="hold"`, `"spring"` and `"press"` are exempt,
+  each with a one-line reason in `EXEMPTION_REASONS` and polish-rules.md; a
+  hold given `after_transition_ms` must still be ≥ that transition.
+  `validate_spring(bounce, stiffness)` checks spring physics instead of the
+  emergent duration (bounce stays 0). `validate_sequence_timing(steps,
+  transition_ms, hold_ms, mode)` checks a stepped sequence and caps a timed
+  `reveal` at `SEQUENCE_MAX_MS` (8000 ms of holds, so 5 steps at 1500 ms); a
+  `step` sequence is user-driven and has no total. New constants
+  `STEP_TRANSITION_MS` = 100, `STEP_HOLD_MS` = 1500, and
+  `StyleGuide.to_css_vars()` emits `--<prefix>motion-transition: 100ms` /
+  `--<prefix>motion-hold: 1500ms`.
+
+- **Uncanny-duration doc audit.** `muriel.motion.scan_duration_literals` /
+  `untagged_uncanny_literals` find ms, s, range, TOML `duration_* =` and JS
+  `duration: 0.3` literals. `tests/test_motion.py` fails on any 101–1499 ms
+  literal in the compose docs that lacks a `motion-exempt:
+  hold|spring|press|not-motion` tag, and checks itself against a planted
+  fixture. `not-motion` covers latency budgets, reaction times, event rates
+  and cited counterexamples.
+
 - **`heat_grid`: comparison heat-grid diagram generator.**
   `muriel.tools.diagrams.heat_grid(rows, cols, values, …)` draws 3–7 × 3–8
   cells of one unsigned quantity on a single ink opacity ramp, quantized to a
@@ -139,6 +162,25 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 - `data-mountain-field/` exemplar and its 29-assertion `check.mjs`.
 
 ### Changed
+
+- **Motion defaults moved to the two ends of the binary.**
+  `styleguide.Motion` and both example brand TOMLs: `duration_fast` 120 →
+  100, `duration_normal` 240 → 100, `duration_slow` 480 → 1500,
+  `duration_reveal` 800 → 1500 (`duration_instant` stays 0). Docs follow:
+  polish rule 11 enter 400 ms → 100 ms with a 100 ms stagger (hero words 80
+  → 100 ms); rule 12 exit 150 ms → 100 ms; rule 13's CSS cross-fade fallback
+  at 100 ms; rule 18's exit "linear under 150 ms" → "≤ 100 ms"; charts rule 18
+  "200–500ms" → 100 ms for data-update transitions, ≥1500 ms for narrative
+  reveals; FUI stagger 80–200 / 120 ms → 100 ms and the scaffold's
+  `--mg-duration-reveal` 800 → 1500 ms; hover transitions in muriel-brand.md
+  (0.2s) and katex.md (.3s) → 0.1s. Rule 13's spring `duration: 0.3` and rule
+  14's 150 ms press stay, tagged exempt.
+
+- **One `motion_reduce_policy` vocabulary.** `muriel.motion.REDUCE_POLICIES`
+  (`collapse-to-zero`, `keep-fast`, `keep-linear`) is shared by
+  `styleguide.A11y` and polish rule 20. `reduce`, the name rule 20 used, is
+  accepted as an alias of `keep-fast`; the loader stores the canonical name
+  and warns, without failing, on an unknown value.
 
 - **`contrast.audit_svg` reads SVG presentation attributes.** It previously
   parsed only `<style>` CSS, so on muriel's own diagram SVGs, which colour
