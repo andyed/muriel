@@ -29,6 +29,7 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from muriel.tools.diagrams.cycle import cycle  # noqa: E402
 from muriel.tools.diagrams.dendrogram import dendrogram  # noqa: E402
+from muriel.tools.diagrams.heat_grid import heat_grid  # noqa: E402
 from muriel.tools.diagrams.layer_stack import layer_stack  # noqa: E402
 from muriel.tools.diagrams.matrix import matrix  # noqa: E402
 from muriel.tools.diagrams.pyramid import pyramid  # noqa: E402
@@ -115,6 +116,27 @@ def render_examples(out_dir: Path) -> dict[str, str]:
                   "movements of its own, microsaccades, drift and tremor, and "
                   "the microsaccade is the event under discussion."),
             out_path=out_dir / "dendrogram-eye-movements.svg"),
+        "heat-grid-dwell.svg": heat_grid(
+            ["Position 1", "Position 2", "Position 3", "Position 4",
+             "Position 5", "Position 6–10"],
+            ["Navigational", "Informational", "Transactional", "Local"],
+            [[412, 588, 471, 436], [298, 521, 402, 365],
+             [241, 463, 318, 290], [187, 402, 265, None],
+             [164, 371, 228, 203], [118, 296, 176, 149]],
+            focal=(0, 1),
+            focal_note="informational queries hold the top result longest",
+            unit="mean fixation dwell (ms)", row_title="SERP position",
+            col_title="Query intent",
+            title="Where searchers dwell, by position and intent",
+            desc=("Illustrative values, not measured data. Heat grid of mean "
+                  "fixation dwell in milliseconds by SERP position (rows 1 "
+                  "to 6–10) and query intent (navigational, informational, "
+                  "transactional, local). Dwell falls with position in every "
+                  "intent column, and the informational column is highest at "
+                  "every position; the focal cell, position 1 informational, "
+                  "is 588 ms and is excluded from the scale. Position 4 "
+                  "local has no measurement."),
+            out_path=out_dir / "heat-grid-dwell.svg"),
     }
 
 

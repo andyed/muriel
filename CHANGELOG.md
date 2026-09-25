@@ -19,6 +19,17 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   `dag`), and so does a tree that never branches. Nodes carry `data-depth`.
   Example: `dendrogram-eye-movements.svg`.
 
+- **`heat_grid`: comparison heat-grid diagram generator.**
+  `muriel.tools.diagrams.heat_grid(rows, cols, values, …)` draws 3–7 × 3–8
+  cells of one unsigned quantity on a single ink opacity ramp, quantized to a
+  stepped legend with numeric bounds. `None` values draw as explicit n/a
+  cells, and negative values, ragged tables and out-of-budget sizes raise. An
+  optional focal cell is excluded from the scale max and its value is stated
+  in the legend and `<desc>`. Every cell carries `data-row` / `data-col` /
+  `data-value`. With printed values, the ramp ceiling is solved per brand so
+  every label clears 8:1 on its composited cell. Example:
+  `heat-grid-dwell.svg`.
+
 - **Diagram SVGs carry an accessible-figure contract, and `muriel
   diagram-check` enforces it.** Every generator in `muriel.tools.diagrams`
   (matrix, cycle, layer_stack, pyramid, swimlane, foveal_overlay,
