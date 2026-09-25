@@ -161,6 +161,7 @@ def _render_examples(tmp_path):
     "swimlane-release.svg", "layers-tcpip.svg", "funnel-q2.svg",
     "cycle-evolver.svg", "matrix-sat-opt.svg",
     "heat-grid-dwell.svg",
+    "cycle-experiment-icons.svg", "cycle-agent-hub.svg",
     "dag-serp-causal.svg",
     "spectrum-palette-tritan.svg",
 ])
