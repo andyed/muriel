@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="comparison-pair-serp-title comparison-pair-serp-desc" viewBox="0 0 696 528" width="696" height="528" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
+<title id="comparison-pair-serp-title">Click share by result position (illustrative)</title>
+<desc id="comparison-pair-serp-desc">Illustrative slopegraph, not measured data. Adding an answer box lowers position 1's click share from 38.0% to 31.5%; positions 2 to 5 each gain between 0.2 and 1.6 points, and position 6 is roughly flat.</desc>
+<rect width="696" height="528" fill="#0a0a0f"/>
+<text x="348.0" y="40" fill="#e6e4d2" font-size="20" font-weight="600" text-anchor="middle">Click share by result position (illustrative)</text>
+<line data-axis="a" data-state="Ten links" data-min="0.0" data-max="40.0" data-top="112.000" data-bottom="472.000" x1="164" y1="112.0" x2="164" y2="472.0" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<text data-axis="a" x="164" y="88" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Ten links</text>
+<line data-axis="b" data-state="With answer box" data-min="0.0" data-max="40.0" data-top="112.000" data-bottom="472.000" x1="484" y1="112.0" x2="484" y2="472.0" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<text data-axis="b" x="484" y="88" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">With answer box</text>
+<line data-item="Position 2" data-a="16.5" data-b="17.0" x1="164" y1="323.500" x2="484" y2="319.000" stroke="rgba(176, 176, 196, 0.62)" stroke-width="1.5" stroke-linecap="round"/>
+<circle data-item="Position 2" data-end="a" cx="164" cy="323.500" r="3" fill="rgba(176, 176, 196, 0.62)"/>
+<circle data-item="Position 2" data-end="b" cx="484" cy="319.000" r="3" fill="rgba(176, 176, 196, 0.62)"/>
+<line data-item="Position 3" data-a="10.2" data-b="11.8" x1="164" y1="380.200" x2="484" y2="365.800" stroke="rgba(176, 176, 196, 0.62)" stroke-width="1.5" stroke-linecap="round"/>
+<circle data-item="Position 3" data-end="a" cx="164" cy="380.200" r="3" fill="rgba(176, 176, 196, 0.62)"/>
+<circle data-item="Position 3" data-end="b" cx="484" cy="365.800" r="3" fill="rgba(176, 176, 196, 0.62)"/>
+<line data-item="Position 4" data-a="7.1" data-b="8.0" x1="164" y1="408.100" x2="484" y2="400.000" stroke="rgba(176, 176, 196, 0.62)" stroke-width="1.5" stroke-linecap="round"/>
+<circle data-item="Position 4" data-end="a" cx="164" cy="408.100" r="3" fill="rgba(176, 176, 196, 0.62)"/>
+<circle data-item="Position 4" data-end="b" cx="484" cy="400.000" r="3" fill="rgba(176, 176, 196, 0.62)"/>
+<line data-item="Position 5" data-a="5.4" data-b="5.6" x1="164" y1="423.400" x2="484" y2="421.600" stroke="rgba(176, 176, 196, 0.62)" stroke-width="1.5" stroke-linecap="round"/>
+<circle data-item="Position 5" data-end="a" cx="164" cy="423.400" r="3" fill="rgba(176, 176, 196, 0.62)"/>
+<circle data-item="Position 5" data-end="b" cx="484" cy="421.600" r="3" fill="rgba(176, 176, 196, 0.62)"/>
+<line data-item="Position 6" data-a="4.3" data-b="4.1" x1="164" y1="433.300" x2="484" y2="435.100" stroke="rgba(176, 176, 196, 0.62)" stroke-width="1.5" stroke-linecap="round"/>
+<circle data-item="Position 6" data-end="a" cx="164" cy="433.300" r="3" fill="rgba(176, 176, 196, 0.62)"/>
+<circle data-item="Position 6" data-end="b" cx="484" cy="435.100" r="3" fill="rgba(176, 176, 196, 0.62)"/>
+<line data-item="Position 1" data-a="38.0" data-b="31.5" x1="164" y1="130.000" x2="484" y2="188.500" stroke="#7dd4e4" stroke-width="2.5" stroke-linecap="round"/>
+<circle data-item="Position 1" data-end="a" cx="164" cy="130.000" r="4" fill="#7dd4e4"/>
+<circle data-item="Position 1" data-end="b" cx="484" cy="188.500" r="4" fill="#7dd4e4"/>
+<text data-item="Position 1" data-end="a" data-role="name" x="113.6" y="134.0" fill="#e6e4d2" font-size="13" font-weight="700" text-anchor="end">Position 1</text>
+<text data-item="Position 1" data-end="a" data-role="value" x="148.0" y="134.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="end">38.0</text>
+<text data-item="Position 1" data-end="b" data-role="value" x="500.0" y="192.5" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">31.5</text>
+<text data-item="Position 1" data-end="b" data-role="delta" data-delta="-6.5" x="534.4" y="192.5" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">(−6.5)</text>
+<text data-item="Position 1" data-end="b" data-role="name" x="582.0" y="192.5" fill="#e6e4d2" font-size="13" font-weight="700" text-anchor="start">Position 1</text>
+<text data-item="Position 2" data-end="a" data-role="name" x="113.6" y="327.5" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="end">Position 2</text>
+<text data-item="Position 2" data-end="a" data-role="value" x="148.0" y="327.5" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="end">16.5</text>
+<text data-item="Position 2" data-end="b" data-role="value" x="500.0" y="323.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">17.0</text>
+<text data-item="Position 2" data-end="b" data-role="delta" data-delta="0.5" x="534.4" y="323.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">(+0.5)</text>
+<text data-item="Position 2" data-end="b" data-role="name" x="582.0" y="323.0" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="start">Position 2</text>
+<text data-item="Position 3" data-end="a" data-role="name" x="113.6" y="384.2" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="end">Position 3</text>
+<text data-item="Position 3" data-end="a" data-role="value" x="148.0" y="384.2" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="end">10.2</text>
+<text data-item="Position 3" data-end="b" data-role="value" x="500.0" y="369.8" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">11.8</text>
+<text data-item="Position 3" data-end="b" data-role="delta" data-delta="1.6000000000000014" x="534.4" y="369.8" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">(+1.6)</text>
+<text data-item="Position 3" data-end="b" data-role="name" x="582.0" y="369.8" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="start">Position 3</text>
+<line data-item="Position 4" data-end="a" data-role="leader" x1="159" y1="408.100" x2="151" y2="405.600" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<text data-item="Position 4" data-end="a" data-role="name" x="113.6" y="409.6" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="end">Position 4</text>
+<text data-item="Position 4" data-end="a" data-role="value" x="148.0" y="409.6" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="end">7.1</text>
+<text data-item="Position 4" data-end="b" data-role="value" x="500.0" y="404.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">8.0</text>
+<text data-item="Position 4" data-end="b" data-role="delta" data-delta="0.9000000000000004" x="534.4" y="404.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">(+0.9)</text>
+<text data-item="Position 4" data-end="b" data-role="name" x="582.0" y="404.0" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="start">Position 4</text>
+<line data-item="Position 5" data-end="a" data-role="leader" x1="159" y1="423.400" x2="151" y2="421.600" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<line data-item="Position 5" data-end="b" data-role="leader" x1="489" y1="421.600" x2="497" y2="420.350" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<text data-item="Position 5" data-end="a" data-role="name" x="113.6" y="425.6" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="end">Position 5</text>
+<text data-item="Position 5" data-end="a" data-role="value" x="148.0" y="425.6" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="end">5.4</text>
+<text data-item="Position 5" data-end="b" data-role="value" x="500.0" y="424.4" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">5.6</text>
+<text data-item="Position 5" data-end="b" data-role="delta" data-delta="0.1999999999999993" x="534.4" y="424.4" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">(+0.2)</text>
+<text data-item="Position 5" data-end="b" data-role="name" x="582.0" y="424.4" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="start">Position 5</text>
+<line data-item="Position 6" data-end="a" data-role="leader" x1="159" y1="433.300" x2="151" y2="437.600" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<line data-item="Position 6" data-end="b" data-role="leader" x1="489" y1="435.100" x2="497" y2="436.350" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<text data-item="Position 6" data-end="a" data-role="name" x="113.6" y="441.6" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="end">Position 6</text>
+<text data-item="Position 6" data-end="a" data-role="value" x="148.0" y="441.6" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="end">4.3</text>
+<text data-item="Position 6" data-end="b" data-role="value" x="500.0" y="440.4" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">4.1</text>
+<text data-item="Position 6" data-end="b" data-role="delta" data-delta="-0.20000000000000018" x="534.4" y="440.4" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">(−0.2)</text>
+<text data-item="Position 6" data-end="b" data-role="name" x="582.0" y="440.4" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="start">Position 6</text>
+<text data-role="scale" data-min="0.0" data-max="40.0" x="324.0" y="508.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="middle">both axes: 0–40 (% of clicks)</text>
+</svg>

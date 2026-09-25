@@ -12,6 +12,7 @@ from pathlib import Path
 import pytest
 
 from muriel.tools.diagrams import (
+    comparison_pair,
     cycle,
     engine_sectors_overlay,
     foveal_overlay,
@@ -76,6 +77,14 @@ GENERATORS = {
     "swimlane": lambda out: swimlane(
         ["A", "B"], [{"label": "go", "lane": "A"}, {"label": "stop", "lane": "B"}],
         out_path=out),
+    "comparison_pair_slope": lambda out: comparison_pair(
+        [{"label": "x", "a": 1.0, "b": 2.0}, {"label": "y", "a": 2.0, "b": 1.5}],
+        states=("A", "B"), out_path=out),
+    "comparison_pair_trace": lambda out: comparison_pair(
+        [{"label": "r1", "a": "PASS", "b": "PASS"},
+         {"label": "r2", "a": "PASS", "b": "FAIL"},
+         {"label": "r3", "a": "PASS", "b": "NOT REACHED"}],
+        states=("A", "B"), out_path=out),
     "foveal_overlay_l1": lambda out: foveal_overlay(verbosity=1, out_path=out),
     "foveal_overlay_l3": lambda out: foveal_overlay(verbosity=3, out_path=out),
     "engine_sectors_l1": lambda out: engine_sectors_overlay(verbosity=1, out_path=out),

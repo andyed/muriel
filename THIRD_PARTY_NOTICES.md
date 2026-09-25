@@ -56,6 +56,14 @@ Two verification ideas were adapted from the same repository (upstream commit
   positive size, `<title>` as the first child, a `<desc>`, slug-prefixed
   non-duplicate ids, and `aria-labelledby` naming the title then the desc. The
   60-character title bound follows `skills/diagram-design/scripts/self_check.py`.
+- **Slopegraph conventions** — `muriel/tools/diagrams/comparison_pair.py` follows
+  `references/type-line.md` (slopegraph variant): one scale shared by both
+  axes, a run narrower than the plot is tall, dots and printed values at both
+  ends, no gridlines, muted lines plus one weighted accent, and labels bound to
+  their series by `data-*` attributes. The shared-scale and no-jitter checks in
+  `tests/test_diagram_comparison_pair.py` follow `scripts/verify-slopegraph.py`.
+  The label-spreading policy (labels move, endpoints never do) and the trace
+  form are muriel's own.
 - **Relative-error fidelity check** — `tests/test_diagram_fidelity.py` checks
   proportional funnel widths as *relative* error against the values, the
   framing of `scripts/verify-treemap.py`'s area-fidelity invariant, applied to
