@@ -337,6 +337,15 @@ Reach for this only when ownership is the argument — see [the provider table](
 - Don't let a step span two lanes — every step has one owner. Shared ownership is a process smell, not a diagram feature.
 - Don't snake the flow — if arrows backtrack to read in order, re-sequence the steps so progression runs forward.
 
+## Scrutinizer overlays
+
+Two generators in the package are **domain-specific**, not rhetorical primitives: they draw Scrutinizer's peripheral-vision geometry, and they are not a general-purpose shape for any other argument.
+
+- **`foveal_overlay(verbosity=1|2|3, …)`** — the in-app UI overlay, ported from Scrutinizer's `svg-overlay.js`: fovea circle with tick marks, dashed parafovea ring, and a uniform spoke/ring grid. It is also the Scrutinizer brand mark (`verbosity=1` mark, `2` wordmark, `3` paper diagram with degree-axis labels).
+- **`engine_sectors_overlay(verbosity=1|2|3, …)`** — the grid the renderer actually samples on: Blauch et al. 2026 isotropic cortical sectors, log-spaced rings with spoke count growing outward, fidelity-graded opacity. It shares its layout with `foveal_overlay.compute_isotropic_sectors`.
+
+Both take `brand=`, `theme=`, `title=`, `desc=` and `out_path=`, and meet the same accessible-SVG contract and `diagram-check` gate as the primitives. Use the UI overlay to show what a Scrutinizer user sees and the engine overlay to show what the engine computes; the two grids differ on purpose.
+
 ## Design discipline
 
 The generators bake in the editorial-diagram discipline that keeps SVG from reading as AI-generated SmartArt:
