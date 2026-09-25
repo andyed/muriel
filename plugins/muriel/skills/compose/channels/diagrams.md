@@ -45,7 +45,7 @@ A pattern adds required parts and a tighter budget to a shape. It never brings a
 | Many sources competing for one constrained service | Queue / bottleneck | `swimlane` when owners matter; Mermaid `flowchart` otherwise | distinct sources; a queue with visible slots and a count; capacity with units (`8/hour`, not "high"); one service point; admitted and deferred outcomes | ≤5 sources, ≤5 slots, one bottleneck, ≤9 nodes; fold extra sources into a named cohort |
 | Defenses that reduce a risk without removing it | Defense in depth, residual risk | `layer_stack` | the incoming risk; each layer's mitigation and what escapes it; a final residual-risk statement | 4–5 layers (the pattern caps at 5, `layer_stack` floors at 4), one risk thread, ≤2 mitigations per layer |
 | One subject moving through phases, waits, retries, and terminal outcomes | Single-subject lifecycle | Mermaid `stateDiagram-v2` | a primary phase path; waits and retries kept off that path; cancellation and failure as separate terminal states; every transition labeled | 4–5 primary phases, ≤9 states, ≤10 transitions |
-| Why two similar requests end differently | Divergent policy traces | comparison pair (queued, catalog #3) — until it ships, hand-draw the pair under the [global budget](#budget-and-callouts-for-hand-drawn-diagrams) | the same ordered rules on both traces; per-rule status in words (`PASS` / `FAIL` / `SKIPPED` / `NOT REACHED`); the first divergence marked and labeled | exactly 2 traces, 3–6 rules, one marked divergence |
+| Why two similar requests end differently | Divergent policy traces | `comparison_pair` with status-word values (trace mode, see [Comparison pair](#comparison-pair)) | the same ordered rules on both traces; per-rule status in words (`PASS` / `FAIL` / `SKIPPED` / `NOT REACHED`); the first divergence marked and labeled | exactly 2 traces, 3–6 rules, one marked divergence |
 
 **State and outcome are carried by text.** `FAIL`, `blocked`, `residual: credential reuse` are words on the figure. Colour and position reinforce them and never carry them alone — with the colour stripped, a still frame must still say which path failed.
 
@@ -65,7 +65,7 @@ Ordered by how often each structure carries a real argument in research, product
 |---|---|---|---|
 | 1 | **2×2 matrix** | Two **independent** binary axes divide a population into four meaningful classes. | **Shipped** — `muriel.tools.diagrams.matrix` |
 | 2 | **Cycle (3–8 step)** | Iterative process with no exit; each step feeds the next. | **Shipped** — `muriel.tools.diagrams.cycle` |
-| 3 | Comparison pair | Same axes, one variable changed — the smallest Tufte small-multiple. | Queued |
+| 3 | **Comparison pair** | Same items under exactly two states on one shared scale — the smallest Tufte small-multiple. | **Shipped** — `muriel.tools.diagrams.comparison_pair` (slopegraph; trace pair for status words) |
 | 4 | Phase / funnel | Sequential narrowing; later phases are subsets of earlier. | **Shipped** — `muriel.tools.diagrams.pyramid` (`orientation="down"`) |
 | 5 | Layered stack | Higher layers depend on / abstract over lower; reading direction encodes hierarchy. | **Shipped** — `muriel.tools.diagrams.layer_stack` |
 | 6 | Causal DAG | What causes what; arrow direction is load-bearing. | Queued |
@@ -337,6 +337,53 @@ Reach for this only when ownership is the argument — see [the provider table](
 - Don't let a step span two lanes — every step has one owner. Shared ownership is a process smell, not a diagram feature.
 - Don't snake the flow — if arrows backtrack to read in order, re-sequence the steps so progression runs forward.
 
+## Comparison pair
+
+```python
+from muriel.tools.diagrams import comparison_pair
+
+# Slopegraph: numbers under two states, one shared scale
+comparison_pair(
+    items=[
+        {"label": "Position 1", "a": 38.0, "b": 31.5},
+        {"label": "Position 2", "a": 16.5, "b": 17.0},
+        {"label": "Position 3", "a": 10.2, "b": 11.8},
+        {"label": "Position 4", "a": 7.1,  "b": 8.0},
+    ],
+    states=("Ten links", "With answer box"),
+    focal="Position 1",
+    scale={"min": 0, "max": 40, "unit": "% of clicks"},
+    value_format="{:.1f}",
+    title="Click share by result position",
+    out_path="examples/diagrams/comparison-pair-serp.svg",
+)
+
+# Trace pair: status words for the same ordered rules
+comparison_pair(
+    items=[
+        {"label": "Within refund window",    "a": "PASS", "b": "PASS"},
+        {"label": "Amount under auto-limit", "a": "PASS", "b": "FAIL"},
+        {"label": "Fraud score",             "a": "PASS", "b": "NOT REACHED"},
+    ],
+    states=("Request A", "Request B"),
+    out_path="examples/diagrams/comparison-pair-trace.svg",
+)
+```
+
+**Items** are `{"label", "a", "b", "focal"}`, the same item under state A and state B. **States** must name exactly two. The mode is inferred from the values (`mode=` overrides): numbers draw a slopegraph, status words draw a trace pair.
+
+**Slopegraph** (2–10 items). Two axis rules on **one scale**, which both axes declare (`data-min`/`data-max`) and both use; there is no way to give the sides different scales. `scale` defaults to round bounds around the data, and an explicit `min`/`max` that clips a value raises. The scale is printed under the figure (`both axes: 0–40 (% of clicks)`) because there are no gridlines: every endpoint prints its value. The B side prints the signed change, `(+1.6)` / `(−6.5)`, so increase and decrease read without colour. Lines are muted; one `focal` item takes the accent at a heavier weight and is painted last. When values are close, the **labels** spread apart on a 16px pitch and a leader tick joins each displaced label to its true endpoint. The endpoint itself never moves: `tests/test_diagram_comparison_pair.py` holds every endpoint to the shared scale within 0.5px and fails on any label overlap. Two items identical at both ends raise; merge them into one line. Every line carries `data-a`/`data-b`, and every label carries `data-item` and `data-end`.
+
+**Trace pair** (3–6 rules). The same ordered rules for two subjects, with each status as a word in its own cell. The **first divergence**, computed from the data, gets the accent outline and a `first divergence` label. Traces that never diverge raise, because there is nothing to compare. This is the "divergent policy traces" row in the [behaviour table](#route-by-behaviour-then-by-shape).
+
+**Admission.** The nearest shipped primitive is `matrix`, which puts things side by side but has no value scale, so it cannot draw a slope or hold two axes to one scale. `swimlane` sequences steps under owners and cannot align two traces rule by rule.
+
+**Anti-prescriptions** (also in the docstring):
+
+- More than two states → a **line chart** (or a bump chart for rank). A slope from the first snapshot to the last hides the ones in between.
+- The story is position on one continuous scale, not change between states → **spectrum**.
+- Items with no shared scale → a **table**. A slope between unlike units means nothing.
+- Don't nudge endpoints to make room. Crowded labels mean the values are close, which is part of the data.
 ## Sankey
 
 ```python

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="comparison-pair-trace-title comparison-pair-trace-desc" viewBox="0 0 660 344" width="660" height="344" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
+<title id="comparison-pair-trace-title">Why two refund requests end differently</title>
+<desc id="comparison-pair-trace-desc">Two refund requests pass the same first two rules; request B fails the auto-limit check, so the fraud score and auto-approval are never reached for it.</desc>
+<rect width="660" height="344" fill="#0a0a0f"/>
+<text x="330.0" y="40" fill="#e6e4d2" font-size="20" font-weight="600" text-anchor="middle">Why two refund requests end differently</text>
+<text data-axis="a" x="308.0" y="96" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Request A</text>
+<text data-axis="b" x="444.0" y="96" fill="#e6e4d2" font-size="13" font-weight="600" text-anchor="middle">Request B</text>
+<text data-item="Account in good standing" data-role="name" x="225.9" y="136.0" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="end">Account in good standing</text>
+<rect data-item="Account in good standing" data-end="a" x="244" y="116" width="128" height="32" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<text data-item="Account in good standing" data-end="a" data-role="status" x="308.0" y="136.0" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="400" text-anchor="middle">PASS</text>
+<rect data-item="Account in good standing" data-end="b" x="380" y="116" width="128" height="32" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<text data-item="Account in good standing" data-end="b" data-role="status" x="444.0" y="136.0" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="400" text-anchor="middle">PASS</text>
+<text data-item="Within refund window" data-role="name" x="225.9" y="176.0" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="end">Within refund window</text>
+<rect data-item="Within refund window" data-end="a" x="244" y="156" width="128" height="32" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<text data-item="Within refund window" data-end="a" data-role="status" x="308.0" y="176.0" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="400" text-anchor="middle">PASS</text>
+<rect data-item="Within refund window" data-end="b" x="380" y="156" width="128" height="32" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<text data-item="Within refund window" data-end="b" data-role="status" x="444.0" y="176.0" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="400" text-anchor="middle">PASS</text>
+<text data-item="Amount under auto-limit" data-role="name" x="225.9" y="216.0" fill="#e6e4d2" font-size="13" font-weight="700" text-anchor="end">Amount under auto-limit</text>
+<rect data-item="Amount under auto-limit" data-end="a" x="244" y="196" width="128" height="32" fill="rgba(125, 212, 228, 0.12)" stroke="#7dd4e4" stroke-width="1.5"/>
+<text data-item="Amount under auto-limit" data-end="a" data-role="status" x="308.0" y="216.0" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="700" text-anchor="middle">PASS</text>
+<rect data-item="Amount under auto-limit" data-end="b" x="380" y="196" width="128" height="32" fill="rgba(125, 212, 228, 0.12)" stroke="#7dd4e4" stroke-width="1.5"/>
+<text data-item="Amount under auto-limit" data-end="b" data-role="status" x="444.0" y="216.0" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="700" text-anchor="middle">FAIL</text>
+<text data-role="divergence" data-item="Amount under auto-limit" x="524.0" y="216.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" text-anchor="start">first divergence</text>
+<text data-item="Fraud score" data-role="name" x="225.9" y="256.0" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="end">Fraud score</text>
+<rect data-item="Fraud score" data-end="a" x="244" y="236" width="128" height="32" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<text data-item="Fraud score" data-end="a" data-role="status" x="308.0" y="256.0" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="400" text-anchor="middle">PASS</text>
+<rect data-item="Fraud score" data-end="b" x="380" y="236" width="128" height="32" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<text data-item="Fraud score" data-end="b" data-role="status" x="444.0" y="256.0" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="400" text-anchor="middle">NOT REACHED</text>
+<text data-item="Auto-approve" data-role="name" x="225.9" y="296.0" fill="#e6e4d2" font-size="13" font-weight="500" text-anchor="end">Auto-approve</text>
+<rect data-item="Auto-approve" data-end="a" x="244" y="276" width="128" height="32" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<text data-item="Auto-approve" data-end="a" data-role="status" x="308.0" y="296.0" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="400" text-anchor="middle">PASS</text>
+<rect data-item="Auto-approve" data-end="b" x="380" y="276" width="128" height="32" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.22)" stroke-width="1"/>
+<text data-item="Auto-approve" data-end="b" data-role="status" x="444.0" y="296.0" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="400" text-anchor="middle">NOT REACHED</text>
+</svg>

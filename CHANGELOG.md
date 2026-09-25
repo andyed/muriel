@@ -8,6 +8,13 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`comparison_pair` diagram generator.** One item set under exactly two
+  states. Numeric values draw a slopegraph: two axes on one declared, shared
+  scale, values and a signed delta printed at the ends, one weighted focal
+  line, and labels that spread apart with leader ticks while the endpoints
+  stay exact. Status words draw a trace pair that marks the first divergence.
+  Budgets: 2–10 items (slope), 3–6 rules (trace), exactly two states.
+  Examples: `comparison-pair-serp.svg`, `comparison-pair-trace.svg`.
 - **`muriel.tools.diagrams.sankey` — conserved magnitude flow across 2–3
   stages.** Validates before drawing (equal stage totals, in = out per node,
   adjacent-stage flows, ≤8 nodes / ≤12 flows) and raises with the numbers;
