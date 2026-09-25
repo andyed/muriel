@@ -19,6 +19,37 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   every label clears 8:1 on its composited cell. Example:
   `heat-grid-dwell.svg`.
 
+- **`muriel diagram-export --strict`: SVG-1.1 colours for PowerPoint-class
+  importers.** `strict_svg()` rewrites `rgba()`, `transparent` and
+  `#rrggbbaa` paint (attributes, inline style, `<style>` rules) into
+  `#rrggbb` plus `*-opacity`, multiplying into existing opacity; idempotent
+  and colour-preserving. `png_scale()` gives the 1–4 clamped raster scale.
+
+- **Diagrams carry their data.** Pyramid tiers (`data-index`, `data-value`),
+  matrix cells (`data-row`/`data-col`), layer bands (`data-index`), swimlane
+  steps (`data-lane`/`data-step`) and Venn count labels
+  (`data-region`/`data-count`); the fidelity tests read them back.
+
+- **Connector-label rule and check.** Connector labels sit in clear space
+  beside the line, never on a halo or mask; `connector_label_crossings()`
+  and `tests/test_connector_labels.py` enforce it on the committed examples.
+
+- **Excalidraw extractor** (`python -m muriel.tools.excalidraw_extract`), a
+  read-only, stdlib-only importer copied verbatim from diagram-design (MIT),
+  with its fixtures and a pytest port of the upstream verifier.
+
+- **`tests/test_docs_sync.py`** fails when a name in
+  `muriel.tools.diagrams.__all__` is missing from `channels/diagrams.md`; the
+  Scrutinizer overlays are now documented.
+
+### Fixed (diagrams)
+
+- **Venn counts get a measured contrast ratio.** Sets are emitted as real
+  `<circle>` elements instead of Bézier region paths, so `diagram-check`
+  scores every count (lowest 8.53:1) instead of failing them as unverified.
+- **Decorative pattern textures** (`DotField`, `FlowField`, `Grain`) emit
+  `aria-hidden="true" focusable="false"`.
+
 - **Diagram SVGs carry an accessible-figure contract, and `muriel
   diagram-check` enforces it.** Every generator in `muriel.tools.diagrams`
   (matrix, cycle, layer_stack, pyramid, swimlane, foveal_overlay,
