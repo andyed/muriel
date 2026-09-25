@@ -157,6 +157,10 @@ What never happens: text shrinking to fit, text clipping at a boundary, or a whi
 
 Growth is **strictly conditional**: a diagram whose labels already fit renders byte-for-byte as it did before this existed, which is what `tests/test_diagram_labels.py` asserts against every committed example. The same test reads rendered SVG back and fails on three defects the generators used to ship silently — labels overlapping each other, labels off the canvas, and labels spilling out of their own box.
 
+### The file carries its data
+
+Each generator writes the spec values it encodes as `data-*` attributes on the shape that encodes them, so the encoding can be recomputed from the SVG alone: pyramid/funnel tiers carry `data-index` and, when given, `data-value`; matrix cells carry `data-row` / `data-col`; layer-stack bands carry `data-index`; swimlane steps carry `data-lane` (row index) and `data-step` (flow order); Venn count labels carry `data-region` (the binary subset key) and `data-count`. `tests/test_diagram_fidelity.py` reads these back — the funnel's width ratios are checked against its own `data-value`s, not a copy of the spec.
+
 ## 2×2 matrix
 
 ```python

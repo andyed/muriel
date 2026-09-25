@@ -245,7 +245,8 @@ def matrix(
         cy = grid_y + row * cell_h
         parts.append(
             f'<rect x="{cx:.1f}" y="{cy:.1f}" width="{cell_w:.1f}" height="{cell_h:.1f}" '
-            f'fill="{t["cell_bg"]}" stroke="{t["decorative"]}" stroke-width="1"/>'
+            f'fill="{t["cell_bg"]}" stroke="{t["decorative"]}" stroke-width="1" '
+            f'data-row="{row}" data-col="{col}"/>'
         )
 
     # Cell content

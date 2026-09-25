@@ -327,7 +327,7 @@ def swimlane(
         )
 
     # ── Step boxes ──────────────────────────────────────────────────
-    for s, fit in zip(norm, fits):
+    for step_i, (s, fit) in enumerate(zip(norm, fits)):
         cx = cell_cx(s["col"])
         cy = lane_cy(s["lane"])
         bx = cx - box_w / 2
@@ -337,7 +337,8 @@ def swimlane(
         sw = 1.5 if s["focal"] else 1
         parts.append(
             f'<rect x="{bx:.1f}" y="{by:.1f}" width="{box_w}" height="{box_h}" '
-            f'rx="4" fill="{fill}" stroke="{stroke}" stroke-width="{sw}"/>'
+            f'rx="4" fill="{fill}" stroke="{stroke}" stroke-width="{sw}" '
+            f'data-lane="{s["lane"]}" data-step="{step_i}"/>'
         )
         # Label: pre-wrapped on measured width, block-centred on the box.
         # The single-line case lands on the same baseline it always did.

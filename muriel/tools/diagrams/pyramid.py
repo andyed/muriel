@@ -90,6 +90,12 @@ def _rgba(hex_color: str, alpha: float) -> str:
 
 # ─── Tier normalization ─────────────────────────────────────────────
 
+def _data_num(v) -> str:
+    """A number as a ``data-*`` attribute value: integral floats lose ``.0``."""
+    f = float(v)
+    return str(int(f)) if f.is_integer() and abs(f) < 1e15 else repr(f)
+
+
 def _normalize(tiers) -> list[dict]:
     out = []
     for t in tiers:
@@ -384,9 +390,14 @@ def pyramid(
         fill = t["focal_fill"] if is_focal else t["paper"]
         stroke = t["accent"] if is_focal else t["hairline"]
         sw = 1.5 if is_focal else 1
+        # data-* carries the spec back out, so a test (or a reader of the
+        # file) can recompute the encoding from the drawing alone.
+        data = f' data-index="{i}"'
+        if l["value"] is not None:
+            data += f' data-value="{_data_num(l["value"])}"'
         parts.append(
             f'<polygon points="{pts}" fill="{fill}" '
-            f'stroke="{stroke}" stroke-width="{sw}"/>'
+            f'stroke="{stroke}" stroke-width="{sw}"{data}/>'
         )
         # Primary label: centred in the tier, or — for a proportional bar
         # too narrow to hold it — right-anchored just outside its left edge.

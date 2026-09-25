@@ -92,14 +92,50 @@ def _savefig(fig, out_path, *, dpi: int, facecolor: str) -> None:
                     facecolor=facecolor)
 
 
+def _data_num(v: float) -> str:
+    f = float(v)
+    return str(int(f)) if f.is_integer() and abs(f) < 1e15 else repr(f)
+
+
+def _gid_prefix(out_path, kind: str) -> str:
+    from muriel.tools.diagrams._a11y import figure_slug
+    return figure_slug(out_path, kind)
+
+
+_GID_TEXT_RE = __import__("re").compile(
+    r'(<g id="(?P<gid>[^"]+)">\s*<text\b)')
+
+
+def _annotate_svg(text: str, annotations: Dict[str, Dict[str, str]]) -> str:
+    """Add ``data-*`` attributes to the elements matplotlib wrapped in ``gid``s.
+
+    matplotlib writes an artist's ``gid`` as the id of a ``<g>`` around the
+    element; the data belongs on the element itself (the ``<text>`` a test
+    or a reader recomputes from), so it is attached there.
+    """
+    from xml.sax.saxutils import quoteattr
+
+    def text_attrs(m):
+        attrs = annotations.get(m.group("gid"), {})
+        extra = "".join(f" {k}={quoteattr(v)}" for k, v in attrs.items()
+                        if k.startswith("data-"))
+        return m.group(1) + extra
+
+    return _GID_TEXT_RE.sub(text_attrs, text)
+
+
 def _write_accessible(out_path, *, kind: str, title: Optional[str],
-                      desc: str) -> None:
+                      desc: str,
+                      annotations: Optional[Dict[str, Dict[str, str]]] = None,
+                      ) -> None:
     """matplotlib writes no <title>/<desc>; add the contract to SVG output."""
     path = Path(out_path)
     if path.suffix.lower() != ".svg":
         return  # raster output has no accessible-name slot
     from muriel.tools.diagrams._a11y import figure_slug, inject_a11y
     text = path.read_text(encoding="utf-8")
+    if annotations:
+        text = _annotate_svg(text, annotations)
     path.write_text(
         inject_a11y(text, slug=figure_slug(path, kind),
                     title=title or "Venn diagram", desc=desc),
@@ -201,8 +237,15 @@ def _plot_venn_on_axis(
     brand,
     subset_labels: Optional[Dict[str, str]] = None,
     title: Optional[str] = None,
-) -> None:
-    """Render a 2- or 3-set Venn on the given matplotlib axis."""
+    gid_prefix: Optional[str] = None,
+) -> Dict[str, Dict[str, str]]:
+    """Render a 2- or 3-set Venn on the given matplotlib axis.
+
+    Returns ``{gid: {attr: value}}`` for the SVG post-pass: each region's
+    count label carries ``data-region`` (the binary subset key) and
+    ``data-count`` (the value from the spec, not the drawn string), so a
+    test can recompute the regions from the file.
+    """
     import matplotlib.pyplot as plt  # noqa: F401 (asserts matplotlib installed)
     from matplotlib_venn import venn2, venn3
 
@@ -240,6 +283,18 @@ def _plot_venn_on_axis(
 
     if title:
         ax.set_title(title, fontsize=13, color=text_color, pad=10, loc="left")
+
+    annotations: Dict[str, Dict[str, str]] = {}
+    if gid_prefix:
+        for region_id in sets:
+            lbl = v.get_label_by_id(region_id)
+            if lbl is None:
+                continue
+            gid = f"{gid_prefix}-region-{region_id}"
+            lbl.set_gid(gid)
+            annotations[gid] = {"data-region": region_id,
+                                "data-count": _data_num(sets[region_id])}
+    return annotations
 
 
 def venn_single(
@@ -290,8 +345,9 @@ def venn_single(
 
     fig, ax = plt.subplots(figsize=figsize, dpi=dpi, facecolor=_bg_color(brand))
     ax.set_facecolor(_bg_color(brand))
-    _plot_venn_on_axis(ax, subsets, labels, brand=brand,
-                       subset_labels=subset_labels, title=title)
+    ann = _plot_venn_on_axis(ax, subsets, labels, brand=brand,
+                             subset_labels=subset_labels, title=title,
+                             gid_prefix=_gid_prefix(out_path, "venn"))
     fig.tight_layout()
     Path(out_path).parent.mkdir(parents=True, exist_ok=True)
     _savefig(fig, out_path, dpi=dpi, facecolor=_bg_color(brand))
@@ -302,7 +358,8 @@ def venn_single(
             f"Area-proportional Venn diagram of {len(labels)} sets", title,
             ["sets: " + ", ".join(labels),
              "region sizes: " + _regions_desc(subsets, labels)])
-    _write_accessible(out_path, kind="venn", title=title, desc=desc)
+    _write_accessible(out_path, kind="venn", title=title, desc=desc,
+                      annotations=ann)
     return str(out_path)
 
 
@@ -390,15 +447,18 @@ def venn_panels(
     for ax in axes:
         ax.set_facecolor(_bg_color(brand))
 
+    ann: Dict[str, Dict[str, str]] = {}
+    prefix = _gid_prefix(out_path, "venn-panels")
     for i, spec in enumerate(panels):
         labels = spec["labels"]
         normalizer = _normalize_venn3 if len(labels) == 3 else _normalize_venn2
         subsets = normalizer(spec["sets"], labels)
-        _plot_venn_on_axis(
+        ann.update(_plot_venn_on_axis(
             axes[i], subsets, labels, brand=brand,
             subset_labels=spec.get("subset_labels"),
             title=spec.get("title"),
-        )
+            gid_prefix=f"{prefix}-p{i}",
+        ))
 
     if title:
         fig.suptitle(title, fontsize=14, color="#0f1117", y=1.01)
@@ -418,5 +478,6 @@ def venn_panels(
             panel_txt.append(f"{head}: {_regions_desc(subsets, labels)}")
         desc = default_desc(f"{n} area-proportional Venn panels", title,
                             panel_txt)
-    _write_accessible(out_path, kind="venn-panels", title=title, desc=desc)
+    _write_accessible(out_path, kind="venn-panels", title=title, desc=desc,
+                      annotations=ann)
     return str(out_path)

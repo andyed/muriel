@@ -255,7 +255,8 @@ def layer_stack(
         sw = 1.5 if is_focal else 1
         parts.append(
             f'<rect x="{band_x}" y="{by:.1f}" width="{band_w}" height="{band_h}" '
-            f'fill="{fill}" stroke="{stroke}" stroke-width="{sw}"/>'
+            f'fill="{fill}" stroke="{stroke}" stroke-width="{sw}" '
+            f'data-index="{i}"/>'
         )
         # Text colours are chosen against the band they sit on. The focal
         # band is tinted, so a muted token that clears 8:1 on the page can

@@ -3,10 +3,10 @@
 <desc id="matrix-sat-opt-desc">2×2 matrix titled “Sat/opt × LF/HF — orthogonal axes”. Horizontal axis from low LF/HF to high LF/HF; vertical axis from satisficer to optimizer; quadrants, top-left, top-right, bottom-left, bottom-right: OPTIMIZER (Long, focused dwells, Targeted re-reads, Cognitive load rises with rank); OPTIMIZER + LOAD (Position 1-3 of dense SERP, Sustained pupil dilation, Slow click latency); SATISFICER (Quick scans, Early commitments, Low pupil reactivity); SATISFICER + LOAD (Conflict signals, Re-reads without resolution, Premature exit).</desc>
 <rect width="900" height="700" fill="#0a0a0f"/>
 <text x="450.0" y="70.0" fill="#e6e4d2" font-size="20" font-weight="600" text-anchor="middle">Sat/opt × LF/HF — orthogonal axes</text>
-<rect x="116.0" y="176.0" width="334.0" height="204.0" fill="rgba(125, 212, 228, 0.05)" stroke="rgba(125, 212, 228, 0.28)" stroke-width="1"/>
-<rect x="450.0" y="176.0" width="334.0" height="204.0" fill="rgba(125, 212, 228, 0.05)" stroke="rgba(125, 212, 228, 0.28)" stroke-width="1"/>
-<rect x="116.0" y="380.0" width="334.0" height="204.0" fill="rgba(125, 212, 228, 0.05)" stroke="rgba(125, 212, 228, 0.28)" stroke-width="1"/>
-<rect x="450.0" y="380.0" width="334.0" height="204.0" fill="rgba(125, 212, 228, 0.05)" stroke="rgba(125, 212, 228, 0.28)" stroke-width="1"/>
+<rect x="116.0" y="176.0" width="334.0" height="204.0" fill="rgba(125, 212, 228, 0.05)" stroke="rgba(125, 212, 228, 0.28)" stroke-width="1" data-row="0" data-col="0"/>
+<rect x="450.0" y="176.0" width="334.0" height="204.0" fill="rgba(125, 212, 228, 0.05)" stroke="rgba(125, 212, 228, 0.28)" stroke-width="1" data-row="0" data-col="1"/>
+<rect x="116.0" y="380.0" width="334.0" height="204.0" fill="rgba(125, 212, 228, 0.05)" stroke="rgba(125, 212, 228, 0.28)" stroke-width="1" data-row="1" data-col="0"/>
+<rect x="450.0" y="380.0" width="334.0" height="204.0" fill="rgba(125, 212, 228, 0.05)" stroke="rgba(125, 212, 228, 0.28)" stroke-width="1" data-row="1" data-col="1"/>
 <text x="134.0" y="206.0" fill="#7dd4e4" font-size="15" font-weight="600" letter-spacing="0.06em" text-transform="uppercase">OPTIMIZER</text>
 <text x="134.0" y="234.0" fill="#e6e4d2" font-size="13">• Long, focused dwells</text>
 <text x="134.0" y="256.0" fill="#e6e4d2" font-size="13">• Targeted re-reads</text>

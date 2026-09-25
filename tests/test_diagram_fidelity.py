@@ -91,3 +91,94 @@ def test_ordinal_taper_is_unchanged(tmp_path):
         bots.append(xs[2] - xs[3])
     assert tops == pytest.approx([160, 280, 400, 520])
     assert bots == pytest.approx([280, 400, 520, 640])
+
+
+# ─── data-* read-back: recompute the encoding from the file alone ───
+
+EXAMPLES_DIR = EXAMPLE.parent
+
+
+def _elements(svg: str, tag: str, attr: str):
+    import xml.etree.ElementTree as ET
+    root = ET.fromstring(svg)
+    return [el for el in root.iter()
+            if el.tag.split("}", 1)[-1] == tag and el.get(attr) is not None]
+
+
+def _poly_width(el) -> float:
+    xs = [float(v) for v in el.get("points").replace(",", " ").split()[0::2]]
+    return max(xs) - min(xs)
+
+
+def test_funnel_width_ratio_recomputes_from_data_value():
+    """No hard-coded counts: the file carries its own values."""
+    tiers = _elements(EXAMPLE.read_text("utf-8"), "polygon", "data-value")
+    assert len(tiers) == 4
+    _assert_proportional([_poly_width(t) for t in tiers],
+                         [float(t.get("data-value")) for t in tiers])
+
+
+def test_ordinal_pyramid_carries_index_but_no_value(tmp_path):
+    svg = Path(pyramid(["A", "B", "C", "D"], out_path=tmp_path / "p.svg")
+               ).read_text("utf-8")
+    assert "data-value" not in svg
+    assert [int(e.get("data-index"))
+            for e in _elements(svg, "polygon", "data-index")] == [0, 1, 2, 3]
+
+
+def test_matrix_cells_carry_row_and_col():
+    svg = (EXAMPLES_DIR / "matrix-sat-opt.svg").read_text("utf-8")
+    cells = _elements(svg, "rect", "data-row")
+    assert {(c.get("data-row"), c.get("data-col")) for c in cells} == {
+        ("0", "0"), ("0", "1"), ("1", "0"), ("1", "1")}
+    # row/col agree with the drawn geometry: higher index → further right/down
+    for c in cells:
+        for d in cells:
+            same_row = c.get("data-row") == d.get("data-row")
+            same_col = c.get("data-col") == d.get("data-col")
+            if same_row and int(c.get("data-col")) < int(d.get("data-col")):
+                assert float(c.get("x")) < float(d.get("x"))
+            if same_col and int(c.get("data-row")) < int(d.get("data-row")):
+                assert float(c.get("y")) < float(d.get("y"))
+
+
+def test_layer_stack_bands_carry_index_in_draw_order():
+    svg = (EXAMPLES_DIR / "layers-tcpip.svg").read_text("utf-8")
+    bands = _elements(svg, "rect", "data-index")
+    assert [int(b.get("data-index")) for b in bands] == [0, 1, 2, 3]
+    ys = [float(b.get("y")) for b in bands]
+    assert ys == sorted(ys)
+
+
+def test_swimlane_steps_sit_in_their_lane_in_flow_order():
+    svg = (EXAMPLES_DIR / "swimlane-release.svg").read_text("utf-8")
+    steps = _elements(svg, "rect", "data-step")
+    assert [int(s.get("data-step")) for s in steps] == list(range(6))
+    # the spec: PM, Engineering, Engineering, QA, PM, Release
+    assert [int(s.get("data-lane")) for s in steps] == [0, 1, 1, 2, 0, 3]
+    centre_y: dict[str, set] = {}
+    for s in steps:
+        cy = float(s.get("y")) + float(s.get("height")) / 2
+        centre_y.setdefault(s.get("data-lane"), set()).add(round(cy, 1))
+    assert all(len(v) == 1 for v in centre_y.values()), centre_y
+    lanes_by_y = sorted(centre_y, key=lambda k: next(iter(centre_y[k])))
+    assert lanes_by_y == sorted(lanes_by_y, key=int)
+    xs = [float(s.get("x")) for s in steps]
+    assert xs == sorted(xs)
+
+
+def test_venn_region_labels_carry_their_count(tmp_path):
+    pytest.importorskip("matplotlib")
+    pytest.importorskip("matplotlib_venn")
+    from muriel.tools.venn import venn_single
+    spec = {"a": 5, "b": 3, "c": 2, "a_b": 1, "a_c": 4, "b_c": 1, "all": 7}
+    out = venn_single(spec, labels=["a", "b", "c"], title="Scope",
+                      out_path=tmp_path / "v.svg")
+    svg = Path(out).read_text("utf-8")
+    regions = {e.get("data-region"): e for e in
+               _elements(svg, "text", "data-region")}
+    want = {"100": 5, "010": 3, "001": 2, "110": 1, "101": 4, "011": 1,
+            "111": 7}
+    assert {k: float(e.get("data-count")) for k, e in regions.items()} == want
+    for k, e in regions.items():
+        assert "".join(e.itertext()).strip() == str(want[k])
