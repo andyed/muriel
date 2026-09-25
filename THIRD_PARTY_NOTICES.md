@@ -67,6 +67,14 @@ Two verification ideas were adapted from the same repository (upstream commit
   and `muriel/motion.py` (`validate_mode`, `validate_flash_rate`,
   `validate_sequence_shape`). The upstream clock tokens and pinned controller
   were not adopted.
+- **Treemap** — `muriel/tools/diagrams/treemap.py` follows `references/type-treemap.md`
+  for geometry and conventions: squarified layout, 4–8 cells with a named
+  "Other", 4px gutters, the large / medium / small / sliver label tiers with a
+  16px top-left inset, the rank-ordered ink ramp with one accent cell, and
+  `data-share` on every cell. `tests/test_diagram_treemap.py` checks area as
+  relative error per cell, the invariant of `scripts/verify-treemap.py`, at a
+  4% bound. The gutter-compensating weight correction is muriel's own; no
+  source files were copied.
 - **Diagram guidance** — behaviour-first pattern routing, the generator
   admission rule, callout discipline, the global node/arrow budget, and the
   redraw degrade ladder in `channels/diagrams.md`, plus the per-element removal

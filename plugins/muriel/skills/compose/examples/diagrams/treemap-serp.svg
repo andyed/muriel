@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="treemap-serp-title treemap-serp-desc" viewBox="0 0 960 656" width="960" height="656" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
+<title id="treemap-serp-title">Fixation time by SERP region (illustrative)</title>
+<desc id="treemap-serp-desc">Illustrative treemap of mean fixation time per trial by search-results-page region, area proportional to time: organic results take about half of all fixation time (7.42 of 13.97 s), ads about a fifth (2.91 s), and the knowledge panel, related searches, navigation and pagination share the remaining quarter.</desc>
+<rect width="960" height="656" fill="#0a0a0f"/>
+<text x="480.0" y="48.0" fill="#e6e4d2" font-size="20" font-weight="600" text-anchor="middle">Fixation time by SERP region (illustrative)</text>
+<rect x="32.00" y="88.00" width="469.25" height="480.00" rx="2" fill="rgba(230, 228, 210, 0.160)" stroke="rgba(230, 228, 210, 0.280)" stroke-width="1" data-label="Organic results" data-value="7.42" data-share="53.1138" data-tier="large"/>
+<text x="48.00" y="115.00" fill="#e6e4d2" font-size="13" font-weight="600">Organic results</text>
+<text x="48.00" y="131.00" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">7.42 s · 53%</text>
+<rect x="505.25" y="88.00" width="422.75" height="208.96" rx="2" fill="rgba(125, 212, 228, 0.140)" stroke="#7dd4e4" stroke-width="1.5" data-label="Ads" data-value="2.91" data-share="20.8304" data-tier="large"/>
+<text x="521.25" y="115.00" fill="#e6e4d2" font-size="13" font-weight="600">Ads</text>
+<text x="521.25" y="131.00" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">2.91 s · 21%</text>
+<text x="521.25" y="145.00" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">top and bottom blocks</text>
+<rect x="505.25" y="300.96" width="209.16" height="267.04" rx="2" fill="rgba(230, 228, 210, 0.116)" stroke="rgba(230, 228, 210, 0.280)" stroke-width="1" data-label="Knowledge panel" data-value="1.84" data-share="13.1711" data-tier="large"/>
+<text x="521.25" y="327.96" fill="#e6e4d2" font-size="13" font-weight="600">Knowledge panel</text>
+<text x="521.25" y="343.96" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">1.84 s · 13%</text>
+<rect x="718.41" y="300.96" width="209.59" height="140.49" rx="2" fill="rgba(230, 228, 210, 0.094)" stroke="rgba(230, 228, 210, 0.280)" stroke-width="1" data-label="Related searches" data-value="0.97" data-share="6.9435" data-tier="large"/>
+<text x="734.41" y="327.96" fill="#e6e4d2" font-size="13" font-weight="600">Related searches</text>
+<text x="734.41" y="343.96" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">0.97 s · 6.9%</text>
+<rect x="718.41" y="445.45" width="151.09" height="122.55" rx="2" fill="rgba(230, 228, 210, 0.072)" stroke="rgba(230, 228, 210, 0.280)" stroke-width="1" data-label="Navigation" data-value="0.61" data-share="4.3665" data-tier="large"/>
+<text x="734.41" y="472.45" fill="#e6e4d2" font-size="13" font-weight="600">Navigation</text>
+<text x="734.41" y="488.45" fill="#e6e4d2" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">0.61 s · 4.4%</text>
+<rect x="873.51" y="445.45" width="54.49" height="122.55" rx="2" fill="rgba(230, 228, 210, 0.050)" stroke="rgba(230, 228, 210, 0.280)" stroke-width="1" data-label="Pagination" data-value="0.22" data-share="1.5748" data-tier="sliver"/>
+<circle cx="900.75" cy="506.72" r="4" fill="#e6e4d2" data-marker="sliver"/>
+<text x="32.0" y="596.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">Area is proportional to value. Total 13.97 s. Shares rounded; they may not sum to 100%.</text>
+<rect x="32.0" y="614.0" width="12" height="12" rx="2" fill="rgba(230, 228, 210, 0.050)" stroke="rgba(230, 228, 210, 0.280)" stroke-width="1" data-key="Pagination"/>
+<circle cx="38.0" cy="620.0" r="3" fill="#e6e4d2"/>
+<text x="52.0" y="624.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">Pagination · 0.22 s · 1.6% · bottom right</text>
+</svg>

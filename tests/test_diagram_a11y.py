@@ -21,6 +21,7 @@ from muriel.tools.diagrams import (
     pyramid,
     sankey,
     swimlane,
+    treemap,
 )
 from muriel.tools.diagrams._a11y import TITLE_MAX, fit_title, lint_a11y, slugify
 
@@ -82,6 +83,10 @@ GENERATORS = {
     "foveal_overlay_l3": lambda out: foveal_overlay(verbosity=3, out_path=out),
     "engine_sectors_l1": lambda out: engine_sectors_overlay(verbosity=1, out_path=out),
     "engine_sectors_l3": lambda out: engine_sectors_overlay(verbosity=3, out_path=out),
+    "treemap": lambda out: treemap(
+        [{"label": "A", "value": 50}, {"label": "B", "value": 30, "focal": True},
+         {"label": "C", "value": 15}, {"label": "D", "value": 5}],
+        title="Treemap", out_path=out),
     "heat_grid": lambda out: heat_grid(
         ["r1", "r2", "r3"], ["c1", "c2", "c3"],
         [[1, 2, 3], [4, None, 6], [7, 8, 9]], focal=(2, 2),
