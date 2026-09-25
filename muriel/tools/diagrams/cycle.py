@@ -425,7 +425,7 @@ def cycle(
     ) if norm_hub else ""
     parts.append(
         f'<defs>'
-        f'<marker id="cycle-arrow" markerWidth="10" markerHeight="10" '
+        f'<marker id="{slug}-arrow" markerWidth="10" markerHeight="10" '
         f'refX="9" refY="5" orient="auto" markerUnits="strokeWidth">'
         f'<path d="M0,0 L10,5 L0,10 z" fill="{t["accent"]}"/>'
         f'</marker>'
@@ -457,7 +457,7 @@ def cycle(
         parts.append(
             f'<path d="M {x0:.1f} {y0:.1f} A {arc_r:.1f} {arc_r:.1f} 0 0 {sweep_flag} {x1:.1f} {y1:.1f}" '
             f'fill="none" stroke="{t["decorative"]}" stroke-width="1.5" '
-            f'marker-end="url(#cycle-arrow)"/>'
+            f'marker-end="url(#{slug}-arrow)"/>'
         )
 
     # Hub: dashed write-back spokes first (beneath everything), then the

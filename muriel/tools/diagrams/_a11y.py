@@ -174,6 +174,27 @@ _ROOT_RE = re.compile(r"<svg\b[^>]*>", re.DOTALL)
 _STRIP_RE = re.compile(r'\s(?:role|aria-labelledby)\s*=\s*("[^"]*"|\'[^\']*\')')
 
 
+def _prefix_foreign_ids(svg_text: str, slug: str) -> str:
+    """Prefix every id another renderer wrote (matplotlib's ``figure_1``,
+    ``patch_2``, clip paths) and every reference to it, so two inlined
+    figures never resolve each other's ``url(#…)`` targets."""
+    prefix = f"{slug}-"
+    ids = {i for i in re.findall(r'\bid="([^"]+)"', svg_text)
+           if not i.startswith(prefix)}
+    if not ids:
+        return svg_text
+
+    def ren(i: str) -> str:
+        return prefix + i if i in ids else i
+
+    svg_text = re.sub(r'\bid="([^"]+)"',
+                      lambda m: f'id="{ren(m.group(1))}"', svg_text)
+    svg_text = re.sub(r'url\(#([^)\s]+)\)',
+                      lambda m: f"url(#{ren(m.group(1))})", svg_text)
+    return re.sub(r'((?:xlink:)?href)="#([^"]+)"',
+                  lambda m: f'{m.group(1)}="#{ren(m.group(2))}"', svg_text)
+
+
 def inject_a11y(svg_text: str, *, slug: str, title: str, desc: str) -> str:
     """Retrofit the contract onto SVG another renderer wrote (matplotlib).
 
@@ -181,6 +202,7 @@ def inject_a11y(svg_text: str, *, slug: str, title: str, desc: str) -> str:
     existing values, and inserts ``<title>``/``<desc>`` as its first
     children — ahead of matplotlib's ``<metadata>`` and ``<defs>``.
     """
+    svg_text = _prefix_foreign_ids(svg_text, slug)
     m = _ROOT_RE.search(svg_text)
     if m is None:
         raise ValueError("no <svg> root tag found")
@@ -285,6 +307,17 @@ def lint_a11y(svg_text: str) -> list[str]:
             )
         if count > 1:
             findings.append(f'duplicate id="{eid}" ({count} elements)')
+    # Every id shares the title's slug, so a marker or filter from one inlined
+    # figure can never resolve into another's (the second url(#arrow) wins).
+    title_id = title_el.get("id") if title_el is not None else None
+    if title_id and title_id.endswith("-title"):
+        prefix = title_id[: -len("title")]
+        for eid in seen:
+            if eid not in ("title", "desc") and not eid.startswith(prefix):
+                findings.append(
+                    f'id="{eid}" lacks the figure slug "{prefix}"; two inlined '
+                    f'figures would share it'
+                )
     for label, el in (("title", title_el), ("desc", desc_el)):
         if el is not None and not el.get("id"):
             findings.append(f"<{label}> has no id for aria-labelledby to name")

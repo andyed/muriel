@@ -224,14 +224,15 @@ def layer_stack(
                 + (f" ({l['note']})" if l["note"] else "")
                 for l in norm),
              (f"axis: {axis_label}, pointing {axis_dir}" if axis_label else "")])
+    slug = figure_slug(out_path, "layer-stack")
     parts.append(svg_open(
         width=width, height=height,
-        slug=figure_slug(out_path, "layer-stack"),
+        slug=slug,
         title=title or "Layer stack", desc=desc,
         attrs=f'font-family="{escape(t["body_font"])}"',
     ))
     parts.append(
-        f'<defs><marker id="ls-arrow" markerWidth="8" markerHeight="8" '
+        f'<defs><marker id="{slug}-arrow" markerWidth="8" markerHeight="8" '
         f'refX="4" refY="7" orient="auto" markerUnits="strokeWidth">'
         f'<path d="M0,7 L4,0 L8,7" fill="none" stroke="{t["muted"]}" stroke-width="1"/>'
         f'</marker></defs>'
@@ -296,12 +297,12 @@ def layer_stack(
         if axis_dir == "up":
             parts.append(
                 f'<line x1="{ax}" y1="{a_bot:.1f}" x2="{ax}" y2="{a_top:.1f}" '
-                f'stroke="{t["muted"]}" stroke-width="1" marker-end="url(#ls-arrow)"/>'
+                f'stroke="{t["muted"]}" stroke-width="1" marker-end="url(#{slug}-arrow)"/>'
             )
         else:
             parts.append(
                 f'<line x1="{ax}" y1="{a_top:.1f}" x2="{ax}" y2="{a_bot:.1f}" '
-                f'stroke="{t["muted"]}" stroke-width="1" marker-end="url(#ls-arrow)"/>'
+                f'stroke="{t["muted"]}" stroke-width="1" marker-end="url(#{slug}-arrow)"/>'
             )
         # Direction is carried by the line's arrowhead marker; the text
         # stays ASCII so it survives any rasterizer's font fallback.

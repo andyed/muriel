@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="layers-tcpip-title layers-tcpip-desc" viewBox="0 0 1000 424" width="1000" height="424" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
 <title id="layers-tcpip-title">The TCP/IP stack</title>
 <desc id="layers-tcpip-desc">Layer stack with 4 layers titled “The TCP/IP stack”. Top to bottom: L4 Application (HTTP, DNS, TLS), L3 Transport (TCP, UDP), L2 Internet (IP, ICMP), L1 Link (Ethernet, Wi-Fi); axis: abstraction, pointing up.</desc>
-<defs><marker id="ls-arrow" markerWidth="8" markerHeight="8" refX="4" refY="7" orient="auto" markerUnits="strokeWidth"><path d="M0,7 L4,0 L8,7" fill="none" stroke="#b0b0c4" stroke-width="1"/></marker></defs>
+<defs><marker id="layers-tcpip-arrow" markerWidth="8" markerHeight="8" refX="4" refY="7" orient="auto" markerUnits="strokeWidth"><path d="M0,7 L4,0 L8,7" fill="none" stroke="#b0b0c4" stroke-width="1"/></marker></defs>
 <rect width="1000" height="424" fill="#0a0a0f"/>
 <text x="500.0" y="48.0" fill="#e6e4d2" font-size="20" font-weight="600" text-anchor="middle">The TCP/IP stack</text>
 <rect x="180" y="120.0" width="680" height="64" fill="rgba(230, 228, 210, 0.04)" stroke="rgba(230, 228, 210, 0.14)" stroke-width="1" data-index="0"/>
@@ -20,6 +20,6 @@
 <text x="200" y="348.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" letter-spacing="1.5" text-anchor="start">L1</text>
 <text x="300" y="349.0" fill="#e6e4d2" font-size="15" font-weight="600" text-anchor="start">Link</text>
 <text x="840" y="348.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" text-anchor="end">Ethernet, Wi-Fi</text>
-<line x1="96" y1="368.0" x2="96" y2="128.0" stroke="#b0b0c4" stroke-width="1" marker-end="url(#ls-arrow)"/>
+<line x1="96" y1="368.0" x2="96" y2="128.0" stroke="#b0b0c4" stroke-width="1" marker-end="url(#layers-tcpip-arrow)"/>
 <text x="80" y="248.0" fill="#b0b0c4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" letter-spacing="1.5" text-anchor="middle" transform="rotate(-90 80 248.0)">ABSTRACTION</text>
 </svg>

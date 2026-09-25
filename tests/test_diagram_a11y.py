@@ -210,8 +210,10 @@ def test_slugify_yields_valid_xml_id_prefixes():
 def test_two_figures_inlined_together_do_not_share_ids(tmp_path):
     a = _read(cycle(["a", "b", "c"], out_path=tmp_path / "first.svg"))
     b = _read(cycle(["a", "b", "c"], out_path=tmp_path / "second.svg"))
-    ids = lambda s: set(re.findall(r'<(?:title|desc) id="([^"]+)"', s))  # noqa: E731
-    assert not ids(a) & ids(b)
+    # Every id, not just title/desc: a shared marker id makes the second
+    # figure's arrows resolve to the first figure's <marker>.
+    ids = lambda s: set(re.findall(r'\bid="([^"]+)"', s))  # noqa: E731
+    assert ids(a) and not ids(a) & ids(b)
 
 
 # ─── Negative fixtures: each must trip its rule ─────────────────────
@@ -243,6 +245,11 @@ def test_bare_id_trips():
     svg = (GOOD.replace('id="f-title"', 'id="title"')
                .replace("f-title f-desc", "title f-desc"))
     _trips(svg, 'bare id="title"')
+
+
+def test_id_without_the_figure_slug_trips():
+    svg = GOOD.replace('<rect ', '<marker id="arrow"/><rect ')
+    _trips(svg, 'lacks the figure slug')
 
 
 def test_title_not_first_child_trips():

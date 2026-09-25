@@ -257,18 +257,19 @@ def swimlane(
             ["lanes, top to bottom: " + ", ".join(lane_labels),
              "steps in flow order: " + ", ".join(
                  f"{s['label']} ({lane_labels[s['lane']]})" for s in norm)])
+    slug = figure_slug(out_path, "swimlane")
     parts.append(svg_open(
         width=width, height=height,
-        slug=figure_slug(out_path, "swimlane"),
+        slug=slug,
         title=title or "Swimlane", desc=desc,
         attrs=f'font-family="{escape(t["body_font"])}"',
     ))
     parts.append(
         f'<defs>'
-        f'<marker id="sl-flow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" '
+        f'<marker id="{slug}-flow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" '
         f'orient="auto" markerUnits="strokeWidth">'
         f'<path d="M0,0 L9,4.5 L0,9 z" fill="{t["flow"]}"/></marker>'
-        f'<marker id="sl-handoff" markerWidth="9" markerHeight="9" refX="8" refY="4.5" '
+        f'<marker id="{slug}-handoff" markerWidth="9" markerHeight="9" refX="8" refY="4.5" '
         f'orient="auto" markerUnits="strokeWidth">'
         f'<path d="M0,0 L9,4.5 L0,9 z" fill="{t["accent"]}"/></marker>'
         f'</defs>'
@@ -314,7 +315,7 @@ def swimlane(
         handoff = a["lane"] != b["lane"]
         stroke = t["accent"] if handoff else t["flow"]
         sw = 1.5 if handoff else 1
-        marker = "sl-handoff" if handoff else "sl-flow"
+        marker = f"{slug}-handoff" if handoff else f"{slug}-flow"
         if not handoff:
             d = f'M {ax:.1f} {ay:.1f} L {bx:.1f} {by:.1f}'
         else:

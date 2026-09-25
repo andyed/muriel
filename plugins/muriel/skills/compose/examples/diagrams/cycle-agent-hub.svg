@@ -1,15 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="cycle-agent-hub-title cycle-agent-hub-desc" viewBox="0 0 900 700" width="900" height="700" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
 <title id="cycle-agent-hub-title">Agent operating loop</title>
 <desc id="cycle-agent-hub-desc">Clockwise six-step agent loop — capture, research, decide, act, measure, learn — around a shared memory. Capture, decide, measure and learn write back to the memory; research and act only read from it, so they have no write-back spoke.</desc>
-<defs><marker id="cycle-arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="#7dd4e4"/></marker><marker id="cycle-agent-hub-spoke-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 z" fill="#b0b0c4"/></marker></defs>
+<defs><marker id="cycle-agent-hub-arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="#7dd4e4"/></marker><marker id="cycle-agent-hub-spoke-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 z" fill="#b0b0c4"/></marker></defs>
 <rect width="900" height="700" fill="#0a0a0f"/>
 <text x="450.0" y="38.0" fill="#e6e4d2" font-size="20" font-weight="600" text-anchor="middle">Agent operating loop</text>
-<path d="M 488.5 178.8 A 204.8 204.8 0 0 1 605.0 246.1" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
-<path d="M 643.4 312.7 A 204.8 204.8 0 0 1 643.4 447.3" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
-<path d="M 605.0 513.9 A 204.8 204.8 0 0 1 488.5 581.2" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
-<path d="M 411.5 581.2 A 204.8 204.8 0 0 1 295.0 513.9" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
-<path d="M 256.6 447.3 A 204.8 204.8 0 0 1 256.6 312.7" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
-<path d="M 295.0 246.1 A 204.8 204.8 0 0 1 411.5 178.8" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
+<path d="M 488.5 178.8 A 204.8 204.8 0 0 1 605.0 246.1" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-agent-hub-arrow)"/>
+<path d="M 643.4 312.7 A 204.8 204.8 0 0 1 643.4 447.3" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-agent-hub-arrow)"/>
+<path d="M 605.0 513.9 A 204.8 204.8 0 0 1 488.5 581.2" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-agent-hub-arrow)"/>
+<path d="M 411.5 581.2 A 204.8 204.8 0 0 1 295.0 513.9" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-agent-hub-arrow)"/>
+<path d="M 256.6 447.3 A 204.8 204.8 0 0 1 256.6 312.7" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-agent-hub-arrow)"/>
+<path d="M 295.0 246.1 A 204.8 204.8 0 0 1 411.5 178.8" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-agent-hub-arrow)"/>
 <path d="M 450.0 215.1 L 450.0 342.0" fill="none" stroke="#b0b0c4" stroke-width="1.2" stroke-dasharray="5 4" stroke-opacity="0.8" marker-end="url(#cycle-agent-hub-spoke-arrow)"/>
 <path d="M 592.8 462.5 L 510.6 415.0" fill="none" stroke="#b0b0c4" stroke-width="1.2" stroke-dasharray="5 4" stroke-opacity="0.8" marker-end="url(#cycle-agent-hub-spoke-arrow)"/>
 <path d="M 307.2 462.5 L 389.4 415.0" fill="none" stroke="#b0b0c4" stroke-width="1.2" stroke-dasharray="5 4" stroke-opacity="0.8" marker-end="url(#cycle-agent-hub-spoke-arrow)"/>

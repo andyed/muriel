@@ -406,9 +406,10 @@ def foveal_overlay(
              f"parafovea radius {parafovea_radius_deg:g}°",
              f"{n_spokes} spokes" if verbosity >= 2 else "",
              f"field shown ±{eccentricity_max:g}° of visual angle"])
+    slug = figure_slug(out_path, "foveal-overlay")
     parts.append(svg_open(
         width=size, height=size,
-        slug=figure_slug(out_path, "foveal-overlay"),
+        slug=slug,
         title=title or "Foveal overlay", desc=desc,
         attrs=(f'font-family="{escape(t["body_font"])}" '
                f'shape-rendering="geometricPrecision"'),
@@ -417,7 +418,7 @@ def foveal_overlay(
     # ─── halo-shadow filter — verbatim from svg-overlay.js initFilters() ──
     parts.append(
         '<defs>'
-        '<filter id="halo-shadow" x="-50%" y="-50%" width="200%" height="200%">'
+        f'<filter id="{slug}-halo-shadow" x="-50%" y="-50%" width="200%" height="200%">'
         f'<feDropShadow dx="0" dy="0" stdDeviation="1.5" '
         f'flood-color="{t["halo_flood"]}"/>'
         '</filter>'
@@ -467,7 +468,7 @@ def foveal_overlay(
     # svg-overlay.js: stroke '#a0c0ff' 1.5px opacity 0.7,
     # stroke-dasharray "20, 10", stroke-linecap "butt".
     if verbosity >= 2:
-        parts.append('<g filter="url(#halo-shadow)">')
+        parts.append(f'<g filter="url(#{slug}-halo-shadow)">')
         parts.append(
             f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="{parafovea_r_px:.2f}" '
             f'fill="none" stroke="{t["parafovea"]}" opacity="0.7" '
@@ -480,7 +481,7 @@ def foveal_overlay(
     # svg-overlay.js: fovea circle fill='none' stroke '#ffffff' 1.5px
     # opacity 0.6. Ticks: 12 (every 30°), tickLen=15, white 1.5px opacity 0.8,
     # going OUTWARD from fovea radius.
-    parts.append('<g filter="url(#halo-shadow)">')
+    parts.append(f'<g filter="url(#{slug}-halo-shadow)">')
     parts.append(
         f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="{fovea_r_px:.2f}" '
         f'fill="none" stroke="{t["fovea"]}" opacity="0.6" '

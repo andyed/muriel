@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="cycle-experiment-icons-title cycle-experiment-icons-desc" viewBox="0 0 900 700" width="900" height="700" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
 <title id="cycle-experiment-icons-title">Experiment loop</title>
 <desc id="cycle-experiment-icons-desc">Clockwise five-step experiment loop: observe, hypothesize, test, measure, learn, then observe again. Each step has an icon that repeats its label.</desc>
-<defs><marker id="cycle-arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="#7dd4e4"/></marker></defs>
+<defs><marker id="cycle-experiment-icons-arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="#7dd4e4"/></marker></defs>
 <rect width="900" height="700" fill="#0a0a0f"/>
 <text x="450.0" y="38.0" fill="#e6e4d2" font-size="20" font-weight="600" text-anchor="middle">Experiment loop</text>
-<path d="M 488.5 178.8 A 204.8 204.8 0 0 1 629.4 281.2" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
-<path d="M 653.2 354.4 A 204.8 204.8 0 0 1 599.4 520.1" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
-<path d="M 537.1 565.4 A 204.8 204.8 0 0 1 362.9 565.4" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
-<path d="M 300.6 520.1 A 204.8 204.8 0 0 1 246.8 354.4" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
-<path d="M 270.6 281.2 A 204.8 204.8 0 0 1 411.5 178.8" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>
+<path d="M 488.5 178.8 A 204.8 204.8 0 0 1 629.4 281.2" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-experiment-icons-arrow)"/>
+<path d="M 653.2 354.4 A 204.8 204.8 0 0 1 599.4 520.1" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-experiment-icons-arrow)"/>
+<path d="M 537.1 565.4 A 204.8 204.8 0 0 1 362.9 565.4" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-experiment-icons-arrow)"/>
+<path d="M 300.6 520.1 A 204.8 204.8 0 0 1 246.8 354.4" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-experiment-icons-arrow)"/>
+<path d="M 270.6 281.2 A 204.8 204.8 0 0 1 411.5 178.8" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-experiment-icons-arrow)"/>
 <circle cx="450.0" cy="175.2" r="36.9" fill="rgba(125, 212, 228, 0.12)" stroke="#7dd4e4" stroke-width="1.5"/>
 <g transform="translate(438.0, 155.4) scale(1)" fill="none" stroke="#7dd4e4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 1 0 -6 0Z"/></g>
 <text x="450.0" y="195.0" fill="#7dd4e4" font-size="16" font-weight="600" text-anchor="middle">1</text>
