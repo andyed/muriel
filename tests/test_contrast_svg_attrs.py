@@ -137,6 +137,60 @@ def test_straight_edged_path_is_composited_like_a_polygon(tmp_path):
     assert e.bg_rgb == (250, 250, 248) and e.passes is True and not e.unverified
 
 
+def test_overlapping_translucent_circles_composite_exactly(tmp_path):
+    """Venn overlaps: two style-opacity circles stack source-over."""
+    entries = _attr(_audit(tmp_path,
+        '<rect width="400" height="200" fill="#ffffff"/>'
+        '<circle cx="150" cy="100" r="80" style="fill: #ff0000; opacity: 0.5"/>'
+        '<circle cx="250" cy="100" r="80" style="fill: #0000ff; opacity: 0.5"/>'
+        '<text x="200" y="104" font-size="8" text-anchor="middle" '
+        'fill="#000000">1</text>'))
+    (e,) = entries
+    # white → 50% red → 50% blue
+    assert e.bg_rgb == (128, 64, 192) and not e.unverified
+
+
+def test_circle_bbox_corner_is_not_inside_the_circle(tmp_path):
+    """Inside the bounding box but outside the circle: page colour."""
+    entries = _attr(_audit(tmp_path,
+        '<rect width="400" height="200" fill="#ffffff"/>'
+        '<circle cx="100" cy="100" r="90" fill="#000000"/>'
+        '<text x="18" y="18" font-size="6" fill="#000000">c</text>'))
+    (e,) = entries
+    assert e.bg_rgb == (255, 255, 255)
+
+
+def test_ellipse_is_composited(tmp_path):
+    entries = _attr(_audit(tmp_path,
+        '<rect width="400" height="200" fill="#ffffff"/>'
+        '<ellipse cx="200" cy="100" rx="150" ry="40" fill="rgba(0,0,0,0.5)"/>'
+        '<text x="200" y="104" font-size="8" text-anchor="middle" '
+        'fill="#000000">e</text>'
+        '<text x="200" y="190" font-size="8" text-anchor="middle" '
+        'fill="#000000">out</text>'))
+    bgs = sorted(e.bg_rgb for e in entries)
+    assert bgs == [(128, 128, 128), (255, 255, 255)]
+
+
+def test_venn_counts_get_a_real_ratio(tmp_path):
+    """venn emits its sets as <circle>, so no count is unverified."""
+    pytest.importorskip("matplotlib")
+    pytest.importorskip("matplotlib_venn")
+    from muriel.tools.diagrams.check import check_svg
+    from muriel.tools.venn import venn_single
+    out = Path(venn_single(
+        {"a": 5, "b": 3, "c": 2, "a_b": 1, "a_c": 1, "b_c": 1, "all": 1},
+        labels=["a", "b", "c"], title="Scope", out_path=tmp_path / "v.svg"))
+    svg = out.read_text("utf-8")
+    assert svg.count("<circle ") == 3 and "data-set=" in svg
+    entries = _attr(audit_svg(out, print_table=False))
+    counts = [e for e in entries if not e.unverified]
+    assert counts and not any(e.unverified for e in entries)
+    # the triple overlap is the darkest background a count sits on
+    assert all(e.passes for e in entries)
+    assert check_svg(out) == []
+
+
 # ─── Fail-closed on the committed examples ──────────────────────────
 
 def test_examples_exist():

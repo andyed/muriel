@@ -92,6 +92,9 @@ def _savefig(fig, out_path, *, dpi: int, facecolor: str) -> None:
                     facecolor=facecolor)
 
 
+_CIRCLE_ALPHA = 0.55
+
+
 def _data_num(v: float) -> str:
     f = float(v)
     return str(int(f)) if f.is_integer() and abs(f) < 1e15 else repr(f)
@@ -121,7 +124,61 @@ def _annotate_svg(text: str, annotations: Dict[str, Dict[str, str]]) -> str:
                         if k.startswith("data-"))
         return m.group(1) + extra
 
+    def circle(m):
+        attrs = annotations.get(m.group("gid"))
+        if not attrs or attrs.get("shape") != "circle":
+            return m.group(0)
+        geom = _circle_from_path(m.group("d"))
+        if geom is None:
+            return m.group(0)  # leave it a path; the audit reports unverified
+        cx, cy, rx, ry = geom
+        extra = "".join(f" {k}={quoteattr(v)}" for k, v in attrs.items()
+                        if k.startswith("data-"))
+        if abs(rx - ry) <= 0.01 * max(rx, ry):
+            shape = f'<circle cx="{cx:.4f}" cy="{cy:.4f}" r="{(rx + ry) / 2:.4f}"'
+        else:
+            shape = (f'<ellipse cx="{cx:.4f}" cy="{cy:.4f}" '
+                     f'rx="{rx:.4f}" ry="{ry:.4f}"')
+        return f'{m.group("open")}{shape}{m.group("rest")}{extra}/>'
+
+    text = _GID_PATH_RE.sub(circle, text)
     return _GID_TEXT_RE.sub(text_attrs, text)
+
+
+_GID_PATH_RE = __import__("re").compile(
+    r'(?P<open><g id="(?P<gid>[^"]+)">\s*)<path d="(?P<d>[^"]*)"(?P<rest>[^>]*?)\s*/>')
+_NUM_RE = __import__("re").compile(r"[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?")
+
+
+def _circle_from_path(d: str):
+    """``(cx, cy, rx, ry)`` of the circle matplotlib wrote as Béziers.
+
+    matplotlib draws a ``Circle`` patch as ``M`` plus cubic segments whose
+    on-curve endpoints include the four axis extremes; the control points
+    overshoot, so only the endpoints are used. Returns ``None`` for any
+    path that is not ``M`` followed by ``C`` segments.
+    """
+    import re
+    cmds = re.findall(r"[A-Za-z]", d)
+    if not cmds or cmds[0] != "M" or set(cmds[1:]) - {"C", "z", "Z"}:
+        return None
+    ends = []
+    for seg in re.split(r"(?=[MCz])", d.strip()):
+        nums = [float(n) for n in _NUM_RE.findall(seg)]
+        if seg.startswith("M") and len(nums) == 2:
+            ends.append(tuple(nums))
+        elif seg.startswith("C"):
+            if len(nums) % 6:
+                return None
+            ends += [(nums[k + 4], nums[k + 5]) for k in range(0, len(nums), 6)]
+    if len(ends) < 5:
+        return None
+    xs = [p[0] for p in ends]
+    ys = [p[1] for p in ends]
+    rx, ry = (max(xs) - min(xs)) / 2, (max(ys) - min(ys)) / 2
+    if rx <= 0 or ry <= 0:
+        return None
+    return (max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2, rx, ry
 
 
 def _write_accessible(out_path, *, kind: str, title: Optional[str],
@@ -261,6 +318,28 @@ def _plot_venn_on_axis(
     else:
         raise ValueError(f"venn supports 2 or 3 sets; got {len(labels)}")
 
+    # Draw the sets as translucent circles instead of the library's
+    # per-region patches. Regions are arc-bounded lens shapes, which the
+    # contrast audit can only bound, not colour — every count label came
+    # back "unverified". Stacked circles show the same overlaps, and the
+    # SVG post-pass rewrites each one as a real <circle>, so the colour
+    # under a count is computed exactly (point-in-circle, source-over).
+    from matplotlib.patches import Circle
+    for p in v.patches:
+        if p is not None:
+            p.set_visible(False)
+    circle_ids: Dict[str, Dict[str, str]] = {}
+    for i, (center, radius) in enumerate(zip(v.centers, v.radii)):
+        if not radius or radius <= 0:
+            continue
+        c = Circle(tuple(center.asarray()), radius, facecolor=colors[i],
+                   edgecolor="none", alpha=_CIRCLE_ALPHA, zorder=1)
+        ax.add_patch(c)
+        if gid_prefix:
+            gid = f"{gid_prefix}-set-{i}"
+            c.set_gid(gid)
+            circle_ids[gid] = {"shape": "circle", "data-set": str(labels[i])}
+
     # Style the set labels
     for key in (v.set_labels or []):
         if key is not None:
@@ -284,7 +363,7 @@ def _plot_venn_on_axis(
     if title:
         ax.set_title(title, fontsize=13, color=text_color, pad=10, loc="left")
 
-    annotations: Dict[str, Dict[str, str]] = {}
+    annotations: Dict[str, Dict[str, str]] = dict(circle_ids)
     if gid_prefix:
         for region_id in sets:
             lbl = v.get_label_by_id(region_id)
