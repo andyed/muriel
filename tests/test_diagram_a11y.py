@@ -15,6 +15,7 @@ from muriel.tools.diagrams import (
     cycle,
     engine_sectors_overlay,
     foveal_overlay,
+    heat_grid,
     layer_stack,
     matrix,
     pyramid,
@@ -81,6 +82,10 @@ GENERATORS = {
     "foveal_overlay_l3": lambda out: foveal_overlay(verbosity=3, out_path=out),
     "engine_sectors_l1": lambda out: engine_sectors_overlay(verbosity=1, out_path=out),
     "engine_sectors_l3": lambda out: engine_sectors_overlay(verbosity=3, out_path=out),
+    "heat_grid": lambda out: heat_grid(
+        ["r1", "r2", "r3"], ["c1", "c2", "c3"],
+        [[1, 2, 3], [4, None, 6], [7, 8, 9]], focal=(2, 2),
+        title="Heat grid", out_path=out),
     "venn_single": _venn_single,
     "venn_panels": _venn_panels,
     "wavefield": _wavefield,

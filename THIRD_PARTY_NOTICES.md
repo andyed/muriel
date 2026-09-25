@@ -82,6 +82,15 @@ Two verification ideas were adapted from the same repository (upstream commit
   constancy, relative value fidelity, square-on arrival). Bars are not rounded
   to the 4px grid, sub-4px flows raise rather than fold, and ribbons are
   written as flattened polylines so the contrast audit can score the labels.
+- **Comparison heat-grid** — `muriel/tools/diagrams/heat_grid.py` takes its
+  cell geometry (116×56, 4px gap, 80px minimum width), the 3–7 row / 3–8 column
+  budget, the single ink ramp with a single accent focal cell excluded from the
+  scale, the 0.07 ramp floor and 0.70 ceiling, and the don'ts (hue per row,
+  diverging ramp for unsigned data, gradient legend, dropped rows) from
+  `references/type-heatmap.md`. `tests/test_diagram_heat_grid.py` follows
+  `scripts/verify-heatmap.py`'s `data-row` / `data-col` / `data-value` binding
+  and monotone-fill check (±0.03). The per-brand ramp-ceiling solve for 8:1
+  value labels, the quantized stepped legend and the n/a cells are muriel's.
 
 The code is muriel's own (ElementTree rather than the source's `HTMLParser`,
 and wired into `muriel diagram-check`); no source files were copied.
