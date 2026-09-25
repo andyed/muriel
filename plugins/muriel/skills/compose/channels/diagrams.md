@@ -72,7 +72,7 @@ Ordered by how often each structure carries a real argument in research, product
 | 7 | Venn / Euler | Categorical intersection; area-proportional. | **Shipped** — `muriel.tools.venn` |
 | 8 | Spectrum | Position between two poles is the encoding. | Queued |
 | 9 | Pyramid | Each level depends on the one below; apex is rare or important. | **Shipped** — `muriel.tools.diagrams.pyramid` (`orientation="up"`) |
-| 10 | Comparison heat-grid | Dense `n × m` comparison; small multiples for categorical evals. | Queued |
+| 10 | **Comparison heat-grid** | Dense `n × m` comparison of one unsigned quantity; the pattern across rows × columns is the claim. | **Shipped** — `muriel.tools.diagrams.heat_grid` |
 | 11 | Swimlane | Cross-functional process; the handoffs between actors are the point. | **Shipped** — `muriel.tools.diagrams.swimlane` |
 | 12 | **Treemap** | One whole split into 4–8 disjoint parts; area is each part's share. Hierarchy family, one level. | **Shipped** — `muriel.tools.diagrams.treemap` |
 
@@ -270,6 +270,41 @@ pyramid(
 - Don't fake funnel widths. If they aren't proportional to the counts, the reader sees a drop-off that isn't there — pass real `value`s or say in the caption that the taper is ordinal.
 - Don't highlight the base. Coral on the broad base dilutes the "apex = rare" signal.
 
+## Comparison heat-grid
+
+```python
+from muriel.tools.diagrams import heat_grid
+
+heat_grid(
+    rows=["Position 1", "Position 2", "Position 3", "Position 4",
+          "Position 5", "Position 6–10"],
+    cols=["Navigational", "Informational", "Transactional", "Local"],
+    values=[[412, 588, 471, 436], [298, 521, 402, 365],
+            [241, 463, 318, 290], [187, 402, 265, None],   # None = n/a cell
+            [164, 371, 228, 203], [118, 296, 176, 149]],
+    focal=(0, 1),                        # (row, col) — index or label
+    focal_note="informational queries hold the top result longest",
+    unit="mean fixation dwell (ms)",
+    row_title="SERP position", col_title="Query intent",
+    title="Where searchers dwell, by position and intent",
+    out_path="examples/diagrams/heat-grid-dwell.svg",
+)
+```
+
+**Rows** is 3–7 labels and **cols** 3–8, each unique; `values[r][c]` is one non-negative number per crossing, or `None` for a missing measurement, drawn as a hatched cell that says "n/a" (never a blank that reads as zero). A ragged table raises, and so does a negative value: signed data needs a diverging treatment, which this generator does not draw. Cells are 116×56 with a 4px gap and narrow toward 80px as columns grow; row labels are end-anchored in a left margin sized by measurement, and column labels wrap to two lines before a cell widens.
+
+Fill opacity on a single ink ramp is the only quantity channel. Cells are quantized to the legend's stepped swatches, with bin edges rounded to 1/2/2.5/5 × 10ⁿ near `steps` (default 5), so the legend is the scale rather than an impression of it. The `focal` cell is **excluded from the scale max**, so an outlier cannot flatten the field; it gets an accent stroke, and its value is stated in the legend key and the `<desc>`. Every cell rect carries `data-row`, `data-col`, `data-value` (`"n/a"` when missing) and, on the focal cell, `data-focal="true"`, so the values can be recomputed from the file.
+
+**The contrast constraint.** With `show_values=True` each value is printed in ink or paper, whichever clears 8:1 on the *composited* fill. Ink and paper are only ~15:1 apart, so across the middle of any ink-on-paper ramp neither clears 8:1 — on the OLED default, roughly 0.25–0.75 opacity. The ramp ceiling is therefore solved per brand, as the highest opacity below which every fill keeps a legible text colour: about 0.25 on the default, which makes a quieter ramp. `show_values=False` takes the text off the fill and uses the full 0.07–0.70 range. Choose that when the pattern matters more than the numbers.
+
+**Why not `matrix`.** `matrix` is a named 2×2 categorical decomposition: four classes, each with a label and bullets, and no number. A heat grid is N×M cells each holding one measured value. Stretching `matrix` would give it a quantity channel with no honest scale.
+
+**Anti-prescriptions** (also in the docstring):
+
+- One row or one column is a bar chart: length beats opacity for comparing magnitudes. The generator refuses fewer than 3 of either.
+- If the reader needs exact values more than the pattern, use a table.
+- No hue per row or column, no diverging ramp for unsigned data, no gradient legend, no silently dropped rows or columns.
+
 ## Swimlane
 
 ```python
@@ -418,6 +453,7 @@ Both examples below render to `examples/diagrams/`:
 - [`layers-tcpip.svg`](../examples/diagrams/layers-tcpip.svg) — a 4-layer dependency stack with the Transport layer as the focal band and an "abstraction ↑" axis; the stack shape is honest because each layer genuinely depends on the one below.
 - [`funnel-q2.svg`](../examples/diagrams/funnel-q2.svg) — a proportional acquisition funnel; tier widths are driven by real counts (`proportional=True`), so the visual drop-off matches the `−%` annotations rather than faking a taper.
 - [`swimlane-release.svg`](../examples/diagrams/swimlane-release.svg) — a 4-lane release pipeline; same-lane steps connect with a muted arrow, cross-lane handoffs are drawn in the accent because the handoffs are the claim.
+- [`heat-grid-dwell.svg`](../examples/diagrams/heat-grid-dwell.svg) — mean fixation dwell by SERP position × query intent (**illustrative values, not measured data**); the focal cell sits outside the scale, and one crossing with no measurement is drawn as n/a.
 
 ## Mermaid in HTML — the zoom/pan/expand shell
 
