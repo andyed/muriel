@@ -93,7 +93,7 @@ def _rgba(hex_color: str, alpha: float) -> str:
 def _data_num(v) -> str:
     """A number as a ``data-*`` attribute value: integral floats lose ``.0``."""
     f = float(v)
-    return str(int(f)) if f.is_integer() and abs(f) < 1e15 else repr(f)
+    return str(int(f)) if float(f).is_integer() and abs(f) < 1e15 else repr(f)
 
 
 def _normalize(tiers) -> list[dict]:
@@ -325,7 +325,7 @@ def pyramid(
     if desc is None:
         def _fmt_v(v) -> str:
             v = float(v)
-            return f"{int(v):,}" if v.is_integer() else f"{v:,g}"
+            return f"{int(v):,}" if float(v).is_integer() else f"{v:,g}"
 
         tier_txt = []
         for l in norm:

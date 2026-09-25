@@ -561,7 +561,7 @@ def _slope(items, states, focal, scale, value_format, title, brand,
     # Round bounds print as integers ("0–40", not "0.0–40.0"); the unit
     # travels in parentheses so a format string's own suffix is not doubled.
     bfmt = (_formatter(None, [vmin, vmax])
-            if vmin.is_integer() and vmax.is_integer() else fmt)
+            if float(vmin).is_integer() and float(vmax).is_integer() else fmt)
     scale_txt = f"both axes: {bfmt(vmin)}–{bfmt(vmax)}"
     if unit:
         scale_txt += f" ({unit})"

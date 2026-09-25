@@ -123,6 +123,7 @@ def test_cycle_draws_named_icon_inside_a_wrapper(tmp_path):
 
 
 def test_cycle_icon_scales_from_brand_iconography(tmp_path):
+    pytest.importorskip("tomllib")  # brand.toml loading is 3.11+
     from muriel.styleguide import load_styleguide
     brand = load_styleguide(
         REPO / "plugins/muriel/skills/compose/examples/example-brand.toml")

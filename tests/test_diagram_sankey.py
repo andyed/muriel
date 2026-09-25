@@ -301,6 +301,7 @@ def test_diagram_check_is_clean(tmp_path):
 @pytest.mark.parametrize("toml", ["muriel-brand.toml", "example-brand.toml",
                                   "scrutinizer-brand.toml"])
 def test_brand_tokens_drive_colour(tmp_path, toml):
+    pytest.importorskip("tomllib")  # brand.toml loading is 3.11+
     from muriel.styleguide import load_styleguide
     brand = load_styleguide(Path(__file__).resolve().parents[1]
                             / "plugins/muriel/skills/compose/examples" / toml)

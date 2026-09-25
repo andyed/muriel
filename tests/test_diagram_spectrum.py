@@ -317,6 +317,7 @@ def test_adversarial_specs_pass_every_gate(tmp_path, name):
 
 
 def test_brand_tokens_are_used(tmp_path):
+    pytest.importorskip("tomllib")  # brand.toml loading is 3.11+
     from muriel.styleguide import load_styleguide
     brand = load_styleguide(Path(__file__).resolve().parents[1]
                             / "docs/examples/example-brand.toml")

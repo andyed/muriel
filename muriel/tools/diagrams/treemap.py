@@ -127,7 +127,7 @@ def _rgba(hex_color: str, alpha: float) -> str:
 
 def _default_fmt(v: float) -> str:
     v = float(v)
-    if v.is_integer():
+    if float(v).is_integer():
         return f"{int(v):,}"
     return f"{v:,.4g}" if abs(v) < 100 else f"{v:,.0f}"
 

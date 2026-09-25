@@ -145,7 +145,7 @@ def _rgba(hex_color: str, alpha: float) -> str:
 
 def _fmt(v: float) -> str:
     v = float(v)
-    return f"{int(v):,}" if v.is_integer() else f"{v:,g}"
+    return f"{int(v):,}" if float(v).is_integer() else f"{v:,g}"
 
 
 # ─── Validation ─────────────────────────────────────────────────────

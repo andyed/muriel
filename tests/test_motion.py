@@ -14,7 +14,10 @@ import unittest
 from pathlib import Path
 
 from muriel import motion
-from muriel.styleguide import Motion, load_styleguide
+try:  # styleguide reads brand.toml via tomllib (3.11+); the package supports 3.9
+    from muriel.styleguide import Motion, load_styleguide
+except ModuleNotFoundError:  # pragma: no cover - exercised on the 3.9 CI leg
+    Motion = load_styleguide = None
 from muriel.motion import (
     EXEMPTION_REASONS,
     REDUCE_POLICIES,
@@ -219,6 +222,7 @@ _DURATION_FIELDS = (
 _KNOWN_DEBT: dict = {}
 
 
+@unittest.skipIf(Motion is None, "styleguide needs tomllib (Python 3.11+)")
 class MotionTokenDefaults(unittest.TestCase):
     def test_old_defaults_gone_from_dataclass(self):
         m = Motion()

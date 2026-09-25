@@ -357,6 +357,7 @@ def test_accessible_contract_and_diagram_check(rendered):
 
 
 def test_diagram_check_with_a_brand(tmp_path):
+    pytest.importorskip("tomllib")  # brand.toml loading is 3.11+
     from muriel.styleguide import load_styleguide
     toml = (Path(__file__).resolve().parents[1]
             / "plugins/muriel/skills/compose/examples/muriel-brand.toml")

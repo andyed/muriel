@@ -1374,7 +1374,7 @@ wheels = [
 
 [[package]]
 name = "muriel"
-version = "0.7.0"
+version = "0.14.0"
 source = { editable = "." }
 
 [package.optional-dependencies]
