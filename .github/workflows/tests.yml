@@ -52,8 +52,15 @@ jobs:
           assert MURIEL_VERSION == declared, "provenance stamp drifted from pyproject"
           PY
 
+      # pytest, not `unittest discover`: discover only collects TestCase
+      # classes, so the plain-function suites (test_diagram_labels,
+      # test_patterns, and every diagram gate added since) reported 0 tests
+      # and CI stayed green without running them. pytest runs both styles.
       - name: unit tests
-        run: python -m unittest discover -s tests -t tests -p "test_*.py" -v
+        run: python -m pytest tests -v
+
+      - name: committed diagram examples are current
+        run: python scripts/render_diagram_examples.py --check
 
       - name: package builds
         run: |

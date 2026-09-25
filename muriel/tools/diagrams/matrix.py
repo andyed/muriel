@@ -25,6 +25,7 @@ from html import escape
 from pathlib import Path
 from typing import Optional, Sequence, Union
 
+from ._a11y import default_desc, figure_slug, svg_open
 from ._labels import (
     RATIO_SANS,
     RATIO_SANS_BOLD,
@@ -114,6 +115,7 @@ def matrix(
     out_path: Union[str, Path] = "matrix.svg",
     width: int = 900,
     height: int = 700,
+    desc: Optional[str] = None,
 ) -> str:
     """Render a 2×2 categorical decomposition.
 
@@ -132,7 +134,12 @@ def matrix(
     brand
         Optional ``muriel.styleguide.StyleGuide`` for colors + typography.
     out_path
-        Where to write the SVG.
+        Where to write the SVG. Its stem also prefixes the accessible
+        ``<title>``/``<desc>`` ids.
+    desc
+        What the figure argues, for the SVG ``<desc>`` a screen reader
+        announces. Defaults to a conservative description built from the
+        title and the element labels — it states no claim of its own.
 
     Returns
     -------
@@ -207,10 +214,21 @@ def matrix(
     cell_h = grid_h / 2
 
     parts: list[str] = []
-    parts.append(
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
-        f'width="{width}" height="{height}" font-family="{escape(t["body_font"])}">'
-    )
+    if desc is None:
+        desc = default_desc(
+            "2×2 matrix", title,
+            [f"horizontal axis from {x_low} to {x_high}",
+             f"vertical axis from {y_low} to {y_high}",
+             "quadrants, top-left, top-right, bottom-left, bottom-right: "
+             + "; ".join(
+                 c["label"] + (f" ({', '.join(c['items'])})" if c["items"] else "")
+                 for c in cells)])
+    parts.append(svg_open(
+        width=width, height=height,
+        slug=figure_slug(out_path, "matrix"),
+        title=title or "2×2 matrix", desc=desc,
+        attrs=f'font-family="{escape(t["body_font"])}"',
+    ))
     parts.append(f'<rect width="{width}" height="{height}" fill="{t["bg"]}"/>')
 
     # Title
@@ -354,6 +372,7 @@ def _main(argv=None) -> int:
         title=spec.get("title"),
         brand=brand,
         out_path=args.output,
+        desc=spec.get("desc"),
     )
     print(f"→ {args.output}")
     return 0

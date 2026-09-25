@@ -142,56 +142,19 @@ def test_verifier_does_not_flag_a_label_beside_or_above_a_shape():
 # ─── Non-regression: committed examples are untouched ───────────────
 
 def _render_examples(tmp_path):
-    """Every committed example, re-rendered from its own spec."""
-    return {
-        "swimlane-release.svg": swimlane(
-            ["PM", "Engineering", "QA", "Release"],
-            [{"label": "Write spec", "lane": "PM"},
-             {"label": "Implement", "lane": "Engineering"},
-             {"label": "Review PR", "lane": "Engineering"},
-             {"label": "Test build", "lane": "QA", "focal": True},
-             {"label": "Sign off", "lane": "PM"},
-             {"label": "Ship", "lane": "Release"}],
-            title="Release pipeline",
-            out_path=tmp_path / "swimlane-release.svg"),
-        "layers-tcpip.svg": layer_stack(
-            [{"label": "Application", "tag": "L4", "note": "HTTP, DNS, TLS"},
-             {"label": "Transport", "tag": "L3", "note": "TCP, UDP",
-              "focal": True},
-             {"label": "Internet", "tag": "L2", "note": "IP, ICMP"},
-             {"label": "Link", "tag": "L1", "note": "Ethernet, Wi-Fi"}],
-            title="The TCP/IP stack", axis_label="abstraction", axis_dir="up",
-            out_path=tmp_path / "layers-tcpip.svg"),
-        "funnel-q2.svg": pyramid(
-            [{"label": "Visitors", "sublabel": "all sessions",
-              "value": 100000},
-             {"label": "Signups", "value": 24000, "annotation": "−76%"},
-             {"label": "Activated", "value": 9000, "annotation": "−62%"},
-             {"label": "Paid", "value": 2083, "annotation": "−77%"}],
-            orientation="down", proportional=True, axis_label="drop-off",
-            title="Acquisition funnel — Q2",
-            out_path=tmp_path / "funnel-q2.svg"),
-        "cycle-evolver.svg": cycle(
-            ["Learns", "Executes", "Evaluates", "Hypothesizes", "Tests"],
-            center="Evolver's\nimprovement\ncycle",
-            out_path=tmp_path / "cycle-evolver.svg"),
-        "matrix-sat-opt.svg": matrix(
-            [{"label": "OPTIMIZER",
-              "items": ["Long, focused dwells", "Targeted re-reads",
-                        "Cognitive load rises with rank"]},
-             {"label": "OPTIMIZER + LOAD",
-              "items": ["Position 1-3 of dense SERP",
-                        "Sustained pupil dilation", "Slow click latency"]},
-             {"label": "SATISFICER",
-              "items": ["Quick scans", "Early commitments",
-                        "Low pupil reactivity"]},
-             {"label": "SATISFICER + LOAD",
-              "items": ["Conflict signals", "Re-reads without resolution",
-                        "Premature exit"]}],
-            axes=(("low LF/HF", "high LF/HF"), ("satisficer", "optimizer")),
-            title="Sat/opt × LF/HF — orthogonal axes",
-            out_path=tmp_path / "matrix-sat-opt.svg"),
-    }
+    """Every committed example, re-rendered from its own spec.
+
+    The specs live in ``scripts/render_diagram_examples.py`` — the script
+    that regenerates the committed files — so the test and the regenerator
+    cannot disagree about what an example is.
+    """
+    import importlib.util
+
+    script = Path(__file__).resolve().parents[1] / "scripts/render_diagram_examples.py"
+    spec = importlib.util.spec_from_file_location("_render_diagram_examples", script)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.render_examples(tmp_path)
 
 
 @pytest.mark.parametrize("name", [
@@ -204,7 +167,8 @@ def test_committed_example_is_byte_identical(tmp_path, name):
     committed = (EXAMPLES / name).read_text(encoding="utf-8")
     assert rendered == committed, (
         f"{name} changed. Either a growth rule fired on a diagram that "
-        f"already fit, or the example needs regenerating on purpose."
+        f"already fit, or the example needs regenerating on purpose "
+        f"(python3 scripts/render_diagram_examples.py)."
     )
 
 

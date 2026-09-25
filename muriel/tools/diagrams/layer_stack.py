@@ -34,6 +34,7 @@ from html import escape
 from pathlib import Path
 from typing import Optional, Union
 
+from ._a11y import default_desc, figure_slug, legible_on, svg_open
 from ._labels import RATIO_MONO, RATIO_SANS_BOLD, grow_to_fit, text_width
 
 __all__ = ["layer_stack"]
@@ -111,6 +112,7 @@ def layer_stack(
     axis_dir: str = "up",
     out_path: Union[str, Path] = "layer-stack.svg",
     width: int = 1000,
+    desc: Optional[str] = None,
 ) -> str:
     """Render a 4–6 layer dependency stack.
 
@@ -139,7 +141,12 @@ def layer_stack(
     brand
         Optional ``muriel.styleguide.StyleGuide``.
     out_path
-        Where to write the SVG.
+        Where to write the SVG. Its stem also prefixes the accessible
+        ``<title>``/``<desc>`` ids.
+    desc
+        What the figure argues, for the SVG ``<desc>`` a screen reader
+        announces. Defaults to a conservative description built from the
+        title and the element labels — it states no claim of its own.
 
     Returns
     -------
@@ -209,10 +216,20 @@ def layer_stack(
     cx       = width / 2
 
     parts: list[str] = []
-    parts.append(
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
-        f'width="{width}" height="{height}" font-family="{escape(t["body_font"])}">'
-    )
+    if desc is None:
+        desc = default_desc(
+            f"Layer stack with {len(norm)} layers", title,
+            ["top to bottom: " + ", ".join(
+                (f"{l['tag']} " if l["tag"] else "") + l["label"]
+                + (f" ({l['note']})" if l["note"] else "")
+                for l in norm),
+             (f"axis: {axis_label}, pointing {axis_dir}" if axis_label else "")])
+    parts.append(svg_open(
+        width=width, height=height,
+        slug=figure_slug(out_path, "layer-stack"),
+        title=title or "Layer stack", desc=desc,
+        attrs=f'font-family="{escape(t["body_font"])}"',
+    ))
     parts.append(
         f'<defs><marker id="ls-arrow" markerWidth="8" markerHeight="8" '
         f'refX="4" refY="7" orient="auto" markerUnits="strokeWidth">'
@@ -240,11 +257,18 @@ def layer_stack(
             f'<rect x="{band_x}" y="{by:.1f}" width="{band_w}" height="{band_h}" '
             f'fill="{fill}" stroke="{stroke}" stroke-width="{sw}"/>'
         )
+        # Text colours are chosen against the band they sit on. The focal
+        # band is tinted, so a muted token that clears 8:1 on the page can
+        # drop under it there (the default palette's muted note measured
+        # 7.58:1 on the focal band); step up to ink when that happens.
+        tag_fill = legible_on(
+            [t["accent"] if is_focal else t["muted"], t["ink"]], fill, t["bg"])
+        note_fill = legible_on([t["muted"], t["ink"]], fill, t["bg"])
         # Index tag (mono eyebrow, far left inside band)
         if l["tag"]:
             parts.append(
                 f'<text x="{band_x + edge_pad}" y="{mid + 4:.1f}" '
-                f'fill="{t["accent"] if is_focal else t["muted"]}" '
+                f'fill="{tag_fill}" '
                 f'font-family="{_MONO}" font-size="10" letter-spacing="1.5" '
                 f'text-anchor="start">{escape(str(l["tag"]).upper())}</text>'
             )
@@ -259,7 +283,7 @@ def layer_stack(
         if l["note"]:
             parts.append(
                 f'<text x="{band_x + band_w - edge_pad}" y="{mid + 4:.1f}" '
-                f'fill="{t["muted"]}" font-family="{_MONO}" font-size="10" '
+                f'fill="{note_fill}" font-family="{_MONO}" font-size="10" '
                 f'text-anchor="end">{escape(l["note"])}</text>'
             )
 
@@ -332,6 +356,7 @@ def _main(argv=None) -> int:
         axis_label=spec.get("axis_label"),
         axis_dir=spec.get("axis_dir", "up"),
         out_path=args.output,
+        desc=spec.get("desc"),
     )
     print(f"→ {args.output}")
     return 0

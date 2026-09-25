@@ -22,7 +22,11 @@ Catalog (MVP):
                                                   (the engine's sampling layout).
 
 All write self-contained SVG, accept an optional ``StyleGuide``, and
-fall back to muriel's OLED palette. Output is hand-rolled SVG (no
+fall back to muriel's OLED palette. Every one writes the accessible-figure
+contract (``role="img"``, slug-prefixed ``<title>``/``<desc>`` named by
+``aria-labelledby``; see ``_a11y``) and takes ``desc=`` for what the figure
+argues. ``muriel diagram-check`` (``check.py``) is the read-back gate:
+a11y lint, label geometry, 8:1 contrast. Output is hand-rolled SVG (no
 ``svgwrite`` dependency) for transparency: the file you ship is the
 file the agent wrote.
 """

@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="cycle-evolver-title cycle-evolver-desc" viewBox="0 0 900 700" width="900" height="700" font-family="ui-sans-serif, -apple-system, system-ui, sans-serif">
+<title id="cycle-evolver-title">Cycle</title>
+<desc id="cycle-evolver-desc">Clockwise cycle with 5 steps. Steps in order: Learns, Executes, Evaluates, Hypothesizes, Tests; centre: Evolver's improvement cycle.</desc>
 <defs><marker id="cycle-arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="#7dd4e4"/></marker></defs>
 <rect width="900" height="700" fill="#0a0a0f"/>
 <path d="M 492.1 130.0 A 224.0 224.0 0 0 1 646.2 242.0" fill="none" stroke="rgba(125, 212, 228, 0.45)" stroke-width="1.5" marker-end="url(#cycle-arrow)"/>

@@ -52,8 +52,12 @@ def test_wavefield_svg_is_accessible_viewbox_first_and_themeable():
 
     assert svg.startswith('<svg xmlns="http://www.w3.org/2000/svg" role="img"')
     assert 'viewBox="0 0 640 360"' in svg
-    assert "<title>Signal &amp; uncertainty</title>" in svg
-    assert "<desc>Two normalized bands.</desc>" in svg
+    assert '<title id="signal-uncertainty-title">Signal &amp; uncertainty</title>' in svg
+    assert '<desc id="signal-uncertainty-desc">Two normalized bands.</desc>' in svg
+    assert 'aria-labelledby="signal-uncertainty-title signal-uncertainty-desc"' in svg
+
+    from muriel.tools.diagrams._a11y import lint_a11y
+    assert lint_a11y(svg) == []
     assert "var(--mg-bg, #0a0a14)" in svg
     assert "var(--mg-accent, #7fdfff)" in svg
     assert svg.count('data-source="generated"') == 2
