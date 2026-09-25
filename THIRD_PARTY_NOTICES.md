@@ -90,6 +90,13 @@ Two verification ideas were adapted from the same repository (upstream commit
   constancy, relative value fidelity, square-on arrival). Bars are not rounded
   to the 4px grid, sub-4px flows raise rather than fold, and ribbons are
   written as flattened polylines so the contrast audit can score the labels.
+- **Tree** — `muriel/tools/diagrams/dendrogram.py` takes its node proportions
+  (120–180 × 40–52, at most two widths), the orthogonal elbow-bus connectors
+  drawn before the nodes, the 4-level / 5-children budget, the no-skipped-levels
+  rule and the single accent on the root or one critical leaf from
+  `references/type-tree.md`. The contour-based tidy-tree placement, the
+  measured leaf-extent budget, `collapse_over`, and the DAG / treemap / process
+  routing gates are muriel's.
 - **Comparison heat-grid** — `muriel/tools/diagrams/heat_grid.py` takes its
   cell geometry (116×56, 4px gap, 80px minimum width), the 3–7 row / 3–8 column
   budget, the single ink ramp with a single accent focal cell excluded from the

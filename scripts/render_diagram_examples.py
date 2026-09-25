@@ -28,6 +28,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
 from muriel.tools.diagrams.cycle import cycle  # noqa: E402
+from muriel.tools.diagrams.dendrogram import dendrogram  # noqa: E402
 from muriel.tools.diagrams.heat_grid import heat_grid  # noqa: E402
 from muriel.tools.diagrams.layer_stack import layer_stack  # noqa: E402
 from muriel.tools.diagrams.matrix import matrix  # noqa: E402
@@ -150,6 +151,25 @@ def render_examples(out_dir: Path) -> dict[str, str]:
                   "knowledge panel, related searches, navigation and "
                   "pagination share the remaining quarter."),
             out_path=out_dir / "treemap-serp.svg"),
+        "dendrogram-eye-movements.svg": dendrogram(
+            {"label": "Eye-movement events", "sublabel": "oculomotor record",
+             "children": [
+                 {"label": "Fixation", "sublabel": "gaze held", "children": [
+                     {"label": "Microsaccade", "focal": True},
+                     "Drift", "Tremor"]},
+                 {"label": "Saccade", "sublabel": "ballistic shift",
+                  "children": ["Reflexive", "Volitional"]},
+                 {"label": "Smooth pursuit", "sublabel": "tracks a target",
+                  "children": ["Open-loop", "Closed-loop"]},
+                 {"label": "Blink", "sublabel": "lid closure",
+                  "children": ["Spontaneous", "Reflex", "Voluntary"]}]},
+            title="Eye-movement events",
+            desc=("Taxonomy of eye-movement events in four classes: fixation, "
+                  "saccade, smooth pursuit and blink, each split into its "
+                  "subtypes. Fixation is not stillness: it contains three "
+                  "movements of its own, microsaccades, drift and tremor, and "
+                  "the microsaccade is the event under discussion."),
+            out_path=out_dir / "dendrogram-eye-movements.svg"),
         "heat-grid-dwell.svg": heat_grid(
             ["Position 1", "Position 2", "Position 3", "Position 4",
              "Position 5", "Position 6–10"],

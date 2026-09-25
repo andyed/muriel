@@ -13,6 +13,7 @@ import pytest
 
 from muriel.tools.diagrams import (
     cycle,
+    dendrogram,
     engine_sectors_overlay,
     foveal_overlay,
     heat_grid,
@@ -79,6 +80,12 @@ GENERATORS = {
     "swimlane": lambda out: swimlane(
         ["A", "B"], [{"label": "go", "lane": "A"}, {"label": "stop", "lane": "B"}],
         out_path=out),
+    "dendrogram": lambda out: dendrogram(
+        {"label": "Root", "children": [{"label": "A", "children": ["a1", "a2"]},
+                                       "B"]}, out_path=out),
+    "dendrogram_right": lambda out: dendrogram(
+        {"label": "Root", "children": ["A", "B", "C"]},
+        orientation="right", collapse_over=2, title="Tree", out_path=out),
     "foveal_overlay_l1": lambda out: foveal_overlay(verbosity=1, out_path=out),
     "foveal_overlay_l3": lambda out: foveal_overlay(verbosity=3, out_path=out),
     "engine_sectors_l1": lambda out: engine_sectors_overlay(verbosity=1, out_path=out),

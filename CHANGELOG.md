@@ -25,6 +25,16 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   label tiers (large / medium / small / sliver) with a legend for every part
   whose value is not printed in place. Never clips, floors, rotates, resizes
   for a label, or drops a cell. Example: `examples/diagrams/treemap-serp.svg`.
+- **`dendrogram`: tree / hierarchy diagram generator.**
+  `muriel.tools.diagrams.dendrogram(tree, orientation="down"|"right", …)`
+  draws a nested `{label, sublabel, focal, children}` tree as a contour-based
+  tidy tree: parents centred on their first and last child, no subtree
+  overlap, ranks evenly spaced and never skipped, at most two box widths, and
+  elbow-bus connectors with no diagonals. Budget is 4 levels, 5 children per
+  node and a measured leaf-axis extent; `collapse_over=` folds overflow
+  siblings into a `+N more` node. A node shared by two parents raises (use
+  `dag`), and so does a tree that never branches. Nodes carry `data-depth`.
+  Example: `dendrogram-eye-movements.svg`.
 
 - **`heat_grid`: comparison heat-grid diagram generator.**
   `muriel.tools.diagrams.heat_grid(rows, cols, values, …)` draws 3–7 × 3–8
