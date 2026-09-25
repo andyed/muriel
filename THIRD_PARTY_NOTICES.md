@@ -73,6 +73,15 @@ Two verification ideas were adapted from the same repository (upstream commit
   test in `agents/muriel-critique.md`, paraphrase `references/semantic-patterns.md`,
   `references/output-spec.md`, `references/primitive-annotation.md`, and the
   skill's SKILL.md.
+- **Comparison heat-grid** — `muriel/tools/diagrams/heat_grid.py` takes its
+  cell geometry (116×56, 4px gap, 80px minimum width), the 3–7 row / 3–8 column
+  budget, the single ink ramp with a single accent focal cell excluded from the
+  scale, the 0.07 ramp floor and 0.70 ceiling, and the don'ts (hue per row,
+  diverging ramp for unsigned data, gradient legend, dropped rows) from
+  `references/type-heatmap.md`. `tests/test_diagram_heat_grid.py` follows
+  `scripts/verify-heatmap.py`'s `data-row` / `data-col` / `data-value` binding
+  and monotone-fill check (±0.03). The per-brand ramp-ceiling solve for 8:1
+  value labels, the quantized stepped legend and the n/a cells are muriel's.
 
 The code is muriel's own (ElementTree rather than the source's `HTMLParser`,
 and wired into `muriel diagram-check`); no source files were copied.
