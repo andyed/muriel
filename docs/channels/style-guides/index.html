@@ -2081,9 +2081,9 @@
 <a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>
 <a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a><span class="c1"># ── Motion ──</span>
 <a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a><span class="k">[motion]</span>
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a><span class="n">duration_fast</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">120</span>
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a><span class="n">duration_normal</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">240</span>
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a><span class="n">duration_slow</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">480</span>
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a><span class="n">duration_fast</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="w">    </span><span class="c1"># utility transition</span>
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a><span class="n">duration_normal</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="w">    </span><span class="c1"># the binary has no middle</span>
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a><span class="n">duration_slow</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">1500</span><span class="w">   </span><span class="c1"># cinematic</span>
 <a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a><span class="n">easing_default</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s2">"cubic-bezier(0.2, 0.0, 0.2, 1.0)"</span>
 <a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a><span class="n">easing_emphasis</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s2">"cubic-bezier(0.4, 0.0, 0.2, 1.0)"</span>
 <a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a><span class="n">motion_preference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"respect-prefers-reduced-motion"</span>
@@ -2123,7 +2123,7 @@
 <a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a><span class="n">min_hit_target_px</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">44</span>
 <a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a><span class="n">focus_ring_color</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">"accent_ink"</span><span class="w">   </span><span class="c1"># raw-name, hex, or [colors.named] key</span>
 <a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a><span class="n">focus_ring_width_px</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
-<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a><span class="n">motion_reduce_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"collapse-to-zero"</span>
+<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a><span class="n">motion_reduce_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"collapse-to-zero"</span><span class="w">   </span><span class="c1"># | "keep-fast" (alias "reduce") | "keep-linear"</span>
 <a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>
 <a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a><span class="c1"># ── Ownership rules ──</span>
 <a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a><span class="k">[rules]</span>
@@ -2163,7 +2163,7 @@
 <a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="n">sg</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">"high"</span><span class="p">]</span>                        <span class="c1"># → '0 18px 56px rgba(0,0,0,0.60)'</span>
 <a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>
 <a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="c1"># Motion</span>
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="n">sg</span><span class="o">.</span><span class="n">motion</span><span class="o">.</span><span class="n">duration_normal</span>                   <span class="c1"># → 240</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="n">sg</span><span class="o">.</span><span class="n">motion</span><span class="o">.</span><span class="n">duration_normal</span>                   <span class="c1"># → 100</span>
 <a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="n">sg</span><span class="o">.</span><span class="n">motion</span><span class="o">.</span><span class="n">easing_default</span>                    <span class="c1"># → 'cubic-bezier(0.2, 0.0, 0.2, 1.0)'</span>
 <a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>
 <a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="c1"># Iconography / imagery</span>

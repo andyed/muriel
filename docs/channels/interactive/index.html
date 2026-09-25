@@ -2406,21 +2406,37 @@ compares fixed midpoint SVG stacks with an adaptive carrier: a vendored Pretext
 for Pot Luck.</p>
 <h2 id="sci-fi-ui-fui-patterns">Sci-fi UI (FUI) patterns<a class="headerlink" href="#sci-fi-ui-fui-patterns" title="Permanent link">&para;</a></h2>
 <p>When the output wants to feel like telemetry — live stats, mission clocks, bearing readouts, signal traces — reach for the FUI vocabulary. The full grammar, substrate decision table, and common-failure list live in <a href="../../vocabularies/fui/"><code>vocabularies/fui.md</code></a>; this section is the interactive-channel seam.</p>
+<p>A circular silhouette is not automatically a radial menu. Before rendering a
+ring-heavy FUI, declare what angle, radius, centre, each ring, and each motion
+mean. Load
+<a href="../references/annular-interfaces.md"><code>references/annular-interfaces.md</code></a> for the
+shared polar contract and its distinction between directional commands, sensor
+plots, gauges, cyclic timelines, hierarchies, and reticles. Load the stricter
+<a href="../references/radial-menus.md"><code>references/radial-menus.md</code></a> only when sectors
+are commands.</p>
 <p><strong>Canonical stack</strong> (lifted from the vocabulary's substrate decision):</p>
 <ul>
 <li><strong>HTML + CSS Grid</strong> for layout and text, with <code>font-variant-numeric: tabular-nums</code> on any changing digits.</li>
 <li><strong>SVG</strong> for thin-stroke geometry — compass rings, corner brackets, grid overlays, leader lines.</li>
 <li><strong>Canvas2D + rAF</strong> for tickers, waveforms, and anything that re-draws per frame.</li>
 <li><strong>CSS <code>repeating-linear-gradient</code></strong> for scan-line overlays; <strong>WebGL2 fragment shader</strong> if the post-process needs to vary spatially (glitch, chromatic aberration).</li>
-<li>Motion from muriel's brand tokens: <code>--mg-duration-reveal</code>, <code>--mg-ease-emphasis</code>, plus a project-local <code>--mg-stagger</code> (80–200ms).</li>
+<li>Motion from muriel's brand tokens: <code>--mg-duration-reveal</code>, <code>--mg-ease-emphasis</code>, plus a project-local <code>--mg-stagger</code> (100 ms).</li>
 </ul>
 <p><strong>Runnable scaffold: <a href="../../examples/fui-scaffold.html"><code>examples/fui-scaffold.html</code></a>.</strong> Open in a browser. Single file, no build. Four primitives on one screen:</p>
 <ol>
 <li><strong>Data ticker</strong> — rAF counter with leading zeros, mission clock, packet hex.</li>
 <li><strong>Radial compass</strong> — SVG rings + 36 tick marks + rotating needle.</li>
 <li><strong>Canvas waveform</strong> — scrolling signal trace with RMS/peak readouts.</li>
-<li><strong>Staggered reveal</strong> — CSS animation across the four blocks at 120ms intervals.</li>
+<li><strong>Staggered reveal</strong> — CSS animation across the four blocks at 100 ms intervals.</li>
 </ol>
+<p><strong>Runnable circular-instrument case:
+<a href="../../examples/annular-fui-console.html"><code>examples/annular-fui-console.html</code></a>.</strong>
+Angle is bearing, radius is range, and the centre is a simulated sensor origin.
+The SVG polar plot and HTML contact list share one deterministic record set;
+pointer hover previews, click pins, keyboard steps by declared bearing/range
+semantics, and the phone view promotes the linear equivalent when embedded SVG
+labels would fall below the physical type floor. The sweep is sampling feedback,
+not a control or ambient animation.</p>
 <p>Corner brackets via <code>::before</code> / <code>::after</code>. Scan-line overlay via <code>repeating-linear-gradient</code>. <code>prefers-reduced-motion</code> fallback baked in. Every text element clears 8:1 against <code>#0a0a0f</code>. Swap the four CSS custom properties at the top for a brand's palette and the composition inherits.</p>
 <p><strong>CodePen Prefill the scaffold</strong> to hand readers a live fork — see the Prefill API section above. Useful when a blog post describes a FUI primitive; one click and the reader is in a live editor.</p>
 <h2 id="lessons-from-past-projects">Lessons from past projects<a class="headerlink" href="#lessons-from-past-projects" title="Permanent link">&para;</a></h2>

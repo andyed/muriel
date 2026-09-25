@@ -1024,6 +1024,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Visual grammar">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#circular-grammar-is-semantic-not-a-skin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circular grammar is semantic, not a skin
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1812,10 +1829,31 @@
 <li><strong>Leader lines</strong> — thin diagonal strokes from a data point to a typographic callout, like an engineering drawing.</li>
 <li><strong>Scan lines</strong> — subtle horizontal-line texture across the frame (~3% opacity, 2px period). Optional chromatic aberration for CRT nostalgia.</li>
 <li><strong>Data tickers</strong> — live-updating numbers, <code>requestAnimationFrame</code>-driven counters that roll or flicker between values.</li>
-<li><strong>Animated reveals</strong> — elements fade / translate / scale in with staggered 80–200ms delays, not instantly. <code>cubic-bezier(0.4, 0, 0.2, 1)</code> for the "precise machinery" feel; this is muriel's <code>--mg-ease-emphasis</code>.</li>
+<li><strong>Animated reveals</strong> — elements fade / translate / scale in with a 100 ms stagger between elements, not instantly (the stagger is a hold, start to start; <code>muriel.motion</code> exempts holds from the duration binary). <code>cubic-bezier(0.4, 0, 0.2, 1)</code> for the "precise machinery" feel; this is muriel's <code>--mg-ease-emphasis</code>.</li>
 <li><strong>Restrained palette</strong> — one dominant accent hue (cyan, amber, red) on near-black. Matches the universal OLED rule.</li>
 <li><strong>Glitch / noise accents</strong> — used as <em>punctuation</em>, never as ambient texture.</li>
 </ul>
+<h3 id="circular-grammar-is-semantic-not-a-skin">Circular grammar is semantic, not a skin<a class="headerlink" href="#circular-grammar-is-semantic-not-a-skin" title="Permanent link">&para;</a></h3>
+<p>The circular displays associated with FUI do not share one interaction model.
+Use <strong>ring</strong>, <strong>pie</strong>, or <strong>radial menu</strong> only when direction selects a command.
+A bearing/range instrument, cyclic timeline, annular gauge, hierarchy, and
+reticle may look related while making different claims.</p>
+<p>Before adding concentric geometry, declare:</p>
+<ul>
+<li>what angle means and where zero sits;</li>
+<li>what radius means and whether area is perceptually relevant;</li>
+<li>what the centre represents;</li>
+<li>the source, update cadence, and interaction of each ring; and</li>
+<li>a linear equivalent for exact reading, accessibility, and narrow screens.</li>
+</ul>
+<p>Keep data paths and hit paths stable while state paint and scan feedback move.
+A sweep belongs to sampling phase; a pulse belongs to a sample or alarm; a
+trail belongs to a named history window. If a moving ring has no owner, remove
+it. Load
+<a href="../references/annular-interfaces.md"><code>references/annular-interfaces.md</code></a> for
+the full shared contract and its two worked cases. Load
+<a href="../references/radial-menus.md"><code>references/radial-menus.md</code></a> for the specialized
+command-selector compositor.</p>
 <h2 id="substrate-decision">Substrate decision<a class="headerlink" href="#substrate-decision" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1861,7 +1899,7 @@
 <li><strong>Decorative strokes below 55/255.</strong> Muriel's universal rule: decorative elements need ≥55/255 on a dark background or they vanish on small screens. Thin-stroke grids at 10% opacity look right on a 5K display and disappear on a phone.</li>
 <li><strong>SDF text alpha fades.</strong> Never modulate alpha on Troika/BMFont SDF text — it breaks distance-field antialiasing. Cross-fade via RGB tween or scale instead. (See <a href="../kinetic-typography/"><code>vocabularies/kinetic-typography.md</code></a> for the canonical phrasing.)</li>
 <li><strong>Fake data that reads as fake.</strong> <code>Lorem 0923.88.Ipsum</code> is worse than <code>████</code>. Stylized blanks commit to being blanks; Lorem-style placeholders read as lazy worldbuilding.</li>
-<li><strong>Everything animating at once.</strong> If the reveal stagger collapses to zero, the composition reads as a pop-in, not as machinery waking up. Keep 80–200ms gaps between elements.</li>
+<li><strong>Everything animating at once.</strong> If the reveal stagger collapses to zero, the composition reads as a pop-in, not as machinery waking up. Keep a 100 ms stagger between elements.</li>
 <li><strong>Chrome without content.</strong> Corner brackets, scan lines, and thin-stroke grids don't substitute for information. A FUI block with nothing to say is a cosplay prop.</li>
 <li><strong>Contrast drift mid-animation.</strong> A reveal that tweens from <code>opacity: 0</code> passes through low-contrast states for several frames. If it dips below 8:1 for more than a frame on readable text, fix by tweening translate/scale instead.</li>
 </ul>
@@ -1871,10 +1909,17 @@
 <li><strong>Data ticker</strong> — <code>rAF</code>-driven counter with leading zeros, mission clock, packet hex, all tabular-nums.</li>
 <li><strong>Radial compass</strong> — SVG thin-stroke rings, 36 tick marks (every 9th longer for cardinals), rotating needle bound to time.</li>
 <li><strong>Canvas waveform</strong> — scrolling signal trace with RMS/peak readouts; shows how Canvas2D and SVG coexist inside the same HUD block.</li>
-<li><strong>Staggered reveal</strong> — CSS animation using muriel's <code>--mg-duration-reveal</code> and <code>--mg-ease-emphasis</code> tokens with <code>--mg-stagger: 120ms</code> between blocks.</li>
+<li><strong>Staggered reveal</strong> — CSS animation using muriel's <code>--mg-duration-reveal</code> and <code>--mg-ease-emphasis</code> tokens with <code>--mg-stagger: 100ms</code> between blocks.</li>
 </ol>
 <p>Also demonstrates: corner brackets via <code>::before</code>/<code>::after</code>, scan-line overlay via <code>repeating-linear-gradient</code>, <code>prefers-reduced-motion</code> fallback, 8:1 contrast on every text element, brand-token CSS custom properties (overridable from a <code>StyleGuide.to_css_vars()</code> drop-in).</p>
 <p>Open it directly in a browser: <code>open examples/fui-scaffold.html</code> (macOS) or the equivalent.</p>
+<p><strong><a href="../../examples/annular-fui-console.html"><code>examples/annular-fui-console.html</code></a></strong> is
+the second circular-interface case after the radial command selector. Its
+deterministic simulated sensor records map bearing to angle and range to radius;
+confidence, trails, range gates, and the scan sweep retain distinct layer roles.
+The same records feed a keyboard- and touch-safe linear contact list, proving
+that FUI grammar can remain legible and accessible without pretending every
+ring is a menu.</p>
 <h2 id="reference-archives">Reference archives<a class="headerlink" href="#reference-archives" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://fuidesign.com/">fuidesign.com</a> — Ash Thorp's curated showcase.</li>

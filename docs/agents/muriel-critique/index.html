@@ -1641,6 +1641,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="2. Channel rules + anti-patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diagram-checks-channel-diagrams-or-any-node-link-figure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagram checks (channel diagrams, or any node-link figure)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -1940,7 +1957,7 @@
 <ul>
 <li><strong><code>artifact</code></strong> — a path to a PNG / JPG / SVG / PDF. Always required. Read it via Read.</li>
 <li><strong><code>brand</code></strong> (optional) — path to a <code>brand.toml</code>. If present, read it and audit tokens.</li>
-<li><strong><code>channel</code></strong> (optional) — the name of a muriel channel (<code>raster</code>, <code>svg</code>, <code>web</code>, <code>interactive</code>, <code>video</code>, <code>terminal</code>, <code>heatmaps</code>, <code>gaze</code>, <code>science</code>, <code>dimensions</code>, <code>style-guides</code>). If present, read the corresponding <code>muriel/channels/&lt;channel&gt;.md</code> and apply its rules + anti-patterns.</li>
+<li><strong><code>channel</code></strong> (optional) — the name of a muriel channel (<code>raster</code>, <code>svg</code>, <code>diagrams</code>, <code>web</code>, <code>interactive</code>, <code>video</code>, <code>terminal</code>, <code>heatmaps</code>, <code>gaze</code>, <code>science</code>, <code>dimensions</code>, <code>style-guides</code>). If present, read the corresponding <code>muriel/channels/&lt;channel&gt;.md</code> and apply its rules + anti-patterns.</li>
 <li><strong><code>universal_rules_path</code></strong> (optional, default <code>muriel/SKILL.md</code>) — the universal rules document. Read it first.</li>
 </ul>
 <p>If paths are relative, resolve them against the current working directory. Use Glob to confirm paths exist before reading.</p>
@@ -2020,13 +2037,24 @@
 <h3 id="2-channel-rules-anti-patterns">2. Channel rules + anti-patterns<a class="headerlink" href="#2-channel-rules-anti-patterns" title="Permanent link">&para;</a></h3>
 <p>If <code>channel</code> is supplied, read <code>muriel/channels/&lt;channel&gt;.md</code>. Every bullet in the channel's <code>## Anti-patterns</code> section is a testable assertion. Run through them. Every <code>## Rules</code> or <code>## Patterns</code> bullet that maps onto a visible property is also a check.</p>
 <p>If <code>channel</code> is not supplied, infer the most likely channel from the artifact's aspect ratio, content type, and filename; read that channel's doc; state your inferred channel in the output.</p>
+<h4 id="diagram-checks-channel-diagrams-or-any-node-link-figure">Diagram checks (channel <code>diagrams</code>, or any node-link figure)<a class="headerlink" href="#diagram-checks-channel-diagrams-or-any-node-link-figure" title="Permanent link">&para;</a></h4>
+<p>Run these on every diagram, including Mermaid renders and hand-drawn SVG. Rules live in <code>channels/diagrams.md</code> — cite the section.</p>
+<ul>
+<li><strong>Per-element removal test</strong> (Tufte, data-ink). For each node, arrow, and label, ask: would the reader lose anything if it were gone? Report each that fails:</li>
+<li>two nodes that always appear together, never separately → <strong>merge</strong> (<code>MEDIUM</code>);</li>
+<li>an arrow whose relationship the layout already states — adjacency, lane order, stacking → <strong>drop</strong> (<code>LOW</code>);</li>
+<li>a label that restates what shape or colour already signals → <strong>drop</strong> (<code>LOW</code>).
+  Name the specific element in the Evidence line; "some arrows are redundant" is not a finding.</li>
+<li><strong>Callout cap</strong> (<code>diagrams.md</code> § Callouts). More than 2 callouts → <code>HIGH</code>. A solid leader, or a leader that crosses a primary arrow, lane divider, or lifeline → <code>HIGH</code> (it reads as flow). A callout pointing at something that could be labeled directly → <code>MEDIUM</code>. Callout text below 8:1 or set with opacity falls under the universal 8:1 rule.</li>
+<li><strong>Global budget</strong> (<code>diagrams.md</code> § Budget and callouts for hand-drawn diagrams). A hand-drawn or Mermaid-routed figure past ~9 nodes or ~12 arrows that was not split into overview + detail → <code>MEDIUM</code>; <code>HIGH</code> when text or spacing was shrunk to keep it on one canvas. More than one accent element at any node count → <code>HIGH</code> (one-accent rule; more nodes never buys more accents). Native generators enforce their own caps — cite those instead when the figure came from one.</li>
+</ul>
 <h3 id="3-brand-token-adherence">3. Brand token adherence<a class="headerlink" href="#3-brand-token-adherence" title="Permanent link">&para;</a></h3>
 <p>If <code>brand</code> is supplied:</p>
 <ul>
 <li><strong>Colors.</strong> Each text role in the artifact should match a token in <code>[colors]</code> or resolve via <code>[colors.aliases]</code>. Off-token colors are failures unless explicitly out of brand scope (e.g. a photograph).</li>
 <li><strong>Typography.</strong> Display and body families should match <code>[typography.display_family]</code> / <code>[typography.body_family]</code>.</li>
 <li><strong>Ownership.</strong> If <code>[rules.never_rebuild_image_generation_elsewhere]</code> is true and the artifact appears to regenerate a wordmark/monogram/logo, flag it regardless of visual quality.</li>
-<li><strong>Motion.</strong> If the artifact is animated and <code>[motion]</code> tokens exist, verify durations / easings are plausible. (You may not be able to measure exactly; flag if motion feels outside the token envelope — e.g. a 2-second reveal when the brand specifies 0.48s <code>duration_slow</code>.)</li>
+<li><strong>Motion.</strong> If the artifact is animated and <code>[motion]</code> tokens exist, verify durations / easings are plausible. (You may not be able to measure exactly; flag if motion feels outside the token envelope — e.g. a 300 ms slide when the brand specifies 100 ms <code>duration_fast</code> — the uncanny band <code>muriel.motion</code> forbids for transitions.)</li>
 </ul>
 <h3 id="4-cross-channel-visual-judgment">4. Cross-channel visual judgment<a class="headerlink" href="#4-cross-channel-visual-judgment" title="Permanent link">&para;</a></h3>
 <p>These are judgment calls only a vision model can make. State them even if you are not certain:</p>

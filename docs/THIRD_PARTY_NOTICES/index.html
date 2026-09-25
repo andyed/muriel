@@ -1670,6 +1670,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#lucide-icons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lucide icons
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1772,6 +1783,127 @@ epistemic-precondition / anti-prescription gate on each diagram, the 8:1
 contrast floor (stricter than the source's WCAG AA), and integration with
 muriel's brand tokens. The source's typefaces and colour system were <strong>not</strong>
 adopted.</p>
+<p>Two verification ideas were adapted from the same repository (upstream commit
+<code>dc1ace4</code>, 2026-09-19) on 2026-09-24:</p>
+<ul>
+<li><strong>Accessible-SVG lint rules</strong> — <code>muriel/tools/diagrams/_a11y.py::lint_a11y</code>
+  re-implements the rule set of <code>scripts/lint-skin.py::lint_accessible_svgs</code>
+  (with <code>scripts/test-lint-a11y.py</code> as the fixture model): skip
+  <code>aria-hidden="true"</code> SVGs; require <code>role="img"</code>, a four-number viewBox with
+  positive size, <code>&lt;title&gt;</code> as the first child, a <code>&lt;desc&gt;</code>, slug-prefixed
+  non-duplicate ids, and <code>aria-labelledby</code> naming the title then the desc. The
+  60-character title bound follows <code>skills/diagram-design/scripts/self_check.py</code>.</li>
+<li><strong>Slopegraph conventions</strong> — <code>muriel/tools/diagrams/comparison_pair.py</code> follows
+  <code>references/type-line.md</code> (slopegraph variant): one scale shared by both
+  axes, a run narrower than the plot is tall, dots and printed values at both
+  ends, no gridlines, muted lines plus one weighted accent, and labels bound to
+  their series by <code>data-*</code> attributes. The shared-scale and no-jitter checks in
+  <code>tests/test_diagram_comparison_pair.py</code> follow <code>scripts/verify-slopegraph.py</code>.
+  The label-spreading policy (labels move, endpoints never do) and the trace
+  form are muriel's own.</li>
+<li><strong>Relative-error fidelity check</strong> — <code>tests/test_diagram_fidelity.py</code> checks
+  proportional funnel widths as <em>relative</em> error against the values, the
+  framing of <code>scripts/verify-treemap.py</code>'s area-fidelity invariant, applied to
+  bar width instead of cell area.</li>
+<li><strong>Motion contract</strong> — the static-first rule, the none / reveal / step / loop
+  modes with reveal as the only autoplay, the 3 s decorative-loop floor, and the
+  8-step / 2-per-step / 12-item sequence budget follow <code>references/animation.md</code>
+  and ADRs 0001 / 0003. They land in <code>references/polish-rules.md</code> (rules 28–29)
+  and <code>muriel/motion.py</code> (<code>validate_mode</code>, <code>validate_flash_rate</code>,
+  <code>validate_sequence_shape</code>). The upstream clock tokens and pinned controller
+  were not adopted.</li>
+<li><strong>Treemap</strong> — <code>muriel/tools/diagrams/treemap.py</code> follows <code>references/type-treemap.md</code>
+  for geometry and conventions: squarified layout, 4–8 cells with a named
+  "Other", 4px gutters, the large / medium / small / sliver label tiers with a
+  16px top-left inset, the rank-ordered ink ramp with one accent cell, and
+  <code>data-share</code> on every cell. <code>tests/test_diagram_treemap.py</code> checks area as
+  relative error per cell, the invariant of <code>scripts/verify-treemap.py</code>, at a
+  4% bound. The gutter-compensating weight correction is muriel's own; no
+  source files were copied.</li>
+<li><strong>Diagram guidance</strong> — behaviour-first pattern routing, the generator
+  admission rule, callout discipline, the global node/arrow budget, and the
+  redraw degrade ladder in <code>channels/diagrams.md</code>, plus the per-element removal
+  test in <code>agents/muriel-critique.md</code>, paraphrase <code>references/semantic-patterns.md</code>,
+  <code>references/output-spec.md</code>, <code>references/primitive-annotation.md</code>, and the
+  skill's SKILL.md.</li>
+<li><strong>Sankey conventions</strong> (adapted 2026-09-24) — <code>muriel/tools/diagrams/sankey.py</code>
+  follows <code>references/type-sankey.md</code> for the 12px node bar, one global
+  px-per-unit scale, midline Bézier control points, the single accent path
+  painted last, column-specific label placement and the 3-stage / 8-node /
+  12-flow budget; <code>tests/test_diagram_sankey.py</code> checks the invariants named in
+  <code>scripts/verify-sankey.py</code> (conservation, stage totals, ribbon width
+  constancy, relative value fidelity, square-on arrival). Bars are not rounded
+  to the 4px grid, sub-4px flows raise rather than fold, and ribbons are
+  written as flattened polylines so the contrast audit can score the labels.</li>
+<li><strong>Tree</strong> — <code>muriel/tools/diagrams/dendrogram.py</code> takes its node proportions
+  (120–180 × 40–52, at most two widths), the orthogonal elbow-bus connectors
+  drawn before the nodes, the 4-level / 5-children budget, the no-skipped-levels
+  rule and the single accent on the root or one critical leaf from
+  <code>references/type-tree.md</code>. The contour-based tidy-tree placement, the
+  measured leaf-extent budget, <code>collapse_over</code>, and the DAG / treemap / process
+  routing gates are muriel's.</li>
+<li><strong>Comparison heat-grid</strong> — <code>muriel/tools/diagrams/heat_grid.py</code> takes its
+  cell geometry (116×56, 4px gap, 80px minimum width), the 3–7 row / 3–8 column
+  budget, the single ink ramp with a single accent focal cell excluded from the
+  scale, the 0.07 ramp floor and 0.70 ceiling, and the don'ts (hue per row,
+  diverging ramp for unsigned data, gradient legend, dropped rows) from
+  <code>references/type-heatmap.md</code>. <code>tests/test_diagram_heat_grid.py</code> follows
+  <code>scripts/verify-heatmap.py</code>'s <code>data-row</code> / <code>data-col</code> / <code>data-value</code> binding
+  and monotone-fill check (±0.03). The per-brand ramp-ceiling solve for 8:1
+  value labels, the quantized stepped legend and the n/a cells are muriel's.</li>
+<li><strong>Cycle hub</strong> (adapted 2026-09-24) — the <code>hub=</code> option of
+  <code>muriel/tools/diagrams/cycle.py</code> follows <code>references/type-loop.md</code>: one
+  central accumulated-state node drawn inverted (ink fill, paper text), dashed
+  write-back spokes as true radii from each station's inner edge that stop a
+  6px marker gap short of the hub, drawn beneath the stations, "one hub" and
+  "a hub is state, not a step". The spoke-subset selection, the ring growth
+  that keeps an 18px minimum spoke, and the measured hub box are muriel's.</li>
+<li><strong>Icon build pipeline</strong> — <code>scripts/build_diagram_icons.py</code> adapts the
+  structure of <code>scripts/build-icons.py</code> (a curated slot → upstream-id
+  manifest with one-line blurbs, fetch with a local vendor cache,
+  normalize, emit a committed artifact). The icon source differs (Lucide,
+  not Tabler) and so does the normalization: muriel keeps inner markup only,
+  strips presentation attributes, and rewrites primitives as <code>&lt;path&gt;</code>.</li>
+<li><strong>Causal / dependency DAG</strong> — <code>muriel/tools/diagrams/dag.py</code> takes from
+  <code>references/type-dependency.md</code> the ranked layers (120px pitch), the
+  160×56 <code>rx=6</code> node box, the <code>N in</code> fan-in badge in a small <code>rx=2</code> box, the
+  budget (9 nodes, 14 edges, 4 ranks, 1 highlighted cycle), the single dashed
+  <code>5,4</code> accent back-edge routed around the outside of the stack, and the
+  tree-shaped-data anti-pattern. It takes from SKILL.md's connector rules the
+  orthogonal elbows with <code>r=8</code> corners, attach points ≥12px apart on a shared
+  side, no transit behind a non-endpoint box, and drawing edges before nodes.
+  The layout algorithm (longest-path ranking, barycenter ordering with
+  adjacent swaps, isotonic-regression placement, per-channel jog tracks), the
+  forward-cycle and tree-precondition errors, and the single-accent rule
+  (upstream allows two) are muriel's.</li>
+<li><strong>Spectrum</strong> — <code>muriel/tools/diagrams/spectrum.py</code> takes its dumbbell
+  conventions from <code>references/type-bar.md</code>'s dumbbell variant: horizontal
+  rows on one shared scale, hollow reference end and solid end, connector drawn
+  before the dots, unsnapped data coordinates, value labels placed outside the
+  pair by geometry with the floor exception, never-truncate / never-clamp, and
+  a stated row order; <code>references/type-line.md</code> for the shared-scale rule. The
+  two named poles, the explicit <code>zero=</code> choice for a scale that excludes zero,
+  the change arrowhead, the <code>extent</code> mode and the 8:1 tokens are muriel's.</li>
+</ul>
+<p>The code is muriel's own (ElementTree rather than the source's <code>HTMLParser</code>,
+and wired into <code>muriel diagram-check</code>); apart from the extractor below, no
+source files were copied.</p>
+<p>Additions on 2026-09-24 (upstream commit <code>dc1ace4</code>):</p>
+<ul>
+<li><strong>Excalidraw extractor — copied, not adapted.</strong>
+  <code>muriel/tools/excalidraw_extract.py</code> is
+  <code>skills/diagram-design/scripts/excalidraw_extract.py</code> verbatim, with only a
+  leading comment block added (provenance plus this MIT notice).
+  <code>tests/test_excalidraw_extract.py</code> pins the body to the upstream file's
+  sha256, so a local edit fails the suite; re-copy upstream fixes instead of
+  patching. The fixtures in <code>tests/fixtures/excalidraw/</code> are copied from
+  upstream <code>scripts/fixtures/</code>, and the test ports the essential checks of
+  <code>scripts/verify-excalidraw-import.py</code>.</li>
+<li><strong>Strict SVG export</strong> — <code>muriel/tools/diagrams/_export.py::strict_svg</code>
+  adapts the <code>rgba()</code> / <code>transparent</code> normalisation and the 1–4 raster-scale
+  rule from <code>references/export.md</code>, extended by muriel to inline styles,
+  <code>&lt;style&gt;</code> blocks, 8-digit hex and opacity multiplication.</li>
+</ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>MIT License
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Copyright (c) 2025 Cathryn Lavery
@@ -1969,6 +2101,65 @@ used in any form — muriel's lane is deterministic SVG.</p>
 <a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 <a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 <a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>SOFTWARE.
+</code></pre></div>
+<hr />
+<h2 id="lucide-icons">Lucide icons<a class="headerlink" href="#lucide-icons" title="Permanent link">&para;</a></h2>
+<p>The 30 glyphs in <code>muriel/tools/diagrams/icons/glyphs.py</code> are generated from
+Lucide icons by <code>scripts/build_diagram_icons.py</code>: the outer <code>&lt;svg&gt;</code> and all
+presentation attributes are removed and each primitive is rewritten as an
+equivalent <code>&lt;path&gt;</code>; the geometry is otherwise unchanged. The source SVGs are
+vendored unmodified in <code>muriel/tools/diagrams/icons/vendor/lucide/</code>, with
+Lucide's LICENSE. Some of the glyphs used (<code>clock</code>, <code>database</code>, <code>link</code>,
+<code>lock</code>, <code>search</code>, <code>target</code>, <code>zoom-in</code>) are derived from Feather and fall under
+the MIT notice below.</p>
+<ul>
+<li>Source: https://lucide.dev — npm package <code>lucide-static</code></li>
+<li>Version: 1.48.0 (pinned in <code>muriel/tools/diagrams/icons/_manifest.py</code>)</li>
+<li>License: ISC; Feather-derived icons MIT</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ISC License
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Copyright (c) 2026 Lucide Icons and Contributors
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>Permission to use, copy, modify, and/or distribute this software for any
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>purpose with or without fee is hereby granted, provided that the above
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>copyright notice and this permission notice appear in all copies.
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>---
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>The following Lucide icons are derived from the Feather project:
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>airplay, alert-circle, alert-octagon, alert-triangle, aperture, arrow-down-circle, arrow-down-left, arrow-down-right, arrow-down, arrow-left-circle, arrow-left, arrow-right-circle, arrow-right, arrow-up-circle, arrow-up-left, arrow-up-right, arrow-up, at-sign, calendar, cast, check, chevron-down, chevron-left, chevron-right, chevron-up, chevrons-down, chevrons-left, chevrons-right, chevrons-up, circle, clipboard, clock, code, columns, command, compass, corner-down-left, corner-down-right, corner-left-down, corner-left-up, corner-right-down, corner-right-up, corner-up-left, corner-up-right, crosshair, database, divide-circle, divide-square, dollar-sign, download, external-link, feather, frown, hash, headphones, help-circle, info, italic, key, layout, life-buoy, link-2, link, loader, lock, log-in, log-out, maximize, meh, minimize, minimize-2, minus-circle, minus-square, minus, monitor, moon, more-horizontal, more-vertical, move, music, navigation-2, navigation, octagon, pause-circle, percent, plus-circle, plus-square, plus, power, radio, rss, search, server, share, shopping-bag, sidebar, smartphone, smile, square, table-2, tablet, target, terminal, trash-2, trash, triangle, tv, type, upload, x-circle, x-octagon, x-square, x, zoom-in, zoom-out
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>The MIT License (MIT) (for the icons listed above)
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>Copyright (c) 2013-present Cole Bemis
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>Permission is hereby granted, free of charge, to any person obtaining a copy
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>of this software and associated documentation files (the "Software"), to deal
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>in the Software without restriction, including without limitation the rights
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>copies of the Software, and to permit persons to whom the Software is
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>furnished to do so, subject to the following conditions:
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a>
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a>The above copyright notice and this permission notice shall be included in all
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a>copies or substantial portions of the Software.
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a>SOFTWARE.
 </code></pre></div>
 
 

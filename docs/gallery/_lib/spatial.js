@@ -13,6 +13,11 @@
 //   FocusController              — click-to-focus animation (mountain demos)
 //   startRenderLoop({...})       — parallax + auto-orbit + render
 //   THREE, CSS3DObject           — re-exports
+//
+// For fields of more than a few hundred items, one CSS3DObject per item is the
+// wrong shape — see instanced.js (GPU quads) and hybrid.js (a small DOM pool
+// lent to whatever is close enough to read). This module stays the scene,
+// camera, geometry and camera-motion layer for both.
 
 import * as THREE from 'three';
 import {
@@ -29,34 +34,52 @@ export function createScene({
   lookAt     = [0, 130, -300],
   near       = 1,
   far        = 8000,
+  // Size to this element instead of the window. A full-page demo wants the
+  // window; a scene embedded in an app pane needs the pane, or it renders at
+  // viewport size behind a smaller container and every pointer coordinate is
+  // wrong. Accepts an element or a selector.
+  container  = null,
 } = {}) {
+  const box = typeof container === 'string'
+    ? document.querySelector(container)
+    : container;
+  const measure = () => (box
+    ? { w: box.clientWidth || 1, h: box.clientHeight || 1 }
+    : { w: window.innerWidth, h: window.innerHeight });
+
   const scene = new THREE.Scene();
   scene.background = null;
 
-  const camera = new THREE.PerspectiveCamera(
-    fov, window.innerWidth / window.innerHeight, near, far,
-  );
+  let { w, h } = measure();
+  const camera = new THREE.PerspectiveCamera(fov, w / h, near, far);
   camera.position.set(...cameraPos);
   camera.lookAt(...lookAt);
 
   const webglRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   webglRenderer.setPixelRatio(window.devicePixelRatio || 1);
-  webglRenderer.setSize(window.innerWidth, window.innerHeight);
+  webglRenderer.setSize(w, h);
   webglRenderer.setClearColor(0x000000, 0);
   document.querySelector(webglMount).appendChild(webglRenderer.domElement);
 
   const cssRenderer = new CSS3DRenderer();
-  cssRenderer.setSize(window.innerWidth, window.innerHeight);
+  cssRenderer.setSize(w, h);
   document.querySelector(cssMount).appendChild(cssRenderer.domElement);
 
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+  const resize = () => {
+    ({ w, h } = measure());
+    camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    webglRenderer.setSize(window.innerWidth, window.innerHeight);
-    cssRenderer.setSize(window.innerWidth, window.innerHeight);
-  });
+    webglRenderer.setSize(w, h);
+    cssRenderer.setSize(w, h);
+  };
+  window.addEventListener('resize', resize);
+  // A container can change size without the window doing so — a collapsing
+  // sidebar, a detail panel opening. ResizeObserver catches what resize misses.
+  if (box && typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(resize).observe(box);
+  }
 
-  return { scene, camera, webglRenderer, cssRenderer };
+  return { scene, camera, webglRenderer, cssRenderer, resize, measure };
 }
 
 // ─── Mountain — tilted grid plane + zones ───────────────────────────
@@ -132,6 +155,108 @@ export class Mountain {
       v * this.cosT,
     );
   }
+
+  /**
+   * Lay out a whole corpus on the slope, front to back.
+   *
+   * The original Data Mountain (Robertson / Czerwinski / Larson / Robbins /
+   * Thiel / van Dantzich, UIST 1998) had the *user* place ~100 pages by hand —
+   * the spatial memory being tested was theirs. A corpus of thousands cannot be
+   * hand-placed, so the slope has to earn its depth some other way: order
+   * carries the meaning, and depth carries the ordering.
+   *
+   * Rows are justified — each row filled to the plane's width — with the target
+   * height shrinking toward the back. That is the same rule a flat justified
+   * wall uses, with one addition: because far rows are smaller AND further up
+   * the tilted plane, they foreshorten twice, so a back row costs very little
+   * screen area while staying present as context. That double falloff is the
+   * whole reason to put a wall on a slope rather than leave it flat.
+   *
+   * @param {number} count
+   * @param {(i:number) => number} aspectOf  width/height of item i
+   * @returns {Array<{u:number, v:number, w:number, h:number, row:number, depth:number}>}
+   *   `depth` is 0 at the front edge and 1 at the back, for consumers that want
+   *   to dim, thin, or drop detail with distance.
+   */
+  arrange(count, aspectOf, {
+    width = 1900, depth = 1700,
+    frontH = 210, backH = 64,
+    gap = 16, rowGap = 26,
+    fit = true,
+    overlap = 0,
+  } = {}) {
+    // Negative gap shingles the tiles like roof slates or a fanned deck. It is
+    // a real information channel and not only a look: overlap orders the row,
+    // because what covers what is unambiguous, where a gapped row is just
+    // adjacency. It needs the depth buffer to be correct, which is why the
+    // field stopped alpha-blending.
+    if (overlap) gap = -Math.abs(overlap);
+    if (!fit) return this._pack(count, aspectOf, { width, depth, frontH, backH, gap, rowGap }, 1).out;
+
+    // Fit every item inside `depth`. Without this the row profile clamps at the
+    // back and rows simply keep marching past the plane: at 2,500 items a
+    // 2,600-deep slope ran to 7,242 and stranded 36% of the corpus off the end,
+    // while the surviving ramp was so long the tilt read as a flat floor.
+    //
+    // Shrinking the height profile puts more items per row AND makes each row
+    // shallower, so depth used falls monotonically as scale falls — which is
+    // what makes a binary search valid here.
+    let lo = 0.04, hi = 1;
+    let best = this._pack(count, aspectOf, { width, depth, frontH, backH, gap, rowGap }, lo);
+    if (this._pack(count, aspectOf, { width, depth, frontH, backH, gap, rowGap }, hi).usedDepth <= depth) {
+      best = this._pack(count, aspectOf, { width, depth, frontH, backH, gap, rowGap }, hi);
+    } else {
+      for (let i = 0; i < 18; i++) {
+        const mid = (lo + hi) / 2;
+        const trial = this._pack(count, aspectOf, { width, depth, frontH, backH, gap, rowGap }, mid);
+        if (trial.usedDepth <= depth) { best = trial; lo = mid; } else { hi = mid; }
+      }
+    }
+    return best.out;
+  }
+
+  /**
+   * One packing pass at a given height scale.
+   * @returns {{out: Array, usedDepth: number}} every item placed, and how deep
+   *   the slope had to be to hold them.
+   */
+  _pack(count, aspectOf, o, scale) {
+    const { width, depth, gap, rowGap } = o;
+    const frontH = o.frontH * scale;
+    const backH = o.backH * scale;
+    const out = [];
+    const halfW = width / 2;
+    let v = 0;
+    let i = 0;
+    let row = 0;
+
+    while (i < count) {
+      const t = Math.min(1, -v / depth);
+      const targetH = frontH + (backH - frontH) * t;
+
+      const start = i;
+      let sumAspect = 0;
+      while (i < count) {
+        sumAspect += aspectOf(i);
+        i++;
+        if (sumAspect * targetH + gap * (i - start - 1) >= width) break;
+      }
+      const n = i - start;
+      const h = (width - gap * (n - 1)) / sumAspect;
+      const rowH = (i >= count && h > targetH * 1.45) ? targetH : h;
+
+      let u = -halfW;
+      for (let k = start; k < i; k++) {
+        const w = aspectOf(k) * rowH;
+        out.push({ u: u + w / 2, v, w, h: rowH, row, depth: Math.min(1, -v / depth) });
+        u += w + gap;
+      }
+
+      v -= rowH + rowGap;
+      row++;
+    }
+    return { out, usedDepth: -v };
+  }
 }
 
 // ─── Standalone grid + horizon helpers ──────────────────────────────
@@ -174,7 +299,15 @@ export function addHorizon(scene, {
 
 // ─── CSS3D wrapper ──────────────────────────────────────────────────
 
-export function makePlane(html, {
+/**
+ * Wrap markup or a node in a CSS3DObject.
+ *
+ * Pass a string for authored markup you control. Pass a Node — or an array of
+ * them — for anything derived from data you did not write: the string path
+ * goes through innerHTML, and a consumer rendering scraped third-party titles
+ * must not have an innerHTML path available to it at all.
+ */
+export function makePlane(content, {
   x = 0, y = 0, z = 0,
   rotX = 0, rotY = 0, rotZ = 0,
   className = 'plane',
@@ -183,7 +316,9 @@ export function makePlane(html, {
   const el = document.createElement('div');
   el.className = className;
   if (width) el.style.width = width + 'px';
-  el.innerHTML = html;
+  if (typeof content === 'string') el.innerHTML = content;
+  else if (Array.isArray(content)) el.append(...content);
+  else if (content) el.append(content);
   const obj = new CSS3DObject(el);
   obj.position.set(x, y, z);
   if (rotX) obj.rotation.x = rotX;
@@ -268,6 +403,12 @@ export function startRenderLoop({
   lookYAmount     = 40,
   beforeRender    = null,      // hook for per-card lerps etc.
   onKeydown       = null,      // hook for app-specific key handling
+  // Depth-order the CSS3D cards. The default walks the scene and writes a
+  // zIndex for every visible card, every frame — correct and cheap for the
+  // dozen-card demos, and quadratically wrong past a few hundred, where it
+  // becomes thousands of style writes per frame. A high-count consumer passes
+  // its own (see HybridField.sort, which is bounded by the DOM pool).
+  sortDom         = null,
 } = {}) {
   const cam = {
     mx: 0, my: 0, dolly: 0,
@@ -322,12 +463,16 @@ export function startRenderLoop({
     // opacity/filter (e.g. the distance-dimming .dim-* classes) stack in DOM
     // order and a far card can sit above the focused one. Harmless for
     // non-flattened cards (3D position still wins).
-    scene.traverse((o) => {
-      if (o.element && o.visible) {
-        o.element.style.zIndex =
-          String(Math.round(1e6 - camera.position.distanceTo(o.getWorldPosition(_zTmp))));
-      }
-    });
+    if (sortDom) {
+      sortDom(camera);
+    } else {
+      scene.traverse((o) => {
+        if (o.element && o.visible) {
+          o.element.style.zIndex =
+            String(Math.round(1e6 - camera.position.distanceTo(o.getWorldPosition(_zTmp))));
+        }
+      });
+    }
     webglRenderer.render(scene, camera);
     cssRenderer.render(scene, camera);
     requestAnimationFrame(tick);

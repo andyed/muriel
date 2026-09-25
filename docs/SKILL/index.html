@@ -1606,6 +1606,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Anti-slop check">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prose-anti-slop-ai-writing-tells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prose anti-slop (AI writing tells)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1902,6 +1919,27 @@ coding copilot or a default participant throughout the task.</p>
 </ul>
 <p>The artifact should contain domain-specific decisions a competent generic
 template would not have made.</p>
+<h3 id="prose-anti-slop-ai-writing-tells">Prose anti-slop (AI writing tells)<a class="headerlink" href="#prose-anti-slop-ai-writing-tells" title="Permanent link">&para;</a></h3>
+<p>The checklist above is about how an artifact <em>looks</em>; this is about how its <strong>prose reads</strong>. Any channel that ships sentences — notebook editorial, blog explainers, captions, doc copy, marginalia — should scan against these before shipping. They're the textual equivalent of the gradient-blob hero: the patterns that make writing read as machine-default. (Curated from <a href="https://github.com/hardikpandya/stop-slop">hardikpandya/stop-slop</a>, MIT.)</p>
+<ul>
+<li><strong>Throat-clearing openers.</strong> "It turns out", "Here's the thing", "The uncomfortable truth is", "Let me be clear". Cut the runway; start at the sentence that matters.</li>
+<li><strong>Binary-contrast scaffolds.</strong> "Not because X. Because Y.", "The question isn't X. It's Y.", "It's not this, it's that", "not just X but also Y". The single most common AI-explainer tell. State the thing directly.</li>
+<li><strong>Vague declaratives.</strong> "The implications are significant", "The reasons are structural", "The stakes are high". Name the implication, the reason, the stake — or delete the sentence.</li>
+<li><strong>Adverb crutches.</strong> really, just, genuinely, simply, actually, literally, fundamentally, truly. Almost always deletable with no loss.</li>
+<li><strong>False agency.</strong> "the data tells us", "the culture shifts", "the market rewards". Inanimate subjects with human verbs. Name who acts.</li>
+<li><strong>Dramatic fragmentation / punchy endings.</strong> "X. That's it.", three-item lists, every paragraph closing on a quotable one-liner. Vary rhythm; not every paragraph earns a mic-drop.</li>
+<li><strong>Meta-commentary.</strong> "Let me walk you through", "Plot twist:", "Hint:". The reader doesn't need a tour guide.</li>
+<li><strong>Em-dash overuse and staccato.</strong> Stylistic, not a hard ban — but if every other sentence has an em-dash or trails into "Not always. Not perfectly.", it reads generated.</li>
+</ul>
+<p>Optional gate: score a draft on Directness / Rhythm / Trust / Authenticity / Density (1–10 each); below 35/50 wants a revision pass.</p>
+<p><strong>Register carve-out.</strong> These are defaults for editorial and explainer prose, <em>not</em> overrides for genre conventions. In scientific writing specifically: passive voice is conventional in methods sections ("participants were randomized", "data were filtered") and should not be force-converted; hedging is required, not slop — "not detected at this granularity" is correct precision, not softening to strip. When a stop-slop rule fights the genre, the genre wins.</p>
+<p><strong>What the linter catches, and what it cannot.</strong> <code>muriel.aiism</code> now detects three
+of these mechanically: binary-contrast scaffolds (<code>density-antithesis</code>), the
+three-item list (<code>structure-tricolon</code>), and repeated sentence openings
+(<code>structure-anaphora</code>), alongside the existing em-dash and long-sentence
+density rules. The rest of this list has no detector and never will, because
+throat-clearing, vague declaratives and false agency are judgements about
+meaning rather than shape. Run the linter, then read the draft anyway.</p>
 <h2 id="channel-router">Channel router<a class="headerlink" href="#channel-router" title="Permanent link">&para;</a></h2>
 <p>Read the channel that matches the primary output:</p>
 <table>
@@ -1917,7 +1955,11 @@ template would not have made.</p>
 <td><a href="../channels/raster/"><code>channels/raster.md</code></a></td>
 </tr>
 <tr>
-<td>SVG, diagram, infographic</td>
+<td>named diagram form — 2×2 matrix, cycle, pyramid/funnel, layer stack, swimlane, Venn, flow/Sankey, treemap, heat-grid, DAG, tree, or a behaviour (queue, lifecycle, defense in depth) to diagram</td>
+<td><a href="../channels/diagrams/"><code>channels/diagrams.md</code></a> — Mermaid and ECharts forms are routed onward from its provider table</td>
+</tr>
+<tr>
+<td>general SVG, icon, wordmark, data-driven vector, infographic</td>
 <td><a href="../channels/svg/"><code>channels/svg.md</code></a></td>
 </tr>
 <tr>
@@ -1995,6 +2037,10 @@ template would not have made.</p>
 <li><a href="references/radial-menus.md"><code>references/radial-menus.md</code></a> — stable pie-menu
   geometry, radial input parity, 24-grid glyph grammar, renderer-independent
   Pretext composition, and DOM/SVG materialization for annular sectors.</li>
+<li><a href="references/annular-interfaces.md"><code>references/annular-interfaces.md</code></a> — shared
+  polar semantics, stable geometry, layer ownership, motion, accessibility, and
+  responsive fallbacks across radial menus, instruments, gauges, timelines,
+  hierarchies, and reticles; includes a distinct FUI sensor-console case.</li>
 </ul>
 <h2 id="verification-and-handoff">Verification and handoff<a class="headerlink" href="#verification-and-handoff" title="Permanent link">&para;</a></h2>
 <p>When design synthesis was loaded, emit its labeled <strong>Muriel synthesis</strong> rationale

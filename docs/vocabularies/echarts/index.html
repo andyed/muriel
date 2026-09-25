@@ -1964,7 +1964,7 @@
 <a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="p">});</span>
 </code></pre></div>
 <ul>
-<li><code>timeupdate</code> fires ~4Hz on Chromium, ~250ms throttle. Not animation-smooth, but the eye reads it as "playing." For animation-smooth, use <code>requestAnimationFrame</code> and read <code>player.currentTime</code> each tick.</li>
+<li><code>timeupdate</code> fires ~4Hz on Chromium, ~250ms throttle <!-- motion-exempt: not-motion (event rate) -->. Not animation-smooth, but the eye reads it as "playing." For animation-smooth, use <code>requestAnimationFrame</code> and read <code>player.currentTime</code> each tick.</li>
 <li><strong>Don't use <code>notMerge: true</code></strong> here — you want ECharts to diff the partial option, not blow away the series config and re-render from scratch every frame.</li>
 <li>For seek-by-click on segment labels, the reverse direction works the same: <code>player.currentTime = segment.t[0]</code> and the next <code>timeupdate</code> triggers the playhead move. No need to manually drive both.</li>
 </ul>

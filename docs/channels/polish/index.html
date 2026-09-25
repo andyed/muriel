@@ -1855,6 +1855,11 @@ authorize a parallel state model.</p>
 <li>Give each interaction one load-bearing motion.</li>
 <li>Gate hover behavior behind <code>(hover: hover) and (pointer: fine)</code>.</li>
 <li>Treat reduced motion as a design mode, not an afterthought.</li>
+<li>Static first: every meaningful element is visible before enhancement; only
+  <code>.motion-ready</code> selectors may hide it, and reduced motion, print, no-JS, and
+  static export all show the complete final frame.</li>
+<li>One motion mode per figure (<code>none</code>/<code>reveal</code>/<code>step</code>/<code>loop</code>); only <code>reveal</code>
+  autoplays, once; loops are decorative, with cycles of at least 3s.</li>
 <li>Use FLIP for reorders; do not animate <code>top</code>, <code>left</code>, <code>width</code>, or <code>height</code>.</li>
 </ul>
 <h2 id="composition-check">Composition check<a class="headerlink" href="#composition-check" title="Permanent link">&para;</a></h2>
