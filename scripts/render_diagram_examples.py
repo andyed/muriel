@@ -32,6 +32,7 @@ from muriel.tools.diagrams.heat_grid import heat_grid  # noqa: E402
 from muriel.tools.diagrams.layer_stack import layer_stack  # noqa: E402
 from muriel.tools.diagrams.matrix import matrix  # noqa: E402
 from muriel.tools.diagrams.pyramid import pyramid  # noqa: E402
+from muriel.tools.diagrams.spectrum import spectrum  # noqa: E402
 from muriel.tools.diagrams.swimlane import swimlane  # noqa: E402
 
 EXAMPLES = REPO_ROOT / "plugins/muriel/skills/compose/examples/diagrams"
@@ -39,6 +40,46 @@ MIRRORS = (
     REPO_ROOT / "docs/examples/diagrams",
     REPO_ROOT / "site-build/examples/diagrams",
 )
+
+
+def _spectrum_palette_tritan(out_dir: Path) -> str:
+    """Mean CIELAB b* of six shipped palettes, as designed and under
+    muriel.cvd's tritan simulation. Computed from muriel's own palette and
+    CVD code at render time, so the example cannot drift from them."""
+    from muriel.cvd import _linear_rgb_to_lab, _to_linear_rgb, simulate
+    from muriel.palettes import PALETTES
+
+    def b_star(color) -> float:
+        return _linear_rgb_to_lab(_to_linear_rgb(color))[2]
+
+    names = {"wong": "Wong", "nord_aurora": "Nord Aurora",
+             "tol_hc": "Tol high-contrast", "ibm": "IBM",
+             "catppuccin_mocha": "Catppuccin Mocha",
+             "nord_frost": "Nord Frost"}
+    items = []
+    for key, label in names.items():
+        pal = PALETTES[key]
+        items.append({
+            "label": label,
+            "start": round(sum(b_star(c) for c in pal) / len(pal), 1),
+            "end": round(sum(b_star(simulate(c, "tritan")) for c in pal)
+                         / len(pal), 1),
+        })
+    return spectrum(
+        items,
+        scale={"min": -20, "max": 20, "left_pole": "cooler (blue)",
+               "right_pole": "warmer (yellow)", "unit": "b*",
+               "label": "mean CIELAB b*"},
+        series=("as designed", "tritan simulation"),
+        sort="delta", show_delta=True, focal=0,
+        title="Palette warmth under a tritan simulation",
+        desc=("Mean CIELAB b* (blue negative, yellow positive) of six muriel "
+              "palettes, as designed and after muriel.cvd's tritan "
+              "simulation. The three palettes farthest from neutral move "
+              "furthest toward it: Wong from 17.4 to 5.3, Nord Aurora from "
+              "16.8 to 8.8, Nord Frost from -16.2 to -7.5. The three near "
+              "neutral move 4 units or less. Rows sorted by signed change."),
+        out_path=out_dir / "spectrum-palette-tritan.svg")
 
 
 def render_examples(out_dir: Path) -> dict[str, str]:
@@ -117,6 +158,7 @@ def render_examples(out_dir: Path) -> dict[str, str]:
                   "is 588 ms and is excluded from the scale. Position 4 "
                   "local has no measurement."),
             out_path=out_dir / "heat-grid-dwell.svg"),
+        "spectrum-palette-tritan.svg": _spectrum_palette_tritan(out_dir),
     }
 
 

@@ -70,7 +70,7 @@ Ordered by how often each structure carries a real argument in research, product
 | 5 | Layered stack | Higher layers depend on / abstract over lower; reading direction encodes hierarchy. | **Shipped** — `muriel.tools.diagrams.layer_stack` |
 | 6 | Causal DAG | What causes what; arrow direction is load-bearing. | Queued |
 | 7 | Venn / Euler | Categorical intersection; area-proportional. | **Shipped** — `muriel.tools.venn` |
-| 8 | Spectrum | Position between two poles is the encoding. | Queued |
+| 8 | **Spectrum** | Position between two poles is the encoding; points, or start → end dumbbells, on one shared scale. | **Shipped** — `muriel.tools.diagrams.spectrum` |
 | 9 | Pyramid | Each level depends on the one below; apex is rare or important. | **Shipped** — `muriel.tools.diagrams.pyramid` (`orientation="up"`) |
 | 10 | **Comparison heat-grid** | Dense `n × m` comparison of one unsigned quantity; the pattern across rows × columns is the claim. | **Shipped** — `muriel.tools.diagrams.heat_grid` |
 | 11 | Swimlane | Cross-functional process; the handoffs between actors are the point. | **Shipped** — `muriel.tools.diagrams.swimlane` |
@@ -333,6 +333,48 @@ Reach for this only when ownership is the argument — see [the provider table](
 - Don't let a step span two lanes — every step has one owner. Shared ownership is a process smell, not a diagram feature.
 - Don't snake the flow — if arrows backtrack to read in order, re-sequence the steps so progression runs forward.
 
+## Spectrum
+
+```python
+from muriel.tools.diagrams import spectrum
+
+spectrum(
+    items=[
+        {"label": "Wong",        "start": 17.4,  "end": 5.3},
+        {"label": "Nord Aurora", "start": 16.8,  "end": 8.8},
+        {"label": "Nord Frost",  "start": -16.2, "end": -7.5},
+        {"label": "IBM",         "start": 3.4,   "end": 7.4},
+    ],
+    scale={"min": -20, "max": 20,
+           "left_pole": "cooler (blue)", "right_pole": "warmer (yellow)",
+           "unit": "b*", "label": "mean CIELAB b*"},
+    series=("as designed", "tritan simulation"),
+    sort="delta",           # "input" | "value" | "delta"
+    show_delta=True,        # signed change in a right-hand column
+    focal=0,                # index into items as given; one accent
+    title="Palette warmth under a tritan simulation",
+    out_path="examples/diagrams/spectrum-palette-tritan.svg",
+)
+```
+
+**What it argues:** where things sit on **one** continuous dimension whose two ends mean something. Position is the encoding. **Items** are 1–10 rows, all of one kind: `{"label", "value"}` draws a dot per item; `{"label", "start", "end"}` draws a dumbbell. **Scale** is `{"min", "max", "left_pole", "right_pole"}` plus optional `unit`, `label` (the axis caption), `ticks`, and `zero`.
+
+- **Position is exact.** `x = x0 + (v − min) / (max − min) × plot_width`, written unrounded; `tests/test_diagram_spectrum.py` reads every dot's `cx` back against its row's `data-value` / `data-start` / `data-end` and holds it to 0.5px. Rows and the plot carry those `data-*` attributes for any later checker.
+- **The axis is the domain you gave.** Both ends are always ticked, a value outside the scale raises (a clamped dot would sit where the data is not), and a scale that excludes zero raises until you choose: `zero=False` for an interval scale (a 1–7 rating) or `zero=True` to extend the axis to zero. A truncated axis is disclosed under it.
+- **Direction reads without colour.** `range_kind="change"` (default) draws a hollow start dot, a filled end dot, and an arrowhead at the end of the connector; the legend names both ends via `series=`. `range_kind="extent"` is for a min–max span: both ends filled, no arrow, and the right column (with `show_delta=True`) prints the span. A gap too short for an arrowhead keeps its true positions and drops the arrow; dots are never pushed apart.
+- **Value labels sit outside the pair**, by geometry rather than by series, so a decreasing row does not put both labels inside it. A label that would reach the row label lifts above its dot instead.
+- **Units.** `"%"` prints on every value and a change in `%` prints as `pts`. Any other unit prints once, in the axis caption.
+- **The row order is stated** under the legend: as given, by value (by `end` for ranges), or by signed change `end − start`, largest increase first.
+
+**Admission record.** The nearest shipped primitive is `pyramid(proportional=True)`, which encodes magnitude as the width of a centred bar: it has no positional axis, can't place one item left or right of another, can't show a negative or interval scale, has no poles, and can't draw a start/end pair. `matrix` places items by position, but on two binary axes, which is a categorical claim.
+
+**Anti-prescriptions:**
+
+- Categories without a meaningful continuous order are a **bar chart** — poles would promise a dimension the data doesn't have.
+- Two states per item where the story is the **rank change** (who overtook whom) is a slopegraph — **`comparison_pair`** — not a dumbbell.
+- More than 10 items is a distribution: use the chart channel's **dot plot**.
+- Don't narrow the scale to make the gaps look big, and don't narrate a connector as a trajectory: it is a gap between two measurements.
+
 ## Design discipline
 
 The generators bake in the editorial-diagram discipline that keeps SVG from reading as AI-generated SmartArt:
@@ -418,6 +460,7 @@ Both examples below render to `examples/diagrams/`:
 - [`funnel-q2.svg`](../examples/diagrams/funnel-q2.svg) — a proportional acquisition funnel; tier widths are driven by real counts (`proportional=True`), so the visual drop-off matches the `−%` annotations rather than faking a taper.
 - [`swimlane-release.svg`](../examples/diagrams/swimlane-release.svg) — a 4-lane release pipeline; same-lane steps connect with a muted arrow, cross-lane handoffs are drawn in the accent because the handoffs are the claim.
 - [`heat-grid-dwell.svg`](../examples/diagrams/heat-grid-dwell.svg) — mean fixation dwell by SERP position × query intent (**illustrative values, not measured data**); the focal cell sits outside the scale, and one crossing with no measurement is drawn as n/a.
+- [`spectrum-palette-tritan.svg`](../examples/diagrams/spectrum-palette-tritan.svg) — mean CIELAB b* of six muriel palettes as designed and under `muriel.cvd`'s tritan simulation, computed at render time from muriel's own palette and CVD code; hollow → filled dumbbells sorted by signed change show the palettes farthest from neutral pulled toward it.
 
 ## Mermaid in HTML — the zoom/pan/expand shell
 

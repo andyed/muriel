@@ -19,6 +19,7 @@ from muriel.tools.diagrams import (
     layer_stack,
     matrix,
     pyramid,
+    spectrum,
     swimlane,
 )
 from muriel.tools.diagrams._a11y import TITLE_MAX, fit_title, lint_a11y, slugify
@@ -85,6 +86,11 @@ GENERATORS = {
         ["r1", "r2", "r3"], ["c1", "c2", "c3"],
         [[1, 2, 3], [4, None, 6], [7, 8, 9]], focal=(2, 2),
         title="Heat grid", out_path=out),
+    "spectrum": lambda out: spectrum(
+        [{"label": "a", "start": -2, "end": 3, "focal": True},
+         {"label": "b", "start": 4, "end": 1}],
+        scale={"min": -5, "max": 5, "left_pole": "left", "right_pole": "right"},
+        show_delta=True, title="Spectrum", out_path=out),
     "venn_single": _venn_single,
     "venn_panels": _venn_panels,
     "wavefield": _wavefield,

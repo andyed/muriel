@@ -82,6 +82,14 @@ Two verification ideas were adapted from the same repository (upstream commit
   `scripts/verify-heatmap.py`'s `data-row` / `data-col` / `data-value` binding
   and monotone-fill check (±0.03). The per-brand ramp-ceiling solve for 8:1
   value labels, the quantized stepped legend and the n/a cells are muriel's.
+- **Spectrum** — `muriel/tools/diagrams/spectrum.py` takes its dumbbell
+  conventions from `references/type-bar.md`'s dumbbell variant: horizontal
+  rows on one shared scale, hollow reference end and solid end, connector drawn
+  before the dots, unsnapped data coordinates, value labels placed outside the
+  pair by geometry with the floor exception, never-truncate / never-clamp, and
+  a stated row order; `references/type-line.md` for the shared-scale rule. The
+  two named poles, the explicit `zero=` choice for a scale that excludes zero,
+  the change arrowhead, the `extent` mode and the 8:1 tokens are muriel's.
 
 The code is muriel's own (ElementTree rather than the source's `HTMLParser`,
 and wired into `muriel diagram-check`); no source files were copied.
