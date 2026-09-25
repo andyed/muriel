@@ -163,6 +163,16 @@ A label that names an edge, handoff, or transition goes in **clear channel space
 
 `muriel.tools.diagrams._labels.connector_label_crossings(svg)` reads a rendered SVG back and lists every label box a connector segment passes through (stroked `<line>`/`<polyline>`, unfilled `<path>`; curves checked by their control polygon, so it over-reports rather than misses). `tests/test_connector_labels.py` requires it to return nothing on every committed example. None of the shipped generators labels its connectors today — swimlane handoffs, cycle arrows, and matrix axes carry no edge text — so the rule binds generators that add edge labels and hand-drawn figures.
 
+### Strict export for PowerPoint and SVG-1.1 importers
+
+The generators write translucent tokens as `rgba(...)`, which every browser, Figma and Illustrator read correctly. PowerPoint's SVG importer does not: it paints `rgba(...)` and `transparent` **opaque black**, so a 4% paper wash becomes a solid block over its label. Before handing a figure to a strict importer, run
+
+```bash
+muriel diagram-export --strict fig.svg -o fig.pptx-safe.svg --check
+```
+
+`strict_svg()` (`muriel/tools/diagrams/_export.py`) rewrites `rgba()`, `transparent`, and `#rrggbbaa` in `fill` / `stroke` / `stop-color` / `flood-color` — attributes, inline `style`, and `<style>` rules — into `#rrggbb` plus the matching `*-opacity`, multiplying into any opacity already on the element. It renders the same colours, is idempotent, and `--check` re-runs `diagram-check` on the result. muriel has no SVG rasteriser; for a PNG, rasterise the strict file and pick the scale with `png_scale(viewBox_width, target_width)` = target ÷ viewBox width, clamped to **1–4** (below 1 blurs the type — redraw smaller; above 4 upscales a small layout — redraw larger). (Adapted from diagram-design's export reference, MIT.)
+
 ### The file carries its data
 
 Each generator writes the spec values it encodes as `data-*` attributes on the shape that encodes them, so the encoding can be recomputed from the SVG alone: pyramid/funnel tiers carry `data-index` and, when given, `data-value`; matrix cells carry `data-row` / `data-col`; layer-stack bands carry `data-index`; swimlane steps carry `data-lane` (row index) and `data-step` (flow order); Venn count labels carry `data-region` (the binary subset key) and `data-count`. `tests/test_diagram_fidelity.py` reads these back — the funnel's width ratios are checked against its own `data-value`s, not a copy of the spec.
