@@ -274,6 +274,23 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- **README cut from ~3,950 words to ~1,500.** It now leads with what muriel
+  does, how to install it, and what it enforces. The channel list and the
+  dependency table, which described the same channels twice, are one table;
+  the two critique-agent sections are one, with the jury seats as a table;
+  the rule list matches `SKILL.md`'s Universal constraints. Badges go from 15
+  to 4, the budget `channels/readme.md` sets, and the four kept move to
+  near-black/cream (19.7:1 and 9.9:1): the old license badge measured 1.95:1
+  and the default gray label 7.46:1, both under the 8:1 floor. The full
+  prior-art list moved verbatim to `PRIOR_ART.md`; the README keeps the five
+  most direct debts. Verified on GitHub's render at 390 px: no table scrolls
+  sideways. `muriel.aiism`: 10 findings before, clean after.
+- **One description, one channel count.** `pyproject.toml`,
+  `marketplace.json`, `plugin.json`, the docs site and `vocabularies/surfaces.md`
+  said fourteen, fifteen or sixteen channels and described an older
+  positioning. All now say fifteen output channels (plus the two
+  references) and match the README's lede.
+
 - **Motion defaults moved to the two ends of the binary.**
   `styleguide.Motion` and both example brand TOMLs: `duration_fast` 120 →
   100, `duration_normal` 240 → 100, `duration_slow` 480 → 1500,
@@ -313,6 +330,15 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   rows barely overlap, fatal for a pile.
 
 ### Fixed
+
+- **README and CONTRIBUTING links.** `muriel contrast audit page.svg` is
+  `muriel contrast page.svg` (there is no `audit` subcommand; it was read as
+  a path). The wheel link pointed at v0.11.0. Five prior-art links targeted
+  a Sibling-skills section `SKILL.md` no longer has, and one pointed at
+  `agents/` inside the skill folder. CONTRIBUTING linked `SKILL.md`,
+  `channels/` and `vocabularies/` at the repo root, where none exist since
+  the plugin move, and told contributors to update a "Channel reference
+  map" that is gone; it now names the three places a channel is registered.
 
 - **`cycle`: a wrapped label above the ring no longer lands on its node.**
   Lines stacked downward from the anchor, so the top step's second line hit

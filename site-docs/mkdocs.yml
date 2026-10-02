@@ -1,7 +1,7 @@
 site_name: muriel
 site_description: >-
-  Multi-channel visual production for LLMs — sixteen output channels, a brand
-  token schema, and an 8:1 contrast rule enforced at render time.
+  A design skill for coding agents: fifteen output channels, a brand token
+  schema, and an 8:1 contrast rule enforced at render time.
 site_url: https://muriel.mindbendingpixels.com/
 site_author: Andy Edmonds
 repo_url: https://github.com/andyed/muriel

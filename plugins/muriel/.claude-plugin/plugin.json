@@ -1,6 +1,6 @@
 {
   "name": "muriel",
-  "description": "Multi-channel visual production skill with brand-token enforcement and 8:1 contrast minimum.",
+  "description": "Design skill for coding agents: decides, builds, and checks the parts of a task people will look at, across fifteen output channels, with an 8:1 contrast floor, brand tokens from one brand.toml, and critique subagents that review the render.",
   "author": {
     "name": "Andy Edmonds"
   },
