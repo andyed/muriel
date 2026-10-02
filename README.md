@@ -37,23 +37,23 @@ For other harnesses, the Python package, or a development checkout, see [More wa
 
 A channel is one output medium. Each has a markdown file of recipes, tools, and anti-patterns under [`channels/`](plugins/muriel/skills/compose/channels/), and the agent reads the one that matches the job.
 
-| Channel | For | Built with |
-|---|---|---|
-| [Raster](plugins/muriel/skills/compose/channels/raster.md) | Store assets, icons, banners, wordmarks | Pillow, `muriel.typeset` |
-| [SVG](plugins/muriel/skills/compose/channels/svg.md) | Paper figures, data-driven vectors, icons, wave fields | Plain SVG; `svgwrite` and `cairosvg` optional |
-| [Diagrams](plugins/muriel/skills/compose/channels/diagrams.md) | Named forms (2×2, cycle, pyramid, swimlane, Sankey, treemap, DAG, …), each with a stated test for when it fits | `muriel.tools.diagrams`; Mermaid and MathJax through Node |
-| [Charts](plugins/muriel/skills/compose/channels/charts.md) | Quantitative charts in JS libraries | Recharts, ECharts, Chart.js, Plotly, D3 |
-| [Science](plugins/muriel/skills/compose/channels/science.md) | Paper figures, notebook editorial, APA-style stats | matplotlib, LaTeX, `muriel.stats` |
-| [Infographics](plugins/muriel/skills/compose/channels/infographics.md) | Single-image explainers | Generated SVG |
-| [Web](plugins/muriel/skills/compose/channels/web.md) | Blog posts, magazine layouts, HTML to PNG or PDF | marginalia, pandoc, Playwright or WeasyPrint |
-| [Interactive](plugins/muriel/skills/compose/channels/interactive.md) | Live demos with parameter controls | WebGL, Canvas, D3, PixiJS |
-| [Polish](plugins/muriel/skills/compose/channels/polish.md) | UI detail: radii, press states, hit areas, icon motion | CSS, TSX, HTML |
-| [Spatial](plugins/muriel/skills/compose/channels/spatial.md) | Perspective grids, layered typography, ridge plots | `muriel.spatial`, Three.js |
-| [Video](plugins/muriel/skills/compose/channels/video.md) | Product demos, GIFs, HTML to MP4 | ffmpeg, hyperframes |
-| [Terminal](plugins/muriel/skills/compose/channels/terminal.md) | Sparklines, bar charts, tables in Unicode | `muriel.chart` |
-| [Heatmaps](plugins/muriel/skills/compose/channels/heatmaps.md) | Fixation density overlays | `muriel.typeset` |
-| [Gaze](plugins/muriel/skills/compose/channels/gaze.md) | Scanpaths, AOI timelines, saccade roses | Pillow |
-| [README](plugins/muriel/skills/compose/channels/readme.md) | Repo front pages rendered by GitHub | `muriel.capture`, `muriel.squint`, `muriel.aiism` |
+| Channel | For (main tools) |
+|---|---|
+| [Raster](plugins/muriel/skills/compose/channels/raster.md) | Store assets, icons, banners, wordmarks (Pillow, `muriel.typeset`) |
+| [SVG](plugins/muriel/skills/compose/channels/svg.md) | Paper figures, data-driven vectors, icons, wave fields (plain SVG, optionally `svgwrite` and `cairosvg`) |
+| [Diagrams](plugins/muriel/skills/compose/channels/diagrams.md) | Named forms such as 2×2, cycle, pyramid, swimlane, Sankey, treemap, and DAG, each with a stated test for when it fits (muriel's generators; Mermaid and MathJax through Node) |
+| [Charts](plugins/muriel/skills/compose/channels/charts.md) | Quantitative charts in JS libraries (Recharts, ECharts, Chart.js, Plotly, D3) |
+| [Science](plugins/muriel/skills/compose/channels/science.md) | Paper figures, notebook editorial, APA-style stats (matplotlib, LaTeX, `muriel.stats`) |
+| [Infographics](plugins/muriel/skills/compose/channels/infographics.md) | Single-image explainers (generated SVG) |
+| [Web](plugins/muriel/skills/compose/channels/web.md) | Blog posts, magazine layouts, HTML to PNG or PDF (marginalia, pandoc, Playwright or WeasyPrint) |
+| [Interactive](plugins/muriel/skills/compose/channels/interactive.md) | Live demos with parameter controls (WebGL, Canvas, D3, PixiJS) |
+| [Polish](plugins/muriel/skills/compose/channels/polish.md) | UI detail: radii, press states, hit areas, icon motion (CSS, TSX, HTML) |
+| [Spatial](plugins/muriel/skills/compose/channels/spatial.md) | Perspective grids, layered typography, ridge plots (`muriel.spatial`, Three.js) |
+| [Video](plugins/muriel/skills/compose/channels/video.md) | Product demos, GIFs, HTML to MP4 (ffmpeg, hyperframes) |
+| [Terminal](plugins/muriel/skills/compose/channels/terminal.md) | Sparklines, bar charts, tables in Unicode (`muriel.chart`) |
+| [Heatmaps](plugins/muriel/skills/compose/channels/heatmaps.md) | Fixation density overlays (`muriel.typeset`) |
+| [Gaze](plugins/muriel/skills/compose/channels/gaze.md) | Scanpaths, AOI timelines, saccade roses (Pillow) |
+| [README](plugins/muriel/skills/compose/channels/readme.md) | Repo front pages rendered by GitHub (`muriel.capture`, `muriel.squint`, `muriel.aiism`) |
 
 Two references apply to every channel. [Dimensions](plugins/muriel/skills/compose/channels/dimensions.md) covers social cards, device sizes, paper, and video resolutions. [Style guides](plugins/muriel/skills/compose/channels/style-guides.md) defines the `brand.toml` schema, which imports from Google Stitch `design.md` (`muriel import`) and exports W3C design tokens (`muriel export-dtcg`).
 
@@ -143,13 +143,11 @@ cd ~/Documents/dev/muriel && ./install.sh
 
 ### Repository layout
 
-| Path | Contents |
-|---|---|
-| [`plugins/muriel/skills/compose/`](plugins/muriel/skills/compose/) | The skill: `SKILL.md`, channels, references, vocabularies, examples |
-| [`plugins/muriel/agents/`](plugins/muriel/agents/) | The critique agent and the five jury seats |
-| [`muriel/`](muriel/) | Python package and CLI |
-| [`render_assets/`](render_assets/) | Three.js and CSS3D exemplars for the spatial channel |
-| `.claude-plugin/marketplace.json` | Marketplace entry. The plugin manifest is `plugins/muriel/.claude-plugin/plugin.json`. |
+- [`plugins/muriel/skills/compose/`](plugins/muriel/skills/compose/): the skill (`SKILL.md`, channels, references, vocabularies, examples)
+- [`plugins/muriel/agents/`](plugins/muriel/agents/): the critique agent and the five jury seats
+- [`muriel/`](muriel/): Python package and CLI
+- [`render_assets/`](render_assets/): Three.js and CSS3D exemplars for the spatial channel
+- `.claude-plugin/marketplace.json`: the marketplace entry. The plugin manifest is `plugins/muriel/.claude-plugin/plugin.json`.
 
 ## In use
 
