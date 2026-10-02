@@ -285,11 +285,11 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   prior-art list moved verbatim to `PRIOR_ART.md`; the README keeps the five
   most direct debts. Verified on GitHub's render at 390 px: no table scrolls
   sideways. `muriel.aiism`: 10 findings before, clean after.
-- **The opener leads with reflection and design languages.** The README,
-  plugin manifests and docs landing page now say what muriel is fluent in
-  (ten vocabularies, newly listed in a README "Design languages" section)
-  and that it checks its own work, from measured contrast to a five-critic
-  jury. The critique section is reframed as
+- **The opener says what muriel does.** The README, plugin manifests and
+  docs landing page now lead with four things: it translates between design
+  languages (ten vocabularies, newly listed in a README "Design languages"
+  section), expresses them in a multitude of mediums, juries its own work,
+  and keeps every piece on brand and readable. The critique section is reframed as
   "Checking its own work" and names the tools that do the inspecting.
 - **One description, one channel count.** `pyproject.toml`,
   `marketplace.json`, `plugin.json`, the docs site and `vocabularies/surfaces.md`
