@@ -7,14 +7,14 @@ Contributions are welcome; below is how to make yours land cleanly.
 
 ## Before you start
 
-1. **Read the top-level [`README.md`](README.md) and [`SKILL.md`](SKILL.md).** The universal rules
-   (8:1 contrast, decorative ≥55/255, OLED palette, one font treatment,
-   generated > drawn, reproducible > one-off) apply to every
+1. **Read the top-level [`README.md`](README.md) and [`SKILL.md`](plugins/muriel/skills/compose/SKILL.md).** Its universal
+   constraints (8:1 text contrast, 16 px and weight-500 floors, measure
+   before drawing, reproducible output) apply to every
    contribution. Anti-patterns sections in each channel doc spell out
    what to avoid.
 2. **Skim the channel and vocabulary you're touching.** Every channel
-   subfile under [`channels/`](channels/) and every vocabulary under
-   [`vocabularies/`](vocabularies/) has a distinct voice and scope.
+   subfile under [`channels/`](plugins/muriel/skills/compose/channels/) and every vocabulary under
+   [`vocabularies/`](plugins/muriel/skills/compose/vocabularies/) has a distinct voice and scope.
    Match it; don't homogenize.
 3. **Run the contrast audit.** If your change touches any text color or
    SVG, run `python -m muriel.contrast <file>` before pushing. Exit 0
@@ -68,8 +68,9 @@ Part of the [muriel](../SKILL.md) skill.
 - Don't …
 ```
 
-Also add an entry to [`SKILL.md`](SKILL.md)'s Channel table and the
-Channel reference map.
+Also add a row to the Channel router in [`SKILL.md`](plugins/muriel/skills/compose/SKILL.md), the
+channel table in [`README.md`](README.md), and the Channels nav in
+[`site-docs/mkdocs.yml`](site-docs/mkdocs.yml).
 
 ## Adding a vocabulary
 
@@ -81,8 +82,8 @@ PixiJS, Kinetic Typography. A new one should:
 - Explain how it integrates with existing muriel channels.
 - Name the substrate choices (library / library family) for execution.
 
-Also add an entry to [`SKILL.md`](SKILL.md)'s Aesthetic vocabularies
-list and the Channel reference map.
+Also add it to the Vocabularies nav in
+[`site-docs/mkdocs.yml`](site-docs/mkdocs.yml).
 
 ## Python contributions
 
