@@ -294,8 +294,9 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 - **One description, one channel count.** `pyproject.toml`,
   `marketplace.json`, `plugin.json`, the docs site and `vocabularies/surfaces.md`
   said fourteen, fifteen or sixteen channels and described an older
-  positioning. All now say fifteen output channels (plus the two
-  references) and match the README's lede.
+  positioning. They now carry the README's one-line description, and
+  every remaining count says fifteen output channels (plus the two
+  references).
 
 - **Motion defaults moved to the two ends of the binary.**
   `styleguide.Motion` and both example brand TOMLs: `duration_fast` 120 →
