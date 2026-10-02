@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name            = "muriel"
 version         = "0.14.0"
-description     = "Design skill and Python toolkit for coding agents: recipes for fifteen output channels, a brand.toml token schema, an 8:1 contrast audit, diagram generators, APA-style stats reporting, and critique subagents that review the rendered result."
+description     = "Design skill for coding agents. It translates between design languages, expresses them in a multitude of mediums, juries its own work, and keeps every piece on brand and readable."
 readme          = "README.md"
 requires-python = ">=3.9"
 license         = { text = "MIT" }
