@@ -8,7 +8,7 @@
     {
       "name": "muriel",
       "source": "./plugins/muriel",
-      "description": "Design skill for coding agents. It speaks many design languages, from Visible Language typography to sci-fi interfaces, and checks its own renders: it measures contrast and label collisions, then a jury of critics sees the work blurred, at favicon size, and without the brief, and one tries to forge it from a stock template.",
+      "description": "Design skill for coding agents. It speaks many design languages, from Visible Language typography to sci-fi interfaces, and checks its own work, from measured contrast to a jury of critics.",
       "homepage": "https://github.com/andyed/muriel",
       "license": "MIT",
       "category": "design",

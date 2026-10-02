@@ -2,10 +2,8 @@
 
 **A design skill for coding agents.** muriel turns a brief ("make me a deck",
 "a paper figure", "a gaze plot", "a share card") into a deterministic,
-reproducible artifact in the design language it calls for. It measures the
-render for contrast and label collisions, then a jury of critics sees it
-blurred, at favicon size, and without the brief, and one tries to forge it from
-a stock template.
+reproducible artifact in the design language it calls for, then checks its own
+work, from measured contrast to a jury of critics.
 Named after Muriel Cooper, founder of the MIT Visible Language Workshop.
 
 It is a curator before it is an originator: it lifts the sharpest structural

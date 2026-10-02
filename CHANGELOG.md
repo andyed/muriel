@@ -288,9 +288,8 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 - **The opener leads with reflection and design languages.** The README,
   plugin manifests and docs landing page now say what muriel is fluent in
   (ten vocabularies, newly listed in a README "Design languages" section)
-  and that it inspects its own renders: colliding labels, contrast below
-  8:1, and a five-seat jury (blur, favicon size, a cold read, labels and
-  units, a forgery attempt). The critique section is reframed as
+  and that it checks its own work, from measured contrast to a five-critic
+  jury. The critique section is reframed as
   "Checking its own work" and names the tools that do the inspecting.
 - **One description, one channel count.** `pyproject.toml`,
   `marketplace.json`, `plugin.json`, the docs site and `vocabularies/surfaces.md`
