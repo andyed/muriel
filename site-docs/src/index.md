@@ -1,10 +1,10 @@
 # muriel
 
-**A design skill for coding agents.** muriel handles the part of a task that a
-person will look at. It turns a brief ("make me a deck", "a paper figure", "a
-gaze plot", "a share card") into a deterministic, reproducible artifact across
-fifteen output channels, then checks the rendered result. Named after Muriel
-Cooper, founder of the MIT Visible Language Workshop.
+**A design skill for coding agents.** muriel turns a brief ("make me a deck",
+"a paper figure", "a gaze plot", "a share card") into a deterministic,
+reproducible artifact in the design language it calls for, then inspects the
+render for colliding labels, contrast below 8:1, and hierarchy lost under blur.
+Named after Muriel Cooper, founder of the MIT Visible Language Workshop.
 
 It is a curator before it is an originator: it lifts the sharpest structural
 patterns from sibling skills, ports their agent-actionable detection tables,

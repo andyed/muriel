@@ -8,7 +8,7 @@
     {
       "name": "muriel",
       "source": "./plugins/muriel",
-      "description": "Design skill for coding agents: decides, builds, and checks the parts of a task people will look at, across fifteen output channels, with an 8:1 contrast floor, brand tokens from one brand.toml, and critique subagents that review the render.",
+      "description": "Design skill for coding agents. It speaks many design languages, from Visible Language typography to sci-fi interfaces, and inspects its own renders for colliding labels, contrast below 8:1, and hierarchy lost under blur.",
       "homepage": "https://github.com/andyed/muriel",
       "license": "MIT",
       "category": "design",
