@@ -519,6 +519,45 @@ def _first_present(d: dict[str, Any], *keys: str) -> tuple[str, Any]:
 MURIEL_MIN_CONTRAST = 8.0
 
 
+def _text_pair_warnings(fg: Any, bg: Any) -> list[str]:
+    """
+    WARN when the imported foreground/background pair misses muriel's floor,
+    with the nearest same-hue fix from :func:`muriel.contrast.repair_text_pair`.
+
+    The source colour is kept: brand values are data, and the repaired hex can
+    read as a different colour name (orange at 8:1 on cream is a brown), which
+    is the brand owner's call. The prefix carries no colon so corpus_audit's
+    WARN tally (split on the first ``—`` or ``:``) groups these together.
+    """
+    from muriel.contrast import repair_text_pair
+
+    try:
+        r = repair_text_pair(fg, bg, required=MURIEL_MIN_CONTRAST)
+    except (ValueError, TypeError):
+        return [
+            f"text pair not evaluated for contrast — foreground {fg!r} / "
+            f"background {bg!r} did not parse as colours"
+        ]
+    if r.direction == "none":
+        return []
+    head = (
+        f"text pair below muriel's contrast floor — foreground {fg} on "
+        f"background {bg} is {r.ratio_before:.2f}:1 against "
+        f"{MURIEL_MIN_CONTRAST:g}:1; "
+    )
+    if r.repaired is None:
+        return [
+            head + f"no same-hue fix exists (black and white top out at "
+            f"{r.max_ratio:.2f}:1 on this background), so the background has "
+            f"to move. Source values kept."
+        ]
+    verb = "darker" if r.direction == "dark" else "lighter"
+    return [
+        head + f"nearest same-hue fix is {r.hex} ({r.ratio_after:.2f}:1, "
+        f"{verb}; see `muriel contrast --repair`). Source value kept."
+    ]
+
+
 def _stitch_to_muriel_dict(
     frontmatter: dict[str, Any],
     prose: dict[str, str],
@@ -582,12 +621,21 @@ def _stitch_to_muriel_dict(
     # muriel.colors REQUIRES background + foreground; default if missing.
     # WARN messages remain stable so corpus_audit can detect default-injection
     # by string match (see ``muriel.tools.corpus_audit.audit_file``).
-    if "background" not in colors_out:
+    bg_defaulted = "background" not in colors_out
+    fg_defaulted = "foreground" not in colors_out
+    if bg_defaulted:
         colors_out["background"] = "#0a0a0f"
         warnings.append("colors.surface (background) missing in source — defaulted to #0a0a0f")
-    if "foreground" not in colors_out:
+    if fg_defaulted:
         colors_out["foreground"] = "#e6e4d2"
         warnings.append("colors.on-surface (foreground) missing in source — defaulted to #e6e4d2")
+
+    # A both-defaulted pair is muriel's contrast, not the brand's — same
+    # rule corpus_audit applies before claiming pass/fail.
+    if not (bg_defaulted and fg_defaulted):
+        warnings.extend(
+            _text_pair_warnings(colors_out["foreground"], colors_out["background"])
+        )
 
     if named:
         colors_out["named"] = named
@@ -908,7 +956,9 @@ def _print_help() -> None:
         "Lossy: design.md's flat schema can't express muriel's semantic states,\n"
         "ring gradients, viz palettes, or typed iconography. Those stay absent\n"
         "after import; hand-augment as needed. WARNs print to stderr when the\n"
-        "imported spec specifies below muriel's universal 8:1 contrast floor.\n"
+        "imported spec specifies below muriel's universal 8:1 contrast floor,\n"
+        "or when its foreground/background pair misses 8:1 (with the nearest\n"
+        "same-hue fix; the source colour is kept).\n"
     )
 
 

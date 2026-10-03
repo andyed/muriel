@@ -31,6 +31,24 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   rather than moving an existing one. SKILL.md's 8:1 constraint now
   points at it.
 
+- **`muriel import` checks the imported text pair, and `import-corpus`
+  reports the fix.** Until now the importer only compared a declared
+  `contrast.minimum` against 8.0; a brand whose own `foreground` on
+  `background` failed 8:1 imported without a word unless it went through
+  `import-corpus`. The importer now WARNs on that pair with the nearest
+  same-hue fix, for example: *text pair below muriel's contrast floor —
+  foreground #EA580C on background #FFEDD5 is 3.11:1 against 8:1; nearest
+  same-hue fix is #812b00 (8.04:1, darker)*. The source colour is kept.
+  Pairs where muriel defaulted both colours are not judged, the same rule
+  corpus_audit applies. `BrandResult` gains `repair`, `repair_contrast`
+  and `repair_direction`; the summary lists each failure with its fix, and
+  the markdown table gains a "Same-hue fix" column (`move bg` when black
+  and white both fall short). On awesome-design-md that is 13 failing
+  brands, each now listed with a fix; on awesome-design-skills, 4.
+  `repair_text_pair` also keeps an exact sRGB grey on the grey axis:
+  bisection lands where 8-bit rounding flips, the channels could round
+  apart there, and `#737373` came back `#515051`.
+
 - **Diagram icon library: 30 curated Lucide glyphs, and named icons on
   `cycle`.** `muriel.tools.diagrams.icons.GLYPHS` maps process-verb and
   concept slots (`observe`, `measure`, `decide`, `refresh`, `test`, `ship`,

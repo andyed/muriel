@@ -109,6 +109,16 @@ class RepairEdgeCases(unittest.TestCase):
         r = repair_text_pair("#EA580C", "#FFEDD5", direction="light")
         self.assertEqual(r.direction, "unreachable")
 
+    def test_exact_grey_stays_grey(self):
+        # Bisection lands where 8-bit rounding flips; unguarded, the
+        # channels rounded apart and #737373 came back #515051.
+        for grey in ("#737373", "#7e7e7e", "#757575", "#959595", "#111111"):
+            for bg in ("#ffffff", "#000000", "#f5f5f5"):
+                with self.subTest(grey=grey, bg=bg):
+                    r = repair_text_pair(grey, bg)
+                    if r.repaired is not None:
+                        self.assertEqual(len(set(r.repaired)), 1, r.hex)
+
     def test_grey_input_reports_no_hue_shift(self):
         r = repair_text_pair("#78716B", "#E7E5E4")
         self.assertIsNone(r.hue_shift)

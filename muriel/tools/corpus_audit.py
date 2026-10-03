@@ -64,7 +64,7 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Any, Optional, Sequence
 
-from muriel.contrast import contrast_ratio
+from muriel.contrast import contrast_ratio, repair_text_pair
 from muriel.design_md_import import parse_design_md
 
 __all__ = [
@@ -100,6 +100,11 @@ class BrandResult:
     fg_defaulted: bool = False
     contrast: Optional[float] = None
     passes_8_1: Optional[bool] = None
+    # Nearest same-hue fg that clears 8:1, filled when passes_8_1 is False.
+    # repair_direction is "dark" | "light" | "unreachable" (bg must move).
+    repair: Optional[str] = None
+    repair_contrast: Optional[float] = None
+    repair_direction: Optional[str] = None
     n_named_colors: int = 0
     n_aliases: int = 0
     # Typography extraction.
@@ -172,6 +177,13 @@ def audit_file(path: Path, brand: Optional[str] = None) -> BrandResult:
                 result.passes_8_1 = None
             else:
                 result.passes_8_1 = ratio >= MURIEL_MIN_CONTRAST
+            if result.passes_8_1 is False:
+                fix = repair_text_pair(result.fg, result.bg,
+                                       required=MURIEL_MIN_CONTRAST)
+                result.repair_direction = fix.direction
+                if fix.repaired is not None:
+                    result.repair = fix.hex
+                    result.repair_contrast = round(fix.ratio_after, 2)
         except (ValueError, TypeError):
             result.contrast = None
             result.passes_8_1 = None
@@ -287,6 +299,18 @@ def _format_summary(results: list[BrandResult]) -> str:
         "",
         f"  Total WARNs raised:  {total_warnings}",
     ]
+    failing = sorted(
+        (r for r in results if r.passes_8_1 is False), key=lambda r: r.brand,
+    )
+    if failing:
+        lines.append("")
+        lines.append("  8:1 failures → nearest same-hue fg:")
+        width = max(len(r.brand) for r in failing)
+        for r in failing:
+            fix = (f"{r.repair} ({r.repair_contrast:.2f}:1)"
+                   if r.repair else "none — background has to move")
+            lines.append(f"    {r.brand:<{width}}  {r.fg} on {r.bg} "
+                         f"{r.contrast:.2f}:1 → {fix}")
     if top_warns:
         lines.append("")
         lines.append("  Top WARN categories:")
@@ -311,15 +335,21 @@ def _format_markdown(results: list[BrandResult]) -> str:
         f"8:1 contrast floor on their imported `background` × `foreground` pair, "
         f"**{n_fail}** fall short.",
         "",
-        "| Brand | Status | bg | fg | Contrast | 8:1 | Scale roles | Body / Display | WARNs |",
-        "|---|---|---|---|---:|:---:|---:|:---:|---:|",
+        "| Brand | Status | bg | fg | Contrast | 8:1 | Same-hue fix | Scale roles | Body / Display | WARNs |",
+        "|---|---|---|---|---:|:---:|---|---:|:---:|---:|",
     ]
     for r in sorted(results, key=lambda r: r.brand):
         if r.status != "ok":
             lines.append(
-                f"| `{r.brand}` | {r.status} | — | — | — | — | — | — | — |"
+                f"| `{r.brand}` | {r.status} | — | — | — | — | — | — | — | — |"
             )
             continue
+        if r.repair:
+            fix_txt = f"`{r.repair}` ({r.repair_contrast:.2f})"
+        elif r.repair_direction == "unreachable":
+            fix_txt = "move bg"
+        else:
+            fix_txt = "—"
         contrast_txt = f"{r.contrast:.2f}" if r.contrast is not None else "—"
         if r.bg_defaulted and r.fg_defaulted:
             pass_mark = "n/a"  # muriel filled in both — not the brand's contrast
@@ -331,7 +361,7 @@ def _format_markdown(results: list[BrandResult]) -> str:
         dp = "D" if r.has_display_family else "·"
         lines.append(
             f"| `{r.brand}` | ok | {bg_txt} | {fg_txt} | "
-            f"{contrast_txt} | {pass_mark} | "
+            f"{contrast_txt} | {pass_mark} | {fix_txt} | "
             f"{r.n_scale_roles} | {bd}{dp} | {r.n_warnings} |"
         )
     lines.append("")
@@ -341,7 +371,10 @@ def _format_markdown(results: list[BrandResult]) -> str:
         "both bg and fg are defaulted the contrast claim is `n/a` (it's "
         "muriel's contrast, not the brand's). The 8:1 floor is muriel's "
         "universal a11y rule — stricter than WCAG AAA (7:1) — and applies "
-        "regardless of any `contrast.minimum` in the source spec.*"
+        "regardless of any `contrast.minimum` in the source spec. "
+        "\"Same-hue fix\" is the nearest fg at the same OKLCH hue that clears "
+        "8:1 (`muriel contrast --repair`); `move bg` means black and white "
+        "both fall short on that background.*"
     )
     lines.append("")
     return "\n".join(lines) + "\n"

@@ -474,7 +474,16 @@ def repair_text_pair(
     if ratio_before >= required:
         return result("none", fg_rgb, src.L)
 
+    # Bisection converges on the lightness where 8-bit rounding flips, and
+    # there the three channels can round apart: #737373 came back #515051.
+    # A noise-level tint on a chromatic colour, a visible one on a grey, so
+    # an exact sRGB grey stays on the grey axis.
+    neutral = fg_rgb[0] == fg_rgb[1] == fg_rgb[2]
+
     def candidate(L: float) -> tuple[int, int, int]:
+        if neutral:
+            v = oklch_to_rgb(src.replace(L=L, C=0.0))[1]
+            return (v, v, v)
         return oklch_to_rgb(clamp_to_srgb(src.replace(L=L)))
 
     def passes(rgb: tuple[int, int, int]) -> bool:
