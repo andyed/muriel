@@ -120,7 +120,10 @@ Within the human-visible slice already in scope:
 - Preserve the project's brand and tokens. If none exist, use a restrained
   near-black, cream, and cyan system rather than inventing a large palette.
 - Keep text contrast at least 8:1 against its background. Do not use opacity to
-  weaken text; choose an explicit color.
+  weaken text; choose an explicit color. When a brand color fails as text,
+  deepen or lift that color rather than swapping hues:
+  `muriel contrast --repair FG BG` returns the nearest same-hue color that
+  clears 8:1, or reports that the background itself has to move.
 - Do not put body copy or captions below 16 px, or body text below weight 500.
 - Measure before drawing: text width, plot bounds, target dimensions, and
   responsive states are inputs, not guesses.

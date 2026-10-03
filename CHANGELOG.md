@@ -8,6 +8,29 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`muriel.contrast.repair_text_pair()` and `muriel contrast --repair FG BG`:
+  same-hue contrast repair.** Given a text colour that fails against its
+  background, returns the nearest colour with the same OKLCH hue and
+  chroma (chroma reduced only where the sRGB gamut forces it) that clears
+  the threshold, 8:1 by default. It walks OKLCH lightness toward black
+  and/or white, bisects the bracket, and scores every candidate *after*
+  8-bit rounding, so the returned hex passes as written. `direction="auto"`
+  keeps whichever side moves lightness less. When black and white both
+  fall short (a mid-grey background), the result is `unreachable` with
+  the best achievable ratio: the background has to move, not the text.
+  `RepairResult` reports ΔL, chroma kept and hue drift, because at 8:1 a
+  warm accent on a light ground lands near L 0.40 and an orange can read
+  as brown. That is a brand call for a person to make. On the four
+  failing pairs in
+  [bergside/awesome-design-skills](https://github.com/bergside/awesome-design-skills):
+  `#ea580c` on `#ffedd5` (3.11:1) → `#812b00` (8.04:1, hue Δ0.2°);
+  `#111827` on `#111111` (1.06:1) → `#9faabe` (8.06:1). The rule is
+  adapted from TypeUI's accessibility fundamentals (MIT): repair the
+  palette's own colour rather than override it. Sibling of
+  `palettes.generate_for_floor()`, which builds new colours at the floor
+  rather than moving an existing one. SKILL.md's 8:1 constraint now
+  points at it.
+
 - **Diagram icon library: 30 curated Lucide glyphs, and named icons on
   `cycle`.** `muriel.tools.diagrams.icons.GLYPHS` maps process-verb and
   concept slots (`observe`, `measure`, `decide`, `refresh`, `test`, `ship`,

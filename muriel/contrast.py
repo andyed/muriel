@@ -34,6 +34,7 @@ Programmatic:
 
     contrast_ratio("#e6e4d2", "#0a0a0f")         # → 15.42
     check_text_pair("#8a8aa0", "#0a0a0f")         # CheckResult(passes=False, …)
+    repair_text_pair("#ea580c", "#ffedd5")        # → #802b00, same hue, 8.10:1
     audit_svg("examples/example-palette.svg")    # prints audit table
     audit_html("docs/article.html")              # prints audit + legibility table
 
@@ -45,10 +46,13 @@ CLI:
     python -m muriel.contrast path/to/file.html
     python -m muriel.contrast path/to/file.html --required 4.5
     python -m muriel.contrast path/to/file.html --background '#ffffff'
+    python -m muriel.contrast --repair '#ea580c' '#ffedd5'
 
 Exit status:
     0 = every text rule clears the threshold and no legibility warnings
+        (``--repair``: the pair already passes or a repair was found)
     1 = one or more text rules fail the contrast threshold
+        (``--repair``: no colour at this hue reaches the threshold)
     2 = contrast passes but legibility floor warnings were emitted
     3 = usage error (file not found, etc.)
 
@@ -120,6 +124,8 @@ __all__ = [
     "contrast_ratio",
     "CheckResult",
     "check_text_pair",
+    "RepairResult",
+    "repair_text_pair",
     "SelectorEntry",
     "LegibilityWarning",
     "audit_svg",
@@ -331,6 +337,179 @@ def check_text_pair(
         passes=(ratio >= required),
         wcag_tier=_wcag_tier(ratio),
     )
+
+
+# ─── Text-pair repair ───────────────────────────────────────────────────
+
+# Below this OKLCH chroma a colour reads as grey and its hue angle is
+# noise, so hue drift isn't reported for it.
+_ACHROMATIC_C = 0.02
+
+
+def _hex(rgb: tuple[int, int, int]) -> str:
+    return "#{:02x}{:02x}{:02x}".format(*rgb)
+
+
+@dataclass
+class RepairResult:
+    """
+    Outcome of :func:`repair_text_pair`.
+
+    ``direction`` is ``"none"`` when the pair already clears ``required``,
+    ``"dark"`` / ``"light"`` when ``repaired`` was found by darkening or
+    lightening ``fg``, and ``"unreachable"`` when no lightness at this
+    hue clears the threshold against ``bg`` (``repaired`` is then None and
+    ``max_ratio`` says how close black or white gets — the background has
+    to move, not the text).
+
+    ``C_before`` / ``C_after`` and ``hue_shift`` show what the repair cost.
+    Hue is held fixed, but at 8:1 a warm accent on a light ground lands
+    near OKLCH L 0.40, where an orange reads as brown. The numbers can't
+    make that call; a person looking at the swatch has to.
+    """
+    fg: tuple[int, int, int]
+    bg: tuple[int, int, int]
+    required: float
+    ratio_before: float
+    direction: str  # 'none' | 'dark' | 'light' | 'unreachable'
+    repaired: Optional[tuple[int, int, int]]
+    ratio_after: Optional[float]
+    max_ratio: float
+    L_before: float
+    L_after: Optional[float]
+    C_before: float
+    C_after: Optional[float]
+    hue_shift: Optional[float]  # degrees; None for near-grey input or output
+
+    @property
+    def hex(self) -> Optional[str]:
+        return _hex(self.repaired) if self.repaired is not None else None
+
+    def __str__(self) -> str:
+        src = _hex(self.fg)
+        on = _hex(self.bg)
+        if self.direction == "none":
+            return (f"ok: {src} already clears {self.required:.1f}:1 on {on} "
+                    f"({self.ratio_before:.2f}:1)")
+        if self.direction == "unreachable":
+            return (f"unreachable: no lightness of {src} clears "
+                    f"{self.required:.1f}:1 on {on} (black/white top out at "
+                    f"{self.max_ratio:.2f}:1) — move the background")
+        verb = "darker" if self.direction == "dark" else "lighter"
+        hue = ("" if self.hue_shift is None
+               else f", hue Δ{self.hue_shift:.1f}°")
+        return (f"repair: {src} → {self.hex} on {on} "
+                f"({self.ratio_before:.2f} → {self.ratio_after:.2f}:1, {verb}; "
+                f"L {self.L_before:.2f}→{self.L_after:.2f}, "
+                f"C {self.C_before:.3f}→{self.C_after:.3f}{hue})")
+
+
+def repair_text_pair(
+    fg: ColorInput,
+    bg: ColorInput,
+    required: float = RENDER_8,
+    *,
+    direction: str = "auto",
+) -> RepairResult:
+    """
+    Find the colour closest to ``fg`` — same OKLCH hue and chroma, shifted
+    only in lightness — that clears ``required`` against ``bg``.
+
+    This is the fix for a brand token that fails as text: deepen (or lift)
+    the brand's own colour rather than swapping in an unrelated hue or a
+    grey. ``fg``'s chroma is kept wherever the sRGB gamut allows and
+    reduced only as far as needed to stay in gamut at the new lightness.
+
+    Sibling of :func:`muriel.palettes.generate_for_floor`, which builds
+    *new* colours at the floor at maximum chroma. This one starts from an
+    existing colour and moves it as little as possible.
+
+    Algorithm: walk OKLCH L from ``fg`` toward black (``"dark"``) and/or
+    white (``"light"``) in 0.01 steps until a candidate passes, then
+    bisect that bracket. Every candidate is rounded to 8-bit sRGB and
+    scored with the WCAG formula *after* rounding, so the returned colour
+    passes as written — no monotonicity assumption is needed for that.
+    ``"auto"`` tries both directions and keeps the smaller lightness move.
+
+    Raises ``ValueError`` for transparent / unresolvable input or an
+    unknown ``direction``.
+    """
+    # Lazy import, matching parse_color's oklch() route.
+    from muriel.oklch import clamp_to_srgb, oklch_to_rgb, rgb_to_oklch
+
+    if direction not in ("auto", "dark", "light"):
+        raise ValueError(
+            f"direction must be 'auto' | 'dark' | 'light'; got {direction!r}"
+        )
+    fg_rgb = parse_color(fg) if isinstance(fg, str) else tuple(fg)  # type: ignore[arg-type]
+    bg_rgb = parse_color(bg) if isinstance(bg, str) else tuple(bg)  # type: ignore[arg-type]
+    if fg_rgb is None or bg_rgb is None:
+        raise ValueError("cannot repair transparent / unresolvable color")
+
+    src = rgb_to_oklch(fg_rgb)
+    ratio_before = contrast_ratio(fg_rgb, bg_rgb)
+    sides = ("dark", "light") if direction == "auto" else (direction,)
+    max_ratio = max(
+        contrast_ratio((0, 0, 0) if s == "dark" else (255, 255, 255), bg_rgb)
+        for s in sides
+    )
+
+    def result(dir_: str, rgb=None, L=None) -> RepairResult:
+        out = rgb_to_oklch(rgb) if rgb is not None else None
+        shift = None
+        if out is not None and min(src.C, out.C) >= _ACHROMATIC_C:
+            d = abs(out.h - src.h) % 360.0
+            shift = min(d, 360.0 - d)
+        return RepairResult(
+            fg=fg_rgb, bg=bg_rgb, required=required,
+            ratio_before=ratio_before, direction=dir_,
+            repaired=rgb,
+            ratio_after=contrast_ratio(rgb, bg_rgb) if rgb is not None else None,
+            max_ratio=max_ratio,
+            L_before=src.L, L_after=L,
+            C_before=src.C, C_after=out.C if out is not None else None,
+            hue_shift=shift,
+        )
+
+    if ratio_before >= required:
+        return result("none", fg_rgb, src.L)
+
+    def candidate(L: float) -> tuple[int, int, int]:
+        return oklch_to_rgb(clamp_to_srgb(src.replace(L=L)))
+
+    def passes(rgb: tuple[int, int, int]) -> bool:
+        return contrast_ratio(rgb, bg_rgb) >= required
+
+    best = None  # (|ΔL|, side, rgb, L)
+    for side in sides:
+        end = 0.0 if side == "dark" else 1.0
+        if not passes(candidate(end)):
+            continue
+        step = -0.01 if side == "dark" else 0.01
+        # Bracket: lo fails, hi passes. hi starts at the endpoint so the
+        # bracket always exists even if the walk never trips.
+        lo, hi = src.L, end
+        L = src.L + step
+        while (L > end) if side == "dark" else (L < end):
+            if passes(candidate(L)):
+                hi = L
+                break
+            lo = L
+            L += step
+        for _ in range(20):
+            mid = 0.5 * (lo + hi)
+            if passes(candidate(mid)):
+                hi = mid
+            else:
+                lo = mid
+        found = (abs(hi - src.L), side, candidate(hi), hi)
+        if best is None or found[0] < best[0]:
+            best = found
+
+    if best is None:
+        return result("unreachable")
+    _, side, rgb, L = best
+    return result(side, rgb, L)
 
 
 # ─── Selector role classification ───────────────────────────────────────
@@ -1675,8 +1854,18 @@ def _main(argv: Optional[Sequence[str]] = None) -> int:
             "HTML mode also runs the legibility-floor pass."
         ),
     )
-    parser.add_argument("path", type=Path, nargs="+",
+    parser.add_argument("path", type=Path, nargs="*",
                         help="SVG or HTML file(s) to audit.")
+    parser.add_argument(
+        "--repair", nargs=2, metavar=("FG", "BG"), default=None,
+        help="Instead of auditing files, find the nearest same-hue colour "
+             "to FG that clears --required on BG.",
+    )
+    parser.add_argument(
+        "--direction", choices=("auto", "dark", "light"), default="auto",
+        help="--repair only: force darkening or lightening FG "
+             "(default: whichever moves it less).",
+    )
     parser.add_argument(
         "--required", type=float, default=RENDER_8,
         help="Minimum contrast ratio for text rules (default: 8.0, muriel's rule).",
@@ -1691,6 +1880,18 @@ def _main(argv: Optional[Sequence[str]] = None) -> int:
         help="HTML only: skip inline style=\"…\" attributes.",
     )
     args = parser.parse_args(argv)
+
+    if args.repair:
+        try:
+            res = repair_text_pair(*args.repair, required=args.required,
+                                   direction=args.direction)
+        except ValueError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 3
+        print(res)
+        return 1 if res.direction == "unreachable" else 0
+    if not args.path:
+        parser.error("give one or more files to audit, or --repair FG BG")
 
     total_fail = 0
     total_legibility = 0
