@@ -495,6 +495,62 @@ def _css_length_to_px(value: Any, allow_negative: bool = False) -> Optional[floa
     return int(px) if px == int(px) else px
 
 
+_CSS_RELATIVE_RE = re.compile(
+    r"^(-?(?:\d+(?:\.\d+)?|\.\d+))\s*(px|rem|em|%)?$", re.IGNORECASE
+)
+
+
+def _per_font_size(
+    value: Any,
+    size_px: Optional[float],
+    unitless_ok: bool,
+    positive: bool,
+) -> tuple[Optional[float], str]:
+    """
+    ``value`` as a multiple of the role's own font size: a line-height ratio
+    or a letter-spacing in em. Returns ``(multiple, "")`` or ``(None, reason)``
+    where ``reason`` completes a WARN.
+
+    ``em`` and ``%`` are already relative to the element's font size, so they
+    need no ``size_px`` (``1.5em`` → 1.5, ``150%`` → 1.5; ``%`` is how Figma
+    writes letter-spacing). ``px`` and ``rem`` divide by ``size_px``. A bare
+    number is a ratio when ``unitless_ok`` (CSS line-height); otherwise only
+    zero is meaningful, since CSS letter-spacing requires a unit. Results are
+    rounded to 4 decimals so ``20px / 14px`` emits ``1.4286``.
+    """
+    if isinstance(value, bool):
+        return None, "not parseable"
+    if isinstance(value, (int, float)):
+        n, unit = float(value), None
+    elif isinstance(value, str):
+        m = _CSS_RELATIVE_RE.match(value.strip())
+        if not m:
+            return None, "not parseable"
+        n, unit = float(m.group(1)), (m.group(2) or "").lower() or None
+    else:
+        return None, "not parseable"
+    if not math.isfinite(n):
+        return None, "not parseable"
+
+    if unit is None:
+        if not unitless_ok and n != 0:
+            return None, "has no unit (needs em, px, rem or %)"
+        multiple = n
+    elif unit == "em":
+        multiple = n
+    elif unit == "%":
+        multiple = n / 100.0
+    else:
+        if not size_px:
+            return None, "needs a parseable fontSize to convert"
+        px = n * CSS_ROOT_PX if unit == "rem" else n
+        multiple = px / float(size_px)
+
+    if positive and multiple <= 0:
+        return None, "not positive"
+    return round(multiple, 4), ""
+
+
 def _is_number(value: Any) -> bool:
     """A finite int or float, excluding bool (``True`` is an ``int``)."""
     return (
@@ -682,14 +738,36 @@ def _stitch_to_muriel_dict(
             weight = None
         if weight is not None:
             scale_entry["weight"] = int(weight)
-        lh_key, line_height = _first_present(role_def, "lineHeight", "line_height")
-        if line_height is not None and not _is_number(line_height):
-            warnings.append(
-                f"typography.{stitch_role}.{lh_key} {line_height!r} not numeric; skipping line height"
+        # lineHeight and letterSpacing are relative to this role's font size:
+        # brand.toml stores a unitless ratio and an em value, the same units
+        # dtcg_export writes back out.
+        role_size_px = scale_entry.get("size")
+        lh_key, lh_raw = _first_present(role_def, "lineHeight", "line_height")
+        line_height = None
+        if lh_raw is not None:
+            line_height, reason = _per_font_size(
+                lh_raw, role_size_px, unitless_ok=True, positive=True
             )
-            line_height = None
-        if line_height is not None:
-            scale_entry["line_height"] = float(line_height)
+            if line_height is None:
+                warnings.append(
+                    f"typography.{stitch_role}.{lh_key} {lh_raw!r} {reason}; skipping line height"
+                )
+            else:
+                scale_entry["line_height"] = line_height
+        ls_key, ls_raw = _first_present(role_def, "letterSpacing", "letter_spacing")
+        tracking = None
+        if isinstance(ls_raw, str) and ls_raw.strip().lower() == "normal":
+            tracking = 0.0
+        elif ls_raw is not None:
+            tracking, reason = _per_font_size(
+                ls_raw, role_size_px, unitless_ok=False, positive=False
+            )
+            if tracking is None:
+                warnings.append(
+                    f"typography.{stitch_role}.{ls_key} {ls_raw!r} {reason}; skipping letter spacing"
+                )
+        if tracking is not None:
+            scale_entry["tracking_em"] = tracking
         if scale_entry:
             if muriel_role in scale_source:
                 warnings.append(
@@ -718,6 +796,8 @@ def _stitch_to_muriel_dict(
                     typography_out["display_weight"] = int(weight)
                 if line_height is not None:
                     typography_out["display_line_height"] = float(line_height)
+                if tracking is not None:
+                    typography_out["display_letter_spacing_em"] = tracking
             elif _MONO_FAMILY_RE.search(family):
                 typography_out.setdefault("mono_family", family)
 

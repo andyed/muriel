@@ -393,6 +393,23 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   parse, and inf/NaN return `None` instead of raising. In design.md, a
   negative font size or radius now WARNs instead of importing.
 
+- **design.md import dropped every `letterSpacing` and every px
+  `lineHeight`.** `letterSpacing` was never read, so it vanished without a
+  WARN; `lineHeight` accepted only bare numbers, though the spec allows
+  `24px` and `1.5rem`. Both are now converted against the role's own font
+  size into the units brand.toml and `dtcg_export` already use:
+  `line_height` as a ratio, `tracking_em` in em (`em` and `%` are taken as
+  relative, `px` and `rem` divide by the parsed `fontSize`, results rounded
+  to 4 decimals). The display role also fills `display_line_height` and
+  `display_letter_spacing_em`. On
+  [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md)
+  (64 parseable files) roles carrying a line height rise from 753 to 912
+  and roles carrying tracking from 0 to 722, and the 159 `lineHeight …
+  not numeric` WARNs are gone. Still WARNed and skipped: a px or rem value
+  with no parseable `fontSize`, a non-zero unitless `letterSpacing`, a
+  non-positive line height, and `lineHeight: normal`. The spec's own
+  typography example is now a fixture (`spec-tokens.DESIGN.md`).
+
 - **`cycle`: a wrapped label above the ring no longer lands on its node.**
   Lines stacked downward from the anchor, so the top step's second line hit
   its own circle; centred labels above the ring now grow upward.

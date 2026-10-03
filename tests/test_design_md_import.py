@@ -5,16 +5,19 @@ importer. Standard library only (unittest, no pytest).
 Covers: rem/em font sizes converting at a 16 px root, the WARN for a size
 or radius that is present but unparseable, the quiet skip of TypeUI's
 string metadata keys (``sourceScale``, ``weights``) inside typography,
-``label-caps`` → ``label``, mono_family surfacing by family name, and the
-WARNs for families and scale roles that would otherwise be lost.
+``label-caps`` → ``label``, mono_family surfacing by family name, the
+WARNs for families and scale roles that would otherwise be lost, and
+lineHeight / letterSpacing converting to a ratio and em against the role's
+own font size.
 """
 
 from __future__ import annotations
 
+import sys
 import unittest
 from pathlib import Path
 
-from muriel.design_md_import import _css_length_to_px, parse_design_md
+from muriel.design_md_import import _css_length_to_px, _per_font_size, parse_design_md
 
 
 FIXTURES = Path(__file__).parent / "fixtures" / "design_md"
@@ -99,7 +102,7 @@ class UnparseableSizeImport(unittest.TestCase):
 
 
 class NonNumericWeightAndLineHeight(unittest.TestCase):
-    def test_string_weight_and_line_height_warn(self):
+    def test_string_weight_warns_px_line_height_converts(self):
         text = (
             "---\n"
             "name: Quoted\n"
@@ -112,10 +115,8 @@ class NonNumericWeightAndLineHeight(unittest.TestCase):
         )
         data, warnings = parse_design_md(text)
         self.assertIn("typography.h1.fontWeight '700' not numeric; skipping weight", warnings)
-        self.assertIn(
-            "typography.h1.lineHeight '40px' not numeric; skipping line height", warnings
-        )
-        self.assertEqual(data["typography"]["scale"]["h1"], {"size": 32})
+        # 40px over a 32px font is a 1.25 ratio.
+        self.assertEqual(data["typography"]["scale"]["h1"], {"size": 32, "line_height": 1.25})
 
     def test_typography_metadata_key_that_is_a_map_still_imports(self):
         # Only the string form is skipped; a map under the same name is a role.
@@ -132,6 +133,112 @@ class NonNumericWeightAndLineHeight(unittest.TestCase):
         )
         data, warnings = parse_design_md(text)
         self.assertEqual(data["typography"]["scale"]["weights"], {"size": 16})
+        self.assertEqual(warnings, [])
+
+
+class PerFontSize(unittest.TestCase):
+    def test_line_height_forms(self):
+        def lh(value, size=16):
+            return _per_font_size(value, size, unitless_ok=True, positive=True)[0]
+        self.assertEqual(lh(1.5), 1.5)
+        self.assertEqual(lh("1.5"), 1.5)        # a quoted number is still a ratio
+        self.assertEqual(lh("24px"), 1.5)
+        self.assertEqual(lh("1.5rem"), 1.5)
+        self.assertEqual(lh("1.5rem", size=32), 0.75)
+        self.assertEqual(lh("1.5em", size=None), 1.5)   # em needs no size
+        self.assertEqual(lh("150%", size=None), 1.5)
+        self.assertEqual(lh("20px", size=14), 1.4286)
+
+    def test_line_height_failures_name_the_reason(self):
+        def why(value, size=16):
+            return _per_font_size(value, size, unitless_ok=True, positive=True)
+        self.assertEqual(why("24px", size=None), (None, "needs a parseable fontSize to convert"))
+        self.assertEqual(why("normal"), (None, "not parseable"))
+        self.assertEqual(why(0), (None, "not positive"))
+        self.assertEqual(why(True), (None, "not parseable"))
+        self.assertEqual(why(float("nan")), (None, "not parseable"))
+
+    def test_letter_spacing_forms(self):
+        def ls(value, size=16):
+            return _per_font_size(value, size, unitless_ok=False, positive=False)
+        self.assertEqual(ls("-0.02em"), (-0.02, ""))
+        self.assertEqual(ls("1px"), (0.0625, ""))
+        self.assertEqual(ls("2%"), (0.02, ""))       # Figma's convention
+        self.assertEqual(ls(0), (0.0, ""))
+        self.assertEqual(ls(0.5), (None, "has no unit (needs em, px, rem or %)"))
+
+
+class SpecTokensImport(unittest.TestCase):
+    def setUp(self):
+        self.data, self.warnings = _import("spec-tokens.DESIGN.md")
+        self.typo = self.data["typography"]
+        self.scale = self.typo["scale"]
+
+    def test_unitless_and_em_values_land(self):
+        self.assertEqual(self.scale["h1"], {
+            "size": 48, "weight": 600, "line_height": 1.1, "tracking_em": -0.02,
+        })
+        self.assertEqual(self.scale["body"], {"size": 16, "weight": 400, "line_height": 1.6})
+        self.assertEqual(self.scale["label"], {
+            "size": 12, "weight": 500, "line_height": 1.0, "tracking_em": 0.1,
+        })
+
+    def test_px_values_divide_by_the_role_font_size(self):
+        self.assertEqual(self.scale["caption"], {
+            "size": 14, "line_height": 1.4286, "tracking_em": 0.0357,
+        })
+
+    def test_display_slots(self):
+        self.assertEqual(self.typo["display_family"], "Public Sans")
+        self.assertEqual(self.typo["display_weight"], 600)
+        self.assertEqual(self.typo["display_line_height"], 1.1)
+        self.assertEqual(self.typo["display_letter_spacing_em"], -0.02)
+
+    def test_only_the_unkept_family_warns(self):
+        self.assertEqual(self.warnings, [
+            "typography.label-caps.fontFamily 'Space Grotesk' not kept; "
+            "muriel keeps only body, display and mono families",
+        ])
+
+    @unittest.skipIf(sys.version_info < (3, 11), "styleguide needs tomllib (Python 3.11+)")
+    def test_round_trips_through_styleguide(self):
+        from muriel.design_md_import import _emit_toml
+        from muriel.styleguide import load_styleguide
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "brand.toml"
+            path.write_text(_emit_toml(self.data), encoding="utf-8")
+            sg = load_styleguide(path)
+        self.assertEqual(sg.typography.scale["caption"].line_height, 1.4286)
+        self.assertEqual(sg.typography.scale["h1"].tracking_em, -0.02)
+        self.assertEqual(sg.typography.display_letter_spacing_em, -0.02)
+
+
+class RelativeValueWarnings(unittest.TestCase):
+    def test_px_line_height_without_size_warns(self):
+        _, warnings = parse_design_md(_fm("  caption:\n    lineHeight: 20px\n"))
+        self.assertIn(
+            "typography.caption.lineHeight '20px' needs a parseable fontSize to convert; "
+            "skipping line height",
+            warnings,
+        )
+
+    def test_unitless_letter_spacing_warns(self):
+        data, warnings = parse_design_md(_fm(
+            "  caption:\n    fontSize: 12px\n    letterSpacing: 0.5\n"
+        ))
+        self.assertIn(
+            "typography.caption.letterSpacing 0.5 has no unit (needs em, px, rem or %); "
+            "skipping letter spacing",
+            warnings,
+        )
+        self.assertEqual(data["typography"]["scale"]["caption"], {"size": 12})
+
+    def test_letter_spacing_normal_is_zero(self):
+        data, warnings = parse_design_md(_fm(
+            "  caption:\n    fontSize: 12px\n    letterSpacing: normal\n"
+        ))
+        self.assertEqual(data["typography"]["scale"]["caption"]["tracking_em"], 0.0)
         self.assertEqual(warnings, [])
 
 
