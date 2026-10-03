@@ -30,6 +30,7 @@ hand-rolled TOML emitter for the subset muriel's brand.toml uses.
 
 from __future__ import annotations
 
+import math
 import re
 import sys
 from pathlib import Path
@@ -432,6 +433,66 @@ STITCH_TYPE_TO_MURIEL: dict[str, str] = {
 }
 
 
+# Non-role keys some design.md producers put inside the typography block.
+# TypeUI (bergside/awesome-design-skills) ships `sourceScale: "14/16/18/24"`
+# and `weights: "100, ..., 900"` as strings. They are skipped without a WARN
+# rather than parsed into the scale: the steps carry no role names, and 20 of
+# that corpus's 67 files fill sourceScale with prose ("desktop-first expressive
+# scale").
+TYPOGRAPHY_METADATA_KEYS = frozenset({"sourceScale", "weights"})
+
+
+# Root font size for rem/em conversion. design.md has no document context,
+# so em resolves against the root the same as rem.
+CSS_ROOT_PX = 16.0
+
+_CSS_LENGTH_RE = re.compile(r"^(\d+(?:\.\d+)?|\.\d+)\s*(px|rem|em)?$", re.IGNORECASE)
+
+
+def _css_length_to_px(value: Any) -> Optional[float]:
+    """
+    ``16`` / ``"16px"`` / ``"2.5rem"`` / ``"1em"`` → pixels, or ``None`` when
+    the value is not a plain length (``"2.5vw"``, ``"clamp(...)"``, a bool).
+    Whole results come back as ``int`` so the emitted TOML reads ``40``, not
+    ``40.0``.
+    """
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        px = float(value)
+    elif isinstance(value, str):
+        m = _CSS_LENGTH_RE.match(value.strip())
+        if not m:
+            return None
+        px = float(m.group(1))
+        if (m.group(2) or "px").lower() in ("rem", "em"):
+            px *= CSS_ROOT_PX
+    else:
+        return None
+    if not math.isfinite(px):
+        return None
+    # float(x) == int(x), not x.is_integer(): int.is_integer() is 3.12+.
+    return int(px) if px == int(px) else px
+
+
+def _is_number(value: Any) -> bool:
+    """A finite int or float, excluding bool (``True`` is an ``int``)."""
+    return (
+        isinstance(value, (int, float))
+        and not isinstance(value, bool)
+        and math.isfinite(value)
+    )
+
+
+def _first_present(d: dict[str, Any], *keys: str) -> tuple[str, Any]:
+    """The first of ``keys`` whose value is not ``None``, as ``(key, value)``.
+    Falls back to ``(keys[0], None)`` so callers can name the key in a WARN."""
+    for key in keys:
+        if d.get(key) is not None:
+            return key, d[key]
+    return keys[0], None
+
+
 # Muriel's universal contrast floor — overrides anything an imported spec
 # carries. Surfaced as a WARN, not an error: the imported spec's preference
 # is recorded; muriel's floor remains the validation gate.
@@ -526,25 +587,38 @@ def _stitch_to_muriel_dict(
 
     for stitch_role, role_def in type_in.items():
         if not isinstance(role_def, dict):
+            if stitch_role in TYPOGRAPHY_METADATA_KEYS:
+                continue
             warnings.append(f"typography.{stitch_role} is not a map; skipping")
             continue
         muriel_role = STITCH_TYPE_TO_MURIEL.get(stitch_role, stitch_role)
         scale_entry: dict[str, Any] = {}
-        size = role_def.get("fontSize") or role_def.get("size")
-        if isinstance(size, str):
-            # "16px" → 16
-            m = re.match(r"^(\d+(?:\.\d+)?)\s*(px)?$", size.strip())
-            if m:
-                size = float(m.group(1))
-                if size.is_integer():
-                    size = int(size)
-        if isinstance(size, (int, float)):
-            scale_entry["size"] = size
-        weight = role_def.get("fontWeight") or role_def.get("weight")
-        if isinstance(weight, (int, float)):
+        # A value that is present but unusable gets a WARN, never a silent drop.
+        size_key, size = _first_present(role_def, "fontSize", "size")
+        if size is not None:
+            # "16px" → 16, "2.5rem" → 40
+            size_px = _css_length_to_px(size)
+            if size_px is None:
+                warnings.append(
+                    f"typography.{stitch_role}.{size_key} {size!r} not parseable; skipping size"
+                )
+            else:
+                scale_entry["size"] = size_px
+        weight_key, weight = _first_present(role_def, "fontWeight", "weight")
+        if weight is not None and not _is_number(weight):
+            warnings.append(
+                f"typography.{stitch_role}.{weight_key} {weight!r} not numeric; skipping weight"
+            )
+            weight = None
+        if weight is not None:
             scale_entry["weight"] = int(weight)
-        line_height = role_def.get("lineHeight") or role_def.get("line_height")
-        if isinstance(line_height, (int, float)):
+        lh_key, line_height = _first_present(role_def, "lineHeight", "line_height")
+        if line_height is not None and not _is_number(line_height):
+            warnings.append(
+                f"typography.{stitch_role}.{lh_key} {line_height!r} not numeric; skipping line height"
+            )
+            line_height = None
+        if line_height is not None:
             scale_entry["line_height"] = float(line_height)
         if scale_entry:
             scale_out[muriel_role] = scale_entry
@@ -558,9 +632,9 @@ def _stitch_to_muriel_dict(
                 typography_out["mono_family"] = family
             elif muriel_role in ("h1", "display"):
                 typography_out["display_family"] = family
-                if isinstance(weight, (int, float)):
+                if weight is not None:
                     typography_out["display_weight"] = int(weight)
-                if isinstance(line_height, (int, float)):
+                if line_height is not None:
                     typography_out["display_line_height"] = float(line_height)
 
     if scale_out:
@@ -569,19 +643,23 @@ def _stitch_to_muriel_dict(
         out["typography"] = typography_out
 
     # ─── radii ───────────────────────────────────────────────────────────
-    rounded_in = frontmatter.get("rounded") or frontmatter.get("radii") or {}
-    if isinstance(rounded_in, dict):
-        radii_out: dict[str, Any] = {}
-        for key, value in rounded_in.items():
-            if isinstance(value, str):
-                m = re.match(r"^(\d+(?:\.\d+)?)\s*(px)?$", value.strip())
-                if m:
-                    radii_out[key] = int(float(m.group(1)))
-                    continue
-            if isinstance(value, (int, float)):
-                radii_out[key] = int(value)
-        if radii_out:
-            out["radii"] = radii_out
+    rounded_block = "rounded" if frontmatter.get("rounded") else "radii"
+    rounded_in = frontmatter.get(rounded_block) or {}
+    if not isinstance(rounded_in, dict):
+        warnings.append(
+            f"{rounded_block} block is not a map; got {type(rounded_in).__name__}; skipping"
+        )
+        rounded_in = {}
+    radii_out: dict[str, Any] = {}
+    for key, value in rounded_in.items():
+        radius_px = _css_length_to_px(value)
+        if radius_px is None:
+            warnings.append(f"{rounded_block}.{key} {value!r} not parseable; skipping radius")
+            continue
+        # StyleGuide.radii is dict[str, int]; round like design_tokens_import.
+        radii_out[key] = int(round(radius_px))
+    if radii_out:
+        out["radii"] = radii_out
 
     # ─── elevation ───────────────────────────────────────────────────────
     elevation_in = frontmatter.get("elevation") or {}

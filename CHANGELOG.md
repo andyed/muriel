@@ -314,6 +314,25 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **`muriel import` and `import-corpus` dropped every `rem` and `em` font
+  size without a WARN.** `fontSize` parsed only bare numbers and `px`, so
+  `fontSize: 2.5rem` fell through and the brand imported with an empty
+  `[typography.scale]`. On
+  [bergside/awesome-design-skills](https://github.com/bergside/awesome-design-skills)
+  (67 TypeUI DESIGN.md files, all sized in rem) every row reported
+  `n_scale_roles: 0`; all 67 now import three roles (`h1`, `body`,
+  `label-caps`). Sizes and radii share `_css_length_to_px`: bare numbers,
+  `px`, `rem` and `em`, with `rem` and `em` at a 16 px root
+  (`2.5rem` → `40`). A size or radius that is present but unparseable
+  (`2.5vw`, `50%`) now emits a WARN naming the key and value, as does a
+  non-numeric `fontWeight` or `lineHeight` and a `rounded` block that is not
+  a map. Radii now round instead of truncating (`4.6px` → 5, was 4),
+  matching `design_tokens_import`. TypeUI's string `typography.sourceScale`
+  and `typography.weights` are recognised as metadata and skipped quietly,
+  which removes the 134 "is not a map" WARNs they raised across that corpus;
+  `channels/style-guides.md` (Interop) records why they are not parsed into
+  the scale. Covered by `tests/test_design_md_import.py`.
+
 - **`cycle`: a wrapped label above the ring no longer lands on its node.**
   Lines stacked downward from the anchor, so the top step's second line hit
   its own circle; centred labels above the ring now grow upward.
