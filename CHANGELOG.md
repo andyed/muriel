@@ -356,6 +356,25 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   `channels/style-guides.md` (Interop) records why they are not parsed into
   the scale. Covered by `tests/test_design_md_import.py`.
 
+- **design.md import: `label-caps` font families were dropped, and the
+  tokens importer kept its own copy of the length parser.** `label-caps`
+  now maps to the `label` scale role. brand.toml keeps only body, display
+  and mono families, so a role without a slot of its own (`label`,
+  `caption`, …) now offers its family as `mono_family` when the name reads
+  as monospace (`… Mono`, `monospace`, `Fira Code`, `Inconsolata`, …); a
+  role named `mono` still wins. The test is on the family name because the
+  spec's own `label-caps` example is Space Grotesk while TypeUI puts its
+  mono font there. On awesome-design-skills, 66 of 67 brands now carry a
+  `mono_family`; the 67th (`enterprise`) declares IBM Plex Sans for every
+  slot, so nothing is lost. A family that lands in no slot WARNs unless
+  another slot holds the same name, as do two source roles that collide on
+  one scale role and a `fontFamily` that is not a string.
+  `design_tokens_import._coerce_dimension` now delegates to
+  `design_md_import._css_length_to_px(allow_negative=True)`: numeric floats
+  round like strings already did (`4.6` → 5, was 4), `.5rem` and `16PX`
+  parse, and inf/NaN return `None` instead of raising. In design.md, a
+  negative font size or radius now WARNs instead of importing.
+
 - **`cycle`: a wrapped label above the ring no longer lands on its node.**
   Lines stacked downward from the anchor, so the top step's second line hit
   its own circle; centred labels above the ring now grow upward.

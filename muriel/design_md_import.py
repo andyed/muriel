@@ -429,8 +429,25 @@ STITCH_TYPE_TO_MURIEL: dict[str, str] = {
     "subtitle":  "h2",
     "caption":   "caption",
     "label":     "label",
+    # The spec's own example role. It implies no font class: the spec sets it
+    # in Space Grotesk, TypeUI in its mono font (see _MONO_FAMILY_RE).
+    "label-caps": "label",
     "mono":      "mono",
 }
+
+
+# Family names recognisable as monospace. muriel keeps only body, display and
+# mono families (TextRole has no family), so a role with no slot of its own
+# (label, caption, ...) offers its family as mono_family when the name matches;
+# a role named `mono` always wins. The test is on the family name, not the
+# role name, because `label-caps` is a sans in the spec and mono in TypeUI.
+_MONO_FAMILY_RE = re.compile(
+    r"\bmono(?:space)?\b"
+    r"|\b(?:fira|source|cascadia) code\b"
+    r"|\b(?:courier|consolas|menlo|monaco|inconsolata|anonymous pro|hack|iosevka"
+    r"|lucida console)\b",
+    re.IGNORECASE,
+)
 
 
 # Non-role keys some design.md producers put inside the typography block.
@@ -446,15 +463,18 @@ TYPOGRAPHY_METADATA_KEYS = frozenset({"sourceScale", "weights"})
 # so em resolves against the root the same as rem.
 CSS_ROOT_PX = 16.0
 
-_CSS_LENGTH_RE = re.compile(r"^(\d+(?:\.\d+)?|\.\d+)\s*(px|rem|em)?$", re.IGNORECASE)
+_CSS_LENGTH_RE = re.compile(r"^(-?(?:\d+(?:\.\d+)?|\.\d+))\s*(px|rem|em)?$", re.IGNORECASE)
 
 
-def _css_length_to_px(value: Any) -> Optional[float]:
+def _css_length_to_px(value: Any, allow_negative: bool = False) -> Optional[float]:
     """
     ``16`` / ``"16px"`` / ``"2.5rem"`` / ``"1em"`` → pixels, or ``None`` when
     the value is not a plain length (``"2.5vw"``, ``"clamp(...)"``, a bool).
     Whole results come back as ``int`` so the emitted TOML reads ``40``, not
-    ``40.0``.
+    ``40.0``. Negative lengths are ``None`` unless ``allow_negative``: a font
+    size or radius cannot be negative, a spacing token can.
+
+    Shared with :mod:`muriel.design_tokens_import`, which imports from here.
     """
     if isinstance(value, bool):
         return None
@@ -469,7 +489,7 @@ def _css_length_to_px(value: Any) -> Optional[float]:
             px *= CSS_ROOT_PX
     else:
         return None
-    if not math.isfinite(px):
+    if not math.isfinite(px) or (px < 0 and not allow_negative):
         return None
     # float(x) == int(x), not x.is_integer(): int.is_integer() is 3.12+.
     return int(px) if px == int(px) else px
@@ -584,6 +604,8 @@ def _stitch_to_muriel_dict(
 
     typography_out: dict[str, Any] = {}
     scale_out: dict[str, dict[str, Any]] = {}
+    scale_source: dict[str, str] = {}        # muriel role → stitch role that set it
+    families_seen: list[tuple[str, str, str]] = []   # (stitch role, key, family)
 
     for stitch_role, role_def in type_in.items():
         if not isinstance(role_def, dict):
@@ -621,11 +643,23 @@ def _stitch_to_muriel_dict(
         if line_height is not None:
             scale_entry["line_height"] = float(line_height)
         if scale_entry:
+            if muriel_role in scale_source:
+                warnings.append(
+                    f"typography.{stitch_role} and typography.{scale_source[muriel_role]} "
+                    f"both map to scale role '{muriel_role}'; keeping typography.{stitch_role}"
+                )
             scale_out[muriel_role] = scale_entry
+            scale_source[muriel_role] = stitch_role
 
         # Surface body / mono / display family at the typography top level
-        family = role_def.get("fontFamily") or role_def.get("family")
-        if isinstance(family, str):
+        family_key, family = _first_present(role_def, "fontFamily", "family")
+        if family is not None and not (isinstance(family, str) and family.strip()):
+            warnings.append(
+                f"typography.{stitch_role}.{family_key} {family!r} not a font name; skipping family"
+            )
+            family = None
+        if family is not None:
+            families_seen.append((stitch_role, family_key, family))
             if muriel_role == "body":
                 typography_out["body_family"] = family
             elif muriel_role == "mono":
@@ -636,6 +670,19 @@ def _stitch_to_muriel_dict(
                     typography_out["display_weight"] = int(weight)
                 if line_height is not None:
                     typography_out["display_line_height"] = float(line_height)
+            elif _MONO_FAMILY_RE.search(family):
+                typography_out.setdefault("mono_family", family)
+
+    # A family that reached no slot (or lost one to a later role) is a drop.
+    kept_families = {
+        typography_out.get(k) for k in ("body_family", "display_family", "mono_family")
+    }
+    for stitch_role, family_key, family in families_seen:
+        if family not in kept_families:
+            warnings.append(
+                f"typography.{stitch_role}.{family_key} {family!r} not kept; "
+                f"muriel keeps only body, display and mono families"
+            )
 
     if scale_out:
         typography_out["scale"] = scale_out
