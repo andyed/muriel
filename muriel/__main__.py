@@ -18,6 +18,7 @@ Usage
     muriel diagram-check fig.svg           # a11y + label + contrast gate
     muriel dimensions                      # print the dimensions registry
     muriel heroshot in.png out.png --tilt 12
+    muriel rasterize fig.svg -o fig.png    # SVG to PNG, cairosvg or ImageMagick
     muriel tilt-shift raw.png hero.png
     muriel venn spec.json out.png
     muriel styleguide examples/muriel-brand.toml --css
@@ -58,6 +59,7 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     "import-tokens":  ("muriel.design_tokens_import",         "Convert a DTCG / open-codesign tokens.json into a muriel brand.toml"),
     "import-corpus":  ("muriel.tools.corpus_audit",          "Audit a DESIGN.md corpus through design_md_import + 8:1 floor"),
     "palettes":       ("muriel.palettes",                   "List / generate / validate categorical palettes (CVD + contrast)"),
+    "rasterize":      ("muriel.rasterize",                  "SVG to PNG for a visual audit: cairosvg, else ImageMagick with fonts pinned to installed faces"),
     "smartcrop":      ("muriel.tools.smartcrop",            "Saliency-aware crop solver (edges + optional faces / text / saliency)"),
     "squint":         ("muriel.squint",                     "Dimension-scaled blur ladder + thumbnail companions — does hierarchy survive degradation?"),
     "styleguide":     ("muriel.styleguide",                 "Load a brand.toml; print / derive CSS / matplotlibrc / contrast audit"),

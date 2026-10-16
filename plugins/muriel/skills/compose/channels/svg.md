@@ -102,6 +102,7 @@ Same seed and parameters produce byte-identical geometry. Examples:
 
 ## Conversion
 - **SVG → PNG:** `cairosvg input.svg -o out.png -W 1280 -H 720` or `rsvg-convert -w 1280 input.svg > out.png`
+- **SVG → PNG for an audit:** `python -m muriel.rasterize input.svg -o out.png` uses cairosvg where it imports, else ImageMagick (`magick`), which renders on Windows with no Cairo library. On that rung it pins each font stack to the first installed family and each 500/600 weight to its named face (librsvg would otherwise fall back to a generic Sans and round 600 to Bold), and it flags `<image>` elements, which ImageMagick's librsvg drops.
 - **SVG → PDF:** `cairosvg input.svg -o out.pdf` (for paper inclusion)
 - **HTML → SVG snapshot:** Playwright `page.locator('svg').screenshot()` for live-rendered figures — see [channels/web.md](web.md) for the static capture pipeline.
 
