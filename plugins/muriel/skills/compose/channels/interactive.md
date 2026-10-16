@@ -12,6 +12,11 @@ Part of the [muriel](../SKILL.md) skill — see the top-level index for mission,
 - Eye-tracking replays with timeline scrubber
 - Anything where "watching it move" matters more than "seeing one frame"
 
+For prepared imagery driven by live input, or choreography whose meaning needs
+design work, read [motion craft](../references/motion-craft.md). It separates
+input, playback, and media choices while preserving canonical state and Muriel's
+timing rules; ordinary procedural demos need no media-production pipeline.
+
 ## Constraints (from `~/CLAUDE.md`)
 - **ES6 modules direct.** No bundlers, no build step.
 - **WebGL is the primary graphics stack.** Canvas2D for non-shader 2D, D3 for data binding to DOM/SVG, Three.js when 3D scene management beats raw WebGL.
