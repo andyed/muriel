@@ -8,6 +8,24 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`references/jury.md` — convening the jury on a name.** Written from two
+  sittings on 2026-10-17 that chose the Liquid Light App Store title. Three
+  seats transfer: the Pedant checks each word of the name against the
+  product's README; the Forger builds a blind counterfeit pool from the use
+  statement and diffs each option against it; the Thumbnail reads the
+  `muriel.squint` companions of a name sheet, with the name set in its real
+  slots. The Squinter is unseated and the Stranger runs single-artifact. Three
+  rules are new. The Forger pool is fixed at 100+ names across 16 named
+  templates with a one-hop synonym rule, because SyrupSpin rated HIGH against
+  a 30-name pool and CRITICAL against a 105-name one. A naming sitting reports
+  the ranking with and without form-fatal eliminations (new split trigger 6),
+  because a Forger CRITICAL on a name is form-fatal by construction and
+  would otherwise act as a veto. And the chair searches the harness's
+  standing context (CLAUDE.md, the `MEMORY.md` index) for option strings
+  before seating, because a Forger disclosed seeing the working name there.
+  Harvesting source material and generating a long list now come before the
+  panel, since the jury can only rank the names it is handed.
+
 - **`muriel.contrast.repair_text_pair()` and `muriel contrast --repair FG BG`:
   same-hue contrast repair.** Given a text colour that fails against its
   background, returns the nearest colour with the same OKLCH hue and

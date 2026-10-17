@@ -35,8 +35,9 @@ owns product truth.
 11. [Unanimity smell test](#unanimity-smell-test)
 12. [The chair](#the-chair)
 13. [Worked example](#worked-example)
-14. [Anti-patterns](#anti-patterns)
-15. [Prior art](#prior-art)
+14. [Naming decisions](#naming-decisions)
+15. [Anti-patterns](#anti-patterns)
+16. [Prior art](#prior-art)
 
 ## Load gate
 
@@ -54,8 +55,10 @@ roughly 4-6× a single critique. The five-seat, three-option panel in the worked
 example below is 15-25×. Scale the gate to that number, not to a flat 5×.
 
 Do **not** load for: a test render or intermediate frame; anything a compute
-tool answers; a settled direction needing only execution notes; backend, copy,
-or spacing work; a decision the calling agent has made and only wants ratified.
+tool answers; a settled direction needing only execution notes; backend, body
+copy, or spacing work; a decision the calling agent has made and only wants
+ratified. A name is the one non-visual decision in scope; see [Naming
+decisions](#naming-decisions).
 A single artifact with no alternatives is out of scope **only when its premise
 is settled** — run [`muriel-critique`](../../../agents/muriel-critique.md)
 alone. A single artifact whose premise is contested is in scope, and votes on
@@ -150,6 +153,11 @@ deciding direction selection. The two bodies answer different questions —
 is evidence about the first, not the second. The form-fatal carve-out is
 where the defect genuinely *is* evidence about the form, and it is narrow on
 purpose: the chair must be able to name the encoding change the fix requires.
+
+In a naming sitting the option is the string, so a Forger CRITICAL is
+form-fatal every time and the carve-out stops being narrow. There the chair
+reports the ranking with and without the elimination instead; see [Rule (b):
+no Forger veto](#rule-b-no-forger-veto).
 
 **A jury and `muriel-critique` are mutually exclusive.** Run one or the other
 on an artifact, never both.
@@ -397,7 +405,7 @@ muriel's whole remit. Report it, name what each side optimizes for, hand it up:
 
 That returns cleanly to muriel's boundary: the calling agent owns product
 truth. A jury resolving this by fiat oversteps the skill's contract. Report a
-split when any of these five hold:
+split when any of these six hold:
 
 1. Two seats rank the top option differently.
 2. One seat's top option is another's bottom option.
@@ -407,6 +415,9 @@ split when any of these five hold:
 4. One seat's `Ship (this seat's loss only): no` contradicts a majority `yes`.
 5. **Two seats' fixes on the same target are mutually exclusive** — applying
    one makes the other impossible.
+6. **Naming sittings only: the two rankings disagree.** The ranking over every
+   seated option and the ranking after form-fatal eliminations put different
+   options first. See [Rule (b): no Forger veto](#rule-b-no-forger-veto).
 
 The split report names, per side: the seats, the favored option, the loss
 function driving it, and the product question that would resolve it. It names
@@ -604,7 +615,8 @@ and contributes no findings of its own. Duties, in order:
 8. **Unseal, aggregate** by the correct rule per body. Apply the one-CRITICAL
    cap and the inline-seat CRITICAL restriction, then the ledger discounts.
    Ranking is computed over every seated option; a CRITICAL gates the commit
-   and only a form-fatal CRITICAL eliminates.
+   and only a form-fatal CRITICAL eliminates. In a naming sitting, report the
+   ranking both with and without form-fatal eliminations.
 9. **Run the unanimity smell test.**
 10. **Write the finding,** with the split left unresolved, and emit one ledger
     record per finding at `disposition: open`.
@@ -745,6 +757,263 @@ five B-vs-C comparisons split 3 for B, 2 for C, none tied, so `P(B>C)` is 3/5 =
 judgements, of which 16 agree outright and 8 involve exactly one tie at half
 credit, so 20/30 = 0.67, well under the 0.90 collapse threshold.
 
+## Naming decisions
+
+The protocol was written for visual artifacts. It has been run three times on
+a name: the `unhost` project name (2026-08-29), and two sittings on 2026-10-17
+choosing the App Store title of the Liquid Light Apple TV app —
+`ww-1017-k4` (SyrupSpin, NeonSyrup, PrismSyrup) and `ww-1017-m8` (Protoplasm
+vs SyrupSpin), which Protoplasm won. Three seats transfer with a new lens and
+two do not. Three gaps the visual protocol never had to close came to light in
+those sittings; the rules for them below are normative.
+
+### Before the panel: harvest, then generate
+
+The jury converges. It ranks the names it is handed and cannot add one, so
+from a thin option set the best it can return is a well-measured choice between
+thin options. Neither 2026-10-17 sitting had a step that widened the set, and
+afterwards the human asked for more candidates and for source material. Two
+steps come before the chair fixes the question. Both are the calling agent's
+work: neither is a seat, and neither belongs to the chair, which contributes
+nothing of its own.
+
+1. **Harvest source material** into a file beside the ledger, each item cited.
+   At minimum: the product's own text (the README, which the Pedant reads
+   later); the medium's history and the vocabulary of the people who practised
+   it — crew and studio names, apparatus, period terms; and the technical
+   vocabulary of what the product actually does.
+2. **Generate a long list from the harvest**, run the deterministic checks over
+   all of it, and cut it to a shortlist of at most four, so the full pairwise
+   set stays at six comparisons per seat. Hand the human the long list along
+   with the shortlist. The human chooses which options are seated, and the long
+   list is where that choice is made.
+
+The Forger's template list under [Rule (a)](#rule-a-a-fixed-forger-pool) is the
+negative space for generation. A candidate that fills one of those templates
+with a domain word will be forged. Candidates with a chance of leaving residue
+lie outside the templates' reach from the use statement: a proper noun from
+the medium's history, a practitioner's term, a technical term more than one
+synonym away. Do not pre-screen the long list through seat lenses. The panel
+judges once, sealed. Screening during generation is inline seating, with the
+nominal denial [The roster](#the-roster) describes, and the panel's
+independence is spent before the panel is convened.
+
+### Findings of fact for a name
+
+Stipulate these before seating, exactly as contrast and gamut are stipulated
+for a visual artifact:
+
+- **Trademark** — live marks on the whole string and on each element, by
+  class. No mark existed on SyrupSpin, but its element SYRUP was live in class
+  9 software. What a live mark means legally is counsel's call; that it exists
+  is a fact. The USPTO `tmsearch` API returns empty documents when
+  `_source.includes` is passed, and every class filter then reads zero. That
+  is a source producing no output, which [Jurisdiction](#jurisdiction) forbids
+  stipulating as clean. Omit the field and paginate with `from`.
+- **Store and registry collisions** — the App Store (iTunes Search API), npm,
+  PyPI, whichever the product ships through.
+- **Domains** — RDAP on the likely TLDs.
+- **Length against each slot's limit** — the App Store title allows 30
+  characters.
+- **Contrast on the name sheet** — the 8:1 floor applies to the sheet as to
+  any artifact. Both sittings measured at least 11.35:1.
+
+A name can be settled by a fact before any ballot: the `unhost` sitting lost
+"papertrail" to a live trademark before a seat was convened.
+
+**Keep the question out of the decision ID.** The ID is passed to every seat,
+so a question or candidate string inside it reaches every seat as a brief. Both
+were in the `unhost` ID, and its Stranger detected its own contamination and
+discounted a finding. `ww-1017-k4` and `ww-1017-m8` are neutral.
+
+### The name sheet
+
+A naming panel reads a **name sheet**: one HTML card with the name set in each
+slot where it will appear. For the Liquid Light title those were the App Store
+row (icon, title, subtitle), the tvOS home-screen tile and label, the iPhone
+home-screen label at 11 px with ellipsis truncation, and a browser tab. Build
+the sheet once and vary only the name string, so the options differ in nothing
+else. Render it with
+
+```sh
+python -m muriel.capture file:///abs/path/A.html --tiers desktop --selector '#card' --slug A
+```
+
+which names the PNG by its real pixel size — a 1200×630 card at the default
+scale of 2 is written as `A-desktop-2400x1260.png` — then run `muriel.squint`
+on that PNG for the Thumbnail's companions.
+
+### Seats for a name
+
+**The Pedant — the highest-value seat for a name.** *Lens:* the name string,
+plus the product's README extracted verbatim with line numbers as its sibling
+source, plus stipulated product facts the README omits (for Liquid Light: the
+Apple TV app ships with no audio input). *Judges:* each word of the name against
+the product's own vocabulary — supported, contradicted, drifting, or absent.
+*Access:* denied the sheet render, so its denial is real and its `Isolation` is
+plain `subagent`. In `ww-1017-m8` it graded "Syrup" HIGH as a claim about the
+medium that README line 3 contradicts (mineral oil and dyed water), and "Spin"
+MEDIUM because "spin" reads as playing music on an app with no audio.
+
+Pedants vary on a shared element, and the variation depends on the option set,
+so it is not noise. `ww-1017-k4` graded "Syrup" LOW: it was in all three
+options and read as a house element. `ww-1017-m8` graded it HIGH: beside a
+figurative rival, it read as a literal claim about the medium. Record both and
+do not reconcile them. The comparative ranking cannot be moved by an element
+every option shares, so its severity belongs to the defect union alone.
+
+**The Forger — the counterfeit is a name pool.** Before opening any option, the
+seat builds a counterfeit pool from the use statement alone, stamps start and
+end with `date -u +%FT%TZ`, and writes it to
+`forgery/<decisionId>/counterfeits.forgery.md`. Only then does it open the
+options. For each, it inventories the name's decisions — construction, casing,
+length, each lexeme, metaphor source, register, era marker — and diffs each
+against the pool. `F`, `R`, `Rs` and the severity table are unchanged from the
+agent definition. The counterfeit sheet is the shared name sheet with a pool
+name substituted. Pool width, template list and hop distance are fixed by
+[Rule (a)](#rule-a-a-fixed-forger-pool) and are not the seat's to choose.
+
+**The Thumbnail — the name sheet's downscale companions.** *Lens:* the
+`thumb-eighth` companion of the name sheet, with each slot's real size as the
+intended use size. *Judges:* truncation in each slot, word shape at the small
+slots, and how the name skims in a list. Only the 1/8 companion discriminates.
+At 16 px no word survives on any option, so every option fails there equally
+and there is no ranking signal in the 16 px reading; record it and recuse from
+ranking on it.
+
+**The Squinter — unseated.** Blur keeps position and area and removes the
+letters. The sheets differ only in the name string, so their blurred renders
+differ by a few pixels of word length, with no naming signal in them. Record
+the seat as unseated rather than giving it a costume: a seat without a lens
+correlates with every other seat.
+
+**The Stranger — single-artifact only.** The seat is denied the option set, so
+it cannot rank names. Seat it on one sheet, or on the published page once one
+exists, for its three questions. Its `Ship (this seat's loss only)` stays out
+of the direction ranking, as on any [single-artifact
+ballot](#ballot-mechanics).
+
+A naming panel is therefore Pedant, Forger and Thumbnail: three seats, the
+minimum [The chair](#the-chair) treats as a real panel. Budget three critiques
+per option plus one shared counterfeit pool. Expect low concordance. The
+`unhost` panel measured 0.33, with the meaning seats and the scale seat
+anti-correlated, and that split — meaning against legibility — was the finding.
+
+### Rule (a): a fixed Forger pool
+
+On a name, the Forger's severity moved with the size of its pool. SyrupSpin
+was rated HIGH against a 30-name pool in `ww-1017-k4`, where "Syrup" survived
+as residue, and CRITICAL against a 105-name pool in `ww-1017-m8`, where
+"syrup" was scored `near`, one synonym hop from the pool's "Viscous". Same
+name, same seat, two severities, and the two pools were also built from
+different template lists. A severity that moves with the seat's stopping point
+is a measure of the stopping point. Fix all four inputs:
+
+- **Width — at least 100 names, and at least 6 from every template.** That
+  width is reached well inside the four-minute ceiling: the 105-name pool took
+  at most 48 seconds. With a narrower pool, the templates' reach is understated,
+  and that reach is the claim the seat exists to test.
+- **Templates — all sixteen, the union of both sittings' lists:**
+
+  | # | Template | From the sittings |
+  |---|---|---|
+  | 1 | Closed compound: substance or texture + effect or motion | OilSwirl |
+  | 2 | Open pair: colour or quality adjective + substance noun | Neon Oil |
+  | 3 | Portmanteau of two domain words | Liquilux |
+  | 4 | Single evocative noun or verb | Drift |
+  | 5 | Period, place or venue reference | Fillmore |
+  | 6 | Period slang, pun or lyric | Far Out |
+  | 7 | Apparatus or medium, literal | Overhead |
+  | 8 | Domain technical term | Meniscus |
+  | 9 | App suffix or cute-ifier (-ly, -io, -ify, -y, -r) | Swirly |
+  | 10 | Latinate or pseudo-classical coinage | Lumina |
+  | 11 | Platform or world suffix (-TV, -scape, -verse) | GlowTV |
+  | 12 | Echo of the category or subtitle | Liquid Dreams |
+  | 13 | Nearest consumer object | Lava Light |
+  | 14 | Genre prefix (Psych-, Trip-) | Psychlight |
+  | 15 | Rhyme or reduplication | Glow Flow |
+  | 16 | Two-word mood phrase | Mind Melt |
+
+- **Hop distance — one.** A lexeme is `near` when it is a first-page synonym of
+  a pool lexeme, and the diff row names the hop (`syrup ← viscous, pool #88`).
+  Two hops or more is residue. Without a stated distance, a wider pool and a
+  stricter diff cannot be told apart.
+- **Use statement — written once per product.** The chair writes it, stores it
+  beside the ledger, and passes it verbatim to every sitting. A later sitting
+  on the same product reuses the earlier pool unchanged and only tops it up to
+  the minimum, so a name that reaches the panel twice is diffed against the
+  same counterfeits both times.
+
+### Rule (b): no Forger veto
+
+In a naming sitting the option is the string, so a Forger CRITICAL is
+form-fatal by construction: its only fix is a different name, and a different
+name is a different option. Applied as written, the [form-fatal
+carve-out](#two-bodies-two-aggregation-rules) amounts to a Forger veto over
+direction selection — the outcome the carve-out was kept narrow to prevent —
+resting on the finding shown under Rule (a) to be least stable. In
+`ww-1017-m8` the Forger rated SyrupSpin CRITICAL (R = 0 of F = 16,
+`form_fatal: yes`), and under the carve-out that ballot alone would have
+eliminated it.
+
+**In a naming sitting, the chair reports the ranking twice:** once over every
+seated option, and once over the remainder after form-fatal eliminations,
+naming the finding behind each elimination.
+
+- If both rankings put the same option first, say so. The elimination changed
+  nothing.
+- If they differ, that is split trigger 6 under [Splits are the
+  product](#splits-are-the-product): the comparative body prefers an option the
+  defect body fails on form. Route it to the split report with the product
+  question it raises — for a Forger CRITICAL, whether a name a generic template
+  reaches is acceptable for this product — and name no winner.
+
+That option's verdict is still FAIL under the CRITICAL. A name cannot be
+repaired without becoming another name, so a human who ships it anyway has
+declined the finding: record the disposition as `miss`, with the human's
+stated reason. The rule covers a form-fatal CRITICAL from any seat on a name;
+the Forger's is the one that is form-fatal every time.
+
+Requiring a second seat to concur before eliminating, on the model of the
+inline-seat restriction, was the alternative. It fails here. No other seat
+judges distinctiveness, so concurrence on the same defect could never arrive
+and the Forger's CRITICAL would be silently capped. Under concurrence on any
+defect, two unrelated findings could combine into an elimination neither seat
+claimed. Under the dual report, both bodies' outputs stay intact and the
+conflict goes to the human, which is what the split report is for.
+
+### Rule (c): standing context crosses the subagent boundary
+
+The chair's conversation stays on its side of the subagent boundary. What the
+harness loads into every agent at spawn does not. In Claude Code that includes
+each CLAUDE.md in scope and the auto-memory index, `MEMORY.md`, which is
+loaded into every subagent. The `ww-1017-m8` Forger disclosed that the
+product's working name was in the index before it built its pool, and it
+flagged the pool items affected. A Stranger spawned into the same context
+would have been handed project context the protocol denies it.
+
+Before seating:
+
+1. **Search the standing context** — every file the harness loads at spawn —
+   for each option string, the working name, and words from the question. A
+   hit is a leak.
+2. **Keep pending decisions out of it.** While a jury is pending, no candidate
+   name or working name goes into an index line or a CLAUDE.md. A memory about
+   the decision goes in a file the index does not list, or waits until the
+   sitting closes.
+3. **Remove the leak or record it.** Removing it means moving the line out of
+   the index before seating. If it stays, every seat records `Isolation:
+   subagent (denial partial — standing context)` and names the leaked string
+   under `Evidence seen`. The Forger flags pool items that equal or contain the
+   string and counts a template as reaching such an item only when the
+   template produces it without the leak, as the `ww-1017-m8` Forger did. A
+   Stranger whose standing context names an option or the question is
+   contaminated: reseat it cleanly or record it unseated, as after an abort.
+
+Instruct every seat to report, before it reads any evidence, whether its own
+context names an option, the working name, or the question. A seat can see
+its standing context; the chair cannot see the seat's.
+
 ## Anti-patterns
 
 Do not:
@@ -771,6 +1040,9 @@ Do not:
   the shouters.
 - **Convene on a test render.** Panels are for work about to be committed. A
   draft-DPI intermediate does not earn five seats.
+- **Seat a naming panel on whatever names came to mind.** The jury cannot add
+  an option. Harvest source material and generate a long list first, and hand
+  the human the long list, not only the shortlist.
 - **Let the chair vote.** A chair with a preference is a sixth juror holding
   procedural power, and it will resolve splits it was meant to report.
 - **Show round 1 ballots to a juror still voting.** That measures conformity.
