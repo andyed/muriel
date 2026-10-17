@@ -355,6 +355,16 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **`muriel.capture --selector` named element PNGs after the viewport.** The
+  filename was always `{slug}-{tier}-{viewport}`, so a 1200×630 card captured
+  at the default scale of 2 on the desktop tier was written as
+  `…-desktop-1920x1080.png` while the file held 2400×1260 pixels, and the
+  wrong size was carried into every `muriel.squint` companion. With `--selector` or
+  `--full-page`, `W×H` is now the written PNG's real pixel size, read from its
+  IHDR chunk with the standard library (`…-desktop-2400x1260.png`). Viewport
+  captures keep the tier-viewport name. `capture_filename()` and
+  `png_dimensions()` are exported, and `tests/test_capture.py` covers both,
+  with a Playwright end-to-end test that skips when the browser is absent.
 - **`muriel import` and `import-corpus` dropped every `rem` and `em` font
   size without a WARN.** `fontSize` parsed only bare numbers and `px`, so
   `fontSize: 2.5rem` fell through and the brand imported with an empty
