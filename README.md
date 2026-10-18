@@ -132,6 +132,8 @@ After `pip install`, the `muriel` command dispatches to every subcommand:
 ```bash
 muriel                              # list subcommands
 muriel capture https://example.com  # responsive screenshot sweep
+muriel collection build photos/ --out photos/collection.json  # folder or CSV → Wunderkammer collection
+muriel collection validate collection.json                  # exit 0 valid, 1 problems, 2 unreadable
 muriel contrast audit page.svg      # WCAG 8:1 audit
 muriel dimensions                   # print the dimensions registry
 muriel heroshot in.png out.png --tilt 12 --brand brand.toml --target og.card

@@ -8,6 +8,41 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`muriel.collection` and `muriel collection`: Wunderkammer collection
+  documents.** [Wunderkammer](https://github.com/andyed/wunderkammer) is
+  muriel's collection engine: an agent hands a person one JSON file
+  (`wunderkammer.collection`, version 1) and the wall shows it, with no
+  server. `build(source, *, title=None, group=None)` writes that file from a
+  folder of images or a CSV. A folder gives one clip per image: the id is
+  the relative path, the title the file name, `captured` the EXIF capture
+  time (with Pillow) or else the file's mtime, width and height as props,
+  and covers as relative URLs, percent-encoded so `#` and `?` in file
+  names stay in the path. A CSV maps `id`, `title`, `cover`, `sourceUrl`
+  and `captured` to clip fields. Every other column becomes a prop, and a
+  column whose header ends in `[]` is split on commas into an array.
+  `validate(doc, *, base_url=None)` lists every problem with its path,
+  capped at 25 with a count of the rest. On the command line, `build` writes
+  nothing when its output has problems, and `validate` exits 0 when a
+  document is valid, 1 with its problems, and 2 when it read nothing or the
+  input is not JSON. The rules are a port of `validateCollection()` in
+  Wunderkammer's `wall/collection.mjs` at 5ba188a, sprite sheets included.
+  JavaScript's semantics were kept where Python's differ: UTF-16 string
+  lengths, ASCII-only digits in `captured`, JavaScript's whitespace set and
+  key order, double-precision numbers, and URLs parsed by a port of the
+  WHATWG URL Standard (`muriel/_whatwg_url.py`), since `urllib` accepts
+  `http://exa mple.org/`. Checked against the reference:
+  - 27,036 fuzzed documents give the same problem lists from both
+    validators;
+  - the facet-count and unused-sheet warnings match;
+  - 39,654 URLs give the same `href` or failure from both parsers.
+
+  One gap remains: hostnames outside ASCII use an approximation of UTS #46,
+  which disagrees with Node on 2 to 5 of 8,000 random mixed-script hosts.
+  `tests/test_collection.py` covers each case in Wunderkammer's
+  `collection.test.mjs`, one planted violation per rule, the builder and
+  CLI, and the shipped Psychodeli example. Two differential tests also run
+  when Node and a Wunderkammer checkout are present.
+
 - **`references/jury.md` — convening the jury on a name.** Written from two
   sittings on 2026-10-17 that chose the Liquid Light App Store title. Three
   seats transfer: the Pedant checks each word of the name against the
