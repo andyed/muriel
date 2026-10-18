@@ -8,6 +8,35 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`references/collections.md` — Wunderkammer 0.1.0 as the engine for
+  visual collections.** It says when an agent should use a collection
+  explorer: dozens to thousands of images, comparisons between groups, or
+  claims a person should be able to check. It then gives the contract in
+  brief:
+  - the `wunderkammer.collection` v1 document;
+  - the comparison recipe;
+  - `wunderkammer.observations`, whose figures are computed by the page from
+    cited cells, so authored text has no numbers of its own;
+  - the `window.wunderkammer.export()` hand-back;
+  - `mount()`.
+
+  Loading is pinned to `wunderkammer@0.1.0` and `v0.1.0`. Modules load from
+  jsDelivr or unpkg. jsDelivr serves HTML as `text/plain`, so pages come from
+  unpkg or a static host. In 0.1.0 the wall page needs a static host: it
+  loads `/wall/…` by root path, so from a CDN sub-path its assets 404
+  (reproduced 2026-10-18). The comparison page loads from a CDN sub-path.
+
+  The linked-atlas lab is the fallback when a single file is required, or
+  when the task needs WebGL-only views and WebGL is unavailable. Also new are
+  an exploration-quality critique axis and the `muriel.collection build` /
+  `validate` CLI. The axis covers overview structure, facets with counts,
+  orientation under zoom, hand-back, and cited observations, each with its
+  evidence and severities.
+
+  Wunderkammer is named by released version only, and muriel imports none of
+  its code. It is listed in the README under Heir projects, with one-line
+  pointers from `SKILL.md` and `channels/interactive.md`.
+
 - **`references/jury.md` — convening the jury on a name.** Written from two
   sittings on 2026-10-17 that chose the Liquid Light App Store title. Three
   seats transfer: the Pedant checks each word of the name against the

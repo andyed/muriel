@@ -235,6 +235,10 @@ Optional deep references:
   polar semantics, stable geometry, layer ownership, motion, accessibility, and
   responsive fallbacks across radial menus, instruments, gauges, timelines,
   hierarchies, and reticles; includes a distinct FUI sensor-console case.
+- [`references/collections.md`](references/collections.md) — dozens to
+  thousands of images to survey, compare, or check: Wunderkammer 0.1.0 as the
+  default engine, its collection/observation contract, pinned loading, and an
+  exploration-quality critique axis.
 
 ## Verification and handoff
 
