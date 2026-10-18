@@ -27,9 +27,21 @@ Wunderkammer's spatial view uses muriel's rendering primitives, vendored at a
 pinned commit
 ([`wall/spatial/lib/VENDOR.md`](https://github.com/andyed/wunderkammer/blob/v0.1.0/wall/spatial/lib/VENDOR.md)).
 muriel imports no Wunderkammer code, and this reference names it by released
-version only. Every URL below is pinned to `v0.1.0` or `wunderkammer@0.1.0`.
-When a new version is released, update the pins and re-check the claims that
-carry a date.
+version only. Every URL below is pinned to `v0.1.0` or `wunderkammer@0.1.0`,
+except the agent skill below, which is newer than 0.1.0 and is linked on
+`main` until the next release. When a new version is released, update the
+pins, pin the skill, and re-check the claims that carry a date.
+
+**This reference is the front door.** Wunderkammer is designed to be used
+from muriel: this reference decides when an explorer is the right
+representation, [`muriel.collection`](#building-a-document-murielcollection)
+builds the document, and the [exploration-quality axis](#exploration-quality)
+and contrast checks review the result. For the engine's own steps and traps
+(URL keys, hosting, observations, the hand-back), read Wunderkammer's skill,
+[`skills/wunderkammer/SKILL.md`](https://github.com/andyed/wunderkammer/blob/main/skills/wunderkammer/SKILL.md).
+Its examples are tested against the pages' validators, so where it or the
+contract disagrees with the summary below, they win. Agents without muriel
+can install that skill on its own (`npx skills add andyed/wunderkammer`).
 
 It is a default, not a requirement. Another explorer that passes the
 [exploration-quality axis](#exploration-quality) is a sensible substitute: the
@@ -59,7 +71,8 @@ images behind them. When the output must be one self-contained file, see the
 
 There are four parts, and all of them are static files. The full contract is
 [`docs/CONTRACT.md`](https://github.com/andyed/wunderkammer/blob/v0.1.0/docs/CONTRACT.md).
-This section covers what an agent needs for a first draft that validates.
+This section summarizes it for design decisions; for the engine's steps,
+see Wunderkammer's skill above.
 
 ### Collection document: `wunderkammer.collection` v1
 
@@ -353,6 +366,11 @@ python -m muriel.collection validate collection.json
   again on load, and when the two validators disagree, the page's
   ([`wall/collection.mjs`](https://github.com/andyed/wunderkammer/blob/v0.1.0/wall/collection.mjs))
   is the reference.
+- **Observations need Wunderkammer's checker.** `muriel.collection` validates
+  the collection document only. From a Wunderkammer checkout,
+  `node scripts/validate-collection.mjs collection.json --observations observations.json`
+  also prints the figures each claim will show and every citation that does
+  not resolve (newer than 0.1.0, like the skill).
 
 A typical pass:
 
