@@ -373,6 +373,25 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **`TileField` drew every tile about 2.2 gamma dark.** The atlases are
+  tagged `SRGBColorSpace`, so sampling decodes them to linear, and the
+  fragment shader wrote the result without re-encoding: an atlas pixel of
+  167,170,176 reached the frame as 99,103,111, and dark covers went black.
+  Both outputs, the sampled tile and the `emptyColor` placeholder, now pass
+  through `linearToOutputTexel`, which is the identity on a linear target.
+  Found by wunderkammer's floating space while matching frame pixels to atlas
+  pixels.
+- **`TileField` tiles at a multiple of the atlas column count sampled their
+  neighbour.** The slot index is an interpolated float and could arrive as
+  4.9999…, so `floor(vSlot / cols)` took the previous row while `mod()`
+  wrapped the column: slot 5 of a 5-column atlas drew part of slot 4. The
+  shader now rounds the index, takes the row with a half-slot margin, and
+  derives the column from the row. `tests/spatial-tile-pixels.test.mjs`
+  (new) renders a 25-tile field in headless Chromium for both tiers and
+  checks 25 points on every tile against its atlas colour. It fails on
+  either defect alone (the encoding one fails 475 of 650 samples per tier,
+  the slot one 14) and skips with a reason when Playwright is not
+  resolvable.
 - **`muriel.capture --selector` named element PNGs after the viewport.** The
   filename was always `{slug}-{tier}-{viewport}`, so a 1200×630 card captured
   at the default scale of 2 on the desktop tier was written as

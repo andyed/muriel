@@ -95,8 +95,15 @@ void main() {
   // instead makes every such tile display slot 0's picture, so a corpus with
   // failures renders as hundreds of copies of one image and looks like a
   // shader bug rather than missing data.
+  //
+  // Both outputs are encoded for the render target. The atlases are tagged
+  // sRGB, so sampling decodes them to linear, and emptyColor is a THREE.Color,
+  // which is linear too. Written raw, every tile draws about 2.2 gamma dark
+  // (an atlas 167,170,176 reached the frame as 99,103,111, and the default
+  // emptyColor 27,36,48 as 3,4,8) and dark covers go black. linearToOutputTexel is what three prepends to every ShaderMaterial
+  // for exactly this; it is the identity when the target is linear.
   if (vSlot < 0.0) {
-    gl_FragColor = vec4(emptyColor, 1.0);
+    gl_FragColor = linearToOutputTexel(vec4(emptyColor, 1.0));
     return;
   }
 
@@ -107,8 +114,16 @@ void main() {
 
   bool near = vTier > 0.5;
   vec2 grid = near ? nearGrid : farGrid;
-  float col = mod(vSlot, grid.x);
-  float row = floor(vSlot / grid.x);
+  // The slot arrives as an interpolated float, so a slot that is an exact
+  // multiple of the column count can arrive as 4.9999 rather than 5. Floored
+  // directly, that picks the previous row while mod() wraps the column, and
+  // part of the tile samples its neighbour (seen: slot 5 of a 5-column atlas
+  // drew a diagonal band of slot 4). Round to the integer it stands for, take
+  // the row with a half-slot margin, and derive the column from the row so the
+  // two can never disagree.
+  float slotIndex = floor(vSlot + 0.5);
+  float row = floor((slotIndex + 0.5) / grid.x);
+  float col = slotIndex - row * grid.x;
 
   // CanvasTexture uploads with flipY, so canvas row 0 (top) is the HIGH v end.
   vec2 uv = vec2(
@@ -123,7 +138,7 @@ void main() {
   // a wall that pops into existence tile by tile reads as broken.
   if (c.a < 0.02) c = vec4(emptyColor, 1.0);
 
-  gl_FragColor = vec4(c.rgb, c.a * vOpacity);
+  gl_FragColor = linearToOutputTexel(vec4(c.rgb, c.a * vOpacity));
 }
 `;
 
