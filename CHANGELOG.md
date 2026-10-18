@@ -20,11 +20,12 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   - the `window.wunderkammer.export()` hand-back;
   - `mount()`.
 
-  Loading is pinned to `wunderkammer@0.1.0` and `v0.1.0`. Modules load from
-  jsDelivr or unpkg. jsDelivr serves HTML as `text/plain`, so pages come from
-  unpkg or a static host. In 0.1.0 the wall page needs a static host: it
-  loads `/wall/…` by root path, so from a CDN sub-path its assets 404
-  (reproduced 2026-10-18). The comparison page loads from a CDN sub-path.
+  Loading is pinned to `wunderkammer@0.1.0` and `v0.1.0`. The wall is
+  `index.html` at the package root, and the comparison page is
+  `wall/compare.html`. Modules load from jsDelivr or unpkg. jsDelivr serves
+  HTML as `text/plain`, so both pages are opened or framed from unpkg
+  (`https://unpkg.com/wunderkammer@0.1.0/index.html?collection=<url>`) or a
+  static host. `mount()` imported from unpkg needs no `wallUrl`.
 
   The linked-atlas lab is the fallback when a single file is required, or
   when the task needs WebGL-only views and WebGL is unavailable. Also new are

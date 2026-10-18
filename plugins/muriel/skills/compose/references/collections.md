@@ -217,12 +217,10 @@ are in the packet, never notes or paths.
 ### Embedding: `mount(element, collection)`
 
 ```js
-import { mount } from 'https://cdn.jsdelivr.net/npm/wunderkammer@0.1.0/wall/embed.mjs';
+import { mount } from 'https://unpkg.com/wunderkammer@0.1.0/wall/embed.mjs';
 
-const wall = mount(element, collection, {
-  wallUrl: 'https://static.example.org/wunderkammer/wall/index.html',   // see the loading table
-});
-await wall.ready;   // resolves on the wall's view-ready message
+const wall = mount(element, collection);   // frames …/wunderkammer@0.1.0/index.html
+await wall.ready;                          // resolves on the wall's view-ready message
 ```
 
 - **`collection`** is an object or a URL.
@@ -231,9 +229,10 @@ await wall.ready;   // resolves on the wall's view-ready message
   origin only, and validated again there.
 - **A URL** is fetched by the wall. If it fails, the host gets a generic error
   and the details appear inside the frame.
-- **`wallUrl`** must be passed whenever `embed.mjs` comes from a CDN. Its
-  default is the directory above `embed.mjs`. On a CDN that is the package
-  root, which holds no page.
+- **`wallUrl`** defaults to the wall page, `index.html` at the package root,
+  one folder above `embed.mjs`. Imported from unpkg or a static host, the
+  default works as it is. Imported from jsDelivr, the default is a page served
+  as `text/plain`, so pass `wallUrl` with an unpkg or static-host wall page.
 - **Other options:** `title` (the iframe's title) and `timeout` (default
   20,000 ms).
 - **`wall.ready`** rejects on the wall's error message or on timeout.
@@ -247,24 +246,25 @@ on GitHub. Never use `@latest`, a bare package name or a branch.
 | What | jsDelivr | unpkg | Static host |
 |---|---|---|---|
 | ES modules (`wall/embed.mjs`, `wall/collection.mjs`, `wall/observations.mjs`) | yes | yes | yes |
-| `wall/compare.html`, opened or framed | no: HTML is served as `text/plain` | yes | yes |
-| `wall/index.html`, the wall, opened or framed | no | no, in 0.1.0 | yes |
+| The wall (`index.html`) and `wall/compare.html`, opened or framed | no: HTML is served as `text/plain` | yes | yes |
 
 - **Content types** were checked on 2026-10-17 (Wunderkammer's contract) and
   again on 2026-10-18 against `swagger-ui-dist@5.17.14/index.html`:
   - jsDelivr serves HTML as `text/plain` and unpkg serves it as `text/html`;
   - both serve JavaScript with a JavaScript type.
-- **The wall page does not boot from a CDN in 0.1.0.** `wall/index.html`
-  loads its stylesheets and `wall.mjs` by root paths (`/wall/wall.mjs`).
-  - On a CDN those paths resolve outside the package. On unpkg, `/wall/…`
-    belongs to an unrelated npm package named `wall`.
-  - Reproduced on 2026-10-18 by serving the package under
-    `/wunderkammer@0.1.0/`. The wall page's seven `/wall/` requests returned
-    404 and `window.wunderkammer` stayed undefined. `compare.html`, whose
-    paths are relative, loaded and exported normally.
-  - Serve the wall from a static host instead: a checkout of the tag
-    (`npx http-server -p 8080 .`, then `/wall/?collection=<url>`), or the
-    output of `scripts/build-demo.mjs`, which rewrites those paths.
+- **Where the pages are.** The wall is `index.html` at the package root,
+  with its assets under `wall/`:
+  `https://unpkg.com/wunderkammer@0.1.0/index.html?collection=<url>`. The
+  comparison page is `wall/compare.html`. Both name their assets by relative
+  paths, so they work under a versioned CDN path.
+  [`tests/cdn-subpath.test.mjs`](https://github.com/andyed/wunderkammer/blob/v0.1.0/tests/cdn-subpath.test.mjs)
+  serves only the files `npm pack` publishes, under `/npm/wunderkammer@0.1.0/`.
+  From there it boots the wall, `mount()` with its default, and the comparison
+  page's link back, with no request leaving the package.
+- **A static host** also works: a checkout of the tag
+  (`npx http-server -p 8080 .`, then `/?collection=<url>`), the output of
+  `scripts/build-demo.mjs`, or a wunderkammer server. All of them serve the
+  wall at `/`.
 - **Framing from an artifact host is untested.** unpkg sends no
   `X-Frame-Options` or `frame-ancestors` header (checked 2026-10-18), so
   framing is governed by the host page's own content security policy.
@@ -357,10 +357,10 @@ python -m muriel.collection validate collection.json
 A typical pass:
 
 1. Build and validate the document, then fix every listed problem.
-2. Serve the wall with `?collection=` and check the overview against the
-   exploration-quality axis.
+2. Open the wall (`index.html`) with `?collection=` and check the overview
+   against the exploration-quality axis.
 3. For a comparison, write the recipe. For claims, write observations that
-   cite cells. Open `compare.html` with both.
+   cite cells. Open `wall/compare.html` with both.
 4. Let the person explore, then read the hand-back and quote the identities in
    it.
 
