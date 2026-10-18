@@ -15,6 +15,7 @@ import unittest
 from muriel.design_tokens_import import (
     parse_design_tokens,
     tokens_to_brand,
+    _coerce_dimension,
     _color_role_for,
     _resolve_aliases,
 )
@@ -112,6 +113,25 @@ class ColorRoleMapping(unittest.TestCase):
     def test_accent_variants(self):
         self.assertEqual(_color_role_for("semantic.color.accentValue"), "accent")
         self.assertEqual(_color_role_for("color.accentInk"), "accent_ink")
+
+
+class CoerceDimension(unittest.TestCase):
+    """Delegates to design_md_import._css_length_to_px, keeping negatives."""
+
+    def test_units_and_negatives(self):
+        self.assertEqual(_coerce_dimension("1rem"), 16)
+        self.assertEqual(_coerce_dimension(".5rem"), 8)
+        self.assertEqual(_coerce_dimension("-4px"), -4)
+        self.assertEqual(_coerce_dimension(28), 28)
+
+    def test_numbers_round_like_strings(self):
+        self.assertEqual(_coerce_dimension(4.6), _coerce_dimension("4.6px"))
+        self.assertEqual(_coerce_dimension(4.6), 5)
+
+    def test_non_lengths_are_none(self):
+        for value in ("2.5vw", "", True, None, float("inf"), float("nan")):
+            with self.subTest(value=value):
+                self.assertIsNone(_coerce_dimension(value))
 
 
 class ATVImport(unittest.TestCase):

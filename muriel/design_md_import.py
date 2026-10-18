@@ -30,6 +30,7 @@ hand-rolled TOML emitter for the subset muriel's brand.toml uses.
 
 from __future__ import annotations
 
+import math
 import re
 import sys
 from pathlib import Path
@@ -428,14 +429,189 @@ STITCH_TYPE_TO_MURIEL: dict[str, str] = {
     "subtitle":  "h2",
     "caption":   "caption",
     "label":     "label",
+    # The spec's own example role. It implies no font class: the spec sets it
+    # in Space Grotesk, TypeUI in its mono font (see _MONO_FAMILY_RE).
+    "label-caps": "label",
     "mono":      "mono",
 }
+
+
+# Family names recognisable as monospace. muriel keeps only body, display and
+# mono families (TextRole has no family), so a role with no slot of its own
+# (label, caption, ...) offers its family as mono_family when the name matches;
+# a role named `mono` always wins. The test is on the family name, not the
+# role name, because `label-caps` is a sans in the spec and mono in TypeUI.
+_MONO_FAMILY_RE = re.compile(
+    r"\bmono(?:space)?\b"
+    r"|\b(?:fira|source|cascadia) code\b"
+    r"|\b(?:courier|consolas|menlo|monaco|inconsolata|anonymous pro|hack|iosevka"
+    r"|lucida console)\b",
+    re.IGNORECASE,
+)
+
+
+# Non-role keys some design.md producers put inside the typography block.
+# TypeUI (bergside/awesome-design-skills) ships `sourceScale: "14/16/18/24"`
+# and `weights: "100, ..., 900"` as strings. They are skipped without a WARN
+# rather than parsed into the scale: the steps carry no role names, and 20 of
+# that corpus's 67 files fill sourceScale with prose ("desktop-first expressive
+# scale").
+TYPOGRAPHY_METADATA_KEYS = frozenset({"sourceScale", "weights"})
+
+
+# Root font size for rem/em conversion. design.md has no document context,
+# so em resolves against the root the same as rem.
+CSS_ROOT_PX = 16.0
+
+_CSS_LENGTH_RE = re.compile(r"^(-?(?:\d+(?:\.\d+)?|\.\d+))\s*(px|rem|em)?$", re.IGNORECASE)
+
+
+def _css_length_to_px(value: Any, allow_negative: bool = False) -> Optional[float]:
+    """
+    ``16`` / ``"16px"`` / ``"2.5rem"`` / ``"1em"`` → pixels, or ``None`` when
+    the value is not a plain length (``"2.5vw"``, ``"clamp(...)"``, a bool).
+    Whole results come back as ``int`` so the emitted TOML reads ``40``, not
+    ``40.0``. Negative lengths are ``None`` unless ``allow_negative``: a font
+    size or radius cannot be negative, a spacing token can.
+
+    Shared with :mod:`muriel.design_tokens_import`, which imports from here.
+    """
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        px = float(value)
+    elif isinstance(value, str):
+        m = _CSS_LENGTH_RE.match(value.strip())
+        if not m:
+            return None
+        px = float(m.group(1))
+        if (m.group(2) or "px").lower() in ("rem", "em"):
+            px *= CSS_ROOT_PX
+    else:
+        return None
+    if not math.isfinite(px) or (px < 0 and not allow_negative):
+        return None
+    # float(x) == int(x), not x.is_integer(): int.is_integer() is 3.12+.
+    return int(px) if px == int(px) else px
+
+
+_CSS_RELATIVE_RE = re.compile(
+    r"^(-?(?:\d+(?:\.\d+)?|\.\d+))\s*(px|rem|em|%)?$", re.IGNORECASE
+)
+
+
+def _per_font_size(
+    value: Any,
+    size_px: Optional[float],
+    unitless_ok: bool,
+    positive: bool,
+) -> tuple[Optional[float], str]:
+    """
+    ``value`` as a multiple of the role's own font size: a line-height ratio
+    or a letter-spacing in em. Returns ``(multiple, "")`` or ``(None, reason)``
+    where ``reason`` completes a WARN.
+
+    ``em`` and ``%`` are already relative to the element's font size, so they
+    need no ``size_px`` (``1.5em`` → 1.5, ``150%`` → 1.5; ``%`` is how Figma
+    writes letter-spacing). ``px`` and ``rem`` divide by ``size_px``. A bare
+    number is a ratio when ``unitless_ok`` (CSS line-height); otherwise only
+    zero is meaningful, since CSS letter-spacing requires a unit. Results are
+    rounded to 4 decimals so ``20px / 14px`` emits ``1.4286``.
+    """
+    if isinstance(value, bool):
+        return None, "not parseable"
+    if isinstance(value, (int, float)):
+        n, unit = float(value), None
+    elif isinstance(value, str):
+        m = _CSS_RELATIVE_RE.match(value.strip())
+        if not m:
+            return None, "not parseable"
+        n, unit = float(m.group(1)), (m.group(2) or "").lower() or None
+    else:
+        return None, "not parseable"
+    if not math.isfinite(n):
+        return None, "not parseable"
+
+    if unit is None:
+        if not unitless_ok and n != 0:
+            return None, "has no unit (needs em, px, rem or %)"
+        multiple = n
+    elif unit == "em":
+        multiple = n
+    elif unit == "%":
+        multiple = n / 100.0
+    else:
+        if not size_px:
+            return None, "needs a parseable fontSize to convert"
+        px = n * CSS_ROOT_PX if unit == "rem" else n
+        multiple = px / float(size_px)
+
+    if positive and multiple <= 0:
+        return None, "not positive"
+    return round(multiple, 4), ""
+
+
+def _is_number(value: Any) -> bool:
+    """A finite int or float, excluding bool (``True`` is an ``int``)."""
+    return (
+        isinstance(value, (int, float))
+        and not isinstance(value, bool)
+        and math.isfinite(value)
+    )
+
+
+def _first_present(d: dict[str, Any], *keys: str) -> tuple[str, Any]:
+    """The first of ``keys`` whose value is not ``None``, as ``(key, value)``.
+    Falls back to ``(keys[0], None)`` so callers can name the key in a WARN."""
+    for key in keys:
+        if d.get(key) is not None:
+            return key, d[key]
+    return keys[0], None
 
 
 # Muriel's universal contrast floor — overrides anything an imported spec
 # carries. Surfaced as a WARN, not an error: the imported spec's preference
 # is recorded; muriel's floor remains the validation gate.
 MURIEL_MIN_CONTRAST = 8.0
+
+
+def _text_pair_warnings(fg: Any, bg: Any) -> list[str]:
+    """
+    WARN when the imported foreground/background pair misses muriel's floor,
+    with the nearest same-hue fix from :func:`muriel.contrast.repair_text_pair`.
+
+    The source colour is kept: brand values are data, and the repaired hex can
+    read as a different colour name (orange at 8:1 on cream is a brown), which
+    is the brand owner's call. The prefix carries no colon so corpus_audit's
+    WARN tally (split on the first ``—`` or ``:``) groups these together.
+    """
+    from muriel.contrast import repair_text_pair
+
+    try:
+        r = repair_text_pair(fg, bg, required=MURIEL_MIN_CONTRAST)
+    except (ValueError, TypeError):
+        return [
+            f"text pair not evaluated for contrast — foreground {fg!r} / "
+            f"background {bg!r} did not parse as colours"
+        ]
+    if r.direction == "none":
+        return []
+    head = (
+        f"text pair below muriel's contrast floor — foreground {fg} on "
+        f"background {bg} is {r.ratio_before:.2f}:1 against "
+        f"{MURIEL_MIN_CONTRAST:g}:1; "
+    )
+    if r.repaired is None:
+        return [
+            head + f"no same-hue fix exists (black and white top out at "
+            f"{r.max_ratio:.2f}:1 on this background), so the background has "
+            f"to move. Source values kept."
+        ]
+    verb = "darker" if r.direction == "dark" else "lighter"
+    return [
+        head + f"nearest same-hue fix is {r.hex} ({r.ratio_after:.2f}:1, "
+        f"{verb}; see `muriel contrast --repair`). Source value kept."
+    ]
 
 
 def _stitch_to_muriel_dict(
@@ -501,12 +677,21 @@ def _stitch_to_muriel_dict(
     # muriel.colors REQUIRES background + foreground; default if missing.
     # WARN messages remain stable so corpus_audit can detect default-injection
     # by string match (see ``muriel.tools.corpus_audit.audit_file``).
-    if "background" not in colors_out:
+    bg_defaulted = "background" not in colors_out
+    fg_defaulted = "foreground" not in colors_out
+    if bg_defaulted:
         colors_out["background"] = "#0a0a0f"
         warnings.append("colors.surface (background) missing in source — defaulted to #0a0a0f")
-    if "foreground" not in colors_out:
+    if fg_defaulted:
         colors_out["foreground"] = "#e6e4d2"
         warnings.append("colors.on-surface (foreground) missing in source — defaulted to #e6e4d2")
+
+    # A both-defaulted pair is muriel's contrast, not the brand's — same
+    # rule corpus_audit applies before claiming pass/fail.
+    if not (bg_defaulted and fg_defaulted):
+        warnings.extend(
+            _text_pair_warnings(colors_out["foreground"], colors_out["background"])
+        )
 
     if named:
         colors_out["named"] = named
@@ -523,45 +708,109 @@ def _stitch_to_muriel_dict(
 
     typography_out: dict[str, Any] = {}
     scale_out: dict[str, dict[str, Any]] = {}
+    scale_source: dict[str, str] = {}        # muriel role → stitch role that set it
+    families_seen: list[tuple[str, str, str]] = []   # (stitch role, key, family)
 
     for stitch_role, role_def in type_in.items():
         if not isinstance(role_def, dict):
+            if stitch_role in TYPOGRAPHY_METADATA_KEYS:
+                continue
             warnings.append(f"typography.{stitch_role} is not a map; skipping")
             continue
         muriel_role = STITCH_TYPE_TO_MURIEL.get(stitch_role, stitch_role)
         scale_entry: dict[str, Any] = {}
-        size = role_def.get("fontSize") or role_def.get("size")
-        if isinstance(size, str):
-            # "16px" → 16
-            m = re.match(r"^(\d+(?:\.\d+)?)\s*(px)?$", size.strip())
-            if m:
-                size = float(m.group(1))
-                if size.is_integer():
-                    size = int(size)
-        if isinstance(size, (int, float)):
-            scale_entry["size"] = size
-        weight = role_def.get("fontWeight") or role_def.get("weight")
-        if isinstance(weight, (int, float)):
+        # A value that is present but unusable gets a WARN, never a silent drop.
+        size_key, size = _first_present(role_def, "fontSize", "size")
+        if size is not None:
+            # "16px" → 16, "2.5rem" → 40
+            size_px = _css_length_to_px(size)
+            if size_px is None:
+                warnings.append(
+                    f"typography.{stitch_role}.{size_key} {size!r} not parseable; skipping size"
+                )
+            else:
+                scale_entry["size"] = size_px
+        weight_key, weight = _first_present(role_def, "fontWeight", "weight")
+        if weight is not None and not _is_number(weight):
+            warnings.append(
+                f"typography.{stitch_role}.{weight_key} {weight!r} not numeric; skipping weight"
+            )
+            weight = None
+        if weight is not None:
             scale_entry["weight"] = int(weight)
-        line_height = role_def.get("lineHeight") or role_def.get("line_height")
-        if isinstance(line_height, (int, float)):
-            scale_entry["line_height"] = float(line_height)
+        # lineHeight and letterSpacing are relative to this role's font size:
+        # brand.toml stores a unitless ratio and an em value, the same units
+        # dtcg_export writes back out.
+        role_size_px = scale_entry.get("size")
+        lh_key, lh_raw = _first_present(role_def, "lineHeight", "line_height")
+        line_height = None
+        if lh_raw is not None:
+            line_height, reason = _per_font_size(
+                lh_raw, role_size_px, unitless_ok=True, positive=True
+            )
+            if line_height is None:
+                warnings.append(
+                    f"typography.{stitch_role}.{lh_key} {lh_raw!r} {reason}; skipping line height"
+                )
+            else:
+                scale_entry["line_height"] = line_height
+        ls_key, ls_raw = _first_present(role_def, "letterSpacing", "letter_spacing")
+        tracking = None
+        if isinstance(ls_raw, str) and ls_raw.strip().lower() == "normal":
+            tracking = 0.0
+        elif ls_raw is not None:
+            tracking, reason = _per_font_size(
+                ls_raw, role_size_px, unitless_ok=False, positive=False
+            )
+            if tracking is None:
+                warnings.append(
+                    f"typography.{stitch_role}.{ls_key} {ls_raw!r} {reason}; skipping letter spacing"
+                )
+        if tracking is not None:
+            scale_entry["tracking_em"] = tracking
         if scale_entry:
+            if muriel_role in scale_source:
+                warnings.append(
+                    f"typography.{stitch_role} and typography.{scale_source[muriel_role]} "
+                    f"both map to scale role '{muriel_role}'; keeping typography.{stitch_role}"
+                )
             scale_out[muriel_role] = scale_entry
+            scale_source[muriel_role] = stitch_role
 
         # Surface body / mono / display family at the typography top level
-        family = role_def.get("fontFamily") or role_def.get("family")
-        if isinstance(family, str):
+        family_key, family = _first_present(role_def, "fontFamily", "family")
+        if family is not None and not (isinstance(family, str) and family.strip()):
+            warnings.append(
+                f"typography.{stitch_role}.{family_key} {family!r} not a font name; skipping family"
+            )
+            family = None
+        if family is not None:
+            families_seen.append((stitch_role, family_key, family))
             if muriel_role == "body":
                 typography_out["body_family"] = family
             elif muriel_role == "mono":
                 typography_out["mono_family"] = family
             elif muriel_role in ("h1", "display"):
                 typography_out["display_family"] = family
-                if isinstance(weight, (int, float)):
+                if weight is not None:
                     typography_out["display_weight"] = int(weight)
-                if isinstance(line_height, (int, float)):
+                if line_height is not None:
                     typography_out["display_line_height"] = float(line_height)
+                if tracking is not None:
+                    typography_out["display_letter_spacing_em"] = tracking
+            elif _MONO_FAMILY_RE.search(family):
+                typography_out.setdefault("mono_family", family)
+
+    # A family that reached no slot (or lost one to a later role) is a drop.
+    kept_families = {
+        typography_out.get(k) for k in ("body_family", "display_family", "mono_family")
+    }
+    for stitch_role, family_key, family in families_seen:
+        if family not in kept_families:
+            warnings.append(
+                f"typography.{stitch_role}.{family_key} {family!r} not kept; "
+                f"muriel keeps only body, display and mono families"
+            )
 
     if scale_out:
         typography_out["scale"] = scale_out
@@ -569,19 +818,23 @@ def _stitch_to_muriel_dict(
         out["typography"] = typography_out
 
     # ─── radii ───────────────────────────────────────────────────────────
-    rounded_in = frontmatter.get("rounded") or frontmatter.get("radii") or {}
-    if isinstance(rounded_in, dict):
-        radii_out: dict[str, Any] = {}
-        for key, value in rounded_in.items():
-            if isinstance(value, str):
-                m = re.match(r"^(\d+(?:\.\d+)?)\s*(px)?$", value.strip())
-                if m:
-                    radii_out[key] = int(float(m.group(1)))
-                    continue
-            if isinstance(value, (int, float)):
-                radii_out[key] = int(value)
-        if radii_out:
-            out["radii"] = radii_out
+    rounded_block = "rounded" if frontmatter.get("rounded") else "radii"
+    rounded_in = frontmatter.get(rounded_block) or {}
+    if not isinstance(rounded_in, dict):
+        warnings.append(
+            f"{rounded_block} block is not a map; got {type(rounded_in).__name__}; skipping"
+        )
+        rounded_in = {}
+    radii_out: dict[str, Any] = {}
+    for key, value in rounded_in.items():
+        radius_px = _css_length_to_px(value)
+        if radius_px is None:
+            warnings.append(f"{rounded_block}.{key} {value!r} not parseable; skipping radius")
+            continue
+        # StyleGuide.radii is dict[str, int]; round like design_tokens_import.
+        radii_out[key] = int(round(radius_px))
+    if radii_out:
+        out["radii"] = radii_out
 
     # ─── elevation ───────────────────────────────────────────────────────
     elevation_in = frontmatter.get("elevation") or {}
@@ -783,7 +1036,9 @@ def _print_help() -> None:
         "Lossy: design.md's flat schema can't express muriel's semantic states,\n"
         "ring gradients, viz palettes, or typed iconography. Those stay absent\n"
         "after import; hand-augment as needed. WARNs print to stderr when the\n"
-        "imported spec specifies below muriel's universal 8:1 contrast floor.\n"
+        "imported spec specifies below muriel's universal 8:1 contrast floor,\n"
+        "or when its foreground/background pair misses 8:1 (with the nearest\n"
+        "same-hue fix; the source colour is kept).\n"
     )
 
 

@@ -56,6 +56,17 @@ Usage (CLI)
     python -m muriel.capture https://example.com --selector '.hero' --slug hero
     python -m muriel.capture https://example.com --full-page
 
+Filenames
+---------
+
+Every PNG is named ``{slug}-{tier}-{W}x{H}.png``. For a viewport capture
+``W×H`` is the tier's CSS viewport and the image is that size times the
+device scale factor (``desktop-1920x1080`` at ``--scale 2`` is 3840×2160
+pixels). With ``--selector`` or ``--full-page`` the image is not the
+viewport, so ``W×H`` is the written PNG's real pixel size instead: a
+1200×630 element at scale 2 on the desktop tier writes
+``{slug}-desktop-2400x1260.png``. See ``capture_filename()``.
+
 Exit status:
 
 - ``0`` — every capture succeeded
@@ -86,6 +97,7 @@ need speed.
 from __future__ import annotations
 
 import re
+import struct
 import sys
 from pathlib import Path
 from typing import Optional, Sequence, Union
@@ -113,7 +125,9 @@ __all__ = [
     "NAMED_TIERS",
     "DEFAULT_TIERS",
     "CaptureError",
+    "capture_filename",
     "capture_responsive",
+    "png_dimensions",
     "resolve_tiers",
     "slug_from_url",
 ]
@@ -220,6 +234,70 @@ def slug_from_url(url: str) -> str:
     slug = re.sub(r"[^a-z0-9]+", "-", combined.lower())
     slug = slug.strip("-")
     return slug or "capture"
+
+
+_PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+
+
+def png_dimensions(data: bytes) -> tuple[int, int]:
+    """
+    Read ``(width, height)`` in pixels from a PNG's IHDR chunk.
+
+    Standard library only, so the filename can report the real image size
+    without making Pillow a dependency of capture.
+
+    >>> import struct
+    >>> png_dimensions(_PNG_SIGNATURE + struct.pack('>I4sII', 13, b'IHDR', 2400, 1260))
+    (2400, 1260)
+
+    Raises
+    ------
+    ValueError
+        If ``data`` does not start with a PNG signature followed by IHDR.
+    """
+    if (
+        len(data) < 24
+        or data[:8] != _PNG_SIGNATURE
+        or data[12:16] != b"IHDR"
+    ):
+        raise ValueError("not a PNG: missing signature or IHDR chunk")
+    width, height = struct.unpack(">II", data[16:24])
+    return width, height
+
+
+def capture_filename(
+    slug: str,
+    tier_name: str,
+    viewport: Size,
+    image_size: Optional[tuple[int, int]] = None,
+) -> str:
+    """
+    Build the output filename for one tier: ``{slug}-{tier}-{W}x{H}.png``.
+
+    What ``W×H`` means depends on what was captured:
+
+    - **Viewport capture** (``image_size`` is ``None``) — the tier's CSS
+      viewport, so the tier name and its size travel together. The PNG
+      itself is that size times ``device_scale_factor``: ``desktop-1920x1080``
+      at the default scale of 2 is a 3840×2160 image.
+    - **Element or full-page capture** — the written PNG's real pixel size,
+      device scale included. The image is not the viewport, so naming it
+      after the viewport would misreport it: a 1200×630 card captured at
+      scale 2 on the desktop tier is ``desktop-2400x1260``, not
+      ``desktop-1920x1080``. The tier stays in the name because layout
+      depends on viewport width, and two tiers that produce the same element
+      size would otherwise overwrite each other.
+
+    >>> capture_filename('card', 'desktop', Size(1920, 1080))
+    'card-desktop-1920x1080.png'
+    >>> capture_filename('card', 'desktop', Size(1920, 1080), (2400, 1260))
+    'card-desktop-2400x1260.png'
+    """
+    if image_size is None:
+        width, height = viewport.width, viewport.height
+    else:
+        width, height = image_size
+    return f"{slug}-{tier_name}-{width}x{height}.png"
 
 
 # ─── Main capture ────────────────────────────────────────────────────────
@@ -363,22 +441,15 @@ def capture_responsive(
                             except PlaywrightError:
                                 pass  # older browsers lack document.fonts
 
-                        # Build the target filename
-                        filename = (
-                            f"{slug}-{tier_name}-{size.width}x{size.height}.png"
-                        )
-                        out_path = out_dir / filename
-
-                        # Screenshot — element, viewport, or full page
+                        # Screenshot — element, viewport, or full page. Taken
+                        # to bytes first: an element or full-page image is
+                        # not the viewport, and its real size is only known
+                        # once Playwright has produced it.
                         try:
                             if selector:
-                                locator = page.locator(selector)
-                                locator.screenshot(path=str(out_path))
+                                data = page.locator(selector).screenshot()
                             else:
-                                page.screenshot(
-                                    path=str(out_path),
-                                    full_page=full_page,
-                                )
+                                data = page.screenshot(full_page=full_page)
                         except PlaywrightError as exc:
                             if verbose:
                                 print(
@@ -388,10 +459,22 @@ def capture_responsive(
                                 )
                             continue
 
+                        clipped = bool(selector) or full_page
+                        image_size = png_dimensions(data) if clipped else None
+                        out_path = out_dir / capture_filename(
+                            slug, tier_name, size, image_size
+                        )
+                        out_path.write_bytes(data)
+
                         written.append(out_path)
                         if verbose:
+                            detail = (
+                                f"  ({image_size[0]}×{image_size[1]} px)"
+                                if image_size else ""
+                            )
                             print(
                                 f"  PASS {tier_name:<16} {size}  → {out_path}"
+                                f"{detail}"
                             )
                     finally:
                         context.close()
@@ -684,11 +767,18 @@ def _main(argv: Optional[Sequence[str]] = None) -> int:
     )
     parser.add_argument(
         "--full-page", action="store_true",
-        help="Capture the entire scrollable page, not just the viewport.",
+        help=(
+            "Capture the entire scrollable page, not just the viewport. "
+            "The filename then carries the PNG's real pixel size."
+        ),
     )
     parser.add_argument(
         "--selector", default=None,
-        help="CSS selector to clip the screenshot to a single element.",
+        help=(
+            "CSS selector to clip the screenshot to a single element. The "
+            "filename then carries the PNG's real pixel size (device scale "
+            "included), not the tier's viewport."
+        ),
     )
     parser.add_argument(
         "--no-fonts", dest="wait_for_fonts", action="store_false",

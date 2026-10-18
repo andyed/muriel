@@ -50,7 +50,7 @@ from typing import Any, Optional, Sequence
 
 # Reuse the zero-dep TOML emitter and the universal contrast floor rather than
 # re-rolling them — design_md_import is the sibling importer and owns both.
-from muriel.design_md_import import MURIEL_MIN_CONTRAST, _emit_toml
+from muriel.design_md_import import MURIEL_MIN_CONTRAST, _css_length_to_px, _emit_toml
 
 try:
     from muriel.contrast import contrast_ratio
@@ -277,20 +277,10 @@ def _is_component_path(path: str) -> bool:
 
 
 def _coerce_dimension(value: Any) -> Optional[int]:
-    """``16`` / ``"16px"`` / ``"1rem"`` → an int pixel count where sensible."""
-    if isinstance(value, bool):
-        return None
-    if isinstance(value, (int, float)):
-        return int(value)
-    if isinstance(value, str):
-        m = re.match(r"^(-?\d+(?:\.\d+)?)\s*(px|rem|em)?$", value.strip())
-        if m:
-            n = float(m.group(1))
-            unit = m.group(2)
-            if unit in ("rem", "em"):
-                n *= 16.0
-            return int(round(n))
-    return None
+    """``16`` / ``"16px"`` / ``"1rem"`` → an int pixel count where sensible.
+    Negative values pass: spacing tokens can be negative."""
+    px = _css_length_to_px(value, allow_negative=True)
+    return None if px is None else int(round(px))
 
 
 def _coerce_ms(value: Any) -> Optional[int]:

@@ -59,6 +59,8 @@ Two references apply to every channel. [Dimensions](plugins/muriel/skills/compos
 
 The web and kinetic-type docs default to two sibling projects, [marginalia](https://github.com/andyed/marginalia) and [iblipper](https://github.com/andyed/iblipper2025), because they pass muriel's rules without changes. Substitute your own libraries freely. Each channel names the library it assumes, and none of the rules depend on it.
 
+Collections of many images default to a third sibling, [Wunderkammer](https://github.com/andyed/wunderkammer), whose 3D views draw with muriel's renderer; [`references/collections.md`](plugins/muriel/skills/compose/references/collections.md) covers when to use it and how.
+
 ## Design languages
 
 A channel is a medium; a vocabulary is a style the agent can work in. Ten ship under [`vocabularies/`](plugins/muriel/skills/compose/vocabularies/):

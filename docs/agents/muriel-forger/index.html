@@ -1711,8 +1711,10 @@ option:</p>
   and diff table (below).</li>
 <li><code>&lt;optionId&gt;.forgery.render*.png</code> — the render of your counterfeit. Pass
   <code>--slug &lt;optionId&gt;.forgery.render</code> to <code>muriel.capture</code>; it appends the tier
-  and pixel size, so the real filename is
-  <code>&lt;optionId&gt;.forgery.render-&lt;tier&gt;-&lt;WxH&gt;.png</code>. Both forms are permitted.</li>
+  and a size, so the real filename is
+  <code>&lt;optionId&gt;.forgery.render-&lt;tier&gt;-&lt;WxH&gt;.png</code>. <code>WxH</code> is the tier's CSS
+  viewport for a viewport render, and the PNG's real pixel size when you pass
+  <code>--selector</code> or <code>--full-page</code>. Both forms are permitted.</li>
 <li><code>&lt;optionId&gt;.original*.png</code> — the rasterized original, the file step 3 needs
   in order to diff against something you can see. Same slug-suffix rule.</li>
 </ul>

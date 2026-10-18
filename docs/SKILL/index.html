@@ -1886,7 +1886,10 @@ coding copilot or a default participant throughout the task.</p>
 <li>Preserve the project's brand and tokens. If none exist, use a restrained
   near-black, cream, and cyan system rather than inventing a large palette.</li>
 <li>Keep text contrast at least 8:1 against its background. Do not use opacity to
-  weaken text; choose an explicit color.</li>
+  weaken text; choose an explicit color. When a brand color fails as text,
+  deepen or lift that color rather than swapping hues:
+  <code>muriel contrast --repair FG BG</code> returns the nearest same-hue color that
+  clears 8:1, or reports that the background itself has to move.</li>
 <li>Do not put body copy or captions below 16 px, or body text below weight 500.</li>
 <li>Measure before drawing: text width, plot bounds, target dimensions, and
   responsive states are inputs, not guesses.</li>
@@ -2041,6 +2044,10 @@ meaning rather than shape. Run the linter, then read the draft anyway.</p>
   polar semantics, stable geometry, layer ownership, motion, accessibility, and
   responsive fallbacks across radial menus, instruments, gauges, timelines,
   hierarchies, and reticles; includes a distinct FUI sensor-console case.</li>
+<li><a href="references/collections.md"><code>references/collections.md</code></a> — dozens to
+  thousands of images to survey, compare, or check: Wunderkammer 0.1.0 as the
+  default engine, its collection/observation contract, pinned loading, and an
+  exploration-quality critique axis.</li>
 </ul>
 <h2 id="verification-and-handoff">Verification and handoff<a class="headerlink" href="#verification-and-handoff" title="Permanent link">&para;</a></h2>
 <p>When design synthesis was loaded, emit its labeled <strong>Muriel synthesis</strong> rationale

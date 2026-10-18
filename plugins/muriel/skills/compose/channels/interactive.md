@@ -12,6 +12,11 @@ Part of the [muriel](../SKILL.md) skill — see the top-level index for mission,
 - Eye-tracking replays with timeline scrubber
 - Anything where "watching it move" matters more than "seeing one frame"
 
+For prepared imagery driven by live input, or choreography whose meaning needs
+design work, read [motion craft](../references/motion-craft.md). It separates
+input, playback, and media choices while preserving canonical state and Muriel's
+timing rules; ordinary procedural demos need no media-production pipeline.
+
 ## Constraints (from `~/CLAUDE.md`)
 - **ES6 modules direct.** No bundlers, no build step.
 - **WebGL is the primary graphics stack.** Canvas2D for non-shader 2D, D3 for data binding to DOM/SVG, Three.js when 3D scene management beats raw WebGL.
@@ -137,6 +142,7 @@ Good shapes to borrow rather than rebuild:
 - A shipped WebGL explainer for the concept you're teaching (foveation, diffusion, whatever) — reference its URL from your post, don't re-derive the math.
 - A project-local PermalinkManager utility — one implementation per repo, imported by every demo.
 - An audio-reactive shader pipeline elsewhere in the codebase — if a sibling project already solved the AnalyserNode → uniforms plumbing, import or vendor the small hot path instead of starting from scratch.
+- A collection of dozens to thousands of images — write a collection document for Wunderkammer 0.1.0 instead of building a wall; see [`references/collections.md`](../references/collections.md).
 
 ## Distribution & hosting
 

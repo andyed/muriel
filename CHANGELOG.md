@@ -23,6 +23,129 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   ImageMagick's librsvg drops them. The critique agent and the repo's
   permission allowlist now point at it.
 
+- **`muriel.collection` and `muriel collection`: Wunderkammer collection
+  documents.** [Wunderkammer](https://github.com/andyed/wunderkammer) is
+  muriel's collection engine: an agent hands a person one JSON file
+  (`wunderkammer.collection`, version 1) and the wall shows it, with no
+  server. `build(source, *, title=None, group=None)` writes that file from a
+  folder of images or a CSV. A folder gives one clip per image: the id is
+  the relative path, the title the file name, `captured` the EXIF capture
+  time (with Pillow) or else the file's mtime, width and height as props,
+  and covers as relative URLs, percent-encoded so `#` and `?` in file
+  names stay in the path. A CSV maps `id`, `title`, `cover`, `sourceUrl`
+  and `captured` to clip fields. Every other column becomes a prop, and a
+  column whose header ends in `[]` is split on commas into an array.
+  `validate(doc, *, base_url=None)` lists every problem with its path,
+  capped at 25 with a count of the rest. On the command line, `build` writes
+  nothing when its output has problems, and `validate` exits 0 when a
+  document is valid, 1 with its problems, and 2 when it read nothing or the
+  input is not JSON. The rules are a port of `validateCollection()` in
+  Wunderkammer's `wall/collection.mjs` at 5ba188a, sprite sheets included.
+  JavaScript's semantics were kept where Python's differ: UTF-16 string
+  lengths, ASCII-only digits in `captured`, JavaScript's whitespace set and
+  key order, double-precision numbers, and URLs parsed by a port of the
+  WHATWG URL Standard (`muriel/_whatwg_url.py`), since `urllib` accepts
+  `http://exa mple.org/`. Checked against the reference:
+  - 27,036 fuzzed documents give the same problem lists from both
+    validators;
+  - the facet-count and unused-sheet warnings match;
+  - 39,654 URLs give the same `href` or failure from both parsers.
+
+  One gap remains: hostnames outside ASCII use an approximation of UTS #46,
+  which disagrees with Node on 2 to 5 of 8,000 random mixed-script hosts.
+  `tests/test_collection.py` covers each case in Wunderkammer's
+  `collection.test.mjs`, one planted violation per rule, the builder and
+  CLI, and the shipped Psychodeli example. Two differential tests also run
+  when Node and a Wunderkammer checkout are present.
+- **`references/collections.md` — Wunderkammer 0.1.0 as the engine for
+  visual collections.** It says when an agent should use a collection
+  explorer: dozens to thousands of images, comparisons between groups, or
+  claims a person should be able to check. It then gives the contract in
+  brief:
+  - the `wunderkammer.collection` v1 document;
+  - the comparison recipe;
+  - `wunderkammer.observations`, whose figures are computed by the page from
+    cited cells, so authored text has no numbers of its own;
+  - the `window.wunderkammer.export()` hand-back;
+  - `mount()`.
+
+  Loading is pinned to `wunderkammer@0.1.0` and `v0.1.0`. The wall is
+  `index.html` at the package root, and the comparison page is
+  `wall/compare.html`. Modules load from jsDelivr or unpkg. jsDelivr serves
+  HTML as `text/plain`, so both pages are opened or framed from unpkg
+  (`https://unpkg.com/wunderkammer@0.1.0/index.html?collection=<url>`) or a
+  static host. `mount()` imported from unpkg needs no `wallUrl`.
+
+  The linked-atlas lab is the fallback when a single file is required, or
+  when the task needs WebGL-only views and WebGL is unavailable. Also new are
+  an exploration-quality critique axis and the `muriel.collection build` /
+  `validate` CLI. The axis covers overview structure, facets with counts,
+  orientation under zoom, hand-back, and cited observations, each with its
+  evidence and severities.
+
+  Wunderkammer is named by released version only, and muriel imports none of
+  its code. It is listed in the README under Heir projects, with one-line
+  pointers from `SKILL.md` and `channels/interactive.md`.
+
+- **`references/jury.md` — convening the jury on a name.** Written from two
+  sittings on 2026-10-17 that chose the Liquid Light App Store title. Three
+  seats transfer: the Pedant checks each word of the name against the
+  product's README; the Forger builds a blind counterfeit pool from the use
+  statement and diffs each option against it; the Thumbnail reads the
+  `muriel.squint` companions of a name sheet, with the name set in its real
+  slots. The Squinter is unseated and the Stranger runs single-artifact. Three
+  rules are new. The Forger pool is fixed at 100+ names across 16 named
+  templates with a one-hop synonym rule, because SyrupSpin rated HIGH against
+  a 30-name pool and CRITICAL against a 105-name one. A naming sitting reports
+  the ranking with and without form-fatal eliminations (new split trigger 6),
+  because a Forger CRITICAL on a name is form-fatal by construction and
+  would otherwise act as a veto. And the chair searches the harness's
+  standing context (CLAUDE.md, the `MEMORY.md` index) for option strings
+  before seating, because a Forger disclosed seeing the working name there.
+  Harvesting source material and generating a long list now come before the
+  panel, since the jury can only rank the names it is handed.
+
+- **`muriel.contrast.repair_text_pair()` and `muriel contrast --repair FG BG`:
+  same-hue contrast repair.** Given a text colour that fails against its
+  background, returns the nearest colour with the same OKLCH hue and
+  chroma (chroma reduced only where the sRGB gamut forces it) that clears
+  the threshold, 8:1 by default. It walks OKLCH lightness toward black
+  and/or white, bisects the bracket, and scores every candidate *after*
+  8-bit rounding, so the returned hex passes as written. `direction="auto"`
+  keeps whichever side moves lightness less. When black and white both
+  fall short (a mid-grey background), the result is `unreachable` with
+  the best achievable ratio: the background has to move, not the text.
+  `RepairResult` reports ΔL, chroma kept and hue drift, because at 8:1 a
+  warm accent on a light ground lands near L 0.40 and an orange can read
+  as brown. That is a brand call for a person to make. On the four
+  failing pairs in
+  [bergside/awesome-design-skills](https://github.com/bergside/awesome-design-skills):
+  `#ea580c` on `#ffedd5` (3.11:1) → `#812b00` (8.04:1, hue Δ0.2°);
+  `#111827` on `#111111` (1.06:1) → `#9faabe` (8.06:1). The rule is
+  adapted from TypeUI's accessibility fundamentals (MIT): repair the
+  palette's own colour rather than override it. Sibling of
+  `palettes.generate_for_floor()`, which builds new colours at the floor
+  rather than moving an existing one. SKILL.md's 8:1 constraint now
+  points at it.
+
+- **`muriel import` checks the imported text pair, and `import-corpus`
+  reports the fix.** Until now the importer only compared a declared
+  `contrast.minimum` against 8.0; a brand whose own `foreground` on
+  `background` failed 8:1 imported without a word unless it went through
+  `import-corpus`. The importer now WARNs on that pair with the nearest
+  same-hue fix, for example: *text pair below muriel's contrast floor —
+  foreground #EA580C on background #FFEDD5 is 3.11:1 against 8:1; nearest
+  same-hue fix is #812b00 (8.04:1, darker)*. The source colour is kept.
+  Pairs where muriel defaulted both colours are not judged, the same rule
+  corpus_audit applies. `BrandResult` gains `repair`, `repair_contrast`
+  and `repair_direction`; the summary lists each failure with its fix, and
+  the markdown table gains a "Same-hue fix" column (`move bg` when black
+  and white both fall short). On awesome-design-md that is 13 failing
+  brands, each now listed with a fix; on awesome-design-skills, 4.
+  `repair_text_pair` also keeps an exact sRGB grey on the grey axis:
+  bisection lands where 8-bit rounding flips, the channels could round
+  apart there, and `#737373` came back `#515051`.
+
 - **Diagram icon library: 30 curated Lucide glyphs, and named icons on
   `cycle`.** `muriel.tools.diagrams.icons.GLYPHS` maps process-verb and
   concept slots (`observe`, `measure`, `decide`, `refresh`, `test`, `ship`,
@@ -353,6 +476,70 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **`muriel.capture --selector` named element PNGs after the viewport.** The
+  filename was always `{slug}-{tier}-{viewport}`, so a 1200×630 card captured
+  at the default scale of 2 on the desktop tier was written as
+  `…-desktop-1920x1080.png` while the file held 2400×1260 pixels, and the
+  wrong size was carried into every `muriel.squint` companion. With `--selector` or
+  `--full-page`, `W×H` is now the written PNG's real pixel size, read from its
+  IHDR chunk with the standard library (`…-desktop-2400x1260.png`). Viewport
+  captures keep the tier-viewport name. `capture_filename()` and
+  `png_dimensions()` are exported, and `tests/test_capture.py` covers both,
+  with a Playwright end-to-end test that skips when the browser is absent.
+- **`muriel import` and `import-corpus` dropped every `rem` and `em` font
+  size without a WARN.** `fontSize` parsed only bare numbers and `px`, so
+  `fontSize: 2.5rem` fell through and the brand imported with an empty
+  `[typography.scale]`. On
+  [bergside/awesome-design-skills](https://github.com/bergside/awesome-design-skills)
+  (67 TypeUI DESIGN.md files, all sized in rem) every row reported
+  `n_scale_roles: 0`; all 67 now import three roles (`h1`, `body`,
+  `label-caps`). Sizes and radii share `_css_length_to_px`: bare numbers,
+  `px`, `rem` and `em`, with `rem` and `em` at a 16 px root
+  (`2.5rem` → `40`). A size or radius that is present but unparseable
+  (`2.5vw`, `50%`) now emits a WARN naming the key and value, as does a
+  non-numeric `fontWeight` or `lineHeight` and a `rounded` block that is not
+  a map. Radii now round instead of truncating (`4.6px` → 5, was 4),
+  matching `design_tokens_import`. TypeUI's string `typography.sourceScale`
+  and `typography.weights` are recognised as metadata and skipped quietly,
+  which removes the 134 "is not a map" WARNs they raised across that corpus;
+  `channels/style-guides.md` (Interop) records why they are not parsed into
+  the scale. Covered by `tests/test_design_md_import.py`.
+
+- **design.md import: `label-caps` font families were dropped, and the
+  tokens importer kept its own copy of the length parser.** `label-caps`
+  now maps to the `label` scale role. brand.toml keeps only body, display
+  and mono families, so a role without a slot of its own (`label`,
+  `caption`, …) now offers its family as `mono_family` when the name reads
+  as monospace (`… Mono`, `monospace`, `Fira Code`, `Inconsolata`, …); a
+  role named `mono` still wins. The test is on the family name because the
+  spec's own `label-caps` example is Space Grotesk while TypeUI puts its
+  mono font there. On awesome-design-skills, 66 of 67 brands now carry a
+  `mono_family`; the 67th (`enterprise`) declares IBM Plex Sans for every
+  slot, so nothing is lost. A family that lands in no slot WARNs unless
+  another slot holds the same name, as do two source roles that collide on
+  one scale role and a `fontFamily` that is not a string.
+  `design_tokens_import._coerce_dimension` now delegates to
+  `design_md_import._css_length_to_px(allow_negative=True)`: numeric floats
+  round like strings already did (`4.6` → 5, was 4), `.5rem` and `16PX`
+  parse, and inf/NaN return `None` instead of raising. In design.md, a
+  negative font size or radius now WARNs instead of importing.
+
+- **design.md import dropped every `letterSpacing` and every px
+  `lineHeight`.** `letterSpacing` was never read, so it vanished without a
+  WARN; `lineHeight` accepted only bare numbers, though the spec allows
+  `24px` and `1.5rem`. Both are now converted against the role's own font
+  size into the units brand.toml and `dtcg_export` already use:
+  `line_height` as a ratio, `tracking_em` in em (`em` and `%` are taken as
+  relative, `px` and `rem` divide by the parsed `fontSize`, results rounded
+  to 4 decimals). The display role also fills `display_line_height` and
+  `display_letter_spacing_em`. On
+  [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md)
+  (64 parseable files) roles carrying a line height rise from 753 to 912
+  and roles carrying tracking from 0 to 722, and the 159 `lineHeight …
+  not numeric` WARNs are gone. Still WARNed and skipped: a px or rem value
+  with no parseable `fontSize`, a non-zero unitless `letterSpacing`, a
+  non-positive line height, and `lineHeight: normal`. The spec's own
+  typography example is now a fixture (`spec-tokens.DESIGN.md`).
 - **README and CONTRIBUTING links.** `muriel contrast audit page.svg` is
   `muriel contrast page.svg` (there is no `audit` subcommand; it was read as
   a path). The wheel link pointed at v0.11.0. Five prior-art links targeted

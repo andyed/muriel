@@ -4,6 +4,11 @@ Scripted screen recordings with tooltip overlays for YouTube/social. ffmpeg for 
 
 Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map.
 
+For expressive staging or continuity across authored media segments, read
+[motion craft](../references/motion-craft.md). Keep the selected production tool
+and Muriel's timing rules; live input and playback integration belong in the
+[interactive channel](interactive.md).
+
 ## Tools available
 
 | Tool | What it does | How to invoke |

@@ -14,6 +14,7 @@ Usage
     muriel                                 # list subcommands
     muriel --help                          # same
     muriel capture https://example.com     # responsive viewport-sweep screenshot
+    muriel collection build photos/ --out photos/collection.json
     muriel contrast audit page.svg         # WCAG 8:1 audit
     muriel diagram-check fig.svg           # a11y + label + contrast gate
     muriel dimensions                      # print the dimensions registry
@@ -46,6 +47,7 @@ from typing import Optional, Sequence
 SUBCOMMANDS: dict[str, tuple[str, str]] = {
     # name            (module,                              one-line help)
     "capture":        ("muriel.capture",                    "Responsive viewport-sweep screenshot via Playwright"),
+    "collection":     ("muriel.collection",                 "Build a Wunderkammer collection document from a folder or CSV; validate one"),
     "contrast":       ("muriel.contrast",                   "WCAG 8:1 contrast audit on SVG / CSS / color pairs"),
     "cvd":            ("muriel.cvd",                        "Color-vision-deficiency separation report — can a colorblind reader tell these colors apart?"),
     "diagram-check":  ("muriel.tools.diagrams.check",       "Rendered-SVG gate: accessible-figure lint + label geometry + 8:1 contrast (fails closed)"),

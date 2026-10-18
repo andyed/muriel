@@ -76,6 +76,14 @@ A quick index of every importable utility and CLI muriel ships, so you don't reb
 | **Doctor** | `from muriel.doctor import check_environment` | `python -m muriel.doctor` | Verifying optional deps (Pillow, matplotlib, Playwright, matplotlib_venn) are reachable. |
 | **Warmup** | `from muriel.warmup import warm_caches` | `python -m muriel.warmup` | Pre-loading font caches / palette data / dimension registry in CI to avoid cold-start cost. |
 
+### Collections
+
+| Tool | Import | CLI | Use when |
+|---|---|---|---|
+| **Wunderkammer collection documents** | `from muriel.collection import build, validate, format_problems` | `python -m muriel.collection build <folder\|csv> --out collection.json [--title T] [--group FIELD]`<br>`python -m muriel.collection validate collection.json` | Showing a person a visual collection in [Wunderkammer](https://github.com/andyed/wunderkammer), muriel's collection engine, without writing the JSON by hand. `build` turns a folder of images (id from the relative path, title from the file name, `captured` from EXIF or the file's mtime, width and height as props) or a CSV (`id`, `title`, `cover`, `sourceUrl`, `captured` columns; every other column a prop; a `genre[]` header splits on commas) into a `wunderkammer.collection` v1 document, checks it, and writes nothing if it has problems. `validate` checks any document before it is handed over: exit 0 valid, 1 with each problem and its path, 2 when nothing was read or it is not JSON. `--base-url` resolves relative covers and links the way the hosted wall will. |
+
+The checks are a port of Wunderkammer's own `validateCollection()` (`wall/collection.mjs`), so a document that passes here is one the wall loads. JavaScript's rules are kept where Python's differ: string limits count UTF-16 code units, `captured` digits are ASCII only, and URLs are parsed by the WHATWG URL Standard (`muriel/_whatwg_url.py`), not `urllib`. Hostnames outside ASCII are approximated (UTS #46 is not in the standard library); see that module's docstring.
+
 **When *not* to use these:** AI image generation (muriel is data-driven SVG/raster, not generative), hand-drawn/freeform diagrams (use Excalidraw / Figma), or real-time interactive demos (see the skill's `channels/interactive.md`).
 
 ## matplotlibrc_dark — OLED palette

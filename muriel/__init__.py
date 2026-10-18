@@ -19,6 +19,9 @@ checks can import them instead of copy-pasting.
   - styleguide         — brand style guide schema and TOML loader with
                          rule enforcement, contrast auditing, CSS +
                          matplotlibrc derivation (module + CLI)
+  - collection         — build and validate Wunderkammer collection
+                         documents from a folder of images or a CSV
+                         (module + CLI)
 
 Usage
 -----
@@ -130,6 +133,19 @@ Or from the command line:
     python -m muriel.styleguide brand.toml --css --css-prefix '--mg-'
     python -m muriel.styleguide brand.toml --contrast --required 8.0
 
+Wunderkammer collection documents (folder or CSV in, checked JSON out):
+
+    from muriel.collection import build, validate, format_problems
+    doc = build("photos/", title="Trip", group="captured")
+    problems = validate(doc)        # [] when the wall will load it
+    if problems:
+        print(format_problems(problems))
+
+Or from the command line:
+
+    python -m muriel.collection build albums.csv --out collection.json --group decade
+    python -m muriel.collection validate collection.json   # exit 0 / 1 / 2
+
 Bbox-aware annotation placement:
 
     from muriel.layout import place_label, Anchor, BBox, sample_polyline
@@ -221,6 +237,7 @@ __all__ = [
     "dimensions",
     "capture",
     "styleguide",
+    "collection",
     "layout",
     "math",
     "diagrams",

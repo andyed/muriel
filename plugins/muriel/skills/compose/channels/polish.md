@@ -146,3 +146,7 @@ Read [`../references/polish-rules.md`](../references/polish-rules.md) only when
 the task needs exact CSS recipes, motion constants, the complete numbered rule
 set, or a comprehensive audit. Do not load it for a single hierarchy or spacing
 decision.
+
+Read [`../references/motion-craft.md`](../references/motion-craft.md) when motion
+needs expressive direction or coordinated staging. It adds craft choices within
+Muriel's existing timing, state, and accessibility rules.
