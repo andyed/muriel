@@ -1,10 +1,11 @@
 # muriel
 
-**A multi-constraint solver for visual production.** muriel turns a brief —
-"make me a deck / a paper figure / a gaze plot / a share card" — into a
-deterministic, reproducible artifact for human eyes, across sixteen output
-channels. Named after Muriel Cooper, founder of the MIT Visible Language
-Workshop.
+**A design skill for coding agents.** muriel translates between design
+languages, expresses them in a multitude of mediums, juries its own work, and
+keeps every piece on brand and readable. Give it a brief ("make me a deck", "a paper
+figure", "a gaze plot", "a share card") and it returns a deterministic,
+reproducible artifact.
+Named after Muriel Cooper, founder of the MIT Visible Language Workshop.
 
 It is a curator before it is an originator: it lifts the sharpest structural
 patterns from sibling skills, ports their agent-actionable detection tables,
@@ -62,7 +63,7 @@ across all of them.
 
 | Group | What it covers |
 |---|---|
-| **Channels** | The output media: spatial, charts, infographics, science, raster, SVG, web, interactive, diagrams, video, terminal, density viz, gaze, polish. |
+| **Channels** | The output media: spatial, charts, infographics, science, raster, SVG, web, interactive, diagrams, video, terminal, density viz, gaze, polish, README. |
 | **Vocabularies** | Named aesthetic grammars to borrow conventions from — Visible Language, FUI, kinetic typography, KaTeX, PixiJS, declassified, surfaces, data-viz platform guides, muriel's own brand. |
 | **Reference** | Cross-channel constants: dimensions (social cards, device footprints, print) and style-guides (the `brand.toml` schema). |
 

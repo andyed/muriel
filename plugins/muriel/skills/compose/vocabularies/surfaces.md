@@ -20,7 +20,7 @@ channels/polish.md     ←─┘              "Brutalist web prototype"
 
 A channel tells you *how to emit pixels for this substrate at muriel's rigor*. A surface tells you *what composition to reach for when the brief is "make me a deck"*. The same channel (HTML+CSS via `channels/web.md`) underwrites many surfaces (decks, magazine articles, dashboards, share cards, PRDs).
 
-muriel today ships fourteen channels and one example surface (`examples/scrutinizer-ridgemap/`). The surface vocabulary lives *here* because formalizing the layer above channels is a queued direction, not shipped code — but the concept is already in use in the wider Claude-skill ecosystem and worth naming.
+muriel today ships fifteen channels and one example surface (`examples/scrutinizer-ridgemap/`). The surface vocabulary lives *here* because formalizing the layer above channels is a queued direction, not shipped code — but the concept is already in use in the wider Claude-skill ecosystem and worth naming.
 
 ## The canonical external catalog — html-anything
 

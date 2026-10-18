@@ -8,7 +8,7 @@
     {
       "name": "muriel",
       "source": "./plugins/muriel",
-      "description": "Multi-channel visual production skill — raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics, diagrams. 8:1 contrast minimum enforced; brand tokens active at render time.",
+      "description": "Design skill for coding agents. It translates between design languages, expresses them in a multitude of mediums, juries its own work, and keeps every piece on brand and readable.",
       "homepage": "https://github.com/andyed/muriel",
       "license": "MIT",
       "category": "design",
