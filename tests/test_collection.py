@@ -13,12 +13,22 @@ Four layers:
    ``~/Documents/dev/wunderkammer-readme``) and skipped cleanly otherwise:
    the same documents through both validators, the same URLs through both
    URL parsers.
+
+   The validators are compared at pinned commits, not at whatever the
+   checkout has checked out. ``REFERENCE`` names one Wunderkammer commit
+   for each release in ``muriel.collection.RELEASES``, and each run reads
+   that commit's validator from the checkout's object store with
+   ``git show``. Every run checks every release, and the result does not
+   change when the checkout moves. A separate test fails when the
+   checkout's validator files match no pinned commit: that is the signal
+   to port Wunderkammer's change and pin the new commit.
 """
 
 import copy
 import json
 import os
 import random
+import re
 import shutil
 import subprocess
 import sys
@@ -29,11 +39,21 @@ import pytest
 
 from muriel import collection as col
 from muriel import _whatwg_url
-from muriel.collection import LIMITS, build, format_problems, validate
+from muriel.collection import LIMITS, RELEASES, build, format_problems, validate
 
 BASE = "https://host.example/c/collection.json"
+ROOT = Path(__file__).resolve().parent.parent
 WK = Path(os.environ.get("WUNDERKAMMER_DIR", Path.home() / "Documents/dev/wunderkammer-readme"))
 PSYCHODELI = WK / "examples/psychodeli/collection.json"
+#: The Wunderkammer commit each release is compared against (layer 4).
+REFERENCE = {
+    "0.1.0": "caadd2e558e94eb7df109e9c389cbfccfef23781",   # tag v0.1.0
+    "next": "9c53ca291b25717b8b140db7a476de4683f24724",    # main on 2026-10-18, with ui.nouns
+}
+#: wall/collection.mjs and every module it imports.
+VALIDATOR_FILES = ("wall/collection.mjs", "wall/facet-counts.mjs")
+UI_FIELDS = {"0.1.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets",
+             "next": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns"}
 
 
 def doc(**over):
@@ -65,8 +85,8 @@ def sprite_doc(**over):
     return d
 
 
-def problems_of(d, base_url=BASE):
-    problems = validate(d, base_url=base_url)
+def problems_of(d, base_url=BASE, release=col.WUNDERKAMMER):
+    problems = validate(d, base_url=base_url, release=release)
     assert problems, "expected problems, got a valid document"
     return list(problems)
 
@@ -159,6 +179,18 @@ def test_problem_lists_are_capped_and_say_how_many_were_left_out():
     message = format_problems(problems)
     assert "(40 problems)" in message
     assert message.endswith("- …and 15 more")
+
+
+def test_ui_nouns_names_an_item_and_its_plural_both_are_required_words():
+    # Added after 0.1.0. The JS test's second half, a server payload's
+    # ui.nouns surviving toCollection(), is not ported (see below).
+    nouns = {"item": "frame", "items": "frames"}
+    assert validate(doc(ui={"title": "Frames", "nouns": nouns}), release="next") == []
+    problems = problems_of(doc(ui={"nouns": {"item": "frame", "plural": "frames"}}), release="next")
+    has(problems, "ui.nouns.plural", "supported: item, items")
+    has(problems, "ui.nouns.items", "non-empty string")
+    has(problems_of(doc(ui={"nouns": "frames"}), release="next"), "ui.nouns", "must be an object")
+    has(problems_of(doc(ui={"nouns": {"item": "x" * 41, "items": "xs"}}), release="next"), "ui.nouns.item ", "")
 
 
 def test_a_server_payload_is_refused_until_converted():
@@ -260,10 +292,10 @@ CLIP_FIELDS = ("id, url, title, cover, coverVariants, detailCover, media, sheetS
                "note, tags, props, source, kind, captured, palette, projection")
 
 
-def planted(mutate, base=doc, base_url=None):
+def planted(mutate, base=doc, base_url=None, release=col.WUNDERKAMMER):
     d = base()
     mutate(d)
-    return list(validate(d, base_url=base_url))
+    return list(validate(d, base_url=base_url, release=release))
 
 
 @pytest.mark.parametrize("mutate, expected", [
@@ -292,8 +324,7 @@ def test_clips_above_the_limit_are_refused():
     (lambda d: d.update(extra=1),
      "collection.extra is not supported (supported: format, version, corpus, ui, facetTypes, images, viewState, sheets, facets, clips)"),
     (lambda d: d["corpus"].update(name="x"), "corpus.name is not supported (supported: id, revision)"),
-    (lambda d: d["ui"].update(corpusName="x"),
-     "ui.corpusName is not supported (supported: title, defaultGroup, facetOrder, facetLabels, hiddenFacets)"),
+    (lambda d: d["ui"].update(corpusName="x"), f"ui.corpusName is not supported (supported: {UI_FIELDS['0.1.0']})"),
     (lambda d: d.update(images={"lazy": True}), "images.lazy is not supported (supported: cors, sheets)"),
     (lambda d: d["clips"][0].update(image="x.png"),
      f"clips[0].image is not supported (supported: {CLIP_FIELDS}; put other attributes in props)"),
@@ -301,6 +332,46 @@ def test_clips_above_the_limit_are_refused():
 ])
 def test_unknown_keys_are_refused_with_the_supported_list(mutate, expected):
     assert planted(mutate) == [expected]
+
+
+@pytest.mark.parametrize("release", RELEASES)
+def test_the_supported_ui_list_is_the_releases_own(release):
+    assert planted(lambda d: d["ui"].update(corpusName="x"), release=release) == \
+        [f"ui.corpusName is not supported (supported: {UI_FIELDS[release]})"]
+
+
+@pytest.mark.parametrize("release, nouns, expected", [
+    ("0.1.0", {"item": "cat", "items": "cats"}, [f"ui.nouns is not supported (supported: {UI_FIELDS['0.1.0']})"]),
+    ("0.1.0", "not checked further", [f"ui.nouns is not supported (supported: {UI_FIELDS['0.1.0']})"]),
+    ("next", {"item": "cat", "items": "cats"}, []),
+    ("next", {"item": "😀" * 20, "items": "cats"}, []),   # 40 UTF-16 code units
+    ("next", {"item": "😀" * 20 + "s", "items": "cats"}, ["ui.nouns.item must be a non-empty string of at most 40 characters"]),
+    ("next", {"item": "cat"}, ["ui.nouns.items must be a non-empty string of at most 40 characters"]),
+    ("next", {"item": " ", "items": 2}, ["ui.nouns.item must be a non-empty string of at most 40 characters",
+                                          "ui.nouns.items must be a non-empty string of at most 40 characters"]),
+    ("next", {"item": "cat", "items": "cats", "plural": "cats"}, ["ui.nouns.plural is not supported (supported: item, items)"]),
+    ("next", {"item": "cat", "items": "cats", "__proto__": {}}, ["ui.nouns.__proto__ is not allowed"]),
+    ("next", ["cat", "cats"], ["ui.nouns must be an object"]),
+    ("next", None, ["ui.nouns must be an object"]),
+])
+def test_ui_nouns_by_release(release, nouns, expected):
+    assert planted(lambda d: d["ui"].update(nouns=nouns), release=release) == expected
+
+
+def test_an_unknown_release_is_an_error():
+    with pytest.raises(ValueError, match=r"known: 0\.1\.0, next"):
+        validate(doc(), release="0.2.0")
+
+
+def test_every_added_field_names_a_known_release():
+    assert col.WUNDERKAMMER in RELEASES and set(col.SINCE.values()) <= set(RELEASES)
+    assert col.WUNDERKAMMER not in col.SINCE.values()   # the default release refuses every added field
+
+
+def test_the_default_release_is_the_one_the_collections_reference_pins():
+    text = (ROOT / "plugins/muriel/skills/compose/references/collections.md").read_text(encoding="utf-8")
+    pins = re.findall(r"wunderkammer@(\d+\.\d+\.\d+)|wunderkammer/(?:tree|blob)/v(\d+\.\d+\.\d+)", text)
+    assert pins and {a or b for a, b in pins} == {col.WUNDERKAMMER}
 
 
 def test_only_the_first_unknown_clip_key_lists_the_supported_ones():
@@ -679,6 +750,22 @@ def test_cli_validate_prints_warnings_and_still_passes(tmp_path):
     assert "warning: facets differ" in r.stderr
 
 
+def test_cli_validate_checks_for_a_release(tmp_path):
+    path = tmp_path / "c.json"
+    path.write_text(json.dumps(doc(ui={"title": "Cats", "nouns": {"item": "cat", "items": "cats"}})), encoding="utf-8")
+    r = run_cli("validate", path)
+    assert r.returncode == 1
+    assert f"- ui.nouns is not supported (supported: {UI_FIELDS['0.1.0']})" in r.stdout.splitlines()
+    assert r.stderr.strip() == ("note: ui.nouns is newer than Wunderkammer 0.1.0; "
+                                "for a wall from release next, validate with --release next")
+    assert run_cli("validate", path, "--release", "next").returncode == 0
+    assert run_cli("validate", path, "--release", "0.2.0").returncode == 2
+    # A problem the release does not explain draws no note.
+    path.write_text(json.dumps(doc(ui={"corpusName": "x"})), encoding="utf-8")
+    r = run_cli("validate", path)
+    assert (r.returncode, r.stderr) == (1, "")
+
+
 def test_the_muriel_dispatcher_lists_collection():
     r = subprocess.run([sys.executable, "-m", "muriel"], capture_output=True, text=True)
     assert "collection" in r.stdout
@@ -694,6 +781,65 @@ def _reference():
     if not node or not (WK / "wall/collection.mjs").is_file():
         pytest.skip(f"needs node and a Wunderkammer checkout at {WK} (set WUNDERKAMMER_DIR)")
     return node
+
+
+def _git(*args):
+    return subprocess.run(["git", "-C", str(WK), *args], capture_output=True)
+
+
+def _require_git_checkout():
+    if not shutil.which("git") or _git("rev-parse", "--git-dir").returncode != 0:
+        pytest.skip(f"needs a Wunderkammer git checkout at {WK} (set WUNDERKAMMER_DIR)")
+
+
+@pytest.fixture(scope="session")
+def pinned(tmp_path_factory):
+    """``pinned(release)``: node, and that release's pinned validator and example in a scratch folder."""
+    node = _reference()
+    _require_git_checkout()
+    made = {}
+
+    def get(release):
+        if release not in made:
+            commit = REFERENCE[release]
+            if _git("cat-file", "-e", f"{commit}^{{commit}}").returncode != 0:
+                pytest.skip(f"{WK} lacks Wunderkammer {commit[:7]} ({release}); run git -C {WK} fetch origin --tags")
+            out = tmp_path_factory.mktemp(f"wunderkammer-{release}")
+            for path in (*VALIDATOR_FILES, "examples/psychodeli/collection.json"):
+                blob = _git("show", f"{commit}:{path}")
+                assert blob.returncode == 0, blob.stderr.decode()
+                (out / path).parent.mkdir(parents=True, exist_ok=True)
+                (out / path).write_bytes(blob.stdout)
+            made[release] = out
+        return node, made[release]
+    return get
+
+
+def test_every_release_has_a_pinned_reference():
+    assert set(REFERENCE) == set(RELEASES)
+
+
+def test_the_checkout_validator_matches_a_pinned_commit():
+    """The checkout moving past every pin fails here, not silently.
+
+    The differential tests read pinned commits, so they keep passing when
+    Wunderkammer changes its validator. This test compares the checkout's
+    validator files with each pin's: when none matches, port the change to
+    muriel/collection.py and pin the new commit in REFERENCE.
+    """
+    if not (WK / VALIDATOR_FILES[0]).is_file():
+        pytest.skip(f"no Wunderkammer checkout at {WK} (set WUNDERKAMMER_DIR)")
+    _require_git_checkout()
+    # Every module the validator imports must be one compared here.
+    for path in VALIDATOR_FILES:
+        for name in re.findall(r"""from\s+['"]\./([^'"]+)['"]""", (WK / path).read_text(encoding="utf-8")):
+            assert f"wall/{name}" in VALIDATOR_FILES, f"{path} imports wall/{name}; add it to VALIDATOR_FILES"
+    blobs = lambda ref: [_git("rev-parse", f"{ref}:{p}").stdout.strip() for p in VALIDATOR_FILES]
+    here = [_git("hash-object", "--", p).stdout.strip() for p in VALIDATOR_FILES]
+    matches = [release for release, commit in REFERENCE.items() if blobs(commit) == here]
+    newest = REFERENCE[RELEASES[-1]]
+    assert matches, (f"the validator at {WK} matches no pinned commit; see git -C {WK} diff {newest[:7]} -- "
+                     f"{' '.join(VALIDATOR_FILES)}, port it, and pin the new commit in REFERENCE")
 
 
 _JS_VALIDATE = r"""
@@ -717,11 +863,14 @@ _VALUES = [None, True, False, 0, 1, -1, 1.0, 1.5, 2 ** 53 + 1, 10 ** 400, -0.0, 
            "c:/x.png", "urn:clipwall:image:abc", "urn:x:abc\n", "#112233", [], [1], ["a", {"x": 1}],
            [[0, 2, 2, 64, 36]], [[5, 0, 0, 1, 1]], [[1e21, 0, 0, 1, 1]], {}, {"2": 1, "b": 2, "1": 3},
            {"src": "x.png", "edge": 64, "width": 64, "height": 64}, {"type": "ordinal", "order": ["a"]},
-           {"x": 0.5, "y": -1}, ["x"] * 201, "covers", "full"]
+           {"x": 0.5, "y": -1}, ["x"] * 201, "covers", "full", {"item": "cat", "items": "cats"}]
 _KEYS = ["format", "version", "corpus", "ui", "facetTypes", "images", "viewState", "sheets", "facets", "clips", "vault",
          "extra", "id", "title", "defaultGroup", "facetOrder", "facetLabels", "url", "cover", "coverVariants",
          "media", "sheetSlots", "sourceUrl", "note", "tags", "props", "source", "captured", "palette", "projection",
-         "image", "decade", "src", "edge", "width", "type", "order", "x", "col", "0"]
+         "image", "decade", "src", "edge", "width", "type", "order", "x", "col", "0", "nouns", "item", "items"]
+_NOUNS = [{"item": "cat", "items": "cats"}, {"item": "frame", "plural": "frames"}, "frames", None, [], {},
+          {"item": "x" * 41, "items": "xs"}, {"item": "😀" * 20, "items": "😀" * 21}, {"item": " ", "items": " "},
+          {"item": "a\u0001", "items": "b"}, {"item": 1, "items": True}, {"item": "cat", "items": "cats", "__proto__": {}}]
 
 
 def _mutants(n, seed):
@@ -750,27 +899,35 @@ def _mutants(n, seed):
         yield d
 
 
-def test_both_validators_agree(tmp_path):
-    node = _reference()
+@pytest.mark.parametrize("release", RELEASES)
+def test_both_validators_agree(tmp_path, pinned, release):
+    node, reference = pinned(release)
     folder = tmp_path / "photos"
     _images(folder)
     cases = [(doc(), None), (sprite_doc(), BASE), (doc(facets=DERIVED), None), (doc(facets={"x": 1}), None),
              (build(folder, group="captured"), None),
              (build(_csv(tmp_path, 'id,cover,sourceUrl,genre[]\nx,a.png,https://e.org/x,"a,b"\ny,b.png,about.html,a\n')), None)]
+    cases += [(doc(ui={"title": "Cats", "nouns": n}), None) for n in _NOUNS]
     cases += [(d, base) for d, base in zip(_mutants(400, seed=5), [None, BASE, "file:///c/c.json", "not a url"] * 100)]
-    if PSYCHODELI.is_file():
-        cases.append((json.loads(PSYCHODELI.read_text(encoding="utf-8")), None))
+    cases.append((json.loads((reference / "examples/psychodeli/collection.json").read_text(encoding="utf-8")), None))
     # Both sides read the same JSON text, as the CLI and the wall would.
     payload = json.dumps(cases)
-    script = _JS_VALIDATE % json.dumps((WK / "wall/collection.mjs").as_uri())
+    script = _JS_VALIDATE % json.dumps((reference / "wall/collection.mjs").as_uri())
     r = subprocess.run([node, "--input-type=module", "-e", script], input=payload, capture_output=True, text=True)
     assert r.returncode == 0, r.stderr
-    mismatches = []
+    mismatches, outcomes = [], []
     for (d, base), want in zip(json.loads(payload), json.loads(r.stdout)):
-        got = validate(d, base_url=base)
+        got = validate(d, base_url=base, release=release)
+        outcomes.append(list(got))
         if {"problems": list(got), "overflow": got.overflow, "warnings": got.warnings} != want:
             mismatches.append((json.dumps(d)[:300], base, want, list(got)))
     assert not mismatches, mismatches[:3]
+    # The cases reach the release's ui.nouns rule, accepted or refused.
+    noun_cases = outcomes[6:6 + len(_NOUNS)]
+    if release == "0.1.0":
+        assert all(any(p.startswith("ui.nouns is not supported") for p in o) for o in noun_cases)
+    else:
+        assert noun_cases[0] == [] and any(p.startswith("ui.nouns.item ") for o in noun_cases for p in o)
 
 
 _URLS = [

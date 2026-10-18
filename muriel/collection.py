@@ -35,6 +35,13 @@ Wunderkammer describes the format. In short:
 - Every problem is reported with its path, up to 25, with a count of the
   rest.
 
+The checks follow one Wunderkammer release at a time, because each wall
+refuses the fields added after it. ``validate()`` checks for
+``WUNDERKAMMER`` (0.1.0, the release muriel's collections reference pins)
+unless ``release`` names another one in ``RELEASES``. ``"next"`` is
+Wunderkammer main after 0.1.0, which adds ``ui.nouns``; ``SINCE`` lists
+each added field with the first release that accepts it.
+
 Where Python and JavaScript differ, the port follows JavaScript: string
 limits count UTF-16 code units, numbers compare as doubles, ``trim()`` and
 ``\\s`` use JavaScript's whitespace set, object keys are visited in
@@ -59,6 +66,7 @@ Or from the command line::
     python -m muriel.collection build photos/ --out photos/collection.json
     python -m muriel.collection build albums.csv --out collection.json --group decade
     python -m muriel.collection validate collection.json
+    python -m muriel.collection validate collection.json --release next
 
 ``validate`` exits 0 when the document is valid, 1 when it has problems
 (each printed with its path), and 2 when it read nothing or the input is
@@ -83,10 +91,20 @@ from urllib.parse import quote
 
 from . import _whatwg_url
 
-__all__ = ["build", "validate", "format_problems", "Problems", "FORMAT", "VERSION", "LIMITS"]
+__all__ = ["build", "validate", "format_problems", "Problems", "FORMAT", "VERSION", "LIMITS",
+           "WUNDERKAMMER", "RELEASES", "SINCE"]
 
 FORMAT = "wunderkammer.collection"
 VERSION = 1
+#: The release validate() checks for by default: the one muriel's
+#: references/collections.md pins. Move both together.
+WUNDERKAMMER = "0.1.0"
+#: The releases validate() can check for, oldest first. "next" is
+#: Wunderkammer main after 0.1.0; rename it to the release that ships it.
+RELEASES = ("0.1.0", "next")
+#: Each field added after 0.1.0, with the first release that accepts it.
+#: An older release refuses it as unsupported, as that release's wall does.
+SINCE = MappingProxyType({"ui.nouns": "next"})
 LIMITS = MappingProxyType({
     "clips": 50000, "problems": 25, "sheets": 4096, "sheetSlots": 8, "sheetEdge": 4096, "sheetPx": 16384,
 })
@@ -96,7 +114,7 @@ TOP = ("format", "version", "corpus", "ui", "facetTypes", "images", "viewState",
 SERVER_ONLY = ("vault", "adapters", "generated")
 CLIP = ("id", "url", "title", "cover", "coverVariants", "detailCover", "media", "sheetSlots", "sourceUrl",
         "sourceLabel", "note", "tags", "props", "source", "kind", "captured", "palette", "projection")
-UI = ("title", "defaultGroup", "facetOrder", "facetLabels", "hiddenFacets")
+UI = ("title", "defaultGroup", "facetOrder", "facetLabels", "hiddenFacets", "nouns")
 FACET_TYPES = ("categorical", "ordinal", "numeric", "date")
 SHEET_ROLES = ("overview", "covers")
 FORBIDDEN = ("__proto__", "prototype", "constructor")
@@ -248,6 +266,19 @@ def _get(d: Any, key: str) -> Any:
     return d.get(key, _MISSING) if isinstance(d, dict) else _MISSING
 
 
+def _supported(section: str, keys: Sequence[str], release: str) -> Tuple[str, ...]:
+    """``keys`` of ``section`` that ``release`` accepts, in the reference's order."""
+    have = RELEASES.index(release)
+    return tuple(k for k in keys if RELEASES.index(SINCE.get(f"{section}.{k}", RELEASES[0])) <= have)
+
+
+def _too_new(problems: Sequence[str], release: str) -> List[Tuple[str, str]]:
+    """(field, release) for each field ``problems`` refuse only because ``release`` predates it."""
+    have = RELEASES.index(release)
+    return [(f, since) for f, since in SINCE.items()
+            if RELEASES.index(since) > have and any(p.startswith(f"{f} is not supported") for p in problems)]
+
+
 # ─── the checker ─────────────────────────────────────────────────────────
 
 class _Checker:
@@ -343,14 +374,21 @@ class _Checker:
         return ok
 
 
-def validate(doc: Any, *, base_url: Optional[str] = None) -> Problems:
+def validate(doc: Any, *, base_url: Optional[str] = None, release: str = WUNDERKAMMER) -> Problems:
     """List what is wrong with a collection document; empty means valid.
 
     ``base_url`` is the URL the document will be served from. Relative
     images and links resolve against it, as the wall resolves them. Leave
     it out to check a document that will sit beside its covers: relative
     images are then accepted as page-relative and relative links refused.
+
+    ``release`` is the Wunderkammer release whose wall will load the
+    document, one of ``RELEASES``. Fields added after it are refused, with
+    its own supported list, as its wall refuses them.
     """
+    if release not in RELEASES:
+        raise ValueError(f"unknown Wunderkammer release {release!r} (known: {', '.join(RELEASES)})")
+    ui_keys = _supported("ui", UI, release)
     ck = _Checker(base_url)
     problem = ck.problem
 
@@ -374,7 +412,7 @@ def validate(doc: Any, *, base_url: Optional[str] = None) -> Problems:
             ck.text(corpus["revision"], "corpus.revision", max=200)
 
     ui = _get(doc, "ui")
-    if ui is not _MISSING and ck.keys(ui, "ui", UI):
+    if ui is not _MISSING and ck.keys(ui, "ui", ui_keys):
         if "title" in ui:
             ck.text(ui["title"], "ui.title", max=200)
         if "defaultGroup" in ui:
@@ -388,6 +426,11 @@ def validate(doc: Any, *, base_url: Optional[str] = None) -> Problems:
             for k in _js_keys(labels):
                 if ck.field(k, f'ui.facetLabels key "{k}"') is not None:
                     ck.text(labels[k], f"ui.facetLabels.{k}", max=120)
+        # What the comparison page calls one item and several; both, since a
+        # plural cannot be guessed. Both words are checked, as in the reference.
+        if "nouns" in ui_keys and "nouns" in ui and ck.keys(ui["nouns"], "ui.nouns", ("item", "items")):
+            ck.text(_get(ui["nouns"], "item"), "ui.nouns.item", max=40)
+            ck.text(_get(ui["nouns"], "items"), "ui.nouns.items", max=40)
 
     # Validated and carried; the wall does not yet order or bin by them.
     facet_types = _get(doc, "facetTypes")
@@ -1026,6 +1069,9 @@ def _main(argv: Optional[Sequence[str]] = None) -> int:
     v.add_argument("--base-url", default=None,
                    help="The URL the document will be served from. Relative covers and links resolve "
                         "against it, as the wall resolves them.")
+    v.add_argument("--release", choices=RELEASES, default=WUNDERKAMMER,
+                   help=f"The Wunderkammer release whose wall will load it (default {WUNDERKAMMER}, the release "
+                        "muriel's collections reference pins; next is Wunderkammer main after it).")
     args = parser.parse_args(argv)
 
     if args.command == "build":
@@ -1076,9 +1122,12 @@ def _validate_command(args) -> int:
     except ValueError as exc:
         _say(f"error: {name} is not JSON: {exc}", sys.stderr)
         return 2
-    problems = validate(doc, base_url=args.base_url)
+    problems = validate(doc, base_url=args.base_url, release=args.release)
     if problems:
         _say(format_problems(problems))
+        for field, since in _too_new(problems, args.release):
+            _say(f"note: {field} is newer than Wunderkammer {args.release}; "
+                 f"for a wall from release {since}, validate with --release {since}", sys.stderr)
         return 1
     _say(f"{name}: valid ({len(doc['clips'])} clips)")
     for w in problems.warnings:

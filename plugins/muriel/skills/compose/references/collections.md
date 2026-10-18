@@ -351,7 +351,7 @@ observation text are readable text under the 8:1 floor:
 
 ```bash
 python -m muriel.collection build <folder|csv> --out collection.json [--title T] [--group FIELD]
-python -m muriel.collection validate collection.json
+python -m muriel.collection validate collection.json [--release next]
 ```
 
 - **`build`** reads a folder of images or a CSV and writes a
@@ -366,6 +366,11 @@ python -m muriel.collection validate collection.json
   again on load, and when the two validators disagree, the page's
   ([`wall/collection.mjs`](https://github.com/andyed/wunderkammer/blob/v0.1.0/wall/collection.mjs))
   is the reference.
+- **`--release` names the wall that will load the document.** Each release
+  refuses the fields added after it. The default is 0.1.0, the release this
+  reference pins. `next` is Wunderkammer `main`, which adds `ui.nouns` (what
+  the counts call one item and several). The skill's example on `main` sets
+  `ui.nouns`, and a 0.1.0 wall refuses it, so drop it for the pinned release.
 - **Observations need Wunderkammer's checker.** `muriel.collection` validates
   the collection document only. From a Wunderkammer checkout,
   `node scripts/validate-collection.mjs collection.json --observations observations.json`

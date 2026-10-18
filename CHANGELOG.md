@@ -42,6 +42,29 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   `collection.test.mjs`, one planted violation per rule, the builder and
   CLI, and the shipped Psychodeli example. Two differential tests also run
   when Node and a Wunderkammer checkout are present.
+- **`muriel.collection` checks for a Wunderkammer release, and accepts
+  `ui.nouns` for the next one.** Each Wunderkammer wall refuses the fields
+  added after it. So `validate(doc, *, base_url=None, release="0.1.0")` and
+  `validate --release` name the release whose wall will load the document.
+  The default is `WUNDERKAMMER` (0.1.0), the release
+  `references/collections.md` pins, and a test keeps the two equal.
+  `"next"` is Wunderkammer main after 0.1.0 (9c53ca2). It adds `ui.nouns`,
+  `{ item, items }`, each a non-empty string of at most 40 characters,
+  checked with the reference's problem text. For 0.1.0, `ui.nouns` is
+  refused as unsupported with 0.1.0's own supported list, as that wall
+  refuses it, and the CLI adds a note naming `--release next`. `SINCE`
+  lists each added field with the first release that accepts it. `ui.nouns`
+  is the only validator change in Wunderkammer between v0.1.0 and 9c53ca2.
+  - **The differential tests are pinned.** `REFERENCE` in
+    `tests/test_collection.py` pins one Wunderkammer commit per release
+    (v0.1.0 at caadd2e, `next` at 9c53ca2). Each run reads that commit's
+    validator out of the checkout with `git show`. So every run checks both
+    releases, whatever the checkout has checked out. Before, the test read
+    the checkout as it was: it passed at v0.1.0 and failed at main.
+  - **Drift is caught by content.** A separate test fails when the
+    checkout's `wall/collection.mjs` and `wall/facet-counts.mjs` match no
+    pinned commit. Wunderkammer commits that leave the validator alone do
+    not trip it. When it fails, port the change and pin the new commit.
 - **`references/collections.md` — Wunderkammer 0.1.0 as the engine for
   visual collections.** It says when an agent should use a collection
   explorer: dozens to thousands of images, comparisons between groups, or
