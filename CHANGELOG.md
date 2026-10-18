@@ -77,12 +77,12 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   - the `window.wunderkammer.export()` hand-back;
   - `mount()`.
 
-  Loading is pinned to `wunderkammer@0.1.0` and `v0.1.0`. The wall is
-  `index.html` at the package root, and the comparison page is
-  `wall/compare.html`. Modules load from jsDelivr or unpkg. jsDelivr serves
-  HTML as `text/plain`, so both pages are opened or framed from unpkg
-  (`https://unpkg.com/wunderkammer@0.1.0/index.html?collection=<url>`) or a
-  static host. `mount()` imported from unpkg needs no `wallUrl`.
+  Loading is pinned to a Wunderkammer git tag. The wall is `index.html` at
+  the checkout's root, and the comparison page is `wall/compare.html`.
+  Modules load from a static host serving a checkout of the tag, or from
+  jsDelivr's GitHub route. That route serves HTML as `text/plain`, so both
+  pages are opened or framed from a static host, and `mount()` imported
+  from the route takes a `wallUrl`.
 
   The linked-atlas lab is the fallback when a single file is required, or
   when the task needs WebGL-only views and WebGL is unavailable. Also new are
@@ -420,6 +420,28 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- **Wunderkammer 0.2.0 is the pinned release, and `muriel.collection`
+  checks for it by default.** Wunderkammer 0.2.0 (tag `v0.2.0`, 2026-10-18)
+  ships `ui.nouns`, the floating space and the agent skill. The `"next"`
+  release is renamed `0.2.0`, and `WUNDERKAMMER`, the default, moves to it,
+  so `validate` accepts `ui.nouns` unless `--release 0.1.0` is given; the
+  note for a refused newer field now names `--release 0.2.0`. `REFERENCE`
+  pins 0.2.0 to the tag's commit and keeps 0.1.0 at caadd2e. The
+  validator files at the tag match 9c53ca2's, the previous `next` pin.
+  `references/collections.md` moves every pin to the `v0.2.0` tag,
+  including the skill link, which was on `main`. So the skill's example,
+  which sets `ui.nouns`, no longer conflicts with the pinned wall, and the
+  `--release` bullet's warning is gone. The Three.js bullet names the
+  floating space among the views that need it.
+- **Wunderkammer loads from its git tag, not a package registry.** No
+  Wunderkammer package is published, so the package-CDN URLs in
+  `references/collections.md` pointed at nothing, and would have served
+  whoever registered the name. The reference now pins the `v0.2.0`
+  tag: `mount()` imports from a checkout of it on a static host, jsDelivr's
+  GitHub route is listed for modules only (it serves the tag's HTML as
+  `text/plain`, checked 2026-10-18), and the live demo takes
+  `?collection=<url>` for trying a document without hosting the wall. The
+  anti-patterns add a package-registry URL.
 - **README cut from ~3,950 words to ~1,500.** It now leads with what muriel
   does, how to install it, and what it enforces. The channel list and the
   dependency table, which described the same channels twice, are one table;

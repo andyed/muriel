@@ -48,12 +48,12 @@ PSYCHODELI = WK / "examples/psychodeli/collection.json"
 #: The Wunderkammer commit each release is compared against (layer 4).
 REFERENCE = {
     "0.1.0": "caadd2e558e94eb7df109e9c389cbfccfef23781",   # tag v0.1.0
-    "next": "9c53ca291b25717b8b140db7a476de4683f24724",    # main on 2026-10-18, with ui.nouns
+    "0.2.0": "dc16ee877a5c165f0fdec8beec0cd33847a6ce40",   # tag v0.2.0, with ui.nouns
 }
 #: wall/collection.mjs and every module it imports.
 VALIDATOR_FILES = ("wall/collection.mjs", "wall/facet-counts.mjs")
 UI_FIELDS = {"0.1.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets",
-             "next": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns"}
+             "0.2.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns"}
 
 
 def doc(**over):
@@ -185,12 +185,12 @@ def test_ui_nouns_names_an_item_and_its_plural_both_are_required_words():
     # Added after 0.1.0. The JS test's second half, a server payload's
     # ui.nouns surviving toCollection(), is not ported (see below).
     nouns = {"item": "frame", "items": "frames"}
-    assert validate(doc(ui={"title": "Frames", "nouns": nouns}), release="next") == []
-    problems = problems_of(doc(ui={"nouns": {"item": "frame", "plural": "frames"}}), release="next")
+    assert validate(doc(ui={"title": "Frames", "nouns": nouns}), release="0.2.0") == []
+    problems = problems_of(doc(ui={"nouns": {"item": "frame", "plural": "frames"}}), release="0.2.0")
     has(problems, "ui.nouns.plural", "supported: item, items")
     has(problems, "ui.nouns.items", "non-empty string")
-    has(problems_of(doc(ui={"nouns": "frames"}), release="next"), "ui.nouns", "must be an object")
-    has(problems_of(doc(ui={"nouns": {"item": "x" * 41, "items": "xs"}}), release="next"), "ui.nouns.item ", "")
+    has(problems_of(doc(ui={"nouns": "frames"}), release="0.2.0"), "ui.nouns", "must be an object")
+    has(problems_of(doc(ui={"nouns": {"item": "x" * 41, "items": "xs"}}), release="0.2.0"), "ui.nouns.item ", "")
 
 
 def test_a_server_payload_is_refused_until_converted():
@@ -324,7 +324,7 @@ def test_clips_above_the_limit_are_refused():
     (lambda d: d.update(extra=1),
      "collection.extra is not supported (supported: format, version, corpus, ui, facetTypes, images, viewState, sheets, facets, clips)"),
     (lambda d: d["corpus"].update(name="x"), "corpus.name is not supported (supported: id, revision)"),
-    (lambda d: d["ui"].update(corpusName="x"), f"ui.corpusName is not supported (supported: {UI_FIELDS['0.1.0']})"),
+    (lambda d: d["ui"].update(corpusName="x"), f"ui.corpusName is not supported (supported: {UI_FIELDS[col.WUNDERKAMMER]})"),
     (lambda d: d.update(images={"lazy": True}), "images.lazy is not supported (supported: cors, sheets)"),
     (lambda d: d["clips"][0].update(image="x.png"),
      f"clips[0].image is not supported (supported: {CLIP_FIELDS}; put other attributes in props)"),
@@ -343,34 +343,34 @@ def test_the_supported_ui_list_is_the_releases_own(release):
 @pytest.mark.parametrize("release, nouns, expected", [
     ("0.1.0", {"item": "cat", "items": "cats"}, [f"ui.nouns is not supported (supported: {UI_FIELDS['0.1.0']})"]),
     ("0.1.0", "not checked further", [f"ui.nouns is not supported (supported: {UI_FIELDS['0.1.0']})"]),
-    ("next", {"item": "cat", "items": "cats"}, []),
-    ("next", {"item": "😀" * 20, "items": "cats"}, []),   # 40 UTF-16 code units
-    ("next", {"item": "😀" * 20 + "s", "items": "cats"}, ["ui.nouns.item must be a non-empty string of at most 40 characters"]),
-    ("next", {"item": "cat"}, ["ui.nouns.items must be a non-empty string of at most 40 characters"]),
-    ("next", {"item": " ", "items": 2}, ["ui.nouns.item must be a non-empty string of at most 40 characters",
-                                          "ui.nouns.items must be a non-empty string of at most 40 characters"]),
-    ("next", {"item": "cat", "items": "cats", "plural": "cats"}, ["ui.nouns.plural is not supported (supported: item, items)"]),
-    ("next", {"item": "cat", "items": "cats", "__proto__": {}}, ["ui.nouns.__proto__ is not allowed"]),
-    ("next", ["cat", "cats"], ["ui.nouns must be an object"]),
-    ("next", None, ["ui.nouns must be an object"]),
+    ("0.2.0", {"item": "cat", "items": "cats"}, []),
+    ("0.2.0", {"item": "😀" * 20, "items": "cats"}, []),   # 40 UTF-16 code units
+    ("0.2.0", {"item": "😀" * 20 + "s", "items": "cats"}, ["ui.nouns.item must be a non-empty string of at most 40 characters"]),
+    ("0.2.0", {"item": "cat"}, ["ui.nouns.items must be a non-empty string of at most 40 characters"]),
+    ("0.2.0", {"item": " ", "items": 2}, ["ui.nouns.item must be a non-empty string of at most 40 characters",
+                                           "ui.nouns.items must be a non-empty string of at most 40 characters"]),
+    ("0.2.0", {"item": "cat", "items": "cats", "plural": "cats"}, ["ui.nouns.plural is not supported (supported: item, items)"]),
+    ("0.2.0", {"item": "cat", "items": "cats", "__proto__": {}}, ["ui.nouns.__proto__ is not allowed"]),
+    ("0.2.0", ["cat", "cats"], ["ui.nouns must be an object"]),
+    ("0.2.0", None, ["ui.nouns must be an object"]),
 ])
 def test_ui_nouns_by_release(release, nouns, expected):
     assert planted(lambda d: d["ui"].update(nouns=nouns), release=release) == expected
 
 
 def test_an_unknown_release_is_an_error():
-    with pytest.raises(ValueError, match=r"known: 0\.1\.0, next"):
-        validate(doc(), release="0.2.0")
+    with pytest.raises(ValueError, match=r"known: 0\.1\.0, 0\.2\.0"):
+        validate(doc(), release="0.3.0")
 
 
 def test_every_added_field_names_a_known_release():
     assert col.WUNDERKAMMER in RELEASES and set(col.SINCE.values()) <= set(RELEASES)
-    assert col.WUNDERKAMMER not in col.SINCE.values()   # the default release refuses every added field
+    assert RELEASES[0] not in col.SINCE.values()   # a field the oldest release accepts was not added
 
 
 def test_the_default_release_is_the_one_the_collections_reference_pins():
     text = (ROOT / "plugins/muriel/skills/compose/references/collections.md").read_text(encoding="utf-8")
-    pins = re.findall(r"wunderkammer@(\d+\.\d+\.\d+)|wunderkammer/(?:tree|blob)/v(\d+\.\d+\.\d+)", text)
+    pins = re.findall(r"wunderkammer@v?(\d+\.\d+\.\d+)|wunderkammer/(?:tree|blob)/v(\d+\.\d+\.\d+)", text)
     assert pins and {a or b for a, b in pins} == {col.WUNDERKAMMER}
 
 
@@ -753,16 +753,16 @@ def test_cli_validate_prints_warnings_and_still_passes(tmp_path):
 def test_cli_validate_checks_for_a_release(tmp_path):
     path = tmp_path / "c.json"
     path.write_text(json.dumps(doc(ui={"title": "Cats", "nouns": {"item": "cat", "items": "cats"}})), encoding="utf-8")
-    r = run_cli("validate", path)
+    assert run_cli("validate", path).returncode == 0   # the default, 0.2.0, accepts ui.nouns
+    r = run_cli("validate", path, "--release", "0.1.0")
     assert r.returncode == 1
     assert f"- ui.nouns is not supported (supported: {UI_FIELDS['0.1.0']})" in r.stdout.splitlines()
     assert r.stderr.strip() == ("note: ui.nouns is newer than Wunderkammer 0.1.0; "
-                                "for a wall from release next, validate with --release next")
-    assert run_cli("validate", path, "--release", "next").returncode == 0
-    assert run_cli("validate", path, "--release", "0.2.0").returncode == 2
+                                "for a wall from release 0.2.0, validate with --release 0.2.0")
+    assert run_cli("validate", path, "--release", "0.3.0").returncode == 2
     # A problem the release does not explain draws no note.
     path.write_text(json.dumps(doc(ui={"corpusName": "x"})), encoding="utf-8")
-    r = run_cli("validate", path)
+    r = run_cli("validate", path, "--release", "0.1.0")
     assert (r.returncode, r.stderr) == (1, "")
 
 
