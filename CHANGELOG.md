@@ -42,6 +42,35 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   `collection.test.mjs`, one planted violation per rule, the builder and
   CLI, and the shipped Psychodeli example. Two differential tests also run
   when Node and a Wunderkammer checkout are present.
+- **`references/collections.md` — Wunderkammer 0.1.0 as the engine for
+  visual collections.** It says when an agent should use a collection
+  explorer: dozens to thousands of images, comparisons between groups, or
+  claims a person should be able to check. It then gives the contract in
+  brief:
+  - the `wunderkammer.collection` v1 document;
+  - the comparison recipe;
+  - `wunderkammer.observations`, whose figures are computed by the page from
+    cited cells, so authored text has no numbers of its own;
+  - the `window.wunderkammer.export()` hand-back;
+  - `mount()`.
+
+  Loading is pinned to `wunderkammer@0.1.0` and `v0.1.0`. The wall is
+  `index.html` at the package root, and the comparison page is
+  `wall/compare.html`. Modules load from jsDelivr or unpkg. jsDelivr serves
+  HTML as `text/plain`, so both pages are opened or framed from unpkg
+  (`https://unpkg.com/wunderkammer@0.1.0/index.html?collection=<url>`) or a
+  static host. `mount()` imported from unpkg needs no `wallUrl`.
+
+  The linked-atlas lab is the fallback when a single file is required, or
+  when the task needs WebGL-only views and WebGL is unavailable. Also new are
+  an exploration-quality critique axis and the `muriel.collection build` /
+  `validate` CLI. The axis covers overview structure, facets with counts,
+  orientation under zoom, hand-back, and cited observations, each with its
+  evidence and severities.
+
+  Wunderkammer is named by released version only, and muriel imports none of
+  its code. It is listed in the README under Heir projects, with one-line
+  pointers from `SKILL.md` and `channels/interactive.md`.
 
 - **`references/jury.md` — convening the jury on a name.** Written from two
   sittings on 2026-10-17 that chose the Liquid Light App Store title. Three
