@@ -19,6 +19,14 @@
 //   multiple of the atlas column count it can arrive just under the integer,
 //   so part of the tile sampled the previous slot: here slot 5 drew slot 4's
 //   green in one corner, and slot 15 drew slot 14's grey over half its face.
+//
+// And one in three itself, caught by the per-slot upload test: through r183,
+// WebGLRenderer.copyTextureToTexture bound the destination to unit 0 without
+// making unit 0 active when it was already bound there (mrdoob/three.js#33153).
+// The far atlas sits on unit 0, and a render leaves the near atlas's unit
+// active, so a far tile copied in on its own went into the near atlas, or into
+// no texture once an earlier copy had unbound the active unit. On r169 both
+// recoloured tiles kept their old colour, all 50 samples.
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
@@ -49,6 +57,11 @@ const TRANSPARENT = COLOURS.indexOf(null);
 const SLOTLESS = 3;       // forced to slot -1 after the first frame
 const TOLERANCE = 3;      // per channel, out of 255: 8-bit sRGB decode and re-encode
 
+// Far tiles redrawn after the atlas is on the GPU, few enough that flush()
+// copies each slot in with copyTextureToTexture rather than re-uploading the
+// canvas. Two, so the second copy runs after the first one's trailing unbind.
+const RECOLOUR = { 6: 'ff2200', 13: '00aaff' };
+
 const rgb = hex => [0, 2, 4].map(k => parseInt(hex.slice(k, k + 2), 16));
 const EMPTY_RGB = rgb(EMPTY.toString(16).padStart(6, '0'));
 
@@ -56,7 +69,7 @@ const PAGE = `<!doctype html>
 <meta charset="utf-8">
 <style>html, body { margin: 0; background: #000; }</style>
 <script type="importmap">
-{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js" } }
 </script>
 <script type="module">
 import * as THREE from 'three';
@@ -77,7 +90,7 @@ function tile(hex) {
 // isolatedSamples probe). Tiles are turned about Y so depth varies across
 // each quad, which is what perspective-correct interpolation of the slot
 // varying is sensitive to.
-window.renderField = (tier) => {
+window.renderField = (tier, recolour = null) => {
   const renderer = new THREE.WebGLRenderer({ antialias: false });
   renderer.setPixelRatio(1); renderer.setSize(SIZE, SIZE);
   document.body.replaceChildren(renderer.domElement);
@@ -127,11 +140,30 @@ window.renderField = (tier) => {
   renderer.render(scene, camera);
   const slotless = sample(${SLOTLESS});
 
+  // The per-slot upload path, which needs a renderer attached and the atlas
+  // already on the GPU. The unit state is read without disturbing three's
+  // cache of it: save the active unit, look at unit 0, put the active unit back.
+  let copied = null;
+  if (recolour) {
+    field.atlases.setRenderer(renderer);
+    const far = field.atlases.far;
+    const active = gl.getParameter(gl.ACTIVE_TEXTURE);
+    gl.activeTexture(gl.TEXTURE0);
+    const unit0 = gl.getParameter(gl.TEXTURE_BINDING_2D);
+    gl.activeTexture(active);
+    const units = { farOnUnit0: unit0 === renderer.properties.get(far.texture).__webglTexture, activeIsUnit0: active === gl.TEXTURE0 };
+    for (const [i, hex] of Object.entries(recolour)) far.draw(field.atlases.farSlot[i], tile(hex));
+    field.flush(performance.now() + 3e6);
+    renderer.render(scene, camera);
+    copied = { units, uploadedBytes: far.uploadedBytes, tileBytes: far.tilePx * far.tilePx * 4,
+      tiles: Object.fromEntries(Object.keys(recolour).map(i => [i, sample(Number(i))])) };
+  }
+
   const atlas = tier === 'near' ? field.atlases.near : field.atlases.far;
   const slots = Array.from(tier === 'near' ? field.atlases.nearSlot : field.atlases.farSlot);
   const tiers = Array.from(field.aTier.array);
   renderer.dispose();
-  return { cols: atlas.cols, slots, tiers, tiles, slotless };
+  return { cols: atlas.cols, slots, tiers, tiles, slotless, copied };
 };
 window.ready = true;
 </script>`;
@@ -154,7 +186,7 @@ before(async () => {
 });
 after(async () => { await browser?.close(); await new Promise(r => (server ? server.close(r) : r())); });
 
-async function render(tier) {
+async function render(tier, recolour = null) {
   const page = await browser.newPage({ viewport: { width: 640, height: 640 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
@@ -162,7 +194,7 @@ async function render(tier) {
   try {
     await page.goto(origin);
     await page.waitForFunction(() => window.ready === true, null, { timeout: 20000 });
-    const result = await page.evaluate(t => window.renderField(t), tier);
+    const result = await page.evaluate(([t, r]) => window.renderField(t, r), [tier, recolour]);
     // A shader that fails to compile draws nothing and throws nothing; three
     // reports it on the console, so a console error fails the test.
     assert.deepEqual(errors, [], 'no page or console errors');
@@ -194,6 +226,21 @@ test('far-tier tiles draw their atlas colour as sRGB across the whole face, empt
 
 test('near-tier tiles draw their atlas colour as sRGB across the whole face, empty slots included', { skip }, async () => {
   assertTiles(await render('near'), 'near');
+});
+
+test('far tiles copied in one slot at a time reach the far atlas', { skip }, async () => {
+  const { copied } = await render('far', RECOLOUR);
+  // Guard the fixture: the copies must run with the far atlas on unit 0 and
+  // another unit active, and flush() must take the per-slot path. If three
+  // assigned units differently or the atlas re-uploaded the canvas, the loss
+  // could not happen and this would pass vacuously.
+  assert.deepEqual(copied.units, { farOnUnit0: true, activeIsUnit0: false }, 'far atlas on unit 0, another unit active');
+  assert.equal(copied.uploadedBytes, Object.keys(RECOLOUR).length * copied.tileBytes, 'flush copied each slot instead of the canvas');
+  const wrong = [];
+  for (const [i, hex] of Object.entries(RECOLOUR)) {
+    copied.tiles[i].forEach((pixel, k) => { if (!within(pixel, rgb(hex))) wrong.push(`tile ${i} sample ${k}: ${pixel} vs ${rgb(hex)}`); });
+  }
+  assert.deepEqual(wrong, [], `${wrong.length} samples kept the colour from before the copy`);
 });
 
 test('the transparent and slotless fixtures really are the two empty paths', { skip }, () => {
