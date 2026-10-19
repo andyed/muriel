@@ -1487,6 +1487,174 @@
   
   
     <li class="md-nav__item">
+      <a href="../../references/zooming-interfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zooming user interfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/faceted-exploration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faceted exploration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/multiscale-coordination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Semantic zoom & linked displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/multiscale-adapters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/multiscale-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/linked-atlas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linked Atlas lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../dimensions/" class="md-nav__link">
         
   
@@ -1850,6 +2018,12 @@
 <p>A small library for putting type into <em>felt</em> space — perspective grids that turn the page from a stack of layers into a single volumetric scene, plus a set of Three.js + CSS3DRenderer exemplars that consume the same coordinate system at runtime. Reach for this channel when you need to argue <em>"these things live in a relationship," not just "these things appear in a list."</em></p>
 <p>Part of the <a href="../../SKILL/">muriel</a> skill — see the top-level index for mission and universal rules. Sister channels: <a href="../svg/"><code>svg.md</code></a> for the static surface this writes onto; <a href="../web/"><code>web.md</code></a> and <a href="../interactive/"><code>interactive.md</code></a> for the runtime surfaces the JS exemplars target.</p>
 <h2 id="why-this-channel-exists">Why this channel exists<a class="headerlink" href="#why-this-channel-exists" title="Permanent link">&para;</a></h2>
+<p>When distance changes a document or object's representation, use the
+<a href="../../references/multiscale-coordination/">multiscale coordination contract</a>
+for semantic levels, identity, selection, and focus preservation. The renderer's
+texture-resolution tiers alone do not establish semantic zoom. For linked
+selection across spatial and tabular views, link stable IDs through the host's
+state rather than synchronizing cameras indiscriminately.</p>
 <p>Floating text in 3D space without a perspective scaffold reads as <strong>stacked planes</strong> — there is no felt depth, just layers. The visual system needs three or four well-placed cues — vanishing-point convergence, a horizon anchor, foreshortened transversals — to lock a scene into one continuous space. Once it does, the same screen real estate carries far more information without overcrowding.</p>
 <p>This is not a styling trick. Spatial-typography is an explicit lineage in design history — Alberti's <em>De pictura</em> (1435) and the <em>costruzione legittima</em>; Dürer's perspective machine (1525); architect's blueprint axonometrics; <strong>Muriel Cooper's MIT Visible Language Workshop</strong> (receding planes of type as an information environment); the <strong>Robertson / Mackinlay / Card <em>Information Visualizer</em></strong> cone trees and the <strong>Dumais / Cockburn / Robertson <em>Data Mountain</em></strong> at MSR (spatial memory as an indexing primitive); and the Tron / synthwave horizon-to-VP grid that re-popularised one-point perspective in the 1980s. Every one of those traditions earned its geometry — the depth carried meaning, not decoration.</p>
 <p>Pre-flight question for any spatial composition: <em>if I flattened the scene to a list, would the reader lose information?</em> If no, ship the list.</p>

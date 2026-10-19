@@ -1,0 +1,2425 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A design skill for coding agents: fifteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/references/polish-rules/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Polish rules — UI micro-interaction + visual-detail discipline - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#polish-rules-ui-micro-interaction-visual-detail-discipline" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Polish rules — UI micro-interaction + visual-detail discipline
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/andyed/muriel" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    andyed/muriel
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/andyed/muriel" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    andyed/muriel
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zooming-interfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zooming user interfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faceted-exploration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faceted exploration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-coordination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Semantic zoom & linked displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-adapters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/linked-atlas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linked Atlas lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/showcase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Showcase — featured work ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gallery — all channels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live spatial demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="polish-rules-ui-micro-interaction-visual-detail-discipline">Polish rules — UI micro-interaction + visual-detail discipline<a class="headerlink" href="#polish-rules-ui-micro-interaction-visual-detail-discipline" title="Permanent link">&para;</a></h1>
+<p>Load this detailed reference only when the compact polish channel points to an
+exact rule or the task needs a comprehensive implementation or audit pass.</p>
+<p>The frontend-polish channel: the codified design-engineering rules that turn an OK interface into one that feels considered. Concentric border radius. Optical alignment. Scale on press. Tabular numbers. Interruptible transitions. The small things that compound.</p>
+<p>This is <strong>distinct from sibling channels</strong>:</p>
+<ul>
+<li><a href="../../channels/web/"><code>channels/web.md</code></a> covers editorial HTML, Marginalia, Pandoc, and static capture — the <em>prose</em> surface.</li>
+<li><a href="../../channels/interactive/"><code>channels/interactive.md</code></a> covers live demos where the reader moves parameters — the <em>exploratory</em> surface.</li>
+<li>This channel covers UI polish — the <em>tactile</em> surface that any frontend benefits from regardless of its higher-level purpose.</li>
+</ul>
+<p>Structurally mined from <a href="https://github.com/thedavidmurray/claude-make-interfaces-feel-better">thedavidmurray/claude-make-interfaces-feel-better</a> (MIT, archived 2026-05). The 16 rules below are ported and tightened for muriel's brand floor; per-rule citations live inline. Mining stance follows muriel's curator pattern — port the discipline, not the React component code.</p>
+<p>Part of the <a href="../../SKILL/">muriel</a> skill — see the top-level index for mission, universal rules, and channel map.</p>
+<h2 id="when-to-use">When to use<a class="headerlink" href="#when-to-use" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Building or reviewing UI components (buttons, cards, dropdowns, modals)</li>
+<li>Implementing animations, hover states, shadows, borders, typography micro-details</li>
+<li>Reviewing AI-generated frontend code for "feels off" without obvious cause</li>
+<li>Adding tactile feedback (scale on press, hover lift)</li>
+<li>Closing the gap between "renders correctly" and "feels considered"</li>
+<li>Triggers: <em>"make it feel better"</em>, <em>"polish this"</em>, <em>"feels off"</em>, <em>"jarring"</em>, <em>"loose"</em></li>
+</ul>
+<p>If the work is data viz, use <a href="../../channels/charts/"><code>channels/charts.md</code></a>. If it's a live demo, use <a href="../../channels/interactive/"><code>channels/interactive.md</code></a>. If it's prose-rendering HTML, use <a href="../../channels/web/"><code>channels/web.md</code></a>.</p>
+<h2 id="workflow">Workflow<a class="headerlink" href="#workflow" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Identify the surface.</strong> Is it a button, card, list item, modal, navigation? Different surfaces apply different subsets of rules.</li>
+<li><strong>Apply universal rules</strong> (1–4 below) — they hit nearly every interface.</li>
+<li><strong>Apply surface-specific rules</strong> from the matching section (Typography / Surfaces / Animations / Performance).</li>
+<li><strong>Run the validation checklist</strong> before declaring done.</li>
+<li><strong>Audit any text element with <code>muriel.contrast</code></strong> if brand tokens are in play — the 8:1 floor still binds; polish is additive, never a contrast excuse.</li>
+</ol>
+<h2 id="universal-rules">Universal rules<a class="headerlink" href="#universal-rules" title="Permanent link">&para;</a></h2>
+<p>The four that hit almost every interface. Numbered for citation.</p>
+<h3 id="1-concentric-border-radius">1. Concentric border radius<a class="headerlink" href="#1-concentric-border-radius" title="Permanent link">&para;</a></h3>
+<p>When nesting rounded elements, the outer radius must equal the inner radius plus the padding between them:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>outer_radius = inner_radius + padding
+</code></pre></div>
+<p>Mismatched radii on nested elements is the single most common thing that makes interfaces feel off. If padding exceeds <code>24px</code>, treat the layers as separate surfaces and choose each radius independently — the strict math stops mattering at that scale.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c">/* Good — concentric */</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">.</span><span class="nc">card</span><span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">  </span><span class="c">/* 12 + 8 = 20 */</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">.</span><span class="nc">card-inner</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c">/* Bad — same radius on both */</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">.</span><span class="nc">card</span><span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">.</span><span class="nc">card-inner</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h3 id="2-optical-over-geometric-alignment">2. Optical over geometric alignment<a class="headerlink" href="#2-optical-over-geometric-alignment" title="Permanent link">&para;</a></h3>
+<p>When geometric centering looks off, align optically. Three common cases:</p>
+<ul>
+<li><strong>Button with text + trailing icon:</strong> <code>icon-side padding = text-side padding − 2px</code> so the icon doesn't appear pushed too far out.</li>
+<li><strong>Play-button triangle:</strong> shift <code>2px</code> right of geometric center — the triangle's visual mass sits left of its bounding box.</li>
+<li><strong>Asymmetric icons (stars, arrows, carets):</strong> fix in the SVG itself when possible; fall back to <code>margin-left: 1px</code> adjustments only if the SVG can't be edited.</li>
+</ul>
+<h3 id="3-shadows-over-borders-for-depth">3. Shadows over borders for depth<a class="headerlink" href="#3-shadows-over-borders-for-depth" title="Permanent link">&para;</a></h3>
+<p>For buttons, cards, and containers using a border to suggest elevation: prefer a three-layer <code>box-shadow</code> over a solid border. Shadows adapt to any background via transparency; solid borders don't survive background changes or image fills.</p>
+<p><strong>Exception:</strong> dividers (<code>border-b</code>, <code>border-t</code>, side borders for layout separation) and form-input outlines (for focus accessibility) stay as borders. The shadow-over-border rule is for <em>elevation</em>, not <em>separation</em>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nv">--shadow-border</span><span class="p">:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.06</span><span class="p">),</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="mi">-1</span><span class="kt">px</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.06</span><span class="p">),</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="mi">0</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="mi">4</span><span class="kt">px</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.04</span><span class="p">);</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nv">--shadow-border-hover</span><span class="p">:</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.08</span><span class="p">),</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="mi">-1</span><span class="kt">px</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.08</span><span class="p">),</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="mi">0</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="mi">4</span><span class="kt">px</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.06</span><span class="p">);</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">}</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c">/* Dark mode — simplify to a single white ring */</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="o">[</span><span class="nt">data-theme</span><span class="o">=</span><span class="s2">"dark"</span><span class="o">]</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="nv">--shadow-border</span><span class="p">:</span><span class="w">       </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mf">0.08</span><span class="p">);</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="nv">--shadow-border-hover</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mf">0.13</span><span class="p">);</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="4-minimum-4040px-hit-area">4. Minimum 40×40px hit area<a class="headerlink" href="#4-minimum-4040px-hit-area" title="Permanent link">&para;</a></h3>
+<p>Interactive elements need a hit area of at least <code>40×40px</code> (WCAG 2.5.5 recommends <code>44×44</code>; <code>40</code> is the minimum muriel accepts). If the visible element is smaller (a <code>20×20</code> checkbox), extend with a pseudo-element. <strong>Never let two interactive hit areas overlap</strong> — shrink the pseudo-element rather than have collisions.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">.</span><span class="nc">checkbox</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="k">position</span><span class="p">:</span><span class="w"> </span><span class="kc">relative</span><span class="p">;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="k">width</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="k">height</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">}</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">.</span><span class="nc">checkbox</span><span class="p">::</span><span class="nd">after</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="k">content</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="k">position</span><span class="p">:</span><span class="w"> </span><span class="kc">absolute</span><span class="p">;</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="k">inset</span><span class="p">:</span><span class="w"> </span><span class="mi">-10</span><span class="kt">px</span><span class="p">;</span><span class="w">       </span><span class="c">/* extends to 40×40 */</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">}</span>
+</code></pre></div>
+<h2 id="typography-rules">Typography rules<a class="headerlink" href="#typography-rules" title="Permanent link">&para;</a></h2>
+<h3 id="5-text-wrap-balance-on-headings">5. <code>text-wrap: balance</code> on headings<a class="headerlink" href="#5-text-wrap-balance-on-headings" title="Permanent link">&para;</a></h3>
+<p>Headings and short text blocks (≤6 lines on Chromium, ≤10 on Firefox) get even line distribution with <code>text-wrap: balance</code>. The balancing algorithm is computationally expensive — on body paragraphs it's silently ignored.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">h1</span><span class="o">,</span><span class="w"> </span><span class="nt">h2</span><span class="o">,</span><span class="w"> </span><span class="nt">h3</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">text-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">balance</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h3 id="6-text-wrap-pretty-on-body-text">6. <code>text-wrap: pretty</code> on body text<a class="headerlink" href="#6-text-wrap-pretty-on-body-text" title="Permanent link">&para;</a></h3>
+<p>For paragraphs longer than the balance threshold, <code>text-wrap: pretty</code> runs a slower algorithm that favors typography over performance. Result: fewer orphans without the line-count cap.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">p</span><span class="o">,</span><span class="w"> </span><span class="p">.</span><span class="nc">article-body</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">text-wrap</span><span class="p">:</span><span class="w"> </span><span class="n">pretty</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>Decision table:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Property</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Headings, titles, short text (≤6 lines)</td>
+<td><code>text-wrap: balance</code></td>
+</tr>
+<tr>
+<td>Body paragraphs, descriptions</td>
+<td><code>text-wrap: pretty</code></td>
+</tr>
+<tr>
+<td>Code blocks, pre-formatted text</td>
+<td>Neither — leave default</td>
+</tr>
+</tbody>
+</table>
+<h3 id="7-macos-font-smoothing-at-the-root">7. macOS font smoothing at the root<a class="headerlink" href="#7-macos-font-smoothing-at-the-root" title="Permanent link">&para;</a></h3>
+<p>Apply once on <code>&lt;html&gt;</code>. Other platforms ignore these properties, so the rule is safe to ship universally.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">html</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="kp">-webkit-</span><span class="n">font-smoothing</span><span class="p">:</span><span class="w"> </span><span class="n">antialiased</span><span class="p">;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="kp">-moz-</span><span class="n">osx-font-smoothing</span><span class="p">:</span><span class="w"> </span><span class="n">grayscale</span><span class="p">;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">}</span>
+</code></pre></div>
+<p>Never apply per-element — inconsistent smoothing reads as heavier text in some places and thinner in others, which is more distracting than no smoothing at all.</p>
+<h3 id="8-tabular-numbers-for-dynamic-values">8. Tabular numbers for dynamic values<a class="headerlink" href="#8-tabular-numbers-for-dynamic-values" title="Permanent link">&para;</a></h3>
+<p>Counters, prices, timers, table columns of numbers, animated number transitions — all use <code>font-variant-numeric: tabular-nums</code> to prevent layout shift as digits change.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">.</span><span class="nc">counter</span><span class="o">,</span><span class="w"> </span><span class="p">.</span><span class="nc">price</span><span class="o">,</span><span class="w"> </span><span class="nt">table</span><span class="w"> </span><span class="nt">td</span><span class="p">.</span><span class="nc">numeric</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">font-variant-numeric</span><span class="p">:</span><span class="w"> </span><span class="n">tabular-nums</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p><strong>Don't</strong> use tabular-nums on static display numbers, phone numbers, zip codes, version strings, or decorative large numerals — the proportional spacing reads better when the value isn't changing. (Some fonts like Inter widen the <code>1</code> glyph under tabular-nums; verify in the project's font before shipping.)</p>
+<h2 id="surface-rules">Surface rules<a class="headerlink" href="#surface-rules" title="Permanent link">&para;</a></h2>
+<h3 id="9-image-outlines">9. Image outlines<a class="headerlink" href="#9-image-outlines" title="Permanent link">&para;</a></h3>
+<p>Add a subtle <code>1px</code> inset outline to images. Creates consistent depth across a design system without affecting layout (outlines don't add to box dimensions).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">img</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="k">outline</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">);</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="k">outline-offset</span><span class="p">:</span><span class="w"> </span><span class="mi">-1</span><span class="kt">px</span><span class="p">;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">}</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="o">[</span><span class="nt">data-theme</span><span class="o">=</span><span class="s2">"dark"</span><span class="o">]</span><span class="w"> </span><span class="nt">img</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="k">outline-color</span><span class="p">:</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">);</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="17-local-text-scrims-over-translucent-surfaces-never-a-panel-wide-dark-plate">17. Local text scrims over translucent surfaces — never a panel-wide dark plate<a class="headerlink" href="#17-local-text-scrims-over-translucent-surfaces-never-a-panel-wide-dark-plate" title="Permanent link">&para;</a></h3>
+<p>When text sits on a translucent / backdrop-blurred surface (a frosted popup, a glass card over live content, an overlay on a visualization) and needs contrast against whatever shows through, <strong>darken behind the text only</strong> — per-line caption plates or a glyph-hugging scrim. Do <strong>not</strong> drop a large opaque/dark fill behind the whole content block to buy contrast.</p>
+<p>A hard-edged dark plate sitting <em>inside</em> a translucent panel reads as a <strong>dark box floating in fog</strong>: it re-introduces the nested-container problem (rule 1) the glass surface was supposed to avoid, doubles the visible container count, and muddies the very blur that made the surface feel like glass. It's the lazy contrast fix — the box just moved inward.</p>
+<p>Opaque media (album art, thumbnails, avatars) already carry their own contrast — let them sit <strong>directly</strong> on the translucent surface. Only the text needs help, so only the text gets a backing.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c">/* Bad — panel-wide scrim: a dark box floating in the frosted panel */</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nb">radial-gradient</span><span class="p">(</span><span class="mi">120</span><span class="kt">%</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="mi">50</span><span class="kt">%</span><span class="w"> </span><span class="mi">40</span><span class="kt">%</span><span class="p">,</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mf">.86</span><span class="p">),</span><span class="w"> </span><span class="kc">transparent</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c">/* Good — card is layout-only; selective darkening hugs each text line */</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="p">.</span><span class="nc">card</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="p">.</span><span class="nc">title</span><span class="o">,</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="p">.</span><span class="nc">artist</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mf">.9</span><span class="p">);</span><span class="w">          </span><span class="c">/* near-opaque so 8:1 holds over any backdrop */</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">          </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="kt">px</span><span class="w"> </span><span class="mi">13</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">          </span><span class="kp">-webkit-</span><span class="k">box-decoration-break</span><span class="p">:</span><span class="w"> </span><span class="kc">clone</span><span class="p">;</span><span class="w">   </span><span class="c">/* per-line plates when the line wraps */</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">          </span><span class="k">box-decoration-break</span><span class="p">:</span><span class="w"> </span><span class="kc">clone</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>The plate opacity is a <strong>contrast decision, not a taste one</strong>: compute it against the <em>brightest</em> the backdrop can get — a near-white highlight in a visualization, not the calm frame in front of you. A translucent plate that looks fine over the current view can dip below 8:1 for light text over a bright highlight. Push alpha toward <code>0.9</code> (≈12:1 even over pure white) rather than leaving it pretty-but-failing at <code>0.75</code> (~7.9:1 for dim text over white). Hide empty plates (<code>:empty { display: none }</code>) so missing metadata doesn't leave a floating dark pill.</p>
+<h2 id="animation-rules">Animation rules<a class="headerlink" href="#animation-rules" title="Permanent link">&para;</a></h2>
+<h3 id="10-interruptible-transitions-for-interactive-state-keyframes-only-for-one-shot-sequences">10. Interruptible transitions for interactive state, keyframes only for one-shot sequences<a class="headerlink" href="#10-interruptible-transitions-for-interactive-state-keyframes-only-for-one-shot-sequences" title="Permanent link">&para;</a></h3>
+<p>CSS <em>transitions</em> interpolate toward the latest state and retarget mid-animation. CSS <em>keyframe animations</em> run on a fixed timeline and restart from the beginning if re-triggered. Pick by intent:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Transitions</th>
+<th>Keyframes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interruptible</td>
+<td>Yes — retargets</td>
+<td>No — restarts</td>
+</tr>
+<tr>
+<td>Use for</td>
+<td>Interactive state changes (hover, toggle, drawer)</td>
+<td>One-shot sequences (enter animations, loading spinners)</td>
+</tr>
+</tbody>
+</table>
+<p>A drawer using keyframes for open/close snaps on rapid toggling. A drawer using transitions smoothly reverses mid-flight.</p>
+<h3 id="11-split-stagger-enter-animations">11. Split + stagger enter animations<a class="headerlink" href="#11-split-stagger-enter-animations" title="Permanent link">&para;</a></h3>
+<p>Don't animate a single container. Break enters into semantic chunks and stagger:</p>
+<ul>
+<li>Title → description → CTA buttons, 100 ms between groups.</li>
+<li>For hero titles, consider splitting into individual words at the same 100 ms stagger.</li>
+<li>Combine <code>opacity</code> + <code>translateY(12px)</code> + <code>filter: blur(4px)</code> for the enter effect.</li>
+<li>Each chunk's enter is a <strong>transition</strong> — 100 ms, the utility end of the duration binary. The stagger is a <strong>hold</strong>, start to start, and is ≥ the transition it follows, so each chunk lands before the next begins. For a slow, narrative entrance, go to the cinematic end (≥ 1500 ms) instead — never between.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">.</span><span class="nc">stagger-item</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">--stagger</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">ms</span><span class="p">;</span><span class="w"> </span><span class="k">opacity</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="nb">translateY</span><span class="p">(</span><span class="mi">12</span><span class="kt">px</span><span class="p">);</span><span class="w"> </span><span class="k">filter</span><span class="p">:</span><span class="w"> </span><span class="nb">blur</span><span class="p">(</span><span class="mi">4</span><span class="kt">px</span><span class="p">);</span><span class="w"> </span><span class="k">animation</span><span class="p">:</span><span class="w"> </span><span class="n">fadeInUp</span><span class="w"> </span><span class="mi">100</span><span class="kt">ms</span><span class="w"> </span><span class="kc">ease-out</span><span class="w"> </span><span class="kc">forwards</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="p">.</span><span class="nc">stagger-item</span><span class="p">:</span><span class="nd">nth-child</span><span class="o">(</span><span class="nt">1</span><span class="o">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">animation-delay</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="mi">0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--stagger</span><span class="p">));</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="p">.</span><span class="nc">stagger-item</span><span class="p">:</span><span class="nd">nth-child</span><span class="o">(</span><span class="nt">2</span><span class="o">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">animation-delay</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--stagger</span><span class="p">));</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="p">.</span><span class="nc">stagger-item</span><span class="p">:</span><span class="nd">nth-child</span><span class="o">(</span><span class="nt">3</span><span class="o">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">animation-delay</span><span class="p">:</span><span class="w"> </span><span class="nb">calc</span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--stagger</span><span class="p">));</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="p">@</span><span class="k">keyframes</span><span class="w"> </span><span class="nt">fadeInUp</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">to</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">opacity</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="nb">translateY</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="k">filter</span><span class="p">:</span><span class="w"> </span><span class="nb">blur</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h3 id="12-subtle-exit-animations">12. Subtle exit animations<a class="headerlink" href="#12-subtle-exit-animations" title="Permanent link">&para;</a></h3>
+<p>Exits should be quieter than enters — the user's focus is already moving to the next thing. Small fixed <code>translateY(-12px)</code> over <code>100ms</code> ease-in, not a full-height slide-out. An exit is a transition, so it takes the utility end of the binary; it is quieter by distance and easing, not by a slower clock. Exception: when spatial context matters (a card returning to a list, a drawer to a screen edge), slide the full distance.</p>
+<p>Never remove the exit entirely — popping out of existence loses the user's place.</p>
+<h3 id="13-contextual-icon-animations-exact-values-never-deviate">13. Contextual icon animations — exact values, never deviate<a class="headerlink" href="#13-contextual-icon-animations-exact-values-never-deviate" title="Permanent link">&para;</a></h3>
+<p>When icons appear/disappear contextually (hover toolbars, state-change toggles), animate with <code>opacity</code> + <code>scale</code> + <code>blur</code>. Use <strong>exactly these values</strong>:</p>
+<ul>
+<li><code>scale</code>: <code>0.25</code> → <code>1</code> (never <code>0.5</code>, never <code>0.6</code>)</li>
+<li><code>opacity</code>: <code>0</code> → <code>1</code></li>
+<li><code>filter</code>: <code>blur(4px)</code> → <code>blur(0px)</code></li>
+<li>Motion: <code>{ type: "spring", duration: 0.3, bounce: 0 }</code> <!-- motion-exempt: spring --> — <strong>bounce must be <code>0</code></strong>, never <code>0.1</code> or higher. A spring's duration is an output of its physics, so it is exempt from the duration binary; <code>muriel.motion.validate_spring</code> checks the bounce instead</li>
+</ul>
+<p>If the project has <code>motion</code>/<code>framer-motion</code> in <code>package.json</code>, use <code>AnimatePresence</code> with these values. If not, keep both icons in the DOM (one absolutely positioned, one in flow) and cross-fade via CSS transitions at 100 ms with <code>cubic-bezier(0.2, 0, 0, 1)</code> (a CSS cross-fade is a transition, not a spring — it takes the binary) — don't add a motion dependency just for icon swaps.</p>
+<p>The exact values are tuned: smaller scale values feel jarring, bounce &gt; 0 reads as gimmicky, opacity-only feels lifeless.</p>
+<h3 id="14-scale-on-press-exactly-096-never-below-095">14. Scale on press: exactly <code>0.96</code>, never below <code>0.95</code><a class="headerlink" href="#14-scale-on-press-exactly-096-never-below-095" title="Permanent link">&para;</a></h3>
+<p>A subtle scale-down on click gives buttons tactile feedback. Always <code>scale(0.96)</code>. <strong>Anything below <code>0.95</code> reads as exaggerated</strong> — past that threshold the button feels like it's collapsing rather than depressing.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">.</span><span class="nc">button</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">transition-property</span><span class="p">:</span><span class="w"> </span><span class="k">scale</span><span class="p">;</span><span class="w"> </span><span class="k">transition-duration</span><span class="p">:</span><span class="w"> </span><span class="mi">150</span><span class="kt">ms</span><span class="p">;</span><span class="w"> </span><span class="k">transition-timing-function</span><span class="p">:</span><span class="w"> </span><span class="kc">ease-out</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c">/* motion-exempt: press */</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="p">.</span><span class="nc">button</span><span class="p">:</span><span class="nd">active</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">scale</span><span class="p">:</span><span class="w"> </span><span class="mf">0.96</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>Press feedback is exempt from the duration binary: it is coupled to the input, a response rather than a scheduled animation (<code>muriel.motion.validate_duration(ms, kind="press")</code>).</p>
+<p>Not every button needs this. Provide a <code>static</code> prop on the button component to disable scale for cases where the motion would be distracting (form submits inside dense layouts, primary-action buttons that already have other feedback).</p>
+<h3 id="15-skip-enter-animations-on-page-load">15. Skip enter animations on page load<a class="headerlink" href="#15-skip-enter-animations-on-page-load" title="Permanent link">&para;</a></h3>
+<p>For animation systems that fire on mount (Framer Motion's <code>AnimatePresence</code>, etc.), use <code>initial={false}</code> so default-state elements don't animate in on first render. Icons that match the current state on page load shouldn't pop in — only state <em>changes</em> should animate.</p>
+<p><strong>Caveat:</strong> don't apply this to staged page-enter sequences (rule 11). If <code>initial={false}</code> would skip the entire intentional entrance, the rule doesn't apply.</p>
+<h2 id="performance-rules">Performance rules<a class="headerlink" href="#performance-rules" title="Permanent link">&para;</a></h2>
+<h3 id="16-never-transition-all-will-change-only-for-compositor-friendly-properties">16. Never <code>transition: all</code>; <code>will-change</code> only for compositor-friendly properties<a class="headerlink" href="#16-never-transition-all-will-change-only-for-compositor-friendly-properties" title="Permanent link">&para;</a></h3>
+<p>Two coupled performance rules:</p>
+<ul>
+<li><strong><code>transition: all</code> is banned.</strong> Always specify exact properties: <code>transition-property: scale, opacity, filter</code>. The shorthand forces the browser to watch every property for changes — causes unintended transitions on color/padding/shadow and prevents browser optimizations. Tailwind's <code>transition</code> shorthand has the same issue; use <code>transition-[scale,opacity,filter]</code> bracket syntax instead. <code>transition-transform</code> is fine — it expands to <code>transform, translate, scale, rotate</code> specifically.</li>
+<li><strong><code>will-change</code> only for GPU-compositable properties</strong> — <code>transform</code>, <code>opacity</code>, <code>filter</code>, <code>clip-path</code>. Never <code>will-change: all</code>. Never on <code>background-color</code>, <code>padding</code>, <code>top/left/width/height</code> — they can't be GPU-composited so the hint accomplishes nothing while costing a compositing layer in memory. Only add <code>will-change</code> when you observe first-frame stutter; modern browsers optimize most cases on their own.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>GPU-compositable?</th>
+<th><code>will-change</code> worth it?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>transform</code>, <code>translate</code>, <code>scale</code>, <code>rotate</code></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>opacity</code></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>filter</code> (blur, brightness)</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>clip-path</code></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>background-*</code>, <code>border-*</code>, <code>color</code></td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>top</code>, <code>left</code>, <code>width</code>, <code>height</code></td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h2 id="motion-axes-easing-scale-budget">Motion axes — easing, scale, budget<a class="headerlink" href="#motion-axes-easing-scale-budget" title="Permanent link">&para;</a></h2>
+<p>Rules 18–22 cover the axes rules 10–16 leave open. Paraphrased from All-The-Vibes/ATV-Design's <code>emil-design-eng-inspired</code> (MIT). <code>muriel.motion</code> enforces the mechanical ones — <code>validate_properties</code>, <code>easing_for</code>, <code>validate_scale</code>. muriel's duration <strong>binary</strong> (<code>muriel.motion</code>: utility ≤ 100 ms / cinematic ≥ 1500 ms) deliberately overrides the source's 100–500 ms bands <!-- motion-exempt: not-motion (cited counterexample) --> — don't import those.</p>
+<h3 id="motion-scope-what-the-binary-governs">Motion scope — what the binary governs<a class="headerlink" href="#motion-scope-what-the-binary-governs" title="Permanent link">&para;</a></h3>
+<p>The binary governs <strong>transitions</strong>: an interpolated change of position, opacity, size, or color. Everything in rules 11, 12, 18 and the reduced-motion dial is a transition and takes 100 ms or ≥ 1500 ms. Three kinds are exempt, each with a reason (<code>muriel.motion.EXEMPTION_REASONS</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Why it is exempt</th>
+<th>What is checked instead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>hold</strong></td>
+<td>A pause between steps is not motion; nothing interpolates.</td>
+<td>Must be ≥ the transition it follows. A stagger is a hold, start to start.</td>
+</tr>
+<tr>
+<td><strong>spring</strong></td>
+<td>The duration emerges from physics parameters; it is an output, not a choice.</td>
+<td>Stiffness / bounce — bounce stays <code>0</code> (rule 13).</td>
+</tr>
+<tr>
+<td><strong>press</strong></td>
+<td>Direct-manipulation feedback is coupled to the input; a response, not a scheduled animation.</td>
+<td>Scale (rule 14), and the touch opacity dip (rule 20).</td>
+</tr>
+</tbody>
+</table>
+<p>Sequences use <code>STEP_TRANSITION_MS</code> (100) between states and <code>STEP_HOLD_MS</code> (1500) on each state; a timed reveal caps at <code>SEQUENCE_MAX_MS</code> (8000 ms of holds, so 5 steps at 1500 ms). A user-stepped sequence has no total. <code>muriel.motion.validate_sequence_timing(steps, transition_ms, hold_ms, mode)</code> checks all three. CSS: <code>--mg-motion-transition: 100ms</code>, <code>--mg-motion-hold: 1500ms</code> from <code>StyleGuide.to_css_vars()</code>.</p>
+<p>In these docs, a duration literal strictly between 100 and 1500 ms must carry an exemption tag on its line — <code>&lt;!-- motion-exempt: hold|spring|press|not-motion --&gt;</code> in prose, <code>/* motion-exempt: … */</code> in CSS, <code># motion-exempt: …</code> in TOML. <code>not-motion</code> covers measurements that are not animation durations (latency budgets, reaction times, event rates, cited counterexamples). <code>tests/test_motion.py</code> fails on an untagged one.</p>
+<h3 id="18-easing-curve-follows-direction">18. Easing curve follows direction<a class="headerlink" href="#18-easing-curve-follows-direction" title="Permanent link">&para;</a></h3>
+<p>The curve encodes the physical model the user applies to the motion. Pick by where the element is going, not by taste:</p>
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Curve</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entering / user-triggered (modal mount, toast in, click response)</td>
+<td><code>ease-out</code></td>
+<td>decelerates to rest — catches up to where the user expects it</td>
+</tr>
+<tr>
+<td>Leaving (modal dismiss, toast out)</td>
+<td><code>ease-in</code>, or linear at ≤ 100 ms</td>
+<td>accelerates away; exit is less load-bearing</td>
+</tr>
+<tr>
+<td>Repositioning on-screen / system-scheduled (list reorder, reflow)</td>
+<td><code>ease-in-out</code></td>
+<td>accelerates from one rest position, decelerates into the next</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Never <code>ease-in</code> for an entrance</strong> — acceleration-on-appear reads as the element <em>avoiding</em> the user. <code>muriel.motion.easing_for("enter"|"exit"|"move")</code> returns the curve.</p>
+<h3 id="19-entrance-scale-floors-at-095-never-from-0">19. Entrance scale floors at <code>0.95</code> — never from <code>0</code><a class="headerlink" href="#19-entrance-scale-floors-at-095-never-from-0" title="Permanent link">&para;</a></h3>
+<p>Distinct from press feedback (rule 14). A mounting modal/popover scales <code>0.95 → 1</code> while opacity goes <code>0 → 1</code>: opacity carries "wasn't here, now is," scale carries depth. From <code>0</code> it reads as a black hole opening; from <code>0.95</code> it's a card stepping forward. Set a popover's <code>transform-origin</code> toward its anchor (Radix exposes <code>--radix-*-transform-origin</code>) so it doesn't appear unanchored. <code>muriel.motion.ENTRANCE_SCALE_FLOOR</code> / <code>validate_scale()</code>.</p>
+<h3 id="20-gate-hover-behind-pointer-capability-carry-touch-presses-with-opacity">20. Gate <code>:hover</code> behind pointer capability; carry touch presses with opacity<a class="headerlink" href="#20-gate-hover-behind-pointer-capability-carry-touch-presses-with-opacity" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">hover</span><span class="o">:</span><span class="w"> </span><span class="nt">hover</span><span class="o">)</span><span class="w"> </span><span class="nt">and</span><span class="w"> </span><span class="o">(</span><span class="nt">pointer</span><span class="o">:</span><span class="w"> </span><span class="nt">fine</span><span class="o">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="nc">card</span><span class="p">:</span><span class="nd">hover</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c">/* … */</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>An unconditional <code>:hover</code> fires on tap on touch devices and sticks until the next tap ("stuck hover"). On touch there's no hover preview, so the press itself must carry weight — pair the <code>:active</code> scale (rule 14) with a brief opacity dip (<code>0.85</code> for ~80 ms) — press feedback, exempt from the binary like rule 14.</p>
+<p><strong>Reduced motion is a dial, not a kill switch.</strong> <code>prefers-reduced-motion: reduce</code> means "don't parallax/slide me across the viewport," not "freeze everything." muriel brands pick the response via <code>[a11y].motion_reduce_policy</code> (vocabulary in <code>muriel.motion.REDUCE_POLICIES</code>, shared with <code>muriel.styleguide.A11y</code>):</p>
+<ul>
+<li><code>collapse-to-zero</code> (default) — every duration to 0; state changes are instant.</li>
+<li><code>keep-fast</code> — keep utility (≤ 100 ms) opacity fades, drop transforms to identity, drop cinematic motion. <code>reduce</code>, the name this rule used before 2026-09-24, is accepted as an alias.</li>
+<li><code>keep-linear</code> — keep opacity fades at their durations with linear easing, drop transforms to identity.</li>
+</ul>
+<p>Whichever policy applies, decorative/background motion goes. The policy governs <em>how</em> motion degrades, never <em>whether</em> the end frame is complete: under any setting the reader lands on the full final frame immediately (rule 28).</p>
+<h3 id="21-one-load-bearing-motion-per-interaction">21. One load-bearing motion per interaction<a class="headerlink" href="#21-one-load-bearing-motion-per-interaction" title="Permanent link">&para;</a></h3>
+<p>A single click/tap/drag-end should produce <strong>one</strong> motion that carries meaning. If a click opens a modal <em>and</em> slides a sidebar <em>and</em> fades a backdrop <em>and</em> repositions a tooltip, the user can't tell which is the consequence of their action. Pick the most informative (usually the modal entrance) and play the rest silently — instant opacity, no transforms.</p>
+<h3 id="22-reorders-and-expands-use-flip-not-animated-layout">22. Reorders and expands use FLIP, not animated layout<a class="headerlink" href="#22-reorders-and-expands-use-flip-not-animated-layout" title="Permanent link">&para;</a></h3>
+<p>Rule 16 bans animating layout properties; FLIP is the technique that replaces them. To move an element to a new position, don't animate <code>top</code>/<code>left</code>/<code>height</code> — snapshot <strong>F</strong>irst and <strong>L</strong>ast positions, <strong>I</strong>nvert the delta with a <code>transform</code>, then transition the transform to identity (<strong>P</strong>lay). For accordions, prefer letting content settle into place; if height must animate, animate <code>max-height</code> with a generous ceiling and accept it's less crisp than FLIP.</p>
+<h2 id="motion-contract-static-first-one-mode-per-figure">Motion contract — static first, one mode per figure<a class="headerlink" href="#motion-contract-static-first-one-mode-per-figure" title="Permanent link">&para;</a></h2>
+<p>Rules 28–29 govern motion that <em>explains</em> a figure or diagram, as opposed to rules 10–22's tactile feedback. Adapted from diagram-design's animation contract (MIT, © 2025 Cathryn Lavery). Their timing comes from the motion scope above: 100 ms transitions between states, 1500 ms holds on each state, and a timed <code>reveal</code> capped at 8000 ms of holds (<code>validate_sequence_timing</code>). <code>muriel.motion</code> checks the structural parts — <code>validate_mode</code>, <code>validate_flash_rate</code>, <code>validate_sequence_shape</code>.</p>
+<h3 id="28-static-first-motion-explains-a-complete-figure-never-supplies-missing-meaning">28. Static first — motion explains a complete figure, never supplies missing meaning<a class="headerlink" href="#28-static-first-motion-explains-a-complete-figure-never-supplies-missing-meaning" title="Permanent link">&para;</a></h3>
+<p>Every meaningful element (node, label, connector, value, status, outcome) is visible in the source before any enhancement runs. Only selectors scoped under a <code>.motion-ready</code> class may hide or displace it, and script adds <code>.motion-ready</code> only <em>after</em> setup succeeds — so a script error, a blocked script, or a slow load leaves the complete figure on screen.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">.</span><span class="nc">motion-ready</span><span class="w"> </span><span class="o">[</span><span class="nt">data-motion-item</span><span class="o">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">opacity</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="nb">translateY</span><span class="p">(</span><span class="mi">8</span><span class="kt">px</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="p">.</span><span class="nc">motion-ready</span><span class="w"> </span><span class="o">[</span><span class="nt">data-motion-item</span><span class="o">]</span><span class="p">.</span><span class="nc">is-visible</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">opacity</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p><code>prefers-reduced-motion: reduce</code>, print, no-JS, and static export (PNG/SVG/PDF capture) all present the complete final frame — never a blank or mid-sequence one. <code>[a11y].motion_reduce_policy</code> (rule 20) chooses how motion degrades; it never decides whether the end frame is complete. If a figure only makes sense while animating, the static figure is broken: fix its labels and structure, don't lean on motion to carry the meaning.</p>
+<h3 id="29-pick-one-mode-none-reveal-step-or-loop">29. Pick one mode: <code>none</code>, <code>reveal</code>, <code>step</code>, or <code>loop</code><a class="headerlink" href="#29-pick-one-mode-none-reveal-step-or-loop" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Behavior</th>
+<th>Autoplay</th>
+<th>Repeats</th>
+<th>May carry meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>none</code></td>
+<td>Complete static figure; the default</td>
+<td>—</td>
+<td>—</td>
+<td>yes (it is the figure)</td>
+</tr>
+<tr>
+<td><code>reveal</code></td>
+<td>One ordered run that ends on the complete frame</td>
+<td>yes, once</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>step</code></td>
+<td>Reader advances through states with controls</td>
+<td>no — user-driven</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>loop</code></td>
+<td>One decorative token cycling (a flow hint)</td>
+<td>yes</td>
+<td>yes</td>
+<td><strong>no</strong></td>
+</tr>
+</tbody>
+</table>
+<p><code>reveal</code> is the only mode that autoplays, and it plays once: no restart on viewport re-entry, tab return, or anything but an explicit Replay. <code>step</code> never advances on its own. Loops are decorative only — they never encode state, values, or outcomes — and each cycle lasts at least <code>3000ms</code>. Anything that repeats also stays under three flashes per second (WCAG 2.3.1). Keep the sequence small: 1–8 steps, at most 2 items entering per step, at most 12 marked items total. A timed <code>reveal</code> at the default 1500 ms hold fits at most 5 of those steps; a longer sequence is a <code>step</code> sequence.</p>
+<h2 id="composition-rules-hierarchy-distribution-surface-system">Composition rules — hierarchy, distribution, surface system<a class="headerlink" href="#composition-rules-hierarchy-distribution-surface-system" title="Permanent link">&para;</a></h2>
+<p>Rules 1–22 are <em>tactile</em> detail — the feel of a single element. Rules 23–27 are one altitude up: how elements compose so a build doesn't read as AI-generated. This is the layer that separates a Linear/Vercel/Stripe dashboard from a template. Paraphrased from <a href="https://github.com/Dammyjay93/interface-design">Dammyjay93/interface-design</a> (MIT) — <strong>with its low-contrast hierarchy lever removed</strong> (see rule 24); the rest is 8:1-safe as written.</p>
+<h3 id="23-one-focal-point-per-view">23. One focal point per view<a class="headerlink" href="#23-one-focal-point-per-view" title="Permanent link">&para;</a></h3>
+<p>Every screen has one thing the user came to do. That element dominates — through <strong>size, weight, position, or surrounding space</strong> (not low-contrast neighbors — see rule 24). When everything competes equally, nothing leads and the layout reads as a parking lot. Before building, name the focal element; make it win; demote the rest deliberately. The failure mode is <em>flatness</em> — same size, weight, spacing everywhere — which is the single biggest "this was generated" tell.</p>
+<h3 id="24-type-scale-is-a-ratio-demote-with-weight-size-and-space-never-with-low-contrast">24. Type scale is a ratio — demote with weight, size, and space, never with low contrast<a class="headerlink" href="#24-type-scale-is-a-ratio-demote-with-weight-size-and-space-never-with-low-contrast" title="Permanent link">&para;</a></h3>
+<p>Pick a ratio and step it: <code>~1.2</code> (dense/calm), <code>~1.25</code> (most product UI), <code>~1.333</code> (expressive). From a 14–16px body that yields a <em>visibly</em> distinct scale, not 15/16/17 mush. A 14px base at 1.25: <code>caption 11 · body 14 · h4 16 · h3 18 · h2 22 · h1 28 · display 44+</code>. Round to whole px and to the spacing grid.</p>
+<p>Weight does more hierarchy work than size: a single 14px size holds three tiers through weight alone (<code>600</code> value / <code>500</code> label / <code>400</code> meta).</p>
+<p><strong>The 8:1 carve.</strong> The source skill builds a fourth lever — demoting secondary/muted/disabled text via <em>low opacity and muted color</em> (<code>secondary</code>/<code>muted</code>/<code>faint</code> tiers at e.g. slate-600/400/200). <strong>muriel does not import that lever</strong> — a muted tier at slate-400 on white is ~3:1 and violates the 8:1 floor (<code>~/CLAUDE.md</code> — readable text has no contrast exception; only logotypes/decorative lettering do, per WCAG 1.4.3). Build the <em>same</em> hierarchy with the three contrast-safe levers — <strong>weight, size, and space</strong> — and keep every text tier, including metadata and disabled-state labels, at ≥8:1. Disabled controls signal state through cursor, border, and fill, not by dropping text below floor.</p>
+<h3 id="25-603010-distribution-one-accent-color-means-something">25. 60/30/10 distribution — one accent, color means something<a class="headerlink" href="#25-603010-distribution-one-accent-color-means-something" title="Permanent link">&para;</a></h3>
+<p>A dominant neutral surface (~60%), a secondary tone (~30%), and ~10% accent. Color is a scarce resource: gray builds structure, color <em>communicates</em> (status, action, identity). One intentional accent beats five low-commitment tints. Keep <strong>one hue across surfaces</strong> and shift only lightness — different hues per surface fragments the space. Decorative gradients and unmotivated color are noise; remove them or make them mean something. (The accent still clears 8:1 anywhere it carries text.)</p>
+<h3 id="26-surface-elevation-is-a-numbered-system-whisper-quiet">26. Surface elevation is a numbered system, whisper-quiet<a class="headerlink" href="#26-surface-elevation-is-a-numbered-system-whisper-quiet" title="Permanent link">&para;</a></h3>
+<p>Surfaces stack — dropdown above card above page — via a numbered lightness scale, each step only a few percent: dark mode base → +7% → +9% → +12%; light mode stays light and adds shadow per rule 3. You should <em>feel</em> the step, not see it (the squint test, rule 27). Specifics:</p>
+<ul>
+<li><strong>Sidebars:</strong> same background as the canvas + a subtle border, not a different color — different colors split the UI into "sidebar world" and "content world."</li>
+<li><strong>Inputs:</strong> slightly <em>darker</em> than their surroundings, not lighter — inset surfaces receive content; a darker fill says "type here" without a heavy border.</li>
+<li><strong>Dropdowns/popovers:</strong> exactly one level above their parent surface, or the layering collapses.</li>
+</ul>
+<p>This is the surface-token side of the brand floor: text on every elevation step must still clear 8:1, so verify against the <em>lightest</em> step a given text color lands on.</p>
+<h3 id="27-composition-test-battery-run-before-showing">27. Composition test battery — run before showing<a class="headerlink" href="#27-composition-test-battery-run-before-showing" title="Permanent link">&para;</a></h3>
+<p>Higher-altitude analogues to the validation checklist; run them on the rendered output, not the CSS:</p>
+<ul>
+<li><strong>Swap test</strong> — mentally swap the typeface for the default and the layout for a standard template. Anything that wouldn't change is where you defaulted.</li>
+<li><strong>Squint test</strong> — blur your eyes: hierarchy still legible (what's above what, where sections divide), and <em>nothing</em> jumps out harshly? Quiet structure, clear focal point.</li>
+<li><strong>Signature test</strong> — point to five specific elements expressing this product's identity. "The overall feel" doesn't count.</li>
+</ul>
+<p>If a screen fails these, the fix is composition (rules 23–26), not more micro-polish.</p>
+<h2 id="anti-patterns-at-a-glance">Anti-patterns at a glance<a class="headerlink" href="#anti-patterns-at-a-glance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Mistake</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Same border radius on parent and child</td>
+<td><code>outer = inner + padding</code></td>
+</tr>
+<tr>
+<td>Icons look off-center</td>
+<td>Optical adjustment (icon-side padding −2px, or fix SVG directly)</td>
+</tr>
+<tr>
+<td>Hard 1px borders for elevation</td>
+<td>Three-layer <code>box-shadow</code></td>
+</tr>
+<tr>
+<td>Jarring enter animations</td>
+<td>Split into semantic chunks, 100ms enters, stagger at 100ms</td>
+</tr>
+<tr>
+<td>Dramatic exit animations</td>
+<td>Small <code>translateY(-12px)</code>, <code>100ms</code> ease-in</td>
+</tr>
+<tr>
+<td>Icon swaps that pop without animation</td>
+<td><code>scale 0.25→1</code> + <code>opacity 0→1</code> + <code>blur 4px→0</code>, spring <code>bounce: 0</code></td>
+</tr>
+<tr>
+<td>Buttons with no press feedback</td>
+<td><code>scale(0.96)</code> on <code>:active</code>, never below <code>0.95</code></td>
+</tr>
+<tr>
+<td>Numbers that shift layout as they update</td>
+<td><code>font-variant-numeric: tabular-nums</code></td>
+</tr>
+<tr>
+<td>Text rendering heavy on macOS</td>
+<td><code>-webkit-font-smoothing: antialiased</code> at root</td>
+</tr>
+<tr>
+<td>Headings with orphaned words</td>
+<td><code>text-wrap: balance</code></td>
+</tr>
+<tr>
+<td>Body paragraphs with orphans</td>
+<td><code>text-wrap: pretty</code></td>
+</tr>
+<tr>
+<td>Page-load animations on default-state elements</td>
+<td><code>initial={false}</code> on the AnimatePresence boundary</td>
+</tr>
+<tr>
+<td><code>transition: all</code> or <code>transition</code> shorthand</td>
+<td><code>transition-property: scale, opacity</code> (or Tailwind bracket syntax)</td>
+</tr>
+<tr>
+<td><code>will-change: all</code> or <code>will-change: background-color</code></td>
+<td>Only on <code>transform</code>, <code>opacity</code>, <code>filter</code>; only when stutter is observed</td>
+</tr>
+<tr>
+<td><code>ease-in</code> on a modal/popover entrance</td>
+<td><code>ease-out</code> for entrances; reserve <code>ease-in</code> for exits (rule 18)</td>
+</tr>
+<tr>
+<td>Entrance scaling from <code>scale(0)</code></td>
+<td>Floor at <code>scale(0.95)</code>; let opacity carry the appear (rule 19)</td>
+</tr>
+<tr>
+<td>Unconditional <code>:hover</code> (sticks on touch)</td>
+<td>Gate behind <code>@media (hover: hover) and (pointer: fine)</code> (rule 20)</td>
+</tr>
+<tr>
+<td>One click firing several competing motions</td>
+<td>One load-bearing motion; play the rest silently (rule 21)</td>
+</tr>
+<tr>
+<td>Animating <code>top</code>/<code>left</code>/<code>height</code> to reorder</td>
+<td>FLIP (transform-based), or <code>max-height</code> for accordions (rule 22)</td>
+</tr>
+<tr>
+<td>Tiny hit areas on small icon buttons</td>
+<td>Extend with <code>::after { inset: -10px }</code> to 40×40 minimum</td>
+</tr>
+<tr>
+<td>Panel-wide dark scrim to make text readable on a translucent surface</td>
+<td>Transparent container; near-opaque per-line plates behind the text only — opaque media sits directly on the glass</td>
+</tr>
+<tr>
+<td>Flat layout — everything one size/weight, no focal point</td>
+<td>Name the focal element; make it win via size/weight/space (rule 23)</td>
+</tr>
+<tr>
+<td>Hierarchy built by dimming text (muted/disabled tiers below 8:1)</td>
+<td>Demote with weight + size + space; keep every tier ≥8:1 (rule 24)</td>
+</tr>
+<tr>
+<td>Five tints spread evenly / one accent on everything</td>
+<td>60/30/10, one intentional accent, one hue shifting only lightness (rule 25)</td>
+</tr>
+<tr>
+<td>Different background color for the sidebar</td>
+<td>Same canvas + subtle border; elevation via whisper-quiet lightness steps (rule 26)</td>
+</tr>
+<tr>
+<td>Inputs lighter than their surroundings</td>
+<td>Inputs slightly darker — inset surfaces receive content (rule 26)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="validation-checklist">Validation checklist<a class="headerlink" href="#validation-checklist" title="Permanent link">&para;</a></h2>
+<p>Before declaring a UI surface done, walk through these:</p>
+<ul>
+<li>[ ] Nested rounded elements use concentric radius math</li>
+<li>[ ] Icons and asymmetric shapes are optically centered, not geometrically</li>
+<li>[ ] Elevation uses layered <code>box-shadow</code>, not solid borders</li>
+<li>[ ] Images carry a subtle <code>1px</code> inset outline</li>
+<li>[ ] Text over translucent/blurred surfaces uses local per-line plates (computed for 8:1 over the brightest backdrop), not a panel-wide dark scrim</li>
+<li>[ ] Interactive elements have ≥40×40px hit area (no overlapping hit areas)</li>
+<li>[ ] Enter animations are split + staggered (100ms enters, 100ms between groups)</li>
+<li>[ ] Exit animations are subtle (small <code>translateY</code>, 100ms — quieter by distance, not a slower clock)</li>
+<li>[ ] Every transition is 100ms or ≥1500ms; any literal strictly between those is a tagged hold / spring / press</li>
+<li>[ ] Contextual icon swaps use the canonical <code>scale 0.25→1</code> + <code>opacity</code> + <code>blur</code> recipe with <code>bounce: 0</code></li>
+<li>[ ] Buttons have <code>scale(0.96)</code> on press (with <code>static</code> opt-out where appropriate)</li>
+<li>[ ] Default-state elements don't animate on page load (<code>initial={false}</code>)</li>
+<li>[ ] No <code>transition: all</code> anywhere — exact properties only</li>
+<li>[ ] <code>will-change</code> only on compositor-friendly properties, only when first-frame stutter is observed</li>
+<li>[ ] Easing matches direction — enter <code>ease-out</code>, exit <code>ease-in</code>, on-screen move <code>ease-in-out</code></li>
+<li>[ ] Entrance scale floors at <code>0.95</code> (not <code>0</code>); <code>:hover</code> gated behind <code>@media (hover: hover) and (pointer: fine)</code></li>
+<li>[ ] One load-bearing motion per interaction; reorders/expands use FLIP, not animated layout</li>
+<li>[ ] Figure is complete with no JS, reduced motion, print, and static export; only <code>.motion-ready</code> selectors hide or displace (rule 28)</li>
+<li>[ ] One motion mode; only <code>reveal</code> autoplays (once); loops are decorative with a ≥3000ms cycle (rule 29)</li>
+<li>[ ] macOS font smoothing applied once at root</li>
+<li>[ ] Dynamic numbers use <code>tabular-nums</code></li>
+<li>[ ] Headings use <code>text-wrap: balance</code>; body uses <code>text-wrap: pretty</code></li>
+<li>[ ] One named focal point per view; hierarchy demotes with weight/size/space, never with sub-8:1 muted text (rules 23–24)</li>
+<li>[ ] ~60/30/10 distribution, one accent, one hue shifting only lightness (rule 25)</li>
+<li>[ ] Surface elevation is a whisper-quiet numbered scale; sidebar = canvas; inputs darker (rule 26)</li>
+<li>[ ] Passes the composition battery — swap / squint / signature (rule 27)</li>
+</ul>
+<h2 id="brand-floor-reminder">Brand-floor reminder<a class="headerlink" href="#brand-floor-reminder" title="Permanent link">&para;</a></h2>
+<p>Polish is additive — it never excuses a contrast violation. Any text element in the polished UI still has to clear muriel's 8:1 floor:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.contrast<span class="w"> </span>audit-svg<span class="w"> </span>path/to/component.svg
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.contrast<span class="w"> </span>audit-html<span class="w"> </span>path/to/component.html
+</code></pre></div>
+<p>Hover and focus states are particularly likely to drop below 8:1 — verify both rest and hover states explicitly. Shadows-over-borders (rule 3) interact with this: hover-shadow color must clear floor against whatever sits beneath.</p>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../channels/web/"><code>channels/web.md</code></a> — editorial HTML, marginalia, the prose surface where polish rules apply to readable content</li>
+<li><a href="../../channels/interactive/"><code>channels/interactive.md</code></a> — live demos with parameter sliders, where the polish rules apply to the controls</li>
+<li><a href="../../channels/charts/"><code>channels/charts.md</code></a> — data viz, where polish applies to tooltips, axis labels, hover states</li>
+<li><a href="../../../agents/muriel-critique.md"><code>agents/muriel-critique.md</code></a> — runs the polish validation checklist as part of critique when artifacts target the <code>app</code> register</li>
+</ul>
+<h2 id="prior-art">Prior art<a class="headerlink" href="#prior-art" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://github.com/thedavidmurray/claude-make-interfaces-feel-better">thedavidmurray/claude-make-interfaces-feel-better</a> (MIT, archived May 2026) — Source for rules 1–16. The mathematical-precision framing (<code>outer = inner + padding</code>, exact <code>0.96</code> press value, exact <code>0.25</code> icon scale, <code>bounce: 0</code>) is preserved verbatim because the values are tuned, not arbitrary.</li>
+<li><a href="https://github.com/All-The-Vibes/ATV-Design">All-The-Vibes/ATV-Design</a> <code>emil-design-eng-inspired</code> (MIT) — Source for rules 18–22 (easing-by-direction, entrance scale floor, hover-gating, motion budget, FLIP), itself a clean-room paraphrase of <a href="https://github.com/emilkowalski/skill">emilkowalski/skill</a>. muriel keeps its own duration binary and <code>0.96</code> press value over the source's bands and <code>0.97</code>.</li>
+<li><a href="https://github.com/Dammyjay93/interface-design">Dammyjay93/interface-design</a> (MIT, Damola Akinleye) — Source for rules 23–27 (composition: focal point, type-scale ratio, 60/30/10, surface-elevation system, test battery). muriel <strong>drops the source's low-opacity/muted-color hierarchy lever</strong> — it conflicts with the 8:1 floor — and rebuilds the same hierarchy on weight + size + space. Its polish/motion section (concentric radius, tabular-nums, easing, hit area, etc.) was <em>not</em> imported: muriel rules 1–22 already cover it, more precisely.</li>
+<li>diagram-design <code>references/animation.md</code> and ADRs 0001/0003 (MIT, © 2025 Cathryn Lavery) — Source for rules 28–29 (static-first enhancement, <code>.motion-ready</code> gating, the none/reveal/step/loop modes, reveal-only autoplay, the ≥3s decorative loop, the 8-step / 2-per-step / 12-item budget). Adapted from diagram-design's animation contract (MIT). muriel does <strong>not</strong> import its <code>--motion-*</code> clock tokens or its pinned controller.</li>
+<li><a href="https://m3.material.io/styles/motion">Material Design 3 Motion</a> — Tangentially related; muriel intentionally does not adopt Material's broader motion vocabulary.</li>
+<li><a href="https://developer.apple.com/design/human-interface-guidelines/motion">Apple HIG — Motion</a> — Read-only reference; cited by paraphrase per scholarly discipline (Apple-proprietary docs).</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
