@@ -588,6 +588,14 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   either defect alone (the encoding one fails 475 of 650 samples per tier,
   the slot one 14) and skips with a reason when Playwright is not
   resolvable.
+- **Drawable cards painted nothing in current Chrome Canary.** Canary 158
+  (measured on 158.0.8110.5) renamed the HTML-in-Canvas opt-in from
+  `<canvas layoutsubtree>` to `<canvas content="drawable">`. Under the old
+  name the cards got no layout box, so every `CardHost.capture()` returned
+  `RETRY` until the near tier gave up and fell back to images: the field still
+  showed pictures, but none of its tiles were sourced from the cards, which is
+  the feature. `CardHost` now sets both attributes. Builds from before the
+  rename ignore `content`, and builds after it ignore `layoutsubtree`.
 - **`muriel.capture --selector` named element PNGs after the viewport.** The
   filename was always `{slug}-{tier}-{viewport}`, so a 1200×630 card captured
   at the default scale of 2 on the desktop tier was written as
