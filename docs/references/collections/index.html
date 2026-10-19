@@ -1,0 +1,2260 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A design skill for coding agents: fifteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/references/collections/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Collections — an explorer for many images - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#collections-an-explorer-for-many-images" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Collections — an explorer for many images
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/andyed/muriel" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    andyed/muriel
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/andyed/muriel" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    andyed/muriel
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zooming-interfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zooming user interfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faceted-exploration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faceted exploration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-coordination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Semantic zoom & linked displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-adapters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/linked-atlas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linked Atlas lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/showcase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Showcase — featured work ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gallery — all channels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live spatial demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="collections-an-explorer-for-many-images">Collections — an explorer for many images<a class="headerlink" href="#collections-an-explorer-for-many-images" title="Permanent link">&para;</a></h1>
+<p>Use this reference when the deliverable is a set of images that a person will
+survey, filter, compare or check, rather than one composed figure. muriel's
+default engine for this is <a href="https://github.com/andyed/wunderkammer/tree/v0.2.0">Wunderkammer 0.2.0</a>
+(MIT), a collection explorer for people and language models:</p>
+<ul>
+<li>The agent writes the collection as one JSON document.</li>
+<li>The person pans, zooms, filters by facets, groups, compares groups and opens
+  items.</li>
+<li>The agent reads back exactly what the person selected.</li>
+</ul>
+<p>It runs from static files with no server.</p>
+<p>Wunderkammer's spatial view uses muriel's rendering primitives, vendored at a
+pinned commit
+(<a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/wall/spatial/lib/VENDOR.md"><code>wall/spatial/lib/VENDOR.md</code></a>).
+muriel imports no Wunderkammer code, and this reference names it by released
+version only. Every URL below is pinned to the <code>v0.2.0</code> tag, the agent skill
+included. When a new version is released, update the pins
+and re-check the claims that carry a date.</p>
+<p><strong>This reference is the front door.</strong> Wunderkammer is designed to be used
+from muriel: this reference decides when an explorer is the right
+representation, <a href="#building-a-document-murielcollection"><code>muriel.collection</code></a>
+builds the document, and the <a href="#exploration-quality">exploration-quality axis</a>
+and contrast checks review the result. For the engine's own steps and traps
+(URL keys, hosting, observations, the hand-back), read Wunderkammer's skill,
+<a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/skills/wunderkammer/SKILL.md"><code>skills/wunderkammer/SKILL.md</code></a>.
+Its examples are tested against the pages' validators, so where it or the
+contract disagrees with the summary below, they win. Agents without muriel
+can install that skill on its own (<code>npx skills add andyed/wunderkammer</code>).</p>
+<p>It is a default, not a requirement. Another explorer that passes the
+<a href="#exploration-quality">exploration-quality axis</a> is a sensible substitute: the
+axis is muriel's opinion, and the engine is a preference.</p>
+<h2 id="when-to-reach-for-a-collection-explorer">When to reach for a collection explorer<a class="headerlink" href="#when-to-reach-for-a-collection-explorer" title="Permanent link">&para;</a></h2>
+<p>Use one when at least one of these holds:</p>
+<ul>
+<li><strong>Dozens to thousands of images.</strong> Below a dozen, a figure grid or contact
+  sheet is faster to read than an explorer is to learn. Above that, a person
+  needs an overview, filters and a way back to where they were. A document
+  can list 1 to 50,000 items. The bundled example has 297.</li>
+<li><strong>A comparison between groups.</strong> The question is how an attribute is
+  distributed across 2–6 groups (decades, sources, conditions), and the person
+  should see the items in each group, not only their shares. If the images are
+  irrelevant to the question, use <a href="../../channels/charts/"><code>channels/charts.md</code></a>.</li>
+<li><strong>Claims a person should be able to check.</strong> The agent says something about
+  the collection, such as "jazz is less common in the 1990s", and the person
+  should be able to open the exact items behind it.</li>
+</ul>
+<p>Do not use one for a single image or composed figure, or for numbers with no
+images behind them. When the output must be one self-contained file, see the
+<a href="#fallback">fallback</a>.</p>
+<h2 id="the-contract-in-brief">The contract in brief<a class="headerlink" href="#the-contract-in-brief" title="Permanent link">&para;</a></h2>
+<p>There are four parts, and all of them are static files. The full contract is
+<a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/CONTRACT.md"><code>docs/CONTRACT.md</code></a>.
+This section summarizes it for design decisions; for the engine's steps,
+see Wunderkammer's skill above.</p>
+<h3 id="collection-document-wunderkammercollection-v1">Collection document: <code>wunderkammer.collection</code> v1<a class="headerlink" href="#collection-document-wunderkammercollection-v1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wunderkammer.collection"</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">"corpus"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example:album-covers"</span><span class="p">,</span><span class="w"> </span><span class="nt">"revision"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-10-17"</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">"ui"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Album covers"</span><span class="p">,</span><span class="w"> </span><span class="nt">"defaultGroup"</span><span class="p">:</span><span class="w"> </span><span class="s2">"decade"</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">          </span><span class="nt">"facetOrder"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"decade"</span><span class="p">,</span><span class="w"> </span><span class="s2">"genre"</span><span class="p">],</span><span class="w"> </span><span class="nt">"hiddenFacets"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"catalog"</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nt">"images"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"cors"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nt">"clips"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a1"</span><span class="p">,</span><span class="w"> </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Example title"</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">      </span><span class="nt">"cover"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://example.org/a1-256.webp"</span><span class="p">,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="nt">"props"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"decade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1980s"</span><span class="p">,</span><span class="w"> </span><span class="nt">"genre"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"electronic"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pop"</span><span class="p">],</span><span class="w"> </span><span class="nt">"catalog"</span><span class="p">:</span><span class="w"> </span><span class="s2">"XL-104"</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">      </span><span class="nt">"sourceUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://example.org/a1"</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><strong>Required fields:</strong> <code>format</code>, <code>version</code>, <code>corpus.id</code> and <code>clips</code> (1 to
+  50,000 items). Each clip needs a non-empty <code>id</code>.</li>
+<li><strong>Identity:</strong> an item's identity is its <code>url</code>, or its <code>id</code> when it has no
+  <code>url</code>. Repeated identities are an error.</li>
+<li><strong>Attributes</strong> go in <code>props</code> as strings, finite numbers, booleans or arrays
+  of them. Facets and their counts are derived from <code>props</code>, so supply neither
+  yourself. Hide per-item identifiers with <code>ui.hiddenFacets</code>. A <code>props</code> key
+  that names a clip field (<code>title</code>, <code>source</code> …) is refused.</li>
+<li><strong>Links and images:</strong> <code>sourceUrl</code> must be http(s). Images (<code>cover</code>,
+  <code>detailCover</code>, <code>coverVariants[].src</code>, <code>media[].src</code>) may be http(s),
+  <code>data:image/</code> or <code>blob:</code>. Relative URLs resolve against the document's URL.</li>
+<li><strong>Cross-origin covers:</strong> <code>images.cors: true</code> declares that covers on other
+  origins send CORS headers. Without CORS, those covers stay blank in the 3D
+  views.</li>
+<li><strong>Plain text only:</strong> every string is set as text (<code>textContent</code>). <code>note</code> is
+  never HTML.</li>
+<li><strong>Validation:</strong> unknown keys are refused, with the list of supported ones.
+  All problems are reported at once with their paths, up to 25 in one
+  <code>CollectionError</code>, so a first draft can be fixed in a single pass.</li>
+<li><strong>Sprite sheets:</strong> with a few hundred covers or more, pack them into
+  sprite-sheet pages with
+  <a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/scripts/collection-sheets.py"><code>scripts/collection-sheets.py</code></a>.
+  On the 297-image example, the overview needed 3 image requests instead of 297
+  (<a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/PERF.md"><code>docs/PERF.md</code></a>,
+  "Collection sprite sheets").</li>
+</ul>
+<h3 id="comparison-recipe">Comparison recipe<a class="headerlink" href="#comparison-recipe" title="Permanent link">&para;</a></h3>
+<p>A question-sized comparison: 2–6 groups of one attribute, one measured
+attribute, and counts or shares. Every field is required, though <code>question</code>
+and <code>scope.query</code> may be empty strings.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">"question"</span><span class="p">:</span><span class="w"> </span><span class="s2">"How does genre distribution change across release decades?"</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">"corpus"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example:album-covers"</span><span class="p">,</span><span class="w"> </span><span class="nt">"revision"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-10-17"</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"query"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="nt">"facets"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">"groupBy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"decade"</span><span class="p">,</span><span class="w"> </span><span class="nt">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"1970s"</span><span class="p">,</span><span class="w"> </span><span class="s2">"1980s"</span><span class="p">,</span><span class="w"> </span><span class="s2">"1990s"</span><span class="p">],</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">"measure"</span><span class="p">:</span><span class="w"> </span><span class="s2">"genre"</span><span class="p">,</span><span class="w"> </span><span class="nt">"metric"</span><span class="p">:</span><span class="w"> </span><span class="s2">"share"</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nt">"categoryLimit"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nt">"sort"</span><span class="p">:</span><span class="w"> </span><span class="s2">"difference"</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><strong>Allowed values:</strong></li>
+<li><code>metric</code>: <code>share</code> or <code>count</code>;</li>
+<li><code>sort</code>: <code>difference</code>, <code>total</code> or <code>name</code>;</li>
+<li><code>categoryLimit</code>: an integer from 4 to 20.</li>
+<li><strong>Corpus:</strong> repeat the collection's <code>corpus.id</code> and <code>corpus.revision</code>.
+  Otherwise the page notes that the recipe names a different corpus.</li>
+<li><strong>Validation:</strong> <code>validateComparison()</code> stops at the first problem, unlike the
+  collection and observation validators.</li>
+<li><strong>Counting:</strong> the rules are stated in the evidence packet's
+  <code>countingPolicy</code>:</li>
+<li>an item can fall in several groups and carry several values, so shares
+    need not sum to one;</li>
+<li>an absent attribute counts as <code>(Unknown)</code>;</li>
+<li>a share with a zero denominator is <code>null</code>.</li>
+</ul>
+<h3 id="observations-wunderkammerobservations-v1">Observations: <code>wunderkammer.observations</code> v1<a class="headerlink" href="#observations-wunderkammerobservations-v1" title="Permanent link">&para;</a></h3>
+<p>An observation is a claim about a comparison. It points at the cells or items
+behind it rather than summarizing them.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wunderkammer.observations"</span><span class="p">,</span><span class="w"> </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">"comparison"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nt">"..."</span><span class="p">:</span><span class="w"> </span><span class="s2">"the recipe above, unchanged"</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">"observations"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jazz-falls"</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Jazz is less common in the 1990s than in the 1970s."</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="nt">"evidence"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"cells"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Jazz"</span><span class="p">,</span><span class="w"> </span><span class="nt">"cohort"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1970s"</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">                              </span><span class="p">{</span><span class="w"> </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Jazz"</span><span class="p">,</span><span class="w"> </span><span class="nt">"cohort"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1990s"</span><span class="w"> </span><span class="p">}],</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">                    </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"a1"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">}</span>
+</code></pre></div>
+<ul>
+<li><strong>The figures are computed by the page.</strong> Each cited cell's count,
+  denominator and share are taken from the same rows as the evidence export.
+  In the panel, the text is labelled as the author's and the figures as
+  computed. v1 does not parse numbers out of the text, so an authored claim
+  has no numbers of its own. State the direction and cite the cells. The size
+  is then shown by the page.</li>
+<li><strong>Limits:</strong></li>
+<li>12 observations;</li>
+<li>600 characters of text, 12 cells and 200 items per observation;</li>
+<li>ids of 1–40 letters, digits, <code>-</code> or <code>_</code>.</li>
+<li><strong>Cells:</strong> a cell's <code>cohort</code> must be one of the recipe's groups. A cell
+  without one cites its value in every group.</li>
+<li><strong>Unresolved citations are shown, never dropped.</strong> These are a value the
+  measure lacks, a group the recipe lacks, or an item outside the collection.</li>
+<li><strong>Staleness:</strong> observations apply to the comparison they were written for.
+  After the person changes it, they are shown without figures, with a button
+  back to the original comparison.</li>
+<li><strong>Delivery:</strong> two static files,
+  <code>wall/compare.html?collection=&lt;collection.json&gt;&amp;observations=&lt;observations.json&gt;</code>.
+  Once loaded, the observations travel in the page's link.</li>
+</ul>
+<h3 id="hand-back-windowwunderkammerexport">Hand-back: <code>window.wunderkammer.export()</code><a class="headerlink" href="#hand-back-windowwunderkammerexport" title="Permanent link">&para;</a></h3>
+<p>Both pages define <code>window.wunderkammer.export()</code>. Only identities and titles
+are in the packet, never notes or paths.</p>
+<ul>
+<li><strong>The wall</strong> returns <code>{ format: "wunderkammer.export", version: 1, … }</code>:</li>
+<li><code>corpus</code>;</li>
+<li><code>scope</code>: label, query, facets and branch counts;</li>
+<li><code>view</code>: mode and grouping;</li>
+<li><code>focus</code>: the focused item;</li>
+<li><code>highlight</code>: the pinned highlight with its matching keys;</li>
+<li><code>count</code> and <code>total</code>;</li>
+<li><code>evidence</code>: every in-scope item as <code>{ key, title }</code>, in corpus order.</li>
+<li><strong>The comparison page</strong> returns the evidence packet for the current
+  selection:</li>
+<li>cohorts with their denominators;</li>
+<li>rows of cells with count, share and keys;</li>
+<li><code>countingPolicy</code>, <code>coverage</code> and <code>warnings</code>;</li>
+<li>the selected items.</li>
+</ul>
+<p>For a selected observation, the packet adds <code>observation</code>, with its computed
+  figures and any unresolved citations.
+- <strong>Reading it:</strong> open the page as the top-level document in a browser the
+  agent drives, and evaluate <code>window.wunderkammer.export()</code> with the
+  page-JavaScript tool. In the Claude Code desktop app, that is the browser
+  pane's <code>javascript_tool</code>.
+- <strong>Frames:</strong> a same-origin frame can be read as
+  <code>frame.contentWindow.wunderkammer.export()</code>, but a cross-origin frame cannot.
+- <strong>Not built in 0.2.0:</strong> an <code>onSelection</code> callback through <code>mount()</code>, and a
+  "copy for the conversation" button.
+- <strong>Before acting on a packet,</strong> check that its <code>count</code> matches the scope the
+  person described. Quote identities from the packet rather than from memory
+  of the page.</p>
+<h3 id="embedding-mountelement-collection">Embedding: <code>mount(element, collection)</code><a class="headerlink" href="#embedding-mountelement-collection" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// A checkout of v0.2.0, served by the same static host as this page.</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">mount</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'./wunderkammer/wall/embed.mjs'</span><span class="p">;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kd">const</span><span class="w"> </span><span class="nx">wall</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">mount</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span><span class="w"> </span><span class="nx">collection</span><span class="p">);</span><span class="w">   </span><span class="c1">// frames ./wunderkammer/index.html</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">await</span><span class="w"> </span><span class="nx">wall</span><span class="p">.</span><span class="nx">ready</span><span class="p">;</span><span class="w">                          </span><span class="c1">// resolves on the wall's view-ready message</span>
+</code></pre></div>
+<ul>
+<li><strong><code>collection</code></strong> is an object or a URL.</li>
+<li><strong>An object</strong> is validated in the host page first, so a bad one throws a
+  <code>CollectionError</code> before any frame exists. It is then posted to the wall's
+  origin only, and validated again there.</li>
+<li><strong>A URL</strong> is fetched by the wall. If it fails, the host gets a generic error
+  and the details appear inside the frame.</li>
+<li><strong><code>wallUrl</code></strong> defaults to the wall page, <code>index.html</code> at the checkout's
+  root, one folder above <code>embed.mjs</code>. Imported from a static host, the
+  default works as it is. The module can also be imported from jsDelivr's
+  GitHub route,
+  <code>https://cdn.jsdelivr.net/gh/andyed/wunderkammer@v0.2.0/wall/embed.mjs</code>,
+  but its default is then a page served as <code>text/plain</code>. Pass
+  <code>mount(element, collection, { wallUrl })</code> with a static host's wall page.</li>
+<li><strong>Other options:</strong> <code>title</code> (the iframe's title) and <code>timeout</code> (default
+  20,000 ms).</li>
+<li><strong><code>wall.ready</code></strong> rejects on the wall's error message or on timeout.
+  <code>wall.destroy()</code> removes the frame.</li>
+</ul>
+<h2 id="loading-by-pinned-version">Loading by pinned version<a class="headerlink" href="#loading-by-pinned-version" title="Permanent link">&para;</a></h2>
+<p>Wunderkammer is released as git tags on GitHub. Pin every reference to the
+tag, <code>v0.2.0</code>: in a GitHub URL, in a jsDelivr GitHub-route URL, and as the
+checkout a static host serves. Never use a branch, <code>@latest</code>, or a
+package-registry URL. No Wunderkammer package is published, so such a URL
+fails today, and would serve someone else's code if they registered the name.</p>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>jsDelivr GitHub route (<code>cdn.jsdelivr.net/gh/andyed/wunderkammer@v0.2.0/…</code>)</th>
+<th>Static host serving a checkout of the tag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ES modules (<code>wall/embed.mjs</code>, <code>wall/collection.mjs</code>, <code>wall/observations.mjs</code>)</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>The wall (<code>index.html</code>) and <code>wall/compare.html</code>, opened or framed</td>
+<td>no: HTML is served as <code>text/plain</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Content types</strong> were checked on 2026-10-18 on the GitHub route at
+  <code>v0.1.0</code>: <code>index.html</code> and <code>wall/compare.html</code> are served as <code>text/plain</code>,
+  and <code>wall/embed.mjs</code> as <code>application/javascript</code>.</li>
+<li><strong>Where the pages are.</strong> The wall is <code>index.html</code> at the checkout's root,
+  with its assets under <code>wall/</code>: <code>&lt;host&gt;/&lt;path&gt;/index.html?collection=&lt;url&gt;</code>.
+  The comparison page is <code>wall/compare.html</code>. Both name their assets by
+  relative paths, so they work at any sub-path, such as a GitHub Pages
+  project site.
+  <a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/tests/cdn-subpath.test.mjs"><code>tests/cdn-subpath.test.mjs</code></a>
+  serves the release's files under a versioned sub-path. From there it boots
+  the wall, <code>mount()</code> with its default, and the comparison page's link back,
+  with no request leaving that path.</li>
+<li><strong>A static host:</strong> a checkout of the tag
+  (<code>git clone --branch v0.2.0 https://github.com/andyed/wunderkammer</code>, then
+  <code>npx http-server -p 8080 .</code> and <code>/?collection=&lt;url&gt;</code>), the output of
+  <code>scripts/build-demo.mjs</code>, or a wunderkammer server. All of them serve the
+  wall at <code>/</code>.</li>
+<li><strong>To try a document without hosting the wall,</strong> open the
+  <a href="https://andyed.github.io/clipwall-demo/">live demo</a> with
+  <code>?collection=&lt;url&gt;</code>, which takes precedence over the demo's own
+  collection. The document must be served with CORS. The demo is not pinned
+  to a tag, so validate for the pinned release anyway.</li>
+<li><strong>Framing from an artifact host is untested.</strong> The live demo sends no
+  <code>X-Frame-Options</code> or <code>frame-ancestors</code> header (checked 2026-10-18), so
+  framing it is governed by the host page's own content security policy. A
+  static host of your own sets its own headers.</li>
+<li><strong>Three.js</strong> 0.169.0 is loaded from jsDelivr by both pages, for the 3D
+  views (the spatial view, the aisle and the floating space) and the album
+  walls only. Without the network or WebGL, those views are withdrawn with a
+  notice. The flat wall, facets, detail pane, comparison matrix and evidence
+  list remain usable.</li>
+</ul>
+<h2 id="fallback">Fallback<a class="headerlink" href="#fallback" title="Permanent link">&para;</a></h2>
+<p>Use muriel's <a href="../examples/linked-atlas/">linked-atlas lab</a> instead of
+Wunderkammer when:</p>
+<ul>
+<li><strong>A single file is required.</strong> Wunderkammer is a wall page, its modules and
+  a collection document, with Three.js from a CDN, and it cannot be inlined
+  into one HTML file. The lab has no runtime dependencies: one page, one
+  stylesheet and three small ES modules, all of which can be inlined.</li>
+<li><strong>WebGL is unavailable and the task needs the views that use it.</strong>
+  Wunderkammer's 3D view and album walls need WebGL. Its flat wall and
+  comparison matrix do not, so check which views the task needs before
+  switching.</li>
+</ul>
+<p>The lab is drawn in SVG and HTML, and includes:</p>
+<ul>
+<li>semantic zoom with hysteresis, and an overview linked to a detail view;</li>
+<li>brushing with replace, add, subtract and intersect;</li>
+<li>summaries that show selected/total denominators;</li>
+<li>an accessible record table;</li>
+<li>undo;</li>
+<li>a read-only <code>window.linkedAtlas.snapshot()</code>.</li>
+</ul>
+<p>It is a reference implementation of the interaction contract for 192
+synthetic records, not a collection engine. It has no image tiles, document
+validator, comparison recipe or observations. Adopting it means writing those
+against its model while keeping its selection and camera semantics.</p>
+<h2 id="exploration-quality">Exploration quality<a class="headerlink" href="#exploration-quality" title="Permanent link">&para;</a></h2>
+<p>This is a critique axis for any collection page, whether Wunderkammer or a
+substitute. Each question is answered from evidence an agent can gather:</p>
+<ul>
+<li>a screenshot at fit-to-all;</li>
+<li>one after zooming into a group;</li>
+<li>one after opening and closing an item;</li>
+<li>the hand-back packet.</li>
+</ul>
+<p>Report each failure with its evidence, in
+<a href="../../../agents/muriel-critique.md"><code>muriel-critique</code></a>'s severity scale.</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Passes when</th>
+<th>Evidence</th>
+<th>Severity if it fails</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Does the overview show the collection's structure?</strong></td>
+<td>At fit-to-all, every item is on screen, grouped by an attribute that answers the person's first question, each group is labelled with its count, and the total is shown.</td>
+<td>Fit-to-all screenshot, and <code>export().total</code> against the document's item count.</td>
+<td>HIGH: for example, an ungrouped grid, or grouping by a per-item attribute such as a file name.</td>
+</tr>
+<tr>
+<td><strong>Are the facets useful, with counts?</strong></td>
+<td>Each visible facet splits the collection into two or more values, none of which covers nearly every item. Every value shows its count, with the count's meaning named (Wunderkammer: <em>In view / available</em>). Facets have readable labels (<code>ui.facetLabels</code>), and per-item identifiers are hidden.</td>
+<td>Facet-rail screenshot. For each <code>props</code> key, the number of distinct values against the number of items.</td>
+<td>MEDIUM. HIGH when counts are missing.</td>
+</tr>
+<tr>
+<td><strong>Does zoom keep orientation?</strong></td>
+<td>After zooming into a group, the group's name is still visible. The whole collection is one action away (Fit or Back). Opening and closing an item returns to the same view. A zoom limit is a no-op, not a jump.</td>
+<td>Before and after screenshots, and <code>export().scope</code> and <code>export().view</code> before and after opening an item.</td>
+<td>HIGH.</td>
+</tr>
+<tr>
+<td><strong>Can a selection be handed back?</strong></td>
+<td>The person's scope, focus and selection can be read as exact identities, the packet's count equals the count on screen, and the packet holds no notes or local paths.</td>
+<td>The hand-back packet against the on-screen count.</td>
+<td>HIGH when there is no packet or the counts disagree. CRITICAL when private fields leak.</td>
+</tr>
+<tr>
+<td><strong>Do observations cite evidence?</strong></td>
+<td>Every observation cites at least one cell or item, and none is unresolved. The text contains no figures of its own. Selecting an observation lights exactly its cited items.</td>
+<td>Observation panel, and the packet's <code>observation.figures</code> and <code>observation.unresolved</code>.</td>
+<td>CRITICAL when an authored number disagrees with the computed figure. HIGH for an observation with nothing resolvable.</td>
+</tr>
+</tbody>
+</table>
+<p>The universal rules still apply. Facet labels, counts, group titles and
+observation text are readable text under the 8:1 floor:</p>
+<ul>
+<li><strong>Wunderkammer's own audit:</strong> its facet and scope controls measured at least
+  8.528:1 against their painted backgrounds
+  (<a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/FACETING.md#implementation-verification"><code>docs/FACETING.md</code></a>).
+  That audit did not cover every text element.</li>
+<li><strong>The embedding page:</strong> run <code>python -m muriel.contrast &lt;page.html&gt;</code> on the
+  page you wrote.</li>
+<li><strong>The rest of the wall's text:</strong> measure it on a capture
+  (<code>python -m muriel.capture &lt;url&gt;</code>).</li>
+</ul>
+<h2 id="building-a-document-murielcollection">Building a document: <code>muriel.collection</code><a class="headerlink" href="#building-a-document-murielcollection" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.collection<span class="w"> </span>build<span class="w"> </span>&lt;folder<span class="p">|</span>csv&gt;<span class="w"> </span>--out<span class="w"> </span>collection.json<span class="w"> </span><span class="o">[</span>--title<span class="w"> </span>T<span class="o">]</span><span class="w"> </span><span class="o">[</span>--group<span class="w"> </span>FIELD<span class="o">]</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.collection<span class="w"> </span>validate<span class="w"> </span>collection.json<span class="w"> </span><span class="o">[</span>--release<span class="w"> </span><span class="m">0</span>.1.0<span class="o">]</span>
+</code></pre></div>
+<ul>
+<li><strong><code>build</code></strong> reads a folder of images or a CSV and writes a
+  <code>wunderkammer.collection</code> v1 document. <code>--title</code> names the collection, and
+  <code>--group</code> names the attribute the wall groups by when it opens.</li>
+<li><strong><code>validate</code></strong> follows muriel's CLI convention for exit codes:</li>
+<li>exit 0: the document is valid;</li>
+<li>exit 1: every problem is listed with its path;</li>
+<li>exit 2: nothing was read.</li>
+<li><strong>Validate before opening a browser.</strong> A collection given to a frame by URL
+  reports its problems inside the frame, not to the host. The page validates
+  again on load, and when the two validators disagree, the page's
+  (<a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/wall/collection.mjs"><code>wall/collection.mjs</code></a>)
+  is the reference.</li>
+<li><strong><code>--release</code> names the wall that will load the document.</strong> Each release
+  refuses the fields added after it. The default is 0.2.0, the release this
+  reference pins. For a 0.1.0 wall, validate with <code>--release 0.1.0</code>: it
+  refuses <code>ui.nouns</code> (what the counts call one item and several), which
+  0.2.0 added.</li>
+<li><strong>Observations need Wunderkammer's checker.</strong> <code>muriel.collection</code> validates
+  the collection document only. From a Wunderkammer checkout,
+  <code>node scripts/validate-collection.mjs collection.json --observations observations.json</code>
+  also prints the figures each claim will show and every citation that does
+  not resolve.</li>
+</ul>
+<p>A typical pass:</p>
+<ol>
+<li>Build and validate the document, then fix every listed problem.</li>
+<li>Open the wall (<code>index.html</code>) with <code>?collection=</code> and check the overview
+   against the exploration-quality axis.</li>
+<li>For a comparison, write the recipe. For claims, write observations that
+   cite cells. Open <code>wall/compare.html</code> with both.</li>
+<li>Let the person explore, then read the hand-back and quote the identities in
+   it.</li>
+</ol>
+<h2 id="anti-patterns">Anti-patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Numbers in observation text.</strong> Cite the cell, and let the page show the
+  figure.</li>
+<li><strong>A summary in place of the collection.</strong> Show the collection, and use
+  observations as pointers into it.</li>
+<li><strong><code>@latest</code>, a branch URL, a package-registry URL, or the wall page from
+  jsDelivr.</strong> Pin the tag, and serve HTML from a static host.</li>
+<li><strong>HTML in <code>note</code> or <code>title</code>.</strong> It is shown as literal text.</li>
+<li><strong>Treating the hand-back as the person's conclusion.</strong> It records what they
+  selected, not what they concluded from it.</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

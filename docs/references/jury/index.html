@@ -1,0 +1,2878 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A design skill for coding agents: fifteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/references/jury/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Jury — panel judgement for contested visual decisions - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#jury-panel-judgement-for-contested-visual-decisions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Jury — panel judgement for contested visual decisions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/andyed/muriel" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    andyed/muriel
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/andyed/muriel" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    andyed/muriel
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zooming-interfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zooming user interfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faceted-exploration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faceted exploration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-coordination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Semantic zoom & linked displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-adapters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/linked-atlas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linked Atlas lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/showcase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Showcase — featured work ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gallery — all channels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live spatial demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="jury-panel-judgement-for-contested-visual-decisions">Jury — panel judgement for contested visual decisions<a class="headerlink" href="#jury-panel-judgement-for-contested-visual-decisions" title="Permanent link">&para;</a></h1>
+<p>Use this reference when one critic is not enough and averaging several critics
+would be worse than either. A jury ranks materially different directions and
+widens defect coverage. It does not produce a more confident number.</p>
+<p>Muriel convenes the panel. She is not on it. SKILL.md makes her a visual
+collaborator, not a detached critic; the jury is a body she summons, and its
+finding is evidence she carries back into the build. The calling agent still
+owns product truth.</p>
+<h2 id="contents">Contents<a class="headerlink" href="#contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#load-gate">Load gate</a></li>
+<li><a href="#jurisdiction">Jurisdiction</a></li>
+<li><a href="#two-bodies-two-aggregation-rules">Two bodies, two aggregation rules</a></li>
+<li><a href="#seat-definition">Seat definition</a></li>
+<li><a href="#the-roster">The roster</a></li>
+<li><a href="#ballot-mechanics">Ballot mechanics</a></li>
+<li><a href="#the-sealed-round">The sealed round</a></li>
+<li><a href="#splits-are-the-product">Splits are the product</a></li>
+<li><a href="#delphi-round">Delphi round</a></li>
+<li><a href="#the-ledger">The ledger</a></li>
+<li><a href="#unanimity-smell-test">Unanimity smell test</a></li>
+<li><a href="#the-chair">The chair</a></li>
+<li><a href="#worked-example">Worked example</a></li>
+<li><a href="#naming-decisions">Naming decisions</a></li>
+<li><a href="#anti-patterns">Anti-patterns</a></li>
+<li><a href="#prior-art">Prior art</a></li>
+</ol>
+<h2 id="load-gate">Load gate<a class="headerlink" href="#load-gate" title="Permanent link">&para;</a></h2>
+<p>Load when all three hold. <strong>Contested</strong> — the question survives after the
+deterministic checks ran and their results were stipulated. <strong>Consequential</strong> —
+the answer changes implementation, not decoration; Compare-mode direction
+selection is the clearest earn. <strong>Committed</strong> — the artifact enters a repo,
+paper, published page, or shipped surface this session.</p>
+<p><strong>Cost is per seat per option, not per panel.</strong> Budget one critique per seat
+per option, plus that seat's lens cost: the Squinter renders a four-level blur
+ladder per option, the Thumbnail reads two downscales per option, the Forger
+<em>builds</em> a forgery per option it audits. A three-seat panel on one artifact is
+roughly 4-6× a single critique. The five-seat, three-option panel in the worked
+example below is 15-25×. Scale the gate to that number, not to a flat 5×.</p>
+<p>Do <strong>not</strong> load for: a test render or intermediate frame; anything a compute
+tool answers; a settled direction needing only execution notes; backend, body
+copy, or spacing work; a decision the calling agent has made and only wants
+ratified. A name is the one non-visual decision in scope; see <a href="#naming-decisions">Naming
+decisions</a>.
+A single artifact with no alternatives is out of scope <strong>only when its premise
+is settled</strong> — run <a href="../../../agents/muriel-critique.md"><code>muriel-critique</code></a>
+alone. A single artifact whose premise is contested is in scope, and votes on
+the single-artifact ballot defined under <a href="#ballot-mechanics">Ballot
+mechanics</a>. When in doubt, run one critic: one with a clean
+ledger beats five with correlated priors.</p>
+<h2 id="jurisdiction">Jurisdiction<a class="headerlink" href="#jurisdiction" title="Permanent link">&para;</a></h2>
+<p>The jury may not rule on facts. <strong>Findings of fact</strong> come from deterministic
+tooling and enter as stipulated evidence, never as motions:</p>
+<ul>
+<li><code>python -m muriel.contrast &lt;file.svg&gt;</code> — WCAG ratios per text pair;</li>
+<li><code>python -m muriel.oklch &lt;color&gt;</code> — sRGB / OKLCH / in-gamut;</li>
+<li><code>python -m muriel.devibe &lt;path&gt;</code> — AI-default design tells by regex over
+  source: untouched shadcn/Tailwind defaults, AI-purple as primary, gradient
+  headings, purple-to-blue gradients, neon glow, emoji-as-icons, the centred
+  hero + three-feature-card skeleton;</li>
+<li>recorded seeds, dimensions, and export paths;</li>
+<li><strong>conditional, may return nothing</strong> —
+  <code>python -m muriel.tools.impeccable_bridge &lt;path&gt;</code> is a no-op when Node, npx,
+  or the third-party <code>impeccable</code> CLI is absent, and degrades silently; the
+  polish-rule regex checks (hit-area minimum, <code>transition: all</code>,
+  <code>will-change: all</code>, missing <code>tabular-nums</code>, <code>scale &lt; 0.95</code> press) are <strong>not
+  built</strong> — they are a queued TODO item. A source that produced no output is
+  not a stipulated clean bill. Record it as unavailable, and the question stays
+  in jury jurisdiction rather than being struck.</li>
+</ul>
+<p><strong>"Is this measurable?" depends on the substrate.</strong> <code>devibe</code> reads HTML, CSS,
+JSX, and SVG source and is decisive there; it is silent on a raster, a PDF, or
+a screenshot, where there is no source to scan. Scope the Forger accordingly:
+when the artifact has scannable source, <code>devibe</code>'s tell list is stipulated fact
+and a Forger ballot claiming any of it is struck as <code>noise</code>; the Forger's
+jurisdiction is what survives the scan — whether the <em>composition</em> is
+reproducible from a generic template, which no regex answers. When the artifact
+is a raster, the whole tell list returns to the Forger.</p>
+<p>A juror may not vote a measured contrast failure down to "fine, it's
+decorative." The 8:1 floor on readable text is on no ballot, in no round, under
+no severity discount. Reproducibility is the same: a missing seed is a fact,
+and facts are repaired, not debated.</p>
+<p><strong>Jury jurisdiction</strong> is only the genuinely contested: composition and focal
+dominance; hierarchy and reading order; which of N directions earns
+implementation; brand voice; whether an encoding earns its complexity; whether
+the framing itself is wrong. The chair's first duty is kicking measurable
+questions back to the compute tools. A ballot claim a tool could have settled
+is struck, the tool is re-run, and the strike is logged as <code>noise</code>.</p>
+<h2 id="two-bodies-two-aggregation-rules">Two bodies, two aggregation rules<a class="headerlink" href="#two-bodies-two-aggregation-rules" title="Permanent link">&para;</a></h2>
+<p>One panel, two jobs, two rules. Never mix them.</p>
+<table>
+<thead>
+<tr>
+<th>Body</th>
+<th>Question</th>
+<th>Aggregation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Defect finding</strong></td>
+<td>What is wrong here?</td>
+<td>Union, max severity, no vote</td>
+</tr>
+<tr>
+<td><strong>Direction selection</strong></td>
+<td>Which earns build?</td>
+<td>Comparative, split reported</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Defect finding — worst critic wins.</strong> Union every seat's findings; where two
+name the same defect, keep the higher severity. Nobody votes a defect away,
+because the loss is asymmetric: a false positive costs one wasted fix, a false
+negative ships. Severity vocabulary is <code>CRITICAL | HIGH | MEDIUM | LOW</code>,
+identical to
+<a href="../../../agents/muriel-critique.md"><code>agents/muriel-critique.md</code></a>, and the
+rollup is unchanged — any CRITICAL → FAIL, any HIGH → NEEDS REVISION,
+MEDIUM/LOW only → PASS.</p>
+<p><strong>Direction selection — the jury proper.</strong> There is no "worst" when ranking
+viable options, so worst-case aggregation is meaningless. Use comparative
+judgement, report the ranking with its scale values, report the split. A seat
+may serve both bodies in one sitting; the chair routes each half of its ballot
+to its own rule.</p>
+<p><strong>A CRITICAL does not eliminate an option from the ranking.</strong> This is the one
+place the bodies touch, so the rule is normative here and not inferable from an
+example. A CRITICAL sets that option's <em>verdict</em> to FAIL, which gates
+committing it; the comparative ranking is computed over every option that was
+seated, including that one. The winner ships only after its CRITICALs are
+repaired and the re-render confirms the repair.</p>
+<p>The single exception: a CRITICAL is <strong>form-fatal</strong> when its <code>fix</code> cannot be
+applied without turning the option into a different option — the fix changes
+the encoding, not the execution. A form-fatal CRITICAL eliminates the option;
+the chair drops it and recomputes the ranking over the remainder, and records
+which finding was form-fatal.</p>
+<p>Why this rule and not elimination-on-any-CRITICAL. Elimination lets one seat
+veto the comparative body: a single repairable defect on the Bradley-Terry
+winner would hand the build to the runner-up, which is a defect-finding seat
+deciding direction selection. The two bodies answer different questions —
+"what is wrong here" and "which form earns build" — and a repairable defect
+is evidence about the first, not the second. The form-fatal carve-out is
+where the defect genuinely <em>is</em> evidence about the form, and it is narrow on
+purpose: the chair must be able to name the encoding change the fix requires.</p>
+<p>In a naming sitting the option is the string, so a Forger CRITICAL is
+form-fatal every time and the carve-out stops being narrow. There the chair
+reports the ranking with and without the elimination instead; see <a href="#rule-b-no-forger-veto">Rule (b):
+no Forger veto</a>.</p>
+<p><strong>A jury and <code>muriel-critique</code> are mutually exclusive.</strong> Run one or the other
+on an artifact, never both.
+<a href="../../../agents/muriel-critique.md"><code>muriel-critique</code></a> is a generalist whose
+coverage overlaps four of the five seats — hierarchy (Squinter), the
+numeric-claim probe list (Pedant, which this reference delegates back to it),
+AI-tell (Forger), and multi-scale evaluation (Thumbnail). Under union
+aggregation, running both double-counts by construction: the same defect
+arrives twice from correlated estimators and looks like corroboration.</p>
+<h2 id="seat-definition">Seat definition<a class="headerlink" href="#seat-definition" title="Permanent link">&para;</a></h2>
+<p>N copies of one critic is not a jury. Same base model, same priors, correlated
+errors — you paid per seat per option for noise reduction on a biased
+estimator. Prompt flavor
+("harsh critic", "warm critic") changes tone, not the loss function, and
+decorrelates nothing. A seat is three things, all stated when it is defined:</p>
+<ul>
+<li><strong>Lens</strong> — the transformation applied before the seat sees the artifact. The
+  real source of diversity: it changes the input, not the prompt.</li>
+<li><strong>Loss function</strong> — what it optimizes against, and so what it is willing to
+  be wrong about.</li>
+<li><strong>Evidence access</strong> — what it may see, <em>including what it is denied</em>. A seat
+  that read the brief and one that did not are different estimators.</li>
+</ul>
+<p>Two seats sharing a lens and a loss function are one seat. Cut one.</p>
+<h2 id="the-roster">The roster<a class="headerlink" href="#the-roster" title="Permanent link">&para;</a></h2>
+<p>Five seats, all five shipped as agents. Seat them as subagents. Running one
+inline as a scripted prompt is a weaker thing than seating it — say so on the
+ballot rather than pretending otherwise.</p>
+<p><strong>Evidence denial requires context isolation, and only a subagent provides
+it.</strong> A scripted prompt runs inside the chair's context. Anything the chair has
+read — the brief, the option set, an unsealed ballot — is available to the
+model producing that "seat's" output whether or not the prompt mentions it. The
+denial is nominal: it is an instruction not to use evidence, not an absence of
+evidence. Every ballot therefore carries <code>Isolation</code>, and an inline seat may
+not be the sole source of a CRITICAL. Its findings still enter the union at
+HIGH or below; promoting one to CRITICAL needs a second seat naming the same
+defect.</p>
+<p><strong>The Stranger may never be scripted inline.</strong> It is the only seat defined by
+denial of the brief. Run inside a context that has already read the brief, it
+is the chair's own opinion wearing a persona — the exact failure the seat
+exists to prevent, and worse than not seating it, because the ballot claims an
+independence it does not have. It ships as a subagent and enforces this at its
+own boundary: it audits its invocation for briefing material and aborts rather
+than filing a contaminated ballot. If it aborts, reseat it cleanly or record
+the Stranger as unseated. Do not argue with the abort.</p>
+<p><strong>The Squinter — SHIPPED as an agent.</strong> <em>Lens:</em> heavy Gaussian blur (sigma ≈ 2%
+of the long edge), plus a luminance-only pass. <em>Loss:</em> misses in hierarchy;
+willing to be wrong about detail it can no longer see. <em>Access:</em> blurred
+renders only; denied the sharp artifact, all text, the brief. <em>Judges:</em> focal
+dominance, reading order, figure/ground, whether the composition has one center
+of mass or three. The actual test for hierarchy, not a proxy, and the blur is
+deterministic, so the lens replays.</p>
+<p><strong>The Thumbnail — SHIPPED as an agent.</strong> <em>Lens:</em> the artifact at 1/8 scale, at
+16 px, and at 16 px zoomed 8× for inspection — the three downscale companions
+<code>muriel.squint</code> already writes on every run, so the lens replays. <em>Loss:</em>
+misses in scale survival. <em>Access:</em> downscaled renders plus the intended use
+sizes; denied the full-size render and the blur ladder. <em>Judges:</em> whether the
+primary signal survives an OG preview, favicon, slide thumbnail, or paper
+figure at column width.</p>
+<p>It is not a smaller Squinter, and the distinction is what keeps the two seats
+from correlating. Blur preserves position and area while removing high spatial
+frequency, so a large pale mass survives <code>heavy</code> intact. Downscale destroys
+sub-pixel features outright — hairlines, thin strokes, small type — and
+aliasing invents structure that was never in the source. An artifact can pass
+the hierarchy test cleanly and die at 16 px, and the reverse.</p>
+<p><strong>The Stranger — SHIPPED as an agent; never seat it inline.</strong> <em>Lens:</em> a
+single <code>Read</code> of the artifact, no re-read, followed by three questions answered
+from that one pass — what is this for, what is the one number, where do I
+click. <em>Loss:</em> misses in premise; willing to be wrong about execution entirely.
+<em>Access:</em> one pass over the artifact; <strong>the brief is withheld from the
+invocation</strong>, as are the option set, every other ballot, and project context.
+The only seat that can catch that the panel is grading the wrong thing well,
+because every other seat is anchored to the brief. Fails on premise, not
+execution.</p>
+<p>The earlier form of this lens — "5-second exposure, then the artifact is
+withdrawn" — is unexecutable in any harness and was replaced. You cannot
+withdraw an image from a model's context, and a model has no exposure duration;
+a prompt saying "you saw this for five seconds" is a costume. Single-read,
+no-re-read, brief-withheld is the executable version of the same denial, and it
+is enforceable only across a subagent boundary.</p>
+<p><strong>What the Stranger actually measures.</strong> It is not a naive human. It shares a
+base model with every other seat, so isolation removes brief anchoring and does
+nothing about model priors, training-set familiarity, or genre knowledge. Its
+ballot reports what this model concludes from the artifact alone — a real and
+otherwise-unavailable signal, and not the same as first-time human
+comprehension. Its ballot therefore carries a mandatory <code>Prior strength</code> line:
+<code>high</code> where the model has strong genre priors (a bar chart, a login form),
+<code>low</code> where the artifact is novel enough that the reading approaches first
+contact. Weight the seat by that line. Do not let a quiet Stranger on a
+familiar genre be read as evidence that real strangers will understand it.</p>
+<p><strong>The Forger — SHIPPED as an agent.</strong> <em>Lens:</em> none on input; the lens is on
+output. The seat asserts "I can reproduce this from a generic template in four
+minutes," then <em>actually attempts it</em> and reports how close it got. <em>Loss:</em>
+misses in distinctiveness. <em>Access:</em> the artifact and a generic component
+library; denied the brand tokens, so it cannot cheat by copying them. Converts
+the anti-slop check from rubric to proof obligation: "this looks generic" is
+unfalsifiable, "here is the forgery, 4 minutes, differs only in accent hue" is
+not. <em>Reports:</em> elapsed time, forgery path, and a named list of what it could
+not reproduce. An empty list is CRITICAL.</p>
+<p><strong>The Pedant — SHIPPED as an agent.</strong> <em>Lens:</em> text extraction only — labels,
+legend entries, ticks, captions, units, callouts, flattened with source
+locations. <em>Loss:</em> misses in labeling. <em>Access:</em> extracted text plus any
+sibling data file; denied the rendered composition, so a handsome layout cannot
+charm it. <em>Judges:</em> unlabeled numbers, missing units, terminology drift between
+legend and caption; applies the numeric-claim probe list from
+<a href="../../../agents/muriel-critique.md"><code>agents/muriel-critique.md</code></a>
+exhaustively. Unglamorous, highest hit rate of the five — most shipped defects
+are a missing unit, not a broken layout.</p>
+<p><strong>Its denial depends on substrate, and the ballot must say which it got.</strong> On
+source artifacts — SVG, HTML, Markdown, LaTeX, a plotting script — the denial
+is real: the seat greps text nodes and never reads the render. On rasters there
+is no OCR path that returns strings (<code>muriel.detectors.text</code> returns bounding
+boxes only and is not a subcommand), so either the chair supplies extracted
+text and the denial holds, or the seat reads the raster itself and records
+<code>Isolation: subagent (denial partial — raster read)</code>. Its findings stay valid
+either way; the claim of compositional blindness does not.</p>
+<p>Note also that its probe list comes from <code>muriel-critique</code>, which is why the
+two bodies may not both run — see <a href="#two-bodies-two-aggregation-rules">Two bodies, two aggregation
+rules</a>.</p>
+<h2 id="ballot-mechanics">Ballot mechanics<a class="headerlink" href="#ballot-mechanics" title="Permanent link">&para;</a></h2>
+<p><strong>Randomize option order per juror.</strong> LLM judges have strong position bias;
+first and last presented options are systematically advantaged. Cheapest
+available fix, and where most naive panels leak. Derive the permutation from a
+<strong>named digest, per seat</strong>, so the panel replays:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'%s'</span><span class="w"> </span><span class="s2">"&lt;decisionId&gt;&lt;seatId&gt;"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>shasum
+</code></pre></div>
+<p>Read the hex digest left to right, two characters at a time, and use each byte
+to pick the next option out of the remaining list (<code>byte % remaining</code>). Record
+the result as <code>Order seen</code>. A ballot without <code>Order seen</code> is invalid. Do not
+substitute a language-level hash — Python's <code>hash()</code> is salted per process, so
+it does not replay across sessions, which is the entire point.</p>
+<p><strong>Comparative judgement over absolute scoring whenever there are options.</strong>
+Absolute LLM scores are range-restricted — nearly everything lands 6-8/10 — and
+badly calibrated across sessions. Pairwise forced choice builds a scale out of
+binary decisions and yields an inter-rater reliability statistic for free. Run
+the full pairwise set when N is 4 or fewer (6 comparisons per seat at most);
+sample above that. Fit Bradley-Terry over the pooled comparisons for the
+ranking.</p>
+<p><strong>Two statistics, both raw proportions the chair computes by counting.</strong> The
+chair is an LLM with no fitting library; anything it cannot get by tallying the
+ballots will not be computed. Bradley-Terry strengths are reported for the
+ranking, but neither threshold below is defined on them, because a strength
+means three different things under sum-to-one, log-odds, and probability
+normalization.</p>
+<ul>
+<li><strong>Separation</strong> — <code>P(top1 &gt; top2)</code>, from the pooled pairwise tally: count the
+  comparisons between the top two options across all seats, divide the wins
+  for the higher-ranked option by the number of non-tied comparisons between
+  them. 0.50 is a coin flip; 1.00 is unanimous.</li>
+<li><strong>Concordance</strong> — the fraction of agreeing seat-pair judgements. For every
+  unordered pair of seats and every option pair, score 1 when both seats gave
+  the same strict judgement or both tied, 0.5 when exactly one of them tied,
+  and 0 when they chose opposite options. Divide by (seat pairs × option
+  pairs). This is the reliability figure.</li>
+</ul>
+<p><strong>Reasoning before the vote.</strong> The ballot emits reasoning <em>above</em> its
+comparisons, ranking, and ship decision. A vote written first anchors the
+rationale that follows, and you get justification, not judgement.</p>
+<p><strong>Single artifact, no alternatives.</strong> In scope when the artifact's premise is
+contested; see <a href="#load-gate">Load gate</a>. Do not fake a comparison. Require a
+forced rank of the issues — no ties, which stops a seat calling everything
+equally critical — plus one binary ship call <strong>scoped to that seat's own loss
+function</strong>. Binary decisions carry more than five absolute scores clustered
+at 7. <code>Ship (this seat's loss only)</code> is not a panel ship decision and never
+aggregates into one: the Squinter answering <code>no</code> means hierarchy fails, not
+that the artifact is blocked. The chair reports the spread of these binaries as
+part of the split; it does not tally them into a verdict.</p>
+<p>Every juror agent emits exactly this block and nothing outside it:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Juror ballot
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Seat: &lt;squinter | thumbnail | stranger | forger | pedant&gt;
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Decision ID: &lt;stable task-local id&gt;
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>Isolation: subagent | inline (denial nominal)
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>Order seen: &lt;option ids, in the order presented&gt;
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Evidence seen: &lt;what this seat was given&gt;
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>Evidence denied: &lt;what this seat was refused&gt;
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>Reasoning: &lt;prose; must precede Pairwise, Ranking, Issue rank, Ship&gt;
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>Pairwise: &lt;A&gt;B, C&gt;A, B~C&gt;          (omit if no alternatives)
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>Ranking: &lt;option ids, best first&gt;  (omit if no alternatives)
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>Findings:
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  - id: &lt;seat-local id&gt;
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    target: &lt;option id or "artifact"&gt;
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    rule: &lt;named rule or framework&gt;
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    severity: CRITICAL | HIGH | MEDIUM | LOW
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    evidence: &lt;concrete: where, what, measured or observed&gt;
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    fix: &lt;one sentence, actionable&gt;
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    form_fatal: yes | no    (required on CRITICAL; see Two bodies)
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>Issue rank: &lt;finding ids, worst first, no ties&gt;  (single-artifact only)
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>Ship (this seat's loss only): yes | no           (single-artifact only)
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>Confidence: low | medium | high
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>Recused: &lt;criteria this seat did not judge&gt;
+</code></pre></div>
+<p><code>Recused</code> is mandatory and non-empty for any seat whose access denies it
+something. The Squinter recuses from typography; the Pedant from composition. A
+seat that recuses from nothing is a generalist, and it will correlate with
+every other generalist. <code>Isolation</code> is mandatory on every ballot: <code>subagent</code>
+only when the seat ran in its own context, <code>inline (denial nominal)</code> otherwise.
+A seat that reports <code>subagent</code> while running as a scripted prompt in the
+chair's context is the one lie this format cannot survive.</p>
+<h2 id="the-sealed-round">The sealed round<a class="headerlink" href="#the-sealed-round" title="Permanent link">&para;</a></h2>
+<p>Round 1 ballots are sealed. Jurors do not see each other's ballots, a running
+tally, or the panel size. Break this and the panel measures conformity, and
+round 2 has no baseline. The chair unseals all ballots at once, after the last
+lands, and never summarizes round 1 to a juror still voting.</p>
+<h2 id="splits-are-the-product">Splits are the product<a class="headerlink" href="#splits-are-the-product" title="Permanent link">&para;</a></h2>
+<p>Averaging jurors destroys the only thing a panel uniquely produces. A mean of
+five rankings is a number; the disagreement behind it is a design finding.
+Where the panel splits, that split <strong>is</strong> the unsettled decision — which is
+muriel's whole remit. Report it, name what each side optimizes for, hand it up:</p>
+<blockquote>
+<p>Reader and implementer split on the disclosure control. Reader optimizes
+discoverability, wants always-visible. Implementer optimizes density,
+wants hover. This is a product call, not a visual one.</p>
+</blockquote>
+<p>That returns cleanly to muriel's boundary: the calling agent owns product
+truth. A jury resolving this by fiat oversteps the skill's contract. Report a
+split when any of these six hold:</p>
+<ol>
+<li>Two seats rank the top option differently.</li>
+<li>One seat's top option is another's bottom option.</li>
+<li>Separation between the top two is under 0.65 — <code>P(top1 &gt; top2)</code> from the
+   pooled pairwise tally, as defined under <a href="#ballot-mechanics">Ballot
+   mechanics</a>.</li>
+<li>One seat's <code>Ship (this seat's loss only): no</code> contradicts a majority <code>yes</code>.</li>
+<li><strong>Two seats' fixes on the same target are mutually exclusive</strong> — applying
+   one makes the other impossible.</li>
+<li><strong>Naming sittings only: the two rankings disagree.</strong> The ranking over every
+   seated option and the ranking after form-fatal eliminations put different
+   options first. See <a href="#rule-b-no-forger-veto">Rule (b): no Forger veto</a>.</li>
+</ol>
+<p>The split report names, per side: the seats, the favored option, the loss
+function driving it, and the product question that would resolve it. It names
+no winner.</p>
+<p><strong>Trigger 5 is how the panel acquits a correct form.</strong> Union aggregation has no
+acquittal by itself: every finding survives, so a form both seats attack from
+opposite directions collects both attacks and fails. Concrete case — a Tufte
+small-multiples grid. The Squinter fires HIGH, "no mass dominates," and its fix
+is to break the grid by scaling tiles. The Forger fires HIGH, "equal-weight
+tiles are counterfeit stock," and its fix is to make the tiles more distinctive
+per-tile. Meanwhile the form is correct: uniform tiles carrying one variable
+each is what small multiples <em>are</em>, and the equality is the encoding.</p>
+<p>Under union-max both findings ship, the rollup reads NEEDS REVISION, and a
+chair forbidden a preference cannot say the form is right. Under trigger 5
+the chair checks the fixes before the union, finds them mutually exclusive, and
+routes both findings to the split report instead of the defect union. The
+output becomes: two seats attack this form from opposite sides, one wants less
+uniformity and one wants more, and neither fix can be applied without defeating
+the other. That is a legible acquittal — it says the form is answering to a
+constraint neither seat holds — and the chair reaches it by a mechanical test,
+not by holding an opinion.</p>
+<p>Route to the split, do not merge, and do not let either finding also enter the
+union. A finding routed to a split is recorded in the ledger with the
+disposition it later earns, exactly as a union finding is.</p>
+<h2 id="delphi-round">Delphi round<a class="headerlink" href="#delphi-round" title="Permanent link">&para;</a></h2>
+<p>Optional. Run one only when the split blocks a commit that must happen this
+session. Unseal round 1, show every juror the full split — all ballots, all
+reasoning — allow revision, and <strong>record who moved</strong>. A revised ballot carries
+two extra lines: <code>Moved: yes | no</code> and <code>Moved because: &lt;the specific evidence
+in another ballot that changed it&gt;</code>.</p>
+<p>Movement toward the most confident or most verbose juror is a failure mode, not
+consensus. If a seat moves and cannot name specific evidence in another ballot,
+the chair discards the revision and keeps round 1. Three or more seats moving
+in one round is a cascade: report round 1 as the finding and record the
+cascade. Convergence is not the goal — a split that survives round 2 with both
+sides stating their loss functions more sharply beats a unanimous round 2.</p>
+<h2 id="the-ledger">The ledger<a class="headerlink" href="#the-ledger" title="Permanent link">&para;</a></h2>
+<p>Severity inflation is the failure mode that kills harsh-critic systems. If
+brutality is the reward, everything becomes CRITICAL, the scale collapses, and
+under any-CRITICAL → FAIL the panel fails everything and carries zero bits.
+Harshness is also cheap and usually unfalsifiable — "this lacks conviction" can
+never be wrong. The antidote is scoring each seat against what happened next.</p>
+<p><strong>Disposition vocabulary</strong> — three resolved values plus one open. <code>hit</code>: fixed
+<strong>and</strong> the re-render confirms it. <code>miss</code>: the human dismissed it with a stated
+reason. <code>noise</code>: nobody could act on it, or the chair struck it for straying
+into findings of fact. <code>open</code>: unresolved, excluded from all rates.</p>
+<p><strong>The transition point is the re-render, and it has an owner.</strong> Every finding
+is emitted <code>open</code>. It leaves <code>open</code> at exactly one moment: when the artifact is
+re-rendered after the fix pass — the Muriel delta. The agent owning that fix
+pass writes the disposition, one per finding, at that re-render: <code>hit</code> if the
+re-render shows the defect gone, <code>miss</code> if the human declined the fix and said
+why, <code>open</code> if the finding was neither fixed nor declined. There is one
+exception with a different owner and an earlier moment: the chair writes
+<code>noise</code> at strike time, during the sitting, because a struck claim needs no
+re-render to be resolved. Without a named moment and a named owner, everything
+stays <code>open</code> forever, <code>open</code> is excluded from every rate, and the trailing-20
+threshold below can never trip even in principle.</p>
+<p><strong>Record shape.</strong> One record per finding, versioned, emitted beside the
+existing <code>muriel.design</code> trace and sharing its <code>decisionId</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span><span class="nt">"kind"</span><span class="p">:</span><span class="s2">"muriel.jury.finding"</span><span class="p">,</span><span class="nt">"version"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nt">"decisionId"</span><span class="p">:</span><span class="s2">"…"</span><span class="p">,</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w"> </span><span class="nt">"seat"</span><span class="p">:</span><span class="s2">"squinter"</span><span class="p">,</span><span class="nt">"findingId"</span><span class="p">:</span><span class="s2">"…"</span><span class="p">,</span><span class="nt">"rule"</span><span class="p">:</span><span class="s2">"…"</span><span class="p">,</span><span class="nt">"target"</span><span class="p">:</span><span class="s2">"…"</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w"> </span><span class="nt">"claimedSeverity"</span><span class="p">:</span><span class="s2">"CRITICAL"</span><span class="p">,</span><span class="nt">"effectiveSeverity"</span><span class="p">:</span><span class="s2">"HIGH"</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w"> </span><span class="nt">"disposition"</span><span class="p">:</span><span class="s2">"hit|miss|noise|open"</span><span class="p">,</span><span class="nt">"dispositionReason"</span><span class="p">:</span><span class="s2">"…"</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w"> </span><span class="nt">"proof"</span><span class="p">:</span><span class="s2">"…"</span><span class="p">,</span><span class="nt">"recordedAt"</span><span class="p">:</span><span class="s2">"…"</span><span class="p">}</span>
+</code></pre></div>
+<p><code>claimedSeverity</code> is recorded verbatim so any discount is auditable. <code>proof</code> is
+the render, test, or capture that confirms a <code>hit</code>. <code>dispositionReason</code> is
+required for <code>miss</code> and <code>noise</code> and must be the human's stated reason, not the
+chair's paraphrase.</p>
+<p><strong>Where it lands.</strong> A schema, not infrastructure. Do not build storage for it.
+It is the finding-level child of the TODO item <em>"Effectiveness observability —
+make the Muriel delta measurable"</em>, and it maps onto Session Cartographer's
+proposed generic <code>skill_outcome</code> event: <code>kind</code> → event type, <code>decisionId</code> →
+correlation key, <code>disposition</code> → outcome, <code>proof</code> → verification reference.
+Persist only where an authorized event-log sink already exists, on the same
+terms as <code>design-synthesis.md</code>'s trace: no telemetry dependency added merely to
+emit a record, no reasoning exposed.</p>
+<p><strong>Scoring rule</strong>, over a seat's trailing 20 <em>resolved</em> findings. <code>miss</code> does
+not count against a seat:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>precision       = hit  / (hit + noise)
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>noise_rate      = noise / (hit + miss + noise)
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>dismissal_rate  = miss  / (hit + miss + noise)     reported, never penalised
+</code></pre></div>
+<p>The earlier form put <code>miss</code> in the precision denominator, which made a seat's
+standing a function of human agreement: "the human dismissed it with a stated
+reason" scored identically to "nobody could act on it." Those are different
+events. A correct-but-unwelcome finding is the first and scored as the second,
+so the seat most exposed was the Stranger, whose entire job is to produce the
+finding a team dismisses — the panel would have unseated its only check on
+grading the wrong thing well. <code>noise</code> is the actual slop signal: nobody could
+act on it, or it belonged to a tool. Score that; record <code>miss</code> and report
+<code>dismissal_rate</code> beside precision so a human can see a seat generating
+dismissals without the system acting on it.</p>
+<p>The tradeoff, stated plainly: excluding <code>miss</code> means a seat that produces many
+dismissed findings pays nothing for the reviewer's time it consumes, and
+<code>dismissal_rate</code> is visible but toothless. That is the price of not letting the
+panel converge on agreeable findings, and it is the cheaper error.</p>
+<p><strong>Pre-ledger defense — one CRITICAL per seat per artifact.</strong> Nothing writes
+the ledger yet, so no seat has 20 resolved findings, so the discount table's
+first row applies to every sitting and no discount engages. Until a sink
+exists, the cap is the whole defense against severity inflation: a seat may
+claim <strong>at most one CRITICAL per artifact</strong>, and it must be the finding it
+ranks first. A second CRITICAL from the same seat is recorded at HIGH with
+<code>claimedSeverity: CRITICAL</code> preserved, so the ledger sees the inflation when it
+comes online. This is crude and deliberately so — it forces the seat to spend
+its one veto on its best finding, which is exactly the discipline the ledger
+buys once it can measure. Inline-seated seats are additionally barred from
+being the sole source of a CRITICAL; see <a href="#the-roster">The roster</a>.</p>
+<p><strong>Discount rule</strong>, applied by the chair when setting <code>effectiveSeverity</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fewer than 20 resolved</td>
+<td>face value, <code>provisional</code>; CRITICAL cap in force</td>
+</tr>
+<tr>
+<td><code>noise_rate &gt; 0.30</code></td>
+<td><code>effectiveSeverity</code> capped at HIGH</td>
+</tr>
+<tr>
+<td><code>noise_rate &gt; 0.50</code></td>
+<td><code>effectiveSeverity</code> capped at MEDIUM</td>
+</tr>
+<tr>
+<td><code>precision &lt; 0.25</code>, 20+ resolved</td>
+<td>unseated: recorded, never aggregated</td>
+</tr>
+</tbody>
+</table>
+<p>A capped seat can no longer trigger FAIL on its own; an unseated seat is
+reinstated only manually. This is what makes "worst critic wins" principled
+rather than merely loud: standing goes to the seat with the highest precision
+at an acceptable <code>noise_rate</code>, and a seat that shouts gets quieter
+automatically. Recall is deliberately not part of standing — the record shape
+has no false-negative field and the disposition enum has no value for a defect
+a seat failed to raise, so a recall figure would be uncomputable from what this
+schema stores. Findings of fact are exempt — they were never the jury's to
+claim.</p>
+<h2 id="unanimity-smell-test">Unanimity smell test<a class="headerlink" href="#unanimity-smell-test" title="Permanent link">&para;</a></h2>
+<p>If the panel agrees on everything, it is one juror wearing hats. Cut to one
+critic and save the tokens. Check both after unsealing round 1:</p>
+<ul>
+<li><strong>Concordance</strong> at or above 0.90, computed as defined under <a href="#ballot-mechanics">Ballot
+  mechanics</a>.</li>
+<li><strong>Unique contribution</strong> — fewer than half the seats, rounded up, produced a
+  finding or comparison judgement no other seat produced. That is 2 of 3, 2 of
+  4, 3 of 5. The old absolute "fewer than 2 of N" was far stricter at N=3 than
+  at N=5, so a three-seat panel could pass a test a five-seat panel failed on
+  the same proportion of unique contributors.</li>
+</ul>
+<p>If either trips, record <code>panelCollapsed: true</code> with the tripped condition, ship
+the strongest single ballot as the finding, and do not convene that seat
+combination again for that artifact class until a seat's lens or evidence
+access changes. Adding a personality is not a change.</p>
+<p><strong>"Strongest" is mechanical, because the chair holds no preference.</strong> Rank the
+ballots by: (1) count of findings no other seat produced, most first; (2)
+fewest claims struck as <code>noise</code> this sitting; (3) lowest <code>noise_rate</code> in the
+ledger, seats without 20 resolved findings ranking last. Ship the top ballot.
+If two ballots tie through all three, ship both unmerged and say they tied —
+that is still not a preference.</p>
+<h2 id="the-chair">The chair<a class="headerlink" href="#the-chair" title="Permanent link">&para;</a></h2>
+<p>The chair is <strong>not</strong> a juror. It casts no ballot, breaks no tie by preference,
+and contributes no findings of its own. Duties, in order:</p>
+<ol>
+<li><strong>Fix the question.</strong> One sentence the panel can answer. If it contains a
+   measurable term, stop and run the tool.</li>
+<li><strong>Run the deterministic checks</strong>, enter them as stipulated facts, and repair
+   fact-level failures before seating anyone.</li>
+<li><strong>Seat the panel.</strong> Only seats whose lenses and losses differ for this
+   artifact. Three is a real panel; five is the ceiling. Do not seat the
+   Stranger inline.</li>
+<li><strong>Assign evidence access per seat</strong>, denials included, and enforce it.
+   Record each seat's <code>Isolation</code> honestly.</li>
+<li><strong>Randomize option order</strong> per seat with the <code>shasum</code> digest; record the
+   permutations.</li>
+<li><strong>Enforce jurisdiction.</strong> Strike claims belonging to the compute tools; log
+   each strike as <code>noise</code> against that seat, at strike time.</li>
+<li><strong>Route mutually exclusive fixes to the split</strong> before aggregating, so the
+   union never stacks contradictory fixes on one target.</li>
+<li><strong>Unseal, aggregate</strong> by the correct rule per body. Apply the one-CRITICAL
+   cap and the inline-seat CRITICAL restriction, then the ledger discounts.
+   Ranking is computed over every seated option; a CRITICAL gates the commit
+   and only a form-fatal CRITICAL eliminates. In a naming sitting, report the
+   ranking both with and without form-fatal eliminations.</li>
+<li><strong>Run the unanimity smell test.</strong></li>
+<li><strong>Write the finding,</strong> with the split left unresolved, and emit one ledger
+    record per finding at <code>disposition: open</code>.</li>
+</ol>
+<p>The chair may not resolve a split. It reports the split and names the product
+question. That is the finding.</p>
+<h2 id="worked-example">Worked example<a class="headerlink" href="#worked-example" title="Permanent link">&para;</a></h2>
+<p>Compare mode. Three directions for a per-AOI dwell readout in a gaze-analysis
+app, about to be committed to the canonical panel component. Chair's question:
+which dwell-readout direction earns implementation? <strong>A</strong> — small-multiples
+strip, one mini heatmap per AOI, sorted by dwell. <strong>B</strong> — ranked horizontal
+bars, dwell in ms, AOI labels inline. <strong>C</strong> — annotated stimulus overlay, dwell
+numerals on the stimulus. Findings of fact, stipulated and not votable:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>dwell-a.svg → tick labels 4.6:1 on panel fill. CRITICAL. Repaired
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  pre-seating (label → cream); re-run 12.1:1.
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>dwell-b.svg → minimum text pair 11.2:1. Clean.
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>dwell-c.svg → numerals 7.4:1 over the darkest sampled stimulus region.
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  CRITICAL. Repaired pre-seating (opaque plate); re-run 12.9:1.
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>All three at 1400×900, seed 7, exported to render_assets/dwell/.
+</code></pre></div>
+<p>None of that entered a ballot; two directions were repaired, not debated.
+Panel: all five seats, each as a subagent. The pedant read SVG source, so its
+denial is real and its <code>Isolation</code> is plain <code>subagent</code>; on a PNG export it
+would have carried <code>subagent (denial partial — raster read)</code> instead.</p>
+<p>The stranger was invoked with three artifact paths and a decision id, and
+nothing else. It did not receive the brief above, the question being decided,
+or the fact that the three artifacts are alternatives to one another.</p>
+<p>Round 1 sealed; ballots abridged to load-bearing lines:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>squinter   order B,A,C   pairwise B&gt;A, B&gt;C, C&gt;A   ranking B,C,A   high
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  Blurred, B is one descending wedge: a single unambiguous reading order.
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  A is nine equal-weight blobs, no focal point survives. C is the stimulus.
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>  A / "one dominant focal point" / HIGH — nine tiles at equal area and
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>  luminance; blur leaves no rank. Fix: scale tile area by dwell.
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>  Recused: typography, labeling, units
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>thumbnail  order C,B,A   pairwise B&gt;C, B&gt;A, A~C   ranking B,C,A   medium
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>  At 1/8 scale B keeps bar length; labels vanish but rank survives. A
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>  becomes noise. C's numerals are gone by 1/4 scale.
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>  C / "evaluate at multiple implied scales" / MEDIUM — panel ships in a
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>  320px rail. Fix: add a rank strip.   Recused: full-size composition
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>stranger   order A,C,B   pairwise C&gt;B, C&gt;A, B&gt;A   ranking C,B,A   high
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>  (brief denied; one Read per option, no re-read) On C I can say what it is
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>  for — where people looked on this screen — and point at the region. On B I
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>  read a ranking but could not say what the rows are; "AOI_03" meant nothing.
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>  B / "premise" / HIGH — identifiers opaque to anyone who did not define
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>  the AOIs; ranking legible, referent not. Fix: naming, not charting.
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>  Recused: craft, hierarchy, contrast
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>forger     order C,A,B   pairwise C&gt;B, C&gt;A, A~B   ranking C,A,B   high
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>  (tokens denied) Forged B from a stock bar component in 3m40s, reached
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>  ~90%: same encoding, sort, inline labels. Could not reproduce the
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>  dwell-band shading. Forged C: gave up at 4m; AOI polygon registration is
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>  not template work.
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>  B / "anti-slop: domain-specific decisions" / MEDIUM — 90% forgeable in
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>  3m40s. Fix: make the dwell band carry more, or accept B as commodity.
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>  Recused: hierarchy, contrast, labeling
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>pedant     order A,B,C   pairwise B&gt;C, B&gt;A, C&gt;A   ranking B,C,A   high
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>  B labels units on the axis. C prints bare numerals with no unit in frame.
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a>  A's legend says "dwell", its caption "fixation time" — not synonyms.
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a>  C / "label every number" / HIGH — 14 bare numerals, no unit anywhere.
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a>  A / "terminology drift" / CRITICAL, form_fatal: no — legend vs caption in
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>    one figure. Fix: pick one term and use it in both.
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a>  Recused: composition, scale survival, brand voice
+</code></pre></div>
+<p>One mechanic fires on the pedant's CRITICAL before aggregation. It is not
+form-fatal — aligning two words does not change A's encoding — so under <a href="#two-bodies-two-aggregation-rules">Two
+bodies</a> it gates A's commit and does not
+delete A from the ranking. A's verdict is FAIL and A still ranks last on its
+own merits, which is the ranking doing its own job rather than borrowing the
+defect body's. Had the pedant been scripted inline, the inline-seat restriction
+would have capped this at HIGH with <code>claimedSeverity: CRITICAL</code> preserved,
+because no second seat named the drift — one more reason to seat subagents.</p>
+<p>Finding, written by the chair:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Muriel jury finding
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Decision ID: gaze-dwell-readout-01
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Question: which dwell-readout direction earns implementation
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>Panel: squinter, thumbnail, stranger, forger, pedant (all subagents)
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>Stipulated facts: 3 contrast runs; A and C repaired pre-seating; seed 7;
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>  devibe not applicable (SVG exports, no scannable component source)
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>Ranking: B 0.52 &gt; C 0.41 &gt; A 0.07 (Bradley-Terry, 15 comparisons)
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>Separation: P(B&gt;C) = 3/5 = 0.60  (&lt; 0.65 — split trigger 3)
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>Concordance: 20/30 = 0.67   Unique contributors: 4/5   Collapsed: no
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>Defects (union, max severity):
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>  CRITICAL A — terminology drift, legend vs caption      (pedant)
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>             form_fatal: no — gates A's commit, does not delete it
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>             from the ranking
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>  HIGH     A — no focal point survives blur              (squinter)
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>  HIGH     B — AOI identifiers opaque without the brief  (stranger)
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>  HIGH     C — 14 unlabeled numerals                     (pedant)
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>  MEDIUM   C — numerals die below 1/4 scale              (thumbnail)
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>  MEDIUM   B — 90% forgeable in 3m40s                    (forger)
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>No mutually exclusive fix pairs on one target — nothing routed to the
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>  split by trigger 5.
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>Verdict on A: FAIL (CRITICAL, not form-fatal). A ranks last on the
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>  comparative body; the defect body gates its commit. Neither eliminated
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>  it from the ranking.
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>Split: squinter + thumbnail rank B first; stranger + forger rank C first.
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>  Squinter and thumbnail optimize signal survival under degradation — B
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>  wins because bar length is the strongest channel and survives blur and
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>  downscale. Stranger and forger optimize referential grounding and
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>  distinctiveness — C wins because the answer is spatial and the spatial
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>  version cannot be forged. They are not disagreeing about craft. They
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>  disagree about whether this panel ranks AOIs or locates them.
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>
+<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>Product question, unresolved: does the dwell readout serve triage (which
+<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>  AOI, ranked) or inspection (where, in place)? Product call, not visual.
+<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>  Returned to the calling agent. If triage: ship B; carry AOI names not ids
+<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>  (stranger, HIGH); strengthen or drop the dwell band (forger, MEDIUM). If
+<a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>  inspection: ship C; add units (pedant, HIGH); add a downscale-surviving
+<a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a>  rank strip (thumbnail, MEDIUM).
+</code></pre></div>
+<p>No Delphi round: the commit was not blocked this session, and the split is the
+useful output. Six ledger records emitted, one per finding and not one per
+seat, all at <code>disposition: open</code>. They stay <code>open</code> until the calling agent
+picks a direction, applies the fixes, and re-renders; the agent that owns that
+fix pass writes each disposition at that re-render.</p>
+<p>Both reported statistics are countable from the ballots above. Separation: the
+five B-vs-C comparisons split 3 for B, 2 for C, none tied, so <code>P(B&gt;C)</code> is 3/5 =
+0.60, under the 0.65 trigger. Concordance: 10 seat pairs × 3 option pairs = 30
+judgements, of which 16 agree outright and 8 involve exactly one tie at half
+credit, so 20/30 = 0.67, well under the 0.90 collapse threshold.</p>
+<h2 id="naming-decisions">Naming decisions<a class="headerlink" href="#naming-decisions" title="Permanent link">&para;</a></h2>
+<p>The protocol was written for visual artifacts. It has been run three times on
+a name: the <code>unhost</code> project name (2026-08-29), and two sittings on 2026-10-17
+choosing the App Store title of the Liquid Light Apple TV app —
+<code>ww-1017-k4</code> (SyrupSpin, NeonSyrup, PrismSyrup) and <code>ww-1017-m8</code> (Protoplasm
+vs SyrupSpin), which Protoplasm won. Three seats transfer with a new lens and
+two do not. Three gaps the visual protocol never had to close came to light in
+those sittings; the rules for them below are normative.</p>
+<h3 id="before-the-panel-harvest-then-generate">Before the panel: harvest, then generate<a class="headerlink" href="#before-the-panel-harvest-then-generate" title="Permanent link">&para;</a></h3>
+<p>The jury converges. It ranks the names it is handed and cannot add one, so
+from a thin option set the best it can return is a well-measured choice between
+thin options. Neither 2026-10-17 sitting had a step that widened the set, and
+afterwards the human asked for more candidates and for source material. Two
+steps come before the chair fixes the question. Both are the calling agent's
+work: neither is a seat, and neither belongs to the chair, which contributes
+nothing of its own.</p>
+<ol>
+<li><strong>Harvest source material</strong> into a file beside the ledger, each item cited.
+   At minimum: the product's own text (the README, which the Pedant reads
+   later); the medium's history and the vocabulary of the people who practised
+   it — crew and studio names, apparatus, period terms; and the technical
+   vocabulary of what the product actually does.</li>
+<li><strong>Generate a long list from the harvest</strong>, run the deterministic checks over
+   all of it, and cut it to a shortlist of at most four, so the full pairwise
+   set stays at six comparisons per seat. Hand the human the long list along
+   with the shortlist. The human chooses which options are seated, and the long
+   list is where that choice is made.</li>
+</ol>
+<p>The Forger's template list under <a href="#rule-a-a-fixed-forger-pool">Rule (a)</a> is the
+negative space for generation. A candidate that fills one of those templates
+with a domain word will be forged. Candidates with a chance of leaving residue
+lie outside the templates' reach from the use statement: a proper noun from
+the medium's history, a practitioner's term, a technical term more than one
+synonym away. Do not pre-screen the long list through seat lenses. The panel
+judges once, sealed. Screening during generation is inline seating, with the
+nominal denial <a href="#the-roster">The roster</a> describes, and the panel's
+independence is spent before the panel is convened.</p>
+<h3 id="findings-of-fact-for-a-name">Findings of fact for a name<a class="headerlink" href="#findings-of-fact-for-a-name" title="Permanent link">&para;</a></h3>
+<p>Stipulate these before seating, exactly as contrast and gamut are stipulated
+for a visual artifact:</p>
+<ul>
+<li><strong>Trademark</strong> — live marks on the whole string and on each element, by
+  class. No mark existed on SyrupSpin, but its element SYRUP was live in class
+  9 software. What a live mark means legally is counsel's call; that it exists
+  is a fact. The USPTO <code>tmsearch</code> API returns empty documents when
+  <code>_source.includes</code> is passed, and every class filter then reads zero. That
+  is a source producing no output, which <a href="#jurisdiction">Jurisdiction</a> forbids
+  stipulating as clean. Omit the field and paginate with <code>from</code>.</li>
+<li><strong>Store and registry collisions</strong> — the App Store (iTunes Search API), npm,
+  PyPI, whichever the product ships through.</li>
+<li><strong>Domains</strong> — RDAP on the likely TLDs.</li>
+<li><strong>Length against each slot's limit</strong> — the App Store title allows 30
+  characters.</li>
+<li><strong>Contrast on the name sheet</strong> — the 8:1 floor applies to the sheet as to
+  any artifact. Both sittings measured at least 11.35:1.</li>
+</ul>
+<p>A name can be settled by a fact before any ballot: the <code>unhost</code> sitting lost
+"papertrail" to a live trademark before a seat was convened.</p>
+<p><strong>Keep the question out of the decision ID.</strong> The ID is passed to every seat,
+so a question or candidate string inside it reaches every seat as a brief. Both
+were in the <code>unhost</code> ID, and its Stranger detected its own contamination and
+discounted a finding. <code>ww-1017-k4</code> and <code>ww-1017-m8</code> are neutral.</p>
+<h3 id="the-name-sheet">The name sheet<a class="headerlink" href="#the-name-sheet" title="Permanent link">&para;</a></h3>
+<p>A naming panel reads a <strong>name sheet</strong>: one HTML card with the name set in each
+slot where it will appear. For the Liquid Light title those were the App Store
+row (icon, title, subtitle), the tvOS home-screen tile and label, the iPhone
+home-screen label at 11 px with ellipsis truncation, and a browser tab. Build
+the sheet once and vary only the name string, so the options differ in nothing
+else. Render it with</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.capture<span class="w"> </span>file:///abs/path/A.html<span class="w"> </span>--tiers<span class="w"> </span>desktop<span class="w"> </span>--selector<span class="w"> </span><span class="s1">'#card'</span><span class="w"> </span>--slug<span class="w"> </span>A
+</code></pre></div>
+<p>which names the PNG by its real pixel size — a 1200×630 card at the default
+scale of 2 is written as <code>A-desktop-2400x1260.png</code> — then run <code>muriel.squint</code>
+on that PNG for the Thumbnail's companions.</p>
+<h3 id="seats-for-a-name">Seats for a name<a class="headerlink" href="#seats-for-a-name" title="Permanent link">&para;</a></h3>
+<p><strong>The Pedant — the highest-value seat for a name.</strong> <em>Lens:</em> the name string,
+plus the product's README extracted verbatim with line numbers as its sibling
+source, plus stipulated product facts the README omits (for Liquid Light: the
+Apple TV app ships with no audio input). <em>Judges:</em> each word of the name against
+the product's own vocabulary — supported, contradicted, drifting, or absent.
+<em>Access:</em> denied the sheet render, so its denial is real and its <code>Isolation</code> is
+plain <code>subagent</code>. In <code>ww-1017-m8</code> it graded "Syrup" HIGH as a claim about the
+medium that README line 3 contradicts (mineral oil and dyed water), and "Spin"
+MEDIUM because "spin" reads as playing music on an app with no audio.</p>
+<p>Pedants vary on a shared element, and the variation depends on the option set,
+so it is not noise. <code>ww-1017-k4</code> graded "Syrup" LOW: it was in all three
+options and read as a house element. <code>ww-1017-m8</code> graded it HIGH: beside a
+figurative rival, it read as a literal claim about the medium. Record both and
+do not reconcile them. The comparative ranking cannot be moved by an element
+every option shares, so its severity belongs to the defect union alone.</p>
+<p><strong>The Forger — the counterfeit is a name pool.</strong> Before opening any option, the
+seat builds a counterfeit pool from the use statement alone, stamps start and
+end with <code>date -u +%FT%TZ</code>, and writes it to
+<code>forgery/&lt;decisionId&gt;/counterfeits.forgery.md</code>. Only then does it open the
+options. For each, it inventories the name's decisions — construction, casing,
+length, each lexeme, metaphor source, register, era marker — and diffs each
+against the pool. <code>F</code>, <code>R</code>, <code>Rs</code> and the severity table are unchanged from the
+agent definition. The counterfeit sheet is the shared name sheet with a pool
+name substituted. Pool width, template list and hop distance are fixed by
+<a href="#rule-a-a-fixed-forger-pool">Rule (a)</a> and are not the seat's to choose.</p>
+<p><strong>The Thumbnail — the name sheet's downscale companions.</strong> <em>Lens:</em> the
+<code>thumb-eighth</code> companion of the name sheet, with each slot's real size as the
+intended use size. <em>Judges:</em> truncation in each slot, word shape at the small
+slots, and how the name skims in a list. Only the 1/8 companion discriminates.
+At 16 px no word survives on any option, so every option fails there equally
+and there is no ranking signal in the 16 px reading; record it and recuse from
+ranking on it.</p>
+<p><strong>The Squinter — unseated.</strong> Blur keeps position and area and removes the
+letters. The sheets differ only in the name string, so their blurred renders
+differ by a few pixels of word length, with no naming signal in them. Record
+the seat as unseated rather than giving it a costume: a seat without a lens
+correlates with every other seat.</p>
+<p><strong>The Stranger — single-artifact only.</strong> The seat is denied the option set, so
+it cannot rank names. Seat it on one sheet, or on the published page once one
+exists, for its three questions. Its <code>Ship (this seat's loss only)</code> stays out
+of the direction ranking, as on any <a href="#ballot-mechanics">single-artifact
+ballot</a>.</p>
+<p>A naming panel is therefore Pedant, Forger and Thumbnail: three seats, the
+minimum <a href="#the-chair">The chair</a> treats as a real panel. Budget three critiques
+per option plus one shared counterfeit pool. Expect low concordance. The
+<code>unhost</code> panel measured 0.33, with the meaning seats and the scale seat
+anti-correlated, and that split — meaning against legibility — was the finding.</p>
+<h3 id="rule-a-a-fixed-forger-pool">Rule (a): a fixed Forger pool<a class="headerlink" href="#rule-a-a-fixed-forger-pool" title="Permanent link">&para;</a></h3>
+<p>On a name, the Forger's severity moved with the size of its pool. SyrupSpin
+was rated HIGH against a 30-name pool in <code>ww-1017-k4</code>, where "Syrup" survived
+as residue, and CRITICAL against a 105-name pool in <code>ww-1017-m8</code>, where
+"syrup" was scored <code>near</code>, one synonym hop from the pool's "Viscous". Same
+name, same seat, two severities, and the two pools were also built from
+different template lists. A severity that moves with the seat's stopping point
+is a measure of the stopping point. Fix all four inputs:</p>
+<ul>
+<li><strong>Width — at least 100 names, and at least 6 from every template.</strong> That
+  width is reached well inside the four-minute ceiling: the 105-name pool took
+  at most 48 seconds. With a narrower pool, the templates' reach is understated,
+  and that reach is the claim the seat exists to test.</li>
+<li><strong>Templates — all sixteen, the union of both sittings' lists:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Template</th>
+<th>From the sittings</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Closed compound: substance or texture + effect or motion</td>
+<td>OilSwirl</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Open pair: colour or quality adjective + substance noun</td>
+<td>Neon Oil</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Portmanteau of two domain words</td>
+<td>Liquilux</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Single evocative noun or verb</td>
+<td>Drift</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Period, place or venue reference</td>
+<td>Fillmore</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Period slang, pun or lyric</td>
+<td>Far Out</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Apparatus or medium, literal</td>
+<td>Overhead</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Domain technical term</td>
+<td>Meniscus</td>
+</tr>
+<tr>
+<td>9</td>
+<td>App suffix or cute-ifier (-ly, -io, -ify, -y, -r)</td>
+<td>Swirly</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Latinate or pseudo-classical coinage</td>
+<td>Lumina</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Platform or world suffix (-TV, -scape, -verse)</td>
+<td>GlowTV</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Echo of the category or subtitle</td>
+<td>Liquid Dreams</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Nearest consumer object</td>
+<td>Lava Light</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Genre prefix (Psych-, Trip-)</td>
+<td>Psychlight</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Rhyme or reduplication</td>
+<td>Glow Flow</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Two-word mood phrase</td>
+<td>Mind Melt</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Hop distance — one.</strong> A lexeme is <code>near</code> when it is a first-page synonym of
+  a pool lexeme, and the diff row names the hop (<code>syrup ← viscous, pool #88</code>).
+  Two hops or more is residue. Without a stated distance, a wider pool and a
+  stricter diff cannot be told apart.</li>
+<li><strong>Use statement — written once per product.</strong> The chair writes it, stores it
+  beside the ledger, and passes it verbatim to every sitting. A later sitting
+  on the same product reuses the earlier pool unchanged and only tops it up to
+  the minimum, so a name that reaches the panel twice is diffed against the
+  same counterfeits both times.</li>
+</ul>
+<h3 id="rule-b-no-forger-veto">Rule (b): no Forger veto<a class="headerlink" href="#rule-b-no-forger-veto" title="Permanent link">&para;</a></h3>
+<p>In a naming sitting the option is the string, so a Forger CRITICAL is
+form-fatal by construction: its only fix is a different name, and a different
+name is a different option. Applied as written, the <a href="#two-bodies-two-aggregation-rules">form-fatal
+carve-out</a> amounts to a Forger veto over
+direction selection — the outcome the carve-out was kept narrow to prevent —
+resting on the finding shown under Rule (a) to be least stable. In
+<code>ww-1017-m8</code> the Forger rated SyrupSpin CRITICAL (R = 0 of F = 16,
+<code>form_fatal: yes</code>), and under the carve-out that ballot alone would have
+eliminated it.</p>
+<p><strong>In a naming sitting, the chair reports the ranking twice:</strong> once over every
+seated option, and once over the remainder after form-fatal eliminations,
+naming the finding behind each elimination.</p>
+<ul>
+<li>If both rankings put the same option first, say so. The elimination changed
+  nothing.</li>
+<li>If they differ, that is split trigger 6 under <a href="#splits-are-the-product">Splits are the
+  product</a>: the comparative body prefers an option the
+  defect body fails on form. Route it to the split report with the product
+  question it raises — for a Forger CRITICAL, whether a name a generic template
+  reaches is acceptable for this product — and name no winner.</li>
+</ul>
+<p>That option's verdict is still FAIL under the CRITICAL. A name cannot be
+repaired without becoming another name, so a human who ships it anyway has
+declined the finding: record the disposition as <code>miss</code>, with the human's
+stated reason. The rule covers a form-fatal CRITICAL from any seat on a name;
+the Forger's is the one that is form-fatal every time.</p>
+<p>Requiring a second seat to concur before eliminating, on the model of the
+inline-seat restriction, was the alternative. It fails here. No other seat
+judges distinctiveness, so concurrence on the same defect could never arrive
+and the Forger's CRITICAL would be silently capped. Under concurrence on any
+defect, two unrelated findings could combine into an elimination neither seat
+claimed. Under the dual report, both bodies' outputs stay intact and the
+conflict goes to the human, which is what the split report is for.</p>
+<h3 id="rule-c-standing-context-crosses-the-subagent-boundary">Rule (c): standing context crosses the subagent boundary<a class="headerlink" href="#rule-c-standing-context-crosses-the-subagent-boundary" title="Permanent link">&para;</a></h3>
+<p>The chair's conversation stays on its side of the subagent boundary. What the
+harness loads into every agent at spawn does not. In Claude Code that includes
+each CLAUDE.md in scope and the auto-memory index, <code>MEMORY.md</code>, which is
+loaded into every subagent. The <code>ww-1017-m8</code> Forger disclosed that the
+product's working name was in the index before it built its pool, and it
+flagged the pool items affected. A Stranger spawned into the same context
+would have been handed project context the protocol denies it.</p>
+<p>Before seating:</p>
+<ol>
+<li><strong>Search the standing context</strong> — every file the harness loads at spawn —
+   for each option string, the working name, and words from the question. A
+   hit is a leak.</li>
+<li><strong>Keep pending decisions out of it.</strong> While a jury is pending, no candidate
+   name or working name goes into an index line or a CLAUDE.md. A memory about
+   the decision goes in a file the index does not list, or waits until the
+   sitting closes.</li>
+<li><strong>Remove the leak or record it.</strong> Removing it means moving the line out of
+   the index before seating. If it stays, every seat records <code>Isolation:
+   subagent (denial partial — standing context)</code> and names the leaked string
+   under <code>Evidence seen</code>. The Forger flags pool items that equal or contain the
+   string and counts a template as reaching such an item only when the
+   template produces it without the leak, as the <code>ww-1017-m8</code> Forger did. A
+   Stranger whose standing context names an option or the question is
+   contaminated: reseat it cleanly or record it unseated, as after an abort.</li>
+</ol>
+<p>Instruct every seat to report, before it reads any evidence, whether its own
+context names an option, the working name, or the question. A seat can see
+its standing context; the chair cannot see the seat's.</p>
+<h2 id="anti-patterns">Anti-patterns<a class="headerlink" href="#anti-patterns" title="Permanent link">&para;</a></h2>
+<p>Do not:</p>
+<ul>
+<li><strong>Convene a jury on a measurable fact.</strong> Contrast, gamut, dimensions, token
+  adherence, and regex-detectable polish rules are settled by tools. A panel
+  deliberating a contrast ratio can get it wrong.</li>
+<li><strong>Seat N copies of one critic.</strong> Same lens, same loss, different adjectives
+  buys correlated errors at one full critique per seat per option. If two seats
+  do not deny each other's evidence or optimize different losses, cut one.</li>
+<li><strong>Run a jury and <code>muriel-critique</code> on the same artifact.</strong> The generalist
+  overlaps four of five seats; the union then counts one defect twice and it
+  reads as corroboration.</li>
+<li><strong>Claim a denial a scripted prompt cannot enforce.</strong> Evidence denial needs a
+  subagent boundary. Inline, mark <code>Isolation: inline (denial nominal)</code> and
+  accept the CRITICAL restriction; never seat the Stranger this way.</li>
+<li><strong>Stack mutually exclusive fixes in the union.</strong> Two seats attacking one
+  target from opposite directions is a split, not two defects, and routing it
+  to the split is the only way the panel can acquit a form that is right.</li>
+<li><strong>Average away a split.</strong> The mean of five rankings discards the finding. The
+  split is the product; the ranking is the byproduct.</li>
+<li><strong>Let severity inflate.</strong> A seat whose every finding is CRITICAL carries zero
+  bits under any-CRITICAL → FAIL. Score dispositions, apply the discount, cap
+  the shouters.</li>
+<li><strong>Convene on a test render.</strong> Panels are for work about to be committed. A
+  draft-DPI intermediate does not earn five seats.</li>
+<li><strong>Seat a naming panel on whatever names came to mind.</strong> The jury cannot add
+  an option. Harvest source material and generate a long list first, and hand
+  the human the long list, not only the shortlist.</li>
+<li><strong>Let the chair vote.</strong> A chair with a preference is a sixth juror holding
+  procedural power, and it will resolve splits it was meant to report.</li>
+<li><strong>Show round 1 ballots to a juror still voting.</strong> That measures conformity.</li>
+<li><strong>Skip <code>Order seen</code>.</strong> Without the recorded permutation you cannot separate
+  judgement from position bias, and the panel does not replay.</li>
+<li><strong>Let a seat recuse from nothing</strong>, or <strong>run a Delphi round to manufacture
+  agreement.</strong> A seat that judges everything correlates with every other
+  generalist; movement nobody can source to specific evidence is deference.</li>
+</ul>
+<h2 id="prior-art">Prior art<a class="headerlink" href="#prior-art" title="Permanent link">&para;</a></h2>
+<p>Adapt from the design-school crit and the award jury, which get the structure
+right and the measurement wrong. Right: a chair who owns the question rather
+than an opinion; a stated brief the work is judged against; recusal when a
+juror has a stake; reasoning voiced before the score is committed. Wrong: halo
+and star effects contaminate every subsequent criterion once one juror names a
+favorite; the loudest or most senior voice dominates because deliberation is
+public from the first minute; and absolute rubric scores show poor inter-rater
+reliability across juries and across sittings. Comparative judgement —
+Thurstone's law of comparative judgement via Bradley-Terry, as deployed in
+educational assessment — exists largely <em>because</em> absolute-scoring juries in
+education proved unreliable, and it yields the reliability statistic as a side
+effect of the binary decisions. The sealed first round is the fix for public
+deliberation; the Delphi round with a who-moved record is the fix for treating
+convergence as evidence.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

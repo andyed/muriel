@@ -23,6 +23,13 @@ recipe set you can route a brief to:
   typography and imagery. The look behind the [live demos](gallery/).
 - **[Charts](channels/charts.md)** — data graphics with the contrast floor and
   brand tokens baked in.
+- **[Semantic zoom and linked displays](references/multiscale-coordination.md)** —
+  changing representations, coordinated views, and recoverable brushing.
+  Explore the [Linked Atlas lab](examples/linked-atlas/index.html).
+- **[Zooming interfaces](references/zooming-interfaces.md)** — navigation,
+  landmarks, automatic detail, and return context, with Wunderkammer as a reference.
+- **[Faceted exploration](references/faceted-exploration.md)** — searchable
+  attribute values, contextual counts, explicit scope, and recoverable refinement.
 - **[Infographics](channels/infographics.md)** — explanatory layouts that earn
   every element on the page.
 - **[Science](channels/science.md)** — paper figures, reproducible and

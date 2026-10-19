@@ -1537,6 +1537,174 @@
   
   
     <li class="md-nav__item">
+      <a href="../../references/zooming-interfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zooming user interfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/faceted-exploration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faceted exploration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/multiscale-coordination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Semantic zoom & linked displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/multiscale-adapters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/multiscale-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/linked-atlas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linked Atlas lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../dimensions/" class="md-nav__link">
         
   
@@ -1909,13 +2077,19 @@
 </ul>
 <p>If the chart lands in a paper, lab notebook, or matplotlib pipeline — use <a href="../science/"><code>channels/science.md</code></a> instead.</p>
 <p>For history beside a value, comparison across rows, or a compact preview in a
-control, read the <a href="../references/sparklines.md">sparkline repertoire</a>: 48 task
+control, read the <a href="../../references/sparklines/">sparkline repertoire</a>: 48 task
 patterns with selection reasons, mark choices, and implementation contracts.
 Consider sparklines wherever the trajectory changes the interpretation of an
 anchor; the enclosing text or table supplies the labels and scale context.</p>
+<p>For semantic zoom, linked displays, or brushing, pair this chart grammar with
+the <a href="../../references/multiscale-coordination/">multiscale coordination contract</a>
+and the relevant <a href="../../references/multiscale-adapters/">library adapter</a>.
+Exploration starts with a question the views let the reader investigate; it does
+not require a known finding. Keep editorial claims separate from the open
+questions and selected populations in an analytical tool.</p>
 <h2 id="workflow">Workflow<a class="headerlink" href="#workflow" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>Identify the message.</strong> Before writing chart code: what is the <em>finding</em> this chart must make visible? What is the <em>comparison context</em> — baseline, target, prior period, peer group? If no finding, no chart (see rule 22).</li>
+<li><strong>Identify the task.</strong> For an explanatory chart, name the finding. For an exploratory display, name the question and operations that let the reader investigate it. In either case, establish the comparison context: baseline, target, prior period, or peer group (see rule 22).</li>
 <li><strong>Pick the right chart type</strong> from the chart-type guide below.</li>
 <li><strong>Apply the 22 universal rules.</strong> They are defaults — deviate only on explicit user instruction.</li>
 <li><strong>Apply library-specific config</strong> from the quick-reference table.</li>
@@ -1954,7 +2128,7 @@ anchor; the enclosing text or table supplies the labels and scale context.</p>
 </ol>
 <h3 id="content-format">Content &amp; format<a class="headerlink" href="#content-format" title="Permanent link">&para;</a></h3>
 <ol>
-<li><strong>Titles assert findings.</strong> "Revenue Surged 23% in Q3" — not "Revenue by Quarter, 2024". The chart title states the insight. Subtitle adds context ("vs. prior year, USD millions"). If the data has no clear finding, the chart may not be needed (rule 22).</li>
+<li><strong>Titles match the task.</strong> Explanatory titles state supported findings ("Revenue Surged 23% in Q3"). Exploratory titles identify the question or measure without implying a result ("How does habitat relate to observation quality?"). Subtitles name units, comparison context, and the active population. Update selected counts and scope without converting a temporary brush into an asserted discovery.</li>
 <li><strong>Format numbers for humans.</strong> Abbreviate large numbers (<code>$1.2M</code> not <code>$1,200,000</code>). Thousand separators for mid-range (<code>12,450</code>). Match decimal precision to significance. Right-align numbers in tables. State units once (axis label or title), not on every datum.</li>
 <li><strong>Don't chart what a sentence can say.</strong> 1–2 numbers → write a sentence with inline context ("Revenue was $4.2M, up 23% from Q2"). A simple ranking of 3–5 items → consider a table. Charts earn their space by revealing patterns, trends, or distributions that prose and tables cannot.</li>
 </ol>
@@ -2153,7 +2327,7 @@ anchor; the enclosing text or table supplies the labels and scale context.</p>
 </tr>
 <tr>
 <td><strong>Sparklines</strong></td>
-<td>Size to the host text, row, or control; 80×20px is one starting point. Usually omit internal axes/gridlines; supply measure, units, window, and scale policy nearby. Mark endpoints/extrema only when useful. See the <a href="../references/sparklines.md">48-pattern repertoire</a>.</td>
+<td>Size to the host text, row, or control; 80×20px is one starting point. Usually omit internal axes/gridlines; supply measure, units, window, and scale policy nearby. Mark endpoints/extrema only when useful. See the <a href="../../references/sparklines/">48-pattern repertoire</a>.</td>
 </tr>
 <tr>
 <td><strong>Slopegraph</strong></td>
@@ -2358,7 +2532,7 @@ anchor; the enclosing text or table supplies the labels and scale context.</p>
 <li>[ ] No dual y-axes</li>
 <li>[ ] No 3D, no gradient fills, no decorative borders</li>
 <li>[ ] Bar y-axis includes zero; line/scatter axes range-framed</li>
-<li>[ ] Title asserts the finding (rule 20)</li>
+<li>[ ] Title states the supported finding or exploratory question; units and population are explicit (rule 20)</li>
 <li>[ ] Comparison context present (baseline, target, prior period — rule 13); a sparkline's labeled history can supply context for a trajectory question</li>
 <li>[ ] Each series directly labeled (rule 2)</li>
 <li>[ ] Notable points annotated (rule 12)</li>

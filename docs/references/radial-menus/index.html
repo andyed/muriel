@@ -1,0 +1,2205 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A design skill for coding agents: fifteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/references/radial-menus/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Radial menus — stable targets and measured wedge typography - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#radial-menus-stable-targets-and-measured-wedge-typography" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Radial menus — stable targets and measured wedge typography
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/andyed/muriel" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    andyed/muriel
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/andyed/muriel" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    andyed/muriel
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zooming-interfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zooming user interfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faceted-exploration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faceted exploration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-coordination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Semantic zoom & linked displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-adapters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/linked-atlas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linked Atlas lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/showcase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Showcase — featured work ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gallery — all channels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live spatial demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="radial-menus-stable-targets-and-measured-wedge-typography">Radial menus — stable targets and measured wedge typography<a class="headerlink" href="#radial-menus-stable-targets-and-measured-wedge-typography" title="Permanent link">&para;</a></h1>
+<p>Use this competency for a pie, marking, or radial menu whose commands combine a
+glyph with a short label and optional status, cost, or shortcut. It joins two
+proven implementations:</p>
+<ul>
+<li>Psychodeli consumerUI contributes config-driven main/sub-pies, split rings,
+  two-tone 24-grid glyphs, live-state accents, nested Back, and theme tokens.</li>
+<li>Pot Luck contributes invariant target geometry, radial keyboard movement,
+  direct touch activation plus hold-to-preview, captions for consequences, and
+  shape-aware type that gives the label and cost priority over ornament.</li>
+</ul>
+<p>This is a visual and interaction competency, not a standalone engine. Keep each
+product's state, commands, gating, and side effects in its canonical owner. A
+future shared library may implement this contract; the contract does not require
+either product to adopt a speculative common runtime.</p>
+<p>This is also one specialization of the broader
+<a href="../annular-interfaces/"><code>annular-interfaces.md</code></a> contract. Use the broader
+reference when angle or radius encodes bearing, range, time, magnitude,
+hierarchy, or targeting rather than a directional command. A circular silhouette
+does not make those instruments menus.</p>
+<h2 id="use-gate">Use gate<a class="headerlink" href="#use-gate" title="Permanent link">&para;</a></h2>
+<p>Choose a radial menu when spatial recall or rapid directional selection is part
+of the value, and the set is small enough to remain distinguishable. A useful
+default range is three to eight primary wedges. Test beyond eight rather than
+assuming that more radius creates more comprehension.</p>
+<p>Prefer a linear menu when commands are unfamiliar, descriptions carry the
+decision, order or comparison matters more than direction, or zoom and text
+scaling would push the labels below the physical size floor. Do not hide a
+destructive, legal, financial, or permission consequence inside an unlabeled
+glyph or a gesture-only path.</p>
+<h2 id="shared-contract">Shared contract<a class="headerlink" href="#shared-contract" title="Permanent link">&para;</a></h2>
+<h3 id="state-and-architecture">State and architecture<a class="headerlink" href="#state-and-architecture" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Accept config and emit intent. The renderer does not read application globals
+  or mutate product state.</li>
+<li>Keep <code>open</code>, active wedge, submenu path, and input modality local to the menu
+  instance. Command availability and on/off state remain canonical product data.</li>
+<li>Preserve one geometry primitive for every annular sector. Main rings, sub-rings,
+  split bands, and decorative rails derive from it.</li>
+<li>Treat visual composition as a projection. Pretext handles measurement and line
+  breaking; ordinary DOM, SVG, or a hybrid of both remains the semantic, focus,
+  hit-test, and theme layer. Pretext does not require a canvas renderer.</li>
+</ul>
+<h3 id="target-geometry">Target geometry<a class="headerlink" href="#target-geometry" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Wedge boundaries do not move on hover, focus, selection, or live-state change.
+  Emphasis changes paint, type, or an interior rail, never the target under the
+  pointer. This preserves motor plans and prevents neighbor motion while aiming.</li>
+<li>Make every pointer target at least 40 × 40 physical px; prefer 44 × 44 for
+  touch. Measure the narrowest useful part of the sector, not only its outer arc.</li>
+<li>Keep visual gaps smaller than hit gaps when safe: the interactive path owns the
+  full stable sector while an inset paint path supplies the groove.</li>
+<li>Recompute composition after a real size, font, locale, item, or ring change.
+  Do not poll layout in an animation loop.</li>
+</ul>
+<h3 id="information-priority">Information priority<a class="headerlink" href="#information-priority" title="Permanent link">&para;</a></h3>
+<p>Use this admission order:</p>
+<ol>
+<li>command label;</li>
+<li>exact cost, quantity, shortcut, or consequence when it changes the decision;</li>
+<li>status glyph;</li>
+<li>command glyph;</li>
+<li>decorative material.</li>
+</ol>
+<p>Status is shape, not wedge copy. Model it as a semantic token such as <code>on</code>,
+<code>off</code>, <code>live</code>, <code>ready</code>, <code>warning</code>, or <code>locked</code>, render it through a consistent
+status-glyph family, and preserve a natural-language <code>statusLabel</code> in the
+accessible name and consequence caption. Do not print implementation phrases
+such as <code>INPUT OFF</code>, or routine state words such as <code>ON</code>, <code>OFF</code>, <code>LIVE</code>, and
+<code>READY</code>, inside the wedge.</p>
+<p>Do not turn an exact decision value into a pictogram. <code>$350</code>, <code>1 AP</code>, <code>12.0 oz</code>,
+inventory counts, heat changes, and shortcuts remain text because the magnitude
+matters. A status glyph must differ by silhouette as well as color so the state
+survives color-vision differences and monochrome rendering.</p>
+<p>The accessible name and consequence caption keep the full source copy even when
+the visible surface needs a shorter display label. If no legal glyph pocket
+remains, hide the glyph. If no legal label clears the 16 px physical floor, move
+the full choice to a linear sheet or another larger surface; do not silently
+shrink it.</p>
+<h3 id="composition-rhythm">Composition rhythm<a class="headerlink" href="#composition-rhythm" title="Permanent link">&para;</a></h3>
+<p>Treat every peer wedge as one member of a ring, not as an isolated packing
+problem. Select one label-size tier that every peer can legally render. A short
+label does not become larger merely because it has spare chord width, and a
+status marker does not make its neighboring label smaller. Wrap the longer
+label, lower the shared tier, or move the command to a larger surface.</p>
+<p>Keep a stable semantic order from the outer side of the stack inward:</p>
+<ol>
+<li>optional status rail;</li>
+<li>command-glyph rail;</li>
+<li>one- or two-line command-label rail;</li>
+<li>optional exact-value rail.</li>
+</ol>
+<p>An absent optional rail may collapse, but the remaining rails never reorder or
+run inline to exploit a local gap. In particular, do not append a status glyph
+to the label or append an inventory count to the command name. The rail gap is a
+measured constraint, not a literal space character or an accidental flex gap.
+This stable grammar is more important than maximizing the mean font size.</p>
+<h3 id="input-parity">Input parity<a class="headerlink" href="#input-parity" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Pointer: moving over a wedge previews it; click or tap commits once.</li>
+<li>Touch/pen: a short tap commits. A hold may preview detail, but consume the
+  synthetic click so preview cannot also trigger the action.</li>
+<li>Keyboard: Left/Right rotate around the current ring; Up/Down move between
+  outer ring, inner ring, and hub; Home/End reach ring endpoints; Enter/Space
+  commit; Escape backs out one submenu before closing.</li>
+<li>Keep one predictable tab entry into the instrument, then expose the active
+  descendant or a roving focus item to assistive technology. Every actionable
+  sector has a role, accessible name, availability, and current/pressed state.</li>
+<li>A submenu transition hands focus to the new ring; Back restores the wedge that
+  opened it. Repeated input cannot land on a replacement wedge after the DOM
+  swaps under the pointer.</li>
+</ul>
+<h2 id="pretext-wedge-compositors">Pretext wedge compositors<a class="headerlink" href="#pretext-wedge-compositors" title="Permanent link">&para;</a></h2>
+<p>Pretext earns its cost when labels, command glyphs, exact values, and status
+glyphs need to share irregular or variable-width sectors. It is a layout engine,
+not an output medium: use its
+measurements and line ranges to render ordinary DOM, SVG, Canvas, or another
+host-native surface. Native CSS/SVG alone is still better for a fixed one-word
+label at a known size, and SVG <code>textPath</code> is better for a decorative group name
+that intentionally follows an arc.</p>
+<h3 id="renderer-choice">Renderer choice<a class="headerlink" href="#renderer-choice" title="Permanent link">&para;</a></h3>
+<p>Choose the renderer from the host rather than from Pretext:</p>
+<ul>
+<li><strong>DOM content over SVG targets — recommended for the current Psychodeli and
+  Pot Luck carriers.</strong> Keep the stable SVG wedge paths as semantic and hit-test
+  geometry. Place an absolutely positioned, <code>pointer-events: none</code> DOM layer
+  above the wheel, then materialize the selected line fragments as spans and
+  inline SVG glyphs. This keeps CSS typography, localization, selection, and
+  browser inspection available without duplicating command state.</li>
+<li><strong>DOM-native wedges.</strong> When the host already uses buttons, apply the same
+  generated path or polygon as CSS <code>clip-path</code> and render the Pretext fragments
+  inside each button. Verify clipped pointer hit-testing, focus indication, and
+  non-overlapping tab order in every target browser before choosing this path.</li>
+<li><strong>SVG-native content.</strong> Materialize fragments as SVG <code>&lt;text&gt;</code> and <code>&lt;svg&gt;</code> when
+  the wheel already owns all visual content, exact viewBox scaling is valuable,
+  or a single exportable vector artifact is the requirement.</li>
+</ul>
+<p>Do not use <code>foreignObject</code> merely to claim DOM support. A normal positioned DOM
+overlay is easier to theme and test, while the shared geometry can still map
+each slot between viewBox coordinates and CSS pixels.</p>
+<h3 id="pipeline">Pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Load a named font before measurement.</strong> Await <code>document.fonts.load()</code> for
+   every weight and size tier. Do not use <code>system-ui</code>; canvas and DOM can resolve
+   it differently on macOS.</li>
+<li><strong>Declare rails before measuring copy.</strong> Reserve separate status, command,
+   label, and exact-value line boxes in that order. The compositor may collapse
+   an absent optional rail; it may not place a glyph or value beside the label.</li>
+<li><strong>Turn text rails into planning slots.</strong> For horizontal copy, intersect each
+   candidate label or value line box with the padded annular sector and keep a
+   continuous interval whose corners and edge midpoints remain inside the
+   wedge. For an arc-follow probe, use the guarded arc length at that label
+   rail's radius. Do not wrap against a horizontal chord and bend the result
+   afterward; that creates false line breaks and crowds the inner rails.</li>
+<li><strong>Prepare text once per style tier.</strong> Give Pretext the label words at their
+   real named font and the exact value as its own unbreakable item. Command and
+   status glyphs are fixed SVG pockets, not rich-inline text items.</li>
+<li><strong>Search ring-wide tiers.</strong> At each candidate physical label size, compose
+   every wedge with one or two label lines. Accept the first tier for which the
+   entire peer ring passes; never retain a larger local tier for an easier wedge.</li>
+<li><strong>Apply hard gates before scoring position.</strong> Reject overflow, missing label
+   or value content, physical text below 16 px, text contrast below 8:1, a glyph
+   below its legible minimum, or a rail gap below its declared minimum. Among
+   survivors at the shared tier, score vertical balance and chord use.</li>
+<li><strong>Materialize only the ring winner.</strong>
+   <code>materializeRichInlineLineRange()</code> provides fragments, widths, gaps, and
+   source-item indices for the text rails. Turn those into DOM spans, SVG text,
+   or Canvas draws. An arc-follow renderer may segment the winning fragments
+   into graphemes only at this stage, then position each grapheme along the
+   planned rail. Place the 24-grid glyphs in their fixed rails and keep the
+   original item data for <code>aria-label</code> and captions.</li>
+<li><strong>Close the loop against rendered truth.</strong> After fonts and paint settle,
+   measure the actual DOM or SVG fragments with <code>getBoundingClientRect()</code>. Reject
+   a candidate whose rendered bbox crosses the padded wedge even when Pretext's
+   predictive canvas measurement fitted. Also audit peer type variance, the
+   minimum rendered gap between glyph and text rails, and the gap between a
+   curved label and its exact-value rail.</li>
+</ol>
+<p>Pin Pretext and preload fonts. The runnable
+<a href="../../examples/radial-menu-pretext.html"><code>radial-menu-pretext.html</code></a> example vendors
+<code>@chenglou/pretext</code> 0.0.5 locally and compares a fixed midpoint stack with the
+shape-flow compositor.</p>
+<h3 id="composition-sketch">Composition sketch<a class="headerlink" href="#composition-sketch" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">labelItems</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">label</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\s+/</span><span class="p">).</span><span class="nx">map</span><span class="p">((</span><span class="nx">word</span><span class="p">,</span><span class="w"> </span><span class="nx">index</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="sb">`</span><span class="si">${</span><span class="nx">index</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">' '</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s1">''</span><span class="si">}${</span><span class="nx">word</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nx">font</span><span class="o">:</span><span class="w"> </span><span class="sb">`800 </span><span class="si">${</span><span class="nx">sharedLabelSize</span><span class="si">}</span><span class="sb">px Arial`</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="k">break</span><span class="o">:</span><span class="w"> </span><span class="s1">'never'</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">}))</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="kd">const</span><span class="w"> </span><span class="nx">prepared</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">prepareRichInline</span><span class="p">(</span><span class="nx">labelItems</span><span class="p">)</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="kd">let</span><span class="w"> </span><span class="nx">cursor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">itemIndex</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">segmentIndex</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">graphemeIndex</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">slot</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">labelRailSlots</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">layoutNextRichInlineLineRange</span><span class="p">(</span><span class="nx">prepared</span><span class="p">,</span><span class="w"> </span><span class="nx">slot</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span><span class="w"> </span><span class="nx">cursor</span><span class="p">)</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">range</span><span class="p">)</span><span class="w"> </span><span class="k">break</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="nx">render</span><span class="p">(</span><span class="nx">materializeRichInlineLineRange</span><span class="p">(</span><span class="nx">prepared</span><span class="p">,</span><span class="w"> </span><span class="nx">range</span><span class="p">),</span><span class="w"> </span><span class="nx">slot</span><span class="p">)</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="nx">cursor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">range</span><span class="p">.</span><span class="nx">end</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="p">}</span>
+</code></pre></div>
+<p>The command and status glyphs are placed independently in their declared rails.
+Pretext decides line breaks inside the label and exact-value rails; it does not
+decide semantic order or use spare label width to pull glyphs inline.</p>
+<p>Pretext permits a <code>break: 'never'</code> item to overrun an otherwise empty line. That
+is useful for pills and unbreakable tokens, but an annular sector is a hard
+boundary. After each range, reject the candidate when <code>line.width &gt; slot.width</code>
+and continue the search at a smaller type tier. Split a multi-word command into
+atomic word items so wrapping can occur between words without producing
+<code>Harves</code> / <code>t</code> or another mid-command fracture.</p>
+<h3 id="experimental-per-grapheme-bows-and-carrier-selection">Experimental per-grapheme bows and carrier selection<a class="headerlink" href="#experimental-per-grapheme-bows-and-carrier-selection" title="Permanent link">&para;</a></h3>
+<p>Curved command labels are a probe, not the radial-menu default. Use a shallow bow
+only when a short label underuses the outer part of a sector. Value-dense rings
+and multiword commands default to upright word lines; a literal circle is not an
+upgrade when it makes the reader rotate the word mentally.</p>
+<ul>
+<li>Keep the complete command and state in the semantic SVG/DOM target. The
+  positioned letter layer is visual projection and may remain <code>aria-hidden</code>.</li>
+<li>Let Pretext choose the shared type tier and word breaks against guarded arc
+  length. Then segment the winning fragments with <code>Intl.Segmenter</code> and place
+  graphemes individually; never rotate one rigid string around its midpoint.</li>
+<li>Preserve word spacing when materializing letters. Measure cumulative prefixes
+  so font kerning survives, and reparameterize a line-to-arc blend by its local
+  path speed. Naively interpolating Cartesian glyph centers contracts side-wedge
+  words and makes pairs such as <code>Mo</code> and <code>Co</code> collide.</li>
+<li>Separate <strong>path follow</strong> from <strong>letter turn</strong>. The first blends positions from
+  a horizontal rail to a circular rail. The second independently blends each
+  letter from upright toward the local tangent. This makes restrained hybrids
+  testable instead of coupling curvature to an unreadable 90-degree turn.</li>
+<li>Reverse traversal where necessary to keep lower-half letters upright. Start a
+  command probe near 30% path bow and 10% orientation follow, then verify the
+  actual production font. The reference wheel resolves this to about 2.4
+  degrees of letter turn; the earlier 42-degree result failed visual reading.</li>
+<li>Keep command glyphs and routine-status glyphs upright on their own outer
+  rails. Keep decision-changing exact values horizontal on a separate inner
+  rail unless a product test establishes a better grammar.</li>
+<li>Compute label capacity from the arc before Pretext wraps. After DOM paint,
+  reject any glyph bbox outside the wedge or any label/value collision. A legal
+  horizontal endpoint may use two word lines; an illegal endpoint hard-stops
+  rather than disappearing through clipping.</li>
+<li>Select the carrier from the content before styling it. Short command rings may
+  use the shallow DOM bow. A ring where at least half the wedges carry exact
+  values uses an upright stack. Preserve the full command in <code>aria-label</code> and
+  the consequence caption; a shorter unambiguous <code>displayLabel</code> may protect the
+  wedge, as <code>Connections</code> does for <code>Work Connections, $350</code>.</li>
+</ul>
+<p>An arc variant expands only after real-use evidence shows equal or better
+command recognition, acquisition time, and error rate than the horizontal
+carrier. Fit and novelty alone do not establish the upgrade.</p>
+<h3 id="iblipper-dom-precedent">iBlipper DOM precedent<a class="headerlink" href="#iblipper-dom-precedent" title="Permanent link">&para;</a></h3>
+<p>iBlipper's <code>PretextRenderer.tsx</code> demonstrates the DOM path at production scale:
+it waits for the named font, uses <code>prepareWithSegments()</code> and
+<code>layoutWithLines()</code> to choose wrapping and font sizes, then renders normal React
+<code>.pretext-chunk</code> and <code>.pretext-line</code> elements. After two animation frames it
+reads each line's <code>getBoundingClientRect()</code> and records fill, visible fill, and
+truncation from the actual DOM.</p>
+<p>Carry its measurement-parity lessons into wedge work:</p>
+<ul>
+<li>measure the transformed text that CSS will paint (<code>uppercase</code> in iBlipper),
+  not the pre-transform source string;</li>
+<li>budget for CSS <code>letter-spacing</code>, stroke, per-character wrappers, and other
+  effects that Pretext's canvas measurement does not see;</li>
+<li>treat emoji and platform-substituted glyphs as a canary because their DOM
+  extent can materially exceed canvas metrics;</li>
+<li>distinguish raw overflow from visible clipped area; clipping can protect the
+  surface without proving that the composition is well fitted;</li>
+<li>keep the post-render audit even when the predictive fit usually agrees.</li>
+</ul>
+<p>For a command wedge, prefer rejection and the next smaller legal composition to
+clipping readable content. Clipping is appropriate for decorative trails, not
+for a label, cost, shortcut, availability reason, or glyph needed to decide.</p>
+<h2 id="glyph-grammar">Glyph grammar<a class="headerlink" href="#glyph-grammar" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Author on a 24 × 24 grid with round joins/caps unless the product has another
+  established family.</li>
+<li>Use one primary structural color and at most one live/accent element. The
+  second tone carries state or meaning, not decoration.</li>
+<li>Verify at the real 18–24 px glyph size. Large-source beauty is irrelevant if
+  the mark collapses in its wedge.</li>
+<li>Do not use emoji as the primary command grammar. Platform substitution changes
+  weight, metrics, color, and sometimes meaning.</li>
+<li>Keep command and status glyphs upright. Horizontal command labels remain the
+  default. An explicit per-grapheme arc probe may turn individual letters within
+  a tested ceiling; never rotate the icon or a whole command string as one unit.</li>
+</ul>
+<h2 id="verification-matrix">Verification matrix<a class="headerlink" href="#verification-matrix" title="Permanent link">&para;</a></h2>
+<p>Exercise the real content, not lorem ipsum:</p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Minimum proof</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Density</td>
+<td>3, 5, and 8 wedges; primary and nested/split ring</td>
+</tr>
+<tr>
+<td>Copy</td>
+<td>shortest label, longest production label, state/cost, disabled reason</td>
+</tr>
+<tr>
+<td>Status grammar</td>
+<td>no printed routine state words; glyph has shape + accessible name</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>desktop plus phone-sized same-origin iframe at the target CSS width</td>
+</tr>
+<tr>
+<td>Script</td>
+<td>English plus one CJK or RTL canary when localization is in scope</td>
+</tr>
+<tr>
+<td>Input</td>
+<td>pointer preview/commit, short touch, hold preview, keyboard ring + depth</td>
+</tr>
+<tr>
+<td>State</td>
+<td>default, focus, selected/on, unavailable, locked, submenu, Back</td>
+</tr>
+<tr>
+<td>Geometry</td>
+<td>every visual bbox inside its sector; target paths byte-stable across focus</td>
+</tr>
+<tr>
+<td>Type</td>
+<td>named fonts loaded; every readable line at least 16 physical px; 0 px peer-label variance unless hierarchy is explicit</td>
+</tr>
+<tr>
+<td>Rhythm</td>
+<td>declared rail order preserved; measured glyph/text and label/value gaps do not collapse</td>
+</tr>
+<tr>
+<td>Carrier</td>
+<td>short-label bow and value-dense upright stack both exercised with the same semantic targets</td>
+</tr>
+<tr>
+<td>Arc probe</td>
+<td>path follow and letter turn tested independently; kerning preserved; path contraction prevented; per-letter rotation recorded</td>
+</tr>
+<tr>
+<td>Contrast</td>
+<td>in-browser effective foreground/background audit at least 8:1</td>
+</tr>
+<tr>
+<td>Behavior</td>
+<td>one commit per activation; focus survives submenu swap and return</td>
+</tr>
+</tbody>
+</table>
+<p>For optimization work, measure more than fit. Log task-local acquisition time,
+pointer corrections, wrong-wedge entries, hold cancellations, and keyboard step
+count. Expand the Pretext path only if it improves fit or comprehension without
+regressing acquisition or input parity.</p>
+<h2 id="stop-conditions-and-fallbacks">Stop conditions and fallbacks<a class="headerlink" href="#stop-conditions-and-fallbacks" title="Permanent link">&para;</a></h2>
+<p>Stop the radial approach or fall back to a linear surface when:</p>
+<ul>
+<li>any production label requires text below 16 physical px;</li>
+<li>more than one wedge needs a caption to identify the command itself;</li>
+<li>localization produces routine four-line labels or unstable abbreviations;</li>
+<li>narrow sectors fail 40 × 40 target geometry;</li>
+<li>focus order and visible radial order cannot be made to agree;</li>
+<li>the menu contains heterogeneous controls whose interaction cannot be expressed
+  as inspect, commit, enter submenu, or Back.</li>
+</ul>
+<p>Do not add animation, fisheye expansion, or arc-follow command text to compensate
+for an information-architecture failure. An arc probe must still satisfy every
+label, consequence, input, and fallback requirement above.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

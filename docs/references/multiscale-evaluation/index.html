@@ -1,0 +1,2477 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A design skill for coding agents: fifteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+      
+      
+        <meta name="author" content="Andy Edmonds">
+      
+      
+        <link rel="canonical" href="https://muriel.mindbendingpixels.com/references/multiscale-evaluation/">
+      
+      
+        <link rel="prev" href="../multiscale-adapters/">
+      
+      
+        <link rel="next" href="../../examples/linked-atlas/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../favicon-512.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Coordination evaluation - muriel</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/muriel.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  
+      
+
+    
+  <!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
+  <!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
+  </script>
+
+    
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
+  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
+  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+
+  <!-- Favicons — colophon bars, light + dark variants. Served from the output
+       ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly
+       so cached references and the apple-touch-icon path keep resolving. -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-dark-32.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-dark-16.png" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon-512.png">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#evaluating-semantic-zoom-linked-displays-and-brushing" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="muriel" class="md-header__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            muriel
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Coordination evaluation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/andyed/muriel" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    andyed/muriel
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="muriel" class="md-nav__button md-logo" aria-label="muriel" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    muriel
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/andyed/muriel" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    andyed/muriel
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Channels
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/spatial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spatial
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/charts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Charts
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/infographics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infographics
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Science
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/diagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrams
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/raster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/svg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SVG
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/interactive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interactive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/heatmaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Density viz (heatmaps)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/gaze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gaze plots
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polish
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/readme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    README
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--partial-mvp"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vocabularies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Vocabularies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/visible-language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Language
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/fui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FUI (fictional UI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/kinetic-typography/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kinetic typography
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/katex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KaTeX (web math)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/pixijs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PixiJS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/echarts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECharts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/declassified/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declassified
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/surfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/data-viz-platforms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-viz platforms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../vocabularies/muriel-brand/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    muriel brand
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zooming-interfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zooming user interfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faceted-exploration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Faceted exploration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-coordination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Semantic zoom & linked displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multiscale-adapters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination evaluation
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coordination evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#four-kinds-of-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Four kinds of evidence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-the-capability-battery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run the capability battery
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Run the capability battery">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-time-series-cohort-investigation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. Time-series cohort investigation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-document-or-image-collection-across-scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Document or image collection across scale
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-heterogeneous-linked-data-and-non-bijective-joins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. Heterogeneous linked data and non-bijective joins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-geographic-and-temporal-views-with-independent-navigation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        D. Geographic and temporal views with independent navigation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adversarial-interaction-sequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adversarial interaction sequences
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#narrow-routing-counterexamples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Narrow routing counterexamples
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#human-comparison-when-an-outcome-claim-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Human comparison when an outcome claim matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evidence-receipt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evidence receipt
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/linked-atlas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linked Atlas lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/dimensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dimensions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/style-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Style guides (brand.toml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/SCHEMA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brand-token schema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/showcase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Showcase — featured work ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gallery — all channels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://muriel.mindbendingpixels.com/gallery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live spatial demos ↗
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SKILL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The muriel skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agents/muriel-critique/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Critique agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../THIRD_PARTY_NOTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Third-party notices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-plugin-packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin packaging spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="evaluating-semantic-zoom-linked-displays-and-brushing">Evaluating semantic zoom, linked displays, and brushing<a class="headerlink" href="#evaluating-semantic-zoom-linked-displays-and-brushing" title="Permanent link">&para;</a></h1>
+<p>Use this battery when changing Muriel's multiscale guidance or building an
+interface whose task depends on coordinated views. It tests whether the skill
+produces useful working behavior across domains. A passing reference demo is
+evidence for that demo; it does not establish that a future build, a different
+dataset, or Muriel's general capability passes.</p>
+<p>Read <a href="../multiscale-coordination/">the coordination contract</a> for the design
+mechanisms, <a href="../zooming-interfaces/">zooming interfaces</a> for navigable spaces and
+return paths, and <a href="../multiscale-adapters/">the adapters</a> for host integration.
+The <a href="../../examples/linked-atlas/">linked-atlas lab</a> supplies one
+inspectable implementation. The independent fixtures below deliberately cover
+additional data shapes that the lab does not represent.</p>
+<h2 id="four-kinds-of-evidence">Four kinds of evidence<a class="headerlink" href="#four-kinds-of-evidence" title="Permanent link">&para;</a></h2>
+<p>Keep these separate in the handoff. A failure in one cannot be repaired by
+accumulating passes in another.</p>
+<table>
+<thead>
+<tr>
+<th>Evidence</th>
+<th>What to exercise</th>
+<th>What a pass establishes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td>Small independent data oracles, predicates, ID joins, transforms, event ordering</td>
+<td>The declared state and aggregation semantics hold for the tested cases</td>
+</tr>
+<tr>
+<td>Browser interaction</td>
+<td>Actual pointer, keyboard, focus, wheel, and touch routes; rendered state read back from the page</td>
+<td>The UI invokes those semantics through the tested input paths</td>
+</tr>
+<tr>
+<td>Rendered inspection</td>
+<td>Relevant sizes and tiers, selection/filter combinations, empty/loading/error states, text/mark contrast</td>
+<td>The inspected outputs are legible and communicate the intended state</td>
+</tr>
+<tr>
+<td>Human task observation</td>
+<td>Representative tasks with unfamiliar users; a comparison when claiming improvement</td>
+<td>What those participants understood or accomplished under the observed conditions</td>
+</tr>
+</tbody>
+</table>
+<p>Calling a reducer from a browser console is model evidence. Synthetic pointer
+events can exercise handlers but do not establish hit testing, pointer capture,
+native scrolling, or physical touch acceptance. A screenshot does not establish
+keyboard access. Automated accessibility checks do not establish screen-reader
+comprehension. Record skipped and unavailable checks explicitly.</p>
+<p>The repository includes focused checks for the linked-atlas implementation:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>node<span class="w"> </span>--test<span class="w"> </span>tests/multiscale-coordination.test.mjs
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>node<span class="w"> </span>tests/multiscale-browser.mjs
+</code></pre></div>
+<p>The browser suite needs Playwright and its Chromium runtime in the test
+environment. <code>PLAYWRIGHT_MODULE</code> can point to an existing installation, while
+<code>BASE_URL</code> can supply an already-served lab. Otherwise the script starts and
+stops its own loopback server. Set <code>SCREENSHOT_DIR</code> to retain captures for a
+separate rendered inspection. Browser touch checks use Chromium input emulation;
+physical-device and assistive-technology acceptance remain separate. These
+checks exercise the reference lab, not all the independent briefs below.
+The browser suite also checks its rendered HTML and SVG text against the painted
+background at glyph locations, including SVG label backplates and halos, with
+an 8:1 floor. Planted low-contrast fills and changed backgrounds verify that the
+audit can fail. This audit is scoped to the lab's solid-color text; it does not
+establish chart-mark contrast, native popup-menu contrast, or general image-text
+accessibility.</p>
+<h2 id="run-the-capability-battery">Run the capability battery<a class="headerlink" href="#run-the-capability-battery" title="Permanent link">&para;</a></h2>
+<p>Run the build briefs below in fresh sessions against a recorded skill revision.
+Give the agent the brief and fixture, with the required task and existing host
+constraints. Keep the expected answers available to the evaluator. Require a
+runnable artifact, its canonical-state description, and bounded evidence for
+what was verified. Preserve the resulting artifacts and event traces, including
+failed builds.</p>
+<p>Evaluate the output, not the presence of vocabulary in its rationale. A response
+that says "semantic zoom" while enlarging the same marks fails the relevant
+task. A modest table with the required correspondence and recovery can pass a
+linking task without using a prescribed library or visual form.</p>
+<p>For each brief report <strong>pass</strong>, <strong>fail</strong>, or <strong>not observed</strong> against its listed
+behaviors. Record the first reproducible counterexample and user consequence.
+Do not turn mixed evidence into an invented quality score. Repeat fresh runs
+when estimating reliability; report runs completed / runs attempted and the
+number passing each behavior. Fix the fixture before comparing skill revisions
+when a task or oracle proves ambiguous.</p>
+<h3 id="a-time-series-cohort-investigation">A. Time-series cohort investigation<a class="headerlink" href="#a-time-series-cohort-investigation" title="Permanent link">&para;</a></h3>
+<p><strong>Brief:</strong> Build a small investigation surface for field observations. Let a
+reader select a time window, compare its habitat composition, inspect individual
+records, and retain a chosen record while changing the viewport and habitat
+filter. An overview must retain temporal context. Use calendar day as the time
+unit; brushing selects a half-open interval <code>[start, end)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th style="text-align: right;">Day</th>
+<th>Habitat</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r1</td>
+<td style="text-align: right;">1</td>
+<td>Coast</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr>
+<td>r2</td>
+<td style="text-align: right;">2</td>
+<td>Ridge</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr>
+<td>r3</td>
+<td style="text-align: right;">3</td>
+<td>Coast</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr>
+<td>r4</td>
+<td style="text-align: right;">4</td>
+<td>Coast</td>
+<td style="text-align: right;">40</td>
+</tr>
+<tr>
+<td>r5</td>
+<td style="text-align: right;">5</td>
+<td>Ridge</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr>
+<td>r6</td>
+<td style="text-align: right;">6</td>
+<td>Coast</td>
+<td style="text-align: right;">missing</td>
+</tr>
+<tr>
+<td>r7</td>
+<td style="text-align: right;">7</td>
+<td>Ridge</td>
+<td style="text-align: right;">70</td>
+</tr>
+<tr>
+<td>r8</td>
+<td style="text-align: right;">8</td>
+<td>Coast</td>
+<td style="text-align: right;">80</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Required observations:</strong></p>
+<ul>
+<li>Brushing <code>[2, 5)</code> selects exactly <code>r2, r3, r4</code>. Day 5 is excluded. Reverse
+  dragging produces the same set. Endpoint inclusion is visible in the range
+  control or explanation.</li>
+<li>Filtering to Coast retains three selected IDs, reports two selected records
+  in the current filter, and exposes five eligible records. The selected visible
+  value mean is 35, computed from <code>r3, r4</code>; the selection denominator is not
+  silently replaced by the total corpus size.</li>
+<li>The full Coast mean is 40 over four observed values, with one missing value
+  separately accounted for. Missing does not become zero or disappear from the
+  record count.</li>
+<li>Pin <code>r2</code>, then filter to Coast. The pin remains identifiable with its hidden
+  status, or the interface explicitly asks to replace it. Hovering <code>r4</code> and
+  leaving restores the pin; it does not commit a new selection.</li>
+<li>Zooming the main chart changes the viewport and representation as needed,
+  while the overview retains the full temporal domain and the three selected
+  identities survive. Resetting the viewport does not clear the selection.</li>
+<li>An empty brush has a visible zero-result state distinct from "no selection."
+  Clearing the selection restores the declared unselected behavior.</li>
+</ul>
+<h3 id="b-document-or-image-collection-across-scale">B. Document or image collection across scale<a class="headerlink" href="#b-document-or-image-collection-across-scale" title="Permanent link">&para;</a></h3>
+<p><strong>Brief:</strong> Build a collection browser for eight synthetic documents. At a broad
+scale show two collections and their composition; at a middle scale expose
+documents; close up, expose readable excerpts and metadata. Let a reader select
+documents, cross a tier boundary, inspect one, and return to the original place.
+Supply an equally capable linear route for keyboard use and small screens.</p>
+<p>Use IDs <code>d1</code>–<code>d4</code> in collection A and <code>d5</code>–<code>d8</code> in collection B. Give <code>d2</code> and
+<code>d6</code> the same title, "Survey notes," but different excerpts. Give <code>d4</code> a missing
+thumbnail. Initially select <code>d2, d5, d8</code>; pin <code>d6</code>. Filter out <code>d8</code> in a later
+step. The contents are fixtures, not an asserted semantic clustering result.</p>
+<p><strong>Required observations:</strong></p>
+<ul>
+<li>Overview groups expose selection membership: A has 1/4 selected, B has 2/4.
+  They cannot appear wholly selected. After filtering <code>d8</code>, show B's visible
+  1/3 selected alongside the fact that one selected document is hidden.</li>
+<li>A tier change adds or replaces task-relevant representation: counts and
+  summaries become recognizable document objects, then readable content.
+  Enlarging thumbnails without adding meaningful content does not pass.</li>
+<li>Selecting or pinning either duplicate title identifies the correct ID and
+  excerpt in every view. Array position and display title are not identities.</li>
+<li>Crossing the representation boundary back and forth preserves selected IDs,
+  the pin, and the spatial anchor. If the focused DOM element is replaced,
+  focus transfers to its semantic successor; it does not drop to the page body.</li>
+<li>Slow movement around a threshold does not flicker between tiers. Returning
+  from detail restores enough location context to find the same neighborhood.</li>
+<li>The missing thumbnail has a usable identity and inspection route. Zooming
+  does not trigger repeated unbounded image loads. Motion reduction preserves
+  the state transition without requiring a flying camera.</li>
+</ul>
+<p><strong>Bounded ZUI navigation and return extension:</strong> Use the same collection as a
+two-dimensional space, with world bounds <code>[0, 1600] × [0, 1000]</code>. Place collection
+A near <code>(300, 300)</code> and B near <code>(1200, 700)</code>, with the document positions stored
+in world coordinates. Start at a fitted overview; select <code>d2, d5, d8</code> and pin
+<code>d6</code>. Record camera position, scale, focused entity, and navigation-history
+length at each action. Declare the allowed scale interval and camera-boundary
+policy before testing.</p>
+<ul>
+<li><strong>Anchored zoom:</strong> Choose an off-center point that is away from world bounds.
+  Zoom by a factor of two and back using pointer, keyboard, and any offered
+  pinch route. The same world point remains at the same screen location within
+  a stated rendering tolerance, such as one CSS pixel. Check both axes; a
+  horizontal chart-domain change cannot satisfy this collection task. Boundary
+  clamping is separately visible and tested, rather than treated as anchor
+  preservation.</li>
+<li><strong>Fit and Back:</strong> Pan to an asymmetric view, then inspect <code>d2</code>. Fit computes
+  a camera that contains its declared target (document, collection, selection,
+  or whole space). Back restores the recorded previous camera, including its
+  offset and scale. They must produce distinct results in this fixture. Returning
+  to the preceding location must not clear selection, change the pin, or replace
+  a user's manually chosen camera with a newly fitted one.</li>
+<li><strong>Scale limits and history:</strong> At minimum and maximum scale, repeat the
+  outward zoom action. It is a true no-op: the camera, selection, preview, pin,
+  focus, and history length remain unchanged. One continuous gesture creates
+  the declared single navigation checkpoint, not one entry per input event.
+  Back must not require traversing invisible no-op entries.</li>
+<li><strong>Reflow and intentional position:</strong> Resize the host from a wide screen to a
+  narrow one after an intentional pan. Preserve the declared world anchor or
+  give a visible recovery action. Browser resize or delayed thumbnail arrival
+  cannot silently refit the entire space. If the design offers a reflowing
+  collection layout, record the world-to-entity correspondence before and
+  after reflow and preserve the selected/pinned IDs; test reflow separately from
+  camera navigation.</li>
+<li><strong>Preview and pin:</strong> Crossing the close-up threshold may reveal <code>d2</code>'s content
+  or initiate a preview under an explicit policy. It cannot pin <code>d2</code> merely
+  because the camera approached it. <code>d6</code> remains pinned; zooming away removes
+  a transient preview and restores the pinned detail. An explicit inspect/pin
+  action remains available through keyboard controls.</li>
+<li><strong>Bounds and reachability:</strong> Pan toward all four corners and apply repeated
+  large wheel or key inputs. The camera remains finite and obeys the declared
+  bounded or elastic policy. Every document, including those near the edges,
+  can still be reached and inspected at a readable scale. The overview and a
+  keyboard recovery control can return from an empty region without requiring
+  knowledge of the offscreen coordinates.</li>
+<li><strong>Focus continuity:</strong> Focus <code>d2</code>, cross every representation boundary, then
+  return. Its semantic successor keeps focus and a visible indicator even if
+  DOM nodes, canvas layers, or thumbnail representations change. If <code>d2</code> becomes
+  unavailable, focus moves to an explained collection or navigation target.
+  Virtualization cannot send focus to the page body or leave it on an invisible
+  recycled object.</li>
+</ul>
+<p>This extension tests navigation of a collection. It does not require a new
+faceting runtime. When applying it to Wunderkammer, evaluate any existing filters
+or collection membership behavior against their own declared task and data
+contract; do not equate that behavior with camera movement.</p>
+<h3 id="c-heterogeneous-linked-data-and-non-bijective-joins">C. Heterogeneous linked data and non-bijective joins<a class="headerlink" href="#c-heterogeneous-linked-data-and-non-bijective-joins" title="Permanent link">&para;</a></h3>
+<p><strong>Brief:</strong> Build a customer, order, and event investigation surface. Let a reader
+select a customer, inspect the related orders and events, and compare tags. The
+views have different units of analysis. Make unmatched data and count units
+visible. A shared x-axis is neither required nor meaningful.</p>
+<p>Customers are <code>c1, c2, c3</code>. Orders are <code>o1(c1, 10)</code>, <code>o2(c1, 30)</code>,
+<code>o3(c2, 20)</code>, and <code>o4(no customer, 5)</code>. Events are <code>e1(o1)</code>, <code>e2(o1)</code>,
+<code>e3(o2)</code>, <code>e4(o3)</code>, and <code>e5(unknown order)</code>. Tag A relates to <code>o1, o2</code>;
+tag B relates to <code>o2, o3</code>.</p>
+<p><strong>Required observations:</strong></p>
+<ul>
+<li>Selecting <code>c1</code> links to exactly two orders totaling 40 and three events. The
+  second event on <code>o1</code> does not count its order amount again.</li>
+<li>Selecting both tags yields three distinct orders, not four. Any weighted or
+  multiplicity-based metric is separately named and justified.</li>
+<li>Selecting <code>c3</code> yields no related orders and visibly empty target views.
+  Clearing that selection restores all records; the two actions are distinct.</li>
+<li><code>o4</code> and <code>e5</code> remain discoverable as unmatched records. A join cannot silently
+  drop them while claiming to show the entire input dataset.</li>
+<li>The source entity and join direction are intelligible. Selecting event <code>e1</code>
+  may link to <code>o1</code> and <code>c1</code>, but any expansion to sibling event <code>e2</code> is explicitly
+  defined and visually distinguishable from the original selected entity.</li>
+<li>Sorting, filtering, and aggregate expansion do not change identity mapping.
+  The rendered count labels name customers, orders, or events as appropriate.</li>
+</ul>
+<h3 id="d-geographic-and-temporal-views-with-independent-navigation">D. Geographic and temporal views with independent navigation<a class="headerlink" href="#d-geographic-and-temporal-views-with-independent-navigation" title="Permanent link">&para;</a></h3>
+<p><strong>Brief:</strong> Build an observation map linked to a timeline and record list. Select
+observations in either view, inspect their correspondence, and inspect a dense
+map region without losing the global time context. The map has longitude and
+latitude; the timeline has dates. Declare how multiple selections combine.</p>
+<p>Use five records: <code>p1(-5, 0, day 1)</code>, <code>p2(0, 0, day 2)</code>,
+<code>p3(5, 0, day 3)</code>, <code>p4(0, 5, day 4)</code>, <code>p5(5, 5, day 5)</code>.
+Define the test rectangle as <code>-1 &lt;= longitude &lt;= 1</code> and <code>-1 &lt;= latitude &lt;= 6</code>,
+which yields <code>p2, p4</code>. Define the time brush <code>[2, 4)</code>, which yields <code>p2, p3</code>.</p>
+<p><strong>Required observations:</strong></p>
+<ul>
+<li>Replace produces the most recent set; add produces <code>p2, p3, p4</code>; intersection
+  produces <code>p2</code>; subtracting the time set from the map set produces <code>p4</code>. Offer
+  only operators the interface declares, and test each offered operator.</li>
+<li>Map navigation changes the map viewport without changing timeline scale or
+  turning pan into selection. The selected IDs remain shared.</li>
+<li>Pixel-to-data conversion works when the plot begins away from the document
+  origin, the page is scrolled, and the graphic is CSS-scaled. Nested transforms
+  and SVG viewBox letterboxing must be covered when the host uses them.</li>
+<li>Small-screen interaction has an explicit way to choose navigation versus
+  brushing. Touch scrolling outside the plot still works; multiple pointers
+  do not silently commit the first pointer's unfinished selection.</li>
+</ul>
+<h2 id="adversarial-interaction-sequences">Adversarial interaction sequences<a class="headerlink" href="#adversarial-interaction-sequences" title="Permanent link">&para;</a></h2>
+<p>Run applicable cases against every built artifact, not only a purpose-built
+test harness. A feature absent from the product is <strong>not applicable</strong>, with the
+reason recorded; an offered but untested feature is <strong>not observed</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Sequence</th>
+<th>Observable invariant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Start a replacement brush, move outside the plot, press Escape</td>
+<td>The prior committed set survives; transient geometry disappears; keyboard focus remains usable</td>
+</tr>
+<tr>
+<td>Start a brush, then <code>pointercancel</code> / loss of capture / window blur</td>
+<td>No unfinished selection commits; capture and temporary listeners are released</td>
+</tr>
+<tr>
+<td>Draw a nonzero rectangle that contains no marks, then clear</td>
+<td>Explicit empty selection and absence of selection remain distinguishable</td>
+</tr>
+<tr>
+<td>Click or tap without crossing the drag threshold</td>
+<td>The documented click action occurs; no accidental empty brush replaces the selection</td>
+</tr>
+<tr>
+<td>Start from <code>{a,b}</code>; add <code>{b,c}</code>; subtract <code>{b}</code>; undo if offered</td>
+<td>Sets become <code>{a,b,c}</code>, then <code>{a,c}</code>; undo restores exactly the preceding committed state</td>
+</tr>
+<tr>
+<td>Preview A while B is pinned; move to empty space or another view</td>
+<td>Preview clears through the shared path and B remains pinned</td>
+</tr>
+<tr>
+<td>Change a filter while records are selected offscreen</td>
+<td>Selection identity and visibility counts agree; filtered or offscreen records are not confused with deleted records</td>
+</tr>
+<tr>
+<td>Change data revision during a pending brush</td>
+<td>The gesture is cancelled or recomputed under an explicit policy; IDs from incompatible revisions cannot be committed silently</td>
+</tr>
+<tr>
+<td>Issue request A, then B; resolve B before A</td>
+<td>Visible results stay on B; a stale A response cannot repaint them or restore its selection</td>
+</tr>
+<tr>
+<td>Change viewport while a selection overlay exists</td>
+<td>The overlay reprojects from its declared domain or IDs; stale screen coordinates do not change meaning</td>
+</tr>
+<tr>
+<td>Resize or cross a semantic tier while a child control has focus</td>
+<td>Focus has a visible, relevant destination and remains operable</td>
+</tr>
+<tr>
+<td>Remove a selected or pinned record from the data</td>
+<td>The missing identity is explained or cleared according to a visible policy; another row cannot inherit it</td>
+</tr>
+</tbody>
+</table>
+<p>Async, deleted-data, and multi-pointer cases require host fixtures; a static
+reference lab cannot establish them. Do not retrofit a fake loading spinner to
+claim asynchronous verification.</p>
+<h2 id="narrow-routing-counterexamples">Narrow routing counterexamples<a class="headerlink" href="#narrow-routing-counterexamples" title="Permanent link">&para;</a></h2>
+<p>These briefs test restraint. Use fresh sessions and inspect the runnable result
+or proposal; checking whether the agent mentions "brush" is not a valid test.</p>
+<table>
+<thead>
+<tr>
+<th>Brief</th>
+<th>Expected decision and evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Fix the spacing of the already specified zoom buttons; behavior is approved"</td>
+<td>Follow the host's settled control model; no new selection or linking system</td>
+</tr>
+<tr>
+<td>"Show the latest total and its units on a status page"</td>
+<td>A readable direct display; no invented exploratory canvas or selection state</td>
+</tr>
+<tr>
+<td>"Add a date filter to this appointment form"</td>
+<td>A conventional bounded input is sufficient unless a concrete distribution-comparison task is supplied</td>
+</tr>
+<tr>
+<td>"Make this static publication figure readable when printed"</td>
+<td>Work through the figure channel and print constraints; no interaction required to interpret the export</td>
+</tr>
+<tr>
+<td>"The gallery's image magnifier must show the original pixels"</td>
+<td>Geometric magnification preserves the requested content; semantic substitution is not imposed</td>
+</tr>
+<tr>
+<td>"Build three independent operational controls with unrelated data"</td>
+<td>Preserve independent state; shared appearance alone does not warrant cross-filtering</td>
+</tr>
+</tbody>
+</table>
+<p>For a paired positive test, add a genuine relationship task to the last brief:
+"Choose a deployment and inspect its errors, hosts, and traces." The response
+should then define correspondence and linked state. This tests whether routing
+responds to task meaning rather than surface nouns.</p>
+<h2 id="human-comparison-when-an-outcome-claim-matters">Human comparison when an outcome claim matters<a class="headerlink" href="#human-comparison-when-an-outcome-claim-matters" title="Permanent link">&para;</a></h2>
+<p>The following is a study plan, not evidence that these mechanisms improve
+performance. Start with observed workflow failures and a relevant existing
+interface. Pick tasks that both conditions can complete, and preserve data,
+labels, available information, and answer criteria across conditions.</p>
+<ol>
+<li><strong>Define the claim and task before recruiting.</strong> For example: find which
+   habitat changed within a time window, recover a previously inspected record,
+   or explain why an aggregate includes certain members. Decide which task
+   tests correspondence, navigation, selection, or learning. Do not claim a
+   general cognitive benefit from one successful task.</li>
+<li><strong>Choose the comparison that addresses the mechanism.</strong> Compare the host's
+   current interface with the proposed one. If separating zoom from linking
+   matters, use a targeted variant or staged comparison. Keep the baseline
+   capable and equally polished; otherwise the result cannot isolate the
+   mechanism. A factorial study is useful only when the research question and
+   participant budget support it.</li>
+<li><strong>Separate learning from practiced performance.</strong> Capture unassisted first
+   use, provide the same amount of instruction, then use parallel datasets for
+   practiced trials. Counterbalance condition and task order. Use different
+   values with comparable structure to reduce answer memorization. A delayed
+   retention task is needed for a retention claim.</li>
+<li><strong>Define denominators and failures.</strong> Report correct task answers / assigned
+   tasks, participants completing each condition / recruited participants,
+   recoveries / induced recoverable errors, and condition-specific missingness.
+   Measure elapsed time from an explicit start to an explicit completion. Report
+   incomplete tasks and timeouts alongside time for successful tasks; do not
+   hide them in a faster-successes-only mean.</li>
+<li><strong>Observe the mechanism.</strong> Record chosen IDs, operations, tier crossings,
+   resets, accidental selections, backtracks, and help requests alongside task
+   correctness. Think-aloud can reveal confusion but changes task timing; use
+   a separate session or acknowledge that limit. Logs alone do not reveal why a
+   person acted.</li>
+<li><strong>Treat insight tasks carefully.</strong> Collect an answer and its cited data.
+   Define valid findings and scoring examples beforehand; blind raters to
+   condition where practical. Report agreement, unsupported findings, duplicates,
+   and findings per participant within a fixed observation period. Verbosity or
+   number of interactions is not an insight measure.</li>
+<li><strong>Recruit for the claimed population and input modes.</strong> Include relevant
+   domain experience and access needs. Test keyboard, screen reader, or touch
+   with people who use them before making claims about their usability. Use
+   pilot variance and a smallest meaningful effect to plan a comparative sample;
+   a convenient small pilot supports defect discovery, not a universal ranking.</li>
+<li><strong>Report uncertainty and scope.</strong> Analyze paired observations as paired when
+   appropriate, account for repeated tasks per participant, and report effect
+   estimates with uncertainty. Predeclare primary outcomes and exclusions when
+   testing a performance claim. Preserve contradictions: improved speed with
+   worse accuracy or harder first use is a tradeoff, not an overall win.</li>
+</ol>
+<h2 id="evidence-receipt">Evidence receipt<a class="headerlink" href="#evidence-receipt" title="Permanent link">&para;</a></h2>
+<p>Attach a compact record to a completed evaluation:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Skill and artifact revisions:
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Brief, dataset version, and expected answers:
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Host browser, viewport, device/input mode:
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>Model cases passed / failed / not observed:
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>Real input cases passed / failed / not observed:
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Rendered states inspected and captures:
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>Human participants, assigned tasks, completed tasks (if any):
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>First reproducible defect and its consequence:
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>Claim supported by this evidence:
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>Unverified boundaries and next check:
+</code></pre></div>
+<p>Do not mark the battery complete merely because the reference example passes.
+Keep a new failing build as a regression fixture when it exposes a transferable
+skill or implementation defect.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.instant", "navigation.instant.progress", "navigation.top", "navigation.tracking", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

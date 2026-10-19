@@ -16,6 +16,8 @@ on:
       - 'site-docs/**'
       - 'render_assets/**'
       - 'plugins/muriel/skills/compose/channels/**'
+      - 'plugins/muriel/skills/compose/references/**'
+      - 'plugins/muriel/skills/compose/examples/linked-atlas/**'
       - 'plugins/muriel/skills/compose/vocabularies/**'
       - 'plugins/muriel/skills/compose/SKILL.md'
       - 'TODO.md'
@@ -63,7 +65,8 @@ jobs:
         run: |
           for f in docs/.nojekyll docs/CNAME docs/index.html \
                    docs/gallery/_lib/spatial.js docs/gallery/perspective-wall/index.html \
-                   docs/channels/spatial/index.html docs/vocabularies/visible-language/index.html; do
+                   docs/channels/spatial/index.html docs/vocabularies/visible-language/index.html \
+                   docs/references/multiscale-coordination/index.html docs/examples/linked-atlas/app.mjs; do
             test -e "$f" || { echo "::error::missing $f"; exit 1; }
           done
           grep -qx 'muriel.mindbendingpixels.com' docs/CNAME || { echo '::error::bad CNAME content'; exit 1; }

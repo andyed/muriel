@@ -40,9 +40,16 @@ patterns with selection reasons, mark choices, and implementation contracts.
 Consider sparklines wherever the trajectory changes the interpretation of an
 anchor; the enclosing text or table supplies the labels and scale context.
 
+For semantic zoom, linked displays, or brushing, pair this chart grammar with
+the [multiscale coordination contract](../references/multiscale-coordination.md)
+and the relevant [library adapter](../references/multiscale-adapters.md).
+Exploration starts with a question the views let the reader investigate; it does
+not require a known finding. Keep editorial claims separate from the open
+questions and selected populations in an analytical tool.
+
 ## Workflow
 
-1. **Identify the message.** Before writing chart code: what is the *finding* this chart must make visible? What is the *comparison context* — baseline, target, prior period, peer group? If no finding, no chart (see rule 22).
+1. **Identify the task.** For an explanatory chart, name the finding. For an exploratory display, name the question and operations that let the reader investigate it. In either case, establish the comparison context: baseline, target, prior period, or peer group (see rule 22).
 2. **Pick the right chart type** from the chart-type guide below.
 3. **Apply the 22 universal rules.** They are defaults — deviate only on explicit user instruction.
 4. **Apply library-specific config** from the quick-reference table.
@@ -83,7 +90,7 @@ Numbered for citation. Lifted from Tufte's classic principles + modern screen-fi
 
 ### Content & format
 
-20. **Titles assert findings.** "Revenue Surged 23% in Q3" — not "Revenue by Quarter, 2024". The chart title states the insight. Subtitle adds context ("vs. prior year, USD millions"). If the data has no clear finding, the chart may not be needed (rule 22).
+20. **Titles match the task.** Explanatory titles state supported findings ("Revenue Surged 23% in Q3"). Exploratory titles identify the question or measure without implying a result ("How does habitat relate to observation quality?"). Subtitles name units, comparison context, and the active population. Update selected counts and scope without converting a temporary brush into an asserted discovery.
 21. **Format numbers for humans.** Abbreviate large numbers (`$1.2M` not `$1,200,000`). Thousand separators for mid-range (`12,450`). Match decimal precision to significance. Right-align numbers in tables. State units once (axis label or title), not on every datum.
 22. **Don't chart what a sentence can say.** 1–2 numbers → write a sentence with inline context ("Revenue was $4.2M, up 23% from Q2"). A simple ranking of 3–5 items → consider a table. Charts earn their space by revealing patterns, trends, or distributions that prose and tables cannot.
 
@@ -260,7 +267,7 @@ Before declaring a chart done:
 - [ ] No dual y-axes
 - [ ] No 3D, no gradient fills, no decorative borders
 - [ ] Bar y-axis includes zero; line/scatter axes range-framed
-- [ ] Title asserts the finding (rule 20)
+- [ ] Title states the supported finding or exploratory question; units and population are explicit (rule 20)
 - [ ] Comparison context present (baseline, target, prior period — rule 13); a sparkline's labeled history can supply context for a trajectory question
 - [ ] Each series directly labeled (rule 2)
 - [ ] Notable points annotated (rule 12)

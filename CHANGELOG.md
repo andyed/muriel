@@ -23,6 +23,52 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   ImageMagick's librsvg drops them. The critique agent and the repo's
   permission allowlist now point at it.
 
+- **`references/human-capabilities.md` and `references/microstrategies.md`:
+  research grounding for interaction decisions.** human-capabilities covers
+  cognitive task analysis, human strengths and demands, the split of work
+  between people and AI, the limits of evidence, and task-level evaluation.
+  microstrategies is built on Gray's *Milliseconds Matter* and soft
+  constraints: dependencies, information-access costs, and the routines an
+  interaction permits or encourages. SKILL.md routes to both, and
+  design-synthesis and interaction-contracts point to them.
+  creative-provocations now covers deliberate invention as well as escaping
+  a design rut.
+- **`research/`: two literature reviews with bibliographies.**
+  `interaction-models-review.md` covers Hick–Hyman, Fitts and steering, the
+  GOMS family, Gray's microstrategies, external representations, learning,
+  and resumption. `scrutinizer-perception-review.md` covers crowding,
+  summary statistics, peripheral colour, task guidance, information foraging,
+  and restricted viewing, and audits the Scrutinizer source at `bc68944`. Its
+  links point to that commit on GitHub. Both reviews propose corrections to
+  muriel's scientific rules; they do not apply them.
+- **Semantic zoom, linked displays, brushing, zooming interfaces, and faceted
+  exploration.** `references/multiscale-coordination.md` is the contract:
+  stable identity across representation levels, selection and query
+  semantics (absent is not empty; frozen IDs or live predicates), brush
+  lifetime and set operations, aggregate membership, input ownership, async
+  freshness, and the invariants to test. `multiscale-adapters.md` applies it
+  through D3, Vega-Lite, ECharts, and Canvas/WebGL; `multiscale-evaluation.md`
+  holds briefs, adversarial fixtures, and human-evaluation plans;
+  `zooming-interfaces.md` covers camera bounds, Fit/Back/Undo, and automatic
+  detail; `faceted-exploration.md` covers OR/AND scope, contextual counts,
+  value search, and recovery. The last two cite Wunderkammer v0.2.0 as the
+  inspected implementation and send image collections to
+  `references/collections.md` first. `examples/linked-atlas/` is a
+  dependency-free lab with synthetic data, published on the docs site and
+  tested by `tests/multiscale-coordination.test.mjs` (14 model tests) and
+  `tests/multiscale-browser.mjs` (11 Playwright scenarios, including rendered
+  8:1 text contrast on desktop and phone). `research/` adds a semantic-zoom
+  and linked-views review with a bibliography, a historical reading map,
+  and the Clipwall case study, with links pinned to Wunderkammer v0.2.0.
+  SKILL.md routes the three tasks; the interactive, charts, and spatial
+  channels, `interaction-contracts.md`, and the Visible Language vocabulary
+  point to the contract. Chart titles now match the task: explanatory
+  titles state findings, exploratory titles name the question.
+- **CI runs the node tests.** A new `interactive` job in `tests.yml` runs
+  `node --test tests/*.test.mjs` (the multiscale and spatial suites) on
+  Node 22, then the browser checks with Playwright 1.62.1 and Chromium. The
+  docs workflow rebuilds on reference and lab changes, publishes
+  `references/`, and verifies the new pages exist before committing.
 - **`references/sparklines.md` — 48 ways and reasons to use sparklines.**
   Eight groups of six task patterns (reading, comparing entities,
   monitoring, navigation, controls, data quality, planning, learning), each
@@ -443,6 +489,14 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 - `data-mountain-field/` exemplar and its 29-assertion `check.mjs`.
 
 ### Changed
+
+- **SKILL.md frames muriel as an interaction and visual-design
+  collaborator.** The description, opening, and invocation test now cover
+  people and AI agents, cognitive psychology and HCI as the source of
+  mechanisms, and invention or deliberate departures from convention. Proof
+  is matched to the claim: rendering and interaction checks for the artifact,
+  evidence from people for comprehension, workload, or learning. The README
+  gains an Interaction design section; its lede is unchanged.
 
 - **Wunderkammer 0.2.0 is the pinned release, and `muriel.collection`
   checks for it by default.** Wunderkammer 0.2.0 (tag `v0.2.0`, 2026-10-18)

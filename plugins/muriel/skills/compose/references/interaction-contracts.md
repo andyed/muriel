@@ -35,6 +35,12 @@ one or more of:
 Do not load for a purely typographic, spacing, or surface-detail change whose
 behavior and state ownership are already verified.
 
+For semantic zoom, linked displays, or brushing, use the specialized
+[multiscale coordination contract](multiscale-coordination.md). It distinguishes
+navigation, querying, hover, pinning, and selection, and defines how identity and
+aggregate membership survive representation changes. Apply this reference's
+general recovery and async rules through that same owner.
+
 ## Behavior-truth sequence
 
 Resolve these in order:
@@ -134,6 +140,10 @@ Add two Muriel fields:
 
 These are response-feedback budgets, not animation-duration tokens. Preserve
 the project's measured performance data and Muriel's existing motion rules.
+
+When timing or information-access costs may change the routine a person adopts,
+use [microstrategies](microstrategies.md) to examine the interaction itself.
+Keep that analysis distinct from the response-feedback budgets below.
 
 | Observed delay | Required interaction response |
 |---|---|

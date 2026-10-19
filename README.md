@@ -89,6 +89,16 @@ From [`SKILL.md`](plugins/muriel/skills/compose/SKILL.md):
 
 Most of the rules predate the tooling. They come from Cooper's Visible Language Workshop, Tufte's data-ink ratio, Bertin's retinal variables, Gestalt grouping, and eye-movement research.
 
+## Interaction design
+
+muriel designs how an interface behaves as well as how it looks. It draws on cognitive psychology, perception research, and HCI to choose a mechanism, then builds the mechanism and exercises it in the host product. Rendering and interaction checks are evidence about the artifact; claims about comprehension, workload, or learning need evidence from people.
+
+[`human-capabilities.md`](plugins/muriel/skills/compose/references/human-capabilities.md) covers cognitive task analysis, the split of work between people and AI, and the limits of evidence. [`microstrategies.md`](plugins/muriel/skills/compose/references/microstrategies.md) is built on Gray's *Milliseconds Matter*: small differences in the cost of reaching information change the routines people adopt. Convention is a starting hypothesis. muriel can propose a new interaction, build a working probe, and weigh what it makes possible against what it costs to learn.
+
+Zooming interfaces, semantic zoom, linked displays, brushing, and faceted exploration share one contract, in [`multiscale-coordination.md`](plugins/muriel/skills/compose/references/multiscale-coordination.md): entities keep a stable identity when their representation changes, queries and selections have explicit meanings, and gestures are recoverable. Camera navigation is covered in [`zooming-interfaces.md`](plugins/muriel/skills/compose/references/zooming-interfaces.md) and attribute filters in [`faceted-exploration.md`](plugins/muriel/skills/compose/references/faceted-exploration.md). Adapters for D3, Vega-Lite, ECharts, and Canvas are in [`multiscale-adapters.md`](plugins/muriel/skills/compose/references/multiscale-adapters.md), and briefs and fixtures for testing the contract in other domains are in [`multiscale-evaluation.md`](plugins/muriel/skills/compose/references/multiscale-evaluation.md). The [Linked Atlas lab](https://muriel.mindbendingpixels.com/examples/linked-atlas/) ([source](plugins/muriel/skills/compose/examples/linked-atlas/)) is a working example with synthetic data and no dependencies.
+
+The literature reviews behind these references are in [`research/`](research/).
+
 ## Checking its own work
 
 muriel renders what it makes and measures the result:
@@ -169,6 +179,7 @@ cd ~/Documents/dev/muriel && ./install.sh
 - [`plugins/muriel/agents/`](plugins/muriel/agents/): the critique agent and the five jury seats
 - [`muriel/`](muriel/): Python package and CLI
 - [`render_assets/`](render_assets/): Three.js and CSS3D exemplars for the spatial channel
+- [`research/`](research/): literature reviews and bibliographies behind the references
 - `.claude-plugin/marketplace.json`: the marketplace entry. The plugin manifest is `plugins/muriel/.claude-plugin/plugin.json`.
 
 ## In use

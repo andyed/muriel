@@ -88,47 +88,79 @@ One file. No build. Marginalia handles editorial chrome. Demo lives at `<project
 ## Permalink convention
 Demos with shareable state should follow a **PermalinkManager** pattern: URL hash encodes parameters, parsed on load, rewritten on change. One utility per project, referenced from every demo — if the project already has one, read it first and don't reinvent it.
 
-## Linked displays / coordinated analytic views
+## Zooming interfaces, semantic zooming, linked displays, and brushing
 
-Linked displays are not "several charts on one page." They are **one analytic state projected through several complementary views**. If each chart owns its own date range, filter, cursor, or selection, the interface will feel smart for 30 seconds and then become untrustworthy. Use this contract when building brushing/linking demos, executive analysis surfaces, visual history explorers, or model-debug dashboards:
+Use the [multiscale coordination reference](../references/multiscale-coordination.md)
+when scale changes what can be understood, or several views must answer one
+question together. It owns the behavioral contract; this channel owns the
+interactive surface. A conventional slider or isolated chart needs no extra
+coordination machinery.
 
-### State contract
+For navigation through an information space, read
+[zooming interfaces](../references/zooming-interfaces.md): useful camera bounds,
+landmarks, direct jumps, Fit/Back, automatic detail, and the Wunderkammer precedent.
+Semantic zoom determines how the representation changes; a ZUI also has to make
+the route into detail and back understandable and controllable.
 
-- **One central store.** Keep `focusDate`, `rangeStart`, `rangeEnd`, active facet/lane, pinned entity, and preview entity in one object. Views read from it; views do not independently invent state.
-- **Two interaction modes.** Hover is a **preview**; click is a **pin**. The state bar should say which mode is active. `mouseout` clears previews back to the pinned state.
-- **One global coordinate system.** Context sparklines and small multiples use the same full x-domain even when the main view is zoomed. Draw the brushed range as an overlay; do not re-slice each metric chart.
-- **Range is first-class.** A brush should update all range-dependent views: event list, counts, metric start/end deltas, and mini-chart range bands.
-- **Selection and range are different.** A selected event/date drives point readouts; a brushed range drives aggregate summaries. Do not overload one cursor to mean both.
-- **Visible state beats hidden magic.** A small state bar (`focus`, `range`, `facet`, `mode`) is not chrome; it is the contract the analyst uses to trust the display.
+For exploration through named attributes, read
+[faceted exploration](../references/faceted-exploration.md): explicit OR/AND
+scope, counts that retain other filters while omitting a facet's own restriction,
+local value search, active-value retention, and granular recovery. Local option
+search browses labels; global search and committed facets change membership.
 
-### View roles
-
-Design each view with a job:
-
-| View | Job | Interaction |
+| Mechanism | What changes | What stays identifiable |
 |---|---|---|
-| Overview timeline/map | Show distribution and clusters | Brush range; hover preview; click pin |
-| Metric context strips | Preserve common temporal context | Cursor follows focus; band follows range |
-| Facet/count panel | Show composition of the current range | Click facet to lens/filter |
-| Detail/provenance card | Explain the pinned entity | Source link; caveats; local refs |
-| Range table | Make filtered records inspectable | Row click pins; source link opens |
-| Range summary | Compare start/end values | Uses range, not focus cursor |
+| Semantic zoom | Representation: distribution → records → readable details | Entities, membership, chosen focus, and task meaning |
+| Linked displays | Complementary projections respond to a shared query or selection | Stable entity keys and explicit relationships between datasets |
+| Brushing | A gesture or accessible control specifies a predicate or set | Its scope, operation, selected population, and recovery path |
+| Faceted exploration | Named attribute choices refine the working subset | Combination rules, count context, active restrictions, and recovery |
 
-### Implementation rules
+### Build the contract before the marks
 
-- **No dynamic markLine/markArea churn** for every mousemove. Use DOM overlays for cursors/ranges on small charts; mutate cheap CSS `left/width` values.
-- **Throttle high-frequency events** with `requestAnimationFrame`; never rerender five charts on every pixel-crossing if a CSS overlay will do.
-- **Stable domains are testable.** In runtime tests, assert that every metric chart has the same x-axis min/max and that cursor/range overlays line up across all cards.
-- **Expose a tiny debug API** on `window` for tests (`setState`, `setRange`, `pinRecordById`, `previewDate`, `clearPreview`). Good demos are inspectable.
-- **Avoid "state tunneling."** If a metric chart hover changes the focus date, it must use the same `previewDate()` path as a timeline hover.
-- **Labels must not become the data.** Dense point labels should hide/declutter under overlap; details belong in hover/pin panels.
+- Separate **viewport, filters, committed selection, brush preview, hover, and
+  pin**. A pan does not silently filter; a hover does not overwrite a pin.
+- Define one canonical owner in the host product. Each view emits semantic
+  actions and derives its display from the accepted state. Do not install a
+  second store just to use a chart library.
+- Link through record IDs or documented relational keys. A geographic map,
+  timeline, and table may use different coordinate systems. Comparable context
+  strips should retain their common full domain; a zoomed detail view has its
+  own explicitly labeled domain.
+- Specify whether brushing **highlights**, **filters**, or **navigates**. Keep
+  these actions distinguishable even when the same rectangular gesture can
+  express all three. If combining brushes, expose replace/add/subtract/intersect
+  and define how an inactive selection differs from an active empty one.
+- Preserve aggregate membership. A bin containing two selected records out of
+  twelve must not imply that all twelve are selected. Name count denominators
+  and the population excluded by filters or the viewport.
+- Choose semantic levels using available screen space and task needs. Preserve
+  the world point under the zoom anchor, use hysteresis near representation
+  boundaries, and retain an overview or route back. A larger font alone does
+  not establish semantic zoom.
+- Compose an in-progress brush against its starting selection. Commit once;
+  cancel restores it. Store extents in data coordinates and recompute pixel
+  geometry after resize. Batch previews at animation-frame cadence; invalidate
+  stale async results before publishing them.
+- On small charts, draw cursors and range bands as DOM overlays and move them
+  with CSS `left` and `width`. Do not rebuild ECharts `markLine` or `markArea`
+  on every pointer move.
+- Provide non-drag, non-hover access to the same operations. Keep visible text
+  at the contrast floor; use outlines, symbols, and counts for selection rather
+  than fading essential text.
 
-### Analyst use cases this supports
+### Working proof
 
-- Product-history review: select a launch/decision and see metric context around it.
-- Funnel diagnosis: brush a cohort window; table, dropoff, source mix, and outcome views update together.
-- Content or marketplace analysis: lens by source/type/segment while preserving one time base for supply and demand metrics.
-- Experiment review: pin launch/decision dates; brush pre/post windows; inspect metric deltas without losing provenance.
+[Linked Atlas](../examples/linked-atlas/index.html) is a local, dependency-free
+reference with synthetic field observations: an overview, semantic detail,
+linked cohort summaries, record table, and pin/preview inspector. Its pure model
+and browser checks exercise selection preservation, cancellation, coordinate
+conversion, semantic levels, keyboard access, and mobile layout.
+
+Borrow the contract and the smallest relevant implementation seam. Do not copy
+its dataset, threshold constants, palette, or whole state object into an existing
+product. Use [library adapters](../references/multiscale-adapters.md) for the
+chosen renderer and the [evaluation battery](../references/multiscale-evaluation.md)
+for transfer to other domains and honest task-level proof.
 
 ## Marginalia integration
 Wrap demos in marginalia callouts for editorial context:

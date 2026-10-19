@@ -98,6 +98,12 @@ Record:
 - **Assumptions** — plausible claims not yet established.
 - **Unknowns** — gaps that could reverse the decision.
 
+When a research-informed mechanism determines the choice, use the selected
+channel's academic lineage and, when needed,
+[`human-capabilities.md`](human-capabilities.md). Connect the source or
+framework to the interaction being built and the evidence that can test it.
+Carry this into the existing synthesis; keep one decision record.
+
 Keep facts, assumptions, and concepts visibly separate. Do not let a fluent
 concept silently become project truth.
 
@@ -117,6 +123,15 @@ Do not fill an option quota. Two real alternatives are better than four padded
 ones. Preserve surprising concepts long enough to test their mechanism, but do
 not protect novelty from product constraints.
 
+Conventions are revisable design choices. Challenge or replace them when a
+different mechanism opens worthwhile task, expressive, or experiential value.
+A novel interaction can be a first-class option before a conventional approach
+has failed. Use research to reason about its mechanism without requiring a
+published precedent for the exact invention. Where its value depends on use,
+route to Probe and build enough to test it. Include familiar alternatives when
+they make the tradeoff informative; assess learning and recovery costs alongside
+what the invention makes possible.
+
 ### Optional: Provoke
 
 Do not draw a provocation by default. Load
@@ -127,6 +142,9 @@ Do not draw a provocation by default. Load
 - a favored direction has become too coherent to question;
 - a Compare or Probe has stalled without producing a discriminating move; or
 - the user explicitly asks to brainstorm, get unstuck, or seek an oblique angle.
+
+The repertoire can also support deliberate invention early in exploration;
+there need not be an existing design rut.
 
 Use one fitted transformation first. Use at most three when breadth is the
 purpose. Record what assumption each challenged and what changed. A provocation
