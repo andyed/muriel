@@ -23,6 +23,15 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   ImageMagick's librsvg drops them. The critique agent and the repo's
   permission allowlist now point at it.
 
+- **`references/sparklines.md` — 48 ways and reasons to use sparklines.**
+  Eight groups of six task patterns (reading, comparing entities,
+  monitoring, navigation, controls, data quality, planning, learning), each
+  pairing a placement with the question it exposes and the caveat that keeps
+  it honest; plus a mark vocabulary, scale and missing-data contracts,
+  placement recipes and acceptance checks. The charts, interactive, web and
+  terminal channels and SKILL.md point to it. The charts channel's sparkline
+  row no longer forbids labels: the plot can omit axes, but nearby text
+  carries the measure, units, window and scale policy.
 - **`muriel.collection` and `muriel collection`: Wunderkammer collection
   documents.** [Wunderkammer](https://github.com/andyed/wunderkammer) is
   muriel's collection engine: an agent hands a person one JSON file
@@ -57,6 +66,29 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   `collection.test.mjs`, one planted violation per rule, the builder and
   CLI, and the shipped Psychodeli example. Two differential tests also run
   when Node and a Wunderkammer checkout are present.
+- **`muriel.collection` checks for a Wunderkammer release, and accepts
+  `ui.nouns` for the next one.** Each Wunderkammer wall refuses the fields
+  added after it. So `validate(doc, *, base_url=None, release="0.1.0")` and
+  `validate --release` name the release whose wall will load the document.
+  The default is `WUNDERKAMMER` (0.1.0), the release
+  `references/collections.md` pins, and a test keeps the two equal.
+  `"next"` is Wunderkammer main after 0.1.0 (9c53ca2). It adds `ui.nouns`,
+  `{ item, items }`, each a non-empty string of at most 40 characters,
+  checked with the reference's problem text. For 0.1.0, `ui.nouns` is
+  refused as unsupported with 0.1.0's own supported list, as that wall
+  refuses it, and the CLI adds a note naming `--release next`. `SINCE`
+  lists each added field with the first release that accepts it. `ui.nouns`
+  is the only validator change in Wunderkammer between v0.1.0 and 9c53ca2.
+  - **The differential tests are pinned.** `REFERENCE` in
+    `tests/test_collection.py` pins one Wunderkammer commit per release
+    (v0.1.0 at caadd2e, `next` at 9c53ca2). Each run reads that commit's
+    validator out of the checkout with `git show`. So every run checks both
+    releases, whatever the checkout has checked out. Before, the test read
+    the checkout as it was: it passed at v0.1.0 and failed at main.
+  - **Drift is caught by content.** A separate test fails when the
+    checkout's `wall/collection.mjs` and `wall/facet-counts.mjs` match no
+    pinned commit. Wunderkammer commits that leave the validator alone do
+    not trip it. When it fails, port the change and pin the new commit.
 - **`references/collections.md` — Wunderkammer 0.1.0 as the engine for
   visual collections.** It says when an agent should use a collection
   explorer: dozens to thousands of images, comparisons between groups, or
@@ -69,12 +101,12 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   - the `window.wunderkammer.export()` hand-back;
   - `mount()`.
 
-  Loading is pinned to `wunderkammer@0.1.0` and `v0.1.0`. The wall is
-  `index.html` at the package root, and the comparison page is
-  `wall/compare.html`. Modules load from jsDelivr or unpkg. jsDelivr serves
-  HTML as `text/plain`, so both pages are opened or framed from unpkg
-  (`https://unpkg.com/wunderkammer@0.1.0/index.html?collection=<url>`) or a
-  static host. `mount()` imported from unpkg needs no `wallUrl`.
+  Loading is pinned to a Wunderkammer git tag. The wall is `index.html` at
+  the checkout's root, and the comparison page is `wall/compare.html`.
+  Modules load from a static host serving a checkout of the tag, or from
+  jsDelivr's GitHub route. That route serves HTML as `text/plain`, so both
+  pages are opened or framed from a static host, and `mount()` imported
+  from the route takes a `wallUrl`.
 
   The linked-atlas lab is the fallback when a single file is required, or
   when the task needs WebGL-only views and WebGL is unavailable. Also new are
@@ -412,6 +444,28 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- **Wunderkammer 0.2.0 is the pinned release, and `muriel.collection`
+  checks for it by default.** Wunderkammer 0.2.0 (tag `v0.2.0`, 2026-10-18)
+  ships `ui.nouns`, the floating space and the agent skill. The `"next"`
+  release is renamed `0.2.0`, and `WUNDERKAMMER`, the default, moves to it,
+  so `validate` accepts `ui.nouns` unless `--release 0.1.0` is given; the
+  note for a refused newer field now names `--release 0.2.0`. `REFERENCE`
+  pins 0.2.0 to the tag's commit and keeps 0.1.0 at caadd2e. The
+  validator files at the tag match 9c53ca2's, the previous `next` pin.
+  `references/collections.md` moves every pin to the `v0.2.0` tag,
+  including the skill link, which was on `main`. So the skill's example,
+  which sets `ui.nouns`, no longer conflicts with the pinned wall, and the
+  `--release` bullet's warning is gone. The Three.js bullet names the
+  floating space among the views that need it.
+- **Wunderkammer loads from its git tag, not a package registry.** No
+  Wunderkammer package is published, so the package-CDN URLs in
+  `references/collections.md` pointed at nothing, and would have served
+  whoever registered the name. The reference now pins the `v0.2.0`
+  tag: `mount()` imports from a checkout of it on a static host, jsDelivr's
+  GitHub route is listed for modules only (it serves the tag's HTML as
+  `text/plain`, checked 2026-10-18), and the live demo takes
+  `?collection=<url>` for trying a document without hosting the wall. The
+  anti-patterns add a package-registry URL.
 - **README cut from ~3,950 words to ~1,500.** It now leads with what muriel
   does, how to install it, and what it enforces. The channel list and the
   dependency table, which described the same channels twice, are one table;

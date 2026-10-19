@@ -12,6 +12,13 @@ Part of the [muriel](../SKILL.md) skill — see the top-level index for mission,
 - `sparkline()` — inline single-line trend via `▁▂▃▄▅▆▇█`. Drop into prose or table cells.
 - `table()` — box-drawing-character tables with aligned columns, numeric formatting, optional separators.
 
+For selection reasons and patterns beyond a single trend, read the
+[sparkline repertoire](../references/sparklines.md). The current Unicode helper
+uses a local min/max per call and one character per sample; it cannot represent
+shared domains, timestamps, or gaps. Use it for finite, regularly spaced shape
+previews with nearby units/window/range, and use SVG or the host chart renderer
+when those limitations would change the interpretation.
+
 ## Design rules
 
 - **Label every number.** Units and context required (the universal rule applies here too — a chart with unlabeled axes is worse than no chart).

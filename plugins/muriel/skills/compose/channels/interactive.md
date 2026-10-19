@@ -4,6 +4,11 @@ The biggest win over Photoshop: **parameters the reader can move**. Static image
 
 Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map.
 
+For histories in rows, previews beside filters or scrubbers, or response curves
+beside controls, consult the [sparkline repertoire](../references/sparklines.md).
+Keep preview, inspection, and committed selection distinct; expand through the
+host's canonical state and provide keyboard/touch access to the same detail.
+
 ## When to use
 - Blog post explainers where the reader should move parameters, not just read
 - Paper figures with sliders (CHI / ETTAC / CIKM submissions can include live demo URLs)
@@ -142,7 +147,7 @@ Good shapes to borrow rather than rebuild:
 - A shipped WebGL explainer for the concept you're teaching (foveation, diffusion, whatever) — reference its URL from your post, don't re-derive the math.
 - A project-local PermalinkManager utility — one implementation per repo, imported by every demo.
 - An audio-reactive shader pipeline elsewhere in the codebase — if a sibling project already solved the AnalyserNode → uniforms plumbing, import or vendor the small hot path instead of starting from scratch.
-- A collection of dozens to thousands of images — write a collection document for Wunderkammer 0.1.0 instead of building a wall; see [`references/collections.md`](../references/collections.md).
+- A collection of dozens to thousands of images — write a collection document for Wunderkammer 0.2.0 instead of building a wall; see [`references/collections.md`](../references/collections.md).
 
 ## Distribution & hosting
 

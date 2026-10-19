@@ -34,6 +34,12 @@ Part of the [muriel](../SKILL.md) skill — see the top-level index for mission,
 
 If the chart lands in a paper, lab notebook, or matplotlib pipeline — use [`channels/science.md`](science.md) instead.
 
+For history beside a value, comparison across rows, or a compact preview in a
+control, read the [sparkline repertoire](../references/sparklines.md): 48 task
+patterns with selection reasons, mark choices, and implementation contracts.
+Consider sparklines wherever the trajectory changes the interpretation of an
+anchor; the enclosing text or table supplies the labels and scale context.
+
 ## Workflow
 
 1. **Identify the message.** Before writing chart code: what is the *finding* this chart must make visible? What is the *comparison context* — baseline, target, prior period, peer group? If no finding, no chart (see rule 22).
@@ -64,7 +70,7 @@ Numbered for citation. Lifted from Tufte's classic principles + modern screen-fi
 10. **Gray-first, highlight selectively.** Default series is a muted dark gray; one accent color highlights the most important series or data point. Max 4 distinct colors. See *Color tokens* below — the muriel-strict palette differs from Tufte's published palette because Tufte's defaults fail 8:1.
 11. **Bar baselines include zero.** Truncating a bar y-axis above zero exaggerates differences. Lines and scatters may use range-frame axes; bars may not.
 12. **Annotate the notable.** If the data contains a peak, trough, inflection, or event boundary, add a text annotation pointing to it. Place in the nearest clear space with a short leader line if needed.
-13. **Comparison context required.** Every chart must answer *"compared to what?"* — a baseline line, target band, prior period series, or peer group. A solitary line with no reference fails. (See also SKILL.md universal rule.)
+13. **Comparison context required.** Every chart must answer *"compared to what?"* — a baseline line, target band, prior period series, or peer group. For a sparkline answering a trajectory question, earlier observations in a clearly labeled window can supply that reference; the surrounding sentence or table can carry units, window, and scale policy. A context-free line fails. (See also SKILL.md universal rule.)
 14. **Minimal tooltips.** Plain text with value and label. No colored background, no border, no arrow pointer, no shadow.
 
 ### Screen extensions
@@ -149,7 +155,7 @@ The 22 universal rules are sufficient for most charts. Per-library essentials be
 | **Scatter** | Gray dots `#444` r=3. Highlight key cluster/outlier with `#8b0000`. Regression line if meaningful (dashed, thin). |
 | **Time series** | Label events on chart ("Recession", "Launch"), range-frame x-axis. YoY: current solid, prior period 30% opacity. |
 | **Small multiples** | Shared scale across ALL panels (most-common bug: per-panel auto-scale). X labels only on bottom row; y labels only on leftmost column. No panel borders. |
-| **Sparklines** | ≈80×20px. No axes, labels, or gridlines. Min/max dots at r=1.5. Embed inline in text or table cells. |
+| **Sparklines** | Size to the host text, row, or control; 80×20px is one starting point. Usually omit internal axes/gridlines; supply measure, units, window, and scale policy nearby. Mark endpoints/extrema only when useful. See the [48-pattern repertoire](../references/sparklines.md). |
 | **Slopegraph** | Before/after categories. Label both endpoints (value + name). Gray default + highlight key slopes with `#8b0000`. |
 | **Data table** | No zebra striping (moire). Whitespace + thin rules every 3–5 rows. Right-align numbers. `font-feature-settings: 'onum' 1` for old-style figures. |
 | **Area** | Prefer lines. If area: fillOpacity 0.03–0.08, no gradient, direct labels at endpoints. |
@@ -255,9 +261,10 @@ Before declaring a chart done:
 - [ ] No 3D, no gradient fills, no decorative borders
 - [ ] Bar y-axis includes zero; line/scatter axes range-framed
 - [ ] Title asserts the finding (rule 20)
-- [ ] Comparison context present (baseline, target, prior period — rule 13)
+- [ ] Comparison context present (baseline, target, prior period — rule 13); a sparkline's labeled history can supply context for a trajectory question
 - [ ] Each series directly labeled (rule 2)
 - [ ] Notable points annotated (rule 12)
+- [ ] Sparklines preserve gaps and real horizontal spacing; scale policy is explicit, shared for magnitude comparison, and stable during live inspection
 - [ ] All text passes 8:1 contrast — run `python -m muriel.contrast file.svg` for SVG output
 - [ ] No `opacity:` on text labels
 - [ ] Categorical palette passes CVD separation — run `python -m muriel palettes --validate "<hexes>" --bg <surface>` for any non-shipped palette (ΔE ≥ 12, or ≥ 8 with a second encoding channel)

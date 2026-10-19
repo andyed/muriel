@@ -210,6 +210,11 @@ Use a vocabulary only when it solves the task's specific visual grammar:
 
 Optional deep references:
 
+- [`references/sparklines.md`](references/sparklines.md) — 48 ways to put
+  trajectories beside words, values, rows, places, and controls, with reasons
+  to choose each. Consider these when history, variation, or a preview changes
+  the reader's judgment; includes scale, missing-data, accessibility, and
+  implementation contracts across prose, charts, interactive UI, and terminals.
 - [`references/design-synthesis.md`](references/design-synthesis.md) — adaptive
   framing, option comparison, leverage and synergy tests, thin-slice shaping,
   and observable design rationale for creative-software decisions whose
@@ -236,7 +241,7 @@ Optional deep references:
   responsive fallbacks across radial menus, instruments, gauges, timelines,
   hierarchies, and reticles; includes a distinct FUI sensor-console case.
 - [`references/collections.md`](references/collections.md) — dozens to
-  thousands of images to survey, compare, or check: Wunderkammer 0.1.0 as the
+  thousands of images to survey, compare, or check: Wunderkammer 0.2.0 as the
   default engine, its collection/observation contract, pinned loading, and an
   exploration-quality critique axis.
 

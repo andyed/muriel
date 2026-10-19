@@ -13,7 +13,7 @@ output:
 
 Use this reference when the deliverable is a set of images that a person will
 survey, filter, compare or check, rather than one composed figure. muriel's
-default engine for this is [Wunderkammer 0.1.0](https://github.com/andyed/wunderkammer/tree/v0.1.0)
+default engine for this is [Wunderkammer 0.2.0](https://github.com/andyed/wunderkammer/tree/v0.2.0)
 (MIT), a collection explorer for people and language models:
 
 - The agent writes the collection as one JSON document.
@@ -25,12 +25,11 @@ It runs from static files with no server.
 
 Wunderkammer's spatial view uses muriel's rendering primitives, vendored at a
 pinned commit
-([`wall/spatial/lib/VENDOR.md`](https://github.com/andyed/wunderkammer/blob/v0.1.0/wall/spatial/lib/VENDOR.md)).
+([`wall/spatial/lib/VENDOR.md`](https://github.com/andyed/wunderkammer/blob/v0.2.0/wall/spatial/lib/VENDOR.md)).
 muriel imports no Wunderkammer code, and this reference names it by released
-version only. Every URL below is pinned to `v0.1.0` or `wunderkammer@0.1.0`,
-except the agent skill below, which is newer than 0.1.0 and is linked on
-`main` until the next release. When a new version is released, update the
-pins, pin the skill, and re-check the claims that carry a date.
+version only. Every URL below is pinned to the `v0.2.0` tag, the agent skill
+included. When a new version is released, update the pins
+and re-check the claims that carry a date.
 
 **This reference is the front door.** Wunderkammer is designed to be used
 from muriel: this reference decides when an explorer is the right
@@ -38,7 +37,7 @@ representation, [`muriel.collection`](#building-a-document-murielcollection)
 builds the document, and the [exploration-quality axis](#exploration-quality)
 and contrast checks review the result. For the engine's own steps and traps
 (URL keys, hosting, observations, the hand-back), read Wunderkammer's skill,
-[`skills/wunderkammer/SKILL.md`](https://github.com/andyed/wunderkammer/blob/main/skills/wunderkammer/SKILL.md).
+[`skills/wunderkammer/SKILL.md`](https://github.com/andyed/wunderkammer/blob/v0.2.0/skills/wunderkammer/SKILL.md).
 Its examples are tested against the pages' validators, so where it or the
 contract disagrees with the summary below, they win. Agents without muriel
 can install that skill on its own (`npx skills add andyed/wunderkammer`).
@@ -70,7 +69,7 @@ images behind them. When the output must be one self-contained file, see the
 ## The contract in brief
 
 There are four parts, and all of them are static files. The full contract is
-[`docs/CONTRACT.md`](https://github.com/andyed/wunderkammer/blob/v0.1.0/docs/CONTRACT.md).
+[`docs/CONTRACT.md`](https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/CONTRACT.md).
 This section summarizes it for design decisions; for the engine's steps,
 see Wunderkammer's skill above.
 
@@ -114,10 +113,9 @@ see Wunderkammer's skill above.
   `CollectionError`, so a first draft can be fixed in a single pass.
 - **Sprite sheets:** with a few hundred covers or more, pack them into
   sprite-sheet pages with
-  [`scripts/collection-sheets.py`](https://github.com/andyed/wunderkammer/blob/v0.1.0/scripts/collection-sheets.py).
-  The script is in the repository, not the npm package. On the 297-image
-  example, the overview needed 3 image requests instead of 297
-  ([`docs/PERF.md`](https://github.com/andyed/wunderkammer/blob/v0.1.0/docs/PERF.md),
+  [`scripts/collection-sheets.py`](https://github.com/andyed/wunderkammer/blob/v0.2.0/scripts/collection-sheets.py).
+  On the 297-image example, the overview needed 3 image requests instead of 297
+  ([`docs/PERF.md`](https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/PERF.md),
   "Collection sprite sheets").
 
 ### Comparison recipe
@@ -221,7 +219,7 @@ are in the packet, never notes or paths.
   pane's `javascript_tool`.
 - **Frames:** a same-origin frame can be read as
   `frame.contentWindow.wunderkammer.export()`, but a cross-origin frame cannot.
-- **Not built in 0.1.0:** an `onSelection` callback through `mount()`, and a
+- **Not built in 0.2.0:** an `onSelection` callback through `mount()`, and a
   "copy for the conversation" button.
 - **Before acting on a packet,** check that its `count` matches the scope the
   person described. Quote identities from the packet rather than from memory
@@ -230,9 +228,10 @@ are in the packet, never notes or paths.
 ### Embedding: `mount(element, collection)`
 
 ```js
-import { mount } from 'https://unpkg.com/wunderkammer@0.1.0/wall/embed.mjs';
+// A checkout of v0.2.0, served by the same static host as this page.
+import { mount } from './wunderkammer/wall/embed.mjs';
 
-const wall = mount(element, collection);   // frames …/wunderkammer@0.1.0/index.html
+const wall = mount(element, collection);   // frames ./wunderkammer/index.html
 await wall.ready;                          // resolves on the wall's view-ready message
 ```
 
@@ -242,10 +241,13 @@ await wall.ready;                          // resolves on the wall's view-ready 
   origin only, and validated again there.
 - **A URL** is fetched by the wall. If it fails, the host gets a generic error
   and the details appear inside the frame.
-- **`wallUrl`** defaults to the wall page, `index.html` at the package root,
-  one folder above `embed.mjs`. Imported from unpkg or a static host, the
-  default works as it is. Imported from jsDelivr, the default is a page served
-  as `text/plain`, so pass `wallUrl` with an unpkg or static-host wall page.
+- **`wallUrl`** defaults to the wall page, `index.html` at the checkout's
+  root, one folder above `embed.mjs`. Imported from a static host, the
+  default works as it is. The module can also be imported from jsDelivr's
+  GitHub route,
+  `https://cdn.jsdelivr.net/gh/andyed/wunderkammer@v0.2.0/wall/embed.mjs`,
+  but its default is then a page served as `text/plain`. Pass
+  `mount(element, collection, { wallUrl })` with a static host's wall page.
 - **Other options:** `title` (the iframe's title) and `timeout` (default
   20,000 ms).
 - **`wall.ready`** rejects on the wall's error message or on timeout.
@@ -253,38 +255,48 @@ await wall.ready;                          // resolves on the wall's view-ready 
 
 ## Loading by pinned version
 
-Pin every reference to the release: `wunderkammer@0.1.0` on a CDN, `v0.1.0`
-on GitHub. Never use `@latest`, a bare package name or a branch.
+Wunderkammer is released as git tags on GitHub. Pin every reference to the
+tag, `v0.2.0`: in a GitHub URL, in a jsDelivr GitHub-route URL, and as the
+checkout a static host serves. Never use a branch, `@latest`, or a
+package-registry URL. No Wunderkammer package is published, so such a URL
+fails today, and would serve someone else's code if they registered the name.
 
-| What | jsDelivr | unpkg | Static host |
-|---|---|---|---|
-| ES modules (`wall/embed.mjs`, `wall/collection.mjs`, `wall/observations.mjs`) | yes | yes | yes |
-| The wall (`index.html`) and `wall/compare.html`, opened or framed | no: HTML is served as `text/plain` | yes | yes |
+| What | jsDelivr GitHub route (`cdn.jsdelivr.net/gh/andyed/wunderkammer@v0.2.0/…`) | Static host serving a checkout of the tag |
+|---|---|---|
+| ES modules (`wall/embed.mjs`, `wall/collection.mjs`, `wall/observations.mjs`) | yes | yes |
+| The wall (`index.html`) and `wall/compare.html`, opened or framed | no: HTML is served as `text/plain` | yes |
 
-- **Content types** were checked on 2026-10-17 (Wunderkammer's contract) and
-  again on 2026-10-18 against `swagger-ui-dist@5.17.14/index.html`:
-  - jsDelivr serves HTML as `text/plain` and unpkg serves it as `text/html`;
-  - both serve JavaScript with a JavaScript type.
-- **Where the pages are.** The wall is `index.html` at the package root,
-  with its assets under `wall/`:
-  `https://unpkg.com/wunderkammer@0.1.0/index.html?collection=<url>`. The
-  comparison page is `wall/compare.html`. Both name their assets by relative
-  paths, so they work under a versioned CDN path.
-  [`tests/cdn-subpath.test.mjs`](https://github.com/andyed/wunderkammer/blob/v0.1.0/tests/cdn-subpath.test.mjs)
-  serves only the files `npm pack` publishes, under `/npm/wunderkammer@0.1.0/`.
-  From there it boots the wall, `mount()` with its default, and the comparison
-  page's link back, with no request leaving the package.
-- **A static host** also works: a checkout of the tag
-  (`npx http-server -p 8080 .`, then `/?collection=<url>`), the output of
+- **Content types** were checked on 2026-10-18 on the GitHub route at
+  `v0.1.0`: `index.html` and `wall/compare.html` are served as `text/plain`,
+  and `wall/embed.mjs` as `application/javascript`.
+- **Where the pages are.** The wall is `index.html` at the checkout's root,
+  with its assets under `wall/`: `<host>/<path>/index.html?collection=<url>`.
+  The comparison page is `wall/compare.html`. Both name their assets by
+  relative paths, so they work at any sub-path, such as a GitHub Pages
+  project site.
+  [`tests/cdn-subpath.test.mjs`](https://github.com/andyed/wunderkammer/blob/v0.2.0/tests/cdn-subpath.test.mjs)
+  serves the release's files under a versioned sub-path. From there it boots
+  the wall, `mount()` with its default, and the comparison page's link back,
+  with no request leaving that path.
+- **A static host:** a checkout of the tag
+  (`git clone --branch v0.2.0 https://github.com/andyed/wunderkammer`, then
+  `npx http-server -p 8080 .` and `/?collection=<url>`), the output of
   `scripts/build-demo.mjs`, or a wunderkammer server. All of them serve the
   wall at `/`.
-- **Framing from an artifact host is untested.** unpkg sends no
+- **To try a document without hosting the wall,** open the
+  [live demo](https://andyed.github.io/clipwall-demo/) with
+  `?collection=<url>`, which takes precedence over the demo's own
+  collection. The document must be served with CORS. The demo is not pinned
+  to a tag, so validate for the pinned release anyway.
+- **Framing from an artifact host is untested.** The live demo sends no
   `X-Frame-Options` or `frame-ancestors` header (checked 2026-10-18), so
-  framing is governed by the host page's own content security policy.
-- **Three.js** 0.169.0 is loaded from jsDelivr by both pages, for the 3D view
-  and the album walls only. Without the network or WebGL, those views are
-  withdrawn with a notice. The flat wall, facets, detail pane, comparison
-  matrix and evidence list remain usable.
+  framing it is governed by the host page's own content security policy. A
+  static host of your own sets its own headers.
+- **Three.js** 0.169.0 is loaded from jsDelivr by both pages, for the 3D
+  views (the spatial view, the aisle and the floating space) and the album
+  walls only. Without the network or WebGL, those views are withdrawn with a
+  notice. The flat wall, facets, detail pane, comparison matrix and evidence
+  list remain usable.
 
 ## Fallback
 
@@ -340,7 +352,7 @@ observation text are readable text under the 8:1 floor:
 
 - **Wunderkammer's own audit:** its facet and scope controls measured at least
   8.528:1 against their painted backgrounds
-  ([`docs/FACETING.md`](https://github.com/andyed/wunderkammer/blob/v0.1.0/docs/FACETING.md#implementation-verification)).
+  ([`docs/FACETING.md`](https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/FACETING.md#implementation-verification)).
   That audit did not cover every text element.
 - **The embedding page:** run `python -m muriel.contrast <page.html>` on the
   page you wrote.
@@ -351,7 +363,7 @@ observation text are readable text under the 8:1 floor:
 
 ```bash
 python -m muriel.collection build <folder|csv> --out collection.json [--title T] [--group FIELD]
-python -m muriel.collection validate collection.json
+python -m muriel.collection validate collection.json [--release 0.1.0]
 ```
 
 - **`build`** reads a folder of images or a CSV and writes a
@@ -364,13 +376,18 @@ python -m muriel.collection validate collection.json
 - **Validate before opening a browser.** A collection given to a frame by URL
   reports its problems inside the frame, not to the host. The page validates
   again on load, and when the two validators disagree, the page's
-  ([`wall/collection.mjs`](https://github.com/andyed/wunderkammer/blob/v0.1.0/wall/collection.mjs))
+  ([`wall/collection.mjs`](https://github.com/andyed/wunderkammer/blob/v0.2.0/wall/collection.mjs))
   is the reference.
+- **`--release` names the wall that will load the document.** Each release
+  refuses the fields added after it. The default is 0.2.0, the release this
+  reference pins. For a 0.1.0 wall, validate with `--release 0.1.0`: it
+  refuses `ui.nouns` (what the counts call one item and several), which
+  0.2.0 added.
 - **Observations need Wunderkammer's checker.** `muriel.collection` validates
   the collection document only. From a Wunderkammer checkout,
   `node scripts/validate-collection.mjs collection.json --observations observations.json`
   also prints the figures each claim will show and every citation that does
-  not resolve (newer than 0.1.0, like the skill).
+  not resolve.
 
 A typical pass:
 
@@ -388,8 +405,8 @@ A typical pass:
   figure.
 - **A summary in place of the collection.** Show the collection, and use
   observations as pointers into it.
-- **`@latest`, a branch URL, or the wall page from jsDelivr.** Pin the release,
-  and serve HTML from unpkg or a static host.
+- **`@latest`, a branch URL, a package-registry URL, or the wall page from
+  jsDelivr.** Pin the tag, and serve HTML from a static host.
 - **HTML in `note` or `title`.** It is shown as literal text.
 - **Treating the hand-back as the person's conclusion.** It records what they
   selected, not what they concluded from it.
