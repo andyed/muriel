@@ -4,6 +4,11 @@ The biggest win over Photoshop: **parameters the reader can move**. Static image
 
 Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map.
 
+For histories in rows, previews beside filters or scrubbers, or response curves
+beside controls, consult the [sparkline repertoire](../references/sparklines.md).
+Keep preview, inspection, and committed selection distinct; expand through the
+host's canonical state and provide keyboard/touch access to the same detail.
+
 ## When to use
 - Blog post explainers where the reader should move parameters, not just read
 - Paper figures with sliders (CHI / ETTAC / CIKM submissions can include live demo URLs)

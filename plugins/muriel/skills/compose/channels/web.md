@@ -22,6 +22,11 @@ Use this channel for prose-led web artifacts, Marginalia pages, Markdown-to-HTML
 or PDF pipelines, and browser-rendered stills. Use `interactive.md` when the
 reader manipulates the artifact; use `polish.md` for tactile product UI.
 
+When a claim, value, or named entity benefits from an adjacent history or
+profile, consult the [sparkline repertoire](../references/sparklines.md).
+Choose inline, margin, or table placement for the reading task; preserve the
+anchor through wrapping and carry scale context into static exports.
+
 ## Purpose in the solution
 
 Make the content hierarchy, reading path, responsive behavior, and export path

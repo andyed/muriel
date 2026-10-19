@@ -210,6 +210,11 @@ Use a vocabulary only when it solves the task's specific visual grammar:
 
 Optional deep references:
 
+- [`references/sparklines.md`](references/sparklines.md) — 48 ways to put
+  trajectories beside words, values, rows, places, and controls, with reasons
+  to choose each. Consider these when history, variation, or a preview changes
+  the reader's judgment; includes scale, missing-data, accessibility, and
+  implementation contracts across prose, charts, interactive UI, and terminals.
 - [`references/design-synthesis.md`](references/design-synthesis.md) — adaptive
   framing, option comparison, leverage and synergy tests, thin-slice shaping,
   and observable design rationale for creative-software decisions whose

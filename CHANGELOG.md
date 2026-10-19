@@ -8,6 +8,15 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`references/sparklines.md` — 48 ways and reasons to use sparklines.**
+  Eight groups of six task patterns (reading, comparing entities,
+  monitoring, navigation, controls, data quality, planning, learning), each
+  pairing a placement with the question it exposes and the caveat that keeps
+  it honest; plus a mark vocabulary, scale and missing-data contracts,
+  placement recipes and acceptance checks. The charts, interactive, web and
+  terminal channels and SKILL.md point to it. The charts channel's sparkline
+  row no longer forbids labels: the plot can omit axes, but nearby text
+  carries the measure, units, window and scale policy.
 - **`muriel.collection` and `muriel collection`: Wunderkammer collection
   documents.** [Wunderkammer](https://github.com/andyed/wunderkammer) is
   muriel's collection engine: an agent hands a person one JSON file
