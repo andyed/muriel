@@ -8,13 +8,17 @@ output:
   registers: [app, game, web, native, editorial, data-product]
 ---
 
-# Creative provocations — controlled disturbance for a design rut
+# Creative provocations — invention and controlled disturbance
 
 Use this reference as an optional divergent pass inside design synthesis. It is
 inspired by the role of Brian Eno and Peter Schmidt's *Oblique Strategies*:
 introduce a well-timed constraint or reframing that interrupts a locally
 coherent answer. This is an original transformation set, not a reproduction of
 their card text.
+
+Use it for deliberate invention as well as escaping a rut. A familiar convention
+may be worth challenging while it still works; explore what a different
+mechanism could make possible, then shape a tangible probe.
 
 A provocation is not a decision framework and does not outrank product truth.
 Its job is to expose an assumption, produce a materially different mechanism,
@@ -41,6 +45,8 @@ Use a provocation when at least one is true:
 - expertise is narrowing the space before the risky premise has been tested;
 - a Compare or Probe is stuck and needs a new discriminating move;
 - the user explicitly asks for brainstorming or an oblique angle.
+- an unsettled direction calls for inventing an interaction or deliberately
+  departing from convention.
 
 Skip it when the desired behavior is settled, the task is a local correctness or
 accessibility fix, an urgent incident needs stabilization, or novelty would only

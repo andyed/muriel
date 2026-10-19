@@ -89,6 +89,14 @@ From [`SKILL.md`](plugins/muriel/skills/compose/SKILL.md):
 
 Most of the rules predate the tooling. They come from Cooper's Visible Language Workshop, Tufte's data-ink ratio, Bertin's retinal variables, Gestalt grouping, and eye-movement research.
 
+## Interaction design
+
+muriel designs how an interface behaves as well as how it looks. It draws on cognitive psychology, perception research, and HCI to choose a mechanism, then builds the mechanism and exercises it in the host product. Rendering and interaction checks are evidence about the artifact; claims about comprehension, workload, or learning need evidence from people.
+
+[`human-capabilities.md`](plugins/muriel/skills/compose/references/human-capabilities.md) covers cognitive task analysis, the split of work between people and AI, and the limits of evidence. [`microstrategies.md`](plugins/muriel/skills/compose/references/microstrategies.md) is built on Gray's *Milliseconds Matter*: small differences in the cost of reaching information change the routines people adopt. Convention is a starting hypothesis. muriel can propose a new interaction, build a working probe, and weigh what it makes possible against what it costs to learn.
+
+The literature reviews behind these references are in [`research/`](research/).
+
 ## Checking its own work
 
 muriel renders what it makes and measures the result:
@@ -169,6 +177,7 @@ cd ~/Documents/dev/muriel && ./install.sh
 - [`plugins/muriel/agents/`](plugins/muriel/agents/): the critique agent and the five jury seats
 - [`muriel/`](muriel/): Python package and CLI
 - [`render_assets/`](render_assets/): Three.js and CSS3D exemplars for the spatial channel
+- [`research/`](research/): literature reviews and bibliographies behind the references
 - `.claude-plugin/marketplace.json`: the marketplace entry. The plugin manifest is `plugins/muriel/.claude-plugin/plugin.json`.
 
 ## In use

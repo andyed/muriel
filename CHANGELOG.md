@@ -8,6 +8,24 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`references/human-capabilities.md` and `references/microstrategies.md`:
+  research grounding for interaction decisions.** human-capabilities covers
+  cognitive task analysis, human strengths and demands, the split of work
+  between people and AI, the limits of evidence, and task-level evaluation.
+  microstrategies is built on Gray's *Milliseconds Matter* and soft
+  constraints: dependencies, information-access costs, and the routines an
+  interaction permits or encourages. SKILL.md routes to both, and
+  design-synthesis and interaction-contracts point to them.
+  creative-provocations now covers deliberate invention as well as escaping
+  a design rut.
+- **`research/`: two literature reviews with bibliographies.**
+  `interaction-models-review.md` covers Hick–Hyman, Fitts and steering, the
+  GOMS family, Gray's microstrategies, external representations, learning,
+  and resumption. `scrutinizer-perception-review.md` covers crowding,
+  summary statistics, peripheral colour, task guidance, information foraging,
+  and restricted viewing, and audits the Scrutinizer source at `bc68944`. Its
+  links point to that commit on GitHub. Both reviews propose corrections to
+  muriel's scientific rules; they do not apply them.
 - **`references/sparklines.md` — 48 ways and reasons to use sparklines.**
   Eight groups of six task patterns (reading, comparing entities,
   monitoring, navigation, controls, data quality, planning, learning), each
@@ -428,6 +446,14 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 - `data-mountain-field/` exemplar and its 29-assertion `check.mjs`.
 
 ### Changed
+
+- **SKILL.md frames muriel as an interaction and visual-design
+  collaborator.** The description, opening, and invocation test now cover
+  people and AI agents, cognitive psychology and HCI as the source of
+  mechanisms, and invention or deliberate departures from convention. Proof
+  is matched to the claim: rendering and interaction checks for the artifact,
+  evidence from people for comprehension, workload, or learning. The README
+  gains an Interaction design section; its lede is unchanged.
 
 - **Wunderkammer 0.2.0 is the pinned release, and `muriel.collection`
   checks for it by default.** Wunderkammer 0.2.0 (tag `v0.2.0`, 2026-10-18)

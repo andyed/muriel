@@ -135,6 +135,10 @@ Add two Muriel fields:
 These are response-feedback budgets, not animation-duration tokens. Preserve
 the project's measured performance data and Muriel's existing motion rules.
 
+When timing or information-access costs may change the routine a person adopts,
+use [microstrategies](microstrategies.md) to examine the interaction itself.
+Keep that analysis distinct from the response-feedback budgets below.
+
 | Observed delay | Required interaction response |
 |---|---|
 | Up to about 100 ms | Synchronous local acknowledgment; no spinner flash |
