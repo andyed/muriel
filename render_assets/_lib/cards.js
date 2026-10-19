@@ -1,10 +1,10 @@
 // muriel.spatial — persistent DOM cards as a tile source.
 //
-// A `<canvas layoutsubtree>` can paint real DOM descendants into its own bitmap
-// (Chrome's HTML-in-Canvas API). That lets a tile field source its atlas from
-// live cards instead of raster thumbnails, which buys three things a texture
-// cannot: the text stays in find-in-page, in text selection, and in the
-// accessibility tree. A find match can then fly the camera to the tile.
+// A `<canvas content="drawable">` (formerly `<canvas layoutsubtree>`) can paint
+// real DOM descendants into its own bitmap (Chrome's HTML-in-Canvas API). That
+// lets a tile field source its atlas from live cards instead of raster
+// thumbnails, which buys three things a texture cannot: the text stays in
+// find-in-page, in text selection, and in the accessibility tree. A find match can then fly the camera to the tile.
 //
 // This module owns the host and its cards, and CAPTURES a card into a
 // card-sized bitmap that AtlasPair can treat as an ordinary image source; see
@@ -81,6 +81,16 @@ export class CardHost {
     this._disposed = false;
 
     const canvas = document.createElement('canvas');
+    // The opt-in that makes the canvas lay out and paint its children, under
+    // both of its names. Chrome Canary 158 (measured on 158.0.8110.5) renamed
+    // `layoutsubtree` to `content="drawable"` (the `canvas.content` IDL
+    // attribute, default "fallback"). Under the old name alone the children
+    // get no layout box, so `capture()` returns RETRY until the field gives
+    // up and falls back to images, and a direct draw throws "requires the
+    // canvas to have the content=drawable attribute". Builds from before the
+    // rename ignore `content`, and builds after it ignore `layoutsubtree`, so
+    // setting both is correct on either side of the rename.
+    canvas.setAttribute('content', 'drawable');
     canvas.setAttribute('layoutsubtree', '');
     canvas.className = 'card-host';
     // Bitmap == one card, so a scale-1 drawElementImage fills it exactly and
