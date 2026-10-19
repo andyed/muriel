@@ -296,8 +296,8 @@ Each exemplar in `render_assets/<name>/index.html` is self-contained: an importm
 
 <script type="importmap">
 {"imports": {
-  "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-  "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  "three": "https://unpkg.com/three@0.186.1/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.186.1/examples/jsm/"
 }}</script>
 
 <script type="module">

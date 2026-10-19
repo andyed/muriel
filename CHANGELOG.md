@@ -569,6 +569,23 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **A far tile copied into the atlas on its own could be lost.** three r169's
+  `WebGLRenderer.copyTextureToTexture` binds the destination to texture unit 0
+  but did not make unit 0 active when the destination was already bound
+  there (fixed in r184, mrdoob/three.js#33153). The far atlas sits on unit 0
+  and a render leaves the near atlas's unit active, so `TileAtlas`'s per-slot
+  upload, used when four or fewer slots change between flushes, wrote a far
+  tile into the near atlas, or into no texture once an earlier copy had
+  unbound the active unit. The tile then drew its placeholder until a later
+  whole-canvas upload repaired it. Every importmap in `render_assets/` and the
+  `spatial` channel's example now pins three **0.186.1** (from 0.169.0, and
+  0.160.0 in the channel doc). Nothing in `_lib/` needed changing for
+  r170–r186. `tests/spatial-tile-pixels.test.mjs` adds a per-slot upload
+  case: it redraws two far tiles after the atlas is on the GPU and checks
+  their frame pixels. On r169 all 50 samples keep the old colour; on 0.186.1
+  all pass. The six gallery pages render pixel-identical frames on both
+  versions, except `data-mountain-field`, whose animation differs run to run.
+  Wunderkammer's floating space found the lost tiles in its stills.
 - **`TileField` drew every tile about 2.2 gamma dark.** The atlases are
   tagged `SRGBColorSpace`, so sampling decodes them to linear, and the
   fragment shader wrote the result without re-encoding: an atlas pixel of
