@@ -26,6 +26,34 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   and restricted viewing, and audits the Scrutinizer source at `bc68944`. Its
   links point to that commit on GitHub. Both reviews propose corrections to
   muriel's scientific rules; they do not apply them.
+- **Semantic zoom, linked displays, brushing, zooming interfaces, and faceted
+  exploration.** `references/multiscale-coordination.md` is the contract:
+  stable identity across representation levels, selection and query
+  semantics (absent is not empty; frozen IDs or live predicates), brush
+  lifetime and set operations, aggregate membership, input ownership, async
+  freshness, and the invariants to test. `multiscale-adapters.md` applies it
+  through D3, Vega-Lite, ECharts, and Canvas/WebGL; `multiscale-evaluation.md`
+  holds briefs, adversarial fixtures, and human-evaluation plans;
+  `zooming-interfaces.md` covers camera bounds, Fit/Back/Undo, and automatic
+  detail; `faceted-exploration.md` covers OR/AND scope, contextual counts,
+  value search, and recovery. The last two cite Wunderkammer v0.2.0 as the
+  inspected implementation and send image collections to
+  `references/collections.md` first. `examples/linked-atlas/` is a
+  dependency-free lab with synthetic data, published on the docs site and
+  tested by `tests/multiscale-coordination.test.mjs` (14 model tests) and
+  `tests/multiscale-browser.mjs` (11 Playwright scenarios, including rendered
+  8:1 text contrast on desktop and phone). `research/` adds a semantic-zoom
+  and linked-views review with a bibliography, a historical reading map,
+  and the Clipwall case study, with links pinned to Wunderkammer v0.2.0.
+  SKILL.md routes the three tasks; the interactive, charts, and spatial
+  channels, `interaction-contracts.md`, and the Visible Language vocabulary
+  point to the contract. Chart titles now match the task: explanatory
+  titles state findings, exploratory titles name the question.
+- **CI runs the node tests.** A new `interactive` job in `tests.yml` runs
+  `node --test tests/*.test.mjs` (the multiscale and spatial suites) on
+  Node 22, then the browser checks with Playwright 1.62.1 and Chromium. The
+  docs workflow rebuilds on reference and lab changes, publishes
+  `references/`, and verifies the new pages exist before committing.
 - **`references/sparklines.md` — 48 ways and reasons to use sparklines.**
   Eight groups of six task patterns (reading, comparing entities,
   monitoring, navigation, controls, data quality, planning, learning), each

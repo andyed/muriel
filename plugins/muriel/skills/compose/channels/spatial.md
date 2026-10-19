@@ -24,6 +24,13 @@ Part of the [muriel](../SKILL.md) skill — see the top-level index for mission 
 
 ## Why this channel exists
 
+When distance changes a document or object's representation, use the
+[multiscale coordination contract](../references/multiscale-coordination.md)
+for semantic levels, identity, selection, and focus preservation. The renderer's
+texture-resolution tiers alone do not establish semantic zoom. For linked
+selection across spatial and tabular views, link stable IDs through the host's
+state rather than synchronizing cameras indiscriminately.
+
 Floating text in 3D space without a perspective scaffold reads as **stacked planes** — there is no felt depth, just layers. The visual system needs three or four well-placed cues — vanishing-point convergence, a horizon anchor, foreshortened transversals — to lock a scene into one continuous space. Once it does, the same screen real estate carries far more information without overcrowding.
 
 This is not a styling trick. Spatial-typography is an explicit lineage in design history — Alberti's *De pictura* (1435) and the *costruzione legittima*; Dürer's perspective machine (1525); architect's blueprint axonometrics; **Muriel Cooper's MIT Visible Language Workshop** (receding planes of type as an information environment); the **Robertson / Mackinlay / Card *Information Visualizer*** cone trees and the **Dumais / Cockburn / Robertson *Data Mountain*** at MSR (spatial memory as an indexing primitive); and the Tron / synthwave horizon-to-VP grid that re-popularised one-point perspective in the 1980s. Every one of those traditions earned its geometry — the depth carried meaning, not decoration.

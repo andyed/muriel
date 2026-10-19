@@ -1,6 +1,6 @@
 ---
 name: muriel
-description: Collaborative interaction and visual-design system for humans and AI agents, translating cognitive psychology and HCI research into working software and visual artifacts. Use for unsettled interaction grammar, information structure, spatial composition, hierarchy, or cross-channel direction, including invention and deliberate departures from convention; especially novel or dense controls, complex representations, and rendered visual audits. Do not invoke for backend-only work, settled implementation, routine polish, or specialist media production without an unresolved design decision.
+description: Collaborative interaction and visual-design system for humans and AI agents, translating cognitive psychology and HCI research into working software and visual artifacts. Use for zooming user interfaces, semantic zooming, linked displays, brushing, faceted exploration, unsettled interaction grammar, information structure, spatial composition, or rendered visual audits, including invention and deliberate departures from convention. Do not invoke for backend-only work, routine component implementation or polish, or specialist media production without an unresolved design decision.
 ---
 
 # muriel — science-informed interaction and visual craft
@@ -231,6 +231,9 @@ Read the channel that matches the primary output:
 | general SVG, icon, wordmark, data-driven vector, infographic | [`channels/svg.md`](channels/svg.md) |
 | editorial HTML, printable page, static web capture | [`channels/web.md`](channels/web.md) |
 | explorable demo or parameter-driven interface | [`channels/interactive.md`](channels/interactive.md) |
+| semantic zoom, brushing, or linked displays | [`channels/interactive.md`](channels/interactive.md), then [`references/multiscale-coordination.md`](references/multiscale-coordination.md) |
+| navigable collection or zooming user interface (ZUI) | [`channels/interactive.md`](channels/interactive.md), then [`references/zooming-interfaces.md`](references/zooming-interfaces.md); for a collection of images, [`references/collections.md`](references/collections.md) first |
+| faceted exploration, contextual counts, or collection refinement | [`channels/interactive.md`](channels/interactive.md), then [`references/faceted-exploration.md`](references/faceted-exploration.md) |
 | application UI, hierarchy, typography, responsive polish | [`channels/polish.md`](channels/polish.md) |
 | motion, sequencing, or video | [`channels/video.md`](channels/video.md) |
 | terminal-rendered visual | [`channels/terminal.md`](channels/terminal.md) |
@@ -252,6 +255,28 @@ Optional deep references:
   to choose each. Consider these when history, variation, or a preview changes
   the reader's judgment; includes scale, missing-data, accessibility, and
   implementation contracts across prose, charts, interactive UI, and terminals.
+- [`references/zooming-interfaces.md`](references/zooming-interfaces.md) —
+  meaningful camera navigation, landmarks, Fit/Back, automatic detail, and
+  continuity through representation changes; grounded in ZUI research and an
+  inspected Wunderkammer case.
+- [`references/faceted-exploration.md`](references/faceted-exploration.md) —
+  OR/AND scope semantics, contextual counts, value search, active-value retention,
+  preview, and recovery. Use when named attributes help people explore a
+  collection; includes the Wunderkammer 0.2.0 implementation and an independent
+  acceptance fixture. Hierarchy, ranges, and server integration need
+  host-specific work.
+- [`references/multiscale-coordination.md`](references/multiscale-coordination.md) —
+  build semantic zoom, linked displays, and brushing around stable identity,
+  explicit selection/query semantics, representation budgets, and recoverable
+  gestures. Use for document spaces, maps, timelines, scientific tools, and
+  analytical interfaces. The [reference lab](examples/linked-atlas/index.html)
+  makes the contract executable.
+- [`references/multiscale-adapters.md`](references/multiscale-adapters.md) —
+  apply that contract through D3, Vega-Lite, ECharts, or Canvas/WebGL without
+  introducing competing state owners; load for the chosen host library.
+- [`references/multiscale-evaluation.md`](references/multiscale-evaluation.md) —
+  build briefs, adversarial fixtures, and human evaluation for multiscale
+  coordination; load when planning proof or checking capability transfer.
 - [`references/design-synthesis.md`](references/design-synthesis.md) — adaptive
   framing, option comparison, leverage and synergy tests, thin-slice shaping,
   and observable design rationale for creative-software decisions whose

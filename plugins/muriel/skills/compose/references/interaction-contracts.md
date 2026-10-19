@@ -35,6 +35,12 @@ one or more of:
 Do not load for a purely typographic, spacing, or surface-detail change whose
 behavior and state ownership are already verified.
 
+For semantic zoom, linked displays, or brushing, use the specialized
+[multiscale coordination contract](multiscale-coordination.md). It distinguishes
+navigation, querying, hover, pinning, and selection, and defines how identity and
+aggregate membership survive representation changes. Apply this reference's
+general recovery and async rules through that same owner.
+
 ## Behavior-truth sequence
 
 Resolve these in order:

@@ -26,6 +26,8 @@ exclude_docs: |
   # site on 2026-05-31). Inline comments break these patterns — keep them on
   # their own lines.
   examples/critique-fixtures/README.md
+  # The lab ships its own index.html; keep its source README out of that route.
+  examples/linked-atlas/README.md
 
 theme:
   name: material
@@ -106,6 +108,12 @@ nav:
       - Data-viz platforms: vocabularies/data-viz-platforms.md
       - muriel brand: vocabularies/muriel-brand.md
   - Reference:
+      - Zooming user interfaces: references/zooming-interfaces.md
+      - Faceted exploration: references/faceted-exploration.md
+      - Semantic zoom & linked displays: references/multiscale-coordination.md
+      - Coordination adapters: references/multiscale-adapters.md
+      - Coordination evaluation: references/multiscale-evaluation.md
+      - Linked Atlas lab: examples/linked-atlas/index.html
       - Dimensions: channels/dimensions.md
       - Style guides (brand.toml): channels/style-guides.md
       - Brand-token schema: channels/SCHEMA.md

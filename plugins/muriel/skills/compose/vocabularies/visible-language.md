@@ -2,13 +2,13 @@
 
 The design lineage that treats typography as a data structure and reading as spatial navigation. Emerged from MIT Media Lab's Visible Language Workshop (VLW) under Muriel Cooper in the 1980s–90s, continued through the Aesthetics & Computation Group (ACG) under John Maeda, and flows downstream into Processing, p5.js, D3, Observable, and contemporary typographic substrates like [chenglou/pretext](https://chenglou.me/pretext/).
 
-Part of the [muriel](../SKILL.md) skill, under Aesthetic Vocabularies. Parallel to [FUI](fui.md) but different in register: FUI is fictional interface grammar from screen entertainment. **VLW is the actual design tradition that invented the idea of "information landscape" and multi-scale reading.** Where FUI borrows from cinema, VLW descends from typography, the Bauhaus, and cognitive science.
+Part of the [muriel](../SKILL.md) skill, under Aesthetic Vocabularies. Parallel to [FUI](fui.md) but different in register: FUI is fictional interface grammar from screen entertainment. **VLW is a documented design lineage for information landscapes and multiscale reading.** Where FUI borrows from cinema, VLW descends from typography, the Bauhaus, and cognitive science.
 
 ## Canonical lineage
 
 | Designer / Group | Work | Notable for |
 |---|---|---|
-| **Muriel Cooper** (VLW founder) | [TED 1994 "Information Landscapes"](https://www.ted.com/talks/muriel_cooper_information_landscapes), MIT Press design, MIT Media Lab founding faculty | Coined "information landscape" — data as navigable space, readers "fly" through continuous flows rather than click between discrete pages. Bauhaus → MIT Press → MIT Media Lab lineage. |
+| **Muriel Cooper** (VLW founder) | [TED 1994 "Information Landscapes"](https://www.ted.com/talks/muriel_cooper_information_landscapes), MIT Press design, MIT Media Lab founding faculty | Presented navigable information landscapes at TED5 in 1994; a design precedent, not a verified claim of invention priority. Bauhaus → MIT Press → MIT Media Lab lineage. |
 | **David Small** (VLW) | Shakespeare multi-scale navigation; Talmud project; *[Navigating Large Bodies of Text](https://smg.media.mit.edu/library/small1996.html)* (IBM Systems Journal, 1996) | Multi-scale typography with graceful "greeking" degradation (full text → line shapes → rectangles → scene blocks); 3D space for supplementary content; LEGO-brick physical navigation rigs. |
 | **Suguru Ishizaki** (VLW, ACG) | *Improvisational Design* (MIT Press, 2003) | Typography that reorganizes itself in response to content, reader, and context. Temporal typography as a first-class design variable. |
 | **Lisa Strausfeld** (VLW → Pentagram) | Financial Viewpoints (1993); later the Sunlight Foundation / Pentagram infographic work | Information architecture as 3D spatial composition. Taught a generation of data journalists to think in space, not charts. |
@@ -18,19 +18,24 @@ Part of the [muriel](../SKILL.md) skill, under Aesthetic Vocabularies. Parallel 
 
 Downstream, the tradition continues through Mike Bostock (D3 — Bostock cites Cooper's influence explicitly), Observable notebooks, and — as a contemporary text-measurement primitive — chenglou/pretext.
 
-## The three Small 1996 principles
+## What Small's 1996 account contributes
 
-From David Small's "Navigating Large Bodies of Text" (IBM Systems Journal 35:3&4). The paper documents a design experiment visualizing Shakespeare's complete plays (~1 million words) at multiple scales, using typography designed for varied viewing distances and three-dimensional space organization. Out of it came three axioms that apply to every interactive figure, demo, and scrollytelling piece built since:
+[David Small's primary paper](https://smg.media.mit.edu/library/small1996.html)
+documents Virtual Shakespeare and navigation prototypes. Its useful themes are
+representation changing with scale, highlighting that survives abstraction, and
+designing physical controls alongside the display. It also identifies a problem:
+changing scale can obscure how much text is present. These are prototype
+observations and design arguments, not universal laws or a controlled comparison
+of reading performance.
 
-1. **"It is impossible to separate the visual design from the design of the interface. Subtle interactions between the visual design and the physical controls may facilitate many actions but make others more difficult."** — Visual grammar and interaction grammar are the same grammar. Every choice about how text renders is a choice about how people navigate it. Directly echoes Muriel's [collaborative working agreement](../SKILL.md#working-agreement).
-
-2. **"Computer displays should not emulate paper. Dynamic, flexible, and adaptive typography enables fundamentally new reading and interaction modes."** — Skeuomorphism is surrender. If your blog post could be a PDF without losing anything, you haven't earned the web. Matches muriel's mission line ("kick Photoshop's llama ass") — Photoshop *is* paper-emulation software.
-
-3. **"[Well-designed digital information should be] legible, inviting, and comfortable, with exploration itself [as] a true delight."** — Exploration is the payoff, not the cost. Directly echoes Interactive JS's "parameters the reader can move" doctrine.
+Muriel's adaptation is to make the representation ladder, its selection cues,
+and the return path explicit, then test them in the host. See the
+[coordination contract](../references/multiscale-coordination.md) and
+[zooming-interface reference](../references/zooming-interfaces.md).
 
 ## Visual grammar
 
-- **Multi-scale typography with graceful degradation.** Full text at close range → greeked line shapes at mid range → filled rectangles at far range → scene-level blocks at overview. *Smooth cross-fades between levels*, not discrete zoom jumps. This is the implementation of semantic zoom for text, forty years ago. (Small 1996 §4.)
+- **Multiscale typography.** Small’s Virtual Shakespeare changes full text into line textures, dialogue rectangles, and scene rectangles as it recedes. Cross-fades preserve visual continuity in that implementation; they are not a universal transition requirement.
 - **Information landscapes.** Data occupies a continuous navigable space with peaks, valleys, paths, and mystery. Readers "fly through" rather than "click between." Cooper's TED 1994 demo is the canonical reference.
 - **Typography as data structure.** Text *is* the interface, not content rendered on top of a separate interface. Type size, weight, color, tracking, and position encode information density and hierarchy.
 - **Dynamic highlighting to reveal structure.** Filtering one dimension of a corpus exposes patterns invisible in the flat text. Small's character-dialogue filter revealed Shakespeare's narrative structure; the same move applied to gaze data is phase decomposition.
@@ -38,6 +43,14 @@ From David Small's "Navigating Large Bodies of Text" (IBM Systems Journal 35:3&4
 - **Thin strokes, spatial composition, 3D depth as organizing axis.** Aesthetic overlaps with FUI but derives from typographic rather than cinematic tradition. Where FUI is HUD grammar, VLW is book-and-map grammar taken to 3D space.
 
 ## Technical substrates
+
+For an implementation of multiscale reading, use the
+[semantic zoom and coordination contract](../references/multiscale-coordination.md).
+Preserve document identity and reading focus while changing representation;
+choose levels from measured available space. Cross-fades are an optional
+continuity device subject to reduced-motion preferences and legibility, not a
+requirement for semantic zoom. The [evaluation battery](../references/multiscale-evaluation.md)
+includes a document-space brief alongside analytical charts.
 
 - **[chenglou/pretext](https://chenglou.me/pretext/)** — the contemporary primitive for multi-line text measurement and layout *without DOM reflow*. The right tool for implementing Small's multi-scale typography in 2026 without the 1996-era hacks. See [Typographic canvas with pretext](../channels/interactive.md#typographic-canvas-with-pretext) in the Interactive JS channel for API details and a worked example.
 - **Canvas2D** — the native rendering target for dynamic typography at scale. SVG is slower than Canvas when you're redrawing thousands of glyphs per frame.

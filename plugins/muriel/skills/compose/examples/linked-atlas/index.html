@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Field atlas · Muriel interaction lab</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#controls">Skip to exploration controls</a>
+  <main>
+    <header class="masthead"><a href="./">muriel / field atlas</a><span>Synthetic interaction lab</span></header>
+    <section class="intro" aria-labelledby="title">
+      <div><p class="eyebrow">Semantic zoom · linked displays · brushing</p><h1 id="title">Follow a cohort<br>through scale.</h1></div>
+      <div class="lead"><p>Where do high detection counts cluster? Select observations, compare habitats, then zoom into the same records.</p><p class="muted">192 synthetic surveys · 32 days · 3 habitats.<br>Illustration data, not ecological evidence.</p></div>
+    </section>
+
+    <nav class="mobile-jumps" aria-label="Explore sections"><a href="#selection-state">Selection state</a><a href="#detail-section">Detail plot</a><a href="#exact-selection">Exact selection</a><a href="#records-section">Records</a></nav>
+
+    <section id="selection-state" class="state-strip" aria-label="Exploration state">
+      <div><span class="eyebrow">Selection</span><strong id="selection-count">Inactive</strong><span id="selection-context">All records remain available.</span></div>
+      <div><span class="eyebrow">Detail window</span><strong id="window-label">0–32 days</strong><span id="visible-count">192 visible observations</span></div>
+      <div class="recovery"><button id="fit-selection" disabled>Reveal selection</button><button id="clear-selection">Clear selection</button><button id="undo" disabled>Undo</button><button id="reset">Reset all</button></div>
+    </section>
+    <p id="announcement" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+
+    <section class="overview-section" aria-labelledby="overview-title">
+      <div class="section-heading"><h2 id="overview-title">01 / Whole study</h2><p>Fixed 0–32 day domain · outlined window follows detail</p></div>
+      <svg id="overview" role="img" aria-label="Full study distribution, with selection and detail window" aria-describedby="overview-help"></svg>
+      <p id="overview-help" class="chart-help">Bars count observations per day. Cyan shows selected records; the outline shows the detail window. Use the current gesture mode here too.</p>
+    </section>
+
+    <section id="controls" class="controls" aria-label="Exploration controls">
+      <fieldset class="mode"><legend>Drag gesture</legend><label><input type="radio" name="mode" value="brush" checked> Select</label><label><input type="radio" name="mode" value="navigate"> Navigate</label></fieldset>
+      <label class="stack">Selection operation<select id="operation"><option value="replace">Replace</option><option value="add">Add</option><option value="subtract">Subtract</option><option value="intersect">Intersect</option></select></label>
+      <label class="stack">Habitat filter<select id="filter"><option>All</option><option>Reedbed</option><option>Upland</option><option>Shore</option></select></label>
+      <div class="zoom-controls" role="group" aria-label="Navigate detail window"><button id="pan-left" aria-label="Earlier detail window">← Earlier</button><button id="zoom-in">+ Zoom in</button><button id="zoom-out">− Zoom out</button><button id="pan-right" aria-label="Later detail window">Later →</button><button id="full-extent">Full extent</button></div>
+    </section>
+
+    <div class="analysis-grid">
+      <section id="detail-section" class="detail-section" aria-labelledby="detail-title">
+        <div class="section-heading"><h2 id="detail-title">02 / Detection pattern</h2><span id="semantic-level" class="level">Aggregate cells</span></div>
+        <p class="axis-description">Detections per 10-minute survey ↑ <span>Elapsed study days →</span></p>
+        <svg id="detail" role="img" aria-label="Survey detections over time" aria-describedby="detail-help"></svg>
+        <p id="detail-help" class="chart-help">Drag to select a rectangle. Exact selection below supports keyboard input. Escape cancels an unfinished gesture.</p>
+        <p id="representation-help" class="muted">Cells retain every member ID. A cyan fraction shows selected / total in each cell.</p>
+      </section>
+      <section class="composition" aria-labelledby="composition-title">
+        <div class="section-heading"><h2 id="composition-title">03 / Habitat mix</h2></div>
+        <p class="muted">Selection / eligible observations.<br>Totals span the full study.</p>
+        <div id="groups"></div>
+        <p id="cohort-summary" class="summary-note"></p>
+      </section>
+    </div>
+
+    <details id="exact-selection" class="exact-controls" open>
+      <summary>Exact selection · keyboard and touch alternative</summary>
+      <div class="mobile-selection-status" aria-label="Current selection"><span id="mobile-selection-count">Selection inactive.</span><a href="#selection-state">Review or recover selection ↑</a></div>
+      <form id="exact-form">
+        <label class="stack">Elapsed day from<input id="range-start" type="number" min="0" max="32" step="0.01" value="12" required></label>
+        <label class="stack">Elapsed day to<input id="range-end" type="number" min="0" max="32" step="0.01" value="22" required></label>
+        <label class="stack">Min. detections<input id="value-start" type="number" min="0" max="100" step="1" value="60" required></label>
+        <label class="stack">Max. detections<input id="value-end" type="number" min="0" max="100" step="1" value="100" required></label>
+        <button type="submit">Apply selection</button>
+      </form>
+      <p class="muted">Uses the selected operation and habitat filter; both boundaries are inclusive. Every operation uses empty membership when selection is inactive. Filtering and zooming preserve selected IDs.</p>
+    </details>
+
+    <div class="records-grid">
+      <section id="records-section" aria-labelledby="records-title">
+        <div class="section-heading"><h2 id="records-title">04 / Inspect records</h2><span id="table-count"></span></div>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Visible observations table, scroll for more records">
+          <table><caption class="sr-only">Records in the detail window and habitat filter; selection is marked independently</caption><thead><tr><th scope="col">Record</th><th scope="col">Day</th><th scope="col">Habitat</th><th scope="col">Detections</th><th scope="col">Selected</th><th scope="col">Inspect</th></tr></thead><tbody id="records"></tbody></table>
+        </div>
+      </section>
+      <aside class="inspector" aria-labelledby="inspector-title"><div class="section-heading"><h2 id="inspector-title">Record detail</h2><button id="unpin" disabled>Unpin</button></div><div id="inspector-body"><p>Pin a table record to keep its details here. Hover a plotted record to preview it; leaving restores the pin.</p></div></aside>
+    </div>
+    <footer><p>A reference implementation for Muriel. Local, deterministic, dependency free.</p><a href="#controls">Return to exploration controls ↑</a></footer>
+  </main>
+  <script type="module" src="app.mjs"></script>
+</body>
+</html>
