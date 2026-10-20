@@ -1769,7 +1769,7 @@
 <h1 id="collections-an-explorer-for-many-images">Collections — an explorer for many images<a class="headerlink" href="#collections-an-explorer-for-many-images" title="Permanent link">&para;</a></h1>
 <p>Use this reference when the deliverable is a set of images that a person will
 survey, filter, compare or check, rather than one composed figure. muriel's
-default engine for this is <a href="https://github.com/andyed/wunderkammer/tree/v0.2.0">Wunderkammer 0.2.0</a>
+default engine for this is <a href="https://github.com/andyed/wunderkammer/tree/v0.3.0">Wunderkammer 0.3.0</a>
 (MIT), a collection explorer for people and language models:</p>
 <ul>
 <li>The agent writes the collection as one JSON document.</li>
@@ -1780,9 +1780,9 @@ default engine for this is <a href="https://github.com/andyed/wunderkammer/tree/
 <p>It runs from static files with no server.</p>
 <p>Wunderkammer's spatial view uses muriel's rendering primitives, vendored at a
 pinned commit
-(<a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/wall/spatial/lib/VENDOR.md"><code>wall/spatial/lib/VENDOR.md</code></a>).
+(<a href="https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/spatial/lib/VENDOR.md"><code>wall/spatial/lib/VENDOR.md</code></a>).
 muriel imports no Wunderkammer code, and this reference names it by released
-version only. Every URL below is pinned to the <code>v0.2.0</code> tag, the agent skill
+version only. Every URL below is pinned to the <code>v0.3.0</code> tag, the agent skill
 included. When a new version is released, update the pins
 and re-check the claims that carry a date.</p>
 <p><strong>This reference is the front door.</strong> Wunderkammer is designed to be used
@@ -1791,7 +1791,7 @@ representation, <a href="#building-a-document-murielcollection"><code>muriel.col
 builds the document, and the <a href="#exploration-quality">exploration-quality axis</a>
 and contrast checks review the result. For the engine's own steps and traps
 (URL keys, hosting, observations, the hand-back), read Wunderkammer's skill,
-<a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/skills/wunderkammer/SKILL.md"><code>skills/wunderkammer/SKILL.md</code></a>.
+<a href="https://github.com/andyed/wunderkammer/blob/v0.3.0/skills/wunderkammer/SKILL.md"><code>skills/wunderkammer/SKILL.md</code></a>.
 Its examples are tested against the pages' validators, so where it or the
 contract disagrees with the summary below, they win. Agents without muriel
 can install that skill on its own (<code>npx skills add andyed/wunderkammer</code>).</p>
@@ -1816,9 +1816,25 @@ axis is muriel's opinion, and the engine is a preference.</p>
 <p>Do not use one for a single image or composed figure, or for numbers with no
 images behind them. When the output must be one self-contained file, see the
 <a href="#fallback">fallback</a>.</p>
+<p><strong>An arrival, or a video.</strong> <code>?view=warehouse</code> (since 0.3.0; also asked for as
+the "matrix guns view") opens the wall's aisle with "Cats. Lots of cats."
+played over it once. Rows of racks rush out of a white void, and then the
+lights go down on the aisle, ready to browse. The word in the caption is the
+document's <code>ui.nouns.items</code>. Wunderkammer's <code>scripts/warehouse-video.mjs</code>
+renders the same frames to an MP4; <code>--tour 30</code> ends it with half a minute
+panning over every cover. See its
+<a href="https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/AISLE.md#the-warehouse">AISLE.md</a>.</p>
+<p><strong>From Apple Photos.</strong> On a Mac, Wunderkammer's
+<code>scripts/photos-collection.py</code> builds the document from the Photos library,
+read-only, through osxphotos. It finds one subject (a pet, a person, a trip)
+by Photos' labels, captions or named people and pets, then keeps a tidy
+150: one per burst, spread over time, and with <code>--animal dog</code>, only photos
+where the dog can be seen. Its images carry no location. It is
+macOS-only, so it lives in the engine, not in <code>muriel.collection</code>; see
+<a href="https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/APPLE_PHOTOS.md">APPLE_PHOTOS.md</a>.</p>
 <h2 id="the-contract-in-brief">The contract in brief<a class="headerlink" href="#the-contract-in-brief" title="Permanent link">&para;</a></h2>
 <p>There are four parts, and all of them are static files. The full contract is
-<a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/CONTRACT.md"><code>docs/CONTRACT.md</code></a>.
+<a href="https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/CONTRACT.md"><code>docs/CONTRACT.md</code></a>.
 This section summarizes it for design decisions; for the engine's steps,
 see Wunderkammer's skill above.</p>
 <h3 id="collection-document-wunderkammercollection-v1">Collection document: <code>wunderkammer.collection</code> v1<a class="headerlink" href="#collection-document-wunderkammercollection-v1" title="Permanent link">&para;</a></h3>
@@ -1859,9 +1875,9 @@ see Wunderkammer's skill above.</p>
   <code>CollectionError</code>, so a first draft can be fixed in a single pass.</li>
 <li><strong>Sprite sheets:</strong> with a few hundred covers or more, pack them into
   sprite-sheet pages with
-  <a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/scripts/collection-sheets.py"><code>scripts/collection-sheets.py</code></a>.
+  <a href="https://github.com/andyed/wunderkammer/blob/v0.3.0/scripts/collection-sheets.py"><code>scripts/collection-sheets.py</code></a>.
   On the 297-image example, the overview needed 3 image requests instead of 297
-  (<a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/PERF.md"><code>docs/PERF.md</code></a>,
+  (<a href="https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/PERF.md"><code>docs/PERF.md</code></a>,
   "Collection sprite sheets").</li>
 </ul>
 <h3 id="comparison-recipe">Comparison recipe<a class="headerlink" href="#comparison-recipe" title="Permanent link">&para;</a></h3>
@@ -1958,13 +1974,13 @@ are in the packet, never notes or paths.</p>
   pane's <code>javascript_tool</code>.
 - <strong>Frames:</strong> a same-origin frame can be read as
   <code>frame.contentWindow.wunderkammer.export()</code>, but a cross-origin frame cannot.
-- <strong>Not built in 0.2.0:</strong> an <code>onSelection</code> callback through <code>mount()</code>, and a
+- <strong>Not built in 0.3.0:</strong> an <code>onSelection</code> callback through <code>mount()</code>, and a
   "copy for the conversation" button.
 - <strong>Before acting on a packet,</strong> check that its <code>count</code> matches the scope the
   person described. Quote identities from the packet rather than from memory
   of the page.</p>
 <h3 id="embedding-mountelement-collection">Embedding: <code>mount(element, collection)</code><a class="headerlink" href="#embedding-mountelement-collection" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// A checkout of v0.2.0, served by the same static host as this page.</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// A checkout of v0.3.0, served by the same static host as this page.</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">mount</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'./wunderkammer/wall/embed.mjs'</span><span class="p">;</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kd">const</span><span class="w"> </span><span class="nx">wall</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">mount</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span><span class="w"> </span><span class="nx">collection</span><span class="p">);</span><span class="w">   </span><span class="c1">// frames ./wunderkammer/index.html</span>
@@ -1981,7 +1997,7 @@ are in the packet, never notes or paths.</p>
   root, one folder above <code>embed.mjs</code>. Imported from a static host, the
   default works as it is. The module can also be imported from jsDelivr's
   GitHub route,
-  <code>https://cdn.jsdelivr.net/gh/andyed/wunderkammer@v0.2.0/wall/embed.mjs</code>,
+  <code>https://cdn.jsdelivr.net/gh/andyed/wunderkammer@v0.3.0/wall/embed.mjs</code>,
   but its default is then a page served as <code>text/plain</code>. Pass
   <code>mount(element, collection, { wallUrl })</code> with a static host's wall page.</li>
 <li><strong>Other options:</strong> <code>title</code> (the iframe's title) and <code>timeout</code> (default
@@ -1991,7 +2007,7 @@ are in the packet, never notes or paths.</p>
 </ul>
 <h2 id="loading-by-pinned-version">Loading by pinned version<a class="headerlink" href="#loading-by-pinned-version" title="Permanent link">&para;</a></h2>
 <p>Wunderkammer is released as git tags on GitHub. Pin every reference to the
-tag, <code>v0.2.0</code>: in a GitHub URL, in a jsDelivr GitHub-route URL, and as the
+tag, <code>v0.3.0</code>: in a GitHub URL, in a jsDelivr GitHub-route URL, and as the
 checkout a static host serves. Never use a branch, <code>@latest</code>, or a
 package-registry URL. No Wunderkammer package is published, so such a URL
 fails today, and would serve someone else's code if they registered the name.</p>
@@ -1999,7 +2015,7 @@ fails today, and would serve someone else's code if they registered the name.</p
 <thead>
 <tr>
 <th>What</th>
-<th>jsDelivr GitHub route (<code>cdn.jsdelivr.net/gh/andyed/wunderkammer@v0.2.0/…</code>)</th>
+<th>jsDelivr GitHub route (<code>cdn.jsdelivr.net/gh/andyed/wunderkammer@v0.3.0/…</code>)</th>
 <th>Static host serving a checkout of the tag</th>
 </tr>
 </thead>
@@ -2025,12 +2041,12 @@ fails today, and would serve someone else's code if they registered the name.</p
   The comparison page is <code>wall/compare.html</code>. Both name their assets by
   relative paths, so they work at any sub-path, such as a GitHub Pages
   project site.
-  <a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/tests/cdn-subpath.test.mjs"><code>tests/cdn-subpath.test.mjs</code></a>
+  <a href="https://github.com/andyed/wunderkammer/blob/v0.3.0/tests/cdn-subpath.test.mjs"><code>tests/cdn-subpath.test.mjs</code></a>
   serves the release's files under a versioned sub-path. From there it boots
   the wall, <code>mount()</code> with its default, and the comparison page's link back,
   with no request leaving that path.</li>
 <li><strong>A static host:</strong> a checkout of the tag
-  (<code>git clone --branch v0.2.0 https://github.com/andyed/wunderkammer</code>, then
+  (<code>git clone --branch v0.3.0 https://github.com/andyed/wunderkammer</code>, then
   <code>npx http-server -p 8080 .</code> and <code>/?collection=&lt;url&gt;</code>), the output of
   <code>scripts/build-demo.mjs</code>, or a wunderkammer server. All of them serve the
   wall at <code>/</code>.</li>
@@ -2043,7 +2059,7 @@ fails today, and would serve someone else's code if they registered the name.</p
   <code>X-Frame-Options</code> or <code>frame-ancestors</code> header (checked 2026-10-18), so
   framing it is governed by the host page's own content security policy. A
   static host of your own sets its own headers.</li>
-<li><strong>Three.js</strong> 0.169.0 is loaded from jsDelivr by both pages, for the 3D
+<li><strong>Three.js</strong> 0.186.1 is loaded from jsDelivr by both pages, for the 3D
   views (the spatial view, the aisle and the floating space) and the album
   walls only. Without the network or WebGL, those views are withdrawn with a
   notice. The flat wall, facets, detail pane, comparison matrix and evidence
@@ -2133,7 +2149,7 @@ observation text are readable text under the 8:1 floor:</p>
 <ul>
 <li><strong>Wunderkammer's own audit:</strong> its facet and scope controls measured at least
   8.528:1 against their painted backgrounds
-  (<a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/FACETING.md#implementation-verification"><code>docs/FACETING.md</code></a>).
+  (<a href="https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/FACETING.md#implementation-verification"><code>docs/FACETING.md</code></a>).
   That audit did not cover every text element.</li>
 <li><strong>The embedding page:</strong> run <code>python -m muriel.contrast &lt;page.html&gt;</code> on the
   page you wrote.</li>
@@ -2155,12 +2171,13 @@ observation text are readable text under the 8:1 floor:</p>
 <li><strong>Validate before opening a browser.</strong> A collection given to a frame by URL
   reports its problems inside the frame, not to the host. The page validates
   again on load, and when the two validators disagree, the page's
-  (<a href="https://github.com/andyed/wunderkammer/blob/v0.2.0/wall/collection.mjs"><code>wall/collection.mjs</code></a>)
+  (<a href="https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/collection.mjs"><code>wall/collection.mjs</code></a>)
   is the reference.</li>
 <li><strong><code>--release</code> names the wall that will load the document.</strong> Each release
-  refuses the fields added after it. The default is 0.2.0, the release this
-  reference pins. For a 0.1.0 wall, validate with <code>--release 0.1.0</code>: it
-  refuses <code>ui.nouns</code> (what the counts call one item and several), which
+  refuses the fields added after it. The default is 0.3.0, the release this
+  reference pins; it adds no collection fields, so a document valid for 0.2.0
+  loads in it. For a 0.1.0 wall, validate with <code>--release 0.1.0</code>:
+  it refuses <code>ui.nouns</code> (what the counts call one item and several), which
   0.2.0 added.</li>
 <li><strong>Observations need Wunderkammer's checker.</strong> <code>muriel.collection</code> validates
   the collection document only. From a Wunderkammer checkout,
