@@ -206,9 +206,9 @@ document value search and disappearing selected values. These are implementation
 precedents, not human-effectiveness evidence or dependency recommendations.
 
 **Implemented host reference:** Wunderkammer's
-[`wall/facet-model.mjs`](https://github.com/andyed/wunderkammer/blob/v0.2.0/wall/facet-model.mjs),
-[`wall/facet-rail.mjs`](https://github.com/andyed/wunderkammer/blob/v0.2.0/wall/facet-rail.mjs), and
-[`docs/FACETING.md`](https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/FACETING.md) implement and describe the contextual
+[`wall/facet-model.mjs`](https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/facet-model.mjs),
+[`wall/facet-rail.mjs`](https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/facet-rail.mjs), and
+[`docs/FACETING.md`](https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/FACETING.md) implement and describe the contextual
 counts, reachable values, and recovery contract. The source was inspected on
 16 October 2026, before Clipwall was released as Wunderkammer. At the
 integration checkpoint, focused browser checks passed 15/15
@@ -217,7 +217,7 @@ two deliberate facet mutations were both detected. These passes overlap and
 must not be summed. The public 297-image showcase passed desktop, spatial and
 phone smoke checks, with no script errors or failed assets and a minimum
 measured facet/scope text contrast of 8.528:1. Wunderkammer's
-[`docs/FACETING.md`](https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/FACETING.md#implementation-verification)
+[`docs/FACETING.md`](https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/FACETING.md#implementation-verification)
 records the combined-suite receipt and measurement boundaries. No controlled
 evaluation of the faceting benefit is established. Treat this contract and
 fixture as reusable guidance; copying the host component does not complete another product's integration.
