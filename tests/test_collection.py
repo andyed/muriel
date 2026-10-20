@@ -58,9 +58,7 @@ REFERENCE = {
 }
 #: Unreleased Wunderkammer commits whose validator files differ from every
 #: pin's but validate as the mapped release does (layer 4).
-EQUIVALENT = {
-    "1dbda0c5009a2b24e5d8a8b554ee2bd01874cfac": "0.2.0",   # adds the collectionImages() export
-}
+EQUIVALENT = {}   # 1dbda0c's validator files are v0.3.0's, now pinned in REFERENCE
 #: Every (release, commit) the differential tests run.
 PINS = [*REFERENCE.items(), *((release, commit) for commit, release in EQUIVALENT.items())]
 #: wall/collection.mjs and every module it imports.
