@@ -111,14 +111,14 @@ Keep a click or explicit action as a clear route from preview to commitment.
 ## Wunderkammer as an inspected implementation precedent
 
 Source inspected at Clipwall commit `6ac1e70`, 16 October 2026. Clipwall was
-the private predecessor of [Wunderkammer](https://github.com/andyed/wunderkammer/tree/v0.2.0),
-and the files named here are public at its v0.2.0 tag. This is source and
+the private predecessor of [Wunderkammer](https://github.com/andyed/wunderkammer/tree/v0.3.0),
+and the files named here are public at its v0.3.0 tag. This is source and
 contract evidence, not a new runtime or user study. Read
-[`docs/PHILOSOPHY.md`](https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/PHILOSOPHY.md),
-[`docs/ARCHITECTURE.md`](https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/ARCHITECTURE.md),
-[`docs/ZOOM_DETAIL.md`](https://github.com/andyed/wunderkammer/blob/v0.2.0/docs/ZOOM_DETAIL.md),
-[`wall/zoom-detail.mjs`](https://github.com/andyed/wunderkammer/blob/v0.2.0/wall/zoom-detail.mjs), and
-[`wall/viewport.mjs`](https://github.com/andyed/wunderkammer/blob/v0.2.0/wall/viewport.mjs).
+[`docs/PHILOSOPHY.md`](https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/PHILOSOPHY.md),
+[`docs/ARCHITECTURE.md`](https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/ARCHITECTURE.md),
+[`docs/ZOOM_DETAIL.md`](https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/ZOOM_DETAIL.md),
+[`wall/zoom-detail.mjs`](https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/zoom-detail.mjs), and
+[`wall/viewport.mjs`](https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/viewport.mjs).
 
 - **Survey / Review / Dive** use one corpus and scope evaluator. Layout and sort
   change presentation, while search and facets change membership.

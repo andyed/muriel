@@ -8,6 +8,16 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **The collections reference pins Wunderkammer 0.3.0.** Every link in
+  `references/collections.md`, `faceted-exploration.md` and
+  `zooming-interfaces.md` moves from `v0.2.0` to `v0.3.0`; the Clipwall case
+  study keeps its 0.2.0 links, as it describes that release. The reference
+  gains the image warehouse (`?view=warehouse`, "Cats. Lots of cats.", and its
+  video with a 30-second tour) and Wunderkammer's Apple Photos importer, and
+  says three.js 0.186.1. `muriel.collection validate` checks for 0.3.0 by
+  default; 0.3.0 adds no collection fields, and its differential tests pin
+  the `v0.3.0` commit.
+
 - **`references/human-capabilities.md` and `references/microstrategies.md`:
   research grounding for interaction decisions.** human-capabilities covers
   cognitive task analysis, human strengths and demands, the split of work
