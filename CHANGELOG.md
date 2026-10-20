@@ -23,6 +23,16 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   ImageMagick's librsvg drops them. The critique agent and the repo's
   permission allowlist now point at it.
 
+- **The collections reference pins Wunderkammer 0.3.0.** Every link in
+  `references/collections.md`, `faceted-exploration.md` and
+  `zooming-interfaces.md` moves from `v0.2.0` to `v0.3.0`; the Clipwall case
+  study keeps its 0.2.0 links, as it describes that release. The reference
+  gains the image warehouse (`?view=warehouse`, "Cats. Lots of cats.", and its
+  video with a 30-second tour) and Wunderkammer's Apple Photos importer, and
+  says three.js 0.186.1. `muriel.collection validate` checks for 0.3.0 by
+  default; 0.3.0 adds no collection fields, and its differential tests pin
+  the `v0.3.0` commit.
+
 - **`references/human-capabilities.md` and `references/microstrategies.md`:
   research grounding for interaction decisions.** human-capabilities covers
   cognitive task analysis, human strengths and demands, the split of work
@@ -584,6 +594,50 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **A far tile copied into the atlas on its own could be lost.** three r169's
+  `WebGLRenderer.copyTextureToTexture` binds the destination to texture unit 0
+  but did not make unit 0 active when the destination was already bound
+  there (fixed in r184, mrdoob/three.js#33153). The far atlas sits on unit 0
+  and a render leaves the near atlas's unit active, so `TileAtlas`'s per-slot
+  upload, used when four or fewer slots change between flushes, wrote a far
+  tile into the near atlas, or into no texture once an earlier copy had
+  unbound the active unit. The tile then drew its placeholder until a later
+  whole-canvas upload repaired it. Every importmap in `render_assets/` and the
+  `spatial` channel's example now pins three **0.186.1** (from 0.169.0, and
+  0.160.0 in the channel doc). Nothing in `_lib/` needed changing for
+  r170–r186. `tests/spatial-tile-pixels.test.mjs` adds a per-slot upload
+  case: it redraws two far tiles after the atlas is on the GPU and checks
+  their frame pixels. On r169 all 50 samples keep the old colour; on 0.186.1
+  all pass. The six gallery pages render pixel-identical frames on both
+  versions, except `data-mountain-field`, whose animation differs run to run.
+  Wunderkammer's floating space found the lost tiles in its stills.
+- **`TileField` drew every tile about 2.2 gamma dark.** The atlases are
+  tagged `SRGBColorSpace`, so sampling decodes them to linear, and the
+  fragment shader wrote the result without re-encoding: an atlas pixel of
+  167,170,176 reached the frame as 99,103,111, and dark covers went black.
+  Both outputs, the sampled tile and the `emptyColor` placeholder, now pass
+  through `linearToOutputTexel`, which is the identity on a linear target.
+  Found by wunderkammer's floating space while matching frame pixels to atlas
+  pixels.
+- **`TileField` tiles at a multiple of the atlas column count sampled their
+  neighbour.** The slot index is an interpolated float and could arrive as
+  4.9999…, so `floor(vSlot / cols)` took the previous row while `mod()`
+  wrapped the column: slot 5 of a 5-column atlas drew part of slot 4. The
+  shader now rounds the index, takes the row with a half-slot margin, and
+  derives the column from the row. `tests/spatial-tile-pixels.test.mjs`
+  (new) renders a 25-tile field in headless Chromium for both tiers and
+  checks 25 points on every tile against its atlas colour. It fails on
+  either defect alone (the encoding one fails 475 of 650 samples per tier,
+  the slot one 14) and skips with a reason when Playwright is not
+  resolvable.
+- **Drawable cards painted nothing in current Chrome Canary.** Canary 158
+  (measured on 158.0.8110.5) renamed the HTML-in-Canvas opt-in from
+  `<canvas layoutsubtree>` to `<canvas content="drawable">`. Under the old
+  name the cards got no layout box, so every `CardHost.capture()` returned
+  `RETRY` until the near tier gave up and fell back to images: the field still
+  showed pictures, but none of its tiles were sourced from the cards, which is
+  the feature. `CardHost` now sets both attributes. Builds from before the
+  rename ignore `content`, and builds after it ignore `layoutsubtree`.
 - **`muriel.capture --selector` named element PNGs after the viewport.** The
   filename was always `{slug}-{tier}-{viewport}`, so a 1200×630 card captured
   at the default scale of 2 on the desktop tier was written as

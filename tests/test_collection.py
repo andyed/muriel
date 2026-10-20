@@ -22,6 +22,11 @@ Four layers:
    change when the checkout moves. A separate test fails when the
    checkout's validator files match no pinned commit: that is the signal
    to port Wunderkammer's change and pin the new commit.
+
+   A commit between releases that changes the validator files but no rule
+   goes in ``EQUIVALENT``, mapped to the release it validates as. The
+   checkout test accepts it, and the differential test runs it against
+   that release on every run, so the claim stays checked.
 """
 
 import copy
@@ -49,11 +54,18 @@ PSYCHODELI = WK / "examples/psychodeli/collection.json"
 REFERENCE = {
     "0.1.0": "caadd2e558e94eb7df109e9c389cbfccfef23781",   # tag v0.1.0
     "0.2.0": "dc16ee877a5c165f0fdec8beec0cd33847a6ce40",   # tag v0.2.0, with ui.nouns
+    "0.3.0": "04c13dede6aa0a8e0dc133eaf62889582af31f21",   # tag v0.3.0, the same collection fields as 0.2.0
 }
+#: Unreleased Wunderkammer commits whose validator files differ from every
+#: pin's but validate as the mapped release does (layer 4).
+EQUIVALENT = {}   # 1dbda0c's validator files are v0.3.0's, now pinned in REFERENCE
+#: Every (release, commit) the differential tests run.
+PINS = [*REFERENCE.items(), *((release, commit) for commit, release in EQUIVALENT.items())]
 #: wall/collection.mjs and every module it imports.
 VALIDATOR_FILES = ("wall/collection.mjs", "wall/facet-counts.mjs")
 UI_FIELDS = {"0.1.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets",
-             "0.2.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns"}
+             "0.2.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns",
+             "0.3.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns"}
 
 
 def doc(**over):
@@ -359,8 +371,8 @@ def test_ui_nouns_by_release(release, nouns, expected):
 
 
 def test_an_unknown_release_is_an_error():
-    with pytest.raises(ValueError, match=r"known: 0\.1\.0, 0\.2\.0"):
-        validate(doc(), release="0.3.0")
+    with pytest.raises(ValueError, match=r"known: 0\.1\.0, 0\.2\.0, 0\.3\.0"):
+        validate(doc(), release="0.4.0")
 
 
 def test_every_added_field_names_a_known_release():
@@ -753,13 +765,13 @@ def test_cli_validate_prints_warnings_and_still_passes(tmp_path):
 def test_cli_validate_checks_for_a_release(tmp_path):
     path = tmp_path / "c.json"
     path.write_text(json.dumps(doc(ui={"title": "Cats", "nouns": {"item": "cat", "items": "cats"}})), encoding="utf-8")
-    assert run_cli("validate", path).returncode == 0   # the default, 0.2.0, accepts ui.nouns
+    assert run_cli("validate", path).returncode == 0   # the default, 0.3.0, accepts ui.nouns
     r = run_cli("validate", path, "--release", "0.1.0")
     assert r.returncode == 1
     assert f"- ui.nouns is not supported (supported: {UI_FIELDS['0.1.0']})" in r.stdout.splitlines()
     assert r.stderr.strip() == ("note: ui.nouns is newer than Wunderkammer 0.1.0; "
                                 "for a wall from release 0.2.0, validate with --release 0.2.0")
-    assert run_cli("validate", path, "--release", "0.3.0").returncode == 2
+    assert run_cli("validate", path, "--release", "0.4.0").returncode == 2
     # A problem the release does not explain draws no note.
     path.write_text(json.dumps(doc(ui={"corpusName": "x"})), encoding="utf-8")
     r = run_cli("validate", path, "--release", "0.1.0")
@@ -794,29 +806,29 @@ def _require_git_checkout():
 
 @pytest.fixture(scope="session")
 def pinned(tmp_path_factory):
-    """``pinned(release)``: node, and that release's pinned validator and example in a scratch folder."""
+    """``pinned(release, commit)``: node, and that commit's validator and example in a scratch folder."""
     node = _reference()
     _require_git_checkout()
     made = {}
 
-    def get(release):
-        if release not in made:
-            commit = REFERENCE[release]
+    def get(release, commit):
+        if commit not in made:
             if _git("cat-file", "-e", f"{commit}^{{commit}}").returncode != 0:
                 pytest.skip(f"{WK} lacks Wunderkammer {commit[:7]} ({release}); run git -C {WK} fetch origin --tags")
-            out = tmp_path_factory.mktemp(f"wunderkammer-{release}")
+            out = tmp_path_factory.mktemp(f"wunderkammer-{release}-{commit[:7]}")
             for path in (*VALIDATOR_FILES, "examples/psychodeli/collection.json"):
                 blob = _git("show", f"{commit}:{path}")
                 assert blob.returncode == 0, blob.stderr.decode()
                 (out / path).parent.mkdir(parents=True, exist_ok=True)
                 (out / path).write_bytes(blob.stdout)
-            made[release] = out
-        return node, made[release]
+            made[commit] = out
+        return node, made[commit]
     return get
 
 
 def test_every_release_has_a_pinned_reference():
     assert set(REFERENCE) == set(RELEASES)
+    assert set(EQUIVALENT.values()) <= set(RELEASES) and not set(EQUIVALENT) & set(REFERENCE.values())
 
 
 def test_the_checkout_validator_matches_a_pinned_commit():
@@ -825,7 +837,9 @@ def test_the_checkout_validator_matches_a_pinned_commit():
     The differential tests read pinned commits, so they keep passing when
     Wunderkammer changes its validator. This test compares the checkout's
     validator files with each pin's: when none matches, port the change to
-    muriel/collection.py and pin the new commit in REFERENCE.
+    muriel/collection.py and pin the new commit in REFERENCE. A change that
+    alters no rule goes in EQUIVALENT instead, and test_both_validators_agree
+    then has to pass against it.
     """
     if not (WK / VALIDATOR_FILES[0]).is_file():
         pytest.skip(f"no Wunderkammer checkout at {WK} (set WUNDERKAMMER_DIR)")
@@ -836,10 +850,11 @@ def test_the_checkout_validator_matches_a_pinned_commit():
             assert f"wall/{name}" in VALIDATOR_FILES, f"{path} imports wall/{name}; add it to VALIDATOR_FILES"
     blobs = lambda ref: [_git("rev-parse", f"{ref}:{p}").stdout.strip() for p in VALIDATOR_FILES]
     here = [_git("hash-object", "--", p).stdout.strip() for p in VALIDATOR_FILES]
-    matches = [release for release, commit in REFERENCE.items() if blobs(commit) == here]
+    matches = [release for release, commit in PINS if blobs(commit) == here]
     newest = REFERENCE[RELEASES[-1]]
     assert matches, (f"the validator at {WK} matches no pinned commit; see git -C {WK} diff {newest[:7]} -- "
-                     f"{' '.join(VALIDATOR_FILES)}, port it, and pin the new commit in REFERENCE")
+                     f"{' '.join(VALIDATOR_FILES)}, port it, and pin the new commit in REFERENCE "
+                     f"(or, if no rule changed, map it to its release in EQUIVALENT)")
 
 
 _JS_VALIDATE = r"""
@@ -899,9 +914,9 @@ def _mutants(n, seed):
         yield d
 
 
-@pytest.mark.parametrize("release", RELEASES)
-def test_both_validators_agree(tmp_path, pinned, release):
-    node, reference = pinned(release)
+@pytest.mark.parametrize("release, commit", PINS, ids=[f"{r}@{c[:7]}" for r, c in PINS])
+def test_both_validators_agree(tmp_path, pinned, release, commit):
+    node, reference = pinned(release, commit)
     folder = tmp_path / "photos"
     _images(folder)
     cases = [(doc(), None), (sprite_doc(), BASE), (doc(facets=DERIVED), None), (doc(facets={"x": 1}), None),

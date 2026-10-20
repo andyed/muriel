@@ -37,10 +37,10 @@ Wunderkammer describes the format. In short:
 
 The checks follow one Wunderkammer release at a time, because each wall
 refuses the fields added after it. ``validate()`` checks for
-``WUNDERKAMMER`` (0.2.0, the release muriel's collections reference pins)
+``WUNDERKAMMER`` (0.3.0, the release muriel's collections reference pins)
 unless ``release`` names another one in ``RELEASES``. 0.2.0 adds
-``ui.nouns``, which 0.1.0 refuses; ``SINCE`` lists each added field with
-the first release that accepts it.
+``ui.nouns``, which 0.1.0 refuses, and 0.3.0 adds no fields; ``SINCE``
+lists each added field with the first release that accepts it.
 
 Where Python and JavaScript differ, the port follows JavaScript: string
 limits count UTF-16 code units, numbers compare as doubles, ``trim()`` and
@@ -98,10 +98,10 @@ FORMAT = "wunderkammer.collection"
 VERSION = 1
 #: The release validate() checks for by default: the one muriel's
 #: references/collections.md pins. Move both together.
-WUNDERKAMMER = "0.2.0"
+WUNDERKAMMER = "0.3.0"
 #: The releases validate() can check for, oldest first. Each one has a
 #: pinned commit in tests/test_collection.py's REFERENCE.
-RELEASES = ("0.1.0", "0.2.0")
+RELEASES = ("0.1.0", "0.2.0", "0.3.0")
 #: Each field added after 0.1.0, with the first release that accepts it.
 #: An older release refuses it as unsupported, as that release's wall does.
 SINCE = MappingProxyType({"ui.nouns": "0.2.0"})
