@@ -55,6 +55,7 @@ REFERENCE = {
     "0.1.0": "caadd2e558e94eb7df109e9c389cbfccfef23781",   # tag v0.1.0
     "0.2.0": "dc16ee877a5c165f0fdec8beec0cd33847a6ce40",   # tag v0.2.0, with ui.nouns
     "0.3.0": "04c13dede6aa0a8e0dc133eaf62889582af31f21",   # tag v0.3.0, the same collection fields as 0.2.0
+    "next": "4c86e7961b7a8d394fdb02e44e8bca146e2ce06a",    # feat/video-tiles, with a clip's video
 }
 #: Unreleased Wunderkammer commits whose validator files differ from every
 #: pin's but validate as the mapped release does (layer 4).
@@ -65,7 +66,8 @@ PINS = [*REFERENCE.items(), *((release, commit) for commit, release in EQUIVALEN
 VALIDATOR_FILES = ("wall/collection.mjs", "wall/facet-counts.mjs")
 UI_FIELDS = {"0.1.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets",
              "0.2.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns",
-             "0.3.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns"}
+             "0.3.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns",
+             "next": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns"}
 
 
 def doc(**over):
@@ -286,6 +288,16 @@ def test_images_sheets_says_what_cells_are_when_a_clip_also_has_a_file():
                for p in problems_of(sprite_doc(images={"sheets": "full"})))
 
 
+def test_a_clip_may_name_a_video_http_blob_or_relative_never_data():
+    clips = [{"id": "a", "cover": "covers/a.webp", "video": "video/a.mp4", "kind": "video"},
+             {"id": "b", "video": "https://cdn.example/b.webm"}]
+    assert validate(doc(clips=clips), base_url="https://host.example/c/collection.json", release="next") == []
+    assert validate(doc(clips=[{"id": "a", "video": "video/a.mp4"}]), release="next") == []
+    for video in ["data:video/mp4;base64,AAAA", "javascript:alert(1)", "file:///tmp/a.mp4", ""]:
+        assert any(p.startswith("clips[0].video") for p in problems_of(doc(clips=[{"id": "a", "video": video}]),
+                                                                        base_url=None, release="next")), video
+
+
 # ─── the shipped example ─────────────────────────────────────────────────
 
 def test_the_psychodeli_example_validates():
@@ -300,8 +312,9 @@ def test_the_psychodeli_example_validates():
 
 # ─── 2. one planted violation, exactly one problem ───────────────────────
 
-CLIP_FIELDS = ("id, url, title, cover, coverVariants, detailCover, media, sheetSlots, sourceUrl, sourceLabel, "
-               "note, tags, props, source, kind, captured, palette, projection")
+_CLIP_FIELDS = ("id, url, title, cover, coverVariants, detailCover, media, {}sheetSlots, sourceUrl, sourceLabel, "
+                "note, tags, props, source, kind, captured, palette, projection")
+CLIP_FIELDS = {release: _CLIP_FIELDS.format("video, " if release == "next" else "") for release in RELEASES}
 
 
 def planted(mutate, base=doc, base_url=None, release=col.WUNDERKAMMER):
@@ -339,7 +352,7 @@ def test_clips_above_the_limit_are_refused():
     (lambda d: d["ui"].update(corpusName="x"), f"ui.corpusName is not supported (supported: {UI_FIELDS[col.WUNDERKAMMER]})"),
     (lambda d: d.update(images={"lazy": True}), "images.lazy is not supported (supported: cors, sheets)"),
     (lambda d: d["clips"][0].update(image="x.png"),
-     f"clips[0].image is not supported (supported: {CLIP_FIELDS}; put other attributes in props)"),
+     f"clips[0].image is not supported (supported: {CLIP_FIELDS[col.WUNDERKAMMER]}; put other attributes in props)"),
     (lambda d: d["clips"][0].update(__proto__={}), "clips[0].__proto__ is not allowed"),
 ])
 def test_unknown_keys_are_refused_with_the_supported_list(mutate, expected):
@@ -370,8 +383,50 @@ def test_ui_nouns_by_release(release, nouns, expected):
     assert planted(lambda d: d["ui"].update(nouns=nouns), release=release) == expected
 
 
+@pytest.mark.parametrize("release", RELEASES)
+def test_the_supported_clip_list_is_the_releases_own(release):
+    assert planted(lambda d: d["clips"][0].update(image="x.png"), release=release) == \
+        [f"clips[0].image is not supported (supported: {CLIP_FIELDS[release]}; put other attributes in props)"]
+
+
+@pytest.mark.parametrize("release", RELEASES)
+def test_a_clip_video_by_release(release):
+    video = planted(lambda d: d["clips"][0].update(video="javascript:x"), release=release)
+    prop = planted(lambda d: d["clips"][0]["props"].update(video="x"), release=release)
+    if release == "next":
+        assert video == ["clips[0].video must be an http(s) or blob: URL"]
+        assert prop == ["clips[0].props.video is hidden by the clip's own video field; rename the attribute"]
+    else:
+        # Refused unread, with the release's own list; and a prop may still be called video.
+        assert video == [f"clips[0].video is not supported (supported: {CLIP_FIELDS[release]}; put other attributes in props)"]
+        assert prop == []
+
+
+@pytest.mark.parametrize("value, base_url, expected", [
+    ("https://cdn.example/a.mp4", None, None),
+    ("HTTP://CDN.EXAMPLE/a.webm", None, None),
+    ("blob:https://host.example/2b6f", None, None),
+    ("video/a.mp4", None, None),
+    ("video/a.mp4", BASE, None),
+    ("😀" * 2048, None, None),   # 4096 UTF-16 code units, page-relative
+    ("😀" * 2048 + "a", None, "must be a non-empty string of at most 4096 characters"),
+    (" ", None, "must be a non-empty string of at most 4096 characters"),
+    (3, None, "must be a non-empty string of at most 4096 characters"),
+    ("data:video/mp4;base64,AAAA", None, "must be an http(s) or blob: URL"),
+    ("data:image/png;base64,AAAA", None, "must be an http(s) or blob: URL"),   # a cover's scheme is not a video's
+    ("file:///tmp/a.mp4", None, "must be an http(s) or blob: URL"),
+    ("video/a.mp4", "file:///tmp/c/collection.json", "must be an http(s) or blob: URL"),
+    ("//cdn.example/a.mp4", None, "must be a valid URL"),
+    ("http:", None, "must be a valid URL"),
+    ("video/a.mp4", "not a url", "must be a valid URL"),
+])
+def test_video_schemes(value, base_url, expected):
+    result = planted(lambda d: d.update(clips=[{"id": "a", "video": value}]), base_url=base_url, release="next")
+    assert result == ([f"clips[0].video {expected}"] if expected else [])
+
+
 def test_an_unknown_release_is_an_error():
-    with pytest.raises(ValueError, match=r"known: 0\.1\.0, 0\.2\.0, 0\.3\.0"):
+    with pytest.raises(ValueError, match=r"known: 0\.1\.0, 0\.2\.0, 0\.3\.0, next\)"):
         validate(doc(), release="0.4.0")
 
 
@@ -391,7 +446,7 @@ def test_only_the_first_unknown_clip_key_lists_the_supported_ones():
         d["clips"][0]["image"] = "x.png"
         d["clips"][1]["image"] = "y.png"
     assert planted(mutate) == [
-        f"clips[0].image is not supported (supported: {CLIP_FIELDS}; put other attributes in props)",
+        f"clips[0].image is not supported (supported: {CLIP_FIELDS[col.WUNDERKAMMER]}; put other attributes in props)",
         "clips[1].image is not supported",
     ]
 
@@ -772,6 +827,13 @@ def test_cli_validate_checks_for_a_release(tmp_path):
     assert r.stderr.strip() == ("note: ui.nouns is newer than Wunderkammer 0.1.0; "
                                 "for a wall from release 0.2.0, validate with --release 0.2.0")
     assert run_cli("validate", path, "--release", "0.4.0").returncode == 2
+    # A clip field newer than the release is noted at its clip's path.
+    path.write_text(json.dumps(doc(clips=[{"id": "a", "video": "a.mp4"}, {"id": "b", "video": "b.mp4"}])), encoding="utf-8")
+    r = run_cli("validate", path)
+    assert r.returncode == 1
+    assert r.stderr.strip() == ("note: clips.video is newer than Wunderkammer 0.3.0; "
+                                "for a wall from release next, validate with --release next")
+    assert run_cli("validate", path, "--release", "next").returncode == 0
     # A problem the release does not explain draws no note.
     path.write_text(json.dumps(doc(ui={"corpusName": "x"})), encoding="utf-8")
     r = run_cli("validate", path, "--release", "0.1.0")
@@ -882,7 +944,10 @@ _VALUES = [None, True, False, 0, 1, -1, 1.0, 1.5, 2 ** 53 + 1, 10 ** 400, -0.0, 
 _KEYS = ["format", "version", "corpus", "ui", "facetTypes", "images", "viewState", "sheets", "facets", "clips", "vault",
          "extra", "id", "title", "defaultGroup", "facetOrder", "facetLabels", "url", "cover", "coverVariants",
          "media", "sheetSlots", "sourceUrl", "note", "tags", "props", "source", "captured", "palette", "projection",
-         "image", "decade", "src", "edge", "width", "type", "order", "x", "col", "0", "nouns", "item", "items"]
+         "image", "decade", "src", "edge", "width", "type", "order", "x", "col", "0", "nouns", "item", "items", "video"]
+_VIDEOS = ["video/a.mp4", "https://cdn.example/a.webm", "blob:https://host.example/1", "data:video/mp4;base64,AAAA",
+           "data:image/png,x", "javascript:alert(1)", "file:///a.mp4", "//cdn.example/a.mp4", "c:/a.mp4", "", " ", None, 3,
+           ["a.mp4"], "😀" * 2048, "😀" * 2048 + "a", "a\u0001.mp4"]
 _NOUNS = [{"item": "cat", "items": "cats"}, {"item": "frame", "plural": "frames"}, "frames", None, [], {},
           {"item": "x" * 41, "items": "xs"}, {"item": "😀" * 20, "items": "😀" * 21}, {"item": " ", "items": " "},
           {"item": "a\u0001", "items": "b"}, {"item": 1, "items": True}, {"item": "cat", "items": "cats", "__proto__": {}}]
@@ -923,6 +988,8 @@ def test_both_validators_agree(tmp_path, pinned, release, commit):
              (build(folder, group="captured"), None),
              (build(_csv(tmp_path, 'id,cover,sourceUrl,genre[]\nx,a.png,https://e.org/x,"a,b"\ny,b.png,about.html,a\n')), None)]
     cases += [(doc(ui={"title": "Cats", "nouns": n}), None) for n in _NOUNS]
+    cases += [(doc(clips=[{"id": "a", "video": v, "props": {"video": "x"}}]), base) for v in _VIDEOS
+              for base in (None, BASE, "not a url")]
     cases += [(d, base) for d, base in zip(_mutants(400, seed=5), [None, BASE, "file:///c/c.json", "not a url"] * 100)]
     cases.append((json.loads((reference / "examples/psychodeli/collection.json").read_text(encoding="utf-8")), None))
     # Both sides read the same JSON text, as the CLI and the wall would.
@@ -943,6 +1010,13 @@ def test_both_validators_agree(tmp_path, pinned, release, commit):
         assert all(any(p.startswith("ui.nouns is not supported") for p in o) for o in noun_cases)
     else:
         assert noun_cases[0] == [] and any(p.startswith("ui.nouns.item ") for o in noun_cases for p in o)
+    # And the clip video rule: read and judged where the release has it, refused unread where it does not.
+    video_cases = outcomes[6 + len(_NOUNS):6 + len(_NOUNS) + 3 * len(_VIDEOS)]
+    if release == "next":
+        assert any(p.startswith("clips[0].video must be an http(s) or blob: URL") for o in video_cases for p in o)
+        assert all(any(p.startswith("clips[0].props.video is hidden") for p in o) for o in video_cases)
+    else:
+        assert all(any(p.startswith("clips[0].video is not supported") for p in o) for o in video_cases)
 
 
 _URLS = [
