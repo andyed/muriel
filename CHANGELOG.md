@@ -8,6 +8,16 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`muriel.collection` accepts a clip's `video` for Wunderkammer's next
+  release.** Wunderkammer's `feat/video-tiles` (4c86e79) adds an optional
+  `video` to a clip: one http(s), `blob:` or relative URL, never `data:`,
+  played over the clip's cover. `validate(..., release="next")` and
+  `validate --release next` check it with the reference's problem text, and a
+  `props` key named `video` is then refused as hidden by the clip's field.
+  The default, 0.3.0, refuses `video` with its own supported list, as a 0.3.0
+  wall does, and the CLI notes `--release next`. The differential tests pin
+  4c86e79 as `next`, and their cases now reach the video rule.
+
 - **The collections reference pins Wunderkammer 0.3.0.** Every link in
   `references/collections.md`, `faceted-exploration.md` and
   `zooming-interfaces.md` moves from `v0.2.0` to `v0.3.0`; the Clipwall case
