@@ -381,7 +381,7 @@ observation text are readable text under the 8:1 floor:
 
 ```bash
 python -m muriel.collection build <folder|csv> --out collection.json [--title T] [--group FIELD]
-python -m muriel.collection validate collection.json [--release 0.1.0]
+python -m muriel.collection validate collection.json [--release 0.1.0|next]
 ```
 
 - **`build`** reads a folder of images or a CSV and writes a
@@ -401,7 +401,11 @@ python -m muriel.collection validate collection.json [--release 0.1.0]
   reference pins; it adds no collection fields, so a document valid for 0.2.0
   loads in it. For a 0.1.0 wall, validate with `--release 0.1.0`:
   it refuses `ui.nouns` (what the counts call one item and several), which
-  0.2.0 added.
+  0.2.0 added. `--release next` checks for Wunderkammer's unreleased work
+  after 0.3.0, which adds a clip's `video`: one http(s) or `blob:` URL, never
+  `data:`, played muted and looping over the clip's cover in the 3D views and
+  the aisle, and with controls in the detail pane. A 0.3.0 wall refuses it,
+  so the default check refuses it too.
 - **Observations need Wunderkammer's checker.** `muriel.collection` validates
   the collection document only. From a Wunderkammer checkout,
   `node scripts/validate-collection.mjs collection.json --observations observations.json`

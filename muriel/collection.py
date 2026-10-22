@@ -22,9 +22,10 @@ Wunderkammer describes the format. In short:
   identity is an error.
 - ``sourceUrl`` must be http(s). Images (``cover``, ``detailCover``,
   ``coverVariants[].src``, ``media[].src``, ``sheets[].src``) may be
-  http(s), ``data:image/`` or ``blob:``. Relative URLs resolve against the
+  http(s), ``data:image/`` or ``blob:``; a clip's ``video`` may be http(s)
+  or ``blob:``, never ``data:``. Relative URLs resolve against the
   document's URL when ``base_url`` is given; without one, a relative image
-  stays relative to the page and a relative link is refused.
+  or video stays relative to the page and a relative link is refused.
 - ``props`` values are strings, finite numbers, booleans, null, or arrays
   of those. A props key may not name a clip field, because the wall reads
   the clip's own field first.
@@ -39,7 +40,8 @@ The checks follow one Wunderkammer release at a time, because each wall
 refuses the fields added after it. ``validate()`` checks for
 ``WUNDERKAMMER`` (0.3.0, the release muriel's collections reference pins)
 unless ``release`` names another one in ``RELEASES``. 0.2.0 adds
-``ui.nouns``, which 0.1.0 refuses, and 0.3.0 adds no fields; ``SINCE``
+``ui.nouns``, which 0.1.0 refuses, and 0.3.0 adds no fields. ``"next"`` is
+Wunderkammer's work after 0.3.0, which adds a clip's ``video``. ``SINCE``
 lists each added field with the first release that accepts it.
 
 Where Python and JavaScript differ, the port follows JavaScript: string
@@ -67,6 +69,7 @@ Or from the command line::
     python -m muriel.collection build albums.csv --out collection.json --group decade
     python -m muriel.collection validate collection.json
     python -m muriel.collection validate collection.json --release 0.1.0
+    python -m muriel.collection validate collection.json --release next
 
 ``validate`` exits 0 when the document is valid, 1 when it has problems
 (each printed with its path), and 2 when it read nothing or the input is
@@ -100,11 +103,13 @@ VERSION = 1
 #: references/collections.md pins. Move both together.
 WUNDERKAMMER = "0.3.0"
 #: The releases validate() can check for, oldest first. Each one has a
-#: pinned commit in tests/test_collection.py's REFERENCE.
-RELEASES = ("0.1.0", "0.2.0", "0.3.0")
+#: pinned commit in tests/test_collection.py's REFERENCE. "next" is
+#: Wunderkammer after 0.3.0; rename it to the release that ships it.
+RELEASES = ("0.1.0", "0.2.0", "0.3.0", "next")
 #: Each field added after 0.1.0, with the first release that accepts it.
 #: An older release refuses it as unsupported, as that release's wall does.
-SINCE = MappingProxyType({"ui.nouns": "0.2.0"})
+#: A clip field is named ``clips.<field>``.
+SINCE = MappingProxyType({"ui.nouns": "0.2.0", "clips.video": "next"})
 LIMITS = MappingProxyType({
     "clips": 50000, "problems": 25, "sheets": 4096, "sheetSlots": 8, "sheetEdge": 4096, "sheetPx": 16384,
 })
@@ -112,7 +117,7 @@ LIMITS = MappingProxyType({
 TOP = ("format", "version", "corpus", "ui", "facetTypes", "images", "viewState", "sheets", "facets", "clips")
 #: Keys a Wunderkammer server payload carries that a portable document must not.
 SERVER_ONLY = ("vault", "adapters", "generated")
-CLIP = ("id", "url", "title", "cover", "coverVariants", "detailCover", "media", "sheetSlots", "sourceUrl",
+CLIP = ("id", "url", "title", "cover", "coverVariants", "detailCover", "media", "video", "sheetSlots", "sourceUrl",
         "sourceLabel", "note", "tags", "props", "source", "kind", "captured", "palette", "projection")
 UI = ("title", "defaultGroup", "facetOrder", "facetLabels", "hiddenFacets", "nouns")
 FACET_TYPES = ("categorical", "ordinal", "numeric", "date")
@@ -275,8 +280,15 @@ def _supported(section: str, keys: Sequence[str], release: str) -> Tuple[str, ..
 def _too_new(problems: Sequence[str], release: str) -> List[Tuple[str, str]]:
     """(field, release) for each field ``problems`` refuse only because ``release`` predates it."""
     have = RELEASES.index(release)
-    return [(f, since) for f, since in SINCE.items()
-            if RELEASES.index(since) > have and any(p.startswith(f"{f} is not supported") for p in problems)]
+    found = []
+    for f, since in SINCE.items():
+        section, _, key = f.partition(".")
+        # A clip field is refused at its clip's path: clips[3].video.
+        index = r"\[[0-9]+\]" if section == "clips" else ""
+        at = re.compile(re.escape(section) + index + re.escape(f".{key} is not supported"))
+        if RELEASES.index(since) > have and any(at.match(p) for p in problems):
+            found.append((f, since))
+    return found
 
 
 # ─── the checker ─────────────────────────────────────────────────────────
@@ -349,6 +361,22 @@ class _Checker:
             return False
         return True
 
+    def video(self, value: Any, path: str) -> bool:
+        """A video source: http(s) or blob:, after resolving relative paths. Never data:."""
+        if self.text(value, path, max=4096) is None:
+            return False
+        url = self._url(value)
+        if url is None:
+            # Without a base, a relative path stays relative to the page.
+            if not self.has_base and not _SCHEME_PREFIX.match(value) and not value.startswith("//"):
+                return True
+            self.problem(path, "must be a valid URL")
+            return False
+        if url.scheme not in ("http", "https", "blob"):
+            self.problem(path, "must be an http(s) or blob: URL")
+            return False
+        return True
+
     def link(self, value: Any, path: str) -> Optional[str]:
         """A link a person can follow: http(s) only. Returns its href."""
         if self.text(value, path, max=4096) is None:
@@ -388,7 +416,7 @@ def validate(doc: Any, *, base_url: Optional[str] = None, release: str = WUNDERK
     """
     if release not in RELEASES:
         raise ValueError(f"unknown Wunderkammer release {release!r} (known: {', '.join(RELEASES)})")
-    ui_keys = _supported("ui", UI, release)
+    ui_keys, clip_keys = _supported("ui", UI, release), _supported("clips", CLIP, release)
     ck = _Checker(base_url)
     problem = ck.problem
 
@@ -500,16 +528,16 @@ def validate(doc: Any, *, base_url: Optional[str] = None, release: str = WUNDERK
                 problem(path, "must be an object")
                 continue
             for key in _js_keys(clip):
-                if key in CLIP:
+                if key in clip_keys:
                     continue
                 if key in FORBIDDEN:
                     problem(f"{path}.{key}", "is not allowed")
                 elif not unknown_reported:
                     unknown_reported = True
-                    problem(f"{path}.{key}", f"is not supported (supported: {', '.join(CLIP)}; put other attributes in props)")
+                    problem(f"{path}.{key}", f"is not supported (supported: {', '.join(clip_keys)}; put other attributes in props)")
                 else:
                     problem(f"{path}.{key}", "is not supported")
-            out_clips.append(_check_clip(ck, clip, path, i, seen, sheets, used_sheets))
+            out_clips.append(_check_clip(ck, clip, path, i, seen, sheets, used_sheets, clip_keys))
 
     if ck.problems or ck.overflow:
         return Problems(ck.problems, ck.overflow)
@@ -545,8 +573,12 @@ def _check_sheet(ck: _Checker, sheet: Any, path: str) -> Optional[Dict[str, floa
 
 
 def _check_clip(ck: _Checker, clip: dict, path: str, i: int, seen: Dict[str, int],
-                sheets: Optional[list], used_sheets: set) -> Dict[str, Any]:
-    """One clip's checks, in the reference's order. Returns what facets need."""
+                sheets: Optional[list], used_sheets: set, clip_keys: Sequence[str]) -> Dict[str, Any]:
+    """One clip's checks, in the reference's order. Returns what facets need.
+
+    ``clip_keys`` are the clip fields the release accepts; one it does not
+    was refused as unsupported and is not checked further.
+    """
     problem = ck.problem
     c: Dict[str, Any] = {"id": ck.text(_get(clip, "id"), f"{path}.id", max=300)}
     url = None
@@ -589,6 +621,8 @@ def _check_clip(ck: _Checker, clip: dict, path: str, i: int, seen: Dict[str, int
             for j, m in enumerate(media):
                 if ck.keys(m, f"{path}.media[{j}]", ("src",)):
                     ck.image(_get(m, "src"), f"{path}.media[{j}].src")
+    if "video" in clip and "video" in clip_keys:
+        ck.video(clip["video"], f"{path}.video")
     if "sheetSlots" in clip:
         _check_slots(ck, clip["sheetSlots"], f"{path}.sheetSlots", sheets, used_sheets)
     if "sourceUrl" in clip:
@@ -624,7 +658,7 @@ def _check_clip(ck: _Checker, clip: dict, path: str, i: int, seen: Dict[str, int
             if ck.field(k, f'{path}.props key "{k}"') is None:
                 continue
             # The wall reads a clip's own field before props, so these would be invisible.
-            if k in CLIP:
+            if k in clip_keys:
                 problem(p, f"is hidden by the clip's own {k} field; rename the attribute")
                 continue
             if v is None:
