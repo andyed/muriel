@@ -135,6 +135,64 @@ This stable grammar is more important than maximizing the mean font size.
   opened it. Repeated input cannot land on a replacement wedge after the DOM
   swaps under the pointer.
 
+### Branches: a submenu on the next orbit
+
+When a ring is a fan of round targets on an orbit (Protoplasm's tool arc round
+the hue ring, `show-corners.css`) rather than a pie of wedges, a submenu is a
+*branch* off that ring, not a replacement ring. The replacement version fails
+in two ways that only show once the parent is not at the end of the arc: the
+second level looks like the first (same plates, nearly the same orbit), and
+nothing says which parent it came from. The branch contract, implemented in
+Protoplasm's `pen-tools.ts`:
+
+- **The parent stays lit where it was tapped.** Its target does not move,
+  hide, or change size (the stable-target rule above); `aria-expanded` lights
+  it. Tapping it again closes the branch and keeps it selected, so Back is the
+  parent, not a leaf of the branch. Escape returns focus to the parent; opening
+  moves focus to the child that is currently on. While the branch is open the
+  parent shows its own glyph: the lit child already says which choice is on,
+  and repeating it on the parent puts two identical lit plates on the screen.
+  Closed, the parent may summarise the choice (the Pen shows its stamp).
+- **Siblings recede and go inert.** Same treatment as the other corners while a
+  branch is open (opacity, `pointer-events: none`), so a tap on one falls
+  through to the outside-tap rule, which only backs out and consumes the
+  gesture. Keeping them visible is what makes the levels distinguishable: the
+  dim ring is the level above, the lit parent and its children are the level
+  below.
+- **Children take the next orbit out, centred on the parent's angle.** Radius is
+  depth, as in [`annular-interfaces.md`](annular-interfaces.md). Measure the
+  parent's radius and angle from the rendered ring (`getBoundingClientRect`),
+  so every media query and safe-area inset is already in the numbers: child
+  orbit `R = parent orbit + target + channel`, step `2·asin((target + gap) / 2R)`.
+  Protoplasm uses a 44 px target, a 12 px channel and a 4 px gap.
+- **Clamp the fan to the screen, then let the connector absorb the slide.**
+  Compute the window of angles whose plates stay inside the ring's own inset
+  and clear of the nearest neighbouring control (the dish corner's Clear button
+  on a landscape phone), and slide the fan's centre along the orbit until it
+  fits. The parent does not move; the rail reaches back to it.
+- **Connect with a bracket, not spokes.** A stem from the parent's plate to a
+  rail at mid-channel, and the rail spanning the children (and the stem, when
+  the fan slid). Spokes from the parent to each child fail at six or more
+  children: the outer spokes pass within a few pixels of the neighbouring
+  plates and read as crossings. The rail groups the children by uniform
+  connectedness (Palmer & Rock 1994, a perceptual-grouping result with
+  empirical support) and the stem assigns the group to the parent. Keep it
+  below the plates and their glyphs in the hierarchy: a 1.5 px line at mid
+  lightness, not the plate's cream, over a plate-black halo so it survives a
+  bright projection behind it. It is a connector, so the text-contrast floor
+  does not apply. Protoplasm colours it with the complement of the current
+  dye's hue (`hsl(hue + 180, 55 %, 52 %)`), a palette colour, so the branch
+  belongs to the colour corner it grew from and changes with the dye.
+  Recompute on resize while open; the connector is a projection of the same
+  measured geometry as the targets, never a second layout.
+
+What this establishes and what it does not: the rendered checks prove target
+size, on-screen placement at phone portrait, phone landscape and desktop, one
+commit per tap, and focus return. That the bracket shortens level recognition
+or reduces wrong-level taps is the design hypothesis; it needs a task
+observation (wrong-level entries, acquisition time) before it counts as more
+than precedent.
+
 ## Pretext wedge compositors
 
 Pretext earns its cost when labels, command glyphs, exact values, and status
