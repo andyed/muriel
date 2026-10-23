@@ -144,6 +144,11 @@ for scanning, not for reading in order.
   "surprisingly", "stunning", "immersive", "seamless", "powerful" describe the
   writer's feeling. State the fact, explain why it matters,
   move on.
+- Gloss every in-house noun on first use. A preset family, a paid tier or a
+  panel name means nothing to a stranger until the sentence says what kind of
+  thing it is: "17 Looks, ready-made visual styles", "Touch, the paid add-on".
+  A Stranger pass on a store description found this the only defect left
+  after the structure rules were applied.
 - Product names exactly as the project's naming document spells them, and
   platform or trademark names only in referential phrases ("for macOS", never
   "ProductMacOS").
@@ -178,7 +183,9 @@ for scanning, not for reading in order.
 - **The Stranger pass.** Seat the Stranger from
   [`references/jury.md`](../references/jury.md) on the text alone, brief
   withheld, and compare its three answers with the reader contract. The
-  Pedant covers labels, units and numeric claims. The Squinter and Thumbnail
+  Pedant covers labels, units and numeric claims. The seat shares the
+  workspace's memory, so its recognizing a product name is not evidence that
+  a stranger would. Read its disclosure and weight it by its Prior strength. The Squinter and Thumbnail
   do not apply to text.
 - **The linter, then the read.** `python3 -m muriel.aiism <file.md>` catches
   shape tells (antithesis stacks, tricolons, anaphora, em-dash density). It
