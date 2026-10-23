@@ -54,6 +54,7 @@ A channel is one output medium. Each has a markdown file of recipes, tools, and 
 | [Heatmaps](plugins/muriel/skills/compose/channels/heatmaps.md) | Fixation density overlays (`muriel.typeset`) |
 | [Gaze](plugins/muriel/skills/compose/channels/gaze.md) | Scanpaths, AOI timelines, saccade roses (Pillow) |
 | [README](plugins/muriel/skills/compose/channels/readme.md) | Repo front pages rendered by GitHub (`muriel.capture`, `muriel.squint`, `muriel.aiism`) |
+| [Prose](plugins/muriel/skills/compose/channels/prose.md) | Plain text people read: store listings, release notes, UI strings, explainers, reports (reader contract, registers, `muriel.aiism`) |
 
 Two references apply to every channel. [Dimensions](plugins/muriel/skills/compose/channels/dimensions.md) covers social cards, device sizes, paper, and video resolutions. [Style guides](plugins/muriel/skills/compose/channels/style-guides.md) defines the `brand.toml` schema, which imports from Google Stitch `design.md` (`muriel import`) and exports W3C design tokens (`muriel export-dtcg`).
 

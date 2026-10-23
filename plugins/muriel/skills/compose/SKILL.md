@@ -210,6 +210,9 @@ The checklist above is about how an artifact *looks*; this is about how its **pr
 
 Optional gate: score a draft on Directness / Rhythm / Trust / Authenticity / Density (1–10 each); below 35/50 wants a revision pass.
 
+That list is the negative. How to write the thing, register by register, is
+[`channels/prose.md`](channels/prose.md).
+
 **Register carve-out.** These are defaults for editorial and explainer prose, *not* overrides for genre conventions. In scientific writing specifically: passive voice is conventional in methods sections ("participants were randomized", "data were filtered") and should not be force-converted; hedging is required, not slop — "not detected at this granularity" is correct precision, not softening to strip. When a stop-slop rule fights the genre, the genre wins.
 
 **What the linter catches, and what it cannot.** `muriel.aiism` now detects three
@@ -244,6 +247,7 @@ Read the channel that matches the primary output:
 | quantitative chart | [`channels/charts.md`](channels/charts.md) |
 | spatial or dimensional composition | [`channels/spatial.md`](channels/spatial.md) |
 | repo front page or markdown rendered by GitHub | [`channels/readme.md`](channels/readme.md) |
+| plain text people read: store listing, release notes, UI strings, explainer, a report to a person | [`channels/prose.md`](channels/prose.md) |
 
 Use a vocabulary only when it solves the task's specific visual grammar:
 [`vocabularies/`](vocabularies/).
@@ -347,7 +351,8 @@ standing outside it.
 - Do not invoke Muriel for backend-only or infrastructure work without a
   consequential human interaction decision.
 - Do not invoke for settled component implementation, routine CSS, spacing,
-  copy, responsive cleanup, or conventional polish with known desired behavior.
+  a copy edit with known desired wording, responsive cleanup, or conventional
+  polish with known desired behavior.
 - Defer raster generation, video production, quantitative charting, documents,
   and other specialist media to their narrower production skill unless one
   unresolved visual decision spans media or changes the interaction model.

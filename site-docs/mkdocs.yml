@@ -96,6 +96,7 @@ nav:
       - Terminal: channels/terminal.md
       - Polish: channels/polish.md
       - README: channels/readme.md
+      - Prose: channels/prose.md
   - Vocabularies:
       - Visible Language: vocabularies/visible-language.md
       - FUI (fictional UI): vocabularies/fui.md

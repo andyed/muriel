@@ -8,6 +8,22 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **A prose channel, the positive counterpart to the anti-slop list.**
+  `channels/prose.md` says how to write plain text people read: a reader
+  contract for the lines a surface shows first (what is this, what do I do,
+  what does it cost), a workflow that lists sourced facts before drafting,
+  structure rules (promise, definition, action; one idea per header; one
+  list of parallel items; price and permissions as lists; caveats once; never
+  lead with a negative; current truth, not history), sentence rules (topic as
+  subject, so an inanimate subject loses its transitive verb; name the actor;
+  no flag-planting; no breathless adjectives), a register table from store
+  listing to agent report, and verification by counts, the first-screen test,
+  the deletion test, a Stranger pass and the linter. The router gains its row,
+  the anti-slop section points at it, and the boundary that excluded "copy"
+  now excludes only a copy edit with known wording. Prompted by a study of
+  sixteen live App Store descriptions that found a shipped listing with no
+  bullets, one caveat stated three times and a section led by a limitation.
+
 - **`muriel.collection` accepts a clip's `video` for Wunderkammer's next
   release.** Wunderkammer's `feat/video-tiles` (4c86e79) adds an optional
   `video` to a clip: one http(s), `blob:` or relative URL, never `data:`,
