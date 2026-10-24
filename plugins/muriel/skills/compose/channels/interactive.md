@@ -350,7 +350,7 @@ This is the Interactive JS-channel version of the Web Rendering channel's "wait 
 
 ### Reference exemplar: pretext-coachella
 
-A publicly available worked example of pretext Tier 2: [andyed/pretext-coachella](https://github.com/andyed/pretext-coachella) — a 2026 Coachella lineup typeset *inside* the letterforms of "COACHELLA". Four views over the same 169-artist JSON exercise the whole API surface:
+A local worked example of pretext Tier 2 (public source unavailable): **pretext-coachella** — a 2026 Coachella lineup typeset *inside* the letterforms of "COACHELLA". Four views over the same 169-artist JSON exercise the whole API surface:
 
 | View | File | Pretext API | What it does |
 |---|---|---|---|

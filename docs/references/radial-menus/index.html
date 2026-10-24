@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="A design skill for coding agents: fifteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+        <meta name="description" content="A design skill for coding agents: interaction design, visual craft, collection exploration, and readable artifacts grounded in design research.">
       
       
         <meta name="author" content="Andy Edmonds">
@@ -67,15 +67,17 @@
   </script>
 
     
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
-  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  
+  
+  <meta property="og:title" content="Radial menus — stable targets and measured wedge typography — muriel">
+  <meta property="og:description" content="A design skill for coding agents: interaction design, visual craft, collection exploration, and readable artifacts grounded in design research.">
   <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
-  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:image:alt" content="muriel — a design skill for coding agents">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/references/radial-menus/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
-  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:title" content="Radial menus — stable targets and measured wedge typography — muriel">
+  <meta name="twitter:description" content="A design skill for coding agents: interaction design, visual craft, collection exploration, and readable artifacts grounded in design research.">
   <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
 
   <!-- Favicons — colophon bars, light + dark variants. Served from the output
@@ -1239,6 +1241,139 @@
   
   
     <li class="md-nav__item">
+      <a href="../collections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Collections & Wunderkammer
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--experimental"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../human-capabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human capabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design-synthesis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design synthesis
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jury/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jury protocol
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--experimental"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../zooming-interfaces/" class="md-nav__link">
         
   
@@ -1878,6 +2013,62 @@ This stable grammar is more important than maximizing the mean font size.</p>
   opened it. Repeated input cannot land on a replacement wedge after the DOM
   swaps under the pointer.</li>
 </ul>
+<h3 id="branches-a-submenu-on-the-next-orbit">Branches: a submenu on the next orbit<a class="headerlink" href="#branches-a-submenu-on-the-next-orbit" title="Permanent link">&para;</a></h3>
+<p>When a ring is a fan of round targets on an orbit (Protoplasm's tool arc round
+the hue ring, <code>show-corners.css</code>) rather than a pie of wedges, a submenu is a
+<em>branch</em> off that ring, not a replacement ring. The replacement version fails
+in two ways that only show once the parent is not at the end of the arc: the
+second level looks like the first (same plates, nearly the same orbit), and
+nothing says which parent it came from. The branch contract, implemented in
+Protoplasm's <code>pen-tools.ts</code>:</p>
+<ul>
+<li><strong>The parent stays lit where it was tapped.</strong> Its target does not move,
+  hide, or change size (the stable-target rule above); <code>aria-expanded</code> lights
+  it. Tapping it again closes the branch and keeps it selected, so Back is the
+  parent, not a leaf of the branch. Escape returns focus to the parent; opening
+  moves focus to the child that is currently on. While the branch is open the
+  parent shows its own glyph: the lit child already says which choice is on,
+  and repeating it on the parent puts two identical lit plates on the screen.
+  Closed, the parent may summarise the choice (the Pen shows its stamp).</li>
+<li><strong>Siblings recede and go inert.</strong> Same treatment as the other corners while a
+  branch is open (opacity, <code>pointer-events: none</code>), so a tap on one falls
+  through to the outside-tap rule, which only backs out and consumes the
+  gesture. Keeping them visible is what makes the levels distinguishable: the
+  dim ring is the level above, the lit parent and its children are the level
+  below.</li>
+<li><strong>Children take the next orbit out, centred on the parent's angle.</strong> Radius is
+  depth, as in <a href="../annular-interfaces/"><code>annular-interfaces.md</code></a>. Measure the
+  parent's radius and angle from the rendered ring (<code>getBoundingClientRect</code>),
+  so every media query and safe-area inset is already in the numbers: child
+  orbit <code>R = parent orbit + target + channel</code>, step <code>2·asin((target + gap) / 2R)</code>.
+  Protoplasm uses a 44 px target, a 12 px channel and a 4 px gap.</li>
+<li><strong>Clamp the fan to the screen, then let the connector absorb the slide.</strong>
+  Compute the window of angles whose plates stay inside the ring's own inset
+  and clear of the nearest neighbouring control (the dish corner's Clear button
+  on a landscape phone), and slide the fan's centre along the orbit until it
+  fits. The parent does not move; the rail reaches back to it.</li>
+<li><strong>Connect with a bracket, not spokes.</strong> A stem from the parent's plate to a
+  rail at mid-channel, and the rail spanning the children (and the stem, when
+  the fan slid). Spokes from the parent to each child fail at six or more
+  children: the outer spokes pass within a few pixels of the neighbouring
+  plates and read as crossings. The rail groups the children by uniform
+  connectedness (Palmer &amp; Rock 1994, a perceptual-grouping result with
+  empirical support) and the stem assigns the group to the parent. Keep it
+  below the plates and their glyphs in the hierarchy: a 1.5 px line at mid
+  lightness, not the plate's cream, over a plate-black halo so it survives a
+  bright projection behind it. It is a connector, so the text-contrast floor
+  does not apply. Protoplasm colours it with the complement of the current
+  dye's hue (<code>hsl(hue + 180, 55 %, 52 %)</code>), a palette colour, so the branch
+  belongs to the colour corner it grew from and changes with the dye.
+  Recompute on resize while open; the connector is a projection of the same
+  measured geometry as the targets, never a second layout.</li>
+</ul>
+<p>What this establishes and what it does not: the rendered checks prove target
+size, on-screen placement at phone portrait, phone landscape and desktop, one
+commit per tap, and focus return. That the bracket shortens level recognition
+or reduces wrong-level taps is the design hypothesis; it needs a task
+observation (wrong-level entries, acquisition time) before it counts as more
+than precedent.</p>
 <h2 id="pretext-wedge-compositors">Pretext wedge compositors<a class="headerlink" href="#pretext-wedge-compositors" title="Permanent link">&para;</a></h2>
 <p>Pretext earns its cost when labels, command glyphs, exact values, and status
 glyphs need to share irregular or variable-width sectors. It is a layout engine,

@@ -112,7 +112,7 @@ ring is a menu.
 
 - [fuidesign.com](https://fuidesign.com/) — Ash Thorp's curated showcase.
 - [hudsandguis.com](https://www.hudsandguis.com/) — dormant but canonical Tumblr archive; still the best single-site reference.
-- [perception.nyc](https://perception.nyc/) / [territorystudio.com](https://territorystudio.com/) — studio portfolios.
+- [Perception’s portfolio](https://www.experienceperception.com/) / [territorystudio.com](https://territorystudio.com/) — studio portfolios.
 - CodePen search for `#fui`, `#hud`, `#sci-fi-ui` — community implementations worth forking.
 - Film stills from the lineage above — particularly Blade Runner 2049 (analytical spread), The Martian (orbital mechanics), Ghost in the Shell 2017 (full-screen data overlays).
 

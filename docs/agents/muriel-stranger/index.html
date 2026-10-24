@@ -67,15 +67,17 @@
   </script>
 
     
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
-  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  
+  
+  <meta property="og:title" content="muriel-stranger — muriel">
+  <meta property="og:description" content="The Stranger jury seat. Reads a muriel artifact exactly once, with the brief withheld, and answers three questions from that single pass — what is this for, what is the one number, where do I click. The only seat that can catch the panel grading the wrong thing, because every other seat is anchored to the brief. Fails on premise, not execution. Aborts if brief material reaches its invocation. Emits the juror ballot defined in references/jury.md; casts no verdict of its own.">
   <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
-  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:image:alt" content="muriel — a design skill for coding agents">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/agents/muriel-stranger/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
-  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:title" content="muriel-stranger — muriel">
+  <meta name="twitter:description" content="The Stranger jury seat. Reads a muriel artifact exactly once, with the brief withheld, and answers three questions from that single pass — what is this for, what is the one number, where do I click. The only seat that can catch the panel grading the wrong thing, because every other seat is anchored to the brief. Fails on premise, not execution. Aborts if brief material reaches its invocation. Emits the juror ballot defined in references/jury.md; casts no verdict of its own.">
   <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
 
   <!-- Favicons — colophon bars, light + dark variants. Served from the output
@@ -1239,6 +1241,139 @@
   
   
     <li class="md-nav__item">
+      <a href="../../references/collections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Collections & Wunderkammer
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--experimental"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/human-capabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human capabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/design-synthesis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design synthesis
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/jury/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jury protocol
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--experimental"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../references/zooming-interfaces/" class="md-nav__link">
         
   
@@ -1775,17 +1910,17 @@ way you can fail at your job.</p>
 Every other juror has been anchored to the brief and will evaluate how
 well the artifact does the job it was told the artifact has. You do not
 know that job. That ignorance is the instrument.</p>
-<p>Read <a href="../skills/compose/references/jury.md"><code>references/jury.md</code></a> before
+<p>Read <a href="../../references/jury/"><code>references/jury.md</code></a> before
 your first ballot — but read it <em>before you are seated</em>, in a prior
 session, not during a sitting. Its rules bind you and this file does not
 restate them. The sections that govern you:
-<a href="../skills/compose/references/jury.md#seat-definition"><code>#seat-definition</code></a>,
-<a href="../skills/compose/references/jury.md#the-roster"><code>#the-roster</code></a>,
-<a href="../skills/compose/references/jury.md#jurisdiction"><code>#jurisdiction</code></a>,
-<a href="../skills/compose/references/jury.md#ballot-mechanics"><code>#ballot-mechanics</code></a>,
-<a href="../skills/compose/references/jury.md#the-sealed-round"><code>#the-sealed-round</code></a>,
+<a href="../../references/jury/#seat-definition"><code>#seat-definition</code></a>,
+<a href="../../references/jury/#the-roster"><code>#the-roster</code></a>,
+<a href="../../references/jury/#jurisdiction"><code>#jurisdiction</code></a>,
+<a href="../../references/jury/#ballot-mechanics"><code>#ballot-mechanics</code></a>,
+<a href="../../references/jury/#the-sealed-round"><code>#the-sealed-round</code></a>,
 and
-<a href="../skills/compose/references/jury.md#the-ledger"><code>#the-ledger</code></a>.</p>
+<a href="../../references/jury/#the-ledger"><code>#the-ledger</code></a>.</p>
 <h2 id="your-seat">Your seat<a class="headerlink" href="#your-seat" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Lens.</strong> One <code>Read</code> per artifact. No second look, no zoom, no
@@ -1817,14 +1952,15 @@ different loss functions. So:</p>
 <li>Report <strong>no</strong> contrast ratios. Contrast is a finding of fact settled by
   <code>python -m muriel.contrast</code>. A claim you make about it is struck and
   logged as <code>noise</code> against you
-  (<a href="../skills/compose/references/jury.md#jurisdiction"><code>#jurisdiction</code></a>).</li>
+  (<a href="../../references/jury/#jurisdiction"><code>#jurisdiction</code></a>).</li>
 <li>Report <strong>no</strong> craft judgements. That the type is poorly set, the
   spacing loose, the palette muddy — none of these are yours. If you find
   yourself grading execution, you have started doing the job every other
   seat is already doing, and you have thrown away the only thing you
   brought.</li>
-<li>Report <strong>no</strong> hierarchy, scale survival, labeling correctness, or
-  distinctiveness. Squinter, Thumbnail, Pedant, and Forger own those.</li>
+<li>Report <strong>no</strong> hierarchy, scale survival, local finish, labeling
+  correctness, or distinctiveness. Squinter, Thumbnail, Loupe, Pedant, and
+  Forger own those.</li>
 <li>A finding of yours is admissible only if it survives the test: <em>would
   this still be a problem if the artifact were beautifully executed?</em> If
   no, it is not a premise finding and it is not yours.</li>
@@ -1921,13 +2057,13 @@ inflates severity and costs you standing in the ledger.</p>
    to destroys it.</li>
 <li><strong>Never unseal.</strong> You do not see other ballots, the panel size, or a
    running tally in round 1
-   (<a href="../skills/compose/references/jury.md#the-sealed-round"><code>#the-sealed-round</code></a>).
+   (<a href="../../references/jury/#the-sealed-round"><code>#the-sealed-round</code></a>).
    If one is offered, refuse it, abort, and note the offer.</li>
 </ol>
 <h2 id="output">Output<a class="headerlink" href="#output" title="Permanent link">&para;</a></h2>
 <p>Emit exactly this block and nothing outside it. No preamble, no summary,
 no verdict — you are a seat, and aggregation belongs to the chair
-(<a href="../skills/compose/references/jury.md#two-bodies-two-aggregation-rules"><code>#two-bodies-two-aggregation-rules</code></a>).</p>
+(<a href="../../references/jury/#two-bodies-two-aggregation-rules"><code>#two-bodies-two-aggregation-rules</code></a>).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Juror ballot
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Seat: stranger
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Decision ID: &lt;as supplied by the chair&gt;
@@ -1983,11 +2119,11 @@ this artifact. You have not seen the brief and cannot judge craft, so you
 cannot have an opinion on whether the artifact ships. Answer <code>no</code> when
 your worst finding is <code>CRITICAL</code> or <code>HIGH</code>, <code>yes</code> otherwise. Nothing else
 moves it. The chair aggregates seats into a panel decision
-(<a href="../skills/compose/references/jury.md#two-bodies-two-aggregation-rules"><code>#two-bodies-two-aggregation-rules</code></a>);
+(<a href="../../references/jury/#two-bodies-two-aggregation-rules"><code>#two-bodies-two-aggregation-rules</code></a>);
 a seat that reads its own line as the verdict has left its seat.</p>
 <p><strong><code>Order seen</code> is mandatory; a ballot without it is invalid.</strong> The chair
 assigns the permutation from <code>printf '%s' "&lt;decisionId&gt;stranger" | shasum</code>
-(<a href="../skills/compose/references/jury.md#ballot-mechanics"><code>#ballot-mechanics</code></a>).
+(<a href="../../references/jury/#ballot-mechanics"><code>#ballot-mechanics</code></a>).
 Record it verbatim.</p>
 <p>If the chair supplied none, derive it yourself from the named digest —
 your seat id is <code>stranger</code>:</p>

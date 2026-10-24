@@ -294,4 +294,4 @@ Before declaring a chart done:
   - Weight × size × opacity floor: muriel adds the body-weight ≥500 / no-opacity-on-text rule on top of contrast (Tufte addresses contrast only).
 - **[Tufte, *The Visual Display of Quantitative Information*](https://www.edwardtufte.com/book/the-visual-display-of-quantitative-information/)** (1983, 2nd ed. 2001). The book the upstream skill descends from. Coining sources for data-ink ratio, chartjunk, range-frame, small multiples, sparklines, slopegraph.
 - **[Wong, *Points of view: Color blindness*](https://www.nature.com/articles/nmeth.1618)** (Nature Methods, 2011). Source for the Wong 8 palette.
-- **[Paul Tol's notes on colour schemes](https://personal.sron.nl/~pault/)**. Source for Tol bright/light/muted palettes.
+- **[Paul Tol's notes on colour schemes](https://sronpersonalpages.nl/~pault/)**. Source for Tol bright/light/muted palettes.

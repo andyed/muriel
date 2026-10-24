@@ -463,4 +463,4 @@ render_assets/sciprogfi-lux-mesh-wall/             # Perspective Wall (sciprogfi
 - **Further ridgemap projections.** The `ridgemap` MVP ships only the stacked-1D-slice form. The same `(field, canvas, …)` signature should grow siblings that render the same scalar field as: filled isoline bands (USGS / Imhof quadrangle), wireframe protrusion from a grid (BYTE-cover / Tinney 3D mesh), and hachured / halftone relief. One extractor stage, several emitters — the unifier is *scalar field → topology*. Documenting the taxonomy in a `channels/topography.md` companion before the next emitter lands.
 - **Field ingestion from pixels.** Today `ridgemap` takes a 2D numeric array. A small `muriel.spatial.field_from_image(path, downsample=N, channel="luma")` helper would let raster sources (image luminance, video frame Δ, attention/saliency maps) feed the same primitive without callers needing to roll their own resampling. Crosses the channel's first input-is-pixels line — defer until a real artifact needs it.
 
-See [`TODO.md`](../TODO.md) for cross-channel queue context.
+See [`TODO.md`](../../../../../TODO.md) for cross-channel queue context.

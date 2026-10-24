@@ -52,7 +52,7 @@ This includes freetype, libass, fontconfig — enables `drawtext`, `subtitles`, 
 
 ## Tooltip burn script
 
-A `burn-tooltips.sh` script (see your app repo or [`muriel/tools/`](../tools/)) — two modes:
+A `burn-tooltips.sh` script (see your app repo or [`muriel/tools/`](../../../../../muriel/tools/)) — two modes:
 ```bash
 # SRT only (no ffmpeg needed)
 burn-tooltips.sh tooltips.json output.srt
@@ -100,7 +100,9 @@ ffmpeg -i input.mp4 -c copy -f segment -segment_time 60 -reset_timestamps 1 outp
 
 ## Design doc
 
-See [`docs/PERMUTE.md`](https://github.com/andyed/muriel/blob/main/docs/PERMUTE.md) for the infographic aspiration: Tufte, Bertin, Gestalt, CRAP, semantic zoom, small multiples, linked displays.
+See the [infographics channel](infographics.md) for figure composition and the
+[coordination reference](../references/multiscale-coordination.md) for semantic
+zoom, small multiples, and linked displays.
 
 ## HTML → MP4 via hyperframes
 

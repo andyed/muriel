@@ -68,8 +68,9 @@ different loss functions. So:
   yourself grading execution, you have started doing the job every other
   seat is already doing, and you have thrown away the only thing you
   brought.
-- Report **no** hierarchy, scale survival, labeling correctness, or
-  distinctiveness. Squinter, Thumbnail, Pedant, and Forger own those.
+- Report **no** hierarchy, scale survival, local finish, labeling
+  correctness, or distinctiveness. Squinter, Thumbnail, Loupe, Pedant, and
+  Forger own those.
 - A finding of yours is admissible only if it survives the test: *would
   this still be a problem if the artifact were beautifully executed?* If
   no, it is not a premise finding and it is not yours.

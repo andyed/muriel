@@ -20,19 +20,20 @@
   </script>
 {% endblock %}
 
-{#- Social cards + favicons, ported from docs/index.html. og:url is the site
-    root; og:image is absolute so scrapers resolve it. -#}
+{# Per-page metadata keeps search and shared links attached to the article. #}
 {% block extrahead %}
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
-  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
-  <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
-  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  {% set social_title = (page.meta.title or page.title) ~ " — " ~ config.site_name if page else config.site_name %}
+  {% set social_description = page.meta.description or config.site_description if page else config.site_description %}
+  <meta property="og:title" content="{{ social_title | e }}">
+  <meta property="og:description" content="{{ social_description | e }}">
+  <meta property="og:image" content="{{ config.site_url }}og-image.png">
+  <meta property="og:image:alt" content="muriel — a design skill for coding agents">
+  <meta property="og:url" content="{{ page.canonical_url if page else config.site_url }}">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
-  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
-  <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
+  <meta name="twitter:title" content="{{ social_title | e }}">
+  <meta name="twitter:description" content="{{ social_description | e }}">
+  <meta name="twitter:image" content="{{ config.site_url }}og-image.png">
 
   <!-- Favicons — colophon bars, light + dark variants. Served from the output
        ROOT (favicon-*.png in docs_dir root) to match the old site's URLs exactly

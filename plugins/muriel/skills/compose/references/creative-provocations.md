@@ -237,7 +237,7 @@ original and attribute the conceptual influence.
   demonstrates a small-hand interaction: present a few strategies, select one,
   and apply it to the current problem.
 - Hermes Agent's
-  [creative-ideation skill](https://github.com/NousResearch/hermes-agent/tree/main/skills/creative/creative-ideation)
+  [creative-ideation skill](https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/creative-ideation)
   demonstrates matching a constraint to the domain and producing concrete
   outputs instead of abstract inspiration.
 - [18F Methods](https://github.com/18F/methods) demonstrates a CC0, inspectable

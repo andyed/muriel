@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="A design skill for coding agents: fifteen output channels, a brand token schema, and an 8:1 contrast rule enforced at render time.">
+        <meta name="description" content="A design skill for coding agents: interaction design, visual craft, collection exploration, and readable artifacts grounded in design research.">
       
       
         <meta name="author" content="Andy Edmonds">
@@ -67,15 +67,17 @@
   </script>
 
     
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="muriel — multi-channel visual production for LLMs">
-  <meta property="og:description" content="Sixteen output channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+  
+  
+  <meta property="og:title" content="Web recipes — Marginalia, Pandoc, Static Capture, Data-URI — muriel">
+  <meta property="og:description" content="A design skill for coding agents: interaction design, visual craft, collection exploration, and readable artifacts grounded in design research.">
   <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
-  <meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+  <meta property="og:image:alt" content="muriel — a design skill for coding agents">
+  <meta property="og:url" content="https://muriel.mindbendingpixels.com/references/web-recipes/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="muriel — multi-channel visual production for LLMs">
-  <meta name="twitter:description" content="Sixteen output channels, a brand-token schema, an 8:1 contrast rule enforced at render time, and a vision-model critique agent.">
+  <meta name="twitter:title" content="Web recipes — Marginalia, Pandoc, Static Capture, Data-URI — muriel">
+  <meta name="twitter:description" content="A design skill for coding agents: interaction design, visual craft, collection exploration, and readable artifacts grounded in design research.">
   <meta name="twitter:image" content="https://muriel.mindbendingpixels.com/og-image.png">
 
   <!-- Favicons — colophon bars, light + dark variants. Served from the output
@@ -1239,6 +1241,139 @@
   
   
     <li class="md-nav__item">
+      <a href="../collections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Collections & Wunderkammer
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--experimental"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../human-capabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human capabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design-synthesis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design synthesis
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jury/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jury protocol
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--experimental"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../zooming-interfaces/" class="md-nav__link">
         
   
@@ -1810,7 +1945,7 @@ data-URI implementation details.</p>
 <p>Exit status: <code>0</code> clean, <code>1</code> ratio failures, <code>2</code> legibility-only warnings (contrast passed but font-size/weight/opacity floors tripped), <code>3</code> usage error. A real AI-Lab explainer restyling pass is the reference exemplar — an <code>index-ailab.html</code> page was caught and fixed by this audit (text-muted bumped from <code>#8a847a</code> (3.55:1) to <code>#4e483e</code> (8.67:1), TOC font-size bumped from 10px to 12px, byline/footer from <code>0.85em</code> to <code>1em</code>, opacity-on-text removed).</p>
 <h3 id="math-katex">Math — KaTeX<a class="headerlink" href="#math-katex" title="Permanent link">&para;</a></h3>
 <p>Marginalia essays with math drop <strong>KaTeX</strong> in via CDN + auto-render. MIT, no bundler, no MathJax-style runtime overhead. Pin to <code>^0.16</code>. Display math is <code>$$…$$</code>, inline is <code>$…$</code>. Wrap display equations in a <code>.eq-block</code> container themed from <code>--mg-*</code> variables so equations participate in the marginalia palette.</p>
-<p>Reference exemplar: <a href="https://github.com/andyed/psychodeli-webgl-port/blob/main/inside_the_math/index-marginalia.html"><code>inside_the_math</code></a> — math-heavy essay, marginalia + KaTeX + WebGL demos. Full vocabulary in <a href="../../vocabularies/katex/"><code>vocabularies/katex.md</code></a>: setup, the <code>.eq-block</code> pattern, color/emphasis with <code>\textcolor</code>, server-side rendering for stills.</p>
+<p>Reference exemplar: <a href="https://psychodeli.com/inside_the_math/"><code>inside_the_math</code></a> — math-heavy essay, marginalia + KaTeX + WebGL demos. Full vocabulary in <a href="../../vocabularies/katex/"><code>vocabularies/katex.md</code></a>: setup, the <code>.eq-block</code> pattern, color/emphasis with <code>\textcolor</code>, server-side rendering for stills.</p>
 <p>Do not use KaTeX for paper figures — see <a href="../../channels/science/"><code>channels/science.md</code></a>, where matplotlib + <code>usetex=True</code> keeps math inside the same TeX pass as the rest of the figure. KaTeX is the web answer; LaTeX is the paper answer.</p>
 <h2 id="pandoc-marginalia-bridge">Pandoc → Marginalia Bridge<a class="headerlink" href="#pandoc-marginalia-bridge" title="Permanent link">&para;</a></h2>
 <p>Pandoc 3.2+ recognizes GitHub-style alerts (<code>&gt; [!NOTE]</code>) via the <code>+alerts</code> extension. A Lua filter at <code>&lt;marginalia&gt;/pandoc/marginalia.lua</code> rewrites pandoc's output to marginalia classes: GitHub alerts → <code>mg-callout[data-type]</code>, extended markers (ASIDE/MARGIN/QUOTE) → <code>mg-sidebar</code> / <code>mg-margin</code> / <code>mg-pull</code>, plain blockquotes → <code>mg-pull</code>, <code>==mark==</code> → <code>mg-mark</code>, <code>{Badge}</code> and multi-word <code>{Text: type}</code> → <code>mg-badge</code>, pandoc footnotes → <code>mg-fn</code> popover, fenced code → <code>mg-code</code>, inline code → <code>mg-inline-code</code>, <code>{dropcap}</code> line marker → <code>mg-dropcap</code> wrap.</p>
@@ -2086,7 +2221,7 @@ Add <code>@page { size: A4; margin: 2cm }</code> to the marginalia stylesheet ov
 <li><strong>Don't chain more than two CSS custom-property fallbacks.</strong> A third fallback means the token system is underspecified — fix the schema, don't paper over it.</li>
 </ul>
 <h2 id="absolute-bans">Absolute bans<a class="headerlink" href="#absolute-bans" title="Permanent link">&para;</a></h2>
-<p>Five escalated anti-patterns — channel-spanning but most visible in web work. Named so the <a href="../../../agents/muriel-critique.md"><code>muriel-critique</code></a> agent can cite them directly and so a human reviewer has a finite list of "stop, don't ship this."</p>
+<p>Five escalated anti-patterns — channel-spanning but most visible in web work. Named so the <a href="../../agents/muriel-critique/"><code>muriel-critique</code></a> agent can cite them directly and so a human reviewer has a finite list of "stop, don't ship this."</p>
 <ul>
 <li>
 <p><strong><code>gradient-text</code></strong> — <code>background-clip: text</code> with a gradient fill. Unreadable at body sizes (the gradient traverses low-contrast hues by construction, failing 8:1 across its span) and telegraphs <em>designer reached for the default Figma preset</em>. Vary weight/size for hierarchy; keep text one color.</p>
@@ -2104,7 +2239,7 @@ Add <code>@page { size: A4; margin: 2cm }</code> to the marginalia stylesheet ov
 <p><strong><code>reflex-fonts</code></strong> — defaulting to the overused web stack without a reason: <strong>Inter</strong>, <strong>DM Sans</strong>, <strong>Instrument Sans</strong>, <strong>Geist</strong>, <strong>Satoshi</strong>, or <code>system-ui</code> chosen because it's safe. Fine tools, but everyone reaches for them because Vercel's starters do, which means the artifact looks like every other 2024–2026 landing page. Choose deliberately; if your brand doesn't have a display typeface, consider Helvetica Neue (restrained), Söhne (licensed), Work Sans, IBM Plex, or a serif/slab your brand is willing to commit to. muriel's <code>brand.toml</code> has a <code>[typography]</code> block — use it.</p>
 </li>
 </ul>
-<p><em>The "absolute bans" escalation and the reflex-fonts concept are borrowed with permission from <a href="https://github.com/pbakaus/impeccable">pbakaus/impeccable</a> (Apache-2.0, <strong>Skill 3.1.1</strong> as of May 2026), rephrased in muriel's voice. The underlying insight that a short named-ban list is a stronger instrument than a long positive-rule list is theirs. Impeccable now ships twenty-seven deterministic anti-pattern rules plus twelve LLM-critique rules (a much broader register than what's encoded here) and a standalone <code>npx impeccable detect &lt;path-or-url&gt;</code> CLI that runs regex + headless-Chrome scans with no API key required — a deterministic complement to muriel's vision-model <code>muriel-critique</code> agent. The shortest pipeline for a web artifact: <code>muriel capture</code> → <code>npx impeccable detect</code> → <code>muriel-critique</code>. See <a href="../../../../../HARNESSES.md"><code>HARNESSES.md</code></a> for cross-harness packaging that mirrors impeccable's eleven-harness matrix.</em></p>
+<p><em>The "absolute bans" escalation and the reflex-fonts concept are borrowed with permission from <a href="https://github.com/pbakaus/impeccable">pbakaus/impeccable</a> (Apache-2.0, <strong>Skill 3.1.1</strong> as of May 2026), rephrased in muriel's voice. The underlying insight that a short named-ban list is a stronger instrument than a long positive-rule list is theirs. Impeccable now ships twenty-seven deterministic anti-pattern rules plus twelve LLM-critique rules (a much broader register than what's encoded here) and a standalone <code>npx impeccable detect &lt;path-or-url&gt;</code> CLI that runs regex + headless-Chrome scans with no API key required — a deterministic complement to muriel's vision-model <code>muriel-critique</code> agent. The shortest pipeline for a web artifact: <code>muriel capture</code> → <code>npx impeccable detect</code> → <code>muriel-critique</code>. See <a href="https://github.com/andyed/muriel/blob/main/HARNESSES.md"><code>HARNESSES.md</code></a> for cross-harness packaging that mirrors impeccable's eleven-harness matrix.</em></p>
 
 
 

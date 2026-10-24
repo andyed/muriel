@@ -1,7 +1,7 @@
 site_name: muriel
 site_description: >-
-  A design skill for coding agents: fifteen output channels, a brand token
-  schema, and an 8:1 contrast rule enforced at render time.
+  A design skill for coding agents: interaction design, visual craft,
+  collection exploration, and readable artifacts grounded in design research.
 site_url: https://muriel.mindbendingpixels.com/
 site_author: Andy Edmonds
 repo_url: https://github.com/andyed/muriel
@@ -28,6 +28,9 @@ exclude_docs: |
   examples/critique-fixtures/README.md
   # The lab ships its own index.html; keep its source README out of that route.
   examples/linked-atlas/README.md
+  # Hold the unfinished jury visual and its draft landing page.
+  brand-assets/social/
+  jury/
 
 theme:
   name: material
@@ -71,6 +74,9 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.details
 
+hooks:
+  - link_paths.py
+
 plugins:
   - search
 
@@ -108,6 +114,10 @@ nav:
       - Data-viz platforms: vocabularies/data-viz-platforms.md
       - muriel brand: vocabularies/muriel-brand.md
   - Reference:
+      - Collections & Wunderkammer: references/collections.md
+      - Human capabilities: references/human-capabilities.md
+      - Design synthesis: references/design-synthesis.md
+      - Jury protocol: references/jury.md
       - Zooming user interfaces: references/zooming-interfaces.md
       - Faceted exploration: references/faceted-exploration.md
       - Semantic zoom & linked displays: references/multiscale-coordination.md

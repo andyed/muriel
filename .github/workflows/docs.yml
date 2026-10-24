@@ -17,9 +17,11 @@ on:
       - 'render_assets/**'
       - 'plugins/muriel/skills/compose/channels/**'
       - 'plugins/muriel/skills/compose/references/**'
-      - 'plugins/muriel/skills/compose/examples/linked-atlas/**'
       - 'plugins/muriel/skills/compose/vocabularies/**'
       - 'plugins/muriel/skills/compose/SKILL.md'
+      - 'assets/**'
+      - 'plugins/muriel/agents/**'
+      - 'plugins/muriel/skills/compose/examples/**'
       - 'TODO.md'
       - '.github/workflows/docs.yml'
   workflow_dispatch:
@@ -54,6 +56,9 @@ jobs:
             site-docs/src/gallery/mindbendingpixels-mountain/index.html \
             site-docs/src/gallery/spatial-typography/index.html
 
+      - name: Test documentation link handling
+        run: python -m unittest discover -s site-docs -p test_links.py
+
       - name: Build
         working-directory: site-docs
         run: mkdocs build -d ../docs --clean
@@ -70,6 +75,9 @@ jobs:
             test -e "$f" || { echo "::error::missing $f"; exit 1; }
           done
           grep -qx 'muriel.mindbendingpixels.com' docs/CNAME || { echo '::error::bad CNAME content'; exit 1; }
+
+      - name: Verify internal documentation links
+        run: python site-docs/audit_links.py --site docs --out /tmp/muriel-links.json
 
       - name: Commit regenerated docs
         run: |

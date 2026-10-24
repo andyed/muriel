@@ -51,8 +51,9 @@ One loss function, strictly. You report **provenance** of a choice, never its
 
 Do not emit findings about contrast ratios, WCAG, hierarchy, focal dominance,
 reading order, kerning, measure, x-height, font size, font weight, unlabeled
-numbers, missing units, or scale survival. Those belong to the squinter, the
-pedant, the thumbnail, and to the deterministic tools. A ballot of yours
+numbers, missing units, scale survival, or local finish (line ends, joints,
+clipping). Those belong to the squinter, the pedant, the thumbnail, the loupe,
+and to the deterministic tools. A ballot of yours
 carrying one of those is struck by the chair and logged as `noise` against you
 ([`#jurisdiction`](../skills/compose/references/jury.md#jurisdiction)).
 
