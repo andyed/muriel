@@ -1,4 +1,6 @@
 ---
+title: Collections and Wunderkammer
+description: Build an explorable image collection with Wunderkammer 0.3.0. Collection documents, facets, comparisons, spatial views, and exact selections for people and agents.
 reference: collections
 status: experimental
 requires:
@@ -318,7 +320,7 @@ fails today, and would serve someone else's code if they registered the name.
 
 ## Fallback
 
-Use muriel's [linked-atlas lab](../examples/linked-atlas/) instead of
+Use muriel's [linked-atlas lab](../examples/linked-atlas/index.html) instead of
 Wunderkammer when:
 
 - **A single file is required.** Wunderkammer is a wall page, its modules and
@@ -355,7 +357,7 @@ substitute. Each question is answered from evidence an agent can gather:
 - the hand-back packet.
 
 Report each failure with its evidence, in
-[`muriel-critique`](../../../agents/muriel-critique.md)'s severity scale.
+[`muriel-critique`](https://github.com/andyed/muriel/blob/main/plugins/muriel/agents/muriel-critique.md)'s severity scale.
 
 | Question | Passes when | Evidence | Severity if it fails |
 |---|---|---|---|

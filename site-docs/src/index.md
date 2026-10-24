@@ -1,24 +1,43 @@
+---
+title: Interaction design and visual craft
+description: A design skill for coding agents, with research-informed interactions, visual production guides, and Wunderkammer collection exploration. Browse the examples and references.
+---
+
 # muriel
 
-**A design skill for coding agents.** muriel translates between design
-languages, expresses them in a multitude of mediums, juries its own work, and
-keeps every piece on brand and readable. Give it a brief ("make me a deck", "a paper
-figure", "a gaze plot", "a share card") and it returns a deterministic,
-reproducible artifact.
-Named after Muriel Cooper, founder of the MIT Visible Language Workshop.
+**Interaction design and visual craft for coding agents.** Muriel helps choose
+how information should look and behave, then builds and checks the result in
+the project’s own design language. Its guides connect perception and HCI
+research to working interfaces, typography, charts, diagrams, and motion.
 
-It is a curator before it is an originator: it lifts the sharpest structural
-patterns from sibling skills, ports their agent-actionable detection tables,
-attributes the lineage, and overrides anything that fights its universal rules.
+Named after [Muriel Cooper](vocabularies/visible-language.md), co-founder of
+MIT’s Visible Language Workshop. The documentation pairs that lineage with
+implementation recipes and examples you can inspect.
 
-[See the live demo gallery ↗](gallery/){ .md-button .md-button--primary }
-[Read the skill ↗](SKILL.md){ .md-button }
+[Browse the examples](gallery/){ .md-button }
+[Use the skill](SKILL.md){ .md-button }
+
+## Explore a collection with Wunderkammer
+
+Many images need an overview, filters, and a way back to the item you were
+reading. **[Wunderkammer](references/collections.md)** is Muriel’s default
+collection explorer: a person can pan, zoom, group, compare, and inspect;
+an agent can read back the exact selection.
+
+[![Wunderkammer’s collection wall, showing Psychodeli frames grouped by capture month.](examples/wunderkammer-explore.webp){ loading=lazy width=1520 height=950 }](https://andyed.github.io/clipwall-demo/)
+
+[Try the live collection](https://andyed.github.io/clipwall-demo/) ·
+[Build your own](references/collections.md) ·
+[Read the Visible Language lineage](vocabularies/visible-language.md)
+
+The collection guide covers **Wunderkammer 0.3.0**, including spatial views and
+collection documents. The screenshot comes from that release; the live demo
+can change independently.
 
 ## Start here
 
-New to muriel? These are the highest-leverage channels — each is a self-contained
-recipe set you can route a brief to:
-
+- **[Human capabilities](references/human-capabilities.md)** — the cognitive
+  and perceptual questions behind an interaction choice.
 - **[Spatial](channels/spatial.md)** — 3-D perspective walls and floors for
   typography and imagery. The look behind the [live demos](gallery/).
 - **[Charts](channels/charts.md)** — data graphics with the contrast floor and
@@ -72,7 +91,7 @@ across all of them.
 |---|---|
 | **Channels** | The output media: spatial, charts, infographics, science, raster, SVG, web, interactive, diagrams, video, terminal, density viz, gaze, polish, README. |
 | **Vocabularies** | Named aesthetic grammars to borrow conventions from — Visible Language, FUI, kinetic typography, KaTeX, PixiJS, declassified, surfaces, data-viz platform guides, muriel's own brand. |
-| **Reference** | Cross-channel constants: dimensions (social cards, device footprints, print) and style-guides (the `brand.toml` schema). |
+| **Reference** | Interaction design, collection exploration, zooming, linked displays, dimensions, and style guides. |
 
 Use the left rail to navigate. Every channel page is single-sourced from the
 skill itself — what you read here is exactly what the skill carries at render
