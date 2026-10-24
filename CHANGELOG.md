@@ -47,6 +47,19 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   [anatomy](https://github.com/wheresryan22/anatomy); its density
   aesthetic does not.
 
+- **Procedural light stays continuous, on dark grounds and on paper.**
+  `references/motion-craft.md` gains rules for shader and canvas effects
+  inside a figure. Every uniform rides an envelope, validated as
+  `spring`-kind motion, so the section adds no durations. Phase changes are
+  crossfades driven by one physical quantity, a fade-out only fades, every
+  term reaches zero before any boundary, and effects live in the scene's own
+  coordinates. On a light ground the ink is solved from the colour the page
+  should show (`inkFor`), with one ink per kind of light, faded once.
+  Inspection adds a contact sheet at 5% speed and a per-frame scalar that
+  must move with the quantity driving it. `channels/spatial.md` points
+  isometric machine figures at anatomy as a peer skill, and `PRIOR_ART.md`
+  records what muriel took from it and what it left.
+
 - **A prose channel, the positive counterpart to the anti-slop list.**
   `channels/prose.md` says how to write plain text people read: a reader
   contract for the lines a surface shows first (what is this, what do I do,

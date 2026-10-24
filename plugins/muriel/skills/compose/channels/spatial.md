@@ -37,6 +37,25 @@ This is not a styling trick. Spatial-typography is an explicit lineage in design
 
 Pre-flight question for any spatial composition: *if I flattened the scene to a list, would the reader lose information?* If no, ship the list.
 
+## Isometric machine figures are a peer skill's job
+
+An explanatory figure built as a physical object (a lock, a test rig, a
+plotter) drawn in isometric solids is not this channel. This channel uses
+depth to carry information; that kind of figure uses a mechanism to carry an
+explanation. [anatomy](https://github.com/wheresryan22/anatomy) (MIT) does it
+well: hundreds of depth-sorted solids, an audit that proves nothing passes
+through anything, and shaders registered to the same camera. `grid("iso")`
+here is a guide grid, not a solid renderer, and muriel does not duplicate
+anatomy's kit.
+
+Taking that approach still means passing this channel's pre-flight test.
+A machine flattened to a list loses no information. What earns it is that
+every number the figure shows comes from the same model that moves its parts,
+so treat a machine figure as a creative choice that must clear that bar, not
+as a default for explainers. Its card text still meets the 8:1 floor: anatomy's
+own corner text measures 3.2–7.4:1, so restyle it with the brand's tokens
+before it ships.
+
 ## What ships today
 
 | # | Surface | Module / file | What it does |

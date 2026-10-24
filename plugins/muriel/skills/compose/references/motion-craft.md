@@ -110,6 +110,77 @@ For a media sequence:
 Keep existing generation providers, renderers, and media tools. These ideas do
 not require installing either upstream skill or adopting its service defaults.
 
+## Keep procedural light continuous
+
+For shader and canvas effects that run inside an illustration or interface,
+such as fire, glow, water, caustics, lamp light, smoke or sparks. A shader can
+change any pixel in one frame, so continuity has to be designed in. Each rule
+below answers a defect found in review of anatomy's shader figures (see
+[Sources](#sources-and-adaptation)), and each one read as a cut.
+
+- **Every uniform rides an envelope.** Nothing steps in a single frame. A
+  one-shot event has an attack that leaves zero at zero slope and a decay. A
+  level follows a critically damped follower, so it does not overshoot its
+  target. These are `spring`-kind motion in `muriel.motion`: the time comes
+  from the parameters, so validate those (`validate_spring`), and keep repeated
+  flashes within `validate_flash_rate`. This section adds no durations.
+- **Drive a phase change from one physical quantity.** Derive colour,
+  brightness and size from a single state (pressure, temperature, energy)
+  moving on its follower, so a change of phase is a crossfade. Two terms
+  where one dies as the other grows read as a colour switch. If that state
+  moves fast, give hue its own slower follower, and check that brightness
+  does not dip and recover inside a flash: that is a cut hidden by the flash.
+- **A fade-out only fades.** On a dark ground brightness only falls; on paper
+  ink only thins. `mix(a, b, t)` with `b < a` climbs again as `t` decays, so
+  freeze the peak when the fade starts and scale it only by quantities that
+  fall. Two envelopes multiplied together can rise mid-fade when one is still
+  growing: freeze the growing one first.
+- **Every term reaches zero before any boundary.** That covers an `if`, a
+  bounding volume, a plane, the edge of a noise cell and the canvas edge.
+  Soften with `smoothstep`, and check that the outermost rows and columns of
+  the canvas read exactly 0. Cell noise only looks inside its own cell, so a
+  feature's offset, wobble, radius and tail must stay under half a cell, or
+  the 3 × 3 neighbourhood must be sampled. Angular noise built on `atan` has a
+  seam along one angle; sample noise of the direction vector instead.
+- **Effects live in the scene's coordinates.** Build shader positions from the
+  same camera or projection as the SVG or DOM layer, so a reflection on a
+  floor registers with the floor's lines and a glow sized in world units stays
+  the right size when the figure scales. When an effect sits both behind and in
+  front of a part, stack a back layer, the canvas and a front layer instead of
+  faking depth in one canvas.
+- **Tonemap, never clamp, then dither.** A clamp flattens a bright core into a
+  plateau. After tonemapping, add about ±1 LSB of animated noise, gated so empty
+  pixels stay exactly 0. Without it, large soft gradients band into 8-bit steps.
+
+**On a light ground, design the colour the page should show and solve for the
+ink.** Screen blending over white is white, and no pixel can be brighter than
+the paper, so light reads through saturation and a darker physical ground
+(soot, deep water, shadow). A dark-theme glow that is darkened for paper reads
+as a stain. Write the ramp from energy to the colour seen over the page, then
+invert normal compositing over white, which shows `rgb + (1 − a)`:
+
+```glsl
+vec4 inkFor(vec3 seen, float cover) {
+  vec3 absorbed = 1. - seen;
+  float a = max(max(absorbed.r, max(absorbed.g, absorbed.b)), cover);
+  return vec4(vec3(a) - absorbed, a);
+}
+```
+
+`cover` is an alpha floor at the hot end. Without it a near-white core is
+near-transparent and the lines behind it show through, so the core reads as a
+hole instead of light. Give each kind of light its own ink (emission, light
+falling on a surface, haze, sparks) and composite them back to front. Summing
+the energies first and inking the sum gives everything one hue and loses the
+pale core. Fade the finished ink once, never term by term: fading each term
+before inking lets the pale core arrive ahead of its saturated body, and first
+light goes pale, then dark.
+
+Draw only while an effect is active and on screen, and cap the device pixel
+ratio. Under reduced motion, show one representative steady state with time
+frozen and no event envelopes. The illustration must still read with WebGL
+unavailable.
+
 ## Inspect the experience
 
 Select checks that match the work:
@@ -123,6 +194,12 @@ Select checks that match the work:
 - Check narrow layouts, actual display size, initial loading, media failure,
   and reduced motion. Disable continuous input-driven animation when the chosen
   fallback is static; turning off easing alone still allows frame changes.
+- For a shader, slow every transition to about 5% speed and lay its frames
+  out as a contact sheet. A pop is a jump between adjacent frames that the
+  physical quantity did not make. Log one scalar per frame (mean luminance,
+  total ink, or peak channel) through each transition and require it to move
+  in the same direction as the quantity driving it. Crop the canvas edges at
+  8–16× to confirm every term reaches 0 before them.
 - Preserve the complete current state in the accessible alternative. Explanatory
   figures retain Muriel's complete final frame for reduced motion, no-JS, print,
   and static export. Keep essential information outside motion-only cues.
@@ -132,9 +209,10 @@ comprehension, workload, or emotional response need appropriate human evidence.
 
 ## Sources and adaptation
 
-Craft inspiration, reviewed 2026-10-16; these are design precedents rather than
-empirical authority for numerical limits. The guidance above is written for
-Muriel; no upstream code, media, or dependencies are included.
+Craft inspiration, reviewed 2026-10-16 and 2026-10-24; these are design
+precedents rather than empirical authority for numerical limits. The guidance
+above is written for Muriel; no upstream code, media, or dependencies are
+included.
 
 - **LottieFiles motion-design-skill:**
   [motion identity](https://github.com/LottieFiles/motion-design-skill/blob/main/skills/motion-design/director/motion-personality.md),
@@ -151,3 +229,14 @@ Muriel; no upstream code, media, or dependencies are included.
   inform independent input/playback choices, continuity checks, resource-aware
   delivery, and a representative pilot. Muriel keeps the host's canonical state,
   production tooling, accessibility contract, and timing rules.
+- **anatomy:**
+  [WebGL inside the drawing](https://github.com/wheresryan22/anatomy/blob/main/references/webgl.md)
+  (sections 7 and 8, and the shader checks in
+  [verify](https://github.com/wheresryan22/anatomy/blob/main/references/verify.md))
+  informs the procedural-light rules: envelopes on every uniform, crossfades
+  driven by one physical quantity, terms that reach zero before every
+  boundary, ink solved from the colour paper should show, one ink per kind of
+  light, and the slowed contact sheet. Its specific attack and decay times,
+  device-ratio cap and per-figure ramps are not adopted; Muriel's timing comes
+  from `muriel.motion`. The `inkFor` inversion is a three-line identity of
+  normal compositing, restated here.
