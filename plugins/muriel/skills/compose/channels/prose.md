@@ -185,8 +185,8 @@ for scanning, not for reading in order.
   withheld, and compare its three answers with the reader contract. The
   Pedant covers labels, units and numeric claims. The seat shares the
   workspace's memory, so its recognizing a product name is not evidence that
-  a stranger would. Read its disclosure and weight it by its Prior strength. The Squinter and Thumbnail
-  do not apply to text.
+  a stranger would. Read its disclosure and weight it by its Prior strength. The Squinter, Thumbnail and
+  Loupe do not apply to text.
 - **The linter, then the read.** `python3 -m muriel.aiism <file.md>` catches
   shape tells (antithesis stacks, tricolons, anaphora, em-dash density). It
   skips single words by design and reports a flag-planting sentence as clean.
