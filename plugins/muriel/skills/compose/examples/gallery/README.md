@@ -10,15 +10,15 @@ For the interactive in-browser set — 3D spatial typography, data mountains, th
 
 <p align="center">
   <picture>
-    <source srcset="../../assets/logo-animated-dark.gif" media="(prefers-color-scheme: dark)">
-    <img src="../../assets/logo-animated.gif" alt="muriel colophon — after muriel cooper" width="540">
+    <source srcset="../../../../../../assets/logo-animated-dark.gif" media="(prefers-color-scheme: dark)">
+    <img src="../../../../../../assets/logo-animated.gif" alt="muriel colophon — after muriel cooper" width="540">
   </picture>
 </p>
 
 **Tools:** Pillow (still frame composition) · a custom 12-pose renderer (iterates frame_0..frame_11.png) · ffmpeg or ImageMagick `convert -delay -loop 0` (GIF assembly) · `muriel.contrast.audit_svg` (8:1 text-rule check before ship).
 **Channels:** [`raster`](../../channels/raster.md), [`svg`](../../channels/svg.md), [`video`](../../channels/video.md).
 **Vocabularies:** [`visible-language`](../../vocabularies/visible-language.md) (Cooper's mitp colophon reinterpreted), [`kinetic-typography`](../../vocabularies/kinetic-typography.md) (strategic motion, max contrast).
-**Pattern:** same mark, four variants — still + animated × light + dark — served via `<picture>` + `prefers-color-scheme`. Assets at [`assets/`](../../assets/).
+**Pattern:** same mark, four variants — still + animated × light + dark — served via `<picture>` + `prefers-color-scheme`. Assets at [`assets/`](../../../../../../assets/).
 
 *The rest of the gallery points at other shipped work that exemplifies each channel in its own right. Source blog posts live under [the Scrutinizer dev log](https://andyed.github.io/scrutinizer-www/blog/); this gallery references them, it doesn't host them.*
 
@@ -91,7 +91,7 @@ For the interactive in-browser set — 3D spatial typography, data mountains, th
 
 ## 7. V1 orientation columns — Diagrams + SVG (runnable)
 
-[![v1 orientation columns](thumbs/v1-orientation-columns.jpg)](https://github.com/andyed/muriel/blob/main/docs/v1-orientation-columns.svg)
+[![v1 orientation columns](thumbs/v1-orientation-columns.jpg)](https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/examples/gallery/v1-orientation-columns-demo.py)
 
 **Tools:** pure Python stdlib (`math`) emitting SVG directly — a multi-pinwheel orientation field over a hex grid, hand-rolled `<line>` + `<circle>` elements with brand tokens inlined from `examples/muriel-brand.toml` (OLED palette, 8:1+ contrast on every text element).
 **Channels:** [`channels/diagrams.md`](../../channels/diagrams.md) + [`channels/svg.md`](../../channels/svg.md), with [`channels/science.md`](../../channels/science.md) sensibility (cited primary literature in the footer).

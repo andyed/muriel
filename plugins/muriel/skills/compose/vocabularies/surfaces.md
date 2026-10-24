@@ -88,7 +88,7 @@ html-anything routinely pairs Latin display fonts with `Noto Sans SC` for Chines
 Inter Tight (Latin display) / Inter (body) / Noto Sans SC (中文) / JetBrains Mono (数据)
 ```
 
-muriel currently assumes Latin-only font stacks. The CJK pairing pattern (Latin first, CJK fallback in the same family) is a queued addition — see [`TODO.md`](../../../../TODO.md) i18n entry.
+muriel currently assumes Latin-only font stacks. The CJK pairing pattern (Latin first, CJK fallback in the same family) is a queued addition — see [`TODO.md`](../../../../../TODO.md) i18n entry.
 
 ### 4. "Inspired by" lineage chain in skill frontmatter
 

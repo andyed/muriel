@@ -7,7 +7,7 @@ recipe. This reference informs design within the host's current animation stack.
 
 ## Keep the clock and the contract
 
-[Polish rules](polish-rules.md#motion-scope--what-the-binary-governs),
+[Polish rules](polish-rules.md#motion-scope-what-the-binary-governs),
 `muriel.motion`, and the host's compliant brand tokens remain authoritative:
 utility transitions stay at or below 100 ms, cinematic transitions at or above
 1500 ms. Keep the existing hold, spring, and press distinctions, sequence

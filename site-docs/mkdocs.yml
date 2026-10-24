@@ -71,6 +71,9 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.details
 
+hooks:
+  - link_paths.py
+
 plugins:
   - search
 
@@ -80,6 +83,7 @@ plugins:
 # Reference, not Channels. Vocabularies ordered concept-first.
 nav:
   - Home: index.md
+  - Meet the jury: jury/index.md
   - Channels:
       - Spatial: channels/spatial.md
       - Charts: channels/charts.md
@@ -111,6 +115,7 @@ nav:
       - Collections & Wunderkammer: references/collections.md
       - Human capabilities: references/human-capabilities.md
       - Design synthesis: references/design-synthesis.md
+      - Jury protocol: references/jury.md
       - Zooming user interfaces: references/zooming-interfaces.md
       - Faceted exploration: references/faceted-exploration.md
       - Semantic zoom & linked displays: references/multiscale-coordination.md

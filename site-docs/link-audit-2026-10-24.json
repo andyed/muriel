@@ -1,0 +1,2014 @@
+{
+  "internal_checked": 4227,
+  "internal_issues": [],
+  "external_unique": 199,
+  "external_results": [
+    {
+      "url": "https://academy.datawrapper.de/",
+      "status": 200,
+      "final_url": "https://www.datawrapper.de/academy",
+      "title": "Datawrapper Academy",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/data-viz-platforms/index.html"
+      ]
+    },
+    {
+      "url": "https://acg.media.mit.edu/events/dbn-aiga/",
+      "status": 200,
+      "final_url": "https://acg.media.mit.edu/events/dbn-aiga/",
+      "title": "",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://andyed.github.io/attentional-foraging/explainer/",
+      "status": 200,
+      "final_url": "https://andyed.github.io/attentional-foraging/explainer/",
+      "title": "The Search Results F-Heatmap, Frame by Frame",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html",
+        "/references/web-recipes/index.html"
+      ]
+    },
+    {
+      "url": "https://andyed.github.io/clipwall-demo/",
+      "status": 200,
+      "final_url": "https://andyed.github.io/clipwall-demo/",
+      "title": "wunderkammer",
+      "category": "ok",
+      "pages": [
+        "/index.html",
+        "/references/collections/index.html",
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://andyed.github.io/clipwall-demo/?view=aisle&group=year",
+      "status": 200,
+      "final_url": "https://andyed.github.io/clipwall-demo/?view=aisle&group=year",
+      "title": "wunderkammer",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://andyed.github.io/clipwall-demo/?view=float&arrange=oklch",
+      "status": 200,
+      "final_url": "https://andyed.github.io/clipwall-demo/?view=float&arrange=oklch",
+      "title": "wunderkammer",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://andyed.github.io/iblipper2025/",
+      "status": 200,
+      "final_url": "https://andyed.github.io/iblipper2025/",
+      "title": "iBlipper - Motion Type Synthesizer",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/kinetic-typography/index.html"
+      ]
+    },
+    {
+      "url": "https://andyed.github.io/scrutinizer-www/blog/",
+      "status": 200,
+      "final_url": "https://andyed.github.io/scrutinizer-www/blog/",
+      "title": "Scrutinizer Blog",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html"
+      ]
+    },
+    {
+      "url": "https://andyed.github.io/scrutinizer-www/blog/2026-03-13-reading-span.html",
+      "status": 200,
+      "final_url": "https://andyed.github.io/scrutinizer-www/blog/2026-03-13-reading-span.html",
+      "title": "Where Your Eyes Actually Read",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html"
+      ]
+    },
+    {
+      "url": "https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html",
+      "status": 200,
+      "final_url": "https://andyed.github.io/scrutinizer-www/blog/2026-03-16-color-sprint.html",
+      "title": "Peripheral Color: From Cliff to Gradient",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html"
+      ]
+    },
+    {
+      "url": "https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html",
+      "status": 200,
+      "final_url": "https://andyed.github.io/scrutinizer-www/blog/2026-03-21-v2.6.html",
+      "title": "Isotropic Cortical Sampling",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html"
+      ]
+    },
+    {
+      "url": "https://andyed.github.io/scrutinizer-www/blog/color-search.html",
+      "status": 200,
+      "final_url": "https://andyed.github.io/scrutinizer-www/blog/color-search.html",
+      "title": "Peripheral Color Search \u2014 Proposed Evaluation \u2014 Scrutinizer",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html"
+      ]
+    },
+    {
+      "url": "https://andyed.github.io/scrutinizer-www/blog/congestion-score.html",
+      "status": 200,
+      "final_url": "https://andyed.github.io/scrutinizer-www/blog/congestion-score.html",
+      "title": "Measuring What Your Eyes Can't Ignore \u2014 Feature Congestion in Scrutinizer",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html"
+      ]
+    },
+    {
+      "url": "https://arxiv.org/abs/2102.09692",
+      "status": 200,
+      "final_url": "https://arxiv.org/abs/2102.09692",
+      "title": "[2102.09692] To Trust or to Think: Cognitive Forcing Functions Can Reduce Overreliance on AI in AI-assisted Decision-making",
+      "category": "ok",
+      "pages": [
+        "/references/human-capabilities/index.html"
+      ]
+    },
+    {
+      "url": "https://blog.codepen.io/documentation/prefill/",
+      "status": 200,
+      "final_url": "https://blog.codepen.io/documentation/prefill/",
+      "title": "POST to Prefill Editors &#8211; CodePen",
+      "category": "ok",
+      "pages": [
+        "/channels/interactive/index.html"
+      ]
+    },
+    {
+      "url": "https://chenglou.me/pretext/",
+      "status": 200,
+      "final_url": "https://chenglou.me/pretext/",
+      "title": "Pretext Demos",
+      "category": "ok",
+      "pages": [
+        "/channels/interactive/index.html",
+        "/vocabularies/fui/index.html",
+        "/vocabularies/kinetic-typography/index.html"
+      ]
+    },
+    {
+      "url": "https://claude.ai/settings/plugins/submit",
+      "status": 200,
+      "final_url": "https://claude.ai/settings/plugins/submit",
+      "title": "Claude",
+      "category": "ok",
+      "pages": [
+        "/spec-plugin-packaging/index.html"
+      ]
+    },
+    {
+      "url": "https://code.claude.com/docs/en/plugin-marketplaces",
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/plugin-marketplaces",
+      "title": "Create a marketplace - Claude Code Docs",
+      "category": "ok",
+      "pages": [
+        "/spec-plugin-packaging/index.html"
+      ]
+    },
+    {
+      "url": "https://code.claude.com/docs/en/plugins",
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/plugins",
+      "title": "Plugins overview - Claude Code Docs",
+      "category": "ok",
+      "pages": [
+        "/spec-plugin-packaging/index.html"
+      ]
+    },
+    {
+      "url": "https://code.claude.com/docs/en/plugins-reference",
+      "status": 200,
+      "final_url": "https://code.claude.com/docs/en/plugins-reference",
+      "title": "Plugin manifest reference - Claude Code Docs",
+      "category": "ok",
+      "pages": [
+        "/spec-plugin-packaging/index.html"
+      ]
+    },
+    {
+      "url": "https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions",
+      "status": 200,
+      "final_url": "https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions",
+      "title": "Documenting Architecture Decisions",
+      "category": "ok",
+      "pages": [
+        "/references/design-synthesis/index.html"
+      ]
+    },
+    {
+      "url": "https://courses.ischool.berkeley.edu/i247/f05/readings/Yee_Flamenco_CHI03.pdf",
+      "status": 200,
+      "final_url": "https://courses.ischool.berkeley.edu/i247/f05/readings/Yee_Flamenco_CHI03.pdf",
+      "title": "",
+      "category": "ok",
+      "pages": [
+        "/references/faceted-exploration/index.html"
+      ]
+    },
+    {
+      "url": "https://d3js.org/d3-brush",
+      "status": 200,
+      "final_url": "https://d3js.org/d3-brush",
+      "title": "d3-brush | D3 by Observable",
+      "category": "ok",
+      "pages": [
+        "/references/multiscale-adapters/index.html"
+      ]
+    },
+    {
+      "url": "https://d3js.org/d3-zoom",
+      "status": 200,
+      "final_url": "https://d3js.org/d3-zoom",
+      "title": "d3-zoom | D3 by Observable",
+      "category": "ok",
+      "pages": [
+        "/references/multiscale-adapters/index.html"
+      ]
+    },
+    {
+      "url": "https://design-tokens.github.io/community-group/format/",
+      "status": 200,
+      "final_url": "https://www.designtokens.org/tr/drafts/format/",
+      "title": "Design Tokens Format Module 2025.10",
+      "category": "ok",
+      "pages": [
+        "/channels/style-guides/index.html"
+      ]
+    },
+    {
+      "url": "https://developer.apple.com/design/human-interface-guidelines/charting-data",
+      "status": 200,
+      "final_url": "https://developer.apple.com/design/human-interface-guidelines/charting-data",
+      "title": "Charting data | Apple Developer Documentation",
+      "category": "ok",
+      "pages": [
+        "/channels/science/index.html",
+        "/vocabularies/data-viz-platforms/index.html"
+      ]
+    },
+    {
+      "url": "https://developer.apple.com/design/human-interface-guidelines/motion",
+      "status": 200,
+      "final_url": "https://developer.apple.com/design/human-interface-guidelines/motion",
+      "title": "Motion | Apple Developer Documentation",
+      "category": "ok",
+      "pages": [
+        "/references/polish-rules/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1037/0033-295X.113.3.461",
+      "status": 200,
+      "final_url": "https://psycnet.apa.org:443/doiLanding?doi=10.1037/0033-295X.113.3.461",
+      "title": "APA PsycNet",
+      "category": "ok",
+      "pages": [
+        "/references/microstrategies/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1037/1076-898X.6.4.322",
+      "status": 200,
+      "final_url": "https://psycnet.apa.org:443/doiLanding?doi=10.1037/1076-898X.6.4.322",
+      "title": "APA PsycNet",
+      "category": "ok",
+      "pages": [
+        "/references/microstrategies/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1080/00401706.1987.10488204",
+      "status": 403,
+      "category": "blocked",
+      "pages": [
+        "/references/multiscale-coordination/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1109/TVCG.2007.70539",
+      "status": 202,
+      "final_url": "https://ieeexplore.ieee.org/document/4376146/",
+      "title": "",
+      "category": "review",
+      "pages": [
+        "/references/multiscale-coordination/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1109/TVCG.2016.2599030",
+      "status": 202,
+      "final_url": "https://ieeexplore.ieee.org/document/7539624/",
+      "title": "",
+      "category": "review",
+      "pages": [
+        "/references/multiscale-coordination/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1145/1456650.1456652",
+      "status": 403,
+      "category": "blocked",
+      "pages": [
+        "/references/multiscale-coordination/index.html",
+        "/references/zooming-interfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1145/192426.192435",
+      "status": 403,
+      "category": "blocked",
+      "pages": [
+        "/references/multiscale-coordination/index.html",
+        "/references/zooming-interfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1145/223904.223934",
+      "status": 403,
+      "category": "blocked",
+      "pages": [
+        "/references/multiscale-coordination/index.html",
+        "/references/zooming-interfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1145/345513.345282",
+      "status": 403,
+      "category": "blocked",
+      "pages": [
+        "/references/multiscale-coordination/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1145/642611.642681",
+      "status": 403,
+      "category": "blocked",
+      "pages": [
+        "/references/faceted-exploration/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1147/sj.353.0514",
+      "status": 202,
+      "final_url": "https://ieeexplore.ieee.org/document/5387204/",
+      "title": "",
+      "category": "review",
+      "pages": [
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1207/s15327051hci0603&4_2",
+      "status": 200,
+      "final_url": "https://taylorandfrancis.com/",
+      "title": "Taylor &amp; Francis &#8211; Fostering human progress through knowledge",
+      "category": "ok",
+      "pages": [
+        "/references/design-synthesis/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1207/s15516709cog1801_3",
+      "status": 403,
+      "category": "blocked",
+      "pages": [
+        "/references/human-capabilities/index.html"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.1207/s15516709cog2803_3",
+      "status": 403,
+      "category": "blocked",
+      "pages": [
+        "/references/microstrategies/index.html"
+      ]
+    },
+    {
+      "url": "https://donellameadows.org/archives/leverage-points-places-to-intervene-in-a-system/",
+      "status": 200,
+      "final_url": "https://donellameadows.org/archives/leverage-points-places-to-intervene-in-a-system/",
+      "title": "Leverage Points: Places to Intervene in a System - The Donella Meadows Project",
+      "category": "ok",
+      "pages": [
+        "/references/design-synthesis/index.html"
+      ]
+    },
+    {
+      "url": "https://donhopkins.com/home/piepaper/cookbook.html",
+      "status": 200,
+      "final_url": "https://donhopkins.com/home/piepaper/cookbook.html",
+      "title": "",
+      "category": "ok",
+      "pages": [
+        "/references/annular-interfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://echarts.apache.org/en/api.html",
+      "status": 200,
+      "final_url": "https://echarts.apache.org/en/api.html",
+      "title": "Documentation - Apache ECharts",
+      "category": "ok",
+      "pages": [
+        "/references/multiscale-adapters/index.html"
+      ]
+    },
+    {
+      "url": "https://echarts.apache.org/en/option.html",
+      "status": 200,
+      "final_url": "https://echarts.apache.org/en/option.html",
+      "title": "Documentation - Apache ECharts",
+      "category": "ok",
+      "pages": [
+        "/references/multiscale-adapters/index.html",
+        "/vocabularies/echarts/index.html"
+      ]
+    },
+    {
+      "url": "https://echarts.apache.org/handbook/en/concepts/event/",
+      "status": 200,
+      "final_url": "https://echarts.apache.org/handbook/en/concepts/event/",
+      "title": "Event and Action - Concepts - Handbook - Apache ECharts",
+      "category": "ok",
+      "pages": [
+        "/references/multiscale-adapters/index.html"
+      ]
+    },
+    {
+      "url": "https://fonts.google.com/specimen/Architects+Daughter",
+      "status": 200,
+      "final_url": "https://fonts.google.com/specimen/Architects+Daughter",
+      "title": "",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/declassified/index.html"
+      ]
+    },
+    {
+      "url": "https://fonts.google.com/specimen/Caveat",
+      "status": 200,
+      "final_url": "https://fonts.google.com/specimen/Caveat",
+      "title": "",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/declassified/index.html"
+      ]
+    },
+    {
+      "url": "https://fonts.google.com/specimen/Kalam",
+      "status": 200,
+      "final_url": "https://fonts.google.com/specimen/Kalam",
+      "title": "",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/declassified/index.html"
+      ]
+    },
+    {
+      "url": "https://fonts.google.com/specimen/Permanent+Marker",
+      "status": 200,
+      "final_url": "https://fonts.google.com/specimen/Permanent+Marker",
+      "title": "",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/declassified/index.html"
+      ]
+    },
+    {
+      "url": "https://fonts.google.com/specimen/Reenie+Beanie",
+      "status": 200,
+      "final_url": "https://fonts.google.com/specimen/Reenie+Beanie",
+      "title": "",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/declassified/index.html"
+      ]
+    },
+    {
+      "url": "https://fonts.google.com/specimen/Shadows+Into+Light+Two",
+      "status": 200,
+      "final_url": "https://fonts.google.com/specimen/Shadows+Into+Light+Two",
+      "title": "",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/declassified/index.html"
+      ]
+    },
+    {
+      "url": "https://ft-interactive.github.io/visual-vocabulary/",
+      "status": 200,
+      "final_url": "https://ft-interactive.github.io/visual-vocabulary/",
+      "title": "Visual Vocabulary",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/data-viz-platforms/index.html"
+      ]
+    },
+    {
+      "url": "https://fuidesign.com/",
+      "category": "unverified",
+      "error": "<urlopen error timed out>",
+      "pages": [
+        "/vocabularies/fui/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/18F/methods",
+      "status": 200,
+      "final_url": "https://github.com/18F/methods",
+      "title": "GitHub - 18F/methods: The methods 18F uses to practice human-centered design. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/creative-provocations/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/All-The-Vibes/ATV-Design",
+      "status": 200,
+      "final_url": "https://github.com/All-The-Vibes/ATV-Design",
+      "title": "GitHub - All-The-Vibes/ATV-Design: ATV Design \u2014 the GitHub Copilot-native AI design agent for your desktop. Prompt \u2192 prototype, slides, PDF with your Copilot subscription via OAuth+PKCE. Local-first, BYOK for other providers, MIT-licensed. Electron + TypeScript + React. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/polish-rules/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/ChrisBuilds/terminaltexteffects",
+      "status": 200,
+      "final_url": "https://github.com/ChrisBuilds/terminaltexteffects",
+      "title": "GitHub - ChrisBuilds/terminaltexteffects: TerminalTextEffects (TTE) is a terminal visual effects engine, application, and Python library. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/terminal/index.html",
+        "/vocabularies/kinetic-typography/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/Dammyjay93/interface-design",
+      "status": 200,
+      "final_url": "https://github.com/Dammyjay93/interface-design",
+      "title": "GitHub - Dammyjay93/interface-design: Design engineering for Claude Code. Craft, memory, and enforcement for consistent UI. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/polish-rules/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/Financial-Times/chart-doctor/blob/main/README.md",
+      "status": 200,
+      "final_url": "https://github.com/Financial-Times/chart-doctor/blob/main/README.md",
+      "title": "chart-doctor/README.md at main \u00b7 Financial-Times/chart-doctor \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/data-viz-platforms/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/JimLiu/baoyu-skills",
+      "status": 200,
+      "final_url": "https://github.com/JimLiu/baoyu-skills",
+      "title": "GitHub - JimLiu/baoyu-skills \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/infographics/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/infographics/SKILL.md",
+      "status": 200,
+      "final_url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/infographics/SKILL.md",
+      "title": "scientific-agent-skills/skills/infographics/SKILL.md at main \u00b7 K-Dense-AI/scientific-agent-skills \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/infographics/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/infographics/references/color_palettes.md",
+      "status": 200,
+      "final_url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/infographics/references/color_palettes.md",
+      "title": "scientific-agent-skills/skills/infographics/references/color_palettes.md at main \u00b7 K-Dense-AI/scientific-agent-skills \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/infographics/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/infographics/references/design_principles.md",
+      "status": 200,
+      "final_url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/infographics/references/design_principles.md",
+      "title": "scientific-agent-skills/skills/infographics/references/design_principles.md at main \u00b7 K-Dense-AI/scientific-agent-skills \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/infographics/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/matplotlib/SKILL.md",
+      "status": 200,
+      "final_url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/matplotlib/SKILL.md",
+      "title": "scientific-agent-skills/skills/matplotlib/SKILL.md at main \u00b7 K-Dense-AI/scientific-agent-skills \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/science/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/scientific-critical-thinking/SKILL.md",
+      "status": 200,
+      "final_url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/scientific-critical-thinking/SKILL.md",
+      "title": "scientific-agent-skills/skills/scientific-critical-thinking/SKILL.md at main \u00b7 K-Dense-AI/scientific-agent-skills \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/science/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/statistical-analysis/SKILL.md",
+      "status": 200,
+      "final_url": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/statistical-analysis/SKILL.md",
+      "title": "scientific-agent-skills/skills/statistical-analysis/SKILL.md at main \u00b7 K-Dense-AI/scientific-agent-skills \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/science/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/KaTeX/KaTeX",
+      "status": 200,
+      "final_url": "https://github.com/KaTeX/KaTeX",
+      "title": "GitHub - KaTeX/KaTeX: Fast math typesetting for the web. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/katex/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/KaTeX/KaTeX/blob/main/cli.js",
+      "status": 200,
+      "final_url": "https://github.com/KaTeX/KaTeX/blob/main/cli.js",
+      "title": "KaTeX/cli.js at main \u00b7 KaTeX/KaTeX \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/katex/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/LottieFiles/motion-design-skill/blob/main/skills/motion-design/SKILL.md",
+      "status": 200,
+      "final_url": "https://github.com/LottieFiles/motion-design-skill/blob/main/skills/motion-design/SKILL.md",
+      "title": "motion-design-skill/skills/motion-design/SKILL.md at main \u00b7 LottieFiles/motion-design-skill \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/motion-craft/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/LottieFiles/motion-design-skill/blob/main/skills/motion-design/director/choreography.md",
+      "status": 200,
+      "final_url": "https://github.com/LottieFiles/motion-design-skill/blob/main/skills/motion-design/director/choreography.md",
+      "title": "motion-design-skill/skills/motion-design/director/choreography.md at main \u00b7 LottieFiles/motion-design-skill \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/motion-craft/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/LottieFiles/motion-design-skill/blob/main/skills/motion-design/director/motion-personality.md",
+      "status": 200,
+      "final_url": "https://github.com/LottieFiles/motion-design-skill/blob/main/skills/motion-design/director/motion-personality.md",
+      "title": "motion-design-skill/skills/motion-design/director/motion-personality.md at main \u00b7 LottieFiles/motion-design-skill \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/motion-craft/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/LottieFiles/motion-design-skill/blob/main/skills/motion-design/reference/quality-checklist.md",
+      "status": 200,
+      "final_url": "https://github.com/LottieFiles/motion-design-skill/blob/main/skills/motion-design/reference/quality-checklist.md",
+      "title": "motion-design-skill/skills/motion-design/reference/quality-checklist.md at main \u00b7 LottieFiles/motion-design-skill \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/motion-craft/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/creative-ideation",
+      "status": 200,
+      "final_url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/creative-ideation",
+      "title": "hermes-agent/optional-skills/creative/creative-ideation at main \u00b7 NousResearch/hermes-agent \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/creative-provocations/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/OpenCoworkAI/open-codesign",
+      "status": 200,
+      "final_url": "https://github.com/OpenCoworkAI/open-codesign",
+      "title": "GitHub - OpenCoworkAI/open-codesign: Open-source Claude Design alternative. One-click import your Claude Code / Codex API key. Prompt \u2192 prototype / slides / PDF. Multi-model (Claude, GPT, Gemini, Kimi, GLM, Ollama). BYOK, local-first, MIT. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/style-guides/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/marginalia",
+      "status": 200,
+      "final_url": "https://github.com/andyed/marginalia",
+      "title": "GitHub - andyed/marginalia: Typographic callout library \u2014 pull quotes, margin notes, drop caps, editorial layout. 15 components, zero dependencies. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/web-recipes/index.html",
+        "/vocabularies/fui/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/HARNESSES.md",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/HARNESSES.md",
+      "title": "muriel/HARNESSES.md at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/web-recipes/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/TODO.md",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/TODO.md",
+      "title": "muriel/TODO.md at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/diagrams/index.html",
+        "/channels/readme/index.html",
+        "/channels/spatial/index.html",
+        "/vocabularies/surfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/docs/favicon-512.png",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/docs/favicon-512.png",
+      "title": "muriel/docs/favicon-512.png at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/muriel-brand/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/muriel/capture.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/muriel/capture.py",
+      "title": "muriel/muriel/capture.py at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/terminal/index.html",
+        "/examples/gallery/index.html",
+        "/references/web-recipes/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/muriel/chart.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/muriel/chart.py",
+      "title": "muriel/muriel/chart.py at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/terminal/index.html"
+      ],
+      "previous_attempt": {
+        "status": 503,
+        "category": "review"
+      }
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/muriel/contrast.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/muriel/contrast.py",
+      "title": "muriel/muriel/contrast.py at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html"
+      ],
+      "previous_attempt": {
+        "status": 503,
+        "category": "review"
+      }
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/muriel/devibe.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/muriel/devibe.py",
+      "title": "muriel/muriel/devibe.py at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/readme/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/muriel/dimensions.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/muriel/dimensions.py",
+      "title": "muriel/muriel/dimensions.py at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/dimensions/index.html",
+        "/examples/gallery/index.html",
+        "/references/web-recipes/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/muriel/layout.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/muriel/layout.py",
+      "title": "muriel/muriel/layout.py at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/diagrams/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/muriel/matplotlibrc_dark.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/muriel/matplotlibrc_dark.py",
+      "title": "muriel/muriel/matplotlibrc_dark.py at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/muriel/matplotlibrc_light.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/muriel/matplotlibrc_light.py",
+      "title": "muriel/muriel/matplotlibrc_light.py at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html",
+        "/references/web-recipes/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/muriel/stats.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/muriel/stats.py",
+      "title": "muriel/muriel/stats.py at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/science/index.html",
+        "/examples/gallery/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/muriel/tools/diagrams/_labels.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/muriel/tools/diagrams/_labels.py",
+      "title": "muriel/muriel/tools/diagrams/_labels.py at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/diagrams/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/muriel/tools/venn.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/muriel/tools/venn.py",
+      "title": "muriel/muriel/tools/venn.py at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/diagrams/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/muriel/typeset.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/muriel/typeset.py",
+      "title": "muriel/muriel/typeset.py at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/raster/index.html",
+        "/examples/gallery/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/plugins/muriel/agents/muriel-critique.md",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/plugins/muriel/agents/muriel-critique.md",
+      "title": "muriel/plugins/muriel/agents/muriel-critique.md at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/collections/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/examples/gallery/v1-orientation-columns-demo.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/examples/gallery/v1-orientation-columns-demo.py",
+      "title": "muriel/plugins/muriel/skills/compose/examples/gallery/v1-orientation-columns-demo.py at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/tree/main/assets",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/tree/main/assets",
+      "title": "muriel/assets at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/tree/main/docs/",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/tree/main/docs/",
+      "title": "muriel/docs at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/muriel-brand/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/tree/main/muriel/",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/tree/main/muriel/",
+      "title": "muriel/muriel at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/science/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/tree/main/muriel/tools",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/tree/main/muriel/tools",
+      "title": "muriel/muriel/tools at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/video/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/examples/gallery/thumbs",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/examples/gallery/thumbs",
+      "title": "muriel/plugins/muriel/skills/compose/examples/gallery/thumbs at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/vocabularies",
+      "status": 200,
+      "final_url": "https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/vocabularies",
+      "title": "muriel/plugins/muriel/skills/compose/vocabularies at main \u00b7 andyed/muriel \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/SKILL/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/AISLE.md",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/AISLE.md",
+      "title": "wunderkammer/docs/AISLE.md at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/collections/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/APPLE_PHOTOS.md",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/APPLE_PHOTOS.md",
+      "title": "wunderkammer/docs/APPLE_PHOTOS.md at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/collections/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/ARCHITECTURE.md",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/ARCHITECTURE.md",
+      "title": "wunderkammer/docs/ARCHITECTURE.md at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/zooming-interfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/CONTRACT.md",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/CONTRACT.md",
+      "title": "wunderkammer/docs/CONTRACT.md at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/collections/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/FACETING.md",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/FACETING.md",
+      "title": "wunderkammer/docs/FACETING.md at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/collections/index.html",
+        "/references/faceted-exploration/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/PERF.md",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/PERF.md",
+      "title": "wunderkammer/docs/PERF.md at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/collections/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/PHILOSOPHY.md",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/PHILOSOPHY.md",
+      "title": "wunderkammer/docs/PHILOSOPHY.md at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/zooming-interfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/ZOOM_DETAIL.md",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/ZOOM_DETAIL.md",
+      "title": "wunderkammer/docs/ZOOM_DETAIL.md at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/zooming-interfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/scripts/collection-sheets.py",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/scripts/collection-sheets.py",
+      "title": "wunderkammer/scripts/collection-sheets.py at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/collections/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/skills/wunderkammer/SKILL.md",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/skills/wunderkammer/SKILL.md",
+      "title": "wunderkammer/skills/wunderkammer/SKILL.md at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/collections/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/tests/cdn-subpath.test.mjs",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/tests/cdn-subpath.test.mjs",
+      "title": "wunderkammer/tests/cdn-subpath.test.mjs at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/collections/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/collection.mjs",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/collection.mjs",
+      "title": "wunderkammer/wall/collection.mjs at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/collections/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/facet-model.mjs",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/facet-model.mjs",
+      "title": "wunderkammer/wall/facet-model.mjs at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/faceted-exploration/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/facet-rail.mjs",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/facet-rail.mjs",
+      "title": "wunderkammer/wall/facet-rail.mjs at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/faceted-exploration/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/spatial/lib/VENDOR.md",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/spatial/lib/VENDOR.md",
+      "title": "wunderkammer/wall/spatial/lib/VENDOR.md at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/collections/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/viewport.mjs",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/viewport.mjs",
+      "title": "wunderkammer/wall/viewport.mjs at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/zooming-interfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/zoom-detail.mjs",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/blob/v0.3.0/wall/zoom-detail.mjs",
+      "title": "wunderkammer/wall/zoom-detail.mjs at v0.3.0 \u00b7 andyed/wunderkammer \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/zooming-interfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/andyed/wunderkammer/tree/v0.3.0",
+      "status": 200,
+      "final_url": "https://github.com/andyed/wunderkammer/tree/v0.3.0",
+      "title": "GitHub - andyed/wunderkammer at v0.3.0 \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/collections/index.html",
+        "/references/zooming-interfaces/index.html",
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/anup-a/svgwave",
+      "status": 200,
+      "final_url": "https://github.com/anup-a/svgwave",
+      "title": "GitHub - anup-a/svgwave: SVG Wave is a tiny, free and beautiful SVG gradient waves generator for your next design. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/THIRD_PARTY_NOTICES/index.html",
+        "/examples/wavefield/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/asciinema/asciinema",
+      "status": 200,
+      "final_url": "https://github.com/asciinema/asciinema",
+      "title": "GitHub - asciinema/asciinema: Terminal session recorder, streamer and player \ud83d\udcf9 \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/terminal/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/aza-ali/github-readme-crisp-links",
+      "status": 200,
+      "final_url": "https://github.com/aza-ali/github-readme-crisp-links",
+      "title": "GitHub - aza-ali/github-readme-crisp-links: \ud83c\udf08 Cleaner GitHub README link text. CLI + web app. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/readme/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/bergside/awesome-design-skills",
+      "status": 200,
+      "final_url": "https://github.com/bergside/awesome-design-skills",
+      "title": "GitHub - bergside/awesome-design-skills: List of 67 awesome DESIGN.md and SKILL.md design skill files for agentic tools like Claude Design, Google Stitch, Codex, Cursor, and other AI tools \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/style-guides/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/carbon-design-system/carbon-charts",
+      "status": 200,
+      "final_url": "https://github.com/carbon-design-system/carbon-charts",
+      "title": "GitHub - carbon-design-system/carbon-charts: :bar_chart: :chart_with_upwards_trend:\u2800Robust dataviz framework implemented using D3 &amp; typescript \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/data-viz-platforms/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/cathrynlavery/diagram-design",
+      "status": 200,
+      "final_url": "https://github.com/cathrynlavery/diagram-design",
+      "title": "GitHub - cathrynlavery/diagram-design: Editorial diagram design for Claude Code, Codex, GitHub Copilot, Cursor, Factory Droid, Qoder, and Pi. 45 diagram types. Self-contained HTML + SVG. No shadows. No Mermaid slop. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/diagrams/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/caylent/tufte-data-viz",
+      "status": 200,
+      "final_url": "https://github.com/caylent/tufte-data-viz",
+      "title": "GitHub - caylent/tufte-data-viz: Agent skill: Edward Tufte&#39;s data visualization principles for clean, honest, high-data-ink-ratio charts. Recharts, ECharts, Chart.js, matplotlib, Plotly, D3/SVG. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/charts/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/caylent/tufte-data-viz/tree/main/rules",
+      "status": 200,
+      "final_url": "https://github.com/caylent/tufte-data-viz/tree/main/rules",
+      "title": "tufte-data-viz/rules at main \u00b7 caylent/tufte-data-viz \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/charts/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/emilkowalski/skill",
+      "status": 200,
+      "final_url": "https://github.com/emilkowalski/skills",
+      "title": "GitHub - emilkowalski/skills: Skills for Designers and Engineers. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/polish-rules/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/geraldnguyen/social-media-posters",
+      "status": 200,
+      "final_url": "https://github.com/geraldnguyen/social-media-posters",
+      "title": "GitHub - geraldnguyen/social-media-posters: social-media-posters \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/dimensions/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/hardikpandya/stop-slop",
+      "status": 200,
+      "final_url": "https://github.com/hardikpandya/stop-slop",
+      "title": "GitHub - hardikpandya/stop-slop: A skill file for removing AI tells from prose \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/SKILL/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/heygen-com/hyperframes",
+      "status": 200,
+      "final_url": "https://github.com/heygen-com/hyperframes",
+      "title": "GitHub - heygen-com/hyperframes: Write HTML. Render video. Built for agents. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/video/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/jakedahn/oblique-skill",
+      "status": 200,
+      "final_url": "https://github.com/jakedahn/oblique-skill",
+      "title": "GitHub - jakedahn/oblique-skill: Oblique Strategies plugin for Claude Code - lateral thinking prompts for vibecoding \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/creative-provocations/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/nexu-io/html-anything",
+      "status": 200,
+      "final_url": "https://github.com/nexu-io/html-anything",
+      "title": "GitHub - nexu-io/html-anything: \u2728 The agentic HTML editor \u2014 your local AI agent writes the HTML, you ship it. \ud83d\ude80 75 Skills \u00d7 9 Surfaces (magazine \u00b7 deck \u00b7 poster \u00b7 XHS / tweet \u00b7 prototype \u00b7 data report \u00b7 Hyperframes) \ud83d\udee1\ufe0f Sandboxed preview \u00b7 \ud83d\udce4 1-click to WeChat / X / Zhihu / HTML / PNG \ud83d\udd11 Zero API key \u2014 Claude Code / Cursor / Codex / Gemini / Copilot / OpenCode / Qwen / Aider. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/surfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/observablehq/plot/blob/main/LICENSE",
+      "status": 200,
+      "final_url": "https://github.com/observablehq/plot/blob/main/LICENSE",
+      "title": "plot/LICENSE at main \u00b7 observablehq/plot \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/data-viz-platforms/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/oil-oil/oil-motion/blob/main/SKILL.md",
+      "status": 200,
+      "final_url": "https://github.com/oil-oil/oil-motion/blob/main/SKILL.md",
+      "title": "oil-motion/SKILL.md at main \u00b7 oil-oil/oil-motion \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/motion-craft/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/oil-oil/oil-motion/blob/main/references/delivery-selection.md",
+      "status": 200,
+      "final_url": "https://github.com/oil-oil/oil-motion/blob/main/references/delivery-selection.md",
+      "title": "oil-motion/references/delivery-selection.md at main \u00b7 oil-oil/oil-motion \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/motion-craft/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/oil-oil/oil-motion/blob/main/references/runtime.md",
+      "status": 200,
+      "final_url": "https://github.com/oil-oil/oil-motion/blob/main/references/runtime.md",
+      "title": "oil-motion/references/runtime.md at main \u00b7 oil-oil/oil-motion \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/motion-craft/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/pbakaus/impeccable",
+      "status": 200,
+      "final_url": "https://github.com/pbakaus/impeccable",
+      "title": "GitHub - pbakaus/impeccable: The design language that makes your AI harness better at design. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/agents/muriel-critique/index.html",
+        "/references/web-recipes/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/pixijs/pixijs",
+      "status": 200,
+      "final_url": "https://github.com/pixijs/pixijs",
+      "title": "GitHub - pixijs/pixijs: The HTML5 Creation Engine: Create beautiful digital content with the fastest, most flexible 2D WebGL renderer. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/pixijs/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/pixijs/pixijs-skills",
+      "status": 200,
+      "final_url": "https://github.com/pixijs/pixijs-skills",
+      "title": "GitHub - pixijs/pixijs-skills: Official AI skills for PixiJS. These skills teach AI coding agents how to correctly use PixiJS \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/pixijs/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/pixijs/pixijs-skills/tree/main/skills",
+      "status": 200,
+      "final_url": "https://github.com/pixijs/pixijs-skills/tree/main/skills",
+      "title": "pixijs-skills/skills at main \u00b7 pixijs/pixijs-skills \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/pixijs/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/rastian/interaction-design-skills",
+      "status": 200,
+      "final_url": "https://github.com/rastian/interaction-design-skills",
+      "title": "GitHub - rastian/interaction-design-skills: A Claude skill for interaction design -&gt; flows, states, micro-interactions, affordances, feedback, and IxD principles for product, UX, UI, and service designers. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/interaction-contracts/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/rohitg00/awesome-claude-design",
+      "status": 200,
+      "final_url": "https://github.com/rohitg00/awesome-claude-design",
+      "title": "GitHub - rohitg00/awesome-claude-design: Claude Design DESIGN.md prompts by aesthetic family, remix recipes, skills, video teardowns, X signal, honest community takes. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/creative-provocations/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/thedavidmurray/claude-make-interfaces-feel-better",
+      "status": 200,
+      "final_url": "https://github.com/thedavidmurray/claude-make-interfaces-feel-better",
+      "title": "GitHub - thedavidmurray/claude-make-interfaces-feel-better: Claude Code skill: design engineering principles for polished UI \u2014 animations, typography, surfaces, micro-interactions \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/references/polish-rules/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/vega/vega-lite/blob/main/LICENSE",
+      "status": 200,
+      "final_url": "https://github.com/vega/vega-lite/blob/main/LICENSE",
+      "title": "vega-lite/LICENSE at main \u00b7 vega/vega-lite \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/data-viz-platforms/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/webadderall/Recordly",
+      "status": 200,
+      "final_url": "https://github.com/webadderallorg/Recordly",
+      "title": "GitHub - webadderallorg/Recordly: Create polished demo videos without editing skills. Mac/Windows/Linux \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/video/index.html"
+      ]
+    },
+    {
+      "url": "https://github.com/yctimlin/mcp_excalidraw",
+      "status": 200,
+      "final_url": "https://github.com/yctimlin/mcp_excalidraw",
+      "title": "GitHub - yctimlin/mcp_excalidraw: MCP server and Claude Code skill for Excalidraw \u2014 programmatic canvas toolkit to create, edit, and export diagrams via AI agents with real-time canvas sync. \u00b7 GitHub",
+      "category": "ok",
+      "pages": [
+        "/channels/svg/index.html"
+      ]
+    },
+    {
+      "url": "https://hdl.handle.net/1721.1/29102",
+      "status": 200,
+      "final_url": "https://dspace.mit.edu/entities/publication/70ee2735-dd3d-45a2-9c48-14b81075129f",
+      "title": "Temporal typography : characterization of time-varying typographic forms",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://hyperframes.heygen.com/catalog/blocks/data-chart",
+      "status": 200,
+      "final_url": "https://hyperframes.heygen.com/catalog/blocks/data-chart",
+      "title": "Data Chart - HyperFrames",
+      "category": "ok",
+      "pages": [
+        "/channels/video/index.html"
+      ]
+    },
+    {
+      "url": "https://katex.org/",
+      "status": 200,
+      "final_url": "https://katex.org/",
+      "title": "KaTeX \u2013 The fastest math typesetting library for the web",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/katex/index.html"
+      ]
+    },
+    {
+      "url": "https://katex.org/docs/autorender.html",
+      "status": 200,
+      "final_url": "https://katex.org/docs/autorender.html",
+      "title": "Auto-render Extension \u00b7 KaTeX",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/katex/index.html"
+      ]
+    },
+    {
+      "url": "https://katex.org/docs/supported.html",
+      "status": 200,
+      "final_url": "https://katex.org/docs/supported.html",
+      "title": "Supported Functions \u00b7 KaTeX",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/katex/index.html"
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/uwp/ui-input/windows-wheel-interactions",
+      "status": 200,
+      "final_url": "https://learn.microsoft.com/en-us/windows/uwp/ui-input/windows-wheel-interactions",
+      "title": "Surface Dial interactions - UWP applications | Microsoft Learn",
+      "category": "ok",
+      "pages": [
+        "/references/annular-interfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://lucide.dev",
+      "status": 200,
+      "final_url": "https://lucide.dev",
+      "title": "Lucide",
+      "category": "ok",
+      "pages": [
+        "/channels/diagrams/index.html"
+      ]
+    },
+    {
+      "url": "https://m2.material.io/design/communication/data-visualization.html",
+      "status": 200,
+      "final_url": "https://m2.material.io/design/communication/data-visualization.html",
+      "title": "Material Design",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/data-viz-platforms/index.html"
+      ]
+    },
+    {
+      "url": "https://m3.material.io/foundations/design-tokens/overview",
+      "status": 200,
+      "final_url": "https://m3.material.io/foundations/design-tokens/overview",
+      "title": "Design tokens \u2013 Material Design 3",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/data-viz-platforms/index.html"
+      ]
+    },
+    {
+      "url": "https://m3.material.io/styles/motion",
+      "status": 200,
+      "final_url": "https://m3.material.io/styles/motion",
+      "title": "Material Design",
+      "category": "ok",
+      "pages": [
+        "/references/polish-rules/index.html"
+      ]
+    },
+    {
+      "url": "https://mitpress.mit.edu/9780262090353/improvisational-design/",
+      "status": 403,
+      "category": "blocked",
+      "pages": [
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://mitpress.mit.edu/9780262133548/design-by-numbers/",
+      "status": 403,
+      "category": "blocked",
+      "pages": [
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://mitpress.mit.edu/9780262182621/processing/",
+      "status": 403,
+      "category": "blocked",
+      "pages": [
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://muriel.mindbendingpixels.com/gallery/",
+      "status": 200,
+      "final_url": "https://muriel.mindbendingpixels.com/gallery/",
+      "title": "muriel.spatial \u2014 render assets",
+      "category": "ok",
+      "pages": [
+        "/examples/gallery/index.html"
+      ]
+    },
+    {
+      "url": "https://observablehq.com/plot/",
+      "status": 429,
+      "category": "blocked",
+      "pages": [
+        "/vocabularies/data-viz-platforms/index.html"
+      ]
+    },
+    {
+      "url": "https://opentelemetry.io/docs/concepts/signals/traces/",
+      "status": 200,
+      "final_url": "https://opentelemetry.io/docs/concepts/signals/traces/",
+      "title": "Traces | OpenTelemetry",
+      "category": "ok",
+      "pages": [
+        "/references/design-synthesis/index.html"
+      ]
+    },
+    {
+      "url": "https://pixijs.com/8.x/examples",
+      "status": 200,
+      "final_url": "https://pixijs.com/8.x/examples",
+      "title": "index | PixiJS",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/pixijs/index.html"
+      ]
+    },
+    {
+      "url": "https://pixijs.download/release/docs/index.html",
+      "status": 200,
+      "final_url": "https://pixijs.download/release/docs/index.html",
+      "title": "pixi.js",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/pixijs/index.html"
+      ]
+    },
+    {
+      "url": "https://platform.claude.com/plugins/submit",
+      "status": 200,
+      "final_url": "https://platform.claude.com/plugins/submit",
+      "title": "Submit plugin | Claude Platform",
+      "category": "ok",
+      "pages": [
+        "/spec-plugin-packaging/index.html"
+      ]
+    },
+    {
+      "url": "https://psychodeli.com/inside_the_math/",
+      "status": 200,
+      "final_url": "https://psychodeli.com/inside_the_math/",
+      "title": "Extinct Code Grew Leopard Spots \u2014 Psychodeli",
+      "category": "ok",
+      "pages": [
+        "/references/web-recipes/index.html",
+        "/vocabularies/katex/index.html"
+      ]
+    },
+    {
+      "url": "https://scifi.stackexchange.com/questions/214058/what-is-the-name-of-this-sci-fi-circular-interface-seen-on-computers-and-hologra",
+      "status": 403,
+      "category": "blocked",
+      "pages": [
+        "/references/annular-interfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://smg.media.mit.edu/",
+      "status": 200,
+      "final_url": "https://smg.media.mit.edu/",
+      "title": "Sociable Media Group - MIT Media Lab",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://smg.media.mit.edu/library/small1996.html",
+      "status": 200,
+      "final_url": "https://smg.media.mit.edu/library/small1996.html",
+      "title": "Navigating large bodies of text",
+      "category": "ok",
+      "pages": [
+        "/references/zooming-interfaces/index.html",
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://sronpersonalpages.nl/~pault/",
+      "status": 200,
+      "final_url": "https://sronpersonalpages.nl/~pault/",
+      "title": "Paul Tol's Notes",
+      "category": "ok",
+      "pages": [
+        "/channels/charts/index.html",
+        "/channels/infographics/index.html"
+      ]
+    },
+    {
+      "url": "https://stitch.withgoogle.com/docs/design-md/",
+      "status": 200,
+      "final_url": "https://stitch.withgoogle.com/docs/design-md/",
+      "title": "Stitch - Design with AI",
+      "category": "ok",
+      "pages": [
+        "/channels/style-guides/index.html"
+      ]
+    },
+    {
+      "url": "https://territorystudio.com/",
+      "status": 200,
+      "final_url": "https://territorystudio.com/",
+      "title": "Homepage - Territory Studio",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/fui/index.html"
+      ]
+    },
+    {
+      "url": "https://thecynefin.co/about-us/about-cynefin-framework/",
+      "status": 200,
+      "final_url": "https://thecynefin.co/about-us/about-cynefin-framework/",
+      "title": "About - Cynefin Framework - The Cynefin Co",
+      "category": "ok",
+      "pages": [
+        "/references/design-synthesis/index.html"
+      ]
+    },
+    {
+      "url": "https://vega.github.io/vega-lite/",
+      "status": 200,
+      "final_url": "https://vega.github.io/vega-lite/",
+      "title": "A High-Level Grammar of Interactive Graphics | Vega-Lite",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/data-viz-platforms/index.html"
+      ]
+    },
+    {
+      "url": "https://vega.github.io/vega-lite/docs/bind.html",
+      "status": 200,
+      "final_url": "https://vega.github.io/vega-lite/docs/bind.html",
+      "title": "Binding a Parameter | Vega-Lite",
+      "category": "ok",
+      "pages": [
+        "/references/multiscale-adapters/index.html"
+      ]
+    },
+    {
+      "url": "https://vega.github.io/vega-lite/docs/predicate.html",
+      "status": 200,
+      "final_url": "https://vega.github.io/vega-lite/docs/predicate.html",
+      "title": "Predicate | Vega-Lite",
+      "category": "ok",
+      "pages": [
+        "/references/multiscale-adapters/index.html"
+      ]
+    },
+    {
+      "url": "https://vega.github.io/vega-lite/docs/resolve.html",
+      "status": 200,
+      "final_url": "https://vega.github.io/vega-lite/docs/resolve.html",
+      "title": "Scale and Guide Resolution | Vega-Lite",
+      "category": "ok",
+      "pages": [
+        "/references/multiscale-adapters/index.html"
+      ]
+    },
+    {
+      "url": "https://vega.github.io/vega-lite/docs/selection.html",
+      "status": 200,
+      "final_url": "https://vega.github.io/vega-lite/docs/selection.html",
+      "title": "Selection Parameters | Vega-Lite",
+      "category": "ok",
+      "pages": [
+        "/references/multiscale-adapters/index.html"
+      ]
+    },
+    {
+      "url": "https://vega.github.io/vega/docs/api/view/",
+      "status": 200,
+      "final_url": "https://vega.github.io/vega/docs/api/view/",
+      "title": "View API | Vega",
+      "category": "ok",
+      "pages": [
+        "/references/multiscale-adapters/index.html"
+      ]
+    },
+    {
+      "url": "https://www.algolia.com/doc/api-reference/widgets/refinement-list/js",
+      "status": 200,
+      "final_url": "https://www.algolia.com/doc/api-reference/widgets/refinement-list/js",
+      "title": "refinementList - Algolia",
+      "category": "ok",
+      "pages": [
+        "/references/faceted-exploration/index.html"
+      ]
+    },
+    {
+      "url": "https://www.algolia.com/doc/guides/managing-results/refine-results/faceting",
+      "status": 200,
+      "final_url": "https://www.algolia.com/doc/guides/managing-results/refine-results/faceting",
+      "title": "Faceting - Algolia",
+      "category": "ok",
+      "pages": [
+        "/references/faceted-exploration/index.html"
+      ]
+    },
+    {
+      "url": "https://www.calligraphr.com/",
+      "status": 200,
+      "final_url": "https://www.calligraphr.com/en/",
+      "title": "Calligraphr - Draw your own fonts.",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/declassified/index.html"
+      ]
+    },
+    {
+      "url": "https://www.carbondesignsystem.com/building-blocks/data-visualization/overview",
+      "status": 200,
+      "final_url": "https://www.carbondesignsystem.com/building-blocks/data-visualization/overview",
+      "title": "Overview | Carbon Design System",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/data-viz-platforms/index.html"
+      ]
+    },
+    {
+      "url": "https://www.designcouncil.org.uk/resources/systemic-design-framework/",
+      "status": 200,
+      "final_url": "https://www.designcouncil.org.uk/resources/systemic-design-framework/",
+      "title": "Systemic Design Framework - Design Council",
+      "category": "ok",
+      "pages": [
+        "/references/design-synthesis/index.html"
+      ]
+    },
+    {
+      "url": "https://www.edwardtufte.com/book/the-visual-display-of-quantitative-information/",
+      "status": 200,
+      "final_url": "https://www.edwardtufte.com/book/the-visual-display-of-quantitative-information/",
+      "title": "The Visual Display of Quantitative Information | Edward Tufte",
+      "category": "ok",
+      "pages": [
+        "/channels/charts/index.html"
+      ]
+    },
+    {
+      "url": "https://www.edwardtufte.com/notebook/sparkline-theory-and-practice-edward-tufte/",
+      "status": 200,
+      "final_url": "https://www.edwardtufte.com/notebook/sparkline-theory-and-practice-edward-tufte/",
+      "title": "Sparkline theory and practice Edward Tufte | Edward Tufte",
+      "category": "ok",
+      "pages": [
+        "/references/sparklines/index.html"
+      ]
+    },
+    {
+      "url": "https://www.elastic.co/docs/reference/elasticsearch/rest-apis/filter-search-results",
+      "status": 200,
+      "final_url": "https://www.elastic.co/docs/reference/elasticsearch/rest-apis/filter-search-results",
+      "title": "Filter search results | Elasticsearch Reference",
+      "category": "ok",
+      "pages": [
+        "/references/faceted-exploration/index.html"
+      ]
+    },
+    {
+      "url": "https://www.experienceperception.com/",
+      "category": "unverified",
+      "error": "<urlopen error timed out>",
+      "pages": [
+        "/vocabularies/fui/index.html"
+      ]
+    },
+    {
+      "url": "https://www.hudsandguis.com/",
+      "status": 200,
+      "final_url": "https://www.hudsandguis.com/",
+      "title": "HUDS+GUIS",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/fui/index.html"
+      ]
+    },
+    {
+      "url": "https://www.media.mit.edu/groups/vlw/publications.html",
+      "status": 200,
+      "final_url": "https://www.media.mit.edu/groups/vlw/publications.html",
+      "title": "",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://www.media.mit.edu/posts/muriel-cooper-lasting-imprint/",
+      "status": 200,
+      "final_url": "https://www.media.mit.edu/posts/muriel-cooper-lasting-imprint/",
+      "title": "Muriel Cooper\u2019s Lasting Imprint &mdash; MIT Media Lab",
+      "category": "ok",
+      "pages": [
+        "/vocabularies/visible-language/index.html"
+      ]
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/research/publication/guidelines-for-human-ai-interaction/",
+      "status": 200,
+      "final_url": "https://www.microsoft.com/en-us/research/publication/guidelines-for-human-ai-interaction/",
+      "title": "Guidelines for Human-AI Interaction - Microsoft Research",
+      "category": "ok",
+      "pages": [
+        "/references/human-capabilities/index.html"
+      ]
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/research/publication/principles-mixed-initiative-user-interfaces/",
+      "status": 200,
+      "final_url": "https://www.microsoft.com/en-us/research/publication/principles-mixed-initiative-user-interfaces/",
+      "title": "Principles of Mixed-Initiative User Interfaces - Microsoft Research",
+      "category": "ok",
+      "pages": [
+        "/references/human-capabilities/index.html"
+      ]
+    },
+    {
+      "url": "https://www.nature.com/articles/nmeth.1618",
+      "status": 200,
+      "final_url": "https://www.nature.com/articles/nmeth.1618?error=cookies_not_supported&code=cf31259e-5356-4566-98ef-eab5d8a0f2f1",
+      "title": "Points of view: Color blindness | Nature Methods",
+      "category": "ok",
+      "pages": [
+        "/channels/charts/index.html",
+        "/channels/infographics/index.html",
+        "/vocabularies/data-viz-platforms/index.html"
+      ]
+    },
+    {
+      "url": "https://www.npmjs.com/package/@chenglou/pretext",
+      "status": 403,
+      "category": "blocked",
+      "pages": [
+        "/channels/interactive/index.html"
+      ]
+    },
+    {
+      "url": "https://www.npmjs.com/package/marginalia",
+      "status": 200,
+      "final_url": "https://www.npmjs.com/package/marginalia",
+      "title": "marginalia - npm",
+      "category": "ok",
+      "pages": [
+        "/references/web-recipes/index.html"
+      ]
+    },
+    {
+      "url": "https://www.pushing-pixels.org/2012/06/01/the-craft-of-screen-graphics-and-movie-user-interfaces-conversation-with-jayse-hansen.html",
+      "status": 200,
+      "final_url": "https://www.pushing-pixels.org/2012/06/01/the-craft-of-screen-graphics-and-movie-user-interfaces-conversation-with-jayse-hansen.html",
+      "title": "The craft of screen graphics and movie user interfaces &#8211; conversation with Jayse Hansen &middot; Pushing Pixels",
+      "category": "ok",
+      "pages": [
+        "/references/annular-interfaces/index.html"
+      ]
+    },
+    {
+      "url": "https://www.sei.cmu.edu/library/quality-attribute-based-economic-valuation-of-architectural-patterns/",
+      "status": 200,
+      "final_url": "https://www.sei.cmu.edu/library/quality-attribute-based-economic-valuation-of-architectural-patterns/",
+      "title": "Quality-Attribute-Based Economic Valuation of Architectural Patterns | CMU Software Engineering Institute",
+      "category": "ok",
+      "pages": [
+        "/references/design-synthesis/index.html"
+      ]
+    },
+    {
+      "url": "https://www.visdesignlab.net/publications/2014_infovis_placement-wsv/",
+      "status": 200,
+      "final_url": "https://www.visdesignlab.net/publications/2014_infovis_placement-wsv/",
+      "title": "Exploring the Placement and Design of Word-Scale Visualizations",
+      "category": "ok",
+      "pages": [
+        "/references/sparklines/index.html"
+      ]
+    },
+    {
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html",
+      "status": 200,
+      "final_url": "https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html",
+      "title": "Understanding Success Criterion 2.5.7: Dragging Movements | WAI | W3C",
+      "category": "ok",
+      "pages": [
+        "/references/multiscale-coordination/index.html"
+      ]
+    },
+    {
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html",
+      "status": 200,
+      "final_url": "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html",
+      "title": "Understanding Success Criterion 1.4.1: Use of Color | WAI | W3C",
+      "category": "ok",
+      "pages": [
+        "/references/multiscale-coordination/index.html"
+      ]
+    }
+  ],
+  "external_counts": {
+    "ok": 180,
+    "blocked": 14,
+    "review": 3,
+    "unverified": 2
+  },
+  "skipped_examples": [],
+  "limits": "HTTP checks do not verify remote fragments, JavaScript routes, source claims, or link relevance. Blocked and unverified URLs are not confirmed dead.",
+  "checked_date": "2026-10-24"
+}

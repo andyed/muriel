@@ -131,7 +131,7 @@ to see what a shared selection should preserve.
 
 ### Pretext Coachella
 
-[Pretext Coachella](https://github.com/andyed/pretext-coachella) arranges artist
+Pretext Coachella, a local study with no public source link, arranges artist
 names into flowing text, a letterform poster, and a perspective wall. It is a
 contemporary typographic experiment: placement, weight, and colour carry
 structure. See the [typographic canvas recipe](../channels/interactive.md#typographic-canvas-with-pretext)
@@ -183,6 +183,8 @@ research, historical context, and later design practice.
   MIT Press. Programming practice for visual work.
 - **[VLW publications list](https://www.media.mit.edu/groups/vlw/publications.html)**
   (March 1995). MIT’s record of the workshop’s research.
+- **[Sociable Media Group](https://smg.media.mit.edu/).** MIT’s group homepage,
+  with links to its projects and papers.
 
 Continue with [collection exploration](../references/collections.md),
 [zooming interfaces](../references/zooming-interfaces.md), or the

@@ -4,7 +4,7 @@
 
 Use it for:
 
-- **Math-rich essays** rendered as long-form HTML (the [`inside_the_math`](https://github.com/andyed/psychodeli-webgl-port/blob/main/inside_the_math/index-marginalia.html) reference exemplar). Equations appear next to prose, themed from `brand.toml`, with no image-export step.
+- **Math-rich essays** rendered as long-form HTML (the [`inside_the_math`](https://psychodeli.com/inside_the_math/) reference exemplar). Equations appear next to prose, themed from `brand.toml`, with no image-export step.
 - **Single-equation callouts** inside any HTML output (marginalia callouts, infographic captions, deck slides).
 - **In-page derivations.** A `display: block` equation per step, prose between, no Manim required for prose-side step-throughs.
 - **Branded equation blocks** — equations as first-class designed elements, not raw math jammed into a paragraph.
@@ -110,7 +110,7 @@ Hex literals here are a soft conflict with `brand.toml` (KaTeX's color macros do
 
 ### Server-side rendering for static stills
 
-If the artifact target is a PNG (paper figure, social card, OG image) rather than a live web page, KaTeX can render server-side via the `katex.renderToString()` JS API or via [`katex-cli`](https://github.com/KaTeX/KaTeX/tree/main/cli). Combine with Playwright (`muriel/capture.py`) to rasterize the resulting HTML at the channel's target resolution.
+If the artifact target is a PNG (paper figure, social card, OG image) rather than a live web page, KaTeX can render server-side via the `katex.renderToString()` JS API or via [`katex-cli`](https://github.com/KaTeX/KaTeX/blob/main/cli.js). Combine with Playwright (`muriel/capture.py`) to rasterize the resulting HTML at the channel's target resolution.
 
 ## Integration with muriel channels
 
