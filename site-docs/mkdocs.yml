@@ -28,6 +28,9 @@ exclude_docs: |
   examples/critique-fixtures/README.md
   # The lab ships its own index.html; keep its source README out of that route.
   examples/linked-atlas/README.md
+  # Hold the unfinished jury visual and its draft landing page.
+  brand-assets/social/
+  jury/
 
 theme:
   name: material
@@ -83,7 +86,6 @@ plugins:
 # Reference, not Channels. Vocabularies ordered concept-first.
 nav:
   - Home: index.md
-  - Meet the jury: jury/index.md
   - Channels:
       - Spatial: channels/spatial.md
       - Charts: channels/charts.md

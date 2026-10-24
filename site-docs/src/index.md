@@ -34,17 +34,6 @@ The collection guide covers **Wunderkammer 0.3.0**, including spatial views and
 collection documents. The screenshot comes from that release; the live demo
 can change independently.
 
-## A jury with different views
-
-One reviewer sees a blur; another sees only the words. Muriel’s jury limits
-what each reviewer can see, then brings their findings together. The illustrated
-case examines Muriel’s own logo card—including a contrast failure.
-
-[![Muriel’s logo bars become jurors, each looking at the same design through a different lens.](brand-assets/social/jury-1600x900.png){ width=1600 height=900 loading=lazy }](jury/index.md)
-
-[Meet the jury and read the case](jury/index.md) ·
-[Read the protocol](references/jury.md)
-
 ## Start here
 
 - **[Human capabilities](references/human-capabilities.md)** — the cognitive
