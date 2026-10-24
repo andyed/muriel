@@ -59,6 +59,7 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     "import":         ("muriel.design_md_import",            "Convert a Google Stitch design.md into a muriel brand.toml"),
     "import-tokens":  ("muriel.design_tokens_import",         "Convert a DTCG / open-codesign tokens.json into a muriel brand.toml"),
     "import-corpus":  ("muriel.tools.corpus_audit",          "Audit a DESIGN.md corpus through design_md_import + 8:1 floor"),
+    "line-ends":      ("muriel.line_ends",                  "Rendered check: fail any stroke whose end lands on nothing (Playwright)"),
     "loupe":          ("muriel.loupe",                      "Fixed-scale 4× crops, densest first — do joints and line ends resolve up close?"),
     "palettes":       ("muriel.palettes",                   "List / generate / validate categorical palettes (CVD + contrast)"),
     "smartcrop":      ("muriel.tools.smartcrop",            "Saliency-aware crop solver (edges + optional faces / text / saliency)"),

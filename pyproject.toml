@@ -58,6 +58,8 @@ packages = ["muriel", "muriel.detectors", "muriel.diagrams", "muriel.math", "mur
 # by the user via `cd muriel/<module> && npm install` — intentionally
 # not bundled (size + version-sensitive).
 "muriel.math" = ["tex2svg.js", "package.json"]
+# The in-page half of muriel.line_ends (ported from anatomy, MIT; see THIRD_PARTY_NOTICES.md).
+"muriel" = ["line_ends.js"]
 "muriel.diagrams" = ["render.mjs", "package.json"]
 # The ui-ux-pro-max corpus: verbatim MIT CSVs + their license (see
 # muriel/uipromax/__init__.py and THIRD_PARTY_NOTICES.md).

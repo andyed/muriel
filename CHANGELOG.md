@@ -8,6 +8,24 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`muriel line-ends`: a rendered check that fails any stroke ending in
+  mid-air.** In headless Chromium it finds every open end of every stroked,
+  unfilled path, line and polyline, and fails the ones that land on nothing.
+  An end passes on another stroke, a shape's outline or flat fill edge, a dot,
+  within 4 px of a text label, under a fill painted after it, on the canvas
+  edge, or on an implied edge that three or more other ends meet square-on,
+  the way gridlines stop at an unstroked plot boundary. A near miss (within
+  6 px) is never excused that way, so a generator that stops every
+  connector 2 px short cannot excuse itself. `data-free` marks an end
+  meant to stop. It reports gaps and positions in viewBox units, rings
+  each failure on a screenshot with `--out`, and fails closed on a figure
+  where it checked nothing (`--allow-none`). The in-page half,
+  `muriel/line_ends.js`, ports anatomy's `scripts/line-ends.mjs` (MIT; see
+  THIRD_PARTY_NOTICES.md); its header lists what muriel changed. `jury.md`
+  lists it among the findings of fact.
+  `tests/test_line_ends.py` asserts the exact set of floating ends in a
+  fixture covering every rule.
+
 - **A sixth jury seat, the Loupe, and the lens behind it.** The Squinter
   blurs and the Thumbnail shrinks; nothing on the panel looked closer than
   1×, so a rule stopping 2 px short of its outline, a seam missing its

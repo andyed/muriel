@@ -78,6 +78,10 @@ tooling and enter as stipulated evidence, never as motions:
   source: untouched shadcn/Tailwind defaults, AI-purple as primary, gradient
   headings, purple-to-blue gradients, neon glow, emoji-as-icons, the centred
   hero + three-feature-card skeleton;
+- `python -m muriel.line_ends <file.svg|page.html>` — every stroke end that
+  lands on nothing, measured in the rendered page; on SVG and HTML these are
+  facts, and the Loupe's line-end findings are limited to what this check
+  cannot see (rasters, strokes outside its `--lines` scope);
 - recorded seeds, dimensions, and export paths;
 - **conditional, may return nothing** —
   `python -m muriel.tools.impeccable_bridge <path>` is a no-op when Node, npx,
