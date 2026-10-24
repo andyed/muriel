@@ -1,0 +1,21 @@
+/* Shared wayfinding for standalone demos; scoped away from their controls. */
+body.muriel-demo { padding-top: 48px; box-sizing: border-box; }
+nav.demo-links {
+  position: fixed; inset: 0 0 auto; z-index: 10000;
+  height: 48px; display: flex; align-items: center; gap: 20px;
+  padding: 0 16px; margin: 0; box-sizing: border-box;
+  background: #0a0a0f; color: #e6e4d2; border-bottom: 1px solid #444454;
+  font: 600 14px/1.4 system-ui, sans-serif; letter-spacing: normal;
+  text-transform: none; pointer-events: auto;
+}
+nav.demo-links a { display: inline-flex; align-items: center; min-height: 44px;
+  color: #e6e4d2; text-decoration: underline; text-underline-offset: 4px;
+  opacity: 1; white-space: nowrap; pointer-events: auto; }
+nav.demo-links a:hover { color: #7dd4e4; }
+nav.demo-links a:focus-visible { outline: 2px solid #7dd4e4; outline-offset: 3px; }
+body.muriel-demo #hud { top: 48px; }
+body.muriel-demo > .hud { height: calc(100vh - 48px); }
+html { scroll-padding-top: 60px; }
+@media (max-width: 400px) {
+  nav.demo-links { gap: 16px; padding-inline: 12px; }
+}
