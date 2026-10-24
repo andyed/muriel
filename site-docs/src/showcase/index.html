@@ -3,14 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>muriel — next-gen visual-production skill for LLMs</title>
-<meta name="description" content="A dozen channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast at render time, and a vision-model critique agent. Named after Muriel Cooper.">
+<title>muriel — design in practice</title>
+<meta name="description" content="Live collections, linked views, HyperFrames films, spatial typography, and reproducible visual artifacts. Explore Muriel’s design guides, examples, and critique tools.">
 
 <!-- Open Graph / Twitter -->
-<meta property="og:title" content="muriel — next-gen visual-production skill for LLMs">
-<meta property="og:description" content="A dozen channels of tool-use recipes, a brand-token schema with motion, a multi-constraint solver enforcing 8:1 contrast, a vision-model critique agent. Named after Muriel Cooper.">
+<meta property="og:title" content="muriel — design in practice">
+<meta property="og:description" content="Live collections, linked views, HyperFrames films, spatial typography, and reproducible visual artifacts. Explore Muriel’s design guides, examples, and critique tools.">
 <meta property="og:image" content="https://muriel.mindbendingpixels.com/og-image.png">
-<meta property="og:url" content="https://muriel.mindbendingpixels.com/">
+<meta property="og:url" content="https://muriel.mindbendingpixels.com/showcase/">
+<link rel="canonical" href="https://muriel.mindbendingpixels.com/showcase/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 
@@ -27,12 +28,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@andyed/marginalia@0.1.0/marginalia.css">
 <script src="https://cdn.jsdelivr.net/npm/@andyed/marginalia@0.1.0/marginalia.js" defer></script>
 
-<!-- PostHog — replace the placeholder below with the mindbendingpixels.com project key. -->
-<!-- Safe to leave inert: if the token is "PLACEHOLDER" PostHog silently no-ops. -->
-<script>
-!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-posthog.init('PLACEHOLDER_POSTHOG_KEY', { api_host: 'https://app.posthog.com' });
-</script>
+
 
 <style>
 /* ── muriel OLED palette ──────────────────────────────────────────── */
@@ -223,8 +219,9 @@ ul li { margin-bottom: 0.4rem; max-width: 60ch; }
 .tuner-toml .s { color: var(--fg); }
 
 /* ── Gallery strip ─────────────────────────────────────────────── */
-.featured { display: grid; gap: 1.25rem; margin-top: 1rem; }
+.featured { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; margin-top: 1rem; }
 .featured .fig {
+  min-width: 0; overflow-wrap: anywhere;
   background: var(--bg-2);
   border: 1px solid var(--rule);
   border-radius: 4px;
@@ -250,6 +247,13 @@ ul li { margin-bottom: 0.4rem; max-width: 60ch; }
 .featured .caption strong { color: var(--fg); font-weight: 600; }
 .featured .caption .channel { color: var(--accent-ink); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; display: block; margin-bottom: 0.3rem; }
 
+.motion-film { margin: 1.75rem 0 2.5rem; }
+.motion-film video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #000; border: 1px solid var(--rule); border-radius: 3px; }
+.motion-film figcaption { margin-top: 0.75rem; color: var(--fg-muted); }
+.motion-film h3 { color: var(--fg); font-size: 1.15rem; margin-bottom: 0.3rem; }
+.motion-film .film-meta { color: var(--accent-ink); font-size: 0.9rem; }
+section[id] { scroll-margin-top: 64px; }
+
 footer {
   margin-top: 4rem;
   padding-top: 2rem;
@@ -273,56 +277,95 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
   .tuner-bar { transition-duration: 0.001ms !important; }
 }
 </style>
+<link rel="stylesheet" href="../examples/demo-nav.css">
 </head>
 
-<body>
+<body class="muriel-demo">
+<nav class="demo-links" aria-label="Muriel navigation"><a href="../examples/gallery/">← Examples</a><a href="../">Docs</a><a href="#hyperframes">Films</a><a href="#motion-tuner">Tuner</a></nav>
 <main>
 
 <header>
   <picture>
-    <source srcset="https://raw.githubusercontent.com/andyed/muriel/main/assets/logo-animated-dark.gif"
+    <source srcset="../brand-assets/logo-animated-dark.gif"
             media="(prefers-color-scheme: dark)">
-    <img src="https://raw.githubusercontent.com/andyed/muriel/main/assets/logo-animated.gif"
-         alt="muriel — next-gen visual-production skill for LLMs" width="720">
+    <img src="../brand-assets/logo-animated.gif"
+         alt="muriel — design in practice" width="720">
   </picture>
   <h1>muriel</h1>
-  <p class="tagline">A next-gen visual-production skill for LLMs.</p>
-  <p class="subtag">Built for the agentic era, grounded in the full design-history lineage.</p>
+  <p class="tagline">Interaction design and visual craft.</p>
+  <p class="subtag">From a design question to an interface you can explore and an artifact you can reproduce.</p>
   <div class="cta-row">
-    <a class="cta primary" href="https://github.com/andyed/muriel">View on GitHub</a>
-    <a class="cta primary" href="../gallery/">▸ Live 3D demos</a>
-    <a class="cta" href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/SKILL.md">Read the skill</a>
-    <a class="cta" href="https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/examples/gallery">Gallery</a>
+    <a class="cta primary" href="../examples/gallery/">Explore the examples</a>
+    <a class="cta" href="../">Read the documentation</a>
+    <a class="cta" href="../SKILL/">Use the skill</a>
   </div>
 </header>
 
 <section class="mg-margin-scope">
-  <h2>What it is</h2>
-  <p class="mg-dropcap">A dozen channels of tool-use recipes — ten output channels (raster, SVG, web, interactive, video, terminal, density viz, gaze, science, infographics) plus two cross-channel references (dimensions, style-guides) — each with rules, patterns, and anti-patterns. A two-tier brand-token schema with motion. A multi-constraint solver that enforces 8:1 contrast and the OLED palette at render time. A vision-model critique agent grounded in Tufte / Bertin / Gestalt / Reichle / scanpath research.</p>
-  <aside class="mg-pull">
-    It is impossible to separate the visual design from the design of the interface.
-    <small>— David Small, <em>Navigating Large Bodies of Text</em> (IBM Systems Journal, 1996)</small>
-  </aside>
-  <p><strong>Next-gen</strong> means the tools — LLM-native skill format, vision-model critique, brand tokens alive at render time, motion as a first-class schema field, engine adapters for Pillow / Flux / pretext / ffmpeg / Playwright. <strong>Grounded</strong> means the principles — Cooper's Visible Language Workshop, Tufte's data-ink discipline, Bertin's retinal variables, Gestalt grouping, CRAP, Reichle's E-Z Reader, scanpath patterns. New tools serve the old principles.</p>
+  <h2>Design that you can inspect</h2>
+  <p>Muriel is a design skill for coding agents. It connects perception and interaction research to working interfaces, typography, charts, diagrams, and motion. Guides help choose a representation; demos make its behavior visible; source lets you adapt it to your project.</p>
+  <p>Named after Muriel Cooper, co-founder of MIT’s Visible Language Workshop. The <a href="../vocabularies/visible-language/">Visible Language guide</a> traces that design lineage and connects it to contemporary collection and linked-view examples.</p>
+</section>
+
+<section>
+  <h2>Explore, select, inspect</h2>
+  <a class="thumb-link" href="https://andyed.github.io/clipwall-demo/"><img style="width:100%;height:auto" src="../examples/wunderkammer-explore.webp" alt="Wunderkammer’s collection wall of Psychodeli frames grouped by capture month" width="1520" height="950"></a>
+  <h3>Wunderkammer</h3>
+  <p>Survey a collection, filter and regroup it, then inspect the individual frame. The wall, spatial aisle, and attribute-based arrangements offer different ways to explore the same material. The guide and screenshot cover release 0.3.0; the live demo can change independently.</p>
+  <p><a href="https://andyed.github.io/clipwall-demo/">Try the wall ↗</a> · <a href="https://andyed.github.io/clipwall-demo/?view=aisle&amp;group=year">Explore the aisle ↗</a> · <a href="../references/collections/">Read the guide</a> · <a href="https://github.com/andyed/wunderkammer/tree/v0.3.0">View source ↗</a></p>
+  <h3>Linked Atlas</h3>
+  <p>Follow a selected cohort across an overview, a zoomed plot, a habitat breakdown, and a record table. Synthetic observations keep the focus on interaction: what stays selected, what changes with zoom, and how to recover your place.</p>
+  <p><a href="../examples/linked-atlas/">Try the demo</a> · <a href="../references/multiscale-coordination/">Read the guide</a> · <a href="https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/examples/linked-atlas">View source ↗</a></p>
+</section>
+
+<section id="hyperframes" aria-labelledby="films-heading">
+  <h2 id="films-heading">Made with HyperFrames</h2>
+  <p>Two films built from working software. Capture the interaction in the app, compose the titles and transitions in HyperFrames, then encode the finished cut. The same spatial material becomes both an explorable collection and a film.</p>
+
+  <figure class="motion-film" id="wunderkammer-film">
+    <video controls playsinline preload="none" width="1280" height="720" poster="../brand-assets/showcase/wunderkammer-cats.jpg" aria-label="Cats. Lots of cats. — Wunderkammer reel" aria-describedby="cats-caption">
+      <source src="../brand-assets/showcase/wunderkammer-cats.mp4" type="video/mp4">
+      <a href="../brand-assets/showcase/wunderkammer-cats.mp4">Watch the Wunderkammer reel (MP4)</a>.
+    </video>
+    <figcaption id="cats-caption">
+      <h3>Cats. Lots of cats.</h3>
+      <p class="film-meta">Wunderkammer · 28 seconds · Silent</p>
+      <p>One cat opens into a rushing aisle of images. Filter to ginger coats, arrange by colour and era, then connect an observation to its supporting images. Cat artwork generated with Adobe Firefly; the collection views are captured from Wunderkammer.</p>
+      <p><a href="../examples/hyperframes/#cats-lots-of-cats">Production notes and scene descriptions</a> · <a href="../references/collections/">Collection guide</a> · <a href="https://andyed.github.io/clipwall-demo/">Try Wunderkammer ↗</a></p>
+    </figcaption>
+  </figure>
+
+  <figure class="motion-film" id="psychodeli-film">
+    <video controls playsinline preload="none" width="1280" height="720" poster="../brand-assets/showcase/psychodeli-spatial.jpg" aria-label="Psychodeli — spatial reel" aria-describedby="psychodeli-caption">
+      <source src="../brand-assets/showcase/psychodeli-spatial.mp4" type="video/mp4">
+      <a href="../brand-assets/showcase/psychodeli-spatial.mp4">Watch the Psychodeli reel (MP4)</a>.
+    </video>
+    <figcaption id="psychodeli-caption">
+      <h3>Psychodeli — a dance partner for your senses.</h3>
+      <p class="film-meta">Spatial promo · 39 seconds · Music, no narration</p>
+      <p>Recorded Psychodeli visuals become moving tiles in a warehouse, stacks, a wall, and a sphere. The sequence lands on the animated wordmark and platform end card. HyperFrames brings the captured scenes, typography, and soundtrack together.</p>
+      <p><a href="../examples/hyperframes/#psychodeli-spatial-reel">Production notes and scene descriptions</a> · <a href="../channels/video/#html-mp4-via-hyperframes">Video guide</a> · <a href="https://psychodeli.com/">Explore Psychodeli ↗</a></p>
+    </figcaption>
+  </figure>
 </section>
 
 <section>
   <h2>Featured work</h2>
-  <p>One shipped example per channel, organized by the surface it produces. Each card links to source or live post; the repo <a href="https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/examples/gallery">gallery</a> has the full set, and per-channel deep dives live under <a href="https://github.com/andyed/muriel/tree/main/plugins/muriel/skills/compose/channels"><code>channels/</code></a>.</p>
+  <p>A selection of visual artifacts and the recipes behind them. The <a href="../examples/gallery/">examples index</a> brings the live demos and worked artifacts together, with guides and source.</p>
 
   <div class="featured">
 
     <!-- ─── Lead pair: spatial + typography ────────────────────────── -->
 
     <div class="fig">
-      <a class="thumb-link" href="../gallery/">
+      <a class="thumb-link" href="../examples/gallery/#spatial-exploration">
         <img src="spatial-demo.svg" alt="Spatial — 2x2 panel of perspective grids on near-black: one-point (Tron corridor with single vanishing point on the horizon), two-point (architectural cube corner with two horizon vanishing points and vertical lines), three-point (looking-up tower with three vanishing points), and isometric (three parallel axes at 30°/150°/90°). Cyan grid lines with magenta horizon, fading toward the vanishing points.">
       </a>
       <p class="caption">
         <span class="channel">Spatial channel — depth scaffolding</span>
         <strong>Perspective grids — 1pt / 2pt / 3pt / iso.</strong><br>
-        Tools: <code>muriel.spatial.grid()</code> emitting deterministic SVG · pure Python, zero deps · Liang-Barsky line clipping · fade-to-horizon depth weighting on transversals · OLED palette throughout. The static side of the spatial channel — pairs with five Three.js + CSS3DRenderer exemplars — Cooper VLW · Data Mountain · Perspective Wall — now <strong>live and interactive</strong> in the <a href="../gallery/">demo gallery</a>, sharing the same coordinate space by design. Channel doc names the full lineage: Alberti 1435 → Dürer 1525 → Cooper VLW 1980s → Mackinlay-Robertson-Card 1991 → Dumais Data Mountain 2001 → Tron.
-        <a href="../gallery/">▸ Live demo gallery →</a> &nbsp; <a href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/channels/spatial.md">Channel doc →</a>
+        Tools: <code>muriel.spatial.grid()</code> emitting deterministic SVG · pure Python, zero deps · Liang-Barsky line clipping · fade-to-horizon depth weighting on transversals · OLED palette throughout. The static side of the spatial channel — pairs with interactive spatial exemplars — Cooper VLW · Data Mountain · Perspective Wall — now <strong>live and interactive</strong> in the <a href="../examples/gallery/#spatial-exploration">demo gallery</a>, sharing the same coordinate space by design. Channel doc names the full lineage: Alberti 1435 → Dürer 1525 → Cooper VLW 1980s → Mackinlay-Robertson-Card 1991 → Robertson et al. Data Mountain 1998 → Tron.
+        <a href="../examples/gallery/#spatial-exploration">▸ Live demo gallery →</a> &nbsp; <a href="../channels/spatial/">Channel doc →</a>
       </p>
     </div>
 
@@ -353,14 +396,14 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
     </div>
 
     <div class="fig">
-      <a class="thumb-link" href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/channels/diagrams.md">
+      <a class="thumb-link" href="../channels/diagrams/">
         <img src="diagrams-cycle.svg" alt="Diagrams — a 5-step cycle diagram on near-black titled 'Evolver's improvement cycle': five cyan-circled numbered nodes (1 Learns, 2 Executes, 3 Evaluates, 4 Hypothesizes, 5 Tests) arranged evenly on a circle, connected by curved cyan arrows running clockwise, with each label margin-placed outside its node.">
       </a>
       <p class="caption">
         <span class="channel">Diagrams channel — rhetorical primitives</span>
         <strong>N-step cycle — Evolver's improvement loop.</strong><br>
         Tools: <code>muriel.tools.diagrams.cycle()</code> emitting deterministic SVG · five nodes evenly spaced on a circle, curved cyan arrows with auto-derived endpoint tangents · auto-placed labels (margin-aware, never overlapping the nodes — uses the same bbox-aware placement as <code>muriel.layout.place_label</code>) · OLED palette · 8:1 on every text node. One of the shipped rhetorical primitives (alongside 2×2 matrix and Venn). Each preset carries an epistemic precondition + anti-prescription — don't use a cycle when your process has an exit.
-        <a href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/channels/diagrams.md">Channel doc →</a>
+        <a href="../channels/diagrams/">Channel doc →</a>
       </p>
     </div>
 
@@ -369,10 +412,10 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
         <img src="round-trip-flow.svg" alt="Round-trip flow — three columns on near-black: SOURCE (design.md frontmatter from Google Stitch / awesome-design-md with canvas, ink, body, primary color keys) on the left, HUB (brand.toml in muriel's v2 schema with [colors] and [colors.aliases] blocks) cyan-bordered in the middle, DOWNSTREAM (W3C DTCG tokens.json with $value / $type pairs and alias references) on the right. Two coral arrows labeled 'import' and 'export-dtcg' connect the columns.">
       </a>
       <p class="caption">
-        <span class="channel">v0.8.0 headline — brand-token round-trip</span>
+        <span class="channel">Brand tokens — import and export</span>
         <strong>design.md ↔ brand.toml ↔ W3C DTCG.</strong><br>
-        Tools: <code>muriel import</code> (Google Stitch design.md → brand.toml) · <code>muriel export-dtcg</code> (brand.toml → W3C Design Tokens Community Group JSON) · pure Python, no DTCG-validator dependency. All 61 import-parseable brands in <a href="https://github.com/VoltAgent/awesome-design-md">VoltAgent/awesome-design-md</a> round-trip cleanly through both halves with zero failures. The exported JSON drops straight into <code>style-dictionary</code>, theo, Figma tokens-studio, or token-css — and from there into iOS / Android / Tailwind / CSS-vars pipelines. With v0.8.0 muriel is the rigorous offline cousin of DESIGN.md: imports the corpus, exports out to the W3C standard, holds the 8:1 floor honestly through all of it.
-        <a href="https://github.com/andyed/muriel/blob/main/releases/v0.8.0.md">Release notes →</a>
+        Tools: <code>muriel import</code> (Google Stitch design.md → brand.toml) · <code>muriel export-dtcg</code> (brand.toml → W3C Design Tokens Community Group JSON) · pure Python, no DTCG-validator dependency. All 61 import-parseable brands in <a href="https://github.com/VoltAgent/awesome-design-md">VoltAgent/awesome-design-md</a> round-trip cleanly through both halves with zero failures. The exported JSON drops straight into <code>style-dictionary</code>, theo, Figma tokens-studio, or token-css — and from there into iOS / Android / Tailwind / CSS-vars pipelines. This worked example was introduced in v0.8.0.
+        <a href="../channels/style-guides/">Read the guide →</a> · <a href="https://github.com/andyed/muriel/blob/main/releases/v0.8.0.md">Original release notes →</a>
       </p>
     </div>
 
@@ -410,7 +453,7 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
         <span class="channel">Gaze channel — small multiples</span>
         <strong>Cursor + gaze trajectories by outcome class.</strong><br>
         Tools: matplotlib subplot grid (3×3) · <code>muriel.gaze</code> primitives (numbered fixations sized by duration, start-square / end-diamond cursor markers, AOI rectangles) · <code>muriel.matplotlibrc_light</code> palette · class-coded color (green clicked / orange deferred / red eval-rejected). The small-multiples principle made literal: identical axes and encoding, only the outcome class varies row-by-row. Reading the rows reveals the behavioral signature (tight tracking → late return → never return).
-        <a href="https://github.com/andyed/attentional-foraging">Live post →</a>
+        <a href="https://github.com/andyed/attentional-foraging">Project source →</a>
       </p>
     </div>
 
@@ -422,7 +465,7 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
         <span class="channel">Density viz channel</span>
         <strong>Pooled gaze density around the parked cursor — three coupling regimes.</strong><br>
         Tools: numpy 2D histogram for the density estimation · matplotlib <code>imshow</code> with the <code>inferno</code>-family fire colormap · per-panel peak normalization · <code>muriel.heatmaps</code> conventions (Tobii-style Gaussian-pooled overlay, scale-bar annotation, normalized luminance against ground-truth landmarks). Pools every fixation in each outcome class, recentered on its episode's cursor median: tight coupling (eval-rejected, ~220 px) → cursor parked at offset while gaze revisits (deferred, ~300 px) → cursor held far from gaze throughout approach (clicked, ~390 px). The figure that makes a population statistic visible as a shape.
-        <a href="https://github.com/andyed/attentional-foraging">Live post →</a>
+        <a href="https://github.com/andyed/attentional-foraging">Project source →</a>
       </p>
     </div>
 
@@ -442,7 +485,8 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
 </section>
 
 <section>
-  <h2>Motion tuner</h2>
+  <h2 id="motion-tuner">Motion tuner</h2>
+  <p><a href="../channels/style-guides/">Read the brand and motion guide</a> · <a href="https://github.com/andyed/muriel/blob/main/site-docs/src/showcase/index.html">View tuner source ↗</a></p>
   <p>muriel's <code>brand.toml</code> ships a <code>[motion]</code> block with duration tokens (instant / fast / normal / slow / reveal, in ms) and easing tokens (default / emphasis / snappy / linear). Move the sliders; the animated bars below re-play at every change. Copy the resulting TOML snippet back into any project's <code>brand.toml</code> to apply.</p>
 
   <div class="tuner" id="tuner">
@@ -489,28 +533,22 @@ footer a { color: var(--fg-muted); border-bottom-color: var(--rule); }
 </section>
 
 <section>
-  <h2>Install</h2>
-  <p>As a Claude Code plugin (recommended — no clone, no symlinks):</p>
+  <h2>Use Muriel in your project</h2>
+  <p>Install the Claude Code plugin:</p>
   <pre><code>/plugin marketplace add andyed/muriel
 /plugin install muriel@andyed-muriel</code></pre>
-  <p>Invoke with <code>/muriel:compose</code>. The <code>muriel-critique</code> subagent loads alongside the skill automatically.</p>
-  <p>As a Python package (current release: v0.8.0 wheel attached to the <a href="https://github.com/andyed/muriel/releases/tag/v0.8.0">GitHub Release</a> — not on PyPI yet):</p>
-  <pre><code>pip install https://github.com/andyed/muriel/releases/download/v0.8.0/muriel-0.8.0-py3-none-any.whl</code></pre>
-  <p>As a developer install from a clone (edits go live):</p>
-  <pre><code>git clone https://github.com/andyed/muriel ~/Documents/dev/muriel
-cd ~/Documents/dev/muriel && ./install.sh</code></pre>
-  <p>See the <a href="https://github.com/andyed/muriel#install">Install section</a> in the README for full options and cross-harness (Cursor, Codex, Windsurf, Gemini CLI) instructions.</p>
+  <p>Invoke <code>/muriel:compose</code>. For other agent harnesses, Python, and development installs, use the <a href="https://github.com/andyed/muriel#install">installation instructions</a>. The <a href="../SKILL/">skill guide</a> explains how Muriel joins the project’s design and implementation work.</p>
 </section>
 
 <section>
-  <h2>The critique agent</h2>
-  <p>muriel ships a <a href="https://github.com/andyed/muriel/blob/main/plugins/muriel/agents/muriel-critique.md">vision-model critique agent</a> with read-only tools, hardened against prompt-injection, authority-laundering, and contrast-claim spoofing embedded in the artifact itself. It names what's wrong — with evidence — and cites the specific framework (Tufte / Bertin / Gestalt / CRAP / Reichle / scanpath) when surfacing issues. Fix is a human call; the agent doesn't try.</p>
-  <div class="mg-callout" data-type="tip">
-    <strong>How to invoke:</strong> from any Claude Code session, dispatch the <code>muriel-critique</code> subagent on a rendered artifact. It returns a structured verdict — <code>PASS</code> / <code>NEEDS REVISION</code> / <code>FAIL</code> — with a numbered issue list (rule · evidence · fix · severity). Any <span class="mg-badge" data-type="important">CRITICAL</span> → FAIL; any <span class="mg-badge" data-type="warning">HIGH</span> → NEEDS REVISION; otherwise PASS.
-  </div>
+  <h2>Critique and the jury</h2>
+  <p>The <a href="../agents/muriel-critique/">critique agent</a> reviews a rendered artifact and records issues with evidence. When a consequential visual decision remains contested after deterministic checks, Muriel can convene an experimental jury with distinct review lenses.</p>
+  <p>The roster includes the <strong>Squinter</strong>, <strong>Thumbnail</strong>, <strong>Loupe</strong>, <strong>Stranger</strong>, <strong>Forger</strong>, and <strong>Pedant</strong>. Loupe inspects magnified detail. The panel preserves disagreement and records its reasoning; its findings do not substitute for human validation.</p>
+  <p><a href="../references/jury/">Read the jury protocol</a> · <a href="../agents/muriel-loupe/">Read the Loupe guide</a></p>
 </section>
 
 <footer>
+  <p><a href="../examples/gallery/">All examples</a> · <a href="../">Documentation</a></p>
   <p>MIT License. Source at <a href="https://github.com/andyed/muriel">github.com/andyed/muriel</a>. Colophon hero mark after Muriel Cooper's mitp.</p>
   <p class="colophon-credit">after muriel cooper · live constraint system</p>
 </footer>
@@ -570,7 +608,7 @@ cd ~/Documents/dev/muriel && ./install.sh</code></pre>
       await navigator.clipboard.writeText(plain);
       copyBtn.textContent = 'Copied ✓';
       setTimeout(() => copyBtn.textContent = 'Copy as TOML', 1200);
-      if (window.posthog) posthog.capture('muriel.tuner.copy', { duration: d, easing: e, stagger: s });
+
     } catch (err) {
       copyBtn.textContent = 'Copy failed';
       setTimeout(() => copyBtn.textContent = 'Copy as TOML', 1200);

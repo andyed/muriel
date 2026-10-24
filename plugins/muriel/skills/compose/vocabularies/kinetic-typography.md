@@ -15,6 +15,10 @@ Don't reach for it when:
 - The target surface is print or email. Motion vanishes; fall back to raster.
 - Ambient-noise motion is the only reason you're considering it. Kinetic typography should *deliver* meaning, not fill airspace.
 
+## Live examples
+
+[Try the animated Bauhaus M](../examples/logos/output/bauhaus/animated-bauhaus-m.html) for a geometric wordmark, or use the [motion tuner](https://muriel.mindbendingpixels.com/showcase/#motion-tuner) to compare duration, easing, and stagger. See the [examples index](../examples/gallery/README.md) for related guides and source.
+
 ## Lineage and grammar
 
 The tradition runs from Saul Bass's title sequences through Kyle Cooper / Imaginary Forces into Territory Studio's motion-forward UI work (the same lineage that feeds [FUI](fui.md) — they overlap on sci-fi title cards). The grammar is narrow and strict:

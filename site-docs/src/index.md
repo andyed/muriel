@@ -14,7 +14,7 @@ Named after [Muriel Cooper](vocabularies/visible-language.md), co-founder of
 MIT’s Visible Language Workshop. The documentation pairs that lineage with
 implementation recipes and examples you can inspect.
 
-[Browse the examples](gallery/){ .md-button }
+[Browse the examples](examples/gallery/){ .md-button }
 [Use the skill](SKILL.md){ .md-button }
 
 ## Explore a collection with Wunderkammer
@@ -39,7 +39,7 @@ can change independently.
 - **[Human capabilities](references/human-capabilities.md)** — the cognitive
   and perceptual questions behind an interaction choice.
 - **[Spatial](channels/spatial.md)** — 3-D perspective walls and floors for
-  typography and imagery. The look behind the [live demos](gallery/).
+  typography and imagery. The look behind the [live examples](examples/gallery/).
 - **[Charts](channels/charts.md)** — data graphics with the contrast floor and
   brand tokens baked in.
 - **[Semantic zoom and linked displays](references/multiscale-coordination.md)** —
@@ -55,7 +55,7 @@ can change independently.
   publication-ready.
 
 Then browse the full **[channel map](SKILL.md)**, or jump straight into the
-**[live demo gallery ↗](gallery/)** to see spatial typography rendered in the
+**[examples index](examples/gallery/)** to see spatial typography rendered in the
 browser.
 
 ## The 8:1 rule

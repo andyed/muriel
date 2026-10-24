@@ -86,6 +86,8 @@ plugins:
 # Reference, not Channels. Vocabularies ordered concept-first.
 nav:
   - Home: index.md
+  - Examples: examples/gallery/README.md
+  - Showcase: showcase/index.html
   - Channels:
       - Spatial: channels/spatial.md
       - Charts: channels/charts.md
@@ -127,9 +129,6 @@ nav:
       - Dimensions: channels/dimensions.md
       - Style guides (brand.toml): channels/style-guides.md
       - Brand-token schema: channels/SCHEMA.md
-      - Showcase — featured work ↗: https://muriel.mindbendingpixels.com/showcase/
-      - Gallery — all channels: examples/gallery/README.md
-      - Live spatial demos ↗: https://muriel.mindbendingpixels.com/gallery/
   - About:
       - The muriel skill: SKILL.md
       - Critique agent: agents/muriel-critique.md

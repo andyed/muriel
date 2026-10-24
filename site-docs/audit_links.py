@@ -1,4 +1,4 @@
-"""Audit links in built MkDocs articles; distinguish HTTP failures from blocked checks.
+"""Audit links in built docs articles and standalone demo pages; distinguish HTTP failures from blocked checks.
 
 Run after mkdocs build: python site-docs/audit_links.py --site site-build --out /tmp/muriel-links.json
 External requests are bounded and deduplicated. Fragments on remote pages and
@@ -17,9 +17,10 @@ from urllib.request import Request, urlopen
 
 
 class Page(HTMLParser):
-    def __init__(self):
+    def __init__(self, whole_page=False):
         super().__init__()
         self.article = False
+        self.whole_page = whole_page
         self.links = []
         self.ids = set()
 
@@ -29,10 +30,12 @@ class Page(HTMLParser):
             self.ids.add(attrs['id'])
         if tag == 'article' and 'md-content__inner' in attrs.get('class', ''):
             self.article = True
-        if self.article:
-            key = 'href' if tag == 'a' else 'src' if tag == 'img' else None
+        if self.article or self.whole_page:
+            key = 'href' if tag == 'a' else 'src' if tag in ('img', 'video', 'audio', 'source', 'track') else None
             if key and attrs.get(key):
                 self.links.append(attrs[key])
+            if tag == 'video' and attrs.get('poster'):
+                self.links.append(attrs['poster'])
             if tag in ('img', 'source') and attrs.get('srcset'):
                 self.links.extend(item.strip().split()[0] for item in attrs['srcset'].split(',') if item.strip())
 
@@ -71,7 +74,9 @@ def main():
         parser.error(f'No built site at {root}; run mkdocs build first')
     pages = {}
     for path in sorted(root.rglob('*.html')):
-        page = Page(); page.feed(path.read_text(errors='replace')); pages[path] = page
+        html = path.read_text(errors='replace')
+        page = Page(whole_page='md-content__inner' not in html)
+        page.feed(html); pages[path] = page
     external = {}; internal = []; checked = 0; skipped = []
     for path, page in pages.items():
         route = '/' + path.relative_to(root).as_posix()
@@ -79,7 +84,7 @@ def main():
             url = urlsplit(urljoin('https://local.invalid' + route, href))
             if url.scheme not in ('http', 'https'):
                 continue
-            if url.netloc != 'local.invalid':
+            if url.netloc not in ('local.invalid', 'muriel.mindbendingpixels.com'):
                 if url.hostname in ('localhost', '127.0.0.1', 'example.com', 'example.org'):
                     skipped.append(href); continue
                 key = urlunsplit((url.scheme, url.netloc, url.path, url.query, ''))
@@ -94,7 +99,7 @@ def main():
                 dest = pages.get(target)
                 if dest and unquote(url.fragment) not in dest.ids: issue = 'missing anchor'
             if issue: internal.append({'page': route, 'href': href, 'issue': issue})
-    print(f'{len(pages)} HTML files; {checked} internal article links; {len(external)} unique external URLs', flush=True)
+    print(f'{len(pages)} HTML files; {checked} internal links; {len(external)} unique external URLs', flush=True)
     results = []
     if args.external:
         with ThreadPoolExecutor(max_workers=6) as pool:
