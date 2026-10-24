@@ -244,4 +244,4 @@ if [ "$NEEDS_REPAIR" -eq 1 ]; then
 fi
 echo "done. Invoke /muriel from a Claude Code session."
 echo "Jury seats available as subagent_type: muriel-squinter, muriel-thumbnail,"
-echo "muriel-stranger, muriel-forger, muriel-pedant (plus muriel-critique)."
+echo "muriel-loupe, muriel-stranger, muriel-forger, muriel-pedant (plus muriel-critique)."

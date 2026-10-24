@@ -19,12 +19,6 @@ is part of the result.
 [Portrait version](../brand-assets/social/jury-1080x1350.png) ·
 [Read the jury protocol](../references/jury.md)
 
-!!! note "Loupe is a development preview"
-    The published protocol currently has five juror roles. The illustration also
-    introduces Loupe, a sixth lens implemented in the development checkout. Its
-    agent and command are not part of this documentation release. The case used
-    the five published roles; Loupe did not vote.
-
 ## One case, different evidence
 
 The illustration records **case jc-1024-x7**, a review of Muriel’s own logo card.

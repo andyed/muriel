@@ -29,11 +29,21 @@ from the recorded HTTP pass. Twenty rendered states (five pages at 1440, 768,
 390, and 320 pixels wide) passed overflow, JavaScript-error, metadata, image-load,
 and sampled text-contrast checks; minimum sampled contrast was 10.13:1.
 
-The new jury landing page provides the other agent's landscape and portrait
-illustrations plus a readable HTML account of the case. The visual is integrated
-without publishing the unrelated toolkit commits from the primary checkout.
-Loupe is explicitly marked as a development preview; the existing five-role
-protocol remains the published implementation.
+The initial integration provided the other agent's landscape and portrait
+illustrations plus an HTML account of the case. The user subsequently clarified
+that the visual was not ready. The page and all social visual assets are now
+excluded from the site build, and the homepage promotion has been removed.
+The restored docs-only build checks 4,227 internal links with zero failures.
+The user separately authorized the Loupe jury update; its tool and protocol are
+integrated independently of the held visual.
+
+The Loupe integration passes **26 tests on BIGFU** (including the raster tests)
+against snapshot `a3fae4e36`. Its final site build checks **4,288 internal links**
+with zero failures. Its one additional external destination, the anatomy
+prior-art repository, returned HTTP 200. The original 199-URL HTTP report above
+remains a record of the earlier audit. The source integration takes the jury
+changes from `4027532` without the unrelated prose-channel work. No package
+tag or binary release is implied by publishing this repository update.
 
 ## Repairs
 

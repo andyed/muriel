@@ -8,6 +8,27 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **A sixth jury seat, the Loupe, and the lens behind it.** The Squinter
+  blurs and the Thumbnail shrinks; nothing on the panel looked closer than
+  1×, so a rule stopping 2 px short of its outline, a seam missing its
+  corner, or a label clipped by its box passed every seat, because contour
+  completion fills those in at viewing scale. `muriel.loupe` (`muriel
+  loupe`) cuts fixed 256 px cells in ship pixels with a 32 px overlap,
+  ranks them by edge density, and writes the top 16 at 4× as 1024 px tiles,
+  under the size a vision model downsamples. It re-renders an SVG through
+  cairosvg, crops an `@4x` capture with `--source-scale 4`, magnifies a 1×
+  raster nearest-neighbour and records which it did, and never writes an
+  empty cell or an overview. `agents/muriel-loupe.md` judges five rules
+  (line ends land, joints meet, edges resolve, nothing collides or clips,
+  repeats end on purpose), may not fire on empty space, and grades
+  severity by whether anyone will see the artifact that close. `jury.md`
+  gains the roster entry and the six-role roster (a full panel still
+  seats five). `tests/test_loupe.py` pins grid coverage, the overlap
+  guarantee, the fixed cell, the magnification and determinism. The lens
+  comes from the 4× junction close-ups in
+  [anatomy](https://github.com/wheresryan22/anatomy); its density
+  aesthetic does not.
+
 - **`muriel.collection` accepts a clip's `video` for Wunderkammer's next
   release.** Wunderkammer's `feat/video-tiles` (4c86e79) adds an optional
   `video` to a clip: one http(s), `blob:` or relative URL, never `data:`,

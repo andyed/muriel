@@ -107,6 +107,7 @@ muriel renders what it makes and measures the result:
 - `muriel.layout.place_label` puts an annotation where it collides with nothing, falling back to the margin. It never shrinks text or hides data behind a halo.
 - `muriel capture` screenshots a page across viewport sizes.
 - `muriel squint` blurs the capture to show whether the hierarchy survives.
+- `muriel loupe` cuts 4× close-ups of the busiest regions to show whether line ends and joints hold up.
 
 [`muriel-critique`](plugins/muriel/agents/muriel-critique.md) is a read-only subagent. Given a rendered artifact, it lists each way the artifact breaks muriel's rules, the channel's anti-patterns, or an optional `brand.toml`, with evidence. It is hardened against instructions and fake contrast claims embedded in the image. Ask for it by name:
 
@@ -114,12 +115,13 @@ muriel renders what it makes and measures the result:
 
 The verdict is `PASS`, `NEEDS REVISION`, or `FAIL`, followed by numbered issues with rule, evidence, fix, and severity. Any CRITICAL issue fails the artifact; any HIGH issue sends it back for revision. Adversarial and baseline test cases live in [`examples/critique-fixtures/`](plugins/muriel/skills/compose/examples/critique-fixtures/), and new attacks are welcome as pull requests.
 
-A jury splits that review across five narrower seats, used to find defects or to choose between design directions. Each seat sees the artifact through one restricted view, defined in [`references/jury.md`](plugins/muriel/skills/compose/references/jury.md):
+A jury splits that review across six narrower seats, used to find defects or to choose between design directions. Each seat sees the artifact through one restricted view, defined in [`references/jury.md`](plugins/muriel/skills/compose/references/jury.md):
 
 | Seat | Judges | Denied |
 |---|---|---|
 | `muriel-squinter` | Hierarchy and reading order under heavy blur | The sharp render, all text, the brief |
 | `muriel-thumbnail` | Whether the main signal survives at 1/8 scale and 16 px | The full-size render and the blur ladder |
+| `muriel-loupe` | Whether line ends, joints, and edges hold up in 4× close-ups | The whole composition, the brief |
 | `muriel-stranger` | What the artifact is for, from a single read | The brief, other ballots, project context |
 | `muriel-forger` | Whether a generic template can rebuild it, by trying | The brand tokens |
 | `muriel-pedant` | Labels, units, and numeric claims | The rendered composition |
@@ -156,6 +158,7 @@ muriel contrast page.svg             # 8:1 audit of an SVG or HTML file
 muriel diagram-check figure.svg      # accessibility lint, label geometry, contrast
 muriel capture https://example.com   # screenshots across viewport sizes
 muriel squint capture.png            # blur ladder: does the hierarchy survive?
+muriel loupe figure.svg              # 4× close-ups: do the joints hold up?
 muriel styleguide brand.toml --css   # CSS custom properties from a brand.toml
 muriel heroshot in.png out.png --tilt 12 --brand brand.toml --target og.card
 ```

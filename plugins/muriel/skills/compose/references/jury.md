@@ -49,8 +49,9 @@ paper, published page, or shipped surface this session.
 
 **Cost is per seat per option, not per panel.** Budget one critique per seat
 per option, plus that seat's lens cost: the Squinter renders a four-level blur
-ladder per option, the Thumbnail reads two downscales per option, the Forger
-*builds* a forgery per option it audits. A three-seat panel on one artifact is
+ladder per option, the Thumbnail reads two downscales per option, the Loupe
+reads up to 16 magnified tiles per option, the Forger *builds* a forgery per
+option it audits. A three-seat panel on one artifact is
 roughly 4-6× a single critique. The five-seat, three-option panel in the worked
 example below is 15-25×. Scale the gate to that number, not to a flat 5×.
 
@@ -162,7 +163,7 @@ no Forger veto](#rule-b-no-forger-veto).
 **A jury and `muriel-critique` are mutually exclusive.** Run one or the other
 on an artifact, never both.
 [`muriel-critique`](../../../agents/muriel-critique.md) is a generalist whose
-coverage overlaps four of the five seats — hierarchy (Squinter), the
+coverage overlaps four of the six seats — hierarchy (Squinter), the
 numeric-claim probe list (Pedant, which this reference delegates back to it),
 AI-tell (Forger), and multi-scale evaluation (Thumbnail). Under union
 aggregation, running both double-counts by construction: the same defect
@@ -187,7 +188,7 @@ Two seats sharing a lens and a loss function are one seat. Cut one.
 
 ## The roster
 
-Five seats, all five shipped as agents. Seat them as subagents. Running one
+Six seats, all six shipped as agents. Seat them as subagents. Running one
 inline as a scripted prompt is a weaker thing than seating it — say so on the
 ballot rather than pretending otherwise.
 
@@ -232,6 +233,37 @@ frequency, so a large pale mass survives `heavy` intact. Downscale destroys
 sub-pixel features outright — hairlines, thin strokes, small type — and
 aliasing invents structure that was never in the source. An artifact can pass
 the hierarchy test cleanly and die at 16 px, and the reverse.
+
+**The Loupe — SHIPPED as an agent.** *Lens:* magnification. `muriel.loupe`
+cuts fixed 256 px cells, in the pixels the artifact ships at, with a 32 px
+overlap, ranks them by edge density, and writes the top 16 at 4×. It
+re-renders an SVG at 4×, crops an `@4x` capture without resampling, and
+magnifies a 1× raster nearest-neighbour and records that it did. *Loss:*
+misses in local finish; willing to be wrong about everything that needs the
+whole frame. *Access:* the tiles and the manifest's coordinates and coverage;
+denied the full-size render, the blur ladder, the downscales, any overview or
+grid map, and the brief. *Judges:* line ends that land, joints that meet,
+fills that abut without a hairline gap, text that is not clipped, crossings
+drawn in the right order, and repeated patterns that end on an edge instead
+of stopping dead. Empty space is never a finding: whitespace is a decision,
+and the lens does not write an empty cell.
+
+The cell is fixed rather than scaled to the frame, which is the opposite of
+the Squinter's ladder and on purpose. Hierarchy is relative, so the blur
+scales with the long edge. Local finish is not: a 1 px gap is the same gap on
+a sprite and a poster, and a proportional cell would make a poster's loupe a
+1× view. The tile is 1024 px because a vision model downsamples larger inputs
+and would undo the magnification.
+
+The Loupe exists because contour completion hides these defects at viewing
+scale. A rule that stops 2 px short of an outline reads as touching it, and
+a reviewer who sees the whole composition fills in what the joint is meant
+to be. A seat denied the composition cannot. It is not the Thumbnail
+inverted: the Thumbnail asks whether the signal survives shrinking, the Loupe
+whether the execution survives enlarging, and an artifact can pass one and
+fail the other. The practice comes from the anatomy isometric-figure skill,
+whose rejected figures were mostly faults found by zooming in on joints that
+had passed at 1×; see [Prior art](#prior-art).
 
 **The Stranger — SHIPPED as an agent; never seat it inline.** *Lens:* a
 single `Read` of the artifact, no re-read, followed by three questions answered
@@ -278,7 +310,7 @@ sibling data file; denied the rendered composition, so a handsome layout cannot
 charm it. *Judges:* unlabeled numbers, missing units, terminology drift between
 legend and caption; applies the numeric-claim probe list from
 [`agents/muriel-critique.md`](../../../agents/muriel-critique.md)
-exhaustively. Unglamorous, highest hit rate of the five — most shipped defects
+exhaustively. Unglamorous, highest hit rate of the first five seats — most shipped defects
 are a missing unit, not a broken layout.
 
 **Its denial depends on substrate, and the ballot must say which it got.** On
@@ -576,7 +608,7 @@ critic and save the tokens. Check both after unsealing round 1:
   mechanics](#ballot-mechanics).
 - **Unique contribution** — fewer than half the seats, rounded up, produced a
   finding or comparison judgement no other seat produced. That is 2 of 3, 2 of
-  4, 3 of 5. The old absolute "fewer than 2 of N" was far stricter at N=3 than
+  4, 3 of 5, 3 of 6. The old absolute "fewer than 2 of N" was far stricter at N=3 than
   at N=5, so a three-seat panel could pass a test a five-seat panel failed on
   the same proportion of unique contributors.
 
@@ -602,8 +634,10 @@ and contributes no findings of its own. Duties, in order:
 2. **Run the deterministic checks**, enter them as stipulated facts, and repair
    fact-level failures before seating anyone.
 3. **Seat the panel.** Only seats whose lenses and losses differ for this
-   artifact. Three is a real panel; five is the ceiling. Do not seat the
-   Stranger inline.
+   artifact. Three is a real panel; five is the ceiling. The roster has six,
+   so a full panel leaves one out: drop the Loupe for a social card no one
+   will zoom into, or the Thumbnail for a figure that is never shown small.
+   Do not seat the Stranger inline.
 4. **Assign evidence access per seat**, denials included, and enforce it.
    Record each seat's `Isolation` honestly.
 5. **Randomize option order** per seat with the `shasum` digest; record the
@@ -1025,7 +1059,7 @@ Do not:
   buys correlated errors at one full critique per seat per option. If two seats
   do not deny each other's evidence or optimize different losses, cut one.
 - **Run a jury and `muriel-critique` on the same artifact.** The generalist
-  overlaps four of five seats; the union then counts one defect twice and it
+  overlaps four of six seats; the union then counts one defect twice and it
   reads as corroboration.
 - **Claim a denial a scripted prompt cannot enforce.** Evidence denial needs a
   subagent boundary. Inline, mark `Isolation: inline (denial nominal)` and
@@ -1039,11 +1073,11 @@ Do not:
   bits under any-CRITICAL → FAIL. Score dispositions, apply the discount, cap
   the shouters.
 - **Convene on a test render.** Panels are for work about to be committed. A
-  draft-DPI intermediate does not earn five seats.
+  draft-DPI intermediate does not earn a panel.
 - **Seat a naming panel on whatever names came to mind.** The jury cannot add
   an option. Harvest source material and generate a long list first, and hand
   the human the long list, not only the shortlist.
-- **Let the chair vote.** A chair with a preference is a sixth juror holding
+- **Let the chair vote.** A chair with a preference is a seventh juror holding
   procedural power, and it will resolve splits it was meant to report.
 - **Show round 1 ballots to a juror still voting.** That measures conformity.
 - **Skip `Order seen`.** Without the recorded permutation you cannot separate
@@ -1068,3 +1102,13 @@ education proved unreliable, and it yields the reliability statistic as a side
 effect of the binary decisions. The sealed first round is the fix for public
 deliberation; the Delphi round with a who-moved record is the fix for treating
 convergence as evidence.
+
+The Loupe's lens is borrowed from a different tradition: the inspection
+loupe of print production and the close-up review in
+[anatomy](https://github.com/wheresryan22/anatomy) (MIT), an agent skill for
+isometric technical figures. anatomy's verification loop ends in 4× close-ups
+of every junction in both themes, because the faults its owner rejected were
+ones that passed at 1×: cables passing through ducts, bolt rows stopping dead
+mid-surface, a crease ending before its corner. muriel takes the lens and
+leaves the aesthetic. anatomy treats a bare face as unfinished work; muriel's
+Loupe may not fire on empty space.
