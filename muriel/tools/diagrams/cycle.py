@@ -447,10 +447,17 @@ def cycle(
     for i in range(n):
         a0 = base_angle + i * step_angle
         a1 = base_angle + (i + 1) * step_angle
-        # Trim each end by node_r along the arc so the arrow doesn't pierce the node.
-        # Approximate by shifting the angle by the chord-equivalent.
+        # The tail starts exactly where the source node's outline crosses
+        # the ring: a node of radius node_r centred on a circle of radius
+        # arc_r meets it at a chord of length node_r, an angle of
+        # 2·asin(node_r / 2·arc_r). Nodes paint after arcs, so the outline
+        # covers the butt end.
+        start_deg = math.degrees(2 * math.asin(node_r / (2 * arc_r)))
+        # The head keeps a slightly longer trim, so the arrow's tip (which
+        # reaches 1.5 px past the path end) meets the target's outline
+        # instead of piercing the node.
         trim_deg = math.degrees(node_r / arc_r) * 1.05
-        a0t = a0 + (trim_deg if direction == "clockwise" else -trim_deg)
+        a0t = a0 + (start_deg if direction == "clockwise" else -start_deg)
         a1t = a1 - (trim_deg if direction == "clockwise" else -trim_deg)
         x0, y0 = _polar(cx, cy, arc_r, a0t)
         x1, y1 = _polar(cx, cy, arc_r, a1t)
@@ -471,11 +478,14 @@ def cycle(
             d_hub = _box_distance(ux, uy, A, B) + _SPOKE_GAP
             sx, sy = nx - (node_r + 3) * ux, ny - (node_r + 3) * uy
             ex, ey = cx + d_hub * ux, cy + d_hub * uy
+            # Both ends stop short on purpose: the gaps separate a dashed
+            # write-back from the solid ring flow. data-free tells
+            # muriel.line_ends the gaps are intended.
             parts.append(
                 f'<path d="M {sx:.1f} {sy:.1f} L {ex:.1f} {ey:.1f}" '
                 f'fill="none" stroke="{t["muted"]}" stroke-width="1.2" '
                 f'stroke-dasharray="5 4" stroke-opacity="0.8" '
-                f'marker-end="url(#{slug}-spoke-arrow)"/>'
+                f'marker-end="url(#{slug}-spoke-arrow)" data-free=""/>'
             )
         hx, hy = cx - A, cy - B
         parts.append(

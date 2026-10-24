@@ -657,6 +657,11 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **Cycle diagrams: each arc now starts on its source node's outline.** The
+  hub's dashed spokes keep their deliberate gaps and now carry `data-free`,
+  so `muriel line-ends` reads them as intended. The three committed cycle
+  examples and the showcase figure are regenerated.
+
 - **A far tile copied into the atlas on its own could be lost.** three r169's
   `WebGLRenderer.copyTextureToTexture` binds the destination to texture unit 0
   but did not make unit 0 active when the destination was already bound
