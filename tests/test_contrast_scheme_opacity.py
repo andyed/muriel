@@ -321,3 +321,14 @@ def test_cli_shows_the_colour_as_written_beside_the_composite(tmp_path, capsys):
                 if ".credit" in ln and ":1" in ln)
     assert "#4f4a43" in line and "#3A3530 at 0.88" in line
 
+
+# ─── Caption floor boundary ─────────────────────────────────────────────
+
+@pytest.mark.parametrize("size, warns", [("16px", False), ("15.5px", True),
+                                         ("1em", False), ("12pt", False)])
+def test_caption_floor_is_a_16px_minimum(size, warns):
+    # README / SKILL.md: captions "at 16 px or larger". 12pt = 16px.
+    rules = contrast_module._parse_rules(
+        f"figcaption {{ font-size: {size}; font-weight: 500; }}")
+    issues = {w.issue for w in contrast_module._legibility_check(rules)}
+    assert ("caption-below-16" in issues) is warns

@@ -1289,7 +1289,8 @@ def _legibility_check(rules: list[_CssRule]) -> list[LegibilityWarning]:
       the composited colour; the warning stays because translucent text
       also thins its glyph edges.
     - selector matches footer / .byline / .caption / figcaption AND
-      font-size ≤ 16px → WARN ("caption text below 16px floor").
+      font-size < 16px → WARN ("caption text below 16px floor"). The
+      floor is a minimum: 16px itself clears it.
 
     Selectors are evaluated independently; a rule with multiple selectors
     is considered to match if any single selector matches.
@@ -1330,7 +1331,7 @@ def _legibility_check(rules: list[_CssRule]) -> list[LegibilityWarning]:
                 scheme=rule.scheme,
             ))
 
-        if size_px is not None and size_px <= 16.0:
+        if size_px is not None and size_px < 16.0:
             for sel in rule.selectors:
                 if _CAPTION_SELECTOR_RE.search(sel):
                     warnings.append(LegibilityWarning(
