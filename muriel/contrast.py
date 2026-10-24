@@ -78,12 +78,27 @@ Limitations
 - sRGB only; no P3 / Rec.2020 / Oklab
 - Text pairs only; does not evaluate non-text UI / graphical contrast
 - Parses CSS inside ``<style>`` blocks via minimal regex + brace
-  matching. ``@media`` / ``@keyframes`` / ``@supports`` blocks are
-  skipped (their bodies don't enter the audit). Nested selectors and
-  CSS-nesting syntax beyond one level are not interpreted.
-- CSS rules: alpha channel ignored — opaque text on an opaque background
-  is assumed. SVG presentation attributes (``<text fill="…">``) are
-  alpha-composited: see below.
+  matching. ``@media (prefers-color-scheme: dark)`` gets a pass of its
+  own (see below); every other ``@media`` / ``@keyframes`` / ``@supports``
+  block is skipped (its body doesn't enter the audit). Nested selectors
+  and CSS-nesting syntax beyond one level are not interpreted.
+- CSS rules: a translucent text colour is composited over the background
+  before it is scored — the colour's own alpha (``rgba()``,
+  ``#RRGGBBAA``), times the rule's ``opacity``, times its
+  ``fill-opacity`` when the colour is a ``fill``. ``opacity: 0`` is read
+  as a hidden starting state and scored as written. Opacity inherited
+  from an ancestor element is not seen. SVG presentation attributes
+  (``<text fill="…">``) are alpha-composited too: see below.
+
+Dark mode
+---------
+
+When a ``<style>`` block has an ``@media (prefers-color-scheme: dark)``
+block, the audit runs a second pass over the cascade a dark-mode reader
+gets: the rules in source order with the dark block's rules in place, its
+``var(--…)`` overrides resolved, and its own ``body`` / ``.bg``
+background. Those rows come back with ``scheme="dark"`` and print marked
+``[dark]``. A ``background=`` override applies to the first pass only.
 
 SVG presentation attributes
 ---------------------------
@@ -629,6 +644,14 @@ class SelectorEntry:
     # known, so the ratio shown is against what *is* known and may be
     # optimistic. muriel diagram-check fails such runs as unverified.
     unverified: bool = False
+    # CSS / inline entries: the alpha the rule paints its colour at (colour
+    # alpha × opacity × fill-opacity). Scoring composites the colour over
+    # the background at this alpha, sets ``fill_rgb`` to the result and
+    # leaves ``fill`` as written.
+    opacity: float = 1.0
+    # None for the base cascade; "dark" for a row from the
+    # ``@media (prefers-color-scheme: dark)`` pass.
+    scheme: Optional[str] = None
 
     @property
     def fill_hex(self) -> Optional[str]:
@@ -648,6 +671,7 @@ class LegibilityWarning:
     selectors: list[str]
     issue: str          # short tag: 'sub-floor' | 'opacity-on-text' | 'caption-below-16'
     detail: str         # human-readable explanation
+    scheme: Optional[str] = None  # "dark" when the rule is in the dark block
 
 
 # ─── CSS tokenizing helpers ─────────────────────────────────────────────
@@ -656,18 +680,35 @@ def _strip_css_comments(css: str) -> str:
     return re.sub(r"/\*.*?\*/", "", css, flags=re.DOTALL)
 
 
-def _strip_at_rule_blocks(css: str) -> str:
-    """
-    Remove ``@media``, ``@keyframes``, ``@supports`` (etc.) blocks along
-    with their bodies. Single-line at-rules without a brace block (e.g.
-    ``@import``, ``@charset``) are stripped up to the terminating ``;``.
+def _media_applies_to_scheme(prelude: str, scheme: str) -> bool:
+    """True for an ``@media`` prelude that holds under
+    ``prefers-color-scheme: <scheme>`` — ``(prefers-color-scheme: dark)``,
+    ``screen and (prefers-color-scheme: dark)``. A ``not`` query is
+    refused rather than inverted."""
+    if not re.match(r"@media\b", prelude, re.IGNORECASE):
+        return False
+    if re.search(r"\bnot\b", prelude, re.IGNORECASE):
+        return False
+    return re.search(rf"prefers-color-scheme\s*:\s*{scheme}\b",
+                     prelude, re.IGNORECASE) is not None
 
-    This is a brace-matching pass so the remaining text only contains
-    top-level rules ``selector { decl; … }``. The existing regex parser
-    can then walk those without picking up rules nested inside ``@media``
-    (the spec says to skip them for now).
+
+def _css_segments(css: str, scheme: Optional[str] = None,
+                  tag: Optional[str] = None) -> list[tuple[str, Optional[str]]]:
     """
-    out: list[str] = []
+    Split stylesheet text into top-level runs, in source order, each tagged
+    with the colour scheme it applies under.
+
+    Text outside at-rules is tagged ``tag`` (None at the top level). The
+    body of an ``@media`` block that holds under
+    ``prefers-color-scheme: <scheme>`` is unwrapped in place and tagged
+    ``scheme``, so its rules keep their position in the cascade. Every
+    other ``@media``, ``@keyframes``, ``@supports`` (etc.) block is dropped
+    with its body, and single-line at-rules (``@import``, ``@charset``) up
+    to their ``;``.
+    """
+    out: list[tuple[str, Optional[str]]] = []
+    buf: list[str] = []
     i = 0
     n = len(css)
     while i < n:
@@ -690,11 +731,18 @@ def _strip_at_rule_blocks(css: str) -> str:
                 elif css[k] == "}":
                     depth -= 1
                 k += 1
+            if scheme and _media_applies_to_scheme(css[i:j], scheme):
+                if buf:
+                    out.append(("".join(buf), tag))
+                    buf = []
+                out.extend(_css_segments(css[j + 1:k - 1], scheme, scheme))
             i = k
         else:
-            out.append(ch)
+            buf.append(ch)
             i += 1
-    return "".join(out)
+    if buf:
+        out.append(("".join(buf), tag))
+    return out
 
 
 @dataclass
@@ -704,6 +752,8 @@ class _CssRule:
     selector_text: str
     # Last-declaration-wins map of custom properties (--name → value).
     custom_props: dict[str, str] = field(default_factory=dict)
+    # "dark" for a rule from inside @media (prefers-color-scheme: dark).
+    scheme: Optional[str] = None
 
 
 # A rule body: matches "{ ... }" with no nested braces. We pre-strip
@@ -764,30 +814,63 @@ def _parse_declarations(body: str) -> tuple[dict[str, str], dict[str, str]]:
     return decls, custom
 
 
-def _parse_rules(css: str) -> list[_CssRule]:
-    """Walk a CSS string and return one _CssRule per top-level rule."""
-    css = _strip_at_rule_blocks(_strip_css_comments(css))
+def _parse_rules(css: str, scheme: Optional[str] = None) -> list[_CssRule]:
+    """
+    Walk a CSS string and return one _CssRule per top-level rule, in
+    source order. With ``scheme="dark"``, rules inside
+    ``@media (prefers-color-scheme: dark)`` are included where they stand,
+    tagged ``scheme="dark"``.
+    """
     rules: list[_CssRule] = []
-    for match in _CSS_RULE_RE.finditer(css):
-        selector_text = match.group("sel").strip()
-        if not selector_text or selector_text.startswith("@"):
-            continue
-        body = match.group("body")
-        decls, custom = _parse_declarations(body)
-        if not decls and not custom:
-            continue
-        selectors = [s.strip() for s in selector_text.split(",") if s.strip()]
-        if not selectors:
-            continue
-        rules.append(
-            _CssRule(
-                selectors=selectors,
-                declarations=decls,
-                selector_text=selector_text,
-                custom_props=custom,
+    for text, tag in _css_segments(_strip_css_comments(css), scheme):
+        for match in _CSS_RULE_RE.finditer(text):
+            selector_text = match.group("sel").strip()
+            if not selector_text or selector_text.startswith("@"):
+                continue
+            body = match.group("body")
+            decls, custom = _parse_declarations(body)
+            if not decls and not custom:
+                continue
+            selectors = [s.strip() for s in selector_text.split(",")
+                         if s.strip()]
+            if not selectors:
+                continue
+            rules.append(
+                _CssRule(
+                    selectors=selectors,
+                    declarations=decls,
+                    selector_text=selector_text,
+                    custom_props=custom,
+                    scheme=tag,
+                )
             )
-        )
     return rules
+
+
+def _fold_repeated_selectors(rules: list[_CssRule]) -> list[_CssRule]:
+    """
+    Merge rules that repeat a selector list into one, later declarations
+    winning, at the first one's position. This is how a dark block's
+    ``.note { color }`` replaces the base ``.note`` colour in the dark pass
+    instead of leaving the stale colour behind as a second row.
+    """
+    folded: dict[tuple[str, ...], _CssRule] = {}
+    for rule in rules:
+        key = tuple(rule.selectors)
+        if key in folded:
+            prev = folded[key]
+            prev.declarations.update(rule.declarations)
+            prev.custom_props.update(rule.custom_props)
+            prev.scheme = rule.scheme or prev.scheme
+        else:
+            folded[key] = _CssRule(
+                selectors=list(rule.selectors),
+                declarations=dict(rule.declarations),
+                selector_text=rule.selector_text,
+                custom_props=dict(rule.custom_props),
+                scheme=rule.scheme,
+            )
+    return list(folded.values())
 
 
 # ─── CSS custom-property resolution ─────────────────────────────────────
@@ -862,9 +945,11 @@ def _entries_from_rules(
     warnings: list[str] = []
     for rule in rules:
         raw_value: Optional[str] = None
+        paint = ""
         for prop in properties:
             if prop in rule.declarations:
                 raw_value = rule.declarations[prop]
+                paint = prop
                 break
         if raw_value is None:
             continue
@@ -887,9 +972,25 @@ def _entries_from_rules(
                 fill_rgb=rgb,
                 role=role,
                 source=source,
+                opacity=(_color_alpha(resolved)
+                         * _rule_opacity(rule.declarations, paint, var_table)),
             )
         )
     return entries, warnings
+
+
+def _rule_opacity(decls: dict[str, str], paint: str,
+                  var_table: Optional[dict[str, str]] = None) -> float:
+    """
+    The opacity a rule paints its ``paint`` colour at: ``opacity``, times
+    ``fill-opacity`` when the colour is a ``fill`` (it has no effect on an
+    HTML ``color``). Percentages accepted; clamped to [0, 1].
+    """
+    table = var_table or {}
+    a = _float_or(_resolve_var(decls.get("opacity", "1"), table))
+    if paint == "fill":
+        a *= _float_or(_resolve_var(decls.get("fill-opacity", "1"), table))
+    return max(0.0, min(1.0, a))
 
 
 # ─── Inline style parsing (HTML) ────────────────────────────────────────
@@ -935,7 +1036,8 @@ def _entries_from_inline_styles(
                 continue
             if rgb is None:
                 continue
-            key = (tag, resolved.lower())
+            alpha = _color_alpha(resolved) * _rule_opacity(decls, prop, var_table)
+            key = (tag, resolved.lower(), alpha)
             if key in grouped:
                 grouped[key].count += 1
             else:
@@ -946,6 +1048,7 @@ def _entries_from_inline_styles(
                     fill_rgb=rgb,
                     role=role,
                     source="inline",
+                    opacity=alpha,
                 )
     return list(grouped.values()), warnings
 
@@ -997,14 +1100,17 @@ def _resolve_background_html(
     where the warning is non-None if we had to fall back to white.
 
     Priority: explicit argument → ``body { background[-color] }`` →
-    ``html { background[-color] }`` → ``#ffffff`` (with warning).
+    ``html { background[-color] }`` → ``#ffffff`` (with warning). Among
+    several ``body`` rules the last one wins, as in the cascade — that is
+    how a dark block's ``body { background }`` beats an earlier
+    ``html, body { background }``.
     """
     if explicit_bg:
         rgb = parse_color(explicit_bg)
         if rgb is not None:
             return rgb, None
     for selector_key in ("body", "html"):
-        for rule in rules:
+        for rule in reversed(rules):
             if any(s.strip().lower() == selector_key for s in rule.selectors):
                 for prop in ("background-color", "background"):
                     if prop in rule.declarations:
@@ -1103,7 +1209,16 @@ def _score_entries(entries: list[SelectorEntry], bg_rgb: tuple[int, int, int],
     for entry in entries:
         if entry.fill_rgb is None:
             continue
-        entry.ratio = contrast_ratio(entry.fill_rgb, entry.bg_rgb or bg_rgb)
+        bg = entry.bg_rgb or bg_rgb
+        # Translucent text paints its colour mixed with what is behind it;
+        # score that mix. Re-parsed from ``fill`` so a second scoring pass
+        # doesn't composite twice. Opacity 0 is a hidden (fade-in) state,
+        # not the colour a reader sees, so it is scored as written.
+        if 0.0 < entry.opacity < 1.0 and entry.fill:
+            raw = parse_color(entry.fill)
+            if raw is not None:
+                entry.fill_rgb = _composite(raw, entry.opacity, bg)
+        entry.ratio = contrast_ratio(entry.fill_rgb, bg)
         if entry.role == "decorative":
             entry.passes = None
             entry.status = "SKIP"
@@ -1169,7 +1284,10 @@ def _legibility_check(rules: list[_CssRule]) -> list[LegibilityWarning]:
     Apply muriel's legibility-floor rules to parsed CSS:
 
     - font-size ≤ 14px AND (no font-weight or font-weight < 500) → WARN.
-    - opacity present AND color present → WARN ("opacity erodes contrast").
+    - opacity < 1 on a rule that sets color, or opacity / fill-opacity
+      < 1 on a rule that sets fill → WARN. The contrast row already scores
+      the composited colour; the warning stays because translucent text
+      also thins its glyph edges.
     - selector matches footer / .byline / .caption / figcaption AND
       font-size ≤ 16px → WARN ("caption text below 16px floor").
 
@@ -1181,8 +1299,7 @@ def _legibility_check(rules: list[_CssRule]) -> list[LegibilityWarning]:
         decls = rule.declarations
         size_raw = decls.get("font-size")
         weight_raw = decls.get("font-weight")
-        opacity_raw = decls.get("opacity")
-        color_raw = decls.get("color")
+        paint = next((p for p in ("color", "fill") if p in decls), None)
 
         size_px = _parse_font_size_px(size_raw) if size_raw else None
         weight = _parse_font_weight(weight_raw) if weight_raw else None
@@ -1197,22 +1314,21 @@ def _legibility_check(rules: list[_CssRule]) -> list[LegibilityWarning]:
                         f"{weight if weight is not None else 'default(400)'}"
                         " — sub-floor and not medium+"
                     ),
+                    scheme=rule.scheme,
                 ))
 
-        if opacity_raw and color_raw:
-            try:
-                op = float(opacity_raw)
-            except ValueError:
-                op = 1.0
-            if op < 1.0:
-                warnings.append(LegibilityWarning(
-                    selectors=list(rule.selectors),
-                    issue="opacity-on-text",
-                    detail=(
-                        f"opacity {op:.2f} on a rule that also sets color — "
-                        "composites effective contrast below the raw ratio"
-                    ),
-                ))
+        op = _rule_opacity(decls, paint) if paint else 1.0
+        if op < 1.0:
+            warnings.append(LegibilityWarning(
+                selectors=list(rule.selectors),
+                issue="opacity-on-text",
+                detail=(
+                    f"opacity {op:.2f} on a rule that also sets {paint} — "
+                    "composites effective contrast below the raw ratio "
+                    "and thins glyph edges"
+                ),
+                scheme=rule.scheme,
+            ))
 
         if size_px is not None and size_px <= 16.0:
             for sel in rule.selectors:
@@ -1224,6 +1340,7 @@ def _legibility_check(rules: list[_CssRule]) -> list[LegibilityWarning]:
                             f"footer/byline/caption selector {sel!r} at "
                             f"{size_px:.1f}px — below the 16px caption floor"
                         ),
+                        scheme=rule.scheme,
                     ))
                     break
     return warnings
@@ -1650,17 +1767,76 @@ def audit_svg(
         (text color, background) pair among attribute-colored text runs
         (``source="svg-attr"``, ``bg_rgb`` set, ``count`` = runs). Each entry has
         ``ratio``, ``status`` and ``passes`` populated. Decorative
-        entries have ``passes=None`` (exempt).
+        entries have ``passes=None`` (exempt). With an
+        ``@media (prefers-color-scheme: dark)`` block, the same audit run
+        under the dark cascade follows, its entries marked
+        ``scheme="dark"``; ``background`` does not apply to it.
     """
     svg_path = Path(path)
     svg_source = svg_path.read_text(encoding="utf-8")
 
-    blocks = _extract_style_blocks_xml(svg_source)
+    rules, dark_rules = _rules_by_scheme(_extract_style_blocks_xml(svg_source))
+    entries, bg_rgb, var_warnings = _svg_pass(
+        svg_source, rules, rules, background, required,
+    )
+    legibility = _legibility_check(rules)
+
+    dark_bg = None
+    if dark_rules:
+        dark_entries, dark_bg, dark_warnings = _svg_pass(
+            svg_source, _fold_repeated_selectors(dark_rules), dark_rules,
+            None, required, scheme="dark",
+        )
+        entries.extend(dark_entries)
+        var_warnings.extend(f"[dark] {w}" for w in dark_warnings
+                            if w not in var_warnings)
+        legibility.extend(_legibility_check(
+            [r for r in dark_rules if r.scheme == "dark"]))
+
+    if print_table:
+        _print_audit_table(
+            svg_path, bg_rgb, required, entries,
+            legibility=legibility,
+            extra_warnings=var_warnings,
+            dark_bg=dark_bg,
+        )
+
+    return entries
+
+
+def _rules_by_scheme(
+    blocks: list[str],
+) -> tuple[list[_CssRule], list[_CssRule]]:
+    """
+    ``(rules, dark_rules)`` across every ``<style>`` block. ``rules`` is the
+    base cascade. ``dark_rules`` is the cascade under
+    ``prefers-color-scheme: dark`` — the same rules with the dark block's
+    rules in their source positions — or empty when no block contributes
+    a dark rule, so a page without one gets no second pass.
+    """
     rules: list[_CssRule] = []
+    dark_rules: list[_CssRule] = []
     for block in blocks:
         rules.extend(_parse_rules(block))
+        dark_rules.extend(_parse_rules(block, scheme="dark"))
+    if not any(r.scheme == "dark" for r in dark_rules):
+        dark_rules = []
+    return rules, dark_rules
 
-    var_table = _build_var_table(rules)
+
+def _svg_pass(
+    svg_source: str,
+    rules: list[_CssRule],
+    var_rules: list[_CssRule],
+    background: Optional[str],
+    required: float,
+    *,
+    scheme: Optional[str] = None,
+) -> tuple[list[SelectorEntry], tuple[int, int, int], list[str]]:
+    """One scored audit of an SVG under one cascade. ``var_rules`` is that
+    cascade in source order (custom properties resolve last-wins);
+    ``rules`` may have repeated selectors folded."""
+    var_table = _build_var_table(var_rules)
     entries, var_warnings = _entries_from_rules(
         rules, var_table, properties=("fill",), source="css"
     )
@@ -1670,18 +1846,10 @@ def audit_svg(
         composite_shapes=background is None,
     )
     entries.extend(attr_entries)
+    for entry in entries:
+        entry.scheme = scheme
     _score_entries(entries, bg_rgb, required)
-
-    legibility = _legibility_check(rules)
-
-    if print_table:
-        _print_audit_table(
-            svg_path, bg_rgb, required, entries,
-            legibility=legibility,
-            extra_warnings=var_warnings,
-        )
-
-    return entries
+    return entries, bg_rgb, var_warnings
 
 
 def audit_html(
@@ -1705,7 +1873,8 @@ def audit_html(
     background
         Override the background color. If ``None``, auto-detects
         ``body { background[-color] }``, then ``html { background[-color] }``,
-        falling back to ``#ffffff`` with a warning.
+        falling back to ``#ffffff`` with a warning. Applies to the base
+        pass; a ``prefers-color-scheme: dark`` pass always resolves its own.
     print_table
         If ``True``, prints a formatted audit table to stdout.
     audit_inline_styles
@@ -1715,20 +1884,58 @@ def audit_html(
     Returns
     -------
     tuple[list[SelectorEntry], list[LegibilityWarning]]
-        (contrast entries, legibility warnings).
+        (contrast entries, legibility warnings). When the page has an
+        ``@media (prefers-color-scheme: dark)`` block, the entries scored
+        under the dark cascade follow the base ones with ``scheme="dark"``.
     """
     html_path = Path(path)
     html_source = html_path.read_text(encoding="utf-8")
 
-    blocks = _extract_style_blocks_html(html_source)
-    rules: list[_CssRule] = []
-    for block in blocks:
-        rules.extend(_parse_rules(block))
+    rules, dark_rules = _rules_by_scheme(_extract_style_blocks_html(html_source))
+    entries, bg_rgb, extra = _html_pass(
+        html_source, rules, rules, background, required, audit_inline_styles,
+    )
+    legibility = _legibility_check(rules)
 
-    var_table = _build_var_table(rules)
+    dark_bg = None
+    if dark_rules:
+        dark_entries, dark_bg, dark_extra = _html_pass(
+            html_source, _fold_repeated_selectors(dark_rules), dark_rules,
+            None, required, audit_inline_styles, scheme="dark",
+        )
+        entries.extend(dark_entries)
+        extra.extend(f"[dark] {w}" for w in dark_extra if w not in extra)
+        legibility.extend(_legibility_check(
+            [r for r in dark_rules if r.scheme == "dark"]))
+
+    if print_table:
+        _print_audit_table(
+            html_path, bg_rgb, required, entries,
+            legibility=legibility,
+            extra_warnings=extra,
+            dark_bg=dark_bg,
+        )
+
+    return entries, legibility
+
+
+def _html_pass(
+    html_source: str,
+    rules: list[_CssRule],
+    var_rules: list[_CssRule],
+    background: Optional[str],
+    required: float,
+    audit_inline_styles: bool,
+    *,
+    scheme: Optional[str] = None,
+) -> tuple[list[SelectorEntry], tuple[int, int, int], list[str]]:
+    """One scored audit of an HTML page under one cascade; see
+    :func:`_svg_pass` for ``rules`` / ``var_rules``. Returns
+    ``(entries, background, notes)``."""
+    var_table = _build_var_table(var_rules)
 
     # HTML rules may also use `fill` (inline SVG); accept either property.
-    css_entries, var_warnings = _entries_from_rules(
+    css_entries, notes = _entries_from_rules(
         rules, var_table, properties=("color", "fill"), source="css",
     )
 
@@ -1737,29 +1944,19 @@ def audit_html(
         inline_entries, inline_warnings = _entries_from_inline_styles(
             html_source, var_table,
         )
-        var_warnings.extend(inline_warnings)
+        notes.extend(inline_warnings)
 
     bg_rgb, bg_warning = _resolve_background_html(
         rules, var_table, background,
     )
+    if bg_warning:
+        notes.insert(0, bg_warning)
 
     entries = css_entries + inline_entries
+    for entry in entries:
+        entry.scheme = scheme
     _score_entries(entries, bg_rgb, required)
-
-    legibility = _legibility_check(rules)
-
-    extra: list[str] = list(var_warnings)
-    if bg_warning:
-        extra.insert(0, bg_warning)
-
-    if print_table:
-        _print_audit_table(
-            html_path, bg_rgb, required, entries,
-            legibility=legibility,
-            extra_warnings=extra,
-        )
-
-    return entries, legibility
+    return entries, bg_rgb, notes
 
 
 # ─── Pretty printer ─────────────────────────────────────────────────────
@@ -1772,10 +1969,15 @@ def _print_audit_table(
     *,
     legibility: Optional[list[LegibilityWarning]] = None,
     extra_warnings: Optional[list[str]] = None,
+    dark_bg: Optional[tuple[int, int, int]] = None,
 ) -> None:
-    bg_hex = f"#{bg_rgb[0]:02x}{bg_rgb[1]:02x}{bg_rgb[2]:02x}"
     print(f"\nContrast audit: {src_path}")
-    print(f"  background:  {bg_hex}")
+    if dark_bg is None:
+        print(f"  background:  {_hex(bg_rgb)}")
+    else:
+        print(f"  background:  {_hex(bg_rgb)}  (light / no preference)")
+        print(f"  dark bg:     {_hex(dark_bg)}  "
+              "(@media (prefers-color-scheme: dark); rows marked [dark])")
     print(f"  required:    {required:.1f}:1  (WCAG {_wcag_tier(required)})")
     if extra_warnings:
         for w in extra_warnings:
@@ -1787,44 +1989,55 @@ def _print_audit_table(
     print(header_line)
     print("  " + "  ".join("─" * w for w in widths))
 
-    fail_count = warn_count = pass_count = skip_count = 0
-
-    for entry in entries:
-        if entry.fill_rgb is None:
+    counts: dict[Optional[str], dict[str, int]] = {}
+    for scheme in (None, "dark"):
+        rows = [e for e in entries
+                if e.scheme == scheme and e.fill_rgb is not None]
+        if not rows:
             continue
-        status = entry.status or "?"
-        if status == "FAIL":
-            fail_count += 1
-        elif status == "WARN":
-            warn_count += 1
-        elif status == "PASS":
-            pass_count += 1
-        elif status == "SKIP":
-            skip_count += 1
-        ratio_str = f"{entry.ratio:.2f}:1" if entry.ratio is not None else "—"
-        fill_str = entry.fill_hex or entry.fill or "?"
-        sel_str = entry.selector_display
-        if entry.source in ("inline", "svg-attr") and entry.count > 1:
-            sel_str = f"{sel_str}  (×{entry.count})"
-        if len(sel_str) > widths[4]:
-            sel_str = sel_str[: widths[4] - 1] + "…"
-        print(
-            "  "
-            + status.ljust(widths[0])
-            + "  " + ratio_str.ljust(widths[1])
-            + "  " + fill_str.ljust(widths[2])
-            + "  " + entry.role.ljust(widths[3])
-            + "  " + sel_str
-        )
+        tally = counts.setdefault(scheme, {"PASS": 0, "WARN": 0, "FAIL": 0,
+                                           "SKIP": 0})
+        if scheme is not None and counts.get(None):
+            print()
+        for entry in rows:
+            status = entry.status or "?"
+            if status in tally:
+                tally[status] += 1
+            ratio_str = (f"{entry.ratio:.2f}:1"
+                         if entry.ratio is not None else "—")
+            fill_str = entry.fill_hex or entry.fill or "?"
+            sel_str = entry.selector_display
+            if scheme is not None:
+                sel_str = f"[{scheme}] {sel_str}"
+            if 0.0 < entry.opacity < 1.0:
+                sel_str = f"{sel_str}  ({entry.fill} at {entry.opacity:.2f})"
+            if entry.source in ("inline", "svg-attr") and entry.count > 1:
+                sel_str = f"{sel_str}  (×{entry.count})"
+            if len(sel_str) > widths[4]:
+                sel_str = sel_str[: widths[4] - 1] + "…"
+            print(
+                "  "
+                + status.ljust(widths[0])
+                + "  " + ratio_str.ljust(widths[1])
+                + "  " + fill_str.ljust(widths[2])
+                + "  " + entry.role.ljust(widths[3])
+                + "  " + sel_str
+            )
 
     print()
-    summary_parts = [
-        f"{pass_count} pass",
-        f"{warn_count} warn",
-        f"{fail_count} fail",
-        f"{skip_count} decorative (exempt)",
-    ]
-    print(f"  contrast:  {' · '.join(summary_parts)}")
+    for scheme in (None, "dark"):
+        if scheme is not None and scheme not in counts:
+            continue
+        tally = counts.get(scheme, {"PASS": 0, "WARN": 0, "FAIL": 0,
+                                    "SKIP": 0})
+        summary_parts = [
+            f"{tally['PASS']} pass",
+            f"{tally['WARN']} warn",
+            f"{tally['FAIL']} fail",
+            f"{tally['SKIP']} decorative (exempt)",
+        ]
+        label = "contrast:" if scheme is None else f"[{scheme}]:"
+        print(f"  {label:<9}  {' · '.join(summary_parts)}")
 
     if legibility:
         print()
@@ -1833,14 +2046,18 @@ def _print_audit_table(
             sel = ", ".join(w.selectors)
             if len(sel) > 60:
                 sel = sel[:59] + "…"
-            print(f"    [{w.issue}] {sel}")
+            where = f"[{w.scheme}] " if w.scheme else ""
+            print(f"    [{w.issue}] {where}{sel}")
             print(f"        {w.detail}")
 
     print()
-    below = fail_count + warn_count
+    below = sum(t["FAIL"] + t["WARN"] for t in counts.values())
     if below:
+        dark_below = (counts["dark"]["FAIL"] + counts["dark"]["WARN"]
+                      if "dark" in counts else 0)
         print(
             f"  result:    FAIL — {below} text rule(s) below {required:.1f}:1"
+            + (f" ({dark_below} of them [dark])" if dark_below else "")
         )
     elif legibility:
         print(
