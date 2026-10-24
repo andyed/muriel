@@ -131,7 +131,8 @@ Playback starts when you choose it; both include written scene descriptions.
 
 - **Cats. Lots of cats.** — Wunderkammer’s 28-second silent collection tour:
   a rushing aisle, facets, colour placement, and linked evidence.
-  [Watch the reel](https://muriel.mindbendingpixels.com/showcase/#wunderkammer-film) ·
+  [Watch on YouTube ↗](https://www.youtube.com/watch?v=FGobAjvw32g) ·
+  [Play the preview](https://muriel.mindbendingpixels.com/showcase/#wunderkammer-film) ·
   [Production notes](../hyperframes.md#cats-lots-of-cats) ·
   [Collection guide](../../references/collections.md)
 - **Psychodeli spatial reel** — 39 seconds of moving video tiles, camera

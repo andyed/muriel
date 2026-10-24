@@ -16,11 +16,14 @@ manual, with native video controls and no automatic looping.
 
 ## Cats. Lots of cats.
 
-[Watch the 28-second film](https://muriel.mindbendingpixels.com/showcase/#wunderkammer-film) ·
+[Watch on YouTube ↗](https://www.youtube.com/watch?v=FGobAjvw32g) ·
+[Play the on-page preview](https://muriel.mindbendingpixels.com/showcase/#wunderkammer-film) ·
 [Collection guide](../references/collections.md) ·
 [Wunderkammer source](https://github.com/andyed/wunderkammer)
 
-A silent tour of 489 cat images through Wunderkammer. The artwork was generated
+The published 28-second film, “Cats. Lots of cats. | Wunderkammer, a collection
+explorer for people and language models,” tours 489 cat images through
+Wunderkammer. The on-page preview is silent. The artwork was generated
 with Adobe Firefly; this is an illustrative collection, not a historical
 art dataset. Era and style labels come from the generation prompts.
 
