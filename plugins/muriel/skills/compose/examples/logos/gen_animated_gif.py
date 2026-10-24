@@ -31,13 +31,13 @@ PALETTES = {
         "paper":    "#E8E2D0",
         "mark":     "#3A3530",
         "ink":      "#121212",
-        "ink_soft": "#5C5852",
+        "ink_soft": "#433F3A",   # 8.07:1 on paper (muriel.contrast --repair)
     },
     "dark": {
         "paper":    "#1F1A14",
         "mark":     "#E0D4BC",
         "ink":      "#E8E2D0",
-        "ink_soft": "#A89E88",
+        "ink_soft": "#BAB099",   # 8.02:1 on paper (muriel.contrast --repair)
     },
 }
 
