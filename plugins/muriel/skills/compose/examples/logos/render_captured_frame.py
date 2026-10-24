@@ -3,13 +3,20 @@
 Input: JSON blob emitted by the "capture frame" button in
        output/colophon/interactive-colophon.html
 Output: a 1200×630 PNG with the bars in the exact captured pose,
-        plus wordmark / rule / credit matching the interactive layout.
+        plus wordmark / rule / taglines matching the interactive layout.
+        The interactive page's credit line is not drawn; the README
+        carries the Muriel Cooper attribution.
 
 Usage:
     python3 render_captured_frame.py <capture.json> [<capture.json> ...]
     cat capture.json | python3 render_captured_frame.py -
 
 Output path: output/colophon/still-<palette>-t<time>.png
+
+The brand still is captures/graphite-t20_43.json rendered with --both.
+Its light render is copied to assets/logo-light.png, logo-still.png,
+og-image.png, site-docs/src/og-image.png and output/colophon/muriel-logo.png;
+the dark render to assets/logo-dark.png and og-image-dark.png.
 """
 from __future__ import annotations
 
@@ -48,13 +55,15 @@ def _measure(font, text, draw):
 
 # Palette pairs: mode → {paper, mark, ink, ink_soft}. When a capture's
 # palette.id matches a known key, rendering in dark mode swaps to the
-# inverse-lightness pair in the same hue family.
+# inverse-lightness pair in the same hue family. ink_soft is the
+# `muriel.contrast --repair` of the original soft ink, so the second
+# tagline clears the 8:1 text floor on paper.
 DARK_PALETTES = {
     "graphite": {
         "paper":    "#1F1A14",
         "mark":     "#E0D4BC",
         "ink":      "#E8E2D0",
-        "ink_soft": "#A89E88",
+        "ink_soft": "#BAB099",   # 8.02:1 on paper
     },
 }
 
@@ -70,7 +79,7 @@ def render(capture: dict, label: str | None = None, mode: str = "light") -> Path
     else:
         paper = capture["palette"]["paper"]
         mark  = capture["palette"]["mark"]
-        ink, ink_soft = "#121212", "#5C5852"
+        ink, ink_soft = "#121212", "#433F3A"   # ink_soft 8.07:1 on #E8E2D0
 
     img = Image.new("RGB", (W, H), paper)
     draw = ImageDraw.Draw(img, "RGBA")
@@ -81,8 +90,6 @@ def render(capture: dict, label: str | None = None, mode: str = "light") -> Path
         w = round(b["width"])
         h = round(b["height"])
         draw.rectangle([x, y, x + w, y + h], fill=mark)
-
-    accent = mark
 
     draw.line([(400, 410), (800, 410)], fill=mark, width=2)
 
@@ -100,10 +107,6 @@ def render(capture: dict, label: str | None = None, mode: str = "light") -> Path
     s2 = "for researcher-designer-engineers"
     sw2, _ = _measure(sf2, s2, draw)
     draw.text(((W - sw2) // 2, 558 - 17), s2, fill=ink_soft, font=sf2)
-
-    cf = _load_font(11, bold=False)
-    credit = "after muriel cooper · live constraint system"
-    draw.text((40, 612 - 11), credit, fill=accent, font=cf)
 
     t = capture.get("time", 0)
     palette_id = capture["palette"]["id"]
