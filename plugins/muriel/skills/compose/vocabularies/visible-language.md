@@ -1,80 +1,195 @@
-# Visible Language Workshop — dynamic typography, information landscapes, typography as data
+---
+title: Visible Language Workshop
+description: Muriel Cooper’s Visible Language Workshop, information landscapes, and multiscale typography. Primary sources and working examples, including Wunderkammer.
+---
 
-The design lineage that treats typography as a data structure and reading as spatial navigation. Emerged from MIT Media Lab's Visible Language Workshop (VLW) under Muriel Cooper in the 1980s–90s, continued through the Aesthetics & Computation Group (ACG) under John Maeda, and flows downstream into Processing, p5.js, D3, Observable, and contemporary typographic substrates like [chenglou/pretext](https://chenglou.me/pretext/).
+# Visible Language Workshop
 
-Part of the [muriel](../SKILL.md) skill, under Aesthetic Vocabularies. Parallel to [FUI](fui.md) but different in register: FUI is fictional interface grammar from screen entertainment. **VLW is a documented design lineage for information landscapes and multiscale reading.** Where FUI borrows from cinema, VLW descends from typography, the Bauhaus, and cognitive science.
+<span id="visible-language-workshop-dynamic-typography-information-landscapes-typography-as-data"></span>
 
-## Canonical lineage
+**Typography as information. Reading as navigation.** The Visible Language
+Workshop (VLW) explored how words, images, scale, and movement could give readers
+a way through large bodies of information.
 
-| Designer / Group | Work | Notable for |
-|---|---|---|
-| **Muriel Cooper** (VLW founder) | [TED 1994 "Information Landscapes"](https://www.ted.com/talks/muriel_cooper_information_landscapes), MIT Press design, MIT Media Lab founding faculty | Presented navigable information landscapes at TED5 in 1994; a design precedent, not a verified claim of invention priority. Bauhaus → MIT Press → MIT Media Lab lineage. |
-| **David Small** (VLW) | Shakespeare multi-scale navigation; Talmud project; *[Navigating Large Bodies of Text](https://smg.media.mit.edu/library/small1996.html)* (IBM Systems Journal, 1996) | Multi-scale typography with graceful "greeking" degradation (full text → line shapes → rectangles → scene blocks); 3D space for supplementary content; LEGO-brick physical navigation rigs. |
-| **Suguru Ishizaki** (VLW, ACG) | *Improvisational Design* (MIT Press, 2003) | Typography that reorganizes itself in response to content, reader, and context. Temporal typography as a first-class design variable. |
-| **Lisa Strausfeld** (VLW → Pentagram) | Financial Viewpoints (1993); later the Sunlight Foundation / Pentagram infographic work | Information architecture as 3D spatial composition. Taught a generation of data journalists to think in space, not charts. |
-| **Yin Yin Wong** (VLW) | "Temporal Typography" thesis (1995); expressive dynamic type | Type carrying emotional/informational state, not just fixed glyphs. See also Figure 4 in Small 1996. |
-| **John Maeda** (ACG director, VLW successor) | *Design by Numbers* (MIT Press, 1999); MAEDA@MEDIA; later RISD / eBay / Automattic | Code as design material; "Reactive Books." Directly taught Casey Reas, Ben Fry, Golan Levin. |
-| **Casey Reas + Ben Fry** (ACG → Processing) | [Processing language](https://processing.org/); *Visualizing Data* (Fry) | VLW philosophy made available to millions of students. Processing + p5.js are the teaching substrate of the whole tradition. |
+Muriel Cooper and Ron MacNeil co-founded the workshop at MIT in 1974; it became
+one of the Media Lab’s founding research groups in 1985. Cooper’s 1994
+*Information Landscapes* presentation brought its navigable, three-dimensional
+typography to TED5. [MIT’s retrospective](https://www.media.mit.edu/posts/muriel-cooper-lasting-imprint/)
+documents that history and includes footage of the work.
 
-Downstream, the tradition continues through Mike Bostock (D3 — Bostock cites Cooper's influence explicitly), Observable notebooks, and — as a contemporary text-measurement primitive — chenglou/pretext.
+This guide connects that design tradition to practical choices in
+[muriel](../SKILL.md), the design skill named after Cooper: how to show an
+overview, preserve a reader’s place, and reveal detail when it becomes useful.
 
-## What Small's 1996 account contributes
+[Read the references](#references) · [See working examples](#contemporary-exemplars) ·
+[Build a collection explorer](../references/collections.md)
 
-[David Small's primary paper](https://smg.media.mit.edu/library/small1996.html)
-documents Virtual Shakespeare and navigation prototypes. Its useful themes are
-representation changing with scale, highlighting that survives abstraction, and
-designing physical controls alongside the display. It also identifies a problem:
-changing scale can obscure how much text is present. These are prototype
-observations and design arguments, not universal laws or a controlled comparison
-of reading performance.
+## Try the ideas
 
-Muriel's adaptation is to make the representation ladder, its selection cues,
-and the return path explicit, then test them in the host. See the
-[coordination contract](../references/multiscale-coordination.md) and
-[zooming-interface reference](../references/zooming-interfaces.md).
+Start with the [examples index](../examples/gallery/README.md). Try [Spatial typography](https://muriel.mindbendingpixels.com/gallery/spatial-typography/index.html) for layered text in perspective, or [Perspective Wall](https://muriel.mindbendingpixels.com/gallery/perspective-wall/index.html) for focus and context. Wunderkammer and Linked Atlas below explore collection structure and coordinated selection.
 
 ## Visual grammar
 
-- **Multiscale typography.** Small’s Virtual Shakespeare changes full text into line textures, dialogue rectangles, and scene rectangles as it recedes. Cross-fades preserve visual continuity in that implementation; they are not a universal transition requirement.
-- **Information landscapes.** Data occupies a continuous navigable space with peaks, valleys, paths, and mystery. Readers "fly through" rather than "click between." Cooper's TED 1994 demo is the canonical reference.
-- **Typography as data structure.** Text *is* the interface, not content rendered on top of a separate interface. Type size, weight, color, tracking, and position encode information density and hierarchy.
-- **Dynamic highlighting to reveal structure.** Filtering one dimension of a corpus exposes patterns invisible in the flat text. Small's character-dialogue filter revealed Shakespeare's narrative structure; the same move applied to gaze data is phase decomposition.
-- **Perspective as information.** 3D tilt reveals supplementary content at angles — footnotes perpendicular to main text, visible on reorientation. Marginalia's 3D perspective pull quote is a direct descendant.
-- **Thin strokes, spatial composition, 3D depth as organizing axis.** Aesthetic overlaps with FUI but derives from typographic rather than cinematic tradition. Where FUI is HUD grammar, VLW is book-and-map grammar taken to 3D space.
+The useful inheritance is a set of questions about reading and orientation:
 
-## Technical substrates
+- **What remains visible at a distance?** Replace unreadable detail with a
+  representation of its structure. A scene can become a block while retaining
+  its place among other scenes.
+- **What does position mean?** Arrange material by a relationship the reader
+  can use: sequence, grouping, time, or a named attribute. Keep landmarks stable
+  enough to return to.
+- **Can a selection survive a change of scale?** A highlighted passage should
+  remain findable in the overview, even when its words are too small to read.
+- **What does movement reveal?** Use perspective or a transition to expose a
+  relationship, then give the reader a legible, stable view. Test reduced-motion
+  and keyboard paths alongside the visual treatment.
 
-For an implementation of multiscale reading, use the
-[semantic zoom and coordination contract](../references/multiscale-coordination.md).
-Preserve document identity and reading focus while changing representation;
-choose levels from measured available space. Cross-fades are an optional
-continuity device subject to reduced-motion preferences and legibility, not a
-requirement for semantic zoom. The [evaluation battery](../references/multiscale-evaluation.md)
-includes a document-space brief alongside analytical charts.
+These are Muriel’s working design questions. The historical prototypes inform
+them; the usability of a particular implementation still needs to be tested.
 
-- **[chenglou/pretext](https://chenglou.me/pretext/)** — the contemporary primitive for multi-line text measurement and layout *without DOM reflow*. The right tool for implementing Small's multi-scale typography in 2026 without the 1996-era hacks. See [Typographic canvas with pretext](../channels/interactive.md#typographic-canvas-with-pretext) in the Interactive JS channel for API details and a worked example.
-- **Canvas2D** — the native rendering target for dynamic typography at scale. SVG is slower than Canvas when you're redrawing thousands of glyphs per frame.
-- **D3 + SVG** — for data binding and semantic selections. Mike Bostock's design sensibility is directly downstream of VLW.
-- **Processing / p5.js** — Maeda → Reas/Fry. The teaching substrate of the whole tradition; lowest activation energy for typographic experiments.
-- **WebGL + Three.js** — for 3D typographic spaces. Small's original medium was a custom 3D rig; in 2026 you use a GPU and the same ideas compose into single-file HTML.
-- **Typography choices:** Inter, Helvetica, PT Serif, Space Grotesk, Rubik, Work Sans — functional, geometric, designed for screen reading at multiple sizes. Same concerns as FUI but with broader hierarchy since VLW uses type *as* the content, not just labels.
+## Canonical lineage
+
+### Cooper and the workshop
+
+Cooper brought a graphic designer’s attention to hierarchy and composition to
+electronic information. *Information Landscapes*, presented at TED5 in 1994,
+made navigation through text and images part of the act of reading. David Small
+wrote the code for that presentation; MIT’s [account of Cooper’s work](https://www.media.mit.edu/posts/muriel-cooper-lasting-imprint/)
+also records Lisa Strausfeld’s recollections of studying with her.
+
+### Small, Wong, and Ishizaki
+
+Three complementary threads make the workshop’s ideas concrete:
+
+- **Small’s [Virtual Shakespeare](https://smg.media.mit.edu/library/small1996.html)**
+  changes the representation of text with distance and keeps a character’s
+  dialogue visible through highlighting.
+- **Wong’s [Temporal Typography](https://hdl.handle.net/1721.1/29102)** (1995)
+  examines time-varying typographic forms. Motion and time become part of
+  typography’s expressive vocabulary.
+- **Ishizaki’s [Improvisational Design](https://mitpress.mit.edu/9780262090353/improvisational-design/)**
+  (2003) develops a framework for continuously changing digital communication.
+
+### John Maeda, then Processing
+
+Maeda’s [Aesthetics and Computation Group](https://acg.media.mit.edu/events/dbn-aiga/)
+at MIT explored programming as a design medium. *Design by Numbers* (1999)
+introduced computation to designers and artists; Casey Reas and Ben Fry’s
+*Processing* (2007) made a related practice accessible through a programming
+handbook and environment.
+
+Today’s libraries offer ways to explore similar questions. D3, Canvas, and
+WebGL are implementation choices here; their usefulness does not depend on
+claiming a direct institutional lineage from VLW.
+
+## What Small’s 1996 account contributes {#what-smalls-1996-account-contributes}
+
+*[Navigating Large Bodies of Text](https://smg.media.mit.edu/library/small1996.html)*
+describes a representation ladder for Virtual Shakespeare: readable text becomes
+line textures, then dialogue blocks, then scene blocks. Highlighting follows a
+character’s dialogue across those scales. Small also explores physical navigation
+controls and supplementary text arranged in three-dimensional space.
+
+The paper is useful about the costs, too. Perspective can make text illegible;
+changing scale can hide how much text is present. These are design experiments
+and observations, rather than a controlled demonstration of better reading
+performance.
+
+Muriel’s [semantic zoom and coordination contract](../references/multiscale-coordination.md)
+turns those concerns into implementation decisions: stable item identity,
+explicit selections, representations chosen for available space, and a
+recoverable route back. See [zooming interfaces](../references/zooming-interfaces.md)
+for camera navigation and landmarks.
 
 ## Contemporary exemplars
 
-- **[pretext-coachella](https://github.com/andyed/pretext-coachella)** — the 2026 Coachella lineup typeset *inside* the letterforms of "COACHELLA". Four views over the same 169-artist JSON:
-  - *Index* — landing page with hero + cards linking to the other three
-  - *Flow* — all 169 names as one shrinkwrapped paragraph, each word colored by genre family
-  - *Poster* — the signature view. Each letter of COACHELLA is sliced into bands, each band into slots; artists sorted by `position_height` (tier) descending, rendered in rich-inline canvas text at weight 500–900; stage color per artist; justified per slot; live performance metrics (letter count, bands, slots, fragments, ms).
-  - *Wall* — perspective wall of individually laid-out artist names
-  - **Direct descendant of Small 1996**: text as navigable space, multi-scale rendering (tier-based weight instead of Small's greeking), categorical color for structure (stage ⇄ Small's character filter), Canvas at 60fps because pretext measures outside the DOM. Reference implementation for the Interactive JS channel's pretext subsection.
+### Wunderkammer
+
+[Wunderkammer](../references/collections.md) is Muriel’s collection explorer for
+people and language models. A collection document supplies images and attributes;
+the reader can survey, filter, regroup, compare, and inspect the individual items.
+An agent can read back the exact selection.
+
+[![Wunderkammer’s wall of Psychodeli frames, grouped by capture month with attribute filters in the left rail.](../examples/wunderkammer-explore.webp){ loading=lazy width=1520 height=950 }](https://andyed.github.io/clipwall-demo/)
+
+*The wall in Wunderkammer 0.3.0. Screenshot from the
+[public release](https://github.com/andyed/wunderkammer/tree/v0.3.0);
+the live demo can change independently of this version.*
+
+The connection to VLW is a design adaptation: keep the collection’s structure
+available while moving toward a readable item. Wunderkammer’s flat wall,
+spatial aisle, and attribute-based 3D arrangements offer different ways to
+inspect the same material. The [collection reference](../references/collections.md)
+covers the released contract and its limits.
+
+[Open the collection wall](https://andyed.github.io/clipwall-demo/) ·
+[Explore the spatial aisle](https://andyed.github.io/clipwall-demo/?view=aisle&group=year) ·
+[Arrange by colour](https://andyed.github.io/clipwall-demo/?view=float&arrange=oklch)
+
+### Linked Atlas
+
+The [Linked Atlas lab](../examples/linked-atlas/index.html) is a working example
+with synthetic data. It makes semantic zoom, brushing, and coordinated views
+inspectable. Use it alongside the [coordination guide](../references/multiscale-coordination.md)
+to see what a shared selection should preserve.
+
+### Pretext Coachella
+
+Pretext Coachella, a local study with no public source link, arranges artist
+names into flowing text, a letterform poster, and a perspective wall. It is a
+contemporary typographic experiment: placement, weight, and colour carry
+structure. See the [typographic canvas recipe](../channels/interactive.md#typographic-canvas-with-pretext)
+for the measurement and layout approach.
+
+## Technical substrates
+
+Choose the renderer for the material and the interaction. Measure performance
+with the actual content and devices.
+
+| Need | Starting point |
+|---|---|
+| Survey, filter, and compare an image collection | [Wunderkammer collection reference](../references/collections.md) |
+| Preserve selection between overview and detail | [Semantic zoom and linked displays](../references/multiscale-coordination.md) |
+| Measure and lay out typographic compositions | [Pretext recipe](../channels/interactive.md#typographic-canvas-with-pretext), with Canvas for drawing |
+| Coordinate charts or document views | [D3, Vega-Lite, ECharts, and Canvas adapters](../references/multiscale-adapters.md) |
+| Compose a spatial view | [Spatial channel](../channels/spatial.md), with WebGL or Three.js where needed |
+| Test whether the interaction transfers to a new task | [Evaluation briefs and fixtures](../references/multiscale-evaluation.md) |
+
+Keep reading text legible, give focus and selection distinct treatments, and
+provide a dependable return path. A cross-fade is one possible continuity
+device; it is not a requirement for semantic zoom.
 
 ## References
 
-- Small, D. (1996). [Navigating Large Bodies of Text](https://smg.media.mit.edu/library/small1996.html). *IBM Systems Journal*, 35(3&4).
-- Cooper, M. (1994). "Information Landscapes." [TED talk](https://www.ted.com/talks/muriel_cooper_information_landscapes).
-- Ishizaki, S. (2003). *Improvisational Design: Continuous, Responsive Digital Communication*. MIT Press.
-- Maeda, J. (1999). *Design by Numbers*. MIT Press.
-- Reas, C. & Fry, B. (2007). *Processing: A Programming Handbook for Visual Designers and Artists*. MIT Press.
-- Wong, Y. Y. (1995). "Temporal Typography: Characterization of Time-Varying Typographic Forms." MIT Media Lab MS thesis.
-- [smg.media.mit.edu/library/](https://smg.media.mit.edu/library/) — Sociable Media Group's reading library at MIT Media Lab. A broader source of design research in this tradition.
-- [chenglou.me/pretext](https://chenglou.me/pretext/) — live demos and docs for the contemporary text-measurement substrate.
+**Start with Small for the mechanism, MIT’s Cooper retrospective for the history,
+and Wong for temporal typography.** The sources below distinguish original
+research, historical context, and later design practice.
+
+### Primary research
+
+- **Small, D. (1996). [Navigating Large Bodies of Text](https://smg.media.mit.edu/library/small1996.html).**
+  *IBM Systems Journal*, 35(3&4), 514–525. [DOI](https://doi.org/10.1147/sj.353.0514).
+  Virtual Shakespeare, multiscale rendering,
+  highlighting, and navigation prototypes. Full text hosted by MIT.
+- **Wong, Y. Y. (1995). [Temporal Typography: Characterization of Time-Varying Typographic Forms](https://hdl.handle.net/1721.1/29102).**
+  Master’s thesis, MIT, Media Arts and Sciences. Repository record and full thesis.
+- **Ishizaki, S. (2003). [Improvisational Design: Continuous, Responsive Digital Communication](https://mitpress.mit.edu/9780262090353/improvisational-design/).**
+  MIT Press. A framework for designing communication that changes over time.
+
+### Historical context and further practice
+
+- **Evans, M. K. (2018). [Muriel Cooper’s Lasting Imprint](https://www.media.mit.edu/posts/muriel-cooper-lasting-imprint/).**
+  MIT Media Lab. Workshop history, recollections, and footage of Cooper’s
+  *Information Landscapes* presentation at TED5 (1994).
+- **Maeda, J. (1999). [Design by Numbers](https://mitpress.mit.edu/9780262133548/design-by-numbers/).**
+  MIT Press. Computation as a medium for designers and artists.
+- **Reas, C., & Fry, B. (2007). [Processing: A Programming Handbook for Visual Designers and Artists](https://mitpress.mit.edu/9780262182621/processing/).**
+  MIT Press. Programming practice for visual work.
+- **[VLW publications list](https://www.media.mit.edu/groups/vlw/publications.html)**
+  (March 1995). MIT’s record of the workshop’s research.
+- **[Sociable Media Group](https://smg.media.mit.edu/).** MIT’s group homepage,
+  with links to its projects and papers.
+
+Continue with [collection exploration](../references/collections.md),
+[zooming interfaces](../references/zooming-interfaces.md), or the
+[interactive channel](../channels/interactive.md).

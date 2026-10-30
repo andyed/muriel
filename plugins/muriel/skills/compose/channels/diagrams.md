@@ -90,7 +90,7 @@ Several diagram forms have an existing home elsewhere in muriel. The native gene
 | Sequence / interaction | — | **Mermaid** `sequenceDiagram` via `mmdc` ([`svg.md`](svg.md)). Prefer Mermaid; only port to native SVG if a paper figure forbids the Mermaid aesthetic. |
 | State machine | — | **Mermaid** `stateDiagram-v2`. Same call. |
 | ER / data model | — | **Mermaid** `erDiagram`. Same call. |
-| Flowchart / generic DAG | causal DAG (`dag`) | **Mermaid** `flowchart` for a general flowchart. The native [causal DAG](#causal--dependency-dag) is for when arrow direction is the load-bearing claim and a node has two parents. |
+| Flowchart / generic DAG | causal DAG (`dag`) | **Mermaid** `flowchart` for a general flowchart. The native [causal DAG](#causal-dependency-dag) is for when arrow direction is the load-bearing claim and a node has two parents. |
 | Timeline | — | **ECharts** time-axis + band overlays ([`echarts.md`](../vocabularies/echarts.md)), the `svg.md` OSEC phase diagram, or the infographics **Timeline** template ([`infographics.md`](infographics.md)). All predate this channel. |
 | Single-actor process flow | swimlane (degenerate) | infographics **Process** template — lighter when there are no lanes. Use swimlane only when ownership/handoffs are the argument. |
 | Tree / org-chart | **`dendrogram`** (static tree; hierarchy family, unweighted) | **ECharts** `tree` series when the tree must collapse/expand interactively, or the infographics **Hierarchical** template for a quick doc graphic. |
@@ -100,9 +100,9 @@ Several diagram forms have an existing home elsewhere in muriel. The native gene
 
 Rule of thumb: **Mermaid** for node-link relational diagrams (sequence, state, ER, flowchart), **ECharts** when the diagram is data-driven or interactive (timeline, tree, treemap, sunburst), and **this channel** when the output is a static editorial SVG whose geometry encodes a specific rhetorical claim.
 
-**Pending decision — a transcode route.** For sequence, state, ER, and flowchart the table offers two routes: render as Mermaid, or port to native SVG when a paper figure forbids the Mermaid look. A middle route is under consideration: extract the structure from the Mermaid source (nodes, edges, direction, labels), then redraw it by hand in muriel tokens under the [global budget](#budget-and-callouts-for-hand-drawn-diagrams) — or through the [causal DAG generator](#causal--dependency-dag), which now exists. The transcode route itself is **not shipped and not decided**; it is the open question in [`TODO.md`](../../../../../TODO.md)'s diagram-design re-survey item. Until it is settled, the two existing routes stand. (Idea from diagram-design's Mermaid importer, MIT.)
+**Pending decision — a transcode route.** For sequence, state, ER, and flowchart the table offers two routes: render as Mermaid, or port to native SVG when a paper figure forbids the Mermaid look. A middle route is under consideration: extract the structure from the Mermaid source (nodes, edges, direction, labels), then redraw it by hand in muriel tokens under the [global budget](#budget-and-callouts-for-hand-drawn-diagrams) — or through the [causal DAG generator](#causal-dependency-dag), which now exists. The transcode route itself is **not shipped and not decided**; it is the open question in [`TODO.md`](../../../../../TODO.md)'s diagram-design re-survey item. Until it is settled, the two existing routes stand. (Idea from diagram-design's Mermaid importer, MIT.)
 
-When the Mermaid diagram is rendered into an **HTML page** (not exported to a flat SVG) and it's large enough to render unreadable, wrap it in the [zoom/pan/expand shell](#mermaid-in-html--the-zoompanexpand-shell) below — a complex flowchart squeezed into a fixed column is illegible without it.
+When the Mermaid diagram is rendered into an **HTML page** (not exported to a flat SVG) and it's large enough to render unreadable, wrap it in the [zoom/pan/expand shell](#mermaid-in-html-the-zoompanexpand-shell) below — a complex flowchart squeezed into a fixed column is illegible without it.
 
 ## API conventions
 

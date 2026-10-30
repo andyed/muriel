@@ -4,6 +4,10 @@ A style guide is a brand's design tokens — colors, typography, spacing, radii,
 
 Part of the [muriel](../SKILL.md) skill — see the top-level index for mission, universal rules, and channel map. Related: [`raster.md`](raster.md) for asset generation, [`web.md`](web.md) for marginalia CSS tokens, [`science.md`](science.md) for matplotlib rcparams.
 
+## Try the motion tokens
+
+Use the [motion tuner](https://muriel.mindbendingpixels.com/showcase/#motion-tuner) to compare duration, easing, and stagger and copy a TOML snippet. The [examples index](../examples/gallery/README.md) connects other artifacts to their guides and source.
+
 ## When to use
 
 Brands usually ship tokens in ad-hoc form: CSS custom properties here, Python constants there, a CLAUDE.md rule somewhere else. A brand.toml serializes them into one file that muriel can load once and apply across every channel. One loader, one dataclass tree in memory. When muriel gets a task in the context of a brand, it reads the brand.toml, inherits the tokens, and respects the rules.

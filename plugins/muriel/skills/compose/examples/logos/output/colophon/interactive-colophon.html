@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Muriel — interactive colophon (constraint solver)</title>
 <style>
   :root {
@@ -114,9 +115,12 @@
     padding: 5px 12px; border-radius: 2px; cursor: pointer; font: inherit;
   }
   .controls-foot button:hover { border-color: var(--ink); color: var(--ink); }
+@media(max-width:700px){body{grid-template-columns:1fr}.panel{border-left:0}.stage{padding:24px}}
 </style>
+<link rel="stylesheet" href="../../../demo-nav.css">
 </head>
-<body>
+<body class="muriel-demo">
+<nav class="demo-links" aria-label="Demo navigation"><a href="/examples/gallery/">← Examples</a><a href="/vocabularies/muriel-brand/">Read guide</a><a href="https://github.com/andyed/muriel/blob/main/plugins/muriel/skills/compose/examples/logos/output/colophon/interactive-colophon.html">View source ↗</a></nav>
 
 <div class="stage">
   <div class="stage-inner">

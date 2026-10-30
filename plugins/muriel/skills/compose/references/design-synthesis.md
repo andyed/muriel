@@ -24,7 +24,7 @@ makes the visible design decision coherent, legible, adaptable, and observable.
 1. [Load gate](#load-gate)
 2. [Adaptive depth](#adaptive-depth)
 3. [Synthesis loop](#synthesis-loop)
-4. [Creative perturbation](#optional-provoke)
+4. [Creative provocation](#optional-provoke)
 5. [Leverage and synergy](#leverage-and-synergy)
 6. [Choosing without false precision](#choosing-without-false-precision)
 7. [Shape the investment](#shape-the-investment)
@@ -376,7 +376,7 @@ Adapt this reference from:
 - [Cynefin](https://thecynefin.co/about-us/about-cynefin-framework/)'s
   context-sensitive distinction between routine, analyzable, and emergent work;
 - MacLean, Young, Bellotti, and Moran's [Questions, Options, and
-  Criteria](https://doi.org/10.1080/07370024.1991.9667168) design rationale;
+  Criteria](https://doi.org/10.1207/s15327051hci0603&4_2) design rationale;
 - Donella Meadows's [leverage
   points](https://donellameadows.org/archives/leverage-points-places-to-intervene-in-a-system/),
   especially information flows, feedback, rules, and goals;

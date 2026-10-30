@@ -1,7 +1,7 @@
 site_name: muriel
 site_description: >-
-  A design skill for coding agents: fifteen output channels, a brand token
-  schema, and an 8:1 contrast rule enforced at render time.
+  A design skill for coding agents: interaction design, visual craft,
+  collection exploration, and readable artifacts grounded in design research.
 site_url: https://muriel.mindbendingpixels.com/
 site_author: Andy Edmonds
 repo_url: https://github.com/andyed/muriel
@@ -28,6 +28,9 @@ exclude_docs: |
   examples/critique-fixtures/README.md
   # The lab ships its own index.html; keep its source README out of that route.
   examples/linked-atlas/README.md
+  # Hold the unfinished jury visual and its draft landing page.
+  brand-assets/social/
+  jury/
 
 theme:
   name: material
@@ -71,6 +74,9 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.details
 
+hooks:
+  - link_paths.py
+
 plugins:
   - search
 
@@ -80,6 +86,8 @@ plugins:
 # Reference, not Channels. Vocabularies ordered concept-first.
 nav:
   - Home: index.md
+  - Examples: examples/gallery/README.md
+  - Showcase: showcase/index.html
   - Channels:
       - Spatial: channels/spatial.md
       - Charts: channels/charts.md
@@ -109,6 +117,10 @@ nav:
       - Data-viz platforms: vocabularies/data-viz-platforms.md
       - muriel brand: vocabularies/muriel-brand.md
   - Reference:
+      - Collections & Wunderkammer: references/collections.md
+      - Human capabilities: references/human-capabilities.md
+      - Design synthesis: references/design-synthesis.md
+      - Jury protocol: references/jury.md
       - Task analysis: references/task-analysis.md
       - GOMS: references/goms.md
       - Task observation: references/task-observation.md
@@ -124,9 +136,6 @@ nav:
       - Dimensions: channels/dimensions.md
       - Style guides (brand.toml): channels/style-guides.md
       - Brand-token schema: channels/SCHEMA.md
-      - Showcase — featured work ↗: https://muriel.mindbendingpixels.com/showcase/
-      - Gallery — all channels: examples/gallery/README.md
-      - Live spatial demos ↗: https://muriel.mindbendingpixels.com/gallery/
   - About:
       - The muriel skill: SKILL.md
       - Critique agent: agents/muriel-critique.md

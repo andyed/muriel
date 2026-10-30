@@ -26,18 +26,17 @@ Each entry: who owns it, what license its docs sit under (matters for citation d
 - **Divergent.** Apple's register is *interactive surfaces*, not *paper figures*. Detail-on-demand via tap is a chart pattern muriel's `channels/science.md` doesn't endorse (a paper figure must read at-print without interaction). For static figures, ignore the interaction layer of Apple's guidance; for screenshots of iOS apps, follow it.
 - **Cite when:** porting a paper figure to a Swift Charts surface; auditing an iOS-bound chart's accessibility; arguing for audio-graph parity in a brief that owns native iOS deliverables.
 
-### Google — *Material Design 3 — Data viz*
+### Google — *Material Design 2 — Data visualization* {#google-material-design-3-data-viz}
 
-- **Source.** [Material Design — Data visualization](https://m3.material.io/styles/color/data-visualization). Component library: Material Charts (Compose / JetPack / Flutter / Web).
-- **License.** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) on the documentation — **freely citable with attribution**, including longer paraphrases.
-- **Distinctive contribution.** **Token-driven palette discipline** — every chart colour, type ramp, and motion duration resolves through Material's design-token system (`md.sys.color.primary`, etc.), so a chart's appearance follows the surrounding app theme automatically. Strong "Express" theme that lets a brand override token resolution without re-authoring components.
-- **Convergent with muriel.** Tokens-at-render-time is muriel's `brand.toml` story re-spelled. Material's chart-type-by-purpose table (line for trends, bar for categories, etc.) matches `channels/infographics.md`'s 10-type taxonomy.
-- **Divergent.** Material's accessibility floor is WCAG AA (4.5:1) rather than muriel's 8:1. Material's motion library is more permissive — they allow some Material-y bounce that muriel bans in `channels/web.md`.
-- **Cite when:** authoring for Android / Flutter / Compose; building a Material-themed admin dashboard; defending a token-driven palette to a client.
+- **Source.** [Material Design 2 — Data visualization](https://m2.material.io/design/communication/data-visualization.html). This is the legacy Material 2 guide; its site is no longer maintained. There is no equivalent guide at the former Material 3 URL.
+- **Distinctive contribution.** Practical examples of chart selection, labels, hierarchy, and interaction in app interfaces. Use it as a historical design reference, checking implementation details against the platform you are building for.
+- **Convergent with muriel.** Choose a chart for the question, give it a clear reading order, and reveal additional detail through interaction when the task calls for it.
+- **Scope.** This guide does not define a shared “Material Charts” library across Compose, Flutter, and the web. [Material 3 design tokens](https://m3.material.io/foundations/design-tokens/overview) are a separate reference for theme values; connecting a chart library to those tokens is implementation work.
+- **Cite when:** discussing chart purpose, labeling, or detail-on-demand in a Material-styled app. Identify the guide as Material 2 when citing it.
 
 ### IBM — *Carbon Charts*
 
-- **Source.** [Carbon Design System — Data visualization](https://carbondesignsystem.com/data-visualization/charts/). Library: [@carbon/charts](https://github.com/carbon-design-system/carbon-charts) (D3-based, MIT-friendly).
+- **Source.** [Carbon Design System — Data visualization](https://www.carbondesignsystem.com/building-blocks/data-visualization/overview). Library: [@carbon/charts](https://github.com/carbon-design-system/carbon-charts) (D3-based).
 - **License.** Code is Apache 2.0. Documentation site terms permit citation; verify per-page before lifting paragraphs.
 - **Distinctive contribution.** **Enterprise-dashboard chart taxonomy** — when to use a *combo chart* vs a *stacked area*, when a *meter* outperforms a *donut*, exhaustive guidance for ops / observability / BI surfaces. Strong accessibility patterns (focus rings, ARIA descriptions, keyboard navigation across data points).
 - **Convergent with muriel.** Catalog-first thinking — Carbon answers "which chart for this question?" the same way `channels/infographics.md` answers "which template for this argument?".
@@ -65,7 +64,7 @@ Each entry: who owns it, what license its docs sit under (matters for citation d
 ### Financial Times — *Visual Vocabulary*
 
 - **Source.** [FT Visual Vocabulary](https://ft-interactive.github.io/visual-vocabulary/) — the Financial Times' poster + companion app classifying chart types by communication purpose.
-- **License.** [MIT](https://github.com/ft-interactive/visual-vocabulary/blob/master/LICENSE). The chart-type taxonomy itself can be reproduced freely with attribution.
+- **Reuse.** The FT’s [Chart Doctor licence note](https://github.com/Financial-Times/chart-doctor/blob/main/README.md#licence) distinguishes MIT-licensed software from FT content. Link to the vocabulary; do not assume the poster or its illustrations share the software licence.
 - **Distinctive contribution.** **Communication-purpose taxonomy** — *Deviation, Correlation, Ranking, Distribution, Change-over-time, Magnitude, Part-to-whole, Spatial, Flow*. Nine purposes, each with a handful of canonical chart types. Closer to muriel's `channels/infographics.md` taxonomy than to a "which library" guide.
 - **Convergent with muriel.** Purpose-first classification matches muriel's "argument decides chart" framing. The FT taxonomy is the single best public artifact for that move.
 - **Divergent.** Editorial voice; intended for journalism, not science papers or apps. Doesn't address accessibility, motion, or interaction.
@@ -80,33 +79,22 @@ Each entry: who owns it, what license its docs sit under (matters for citation d
 - **Divergent.** Journalism, not science; assumes Datawrapper's interactive surface; opinionated colour palettes that may not match a `brand.toml`.
 - **Cite when:** a chart will land in a newsroom-adjacent register; defending a specific colour choice with public-facing precedent.
 
-## What they converge on
+<span id="what-they-converge-on"></span>
+<span id="what-they-diverge-on"></span>
 
-Five rules show up in every platform's guidance, including muriel's:
+## How to compare them
 
-1. **Choose chart type from the argument**, not the data shape. (FT Visual Vocabulary names this explicitly; Material / Carbon ship taxonomies; Apple HIG / Datawrapper enforce per artifact.)
-2. **Don't rely on hue alone** for categorical distinction — pair with shape, pattern, or label. (All five.)
-3. **Motion serves readability**, not decoration — easing curves are smooth, durations are short, reduced-motion respected. (Apple HIG, Material, Carbon, and `channels/web.md`'s `bounce-easing` ban.)
-4. **Hierarchy via size + weight + position** before colour. (Apple HIG, Tufte's *data-ink*, Bertin's retinal ranking — convergent across the academic and platform traditions.)
-5. **Label every number, label every axis** — no decoration without context. (Universal.)
+These references have different scopes. FT starts with communication purpose; Carbon pairs chart types with implementation resources; Apple focuses on platform behavior; the legacy Material guide illustrates chart presentation in apps. Use the source that addresses the actual design decision.
 
-These are the **citable consensus**. When muriel asserts one of them, you have five precedents in your pocket.
-
-## What they diverge on
-
-- **Contrast floor.** WCAG AA (4.5:1) for Apple / Material / Carbon; muriel's floor is 8:1. Cite muriel's stricter standard when authoring; cite the platform's floor when reviewing externally-produced work that meets AA but not muriel.
-- **Pie/donut tolerance.** Apple HIG and Material permit them for ≤3 categories; FT Visual Vocabulary and muriel's `channels/infographics.md` recommend bar charts almost always. The disagreement is real and worth naming when it surfaces.
-- **Audio / sonification.** Apple alone has it baked in. The rest treat it as a future direction.
-- **Token-driven palettes.** Material is the most disciplined; Carbon and muriel agree; Apple HIG defers to system colours; Vega-Lite and Plot are theme-agnostic.
-- **Animation budget.** Material allows more decoration motion than muriel or Apple HIG.
+Muriel’s own requirements still apply: readable labels, redundant cues when color carries meaning, purposeful motion, and its stricter text-contrast target. Do not attribute these requirements to every platform without a specific supporting passage. A design guide, a library default, and a tested accessibility behavior are different kinds of evidence.
 
 ## How to borrow
 
-The right citation pattern follows muriel's `agents/muriel-critique.md` § "Design-theory grounding":
+Name the platform, link to the relevant section, and distinguish the source’s guidance from the decision you are making:
 
-> **"Material Design — Data viz (token-driven palette):** "The chart's accent colour resolves through `md.sys.color.primary` — overrides at the theme level, not per-chart."*
+> **[Material Design 2 — Data visualization](https://m2.material.io/design/communication/data-visualization.html):** The guide illustrates ways to reveal more detail through interaction. For this dashboard, we will keep the key comparison visible and put supplementary values in a keyboard-accessible detail view.
 
-Name the platform, name the specific concept, link to the source, paraphrase in muriel's voice. Don't copy more than a sentence verbatim and don't lift images. The platforms' guidance is theirs; the application to a muriel artifact is muriel's.
+Paraphrase the relevant idea and explain its application to the artifact. Check the source before quoting or reusing images.
 
 ## Prior art / upstream
 

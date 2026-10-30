@@ -22,6 +22,10 @@ A small library for putting type into *felt* space — perspective grids that tu
 
 Part of the [muriel](../SKILL.md) skill — see the top-level index for mission and universal rules. Sister channels: [`svg.md`](svg.md) for the static surface this writes onto; [`web.md`](web.md) and [`interactive.md`](interactive.md) for the runtime surfaces the JS exemplars target.
 
+## Live examples
+
+Explore the [examples index](../examples/gallery/README.md#spatial-exploration), or open [Spatial typography](https://muriel.mindbendingpixels.com/gallery/spatial-typography/index.html), [MindBendingPixels Mountain](https://muriel.mindbendingpixels.com/gallery/mindbendingpixels-mountain/index.html), [Perspective Wall](https://muriel.mindbendingpixels.com/gallery/perspective-wall/index.html), or [Orbital Sunburst](https://muriel.mindbendingpixels.com/gallery/orbital-sunburst/index.html). Each demo links back here or to its vocabulary guide.
+
 ## Why this channel exists
 
 When distance changes a document or object's representation, use the
@@ -67,7 +71,7 @@ before it ships.
 | 5 | Data Mountain (MSR) | `render_assets/mindbendingpixels-mountain/` + `render_assets/sciprogfi-agentchan-mountain/` | Dumais et al. (2001) spatial-memory index — tilted plane group with click-to-focus zones; cards arranged on the slope so spatial position carries identity. Two brand skins (psychodeli + sciprogfi/agentchan). |
 | 6 | Perspective Wall | `render_assets/perspective-wall/` + `render_assets/sciprogfi-lux-mesh-wall/` | Mackinlay / Robertson / Card (1991) focus + context — central card readable, peripheral cards foreshortened against the receding wall. Two brand skins (psychodeli + sciprogfi/OHC mesh). |
 | 7 | Orbital Sunburst | `render_assets/orbital-sunburst/` | One partition layout projected two ways: conventional top-view sunburst and an exploded 3D hierarchy stack with pointer, keyboard, orbit, and phone-safe linear controls. |
-| 8 | Demo gallery | `render_assets/index.html` | Single page indexing every exemplar with kicker / tag / lineage / source link. |
+| 8 | Examples index | `examples/gallery/README.md` | Live demos and worked artifacts, with guides and source. The old `render_assets/index.html` route forwards to this index. |
 | 9 | High-count tile field | `render_assets/_lib/atlas.js` + `instanced.js` | The whole corpus as ONE instanced draw call over a two-tier texture atlas (`far`: every item at 64px; `near`: an LRU pool of 256px slots). VRAM is bounded by the tier sizes, not the item count. |
 | 10 | Pixel/DOM hybrid | `render_assets/_lib/hybrid.js` | A fixed pool of real DOM elements lent to whatever is close enough to read, swapped against their quads. Keeps selectable text, links, and keyboard focus at a DOM budget that does not grow with the corpus. |
 | 11 | Piles | `render_assets/_lib/piles.js` | Mander / Salomon / Wong (CHI 1992) casual organization. Groups become stacks placed on the surface; click spreads a pile in place and collapses it back. Membership is supplied as index lists, so a facet-derived grouping and a hand-made pile are the same object, and an item may sit in several piles — which a folder tree cannot represent. |
@@ -482,4 +486,4 @@ render_assets/sciprogfi-lux-mesh-wall/             # Perspective Wall (sciprogfi
 - **Further ridgemap projections.** The `ridgemap` MVP ships only the stacked-1D-slice form. The same `(field, canvas, …)` signature should grow siblings that render the same scalar field as: filled isoline bands (USGS / Imhof quadrangle), wireframe protrusion from a grid (BYTE-cover / Tinney 3D mesh), and hachured / halftone relief. One extractor stage, several emitters — the unifier is *scalar field → topology*. Documenting the taxonomy in a `channels/topography.md` companion before the next emitter lands.
 - **Field ingestion from pixels.** Today `ridgemap` takes a 2D numeric array. A small `muriel.spatial.field_from_image(path, downsample=N, channel="luma")` helper would let raster sources (image luminance, video frame Δ, attention/saliency maps) feed the same primitive without callers needing to roll their own resampling. Crosses the channel's first input-is-pixels line — defer until a real artifact needs it.
 
-See [`TODO.md`](../TODO.md) for cross-channel queue context.
+See [`TODO.md`](../../../../../TODO.md) for cross-channel queue context.

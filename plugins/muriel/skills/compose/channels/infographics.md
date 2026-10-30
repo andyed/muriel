@@ -46,7 +46,7 @@ AI image generation lives in other skills (iblipper for animated typography, mur
 
 ## The ten types
 
-Taxonomy borrowed from [K-Dense infographics](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/infographics/SKILL.md) (MIT). Each type suggests a structure; pick the one that matches the message, don't force data into the wrong shape.
+Taxonomy borrowed from [K-Dense infographics](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/infographics/SKILL.md) (MIT). Each type suggests a structure; pick the one that matches the message, don't force data into the wrong shape.
 
 | # | Type | Purpose | Layout patterns | Muriel examples |
 |---|------|---------|----------------|-----------------|
@@ -285,9 +285,9 @@ Palette: scrutinizer-www canonical — slate-900 `#0f172a` background, white pri
 
 ## Prior art / upstream
 
-- [K-Dense scientific-agent-skills — infographics](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/infographics/SKILL.md) (MIT). Source for the 10-type taxonomy, 8-style-preset concept, 5-point quality rubric, 60-40 visual/text rule, 60-30-10 color rule, and colorblind-safe palettes (Wong/IBM/Tol). K-Dense's pipeline (Nano Banana Pro + Gemini scoring) is explicitly **not** adopted — muriel's lane is deterministic SVG.
-- [K-Dense — design_principles.md](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/infographics/references/design_principles.md). Long-form principles reference. Useful when debating a specific layout choice in an artifact review.
-- [K-Dense — color_palettes.md](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/scientific-skills/infographics/references/color_palettes.md). Industry-style palettes (Corporate / Healthcare / Tech / Nature / Education / Marketing / Finance / Nonprofit). Reference when adapting muriel output to a brand that doesn't have its own tokens.
+- [K-Dense scientific-agent-skills — infographics](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/infographics/SKILL.md) (MIT). Source for the 10-type taxonomy, 8-style-preset concept, 5-point quality rubric, 60-40 visual/text rule, 60-30-10 color rule, and colorblind-safe palettes (Wong/IBM/Tol). K-Dense's pipeline (Nano Banana Pro + Gemini scoring) is explicitly **not** adopted — muriel's lane is deterministic SVG.
+- [K-Dense — design_principles.md](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/infographics/references/design_principles.md). Long-form principles reference. Useful when debating a specific layout choice in an artifact review.
+- [K-Dense — color_palettes.md](https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/skills/infographics/references/color_palettes.md). Industry-style palettes (Corporate / Healthcare / Tech / Nature / Education / Marketing / Finance / Nonprofit). Reference when adapting muriel output to a brand that doesn't have its own tokens.
 - [JimLiu/baoyu-skills — baoyu-infographic](https://github.com/JimLiu/baoyu-skills) (MIT). Source for the dense-modules module vocabulary (seven typed module archetypes, generalized and re-cast as content contracts) and the high-density-guide text-placement conventions (module-count subtitle, badge headers, oversized accent numbers). Baoyu's pipeline (prompt-to-raster via image-gen backends) and its shrink-text-to-fit density rule are explicitly **not** adopted — muriel's lane is deterministic SVG with hard type-size and contrast floors.
 - [Bang Wong — "Points of view: Color blindness"](https://www.nature.com/articles/nmeth.1618) (Nature Methods, 2011). Primary source for the Okabe-Ito palette.
-- [Paul Tol — Colour Schemes](https://personal.sron.nl/~pault/). Primary source for the Tol qualitative / sequential / diverging palettes.
+- [Paul Tol — Colour Schemes](https://sronpersonalpages.nl/~pault/). Primary source for the Tol qualitative / sequential / diverging palettes.
