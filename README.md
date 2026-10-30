@@ -143,7 +143,7 @@ Run each seat as its own subagent. The restrictions hold only because the seat n
 muriel is not on PyPI yet. Install the wheel from the latest release:
 
 ```bash
-pip install https://github.com/andyed/muriel/releases/download/v0.14.0/muriel-0.14.0-py3-none-any.whl
+pip install https://github.com/andyed/muriel/releases/download/v0.15.0/muriel-0.15.0-py3-none-any.whl
 ```
 
 The core package has no dependencies. Extras add one backend each: `raster` (Pillow, NumPy), `critique` (cairosvg), `faces` (MediaPipe), `text` (EasyOCR), `saliency` (ONNX Runtime), or `all`. `muriel doctor` reports what is installed.

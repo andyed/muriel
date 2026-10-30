@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name            = "muriel"
-version         = "0.14.0"
+version         = "0.15.0"
 description     = "Design skill for coding agents. It translates between design languages, expresses them in a multitude of mediums, juries its own work, and keeps every piece on brand and readable."
 readme          = "README.md"
 requires-python = ">=3.9"
