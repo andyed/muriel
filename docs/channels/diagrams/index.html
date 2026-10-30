@@ -1381,6 +1381,41 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prose/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prose
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1904,6 +1939,174 @@
     <span class="md-status md-status--experimental"></span>
   
 
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/task-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/goms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GOMS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/task-observation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task observation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/task-analysis-cases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task-analysis cases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/task-analysis-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task-analysis evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/flow-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flow patterns
+  
+
+    
+  </span>
+  
   
 
       </a>
@@ -2625,6 +2828,7 @@
 <li><strong>Decorative SVG</strong> — dividers, ornaments — gets <code>aria-hidden="true" focusable="false"</code> and no title.</li>
 </ul>
 <p>Every generator takes <code>title=</code> and <code>desc=</code>. Pass <code>desc=</code> with the claim; the default only lists the labels and values in the spec and never invents an argument. <code>muriel diagram-check &lt;file.svg&gt;</code> runs this contract together with the label-geometry checks and the 8:1 text-contrast audit (which reads <code>fill=</code> attributes as well as CSS, and scores text against the shapes painted under it). It exits 1 on any finding, and also on a file with no scorable text: a check that saw nothing does not pass. Text over a curved translucent fill reports <code>unverified</code>, not ok; <code>&lt;circle&gt;</code> and <code>&lt;ellipse&gt;</code> are tested point-in-shape and composited exactly, which is why <code>muriel.tools.venn</code> writes its sets as real <code>&lt;circle&gt;</code> elements rather than matplotlib's Bézier region paths — every count gets a measured ratio. (Contract adapted from diagram-design's output-spec, MIT.)</p>
+<p><code>muriel line-ends &lt;file.svg&gt;</code> is the rendered check <code>diagram-check</code> cannot run: in headless Chromium it fails any connector, leader, tick or rule whose end lands on nothing. An end passes on another stroke, a node's outline or flat fill edge, a dot, within 4 px of a label, under a fill painted after it, or on the canvas edge. Gridlines that all stop at one unstroked plot edge pass together, but a near miss (within 6 px) never does, because a generator that stops every connector 2 px short would otherwise excuse itself. Mark an end meant to stop with <code>data-free</code> (<code>"start"</code>, <code>"end"</code>, or bare for both). It needs Playwright, so it is a separate command rather than a fourth <code>diagram-check</code> gate. Generative textures such as flow fields end in mid-air by design: scope the check with <code>--lines</code>.</p>
 <h3 id="labels-are-measured-containers-grow">Labels are measured; containers grow<a class="headerlink" href="#labels-are-measured-containers-grow" title="Permanent link">&para;</a></h3>
 <p>The geometry numbers in each generator — a 144px step box, a 168px lane gutter, a 160px pyramid apex — are <strong>floors, not limits</strong>. Every label is measured before it is drawn (<a href="https://github.com/andyed/muriel/blob/main/muriel/tools/diagrams/_labels.py"><code>muriel/tools/diagrams/_labels.py</code></a>, built on <a href="https://github.com/andyed/muriel/blob/main/muriel/layout.py"><code>muriel.layout.text_bbox</code></a>), and when it doesn't fit, the container grows:</p>
 <table>

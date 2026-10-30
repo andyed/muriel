@@ -9,6 +9,7 @@
     --paper: #E8E2D0;
     --mark:  #3A3530;      /* warm graphite — committed default */
     --ink:   #121212;
+    --ink-soft: #433F3A;   /* 8.07:1 on graphite paper */
     --accent: #3A3530;
     --panel-bg: rgba(255,255,255,0.80);
     --panel-border: rgba(58,53,48,0.25);
@@ -18,6 +19,7 @@
       --paper: #1F1A14;
       --mark:  #E0D4BC;
       --ink:   #E8E2D0;
+      --ink-soft: #BAB099; /* 8.02:1 on graphite paper */
       --accent: #E0D4BC;
       --panel-bg: rgba(31,26,20,0.82);
       --panel-border: rgba(224,212,188,0.25);
@@ -43,8 +45,8 @@
   .rule { stroke: var(--mark); stroke-width: 2; transition: stroke 0.3s; }
   .wordmark { font-size: 76px; font-weight: 700; fill: var(--ink); letter-spacing: -0.01em; }
   .sub1 { font-size: 22px; fill: var(--ink); }
-  .sub2 { font-size: 17px; fill: #5C5852; }
-  .credit { font-size: 11px; fill: var(--accent); fill-opacity: 0.88; }
+  .sub2 { font-size: 17px; fill: var(--ink-soft); }
+  .credit { font-size: 16px; fill: var(--accent); }
 
   .panel {
     background: var(--panel-bg);
