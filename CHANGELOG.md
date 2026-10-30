@@ -6,7 +6,56 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.15.0] — 2026-10-30
+
+**muriel designs behavior, and the jury sees sequences.** muriel now frames itself as an interaction and visual-design system. Task analysis, GOMS, and task observation decide which work a flow should ask of a person before its controls are arranged; interaction contracts check that a flow holds together across its states; semantic zoom, linked displays, brushing, and faceted exploration share one multiscale contract. The jury grows from five seats to seven: the Loupe judges finish in 4× close-ups, and the Walker walks a flow frame by frame with the task in hand. Diagrams gain seven generators and carry their data and an accessible-figure contract; `muriel.collection` validates Wunderkammer collections; a prose channel says how to write the text people read; `muriel line-ends` fails strokes that end on nothing. Long-form notes: [`releases/v0.15.0.md`](releases/v0.15.0.md).
+
 ### Added
+
+- **Task analysis, GOMS, and task observation: design the work before
+  arranging the controls.** `references/task-analysis.md` turns a goal into
+  alternative methods, selection rules (can the person see which one
+  applies?), the knowledge each step assumes, a first-use cognitive
+  walkthrough (Wharton et al., 1994), and acceptance journeys.
+  `references/goms.md` says which model answers which question. All four
+  variants estimate time; CMN-GOMS and NGOMSL also predict operator
+  sequences, and NGOMSL predicts working-memory load and relative learning
+  time. Project Ernestine is there as the reason to count the critical path,
+  not the steps removed. `references/task-observation.md` turns interaction
+  events into evidence after Hilbert and Redmiles, Uzilla, and *Instrumenting
+  the Dynamic Web*, without reading intent into logs. Worked cases, an
+  evaluation protocol, and a research intake with a checked bibliography come
+  with them. SKILL.md and five references route there with one trigger:
+  before designing or changing a multi-step flow.
+
+- **Interaction contracts check continuity across states.** Each state can
+  pass while the sequence fails. `references/interaction-contracts.md` now
+  requires that the next action stays put, that a control which changes
+  meaning cannot misfire on a tap aimed at its old label, one indicator per
+  quantity, results tagged with the revision that produced them, and output
+  checked where it lands rather than at "ready". The proof checklist and
+  anti-patterns gain matching rows.
+
+- **A seventh jury seat, the Walker, and `references/flow-patterns.md`.**
+  Every other seat judges one frame. The Walker gets the task and an ordered
+  filmstrip with a manifest of the next action's name, box, enabled state,
+  and focus. It asks the four walkthrough questions at each step and judges
+  what only shows across frames: a moving target, a relabel under the
+  finger, a handoff the system could run, a journey that ends at "ready".
+  After its walk it checks `flow-patterns.md`, twelve sequence failures with
+  fixes, sources (WCAG 2.2, Apple HIG, Tidwell's *Designing Interfaces*), and
+  a status the chair keeps from the ledger; each finding is tagged
+  `source: walk` or `source: pattern`. Its first sitting, on Protoplasm's
+  video export, filed ten findings, five of them confirmed against the code,
+  the frames, and the delivered files.
+
+- **The docs build fails on a broken internal link.** `site-docs/audit_links.py`
+  audits the built site and `site-docs/test_links.py` tests the audit; the
+  docs workflow runs both before it publishes. The site also features
+  Wunderkammer and its HyperFrames films, links the demos and guides to each
+  other, and holds the illustrated jury page back until its visual is done.
+  Spatial cards cancel stale focus flights and restore framing atomically
+  under reduced motion (`tests/spatial-focus.test.mjs`).
 
 - **`muriel line-ends`: a rendered check that fails any stroke ending in
   mid-air.** In headless Chromium it finds every open end of every stroked,
@@ -561,6 +610,44 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   target height falls toward the back, fitting the count inside the plane.
 - `data-mountain-field/` exemplar and its 29-assertion `check.mjs`.
 
+- **`muriel.typeset.pink_colormap`** — the pink density ramp was inline inside
+  `render_heatmap`, so a consumer holding its own density field (a per-cell
+  statistic rather than a fixation list) had nothing to import and hand-extracted
+  it instead; `attentional-foraging/scripts/render_max_lfhf_heatmap.py` carried a
+  copy. Two copies of a color ramp do not announce their drift — the figures just
+  stop matching. Now one function with two callers, verified byte-identical
+  (`render_heatmap` output hash unchanged across the extraction) and pinned by
+  `tests/test_typeset_colormap.py`, including a guard that `render_heatmap` still
+  delegates rather than re-implementing.
+- **Tests for `muriel.provenance`** (`tests/test_provenance.py`, 12 cases) — the module
+  every external repository imports had none, so a rename of `stamp_json` would have
+  shipped green. Covers the JSON round trip (payload preserved plus embedded
+  `_provenance`, flat sidecar, dataset hashing, unstamped files returning `None`), the
+  version-derivation invariants, and a by-name pin on the ten symbols other repos
+  import across the boundary. Verified two-sided: restoring the hardcoded version turns
+  two of them red. Suite is 181 → 193.
+- **Test CI** (`.github/workflows/tests.yml`) — muriel had only a docs build. Runs the
+  unit suite on Python 3.9 and 3.13 (3.9 exercises the `_version` fallback path),
+  asserts `pyproject` / `__version__` / stamp versions agree, and builds the package.
+
+- **`channels/readme.md` — repo front pages on a renderer you don't control.**
+  A README is a visual artifact rendered by a hostile, non-configurable
+  renderer, read once, at a glance, by someone deciding whether to close the
+  tab — and until now no channel owned it. Documents the GitHub sanitizer
+  contract (what survives, what is stripped silently, and six gotchas
+  including that the README's first screenful is not the *page's* first
+  screenful, and that "dark mode" is five themes so a baked page background
+  bands against dark dimmed). Ships a badge budget with an 8:1 floor on both
+  theme families, `<picture>` theme pairing, and a running-text-as-image
+  prohibition that keeps wordmarks legal and link text illegal. The channel's
+  distinguishing move is that the artifact is renderable: `muriel capture` the
+  live repo page, `muriel squint` the result, and the hierarchy claim becomes
+  testable rather than arguable. Structural AI-tell rules are spec'd in the
+  doc and queued into `muriel.aiism`. Renderer-contract observations credited
+  to [aza-ali/github-readme-crisp-links](https://github.com/aza-ali/github-readme-crisp-links)
+  (MIT); its headline technique — link text as gradient SVG wordmarks — is
+  explicitly not adopted.
+
 ### Changed
 
 - **SKILL.md frames muriel as an interaction and visual-design
@@ -655,7 +742,19 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   back, so a blended field painted far tiles over near ones — invisible while
   rows barely overlap, fatal for a pile.
 
+- **`install.sh` installs the Python package by default** (`Y/n`, was `y/N`), with
+  `--no-python` to opt out. No editable install had ever been made on the author's
+  machine, which is why six consumer scripts in another repo reach muriel by absolute
+  `sys.path.insert` — and why they broke silently for three weeks when the skill mount
+  was repointed at `plugins/muriel/skills/compose`, which is not a package root. The
+  editable install also closes a PEP 420 namespace shadow: the repo root is itself an
+  implicit package named `muriel`, so from a parent directory `import muriel` succeeds
+  and yields an empty module, defeating `try/except ImportError` guards.
+
 ### Fixed
+
+- **`muriel line-ends` exits 2 for a missing file, with or without
+  Playwright installed.**
 
 - **Cycle diagrams: each arc now starts on its source node's outline.** The
   hub's dashed spokes keep their deliberate gaps and now carry `data-free`,
@@ -835,8 +934,6 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   ground. The shared tokens are left alone — changing them restyles all four
   existing demos, and that is a call for their author.
 
-### Fixed
-
 - **The provenance stamp was misreporting its own version, and had been since 0.6.0.**
   `MURIEL_VERSION` was a hardcoded `"0.6.0"` in `muriel/provenance.py`, documented as
   "pinned for reproducibility", while the package moved to 0.14.0 — and a third copy in
@@ -853,41 +950,6 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   sentinel is `0+unknown`, which reads as "provenance unavailable" rather than as a
   release. `SCHEMA_VERSION` stays pinned — that is the field that should be constant.
 
-### Added
-
-- **`muriel.typeset.pink_colormap`** — the pink density ramp was inline inside
-  `render_heatmap`, so a consumer holding its own density field (a per-cell
-  statistic rather than a fixation list) had nothing to import and hand-extracted
-  it instead; `attentional-foraging/scripts/render_max_lfhf_heatmap.py` carried a
-  copy. Two copies of a color ramp do not announce their drift — the figures just
-  stop matching. Now one function with two callers, verified byte-identical
-  (`render_heatmap` output hash unchanged across the extraction) and pinned by
-  `tests/test_typeset_colormap.py`, including a guard that `render_heatmap` still
-  delegates rather than re-implementing.
-- **Tests for `muriel.provenance`** (`tests/test_provenance.py`, 12 cases) — the module
-  every external repository imports had none, so a rename of `stamp_json` would have
-  shipped green. Covers the JSON round trip (payload preserved plus embedded
-  `_provenance`, flat sidecar, dataset hashing, unstamped files returning `None`), the
-  version-derivation invariants, and a by-name pin on the ten symbols other repos
-  import across the boundary. Verified two-sided: restoring the hardcoded version turns
-  two of them red. Suite is 181 → 193.
-- **Test CI** (`.github/workflows/tests.yml`) — muriel had only a docs build. Runs the
-  unit suite on Python 3.9 and 3.13 (3.9 exercises the `_version` fallback path),
-  asserts `pyproject` / `__version__` / stamp versions agree, and builds the package.
-
-### Changed
-
-- **`install.sh` installs the Python package by default** (`Y/n`, was `y/N`), with
-  `--no-python` to opt out. No editable install had ever been made on the author's
-  machine, which is why six consumer scripts in another repo reach muriel by absolute
-  `sys.path.insert` — and why they broke silently for three weeks when the skill mount
-  was repointed at `plugins/muriel/skills/compose`, which is not a package root. The
-  editable install also closes a PEP 420 namespace shadow: the repo root is itself an
-  implicit package named `muriel`, so from a parent directory `import muriel` succeeds
-  and yields an empty module, defeating `try/except ImportError` guards.
-
-### Fixed
-
 - **`aiism` docstring advertised detectors that were deleted three releases
   ago.** The module header still listed copula-avoidance verbs ("serves as",
   "stands as"), significance-inflation phrases ("a testament to",
@@ -902,28 +964,6 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   science-agent's `aiism-rules.json` v6, which rebuilt that coverage from
   MIT-licensed sources. `PATTERN_RULES` also gained the removal comment
   `CLUSTER_RULES` already had, so neither empty table reads as an oversight.
-
-### Added
-
-- **`channels/readme.md` — repo front pages on a renderer you don't control.**
-  A README is a visual artifact rendered by a hostile, non-configurable
-  renderer, read once, at a glance, by someone deciding whether to close the
-  tab — and until now no channel owned it. Documents the GitHub sanitizer
-  contract (what survives, what is stripped silently, and six gotchas
-  including that the README's first screenful is not the *page's* first
-  screenful, and that "dark mode" is five themes so a baked page background
-  bands against dark dimmed). Ships a badge budget with an 8:1 floor on both
-  theme families, `<picture>` theme pairing, and a running-text-as-image
-  prohibition that keeps wordmarks legal and link text illegal. The channel's
-  distinguishing move is that the artifact is renderable: `muriel capture` the
-  live repo page, `muriel squint` the result, and the hierarchy claim becomes
-  testable rather than arguable. Structural AI-tell rules are spec'd in the
-  doc and queued into `muriel.aiism`. Renderer-contract observations credited
-  to [aza-ali/github-readme-crisp-links](https://github.com/aza-ali/github-readme-crisp-links)
-  (MIT); its headline technique — link text as gradient SVG wordmarks — is
-  explicitly not adopted.
-
-### Fixed
 
 - **Channel front-matter gates never ran.** `_load_channel_meta` resolved
   `<repo-root>/channels/<name>.md`, but the channel docs live under
