@@ -106,7 +106,7 @@ can complete it.
 Project Ernestine is the standard lesson. A new telephone-operator workstation
 removed about one keystroke per call and was expected to be faster, by one
 estimate up to four seconds per call. CPM-GOMS models predicted it would be
-slower; the field trial agreed, measuring 0.65 s slower per call. The faster
+slower; the field trial agreed, measuring 0.65 s slower per call. <!-- motion-exempt: not-motion (cited field result) --> The faster
 features were off the critical path, and on some calls the procedure with fewer
 keystrokes took longer (Gray, John & Atwood, 1993). Count what is on the
 critical path, not the steps removed.
