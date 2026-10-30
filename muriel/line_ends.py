@@ -248,8 +248,10 @@ def check(
     FileNotFoundError
         Target path missing.
     """
-    sync_playwright = _require_playwright()
+    # Resolve the target first, so a missing file is a usage error (exit 2)
+    # whether or not Playwright is installed.
     url = _target_url(target)
+    sync_playwright = _require_playwright()
     script = _SCRIPT.read_text(encoding="utf-8")
     options = {
         "root": root,
