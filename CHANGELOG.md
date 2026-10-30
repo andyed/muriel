@@ -6,6 +6,23 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **`muriel rasterize` — SVG to PNG without Cairo.** The critique agent's
+  rasterize step called `cairosvg`, which on Windows installs and then fails
+  at import (no `libcairo-2.dll`). `muriel.rasterize` keeps cairosvg first
+  and falls back to ImageMagick 7 (`magick`), whose Windows build carries
+  librsvg and Cairo itself. Its librsvg reads only the first family of a
+  `font-family` stack and rounds weight 600 to Bold, so before the render
+  every stack is resolved against `magick -list font`. The CSS keywords muriel's
+  generators lead with (`ui-sans-serif`, `system-ui`, `ui-monospace`)
+  resolve to the faces a browser picks. On Windows, intermediate weights
+  become their named faces ("Segoe UI Semibold"), chosen by the CSS
+  weight-matching rule. Prints the backend, every substitution, leftover
+  font fallbacks, and a note when `<image>` elements are present, since
+  ImageMagick's librsvg drops them. The critique agent and the repo's
+  permission allowlist now point at it.
+
 ## [0.15.0] — 2026-10-30
 
 **muriel designs behavior, and the jury sees sequences.** muriel now frames itself as an interaction and visual-design system. Task analysis, GOMS, and task observation decide which work a flow should ask of a person before its controls are arranged; interaction contracts check that a flow holds together across its states; semantic zoom, linked displays, brushing, and faceted exploration share one multiscale contract. The jury grows from five seats to seven: the Loupe judges finish in 4× close-ups, and the Walker walks a flow frame by frame with the task in hand. Diagrams gain seven generators and carry their data and an accessible-figure contract; `muriel.collection` validates Wunderkammer collections; a prose channel says how to write the text people read; `muriel line-ends` fails strokes that end on nothing. Long-form notes: [`releases/v0.15.0.md`](releases/v0.15.0.md).
