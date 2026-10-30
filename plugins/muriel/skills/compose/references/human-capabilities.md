@@ -58,6 +58,10 @@ details that could change the decision:
 Keep this inside the existing Muriel synthesis or delta. A local decision may
 need only a sentence; do not require a separate assessment for every control.
 
+Before designing or changing a multi-step flow, use
+[task analysis](task-analysis.md) to turn this framing into goals, methods,
+selection rules, and knowledge demands.
+
 For example, when designing a creative tool's parameter panel, compare how
 people explore, compare, and return to earlier results. Persistent previews,
 saved alternatives, reversible changes, and precise direct controls are

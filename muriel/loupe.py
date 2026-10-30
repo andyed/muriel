@@ -136,8 +136,10 @@ Exit status:
 Limitations
 -----------
 
-- A lens, not a detector. It finds nothing on its own. A rendered-line
-  check that fails a stroke ending in mid-air is a separate tool.
+- A lens, not a detector. It finds nothing on its own. On SVG and HTML,
+  ``muriel.line_ends`` measures stroke ends in the rendered page and its
+  output is a finding of fact; the lens is for what that check cannot
+  reach.
 - Judges pixels, not markup. A defect that only exists in some state
   the raster did not capture (hover, an animation frame, a theme) is
   invisible here; capture that state and run the lens on it.

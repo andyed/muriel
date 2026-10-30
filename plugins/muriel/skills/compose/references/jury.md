@@ -59,7 +59,8 @@ Do **not** load for: a test render or intermediate frame; anything a compute
 tool answers; a settled direction needing only execution notes; backend, body
 copy, or spacing work; a decision the calling agent has made and only wants
 ratified. A name is the one non-visual decision in scope; see [Naming
-decisions](#naming-decisions).
+decisions](#naming-decisions). A multi-step flow is in scope when its states
+are the artifact: the [Walker](#the-roster) judges the sequence.
 A single artifact with no alternatives is out of scope **only when its premise
 is settled** — run [`muriel-critique`](../../../agents/muriel-critique.md)
 alone. A single artifact whose premise is contested is in scope, and votes on
@@ -78,7 +79,15 @@ tooling and enter as stipulated evidence, never as motions:
   source: untouched shadcn/Tailwind defaults, AI-purple as primary, gradient
   headings, purple-to-blue gradients, neon glow, emoji-as-icons, the centred
   hero + three-feature-card skeleton;
+- `python -m muriel.line_ends <file.svg|page.html>` — every stroke end that
+  lands on nothing, measured in the rendered page; on SVG and HTML these are
+  facts, and the Loupe's line-end findings are limited to what this check
+  cannot see (rasters, strokes outside its `--lines` scope);
 - recorded seeds, dimensions, and export paths;
+- for a flow, how far the next action moved between consecutive frames,
+  computed from the journey manifest's bounding boxes (arithmetic the chair
+  does; no muriel tool yet). The Walker rules on whether a move matters, never
+  on its size;
 - **conditional, may return nothing** —
   `python -m muriel.tools.impeccable_bridge <path>` is a no-op when Node, npx,
   or the third-party `impeccable` CLI is absent, and degrades silently; the
@@ -105,7 +114,8 @@ and facts are repaired, not debated.
 **Jury jurisdiction** is only the genuinely contested: composition and focal
 dominance; hierarchy and reading order; which of N directions earns
 implementation; brand voice; whether an encoding earns its complexity; whether
-the framing itself is wrong. The chair's first duty is kicking measurable
+the framing itself is wrong; whether a flow holds together across its states.
+The chair's first duty is kicking measurable
 questions back to the compute tools. A ballot claim a tool could have settled
 is struck, the tool is re-run, and the strike is logged as `noise`.
 
@@ -163,7 +173,7 @@ no Forger veto](#rule-b-no-forger-veto).
 **A jury and `muriel-critique` are mutually exclusive.** Run one or the other
 on an artifact, never both.
 [`muriel-critique`](../../../agents/muriel-critique.md) is a generalist whose
-coverage overlaps four of the six seats — hierarchy (Squinter), the
+coverage overlaps four of the seven seats — hierarchy (Squinter), the
 numeric-claim probe list (Pedant, which this reference delegates back to it),
 AI-tell (Forger), and multi-scale evaluation (Thumbnail). Under union
 aggregation, running both double-counts by construction: the same defect
@@ -188,7 +198,7 @@ Two seats sharing a lens and a loss function are one seat. Cut one.
 
 ## The roster
 
-Six seats, all six shipped as agents. Seat them as subagents. Running one
+Seven seats, all seven shipped as agents. Seat them as subagents. Running one
 inline as a scripted prompt is a weaker thing than seating it — say so on the
 ballot rather than pretending otherwise.
 
@@ -326,6 +336,46 @@ Note also that its probe list comes from `muriel-critique`, which is why the
 two bodies may not both run — see [Two bodies, two aggregation
 rules](#two-bodies-two-aggregation-rules).
 
+**The Walker — SHIPPED as an agent; seat it only for a flow.** *Lens:* the
+journey filmstrip — one capture per settled state along a complete task
+journey, in order, plus one failure or cancel branch when the flow has one.
+Each frame has a manifest entry: state name, the next intended action's label,
+bounding box, and enabled state, and where focus sits. *Loss:* misses in
+continuity; willing to be wrong about anything visible in a single frame.
+*Access:* the task in the person's terms (goal, starting state, success
+criterion), the filmstrip, and the manifest; denied the design rationale, the
+implementer's claims about what was fixed, source code, and other ballots.
+*Judges:* at each step, the four cognitive-walkthrough questions from
+[task analysis](task-analysis.md#walk-first-use); whether the step is the
+person's work or a handoff the system could do; whether a control or indicator
+that persists across frames keeps its place and its meaning; whether the
+journey ends at a delivered outcome or only at "ready".
+
+Every other seat judges one frame, so a flow whose frames each pass can still
+fail as a sequence. The Walker is the only seat given the task, and the Stranger
+is the only seat denied it; they are complementary, not redundant. A Walker
+finding is admissible only if it needs the task or two or more frames to see.
+A defect visible in one frame without the task belongs to another seat.
+
+**Memory without priming.** Only after its walk is written does the Walker
+check [flow patterns](flow-patterns.md), the known sequence failures, and tag
+each finding `source: walk` or `source: pattern (P<n>)`. The chair, never a
+seat, maintains that list from the ledger: a candidate pattern becomes
+confirmed when its finding is a `hit`. Product canon and prior sittings on the
+same flow stay with the chair, who uses them to choose journeys and to route
+findings that contradict a locked decision to the split. Giving them to the
+seat would hand it the rationale it is denied.
+
+**Assembling the lens.** The chair drives the journey with the host's own
+end-to-end harness (Playwright or equivalent) at the shipping viewport. At each
+settled state it captures the frame and records the next action's accessible
+name, `getBoundingClientRect()`, disabled state, and the focused element.
+`muriel.capture` sweeps one URL across viewport tiers; it does not drive a
+journey. A filmstrip assembled by hand from screenshots is admissible, but the
+ballot records `lens: hand-assembled`. Like the Stranger, the Walker measures
+what a model concludes, here while knowing the goal: an analyst walkthrough
+and an artifact check, not first-time human behavior.
+
 ## Ballot mechanics
 
 **Randomize option order per juror.** LLM judges have strong position bias;
@@ -386,7 +436,7 @@ Every juror agent emits exactly this block and nothing outside it:
 
 ```text
 Juror ballot
-Seat: <squinter | thumbnail | stranger | forger | pedant>
+Seat: <squinter | thumbnail | loupe | stranger | forger | pedant | walker>
 Decision ID: <stable task-local id>
 Isolation: subagent | inline (denial nominal)
 Order seen: <option ids, in the order presented>
@@ -608,7 +658,7 @@ critic and save the tokens. Check both after unsealing round 1:
   mechanics](#ballot-mechanics).
 - **Unique contribution** — fewer than half the seats, rounded up, produced a
   finding or comparison judgement no other seat produced. That is 2 of 3, 2 of
-  4, 3 of 5, 3 of 6. The old absolute "fewer than 2 of N" was far stricter at N=3 than
+  4, 3 of 5, 3 of 6, 4 of 7. The old absolute "fewer than 2 of N" was far stricter at N=3 than
   at N=5, so a three-seat panel could pass a test a five-seat panel failed on
   the same proportion of unique contributors.
 
@@ -634,10 +684,11 @@ and contributes no findings of its own. Duties, in order:
 2. **Run the deterministic checks**, enter them as stipulated facts, and repair
    fact-level failures before seating anyone.
 3. **Seat the panel.** Only seats whose lenses and losses differ for this
-   artifact. Three is a real panel; five is the ceiling. The roster has six,
-   so a full panel leaves one out: drop the Loupe for a social card no one
-   will zoom into, or the Thumbnail for a figure that is never shown small.
-   Do not seat the Stranger inline.
+   artifact. Three is a real panel; five is the ceiling. The roster has seven,
+   so a full panel leaves at least two out. Seat the Walker only for a flow;
+   a static artifact gives it nothing to judge. Drop the Loupe for a social
+   card no one will zoom into, or the Thumbnail for a figure or in-app flow
+   that is never shown small. Do not seat the Stranger inline.
 4. **Assign evidence access per seat**, denials included, and enforce it.
    Record each seat's `Isolation` honestly.
 5. **Randomize option order** per seat with the `shasum` digest; record the
@@ -1059,7 +1110,7 @@ Do not:
   buys correlated errors at one full critique per seat per option. If two seats
   do not deny each other's evidence or optimize different losses, cut one.
 - **Run a jury and `muriel-critique` on the same artifact.** The generalist
-  overlaps four of six seats; the union then counts one defect twice and it
+  overlaps four of seven seats; the union then counts one defect twice and it
   reads as corroboration.
 - **Claim a denial a scripted prompt cannot enforce.** Evidence denial needs a
   subagent boundary. Inline, mark `Isolation: inline (denial nominal)` and

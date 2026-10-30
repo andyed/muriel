@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Muriel — interactive colophon (constraint solver)</title>
+<style>
+  :root {
+    --paper: #E8E2D0;
+    --mark:  #3A3530;      /* warm graphite — committed default */
+    --ink:   #121212;
+    --accent: #3A3530;
+    --panel-bg: rgba(255,255,255,0.80);
+    --panel-border: rgba(58,53,48,0.25);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #1F1A14;
+      --mark:  #E0D4BC;
+      --ink:   #E8E2D0;
+      --accent: #E0D4BC;
+      --panel-bg: rgba(31,26,20,0.82);
+      --panel-border: rgba(224,212,188,0.25);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); min-height: 100%; }
+  body {
+    font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 0;
+    min-height: 100vh;
+  }
+  .stage {
+    display: grid; place-items: center;
+    padding: 40px;
+  }
+  .stage-inner { width: 100%; max-width: 1200px; aspect-ratio: 1200/630; }
+  svg { width: 100%; height: 100%; display: block; }
+  .bar { fill: var(--mark); transition: fill 0.3s; }
+  .rule { stroke: var(--mark); stroke-width: 2; transition: stroke 0.3s; }
+  .wordmark { font-size: 76px; font-weight: 700; fill: var(--ink); letter-spacing: -0.01em; }
+  .sub1 { font-size: 22px; fill: var(--ink); }
+  .sub2 { font-size: 17px; fill: #5C5852; }
+  .credit { font-size: 11px; fill: var(--accent); fill-opacity: 0.88; }
+
+  .panel {
+    background: var(--panel-bg);
+    border-left: 1px solid var(--panel-border);
+    padding: 24px 20px;
+    overflow-y: auto;
+    font-size: 13px;
+  }
+  .panel h1 {
+    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; margin-bottom: 4px;
+  }
+  .panel .subtitle {
+    font-size: 11px; color: #666; margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .panel section {
+    margin-bottom: 24px; padding-bottom: 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .panel section:last-child { border-bottom: none; }
+  .panel h2 {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #888; margin-bottom: 10px; font-weight: 700;
+  }
+  .ctrl {
+    display: grid; grid-template-columns: 1fr 50px;
+    gap: 8px; align-items: center; margin-bottom: 8px;
+    font-family: ui-monospace, Menlo, Monaco, monospace; font-size: 11px;
+  }
+  .ctrl label { color: #444; }
+  .ctrl .val { color: var(--accent); text-align: right; font-weight: 600; }
+  input[type=range] { grid-column: 1 / -1; width: 100%; }
+
+  .swatches {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+  }
+  .swatch {
+    aspect-ratio: 1; border-radius: 2px; cursor: pointer;
+    border: 2px solid transparent; transition: border-color 0.2s;
+    position: relative;
+  }
+  .swatch.active { border-color: var(--ink); }
+  .swatch .name {
+    position: absolute; bottom: -18px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px; color: #666; white-space: nowrap;
+  }
+
+  .presets {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .preset {
+    background: transparent; border: 1px solid #aaa;
+    padding: 5px 10px; border-radius: 2px; font-size: 11px;
+    cursor: pointer; font: inherit; color: #444;
+  }
+  .preset:hover { border-color: var(--ink); color: var(--ink); }
+  .preset.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .controls-foot {
+    display: flex; gap: 8px; font-size: 11px;
+  }
+  .controls-foot button {
+    background: transparent; border: 1px solid #666; color: #444;
+    padding: 5px 12px; border-radius: 2px; cursor: pointer; font: inherit;
+  }
+  .controls-foot button:hover { border-color: var(--ink); color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="stage-inner">
+    <svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+      <rect class="bar" id="b0"/>
+      <rect class="bar" id="b1"/>
+      <rect class="bar" id="b2"/>
+      <rect class="bar" id="b3"/>
+      <rect class="bar" id="b4"/>
+      <rect class="bar" id="b5"/>
+
+      <line class="rule" x1="400" y1="410" x2="800" y2="410"/>
+      <text class="wordmark" x="600" y="490" text-anchor="middle">muriel</text>
+      <text class="sub1"     x="600" y="532" text-anchor="middle">scriptable visual production toolkit</text>
+      <text class="sub2"     x="600" y="558" text-anchor="middle">for researcher-designer-engineers</text>
+      <text class="credit"   x="40"  y="612">after muriel cooper · live constraint system</text>
+    </svg>
+  </div>
+</div>
+
+<aside class="panel">
+  <h1>Constraint System</h1>
+  <p class="subtitle">
+    The mark is a live solution to a constraint set: outer stems anchored,
+    inner bars redistributed by role, total width conserved, area preserved
+    per bar. Adjust the constraints to see the solution space.
+  </p>
+
+  <section>
+    <h2>Palette</h2>
+    <div class="swatches" id="swatches">
+      <!-- filled by JS -->
+    </div>
+  </section>
+
+  <section>
+    <h2>Presets</h2>
+    <div class="presets" id="presets">
+      <button class="preset active" data-preset="default">default</button>
+      <button class="preset" data-preset="calm">calm</button>
+      <button class="preset" data-preset="jiggy">jiggy</button>
+      <button class="preset" data-preset="static">static</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Outer Pair (bars 1 &amp; 4)</h2>
+    <div class="ctrl">
+      <label>shallow height <span class="val" id="v-a-shallow">0.78</span></label>
+      <input type="range" id="a-shallow" min="0.55" max="1.0" step="0.01" value="0.78">
+    </div>
+    <div class="ctrl">
+      <label>deep height <span class="val" id="v-a-deep">0.55</span></label>
+      <input type="range" id="a-deep" min="0.30" max="0.80" step="0.01" value="0.55">
+    </div>
+    <div class="ctrl">
+      <label>float (baseline lift) <span class="val" id="v-a-float">0.45</span></label>
+      <input type="range" id="a-float" min="0.0" max="1.0" step="0.01" value="0.45">
+    </div>
+  </section>
+
+  <section>
+    <h2>Inner Pair (bars 2 &amp; 3)</h2>
+    <div class="ctrl">
+      <label>shallow height <span class="val" id="v-b-shallow">0.55</span></label>
+      <input type="range" id="b-shallow" min="0.30" max="0.80" step="0.01" value="0.55">
+    </div>
+    <div class="ctrl">
+      <label>deep height <span class="val" id="v-b-deep">0.22</span></label>
+      <input type="range" id="b-deep" min="0.08" max="0.55" step="0.01" value="0.22">
+    </div>
+    <div class="ctrl">
+      <label>float (baseline lift) <span class="val" id="v-b-float">0.60</span></label>
+      <input type="range" id="b-float" min="0.0" max="1.0" step="0.01" value="0.60">
+    </div>
+  </section>
+
+  <section>
+    <h2>Motion</h2>
+    <div class="ctrl">
+      <label>breath speed <span class="val" id="v-speed">1.0×</span></label>
+      <input type="range" id="speed" min="0.0" max="2.0" step="0.05" value="1.0">
+    </div>
+    <div class="ctrl">
+      <label>width elasticity <span class="val" id="v-elastic">0.42</span></label>
+      <input type="range" id="elastic" min="0.0" max="0.7" step="0.01" value="0.42">
+    </div>
+    <div class="ctrl">
+      <label>snap (easing) <span class="val" id="v-snap">0.35</span></label>
+      <input type="range" id="snap" min="0.0" max="1.0" step="0.01" value="0.35">
+    </div>
+  </section>
+
+  <section>
+    <h2>Outer Stem Alignment</h2>
+    <p style="font-size:11px;color:#888;margin-bottom:8px;line-height:1.4;">
+      Left outer's top aligns with the tallest inner bar's top.
+      Right outer's bottom aligns with the lowest inner bar's bottom.
+      The diagonal tension is intrinsic — it responds to the inner state.
+    </p>
+    <div class="ctrl">
+      <label>offset (px) <span class="val" id="v-shift-base">0</span></label>
+      <input type="range" id="shift-base" min="-20" max="30" step="1" value="0">
+    </div>
+  </section>
+
+  <section>
+    <h2>M Guard (V-depth floor)</h2>
+    <p style="font-size:11px;color:#888;margin-bottom:8px;line-height:1.4;">
+      Prevents the mark from flattening into an H. Both center bars
+      (2, 3) must dip at least this many pixels below whichever pair-A
+      bar (1 or 4) is currently taller. Cross-pair enforcement keeps
+      the V basin symmetric even when pair A is desynced.
+    </p>
+    <div class="ctrl">
+      <label>minimum V depth (px) <span class="val" id="v-vfloor">40</span></label>
+      <input type="range" id="vfloor" min="0" max="100" step="1" value="40">
+    </div>
+  </section>
+
+  <div class="controls-foot">
+    <button id="pauseBtn">pause</button>
+    <button id="captureBtn">capture frame</button>
+    <button id="copyConfig">copy config</button>
+  </div>
+  <div id="captureOut" style="
+    margin-top:10px; padding:10px; background:rgba(0,0,0,0.04);
+    border-radius:3px; font-family:ui-monospace,Menlo,monospace;
+    font-size:10px; line-height:1.4; white-space:pre-wrap;
+    max-height:180px; overflow:auto; display:none;
+  "></div>
+</aside>
+
+<script>
+(() => {
+  // ── Palettes ───────────────────────────────────────────────────────
+  // Each palette ships light + dark pair. In dark mode, paper↔mark
+  // inverts in lightness but stays in the same hue family.
+  const PALETTES = [
+    { id: 'graphite', mark: '#3A3530', paper: '#E8E2D0', darkMark: '#E0D4BC', darkPaper: '#1F1A14', name: 'graphite' },
+    { id: 'navy',     mark: '#1F2B3C', paper: '#E8E2D0', darkMark: '#C4D0E0', darkPaper: '#121820', name: 'ink navy' },
+    { id: 'teal',     mark: '#1E4E47', paper: '#E8E2D0', darkMark: '#B8D8D0', darkPaper: '#0F2822', name: 'deep teal' },
+    { id: 'charcoal', mark: '#242424', paper: '#E8E2D0', darkMark: '#D8D4CC', darkPaper: '#0F0F0F', name: 'charcoal' },
+    { id: 'oxblood',  mark: '#6B2A2A', paper: '#E8E2D0', darkMark: '#E8B8B0', darkPaper: '#1F0E0E', name: 'oxblood' },
+    { id: 'umber',    mark: '#5A3921', paper: '#E8E2D0', darkMark: '#E0C8A8', darkPaper: '#1C1008', name: 'umber' },
+    { id: 'plum',     mark: '#3E2A3E', paper: '#E8E2D0', darkMark: '#D8C0D8', darkPaper: '#150C15', name: 'aubergine' },
+    { id: 'ink',      mark: '#1A1A1A', paper: '#F4EEDA', darkMark: '#F4EEDA', darkPaper: '#0A0A0A', name: 'pure ink' },
+  ];
+  const isDarkMode = () =>
+    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  function applyPalette(p) {
+    const mark = isDarkMode() ? p.darkMark : p.mark;
+    const paper = isDarkMode() ? p.darkPaper : p.paper;
+    document.documentElement.style.setProperty('--mark', mark);
+    document.documentElement.style.setProperty('--accent', mark);
+    document.documentElement.style.setProperty('--paper', paper);
+  }
+
+  let currentPalette = PALETTES[0];
+  const swatchesEl = document.getElementById('swatches');
+  PALETTES.forEach((p, i) => {
+    const el = document.createElement('div');
+    el.className = 'swatch' + (i === 0 ? ' active' : '');
+    el.style.background = p.mark;
+    el.dataset.id = p.id;
+    el.innerHTML = `<span class="name">${p.name}</span>`;
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+      el.classList.add('active');
+      currentPalette = p;
+      applyPalette(p);
+    });
+    swatchesEl.appendChild(el);
+  });
+  applyPalette(currentPalette);
+  // React to system dark-mode changes
+  window.matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', () => applyPalette(currentPalette));
+
+  // ── Geometry ───────────────────────────────────────────────────────
+  const CX = 600, CY_TOP = 90;
+  const MARK_H = 280;
+  const BAR_GAP = 10;
+  const WIDTHS = [30, 20, 20, 8, 16, 10];
+  const SCALE  = 4.4;
+  const WIDTHS_PX = WIDTHS.map(w => Math.round(w * SCALE));
+  const BOTTOM_Y = CY_TOP + MARK_H;
+  const INNER_BASE_TOTAL = WIDTHS_PX[1] + WIDTHS_PX[2] + WIDTHS_PX[3] + WIDTHS_PX[4];
+  const bars = [0,1,2,3,4,5].map(i => document.getElementById('b' + i));
+
+  // ── Constraint parameters (live) ──────────────────────────────────
+  const state = {
+    aShallow: 0.78, aDeep: 0.55, aFloat: 0.45,
+    bShallow: 0.55, bDeep: 0.22, bFloat: 0.60,
+    speed: 1.0,
+    elastic: 0.42,
+    snap: 0.35,
+    shiftBase: 0,
+    vFloor: 40,         // minimum px gap between outer-inner and center-inner tops
+    phases:  [0.0, 1.4, 3.1, 0.7],
+    periods: [9.2, 8.6, 8.0, 9.4],
+  };
+
+  // ── Presets ────────────────────────────────────────────────────────
+  const PRESETS = {
+    default: { aShallow: 0.78, aDeep: 0.55, aFloat: 0.45,
+               bShallow: 0.55, bDeep: 0.22, bFloat: 0.60,
+               speed: 1.0, elastic: 0.42, snap: 0.35, shiftBase: 0, vFloor: 40 },
+    calm:    { aShallow: 0.72, aDeep: 0.62, aFloat: 0.40,
+               bShallow: 0.38, bDeep: 0.28, bFloat: 0.50,
+               speed: 0.5, elastic: 0.14, snap: 0.10, shiftBase: 0, vFloor: 30 },
+    jiggy:   { aShallow: 0.85, aDeep: 0.48, aFloat: 0.55,
+               bShallow: 0.60, bDeep: 0.14, bFloat: 0.70,
+               speed: 1.6, elastic: 0.55, snap: 0.55, shiftBase: 4, vFloor: 50 },
+    static:  { aShallow: 0.62, aDeep: 0.62, aFloat: 0.45,
+               bShallow: 0.24, bDeep: 0.24, bFloat: 0.60,
+               speed: 0.0, elastic: 0.00, snap: 0.00, shiftBase: 0, vFloor: 40 },
+  };
+
+  // ── Slider wiring ──────────────────────────────────────────────────
+  const fields = ['aShallow','aDeep','aFloat','bShallow','bDeep','bFloat',
+                  'speed','elastic','snap','shiftBase','vFloor'];
+  const sliderIds = { aShallow:'a-shallow', aDeep:'a-deep', aFloat:'a-float',
+                      bShallow:'b-shallow', bDeep:'b-deep', bFloat:'b-float',
+                      speed:'speed', elastic:'elastic', snap:'snap',
+                      shiftBase:'shift-base', vFloor:'vfloor' };
+  const valIds = { aShallow:'v-a-shallow', aDeep:'v-a-deep', aFloat:'v-a-float',
+                   bShallow:'v-b-shallow', bDeep:'v-b-deep', bFloat:'v-b-float',
+                   speed:'v-speed', elastic:'v-elastic', snap:'v-snap',
+                   shiftBase:'v-shift-base', vFloor:'v-vfloor' };
+  function formatField(f, v) {
+    if (f === 'speed') return v.toFixed(1) + '×';
+    if (f === 'shiftBase' || f === 'vFloor') return Math.round(v).toString();
+    return v.toFixed(2);
+  }
+  function syncUI() {
+    for (const f of fields) {
+      document.getElementById(sliderIds[f]).value = state[f];
+      document.getElementById(valIds[f]).textContent = formatField(f, state[f]);
+    }
+  }
+  function wireSlider(f) {
+    const s = document.getElementById(sliderIds[f]);
+    s.addEventListener('input', () => {
+      state[f] = parseFloat(s.value);
+      document.getElementById(valIds[f]).textContent = formatField(f, state[f]);
+    });
+  }
+  fields.forEach(wireSlider);
+
+  document.querySelectorAll('.preset').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const k = btn.dataset.preset;
+      Object.assign(state, PRESETS[k]);
+      syncUI();
+      document.querySelectorAll('.preset').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // ── Constraint solver ──────────────────────────────────────────────
+  // Snap-shaped sine: `snap=0` is pure sine, `snap=1` compresses the
+  // transit and lingers at the extremes. Keeps the domain in [-1, 1].
+  function shapedSine(phase, snap) {
+    const s = Math.sin(phase);
+    if (snap <= 0) return s;
+    const k = 1 / (1 + 3 * snap);
+    return Math.sign(s) * Math.pow(Math.abs(s), k);
+  }
+
+  function innerBreath(i, tSec) {
+    const isA = (i === 1 || i === 4);
+    const shallow = isA ? state.aShallow : state.bShallow;
+    const deep    = isA ? state.aDeep    : state.bDeep;
+    const phase = ((tSec + state.phases[i - 1]) / state.periods[i - 1]) * Math.PI * 2;
+    const u = (shapedSine(phase, state.snap) + 1) / 2;
+    return shallow + (deep - shallow) * u;
+  }
+
+  function heightsAt(tSec) {
+    return [1.00,
+            innerBreath(1, tSec), innerBreath(2, tSec),
+            innerBreath(3, tSec), innerBreath(4, tSec),
+            1.00];
+  }
+
+
+  function widthMultFor(i, heightFrac) {
+    if (i === 0 || i === 5) return 1.0;
+    const isA = (i === 1 || i === 4);
+    const base = isA ? (state.aShallow + state.aDeep) / 2
+                     : (state.bShallow + state.bDeep) / 2;
+    const mult = Math.sqrt(base / Math.max(0.05, heightFrac));
+    const minM = 1 - state.elastic;
+    const maxM = 1 + state.elastic;
+    return Math.max(minM, Math.min(maxM, mult));
+  }
+
+  function apply(hs, tSec) {
+    // 1) per-bar desired widths
+    const desired = hs.map((h, i) => WIDTHS_PX[i] * widthMultFor(i, h));
+    // 2) fixed-width constraint: normalize inner bars to sum = INNER_BASE_TOTAL
+    const innerSum = desired[1] + desired[2] + desired[3] + desired[4];
+    const innerScale = INNER_BASE_TOTAL / Math.max(0.01, innerSum);
+    const widths = desired.map((w, i) =>
+      (i === 0 || i === 5) ? WIDTHS_PX[i] : Math.round(w * innerScale));
+    const postRound = widths[1] + widths[2] + widths[3] + widths[4];
+    widths[2] += INNER_BASE_TOTAL - postRound;
+
+    // 3) Compute inner bar positions, then enforce constraints:
+    //    (a) M-guard: center-inner pair tops must sit at least vFloor px
+    //        below outer-inner pair tops. If violated, shorten the center
+    //        pair from the top down.
+    //    (b) Outer-stem cap: max height clamped to 88% of MARK_H so the
+    //        left outer can't dominate when an inner bar spikes up.
+    const innerTops = [];
+    const innerBots = [];
+    const innerHeights = [];
+    const innerLifts = [];
+    for (let i = 1; i <= 4; i++) {
+      const h = Math.round(hs[i] * MARK_H);
+      const drop = MARK_H - h;
+      const fl = (i === 1 || i === 4) ? state.aFloat : state.bFloat;
+      const lift = Math.round(drop * fl);
+      innerHeights.push(h);
+      innerLifts.push(lift);
+      innerTops.push(BOTTOM_Y - h - lift);
+      innerBots.push(BOTTOM_Y - lift);
+    }
+    // M-guard (a): both center bars (bars 2, 3) must dip at least vFloor
+    // below the TALLEST of pair A (whichever of bar 1 or bar 4 has the
+    // highest top). Cross-pair maximum enforces a symmetric V basin even
+    // when pair A is desynced and the two outer-inner bars differ.
+    // innerTops[] index: 0=bar1, 1=bar2, 2=bar3, 3=bar4.
+    const vFloor = state.vFloor;
+    if (vFloor > 0) {
+      const tallestPairA = Math.min(innerTops[0], innerTops[3]);   // min y = highest
+      const needed = tallestPairA + vFloor;
+      for (const ii of [1, 2]) {   // center bars (bar 2, bar 3)
+        if (innerTops[ii] < needed) {
+          const shrink = needed - innerTops[ii];
+          innerHeights[ii] = Math.max(4, innerHeights[ii] - shrink);
+          innerTops[ii] = innerBots[ii] - innerHeights[ii];
+        }
+      }
+    }
+    // (b) Outer-stem cap — even if tallestInnerTop is very high, the
+    // left outer / right outer can't exceed this many pixels.
+    const OUTER_MAX_H_FRAC = 0.88;
+    const OUTER_MAX_H = Math.round(MARK_H * OUTER_MAX_H_FRAC);
+
+    const tallestInnerTop = Math.min(...innerTops);
+    const lowestInnerBot  = Math.max(...innerBots);
+
+    // 4) lay out with fixed total footprint
+    const totalW = widths.reduce((a,b) => a+b, 0) + BAR_GAP * (widths.length - 1);
+    let x = CX - totalW / 2;
+
+    for (let i = 0; i < bars.length; i++) {
+      let h, y;
+      if (i === 0) {
+        // Left outer: top aligned with tallest inner's top (+ offset),
+        // bottom pinned to baseline. Capped at OUTER_MAX_H so it can't
+        // dominate when an inner bar spikes to frame-top.
+        y = Math.max(tallestInnerTop + state.shiftBase,
+                     BOTTOM_Y - OUTER_MAX_H);
+        h = BOTTOM_Y - y;
+      } else if (i === 5) {
+        // Right outer: top pinned such that its bottom aligns with
+        // lowest inner's bottom (− offset); height capped at OUTER_MAX_H.
+        const bottom = lowestInnerBot - state.shiftBase;
+        h = Math.min(OUTER_MAX_H, bottom - (BOTTOM_Y - MARK_H));
+        y = bottom - h;
+      } else {
+        // Inner bars — use the constraint-adjusted values from step 3
+        const ii = i - 1;
+        h = innerHeights[ii];
+        y = innerTops[ii];
+      }
+      bars[i].setAttribute('x', x);
+      bars[i].setAttribute('y', y);
+      bars[i].setAttribute('width', widths[i]);
+      bars[i].setAttribute('height', h);
+      x += widths[i] + BAR_GAP;
+    }
+  }
+
+  // ── Animation loop ─────────────────────────────────────────────────
+  let t0 = null, paused = false, pausedAt = 0, lastT = 0;
+  let hoverMult = 1;     // hover boosts speed
+  let hoverMultEased = 1; // eased toward hoverMult per-frame
+
+  function frame(now) {
+    if (t0 == null) t0 = now;
+    // Ease hoverMultEased toward hoverMult so speed changes feel smooth,
+    // not abrupt. 12% per frame → ~0.5s to settle at 60fps.
+    hoverMultEased += (hoverMult - hoverMultEased) * 0.12;
+    // Compute effective tSec using cumulative-time trick so speed changes
+    // don't snap the animation's phase.
+    if (!paused) {
+      const dt = (now - lastT) / 1000;
+      lastT = now;
+      pausedAt += dt * state.speed * hoverMultEased;
+    } else {
+      lastT = now;
+    }
+    apply(heightsAt(pausedAt), pausedAt);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // ── Hover speed-up ─────────────────────────────────────────────────
+  const svgEl = document.querySelector('.stage-inner svg');
+  svgEl.addEventListener('mouseenter', () => { hoverMult = 2.0; });
+  svgEl.addEventListener('mouseleave', () => { hoverMult = 1.0; });
+
+  // ── Frame capture (hold to freeze, release to record) ─────────────
+  // mousedown: pause the animation so the pose freezes — user can
+  // inspect before committing. mouseup: run the capture against the
+  // frozen frame. The button stays in a "held" state while mousedown
+  // is active. Leaves the animation paused after release so the user
+  // can also inspect the JSON without the pose moving.
+  const captureBtn = document.getElementById('captureBtn');
+  let captureArmed = false;
+  let wasPausedBeforeCapture = false;
+
+  function holdForCapture() {
+    wasPausedBeforeCapture = paused;
+    if (!paused) {
+      paused = true;
+      pauseBtn.textContent = 'play';
+    }
+    captureArmed = true;
+    captureBtn.textContent = 'release to capture';
+  }
+
+  function runCapture() {
+    if (!captureArmed) return;
+    captureArmed = false;
+    const tSec = pausedAt;
+    const hs = heightsAt(tSec);
+    const frameBars = [];
+    for (let i = 0; i < 6; i++) {
+      const el = document.getElementById('b' + i);
+      frameBars.push({
+        index: i,
+        x: +el.getAttribute('x'),
+        y: +el.getAttribute('y'),
+        width: +el.getAttribute('width'),
+        height: +el.getAttribute('height'),
+      });
+    }
+    const capture = {
+      time: +tSec.toFixed(4),
+      palette: {
+        id: currentPalette.id,
+        mark: currentPalette.mark,
+        paper: currentPalette.paper,
+      },
+      state: Object.fromEntries(fields.map(f => [f, state[f]])),
+      phases:  state.phases,
+      periods: state.periods,
+      heightFractions: hs,
+      bars: frameBars,
+      canvas: { w: 1200, h: 630 },
+    };
+    const json = JSON.stringify(capture, null, 2);
+    navigator.clipboard?.writeText(json);
+    const out = document.getElementById('captureOut');
+    out.style.display = 'block';
+    out.textContent = json;
+    captureBtn.textContent = 'captured ✓';
+    setTimeout(() => { captureBtn.textContent = 'capture frame'; }, 1500);
+  }
+
+  function cancelCapture() {
+    if (!captureArmed) return;
+    captureArmed = false;
+    captureBtn.textContent = 'capture frame';
+    // Restore previous paused state if the user cancelled mid-hold
+    if (!wasPausedBeforeCapture && paused) {
+      paused = false;
+      pauseBtn.textContent = 'pause';
+    }
+  }
+
+  captureBtn.addEventListener('mousedown', (e) => { e.preventDefault(); holdForCapture(); });
+  captureBtn.addEventListener('mouseup',   (e) => { e.preventDefault(); runCapture(); });
+  // If the user drags off the button before releasing, cancel without capturing
+  captureBtn.addEventListener('mouseleave', cancelCapture);
+  // Touch equivalents
+  captureBtn.addEventListener('touchstart', (e) => { e.preventDefault(); holdForCapture(); }, {passive: false});
+  captureBtn.addEventListener('touchend',   (e) => { e.preventDefault(); runCapture(); }, {passive: false});
+  captureBtn.addEventListener('touchcancel', cancelCapture);
+
+  // Pause button — simpler now that pausedAt IS the current tSec
+  const pauseBtn = document.getElementById('pauseBtn');
+  pauseBtn.addEventListener('click', () => {
+    paused = !paused;
+    pauseBtn.textContent = paused ? 'play' : 'pause';
+  });
+
+  // Copy config
+  document.getElementById('copyConfig').addEventListener('click', () => {
+    const cfg = Object.fromEntries(fields.map(f => [f, state[f]]));
+    navigator.clipboard?.writeText(JSON.stringify(cfg, null, 2));
+    const btn = document.getElementById('copyConfig');
+    const orig = btn.textContent;
+    btn.textContent = 'copied ✓';
+    setTimeout(() => btn.textContent = orig, 1200);
+  });
+
+  syncUI();
+})();
+</script>
+</body>
+</html>

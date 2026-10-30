@@ -1,6 +1,6 @@
 ---
 name: muriel
-description: Collaborative interaction and visual-design system for humans and AI agents, translating cognitive psychology and HCI research into working software and visual artifacts. Use for zooming user interfaces, semantic zooming, linked displays, brushing, faceted exploration, unsettled interaction grammar, information structure, spatial composition, or rendered visual audits, including invention and deliberate departures from convention. Do not invoke for backend-only work, routine component implementation or polish, or specialist media production without an unresolved design decision.
+description: Collaborative interaction and visual-design system for humans and AI agents, translating cognitive psychology and HCI research into working software and visual artifacts. Use for task analysis of interactive workflows, GOMS-informed workflow design, zooming user interfaces, semantic zooming, linked displays, brushing, faceted exploration, unsettled interaction grammar, information structure, spatial composition, or rendered visual audits, including invention and deliberate departures from convention. Do not invoke for backend-only work, routine component implementation or polish, or specialist media production without an unresolved design decision.
 ---
 
 # muriel — science-informed interaction and visual craft
@@ -41,9 +41,10 @@ recovery as relevant. Distinguish revisable conventions from locked product
 decisions and accessibility requirements.
 
 Match proof to the claim. Rendering and interaction checks establish properties
-of the artifact; claims about comprehension, workload, learning, or performance
-need relevant human evidence. Keep scholarship proportional to the decision
-and make the insight tangible in the resulting interaction.
+of the artifact. Explicit models can make conditional performance predictions;
+claims of measured improvements in comprehension, workload, learning, or
+performance need relevant human evidence. Keep scholarship proportional to the
+decision and make the insight tangible in the resulting interaction.
 
 ## Invocation gate
 
@@ -117,7 +118,9 @@ task.
    brainstorming, let design synthesis route to
    [`references/creative-provocations.md`](references/creative-provocations.md).
 3. Load a deep reference only when the task needs its exact recipe or exhaustive
-   rule set.
+   rule set. Before designing or changing a multi-step flow, read
+   [task analysis](references/task-analysis.md): model the outcome, competing
+   routes, required knowledge, and recovery before arranging controls.
 4. Fix the highest-altitude issue first: design intent before interaction truth,
    interaction truth before hierarchy, hierarchy and structure before
    typography, typography before surface polish, polish before ornament.
@@ -210,6 +213,9 @@ The checklist above is about how an artifact *looks*; this is about how its **pr
 
 Optional gate: score a draft on Directness / Rhythm / Trust / Authenticity / Density (1–10 each); below 35/50 wants a revision pass.
 
+That list is the negative. How to write the thing, register by register, is
+[`channels/prose.md`](channels/prose.md).
+
 **Register carve-out.** These are defaults for editorial and explainer prose, *not* overrides for genre conventions. In scientific writing specifically: passive voice is conventional in methods sections ("participants were randomized", "data were filtered") and should not be force-converted; hedging is required, not slop — "not detected at this granularity" is correct precision, not softening to strip. When a stop-slop rule fights the genre, the genre wins.
 
 **What the linter catches, and what it cannot.** `muriel.aiism` now detects three
@@ -244,12 +250,26 @@ Read the channel that matches the primary output:
 | quantitative chart | [`channels/charts.md`](channels/charts.md) |
 | spatial or dimensional composition | [`channels/spatial.md`](channels/spatial.md) |
 | repo front page or markdown rendered by GitHub | [`channels/readme.md`](channels/readme.md) |
+| plain text people read: store listing, release notes, UI strings, explainer, a report to a person | [`channels/prose.md`](channels/prose.md) |
 
 Use a vocabulary only when it solves the task's specific visual grammar:
 [`vocabularies/`](vocabularies/).
 
 Optional deep references:
 
+- [`references/task-analysis.md`](references/task-analysis.md) — goals, methods,
+  selection rules, knowledge demands, a first-use walkthrough, and acceptance
+  journeys before arranging a multi-step flow.
+- [`references/goms.md`](references/goms.md) — choose CMN-GOMS, KLM, NGOMSL, or
+  CPM-GOMS when procedure structure or a timing prediction changes the design.
+- [`references/flow-patterns.md`](references/flow-patterns.md) — known failures
+  that only show across a flow's states (relabel under the finger, one
+  indicator for two quantities, stale results), each with a fix, a source, and
+  a status kept from jury sittings.
+- [`references/task-observation.md`](references/task-observation.md) — turn
+  interaction events into evidence about methods and outcomes (Hilbert and
+  Redmiles, Uzilla, dynamic-web instrumentation) without reading intent into
+  logs.
 - [`references/sparklines.md`](references/sparklines.md) — 48 ways to put
   trajectories beside words, values, rows, places, and controls, with reasons
   to choose each. Consider these when history, variation, or a preview changes
@@ -333,6 +353,9 @@ Finish with a concise Muriel delta:
 When a human-capabilities claim drove the decision, include its rationale and
 evidence status in that delta. Distinguish implementation verification from
 observed comprehension, performance, learning, or appropriate reliance on AI.
+When task analysis drove it, name the changed method and how its complete
+journey was checked, and say which claims are model predictions, artifact
+checks, or human evidence.
 
 If Muriel was consulted but changed no material decision, say so. Distinguish
 between an artifact that was inspected, one that was implemented, and one that
@@ -347,7 +370,8 @@ standing outside it.
 - Do not invoke Muriel for backend-only or infrastructure work without a
   consequential human interaction decision.
 - Do not invoke for settled component implementation, routine CSS, spacing,
-  copy, responsive cleanup, or conventional polish with known desired behavior.
+  a copy edit with known desired wording, responsive cleanup, or conventional
+  polish with known desired behavior.
 - Defer raster generation, video production, quantitative charting, documents,
   and other specialist media to their narrower production skill unless one
   unresolved visual decision spans media or changes the interaction model.

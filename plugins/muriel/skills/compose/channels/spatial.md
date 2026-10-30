@@ -22,6 +22,10 @@ A small library for putting type into *felt* space — perspective grids that tu
 
 Part of the [muriel](../SKILL.md) skill — see the top-level index for mission and universal rules. Sister channels: [`svg.md`](svg.md) for the static surface this writes onto; [`web.md`](web.md) and [`interactive.md`](interactive.md) for the runtime surfaces the JS exemplars target.
 
+## Live examples
+
+Explore the [examples index](../examples/gallery/README.md#spatial-exploration), or open [Spatial typography](https://muriel.mindbendingpixels.com/gallery/spatial-typography/index.html), [MindBendingPixels Mountain](https://muriel.mindbendingpixels.com/gallery/mindbendingpixels-mountain/index.html), [Perspective Wall](https://muriel.mindbendingpixels.com/gallery/perspective-wall/index.html), or [Orbital Sunburst](https://muriel.mindbendingpixels.com/gallery/orbital-sunburst/index.html). Each demo links back here or to its vocabulary guide.
+
 ## Why this channel exists
 
 When distance changes a document or object's representation, use the
@@ -37,6 +41,25 @@ This is not a styling trick. Spatial-typography is an explicit lineage in design
 
 Pre-flight question for any spatial composition: *if I flattened the scene to a list, would the reader lose information?* If no, ship the list.
 
+## Isometric machine figures are a peer skill's job
+
+An explanatory figure built as a physical object (a lock, a test rig, a
+plotter) drawn in isometric solids is not this channel. This channel uses
+depth to carry information; that kind of figure uses a mechanism to carry an
+explanation. [anatomy](https://github.com/wheresryan22/anatomy) (MIT) does it
+well: hundreds of depth-sorted solids, an audit that proves nothing passes
+through anything, and shaders registered to the same camera. `grid("iso")`
+here is a guide grid, not a solid renderer, and muriel does not duplicate
+anatomy's kit.
+
+Taking that approach still means passing this channel's pre-flight test.
+A machine flattened to a list loses no information. What earns it is that
+every number the figure shows comes from the same model that moves its parts,
+so treat a machine figure as a creative choice that must clear that bar, not
+as a default for explainers. Its card text still meets the 8:1 floor: anatomy's
+own corner text measures 3.2–7.4:1, so restyle it with the brand's tokens
+before it ships.
+
 ## What ships today
 
 | # | Surface | Module / file | What it does |
@@ -48,7 +71,7 @@ Pre-flight question for any spatial composition: *if I flattened the scene to a 
 | 5 | Data Mountain (MSR) | `render_assets/mindbendingpixels-mountain/` + `render_assets/sciprogfi-agentchan-mountain/` | Dumais et al. (2001) spatial-memory index — tilted plane group with click-to-focus zones; cards arranged on the slope so spatial position carries identity. Two brand skins (psychodeli + sciprogfi/agentchan). |
 | 6 | Perspective Wall | `render_assets/perspective-wall/` + `render_assets/sciprogfi-lux-mesh-wall/` | Mackinlay / Robertson / Card (1991) focus + context — central card readable, peripheral cards foreshortened against the receding wall. Two brand skins (psychodeli + sciprogfi/OHC mesh). |
 | 7 | Orbital Sunburst | `render_assets/orbital-sunburst/` | One partition layout projected two ways: conventional top-view sunburst and an exploded 3D hierarchy stack with pointer, keyboard, orbit, and phone-safe linear controls. |
-| 8 | Demo gallery | `render_assets/index.html` | Single page indexing every exemplar with kicker / tag / lineage / source link. |
+| 8 | Examples index | `examples/gallery/README.md` | Live demos and worked artifacts, with guides and source. The old `render_assets/index.html` route forwards to this index. |
 | 9 | High-count tile field | `render_assets/_lib/atlas.js` + `instanced.js` | The whole corpus as ONE instanced draw call over a two-tier texture atlas (`far`: every item at 64px; `near`: an LRU pool of 256px slots). VRAM is bounded by the tier sizes, not the item count. |
 | 10 | Pixel/DOM hybrid | `render_assets/_lib/hybrid.js` | A fixed pool of real DOM elements lent to whatever is close enough to read, swapped against their quads. Keeps selectable text, links, and keyboard focus at a DOM budget that does not grow with the corpus. |
 | 11 | Piles | `render_assets/_lib/piles.js` | Mander / Salomon / Wong (CHI 1992) casual organization. Groups become stacks placed on the surface; click spreads a pile in place and collapses it back. Membership is supplied as index lists, so a facet-derived grouping and a hand-made pile are the same object, and an item may sit in several piles — which a folder tree cannot represent. |

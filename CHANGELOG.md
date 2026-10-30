@@ -23,6 +23,24 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   ImageMagick's librsvg drops them. The critique agent and the repo's
   permission allowlist now point at it.
 
+- **`muriel line-ends`: a rendered check that fails any stroke ending in
+  mid-air.** In headless Chromium it finds every open end of every stroked,
+  unfilled path, line and polyline, and fails the ones that land on nothing.
+  An end passes on another stroke, a shape's outline or flat fill edge, a dot,
+  within 4 px of a text label, under a fill painted after it, on the canvas
+  edge, or on an implied edge that three or more other ends meet square-on,
+  the way gridlines stop at an unstroked plot boundary. A near miss (within
+  6 px) is never excused that way, so a generator that stops every
+  connector 2 px short cannot excuse itself. `data-free` marks an end
+  meant to stop. It reports gaps and positions in viewBox units, rings
+  each failure on a screenshot with `--out`, and fails closed on a figure
+  where it checked nothing (`--allow-none`). The in-page half,
+  `muriel/line_ends.js`, ports anatomy's `scripts/line-ends.mjs` (MIT; see
+  THIRD_PARTY_NOTICES.md); its header lists what muriel changed. `jury.md`
+  lists it among the findings of fact.
+  `tests/test_line_ends.py` asserts the exact set of floating ends in a
+  fixture covering every rule.
+
 - **A sixth jury seat, the Loupe, and the lens behind it.** The Squinter
   blurs and the Thumbnail shrinks; nothing on the panel looked closer than
   1×, so a rule stopping 2 px short of its outline, a seam missing its
@@ -37,12 +55,41 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   (line ends land, joints meet, edges resolve, nothing collides or clips,
   repeats end on purpose), may not fire on empty space, and grades
   severity by whether anyone will see the artifact that close. `jury.md`
-  gains the roster entry and the six-role roster (a full panel still
+  gains the roster entry and the six-seat ceiling rule (a full panel still
   seats five). `tests/test_loupe.py` pins grid coverage, the overlap
   guarantee, the fixed cell, the magnification and determinism. The lens
   comes from the 4× junction close-ups in
   [anatomy](https://github.com/wheresryan22/anatomy); its density
   aesthetic does not.
+
+- **Procedural light stays continuous, on dark grounds and on paper.**
+  `references/motion-craft.md` gains rules for shader and canvas effects
+  inside a figure. Every uniform rides an envelope, validated as
+  `spring`-kind motion, so the section adds no durations. Phase changes are
+  crossfades driven by one physical quantity, a fade-out only fades, every
+  term reaches zero before any boundary, and effects live in the scene's own
+  coordinates. On a light ground the ink is solved from the colour the page
+  should show (`inkFor`), with one ink per kind of light, faded once.
+  Inspection adds a contact sheet at 5% speed and a per-frame scalar that
+  must move with the quantity driving it. `channels/spatial.md` points
+  isometric machine figures at anatomy as a peer skill, and `PRIOR_ART.md`
+  records what muriel took from it and what it left.
+
+- **A prose channel, the positive counterpart to the anti-slop list.**
+  `channels/prose.md` says how to write plain text people read: a reader
+  contract for the lines a surface shows first (what is this, what do I do,
+  what does it cost), a workflow that lists sourced facts before drafting,
+  structure rules (promise, definition, action; one idea per header; one
+  list of parallel items; price and permissions as lists; caveats once; never
+  lead with a negative; current truth, not history), sentence rules (topic as
+  subject, so an inanimate subject loses its transitive verb; name the actor;
+  no flag-planting; no breathless adjectives), a register table from store
+  listing to agent report, and verification by counts, the first-screen test,
+  the deletion test, a Stranger pass and the linter. The router gains its row,
+  the anti-slop section points at it, and the boundary that excluded "copy"
+  now excludes only a copy edit with known wording. Prompted by a study of
+  sixteen live App Store descriptions that found a shipped listing with no
+  bullets, one caveat stated three times and a section led by a limitation.
 
 - **`muriel.collection` accepts a clip's `video` for Wunderkammer's next
   release.** Wunderkammer's `feat/video-tiles` (4c86e79) adds an optional
@@ -624,6 +671,11 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   rows barely overlap, fatal for a pile.
 
 ### Fixed
+
+- **Cycle diagrams: each arc now starts on its source node's outline.** The
+  hub's dashed spokes keep their deliberate gaps and now carry `data-free`,
+  so `muriel line-ends` reads them as intended. The three committed cycle
+  examples and the showcase figure are regenerated.
 
 - **A far tile copied into the atlas on its own could be lost.** three r169's
   `WebGLRenderer.copyTextureToTexture` binds the destination to texture unit 0

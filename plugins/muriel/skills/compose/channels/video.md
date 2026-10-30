@@ -106,6 +106,15 @@ zoom, small multiples, and linked displays.
 
 ## HTML → MP4 via hyperframes
 
+**Finished examples**
+
+The [HyperFrames showcase](https://muriel.mindbendingpixels.com/showcase/#hyperframes)
+pairs Wunderkammer’s silent collection tour with Psychodeli’s musical spatial
+promo. [Production notes and scene descriptions](../examples/hyperframes.md)
+show what was captured in the app and what was composed in HyperFrames.
+Find these alongside the interactive work in the [examples index](../examples/gallery/README.md#hyperframes-films).
+
+
 For videos whose source of truth is HTML (release announcements, feature explainers, animated data viz, kinetic-typography compositions, website-to-video), use [**hyperframes**](https://github.com/heygen-com/hyperframes) (HeyGen, Apache 2.0). Puppeteer + FFmpeg + GSAP rendering; deterministic (same input → same output). Explicitly built for agent-driven authoring.
 
 Installed globally via `npx skills add heygen-com/hyperframes -y -g`. Registers five Claude Code slash commands:

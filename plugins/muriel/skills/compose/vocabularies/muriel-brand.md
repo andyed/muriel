@@ -4,6 +4,10 @@ The canonical spec for muriel's own visual mark, wordmark, color tokens, and cre
 
 Until this doc existed, muriel theme'd every other project from a documented brand and ran on vibes for its own. The favicon at [`docs/favicon-512.png`](https://github.com/andyed/muriel/blob/main/docs/favicon-512.png) was the only canonical artifact, and every "built with muriel" credit anywhere had to be reverse-engineered from the rendered PNG. That's the exact failure muriel exists to prevent. This file fixes it.
 
+## Live mark studies
+
+[Adjust the interactive colophon](../examples/logos/output/colophon/interactive-colophon.html), inspect the [animated Bauhaus M](../examples/logos/output/bauhaus/animated-bauhaus-m.html), or browse [all examples](../examples/gallery/README.md).
+
 ## Lineage and grammar
 
 The mark is **six rectangles in typographic-block rhythm**, descending from Müller-Brockmann's Swiss grid tradition and Muriel Cooper's Visible Language Workshop discipline (see [`vocabularies/visible-language.md`](visible-language.md) for the full lineage). The six bars represent a wordmark abstracted to vertical strokes — three "capital-height" chunky bars (1, 2, 5) on the main baseline, two "x-height" bars (3, 4) floating on a secondary baseline, one tall narrow accent stroke (6) on the right edge that may extend above as an ascender (favicon scale) or cap to bar-1 height (inline scale).

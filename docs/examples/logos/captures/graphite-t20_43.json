@@ -1,0 +1,57 @@
+{
+  "time": 20.43,
+  "palette": {
+    "id": "graphite",
+    "mark": "#3A3530",
+    "paper": "#E8E2D0"
+  },
+  "bars": [
+    {
+      "index": 0,
+      "x": 346,
+      "y": 159,
+      "width": 132,
+      "height": 211
+    },
+    {
+      "index": 1,
+      "x": 488,
+      "y": 159,
+      "width": 95,
+      "height": 154
+    },
+    {
+      "index": 2,
+      "x": 594,
+      "y": 199,
+      "width": 79,
+      "height": 82
+    },
+    {
+      "index": 3,
+      "x": 682,
+      "y": 199,
+      "width": 31,
+      "height": 85
+    },
+    {
+      "index": 4,
+      "x": 724,
+      "y": 159,
+      "width": 76,
+      "height": 154
+    },
+    {
+      "index": 5,
+      "x": 810,
+      "y": 90,
+      "width": 44,
+      "height": 223
+    }
+  ],
+  "canvas": {
+    "w": 1200,
+    "h": 630
+  },
+  "_note": "No capture JSON survived for the brand still. These bars were read from the pixels of assets/logo-light.png on 2026-10-24; with the renderer as of 9a14b9e they reproduce logo-light.png and logo-dark.png byte for byte."
+}

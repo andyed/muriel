@@ -22,8 +22,9 @@ conceals a gap.
 
 ## When to load
 
-Load after the primary application-UI channel when the visible slice contains
-one or more of:
+For building or auditing an application UI, load after the primary UI channel.
+For a behavior-only consultation, task analysis may route here directly without
+loading a production channel. Use when the visible slice contains one or more of:
 
 - a multi-step flow or meaningful branch;
 - async work, optimistic UI, background processing, or uncertain latency;
@@ -42,6 +43,10 @@ aggregate membership survive representation changes. Apply this reference's
 general recovery and async rules through that same owner.
 
 ## Behavior-truth sequence
+
+Before designing or changing a multi-step flow, use
+[task analysis](task-analysis.md) to decide which steps the person should do at
+all; derive this contract's transitions and acceptance journeys from it.
 
 Resolve these in order:
 
@@ -212,6 +217,31 @@ The visible signifier must match the actual behavior:
 Do not turn discoverability into decoration. A cue that suggests behavior the
 component does not own is a false affordance.
 
+## Continuity across states
+
+Each state can look right while the sequence is wrong. Check the journey as a
+sequence of frames, not a set of screenshots.
+
+- **The next action stays put.** Actions that serve one goal sit together in a
+  predictable place across idle, working, ready, failure, and return. If a
+  target must move, the move is the point and is visible.
+- **A control that changes meaning is guarded.** When Record becomes Download
+  in place, a state change between pointer-down and activation must not turn
+  the intended action into a different one.
+- **One indicator, one quantity.** Playback position, recorded duration, job
+  completion, and delivery are different quantities. Give each its own label
+  and behavior; a control that seeks is not an indicator that reports work.
+- **Results carry their revision.** Tag a result with the input and settings
+  revision that produced it. A result for an older revision, a cancelled job,
+  or a late completion never becomes the current Download or replaces the
+  ready action.
+- **Ready is not delivered.** Check the output at its destination: the file
+  plays, with the expected crop and duration, where the platform put it.
+
+Known sequence failures, with fixes and sources, are in
+[flow patterns](flow-patterns.md). For a jury review of an implemented flow,
+seat the [Walker](jury.md#the-roster); it is the seat that sees the sequence.
+
 ## Proof checklist
 
 Exercise the applicable rows, not a ceremonial superset:
@@ -223,6 +253,11 @@ Exercise the applicable rows, not a ceremonial superset:
 - [ ] keyboard-only completion and visible focus;
 - [ ] pointer and touch behavior where supported;
 - [ ] slow, offline, stale, or conflict state where relevant;
+- [ ] the whole journey walked in order: the next action stays put, and a
+      control that changes meaning cannot misfire across the change;
+- [ ] each progress or position indicator measures one labelled quantity;
+- [ ] a stale, cancelled, or late result cannot become the current result;
+- [ ] delivered output checked at its destination, not only "ready";
 - [ ] optimistic rollback when used;
 - [ ] preserved input/work after recoverable failure;
 - [ ] reduced-motion behavior without loss of state feedback;
@@ -243,6 +278,10 @@ Do not ship:
 - success styling before the operation has succeeded;
 - an error that destroys input or offers no honest next step;
 - a spinner that blocks unrelated work;
+- one progress indicator standing for two quantities;
+- a next action that relocates every time the state changes;
+- a pipeline stage the person must trigger when nothing about their intent
+  decides it;
 - gesture-only behavior without a discoverable fallback;
 - optimistic UI without a tested rollback;
 - a fixed “all states” checklist applied to irrelevant components;

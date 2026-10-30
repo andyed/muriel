@@ -54,6 +54,7 @@ A channel is one output medium. Each has a markdown file of recipes, tools, and 
 | [Heatmaps](plugins/muriel/skills/compose/channels/heatmaps.md) | Fixation density overlays (`muriel.typeset`) |
 | [Gaze](plugins/muriel/skills/compose/channels/gaze.md) | Scanpaths, AOI timelines, saccade roses (Pillow) |
 | [README](plugins/muriel/skills/compose/channels/readme.md) | Repo front pages rendered by GitHub (`muriel.capture`, `muriel.squint`, `muriel.aiism`) |
+| [Prose](plugins/muriel/skills/compose/channels/prose.md) | Plain text people read: store listings, release notes, UI strings, explainers, reports (reader contract, registers, `muriel.aiism`) |
 
 Two references apply to every channel. [Dimensions](plugins/muriel/skills/compose/channels/dimensions.md) covers social cards, device sizes, paper, and video resolutions. [Style guides](plugins/muriel/skills/compose/channels/style-guides.md) defines the `brand.toml` schema, which imports from Google Stitch `design.md` (`muriel import`) and exports W3C design tokens (`muriel export-dtcg`).
 
@@ -91,9 +92,11 @@ Most of the rules predate the tooling. They come from Cooper's Visible Language 
 
 ## Interaction design
 
-muriel designs how an interface behaves as well as how it looks. It draws on cognitive psychology, perception research, and HCI to choose a mechanism, then builds the mechanism and exercises it in the host product. Rendering and interaction checks are evidence about the artifact; claims about comprehension, workload, or learning need evidence from people.
+muriel designs how an interface behaves as well as how it looks. It draws on cognitive psychology, perception research, and HCI to choose a mechanism, then builds the mechanism and exercises it in the host product. Rendering and interaction checks are evidence about the artifact. Explicit models support conditional predictions; measured benefits in comprehension, workload, or learning need evidence from people.
 
-[`human-capabilities.md`](plugins/muriel/skills/compose/references/human-capabilities.md) covers cognitive task analysis, the split of work between people and AI, and the limits of evidence. [`microstrategies.md`](plugins/muriel/skills/compose/references/microstrategies.md) is built on Gray's *Milliseconds Matter*: small differences in the cost of reaching information change the routines people adopt. Convention is a starting hypothesis. muriel can propose a new interaction, build a working probe, and weigh what it makes possible against what it costs to learn.
+[`human-capabilities.md`](plugins/muriel/skills/compose/references/human-capabilities.md) covers task framing, the split of work between people and AI, and the limits of evidence. [`task-analysis.md`](plugins/muriel/skills/compose/references/task-analysis.md) turns a goal into alternative methods, selection rules, knowledge requirements, a first-use walkthrough, and acceptance journeys before controls are arranged. [GOMS](plugins/muriel/skills/compose/references/goms.md) covers timing and procedure models. [Task observation](plugins/muriel/skills/compose/references/task-observation.md) turns interaction events into evidence, drawing on Hilbert and Redmiles, Edmonds's Uzilla, and *Instrumenting the Dynamic Web*.
+
+[`microstrategies.md`](plugins/muriel/skills/compose/references/microstrategies.md) is built on Gray's *Milliseconds Matter*: small differences in the cost of reaching information change the routines people adopt. Convention is a starting hypothesis. muriel can propose a new interaction, build a working probe, and weigh what it makes possible against what it costs to learn.
 
 Zooming interfaces, semantic zoom, linked displays, brushing, and faceted exploration share one contract, in [`multiscale-coordination.md`](plugins/muriel/skills/compose/references/multiscale-coordination.md): entities keep a stable identity when their representation changes, queries and selections have explicit meanings, and gestures are recoverable. Camera navigation is covered in [`zooming-interfaces.md`](plugins/muriel/skills/compose/references/zooming-interfaces.md) and attribute filters in [`faceted-exploration.md`](plugins/muriel/skills/compose/references/faceted-exploration.md). Adapters for D3, Vega-Lite, ECharts, and Canvas are in [`multiscale-adapters.md`](plugins/muriel/skills/compose/references/multiscale-adapters.md), and briefs and fixtures for testing the contract in other domains are in [`multiscale-evaluation.md`](plugins/muriel/skills/compose/references/multiscale-evaluation.md). The [Linked Atlas lab](https://muriel.mindbendingpixels.com/examples/linked-atlas/) ([source](plugins/muriel/skills/compose/examples/linked-atlas/)) is a working example with synthetic data and no dependencies.
 
@@ -115,7 +118,7 @@ muriel renders what it makes and measures the result:
 
 The verdict is `PASS`, `NEEDS REVISION`, or `FAIL`, followed by numbered issues with rule, evidence, fix, and severity. Any CRITICAL issue fails the artifact; any HIGH issue sends it back for revision. Adversarial and baseline test cases live in [`examples/critique-fixtures/`](plugins/muriel/skills/compose/examples/critique-fixtures/), and new attacks are welcome as pull requests.
 
-A jury splits that review across six narrower seats, used to find defects or to choose between design directions. Each seat sees the artifact through one restricted view, defined in [`references/jury.md`](plugins/muriel/skills/compose/references/jury.md):
+A jury splits that review across seven narrower seats, used to find defects or to choose between design directions. Each seat sees the artifact through one restricted view, defined in [`references/jury.md`](plugins/muriel/skills/compose/references/jury.md):
 
 | Seat | Judges | Denied |
 |---|---|---|
@@ -125,6 +128,7 @@ A jury splits that review across six narrower seats, used to find defects or to 
 | `muriel-stranger` | What the artifact is for, from a single read | The brief, other ballots, project context |
 | `muriel-forger` | Whether a generic template can rebuild it, by trying | The brand tokens |
 | `muriel-pedant` | Labels, units, and numeric claims | The rendered composition |
+| `muriel-walker` | Whether a multi-step flow holds together, walked frame by frame with the task | The design rationale, the implementer's claims |
 
 Run each seat as its own subagent. The restrictions hold only because the seat never receives the withheld material in its context.
 
@@ -179,7 +183,7 @@ cd ~/Documents/dev/muriel && ./install.sh
 ### Repository layout
 
 - [`plugins/muriel/skills/compose/`](plugins/muriel/skills/compose/): the skill (`SKILL.md`, channels, references, vocabularies, examples)
-- [`plugins/muriel/agents/`](plugins/muriel/agents/): the critique agent and the five jury seats
+- [`plugins/muriel/agents/`](plugins/muriel/agents/): the critique agent and the seven jury seats
 - [`muriel/`](muriel/): Python package and CLI
 - [`render_assets/`](render_assets/): Three.js and CSS3D exemplars for the spatial channel
 - [`research/`](research/): literature reviews and bibliographies behind the references

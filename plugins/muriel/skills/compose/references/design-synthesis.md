@@ -107,6 +107,10 @@ Carry this into the existing synthesis; keep one decision record.
 Keep facts, assumptions, and concepts visibly separate. Do not let a fluent
 concept silently become project truth.
 
+Before designing or changing a multi-step flow, use
+[task analysis](task-analysis.md) here, so the current screen sequence is not
+mistaken for the task. Its output goes in this same record.
+
 ### 2. Route
 
 Select Direct, Compare, or Probe. Name the factor that set the depth. Prefer a

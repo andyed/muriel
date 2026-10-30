@@ -86,6 +86,8 @@ plugins:
 # Reference, not Channels. Vocabularies ordered concept-first.
 nav:
   - Home: index.md
+  - Examples: examples/gallery/README.md
+  - Showcase: showcase/index.html
   - Channels:
       - Spatial: channels/spatial.md
       - Charts: channels/charts.md
@@ -102,6 +104,7 @@ nav:
       - Terminal: channels/terminal.md
       - Polish: channels/polish.md
       - README: channels/readme.md
+      - Prose: channels/prose.md
   - Vocabularies:
       - Visible Language: vocabularies/visible-language.md
       - FUI (fictional UI): vocabularies/fui.md
@@ -118,6 +121,12 @@ nav:
       - Human capabilities: references/human-capabilities.md
       - Design synthesis: references/design-synthesis.md
       - Jury protocol: references/jury.md
+      - Task analysis: references/task-analysis.md
+      - GOMS: references/goms.md
+      - Task observation: references/task-observation.md
+      - Task-analysis cases: references/task-analysis-cases.md
+      - Task-analysis evaluation: references/task-analysis-evaluation.md
+      - Flow patterns: references/flow-patterns.md
       - Zooming user interfaces: references/zooming-interfaces.md
       - Faceted exploration: references/faceted-exploration.md
       - Semantic zoom & linked displays: references/multiscale-coordination.md
@@ -127,9 +136,6 @@ nav:
       - Dimensions: channels/dimensions.md
       - Style guides (brand.toml): channels/style-guides.md
       - Brand-token schema: channels/SCHEMA.md
-      - Showcase — featured work ↗: https://muriel.mindbendingpixels.com/showcase/
-      - Gallery — all channels: examples/gallery/README.md
-      - Live spatial demos ↗: https://muriel.mindbendingpixels.com/gallery/
   - About:
       - The muriel skill: SKILL.md
       - Critique agent: agents/muriel-critique.md

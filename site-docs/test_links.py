@@ -9,6 +9,7 @@ import unittest
 from unittest.mock import patch
 
 import link_paths
+from audit_links import Page
 
 
 class LinkPathsTest(unittest.TestCase):
@@ -39,6 +40,9 @@ class LinkPathsTest(unittest.TestCase):
     def test_site_link_preserves_fragment(self):
         self.assertEqual(self.render('[review](../agents/reviewer.md#checks)'), '[review](../agents/reviewer.md#checks)')
 
+    def test_public_demo_links_stay_on_preview_host(self):
+        self.assertEqual(self.render('[demo](https://muriel.mindbendingpixels.com/gallery/wall/?view=2#detail)'), '[demo](/gallery/wall/?view=2#detail)')
+
     def test_repository_file_uses_github(self):
         self.assertEqual(self.render('[tool](../../tool.py)'), '[tool](https://github.com/andyed/muriel/blob/main/tool.py)')
 
@@ -57,6 +61,14 @@ class LinkPathsTest(unittest.TestCase):
         text = '[missing](no-such.md) [web](https://example.org/) [section](#section)'
         self.assertEqual(self.render(text), text)
 
+    def test_standalone_navigation_is_audited(self):
+        page = Page(whole_page=True)
+        page.feed('<nav><a href="/examples/gallery/">Examples</a></nav><main><img src="demo.webp"></main>')
+        self.assertEqual(page.links, ['/examples/gallery/', 'demo.webp'])
+        doc = Page()
+        doc.feed('<nav><a href="/other/">Nav</a></nav><article class="md-content__inner"><a href="demo/">Demo</a></article>')
+        self.assertEqual(doc.links, ['demo/'])
+
     def test_audit_fails_on_missing_anchor_and_image(self):
         site = self.root / 'built'
         site.mkdir()
@@ -69,6 +81,11 @@ class LinkPathsTest(unittest.TestCase):
         self.assertEqual(len(json.loads(report.read_text())['internal_issues']), 2)
         page.write_text('<article class="md-content__inner"><h1 id="here">Good</h1><a href="#here">OK</a></article>')
         self.assertEqual(subprocess.run(command, capture_output=True).returncode, 0)
+
+    def test_video_sources_and_posters_are_audited(self):
+        page = Page(whole_page=True)
+        page.feed('<video poster="still.jpg"><source src="film.mp4"><track src="captions.vtt"></video>')
+        self.assertEqual(page.links, ['still.jpg', 'film.mp4', 'captions.vtt'])
 
 
 if __name__ == '__main__':

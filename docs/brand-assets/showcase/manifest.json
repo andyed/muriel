@@ -1,0 +1,37 @@
+{
+  "description": "Existing 720p delivery copies, unchanged. JPEG posters extracted at 8s (Wunderkammer) and 26s (Psychodeli).",
+  "wunderkammer": {
+    "composition": "wunderkammer-reel/videos/cats-reel-long",
+    "delivery": "wunderkammer-readme/docs/screenshots/cats-reel.mp4",
+    "duration_seconds": 27.8,
+    "audio": "none"
+  },
+  "psychodeli": {
+    "composition": "wunderkammer-reel/videos/pdeli-reel",
+    "delivery": "wunderkammer-reel/pdeli-video/out/pdeli-reel-720p.mp4",
+    "duration_seconds": 39.066708,
+    "audio": "AAC stereo; Adobe Firefly generated soundtrack"
+  },
+  "files": [
+    {
+      "file": "psychodeli-spatial.jpg",
+      "bytes": 154944,
+      "sha256": "49dcce430eb7b00bd7b09a3284919ebbc6bf8326ab5f8aaa981de8787554010c"
+    },
+    {
+      "file": "psychodeli-spatial.mp4",
+      "bytes": 23617482,
+      "sha256": "ec882ab2f0cceb22c9cf5d93633d31e38640c40fa3876e462756f097c628c098"
+    },
+    {
+      "file": "wunderkammer-cats.jpg",
+      "bytes": 190735,
+      "sha256": "7555fe58a07777b15db59af0f94ea4fdaae988946384245250ef5d3bdf21a472"
+    },
+    {
+      "file": "wunderkammer-cats.mp4",
+      "bytes": 6583708,
+      "sha256": "a5264b9f45ef66d47e265c9cc7f3b985e2acaae22efa0f4fde9ec7985af8b35d"
+    }
+  ]
+}

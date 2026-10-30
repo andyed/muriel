@@ -334,11 +334,18 @@ export class FocusController {
     focusPos = new THREE.Vector3(0, 160, 420),
     duration = 600,
     featureClass = 'featured',
+    onChange = null,
+    toggleOnRepeat = true,
   } = {}) {
     this.focusPos = focusPos;
     this.duration = duration;
     this.featureClass = featureClass;
     this.focused = null;
+    this.onChange = onChange;
+    this.toggleOnRepeat = toggleOnRepeat;
+    this.animations = new WeakMap();
+    this.focusScale = null;
+    this.focusQuaternion = null;
   }
 
   // Attach click handlers to a list of CSS3DObjects. Each card's
@@ -346,46 +353,61 @@ export class FocusController {
   bind(cards) {
     for (const card of cards) {
       card.userData.basePos = card.position.clone();
+      card.userData.baseScale = card.scale.clone();
+      card.userData.baseQuaternion = card.quaternion.clone();
       card.element.addEventListener('click', (e) => {
-        // Debug aid — if clicks aren't reaching here, something above
-        // (HUD, legend, sibling card) is intercepting in screen space.
-        console.log('[focus] click on', card.userData.title || card.userData.name || '?',
-                    'at world', card.position.toArray().map(v => v.toFixed(0)));
         this.toggle(card);
       });
     }
   }
 
   toggle(card) {
-    if (this.focused && this.focused !== card) this.unfocus(this.focused);
-    if (this.focused === card) { this.unfocus(card); return; }
+    if (this.focused === card) {
+      if (this.toggleOnRepeat) this.unfocus(card);
+      return;
+    }
+    const previous = this.focused;
+    if (previous) this.unfocus(previous, false);
     this.focused = card;
     card.element.classList.add(this.featureClass);
-    this._animate(card, this.focusPos);
+    // A consumer may frame the target from the selected card's actual size.
+    if (this.onChange) this.onChange(card, previous);
+    this.reframe();
   }
 
-  unfocus(card) {
-    // Keep the featured flag on cards that were authored as featured.
-    if (!card.userData.featured) {
-      card.element.classList.remove(this.featureClass);
-    }
-    this._animate(card, card.userData.basePos);
+  unfocus(card, notify = true) {
+    if (!card.userData.featured) card.element.classList.remove(this.featureClass);
     if (this.focused === card) this.focused = null;
+    if (notify && this.onChange) this.onChange(null, card);
+    this._animate(card, card.userData.basePos, card.userData.baseScale, card.userData.baseQuaternion);
   }
 
-  _animate(obj, target) {
-    const start = obj.position.clone();
-    const t0 = performance.now();
-    const dur = this.duration;
-    function step(now) {
-      const t = Math.min(1, (now - t0) / dur);
-      // ease-out cubic
-      const e = 1 - Math.pow(1 - t, 3);
-      obj.position.lerpVectors(start, target, e);
-      if (t < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
+  reframe() {
+    if (this.focused) this._animate(this.focused, this.focusPos, this.focusScale, this.focusQuaternion);
   }
+
+  _animate(obj, target, scale = null, quaternion = null) {
+    // Rapid selection changes must replace, not race, the previous flight.
+    cancelAnimationFrame(this.animations.get(obj));
+    const destination = target.clone();
+    const start = obj.position.clone();
+    const startScale = obj.scale.clone(), endScale = (scale || obj.scale).clone();
+    const startQuaternion = obj.quaternion.clone(), endQuaternion = (quaternion || obj.quaternion).clone();
+    const t0 = performance.now();
+    const dur = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : this.duration;
+    if (dur <= 0) { obj.position.copy(destination); obj.scale.copy(endScale); obj.quaternion.copy(endQuaternion); this.animations.delete(obj); return; }
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / dur);
+      const e = 1 - Math.pow(1 - t, 3);
+      obj.position.lerpVectors(start, destination, e);
+      obj.scale.lerpVectors(startScale, endScale, e);
+      obj.quaternion.slerpQuaternions(startQuaternion, endQuaternion, e);
+      if (t < 1) this.animations.set(obj, requestAnimationFrame(step));
+      else this.animations.delete(obj);
+    };
+    this.animations.set(obj, requestAnimationFrame(step));
+  }
+
 }
 
 // ─── Render loop with parallax + auto-orbit ─────────────────────────
@@ -429,7 +451,8 @@ export function startRenderLoop({
     e.preventDefault();
   }, { passive: false });
   window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') {
+    const nativeControl = e.target.closest?.('button, a, input, select, textarea, [contenteditable=true]');
+    if (e.code === 'Space' && !nativeControl) {
       cam.autoOrbit = !cam.autoOrbit;
       e.preventDefault();
     }

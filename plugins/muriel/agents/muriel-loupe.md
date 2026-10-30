@@ -68,8 +68,9 @@ different loss functions. So:
   logged as `noise` against you
   ([`#jurisdiction`](../skills/compose/references/jury.md#jurisdiction)).
   The 8:1 readable-text floor is on no ballot, in no round.
-- Report **no** line ends the chair stipulated. If a rendered line-end
-  check ran and its output was stipulated, the ends it lists are facts.
+- Report **no** line ends the chair stipulated. If `muriel.line_ends`
+  ran on the SVG or HTML and its output was stipulated, the ends it lists
+  are facts.
   Your line-end findings are the ones it could not see: raster-only
   artifacts, strokes outside its scope, ends it ruled rooted that are
   visibly off.

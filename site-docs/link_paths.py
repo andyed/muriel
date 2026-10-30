@@ -24,6 +24,9 @@ def on_page_markdown(markdown, *, page, config, files):
 
     def rewrite_url(original, html=False):
         url = urlsplit(original)
+        # Keep links to our standalone demos on the current preview/site host.
+        if url.hostname == 'muriel.mindbendingpixels.com':
+            return urlunsplit(('', '', url.path, url.query, url.fragment))
         if url.scheme or url.netloc or not url.path or url.path.startswith('/'):
             return original
         target = (source.parent / unquote(url.path)).resolve()

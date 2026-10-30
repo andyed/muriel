@@ -24,6 +24,10 @@ overview, preserve a reader’s place, and reveal detail when it becomes useful.
 [Read the references](#references) · [See working examples](#contemporary-exemplars) ·
 [Build a collection explorer](../references/collections.md)
 
+## Try the ideas
+
+Start with the [examples index](../examples/gallery/README.md). Try [Spatial typography](https://muriel.mindbendingpixels.com/gallery/spatial-typography/index.html) for layered text in perspective, or [Perspective Wall](https://muriel.mindbendingpixels.com/gallery/perspective-wall/index.html) for focus and context. Wunderkammer and Linked Atlas below explore collection structure and coordinated selection.
+
 ## Visual grammar
 
 The useful inheritance is a set of questions about reading and orientation:

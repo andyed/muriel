@@ -5,6 +5,11 @@ novel control whose value depends on how perception, thought, and action fit
 together. Carry the relevant insight into the existing synthesis and working
 artifact. Load this reference selectively alongside the primary channel.
 
+Before designing or changing a multi-step flow, use
+[task analysis](task-analysis.md); for timing models, [GOMS](goms.md).
+Microstrategies examine how a routine is coordinated, not which work the
+interface should require.
+
 ## What the research contributes
 
 Gray and Boehm-Davis (2000) analyze **microstrategies**: small arrangements of
