@@ -24,7 +24,7 @@ makes the visible design decision coherent, legible, adaptable, and observable.
 1. [Load gate](#load-gate)
 2. [Adaptive depth](#adaptive-depth)
 3. [Synthesis loop](#synthesis-loop)
-4. [Creative perturbation](#creative-perturbation)
+4. [Creative perturbation](#optional-provoke)
 5. [Leverage and synergy](#leverage-and-synergy)
 6. [Choosing without false precision](#choosing-without-false-precision)
 7. [Shape the investment](#shape-the-investment)
@@ -106,6 +106,10 @@ Carry this into the existing synthesis; keep one decision record.
 
 Keep facts, assumptions, and concepts visibly separate. Do not let a fluent
 concept silently become project truth.
+
+Before designing or changing a multi-step flow, use
+[task analysis](task-analysis.md) here, so the current screen sequence is not
+mistaken for the task. Its output goes in this same record.
 
 ### 2. Route
 

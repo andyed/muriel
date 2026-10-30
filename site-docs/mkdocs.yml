@@ -109,6 +109,12 @@ nav:
       - Data-viz platforms: vocabularies/data-viz-platforms.md
       - muriel brand: vocabularies/muriel-brand.md
   - Reference:
+      - Task analysis: references/task-analysis.md
+      - GOMS: references/goms.md
+      - Task observation: references/task-observation.md
+      - Task-analysis cases: references/task-analysis-cases.md
+      - Task-analysis evaluation: references/task-analysis-evaluation.md
+      - Flow patterns: references/flow-patterns.md
       - Zooming user interfaces: references/zooming-interfaces.md
       - Faceted exploration: references/faceted-exploration.md
       - Semantic zoom & linked displays: references/multiscale-coordination.md
