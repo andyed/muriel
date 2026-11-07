@@ -39,6 +39,35 @@ Treat associations such as curved movement suggesting warmth as design
 hypotheses to inspect in context. Do not assign a stock personality to an entire
 product category or claim a motion recipe reliably produces an emotion.
 
+## Storyboard a product demonstration
+
+For a showcase or explanatory product visual, write the action in one sentence
+before choosing effects: “Selecting a saved mix restores its controls and starts
+playback.” Identify the initial state, the meaningful change, and a readable
+result. Use behavior the product actually supports; identify illustrative data
+as such. Choose only the visuals needed to carry that action. A quiet region or
+a held result may serve the story better than another loop.
+
+This is a storyboard prompt for demonstrations, not a requirement to animate
+shipping controls or every card. Retain the host's timing and motion policy.
+
+## Verify fidelity before choreography
+
+When animating a supplied design, render a stationary reconstruction before
+adding movement. Compare it with the reference at matched viewport, pixel
+density, asset readiness, and font state. Inspect both the whole composition
+and individual regions: a good aggregate score can hide a displaced small panel.
+Use an amplified difference image to locate geometry, stacking, crop, and shadow
+errors. A lightly blurred comparison can help distinguish structural drift
+from rasterization noise, but also inspect the unblurred text and fine edges.
+Treat similarity scores as diagnostics; set any tolerance for this material
+and renderer rather than adopting a universal pass threshold.
+
+Agree which regions must match and which may adapt when a website reflows or
+uses accessible live text. A raster match is not proof of accessibility. Keep
+the existing production tools; this check does not require exporting text to
+images or introducing a second animation runtime.
+
 ## Choreograph relationships
 
 - Stage the meaningful change around one focal action. Supporting movement is
@@ -207,9 +236,33 @@ Select checks that match the work:
 Rendered and interaction checks establish artifact behavior. Claims about
 comprehension, workload, or emotional response need appropriate human evidence.
 
+## Check protected regions and reset states
+
+For an authored demonstration with stationary surroundings, define the allowed
+moving region for each phase. Include actual clip contours, rounded corners,
+intended shadows, and any permitted travel during entrances. Compare pixels
+outside that region with the appropriate stationary reference across the
+captured sequence. Keep the capture conditions fixed; use a small, recorded
+edge tolerance for rasterization rather than masking away escaping content.
+Do not demand a frozen background when the brief intentionally animates it.
+
+For a loop, check three distinct states where they exist:
+
+- **Boundary:** compare equivalent times one cycle apart, then inspect the
+  adjacent frames across the join for a visible jump.
+- **Settlement:** compare the returned pose with the intended stationary result.
+- **Reset interval:** inspect every frame of an intentional empty or cleared
+  interval against its reference. Hidden text, masks, cursors, and other helpers
+  must reset too; matching cycle boundaries alone can miss lingering state.
+
+These checks inspect an existing sequence; they do not require an empty opening,
+a dissolve, or continuous repetition. Use the production tool's deterministic
+capture when available, then review key frames and normal-speed playback at the
+smallest delivery size. Preserve the complete static alternative.
+
 ## Sources and adaptation
 
-Craft inspiration, reviewed 2026-10-16 and 2026-10-24; these are design
+Craft inspiration, reviewed 2026-10-16, 2026-10-24, and 2026-10-26; these are design
 precedents rather than empirical authority for numerical limits. The guidance
 above is written for Muriel; no upstream code, media, or dependencies are
 included.
@@ -240,3 +293,13 @@ included.
   device-ratio cap and per-figure ramps are not adopted; Muriel's timing comes
   from `muriel.motion`. The `inkFor` inversion is a three-line identity of
   normal compositing, restated here.
+
+- **elayadesign/ai-design-skills — design-to-motion:**
+  [story loops](https://github.com/elayadesign/ai-design-skills/blob/main/skills/design-to-motion/SKILL.md#b4-story-loops-the-main-act),
+  [stationary comparison](https://github.com/elayadesign/ai-design-skills/blob/main/skills/design-to-motion/SKILL.md#a7-verify-the-still),
+  and [motion checks](https://github.com/elayadesign/ai-design-skills/blob/main/skills/design-to-motion/SKILL.md#b9-motion-checks)
+  inform the demonstration storyboard, region-level fidelity review, protected
+  pixels, and separate boundary, settlement, and reset checks. These are craft
+  precedents, not validated perceptual thresholds. Muriel does not adopt its
+  mandatory moving visuals, empty openings, prescribed timing, raster-text
+  pipeline, or default export formats. No upstream implementation is included.

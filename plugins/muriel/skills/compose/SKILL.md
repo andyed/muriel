@@ -326,6 +326,9 @@ Optional deep references:
 - [`references/interaction-contracts.md`](references/interaction-contracts.md) —
   canonical-state flow, feedback, recovery, and async behavior contracts for
   interfaces whose interaction truth is not yet settled.
+- [`references/marketing-pages.md`](references/marketing-pages.md) — optional
+  visitor context, objections, claim/evidence placement, and action-path review
+  when a landing page or campaign's argument needs design work.
 - [`references/web-recipes.md`](references/web-recipes.md) — exact Marginalia,
   Pandoc, responsive capture, printing, and web-production recipes.
 - [`references/polish-rules.md`](references/polish-rules.md) — comprehensive
