@@ -5,7 +5,8 @@
 // python http.server). Full Chrome: run on cylon.
 //
 //   node harvest-control-map.mjs <dist-dir> <out-dir> [WxH,touch|mouse ...]
-import { chromium } from '/Users/andyed/Documents/dev/worktrees/spinodal-staging-7d95b56/node_modules/playwright/index.mjs';
+// Run from a checkout that has playwright installed (the app's own repo does).
+import { chromium } from 'playwright';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';

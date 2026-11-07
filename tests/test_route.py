@@ -84,7 +84,7 @@ def test_requests_without_a_complaint_are_unrouted():
 @pytest.mark.parametrize(("text", "not_lens"), [
     # False positives found by routing every owner line from 11-05..11-07.
     ("spawn sessions for todo list items, have /muriel critique", "placement"),
-    ("so looks like we're building a mobile app lava lamp -- for real", "reading"),
+    ("so looks like we're building a mobile app wax lamp -- for real", "reading"),
     ("so how would manually spinning a vessel of this shape and volume feel", "sound"),
     ("archive volume up", "sound"),
 ])
