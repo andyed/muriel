@@ -9,8 +9,8 @@ import zlib
 
 import pytest
 
-from muriel.redline import ReviewError, build, load_review, _main
 from muriel.__main__ import main
+from muriel.redline import ReviewError, _main, build, load_review
 
 
 def png(width=100, height=80):
@@ -93,7 +93,7 @@ def test_payload_and_static_fallback_escape_untrusted_text(case, tmp_path):
     path = save(case, lambda d: d.update(title=hostile, summary=hostile))
     result = build(path, tmp_path / 'result.html').read_text()
     assert hostile not in result
-    payload = re.search(r'<script type="application/json" id="review-data">(.*?)</script>', result, re.S)[1]
+    payload = re.search(r'<script type="application/json" id="review-data">(.*?)</script>', result, re.DOTALL)[1]
     assert json.loads(payload)['title'] == hostile
     assert '&lt;script&gt;window.PWNED=1&lt;/script&gt;' in result
 
