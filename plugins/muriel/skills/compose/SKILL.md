@@ -315,6 +315,10 @@ Optional deep references:
   contested direction or defect sweep, with lens-defined seats, randomized
   comparative ballots, reported splits, and a ledger that scores each seat
   against what happened next.
+- [`references/control-map.md`](references/control-map.md) — a census of
+  every control's screen home across every UI state; run it before a jury or
+  the owner sees interactive UI, because a control that wanders between
+  journeys passes every walk of one.
 - [`references/interaction-contracts.md`](references/interaction-contracts.md) —
   canonical-state flow, feedback, recovery, and async behavior contracts for
   interfaces whose interaction truth is not yet settled.

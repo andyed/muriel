@@ -6,6 +6,33 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **`muriel control-map`: every control's home, in every state, as fact.**
+  Reads a JSON census of a UI's settled states and each state's controls,
+  and reports each control's distinct screen homes, the states that put a
+  control somewhere new, and how much of the protected subject each state
+  covers. An undeclared second home exits 1. Built after a Spinodal UI
+  passed three jury rounds and the owner rejected it within the hour for
+  "spawning buttons in different and random places": each walk of one
+  journey looked coherent, and the one moving readout the Walker saw was
+  rated LOW. `references/control-map.md` says how to harvest a map and who
+  acts on each line.
+
+### Changed
+
+- **The jury stipulates the control map before seating on interactive UI.**
+  `jury.md` replaces the "no muriel tool yet" displacement note with the
+  census, gains [What no seat holds](plugins/muriel/skills/compose/references/jury.md#what-no-seat-holds)
+  (whether an overlay earns its pixels; closeness to a sibling product),
+  which goes to the owner as one side-by-side page before any panel, and
+  adds chair duty 11: hand back a working link, a side-by-side page, and
+  the URL parameter for anything still behind a flag.
+- **The Walker's moving-target rule has a floor.** A control the person
+  returns to that sits somewhere new is at least HIGH, however few pixels
+  it moved. The Walker now tests the control map's declared-move reasons,
+  the one piece of design rationale it is given.
+
 ## [0.15.0] — 2026-10-30
 
 **muriel designs behavior, and the jury sees sequences.** muriel now frames itself as an interaction and visual-design system. Task analysis, GOMS, and task observation decide which work a flow should ask of a person before its controls are arranged; interaction contracts check that a flow holds together across its states; semantic zoom, linked displays, brushing, and faceted exploration share one multiscale contract. The jury grows from five seats to seven: the Loupe judges finish in 4× close-ups, and the Walker walks a flow frame by frame with the task in hand. Diagrams gain seven generators and carry their data and an accessible-figure contract; `muriel.collection` validates Wunderkammer collections; a prose channel says how to write the text people read; `muriel line-ends` fails strokes that end on nothing. Long-form notes: [`releases/v0.15.0.md`](releases/v0.15.0.md).

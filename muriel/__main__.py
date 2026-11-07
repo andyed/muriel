@@ -48,6 +48,7 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     "capture":        ("muriel.capture",                    "Responsive viewport-sweep screenshot via Playwright"),
     "collection":     ("muriel.collection",                 "Build a Wunderkammer collection document from a folder or CSV; validate one"),
     "contrast":       ("muriel.contrast",                   "WCAG 8:1 contrast audit on SVG / CSS / color pairs"),
+    "control-map":    ("muriel.control_map",                "Census of every control's screen home across UI states — does anything wander?"),
     "cvd":            ("muriel.cvd",                        "Color-vision-deficiency separation report — can a colorblind reader tell these colors apart?"),
     "diagram-check":  ("muriel.tools.diagrams.check",       "Rendered-SVG gate: accessible-figure lint + label geometry + 8:1 contrast (fails closed)"),
     "diagram-export": ("muriel.tools.diagrams._export",     "Strict SVG-1.1 colours (rgba/transparent → hex + opacity) for PowerPoint-class importers"),
