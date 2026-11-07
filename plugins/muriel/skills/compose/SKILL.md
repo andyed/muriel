@@ -372,6 +372,12 @@ Optional deep references:
 
 ## Verification and handoff
 
+For an inspectable critique or revision presentation, read
+[`references/redline-review.md`](references/redline-review.md). The calling
+agent packages existing captures and findings with `muriel redline`; the critic
+keeps its read-only report contract. Use this when visual comparison helps the
+reviewer, not as an automatic extra artifact for every edit.
+
 When design synthesis was loaded, emit its labeled **Muriel synthesis** rationale
 before the delta. An unlabeled recommendation does not satisfy the observable
 decision contract.

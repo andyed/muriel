@@ -63,6 +63,7 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     "line-ends":      ("muriel.line_ends",                  "Rendered check: fail any stroke whose end lands on nothing (Playwright)"),
     "loupe":          ("muriel.loupe",                      "Fixed-scale 4× crops, densest first — do joints and line ends resolve up close?"),
     "palettes":       ("muriel.palettes",                   "List / generate / validate categorical palettes (CVD + contrast)"),
+    "redline":        ("muriel.redline",                    "Build an offline critique presentation from PNG captures and evidence"),
     "route":          ("muriel.route",                      "Send an owner's complaint to the lens that can answer it — which seat, tool, or owner page"),
     "smartcrop":      ("muriel.tools.smartcrop",            "Saliency-aware crop solver (edges + optional faces / text / saliency)"),
     "squint":         ("muriel.squint",                     "Dimension-scaled blur ladder + thumbnail companions — does hierarchy survive degradation?"),

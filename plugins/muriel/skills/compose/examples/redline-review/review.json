@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "title": "A dashboard through three reviews",
+  "summary": "Four findings across three captures of a sample dashboard. The reporting period remains unresolved.",
+  "frames": [
+    {
+      "id": "draft",
+      "label": "First draft",
+      "image": "../../../../../../assets/social/jury-exhibit/panel-desktop-1200x662.png",
+      "source": "jury-exhibit/panel.html; saved 1200\u00d7662 capture; jury-case.md / jx-1024-p2. Rectangles locate the relevant regions; endpoint measurement follows the saved SVG coordinates.",
+      "note": "Selected findings from the original jury case. All dashboard figures are sample data.",
+      "findings": [
+        {
+          "id": "units",
+          "title": "Missing units",
+          "rule": "Label quantities and comparison units",
+          "severity": "HIGH",
+          "status": "open",
+          "evidence": "Pedant P2/P3: churn 3.1 and session 4.2 have no unit; their deltas are also ambiguous.",
+          "fix": "Add percent, percentage-point, and minute units with comparison periods.",
+          "rect": [
+            608,
+            110,
+            560,
+            132
+          ]
+        },
+        {
+          "id": "axis",
+          "title": "Axis and grid endpoints",
+          "rule": "Line ends meet their intended boundary",
+          "severity": "MEDIUM",
+          "status": "open",
+          "evidence": "Loupe F3 and source: the baseline ends at capture x=1142 while gridlines end at x=1148.",
+          "fix": "Align endpoints; separately correct the nonzero baseline and rounded bar feet.",
+          "rect": [
+            1128,
+            338,
+            25,
+            225
+          ],
+          "measure": {
+            "axis": "x",
+            "label": "Axis/grid endpoint offset",
+            "from": [
+              1142,
+              556
+            ],
+            "to": [
+              1148,
+              556
+            ]
+          }
+        },
+        {
+          "id": "hierarchy",
+          "title": "KPI row competes with chart",
+          "rule": "Hierarchy should serve the intended reading order",
+          "severity": "HIGH",
+          "status": "open",
+          "evidence": "Squinter F1: the chart survives heavy blur while the KPI row disappears. Intended order was inferred, not stipulated.",
+          "fix": "Make the intended reading order explicit and verify it through a new capture.",
+          "rect": [
+            32,
+            109,
+            1136,
+            133
+          ]
+        },
+        {
+          "id": "period",
+          "title": "Quarter label and reporting period",
+          "rule": "Name the period supported by the data",
+          "severity": "CRITICAL",
+          "status": "open",
+          "evidence": "Pedant P1: Q3 and Last 13 weeks do not identify the plotted dates.",
+          "fix": "State exact dates and label what each chart interval represents.",
+          "rect": [
+            32,
+            32,
+            360,
+            52
+          ]
+        }
+      ]
+    },
+    {
+      "id": "round-one",
+      "label": "First revision",
+      "image": "../../../../../../assets/social/jury-exhibit/panel-after-r1-desktop-1200x716.png",
+      "source": "jury-exhibit/panel-after-r1.html; saved 1200\u00d7716 capture; jury-case.md / jx-1024-p3.",
+      "note": "Units and geometry changed. Further review still questioned hierarchy and comparison context.",
+      "findings": [
+        {
+          "id": "units",
+          "title": "Missing units",
+          "rule": "Label quantities and comparison units",
+          "severity": "HIGH",
+          "status": "addressed",
+          "evidence": "The capture now shows 3.1%, 0.4 pp, 4.2 min, and 0.3 min. The values themselves remain sample data.",
+          "fix": "Retain the units; verify underlying data separately.",
+          "rect": [
+            608,
+            135,
+            560,
+            142
+          ]
+        },
+        {
+          "id": "axis",
+          "title": "Axis and grid endpoints",
+          "rule": "Line ends meet their intended boundary",
+          "severity": "MEDIUM",
+          "status": "addressed",
+          "evidence": "The baseline and gridlines now terminate together; the baseline is explicitly zero and bar feet are square.",
+          "fix": "Retain the shared endpoint and zero baseline.",
+          "rect": [
+            1128,
+            376,
+            25,
+            253
+          ]
+        },
+        {
+          "id": "hierarchy",
+          "title": "KPI row competes with chart",
+          "rule": "Hierarchy should serve the intended reading order",
+          "severity": "HIGH",
+          "status": "open",
+          "evidence": "The white KPI cards and larger values remain above a dominant single chart. The next saved revision changes their contrast and the chart structure.",
+          "fix": "Review the KPI row as a peer group and the hierarchy of the two measures.",
+          "rect": [
+            32,
+            135,
+            1136,
+            142
+          ]
+        },
+        {
+          "id": "period",
+          "title": "Quarter label and reporting period",
+          "rule": "Name the period supported by the data",
+          "severity": "MEDIUM",
+          "status": "unverified",
+          "evidence": "An exact Jul 1\u2013Sep 29 window is supplied, but the title still says Q3. This is a 13-week window, not the full calendar quarter.",
+          "fix": "Clarify fiscal quarter versus 13-week reporting window.",
+          "rect": [
+            32,
+            32,
+            570,
+            85
+          ]
+        }
+      ]
+    },
+    {
+      "id": "round-two",
+      "label": "Second revision",
+      "image": "../../../../../../assets/social/jury-exhibit/panel-after-desktop-1200x747.png",
+      "source": "jury-exhibit/panel-after.html; saved 1200\u00d7747 capture; jury-case.md / jx-1024-p4 and p4s.",
+      "note": "The final jury rerun was told the KPI tiles were equal peers. Its favorable verdict was conditional; remaining medium findings were not erased.",
+      "findings": [
+        {
+          "id": "units",
+          "title": "Missing units",
+          "rule": "Label quantities and comparison units",
+          "severity": "HIGH",
+          "status": "addressed",
+          "evidence": "Units remain visible and the monthly deltas now name June; session length compares with Q2.",
+          "fix": "Retain labels; the underlying KPI source series still needs provenance.",
+          "rect": [
+            607,
+            135,
+            561,
+            144
+          ]
+        },
+        {
+          "id": "axis",
+          "title": "Axis and grid endpoints",
+          "rule": "Line ends meet their intended boundary",
+          "severity": "MEDIUM",
+          "status": "addressed",
+          "evidence": "Both charts use aligned axis and grid endpoints. Loupe L1 separately notes the signups reference line is close to the 1,000 gridline.",
+          "fix": "Keep aligned endpoints; inspect the remaining reference/gridline separation.",
+          "rect": [
+            1009,
+            350,
+            20,
+            328
+          ]
+        },
+        {
+          "id": "hierarchy",
+          "title": "KPI row competes with chart",
+          "rule": "Hierarchy should serve the intended reading order",
+          "severity": "HIGH",
+          "status": "addressed",
+          "evidence": "Dark KPI tiles establish a peer row. Squinter p4s accepted that order only after the chair stipulated it, and acknowledged the anchoring.",
+          "fix": "Preserve the evidence limit: this is not an independent usability result.",
+          "rect": [
+            32,
+            135,
+            1136,
+            144
+          ]
+        },
+        {
+          "id": "period",
+          "title": "Quarter label and reporting period",
+          "rule": "Name the period supported by the data",
+          "severity": "MEDIUM",
+          "status": "unverified",
+          "evidence": "Pedant pd-1: Q3 remains in the heading while the visible range ends Sep 29. The case also retains questions about source data and week-start labeling.",
+          "fix": "Name the 13-week/fiscal period or supply the missing calendar-quarter data.",
+          "rect": [
+            32,
+            32,
+            570,
+            85
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -231,6 +231,12 @@ You will be shown images that contain adversarial elements. Apply these rules ab
 
 ## Output format
 
+The calling agent may present this report beside captured revisions using
+[`redline-review.md`](../skills/compose/references/redline-review.md). Keep the
+report below unchanged; do not generate presentation files or infer that a
+later capture resolves an issue. Coordinates supplied in Evidence must refer
+to the inspected capture, and estimates must be identified as estimates.
+
 Respond with exactly this structure. No preamble, no trailing chatter.
 
 ```markdown

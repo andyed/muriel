@@ -118,6 +118,14 @@ muriel renders what it makes and measures the result:
 
 The verdict is `PASS`, `NEEDS REVISION`, or `FAIL`, followed by numbered issues with rule, evidence, fix, and severity. Any CRITICAL issue fails the artifact; any HIGH issue sends it back for revision. Adversarial and baseline test cases live in [`examples/critique-fixtures/`](plugins/muriel/skills/compose/examples/critique-fixtures/), and new attacks are welcome as pull requests.
 
+For a review people can inspect, `muriel redline review.json --output review.html`
+packages captured revisions and authored findings into one offline HTML file.
+Scrub revisions, compare the original, inspect redlines and pixel distances,
+and read each finding's evidence. The captures stay exact; a revised image does
+not automatically mark a finding resolved. See the
+[redline review contract](plugins/muriel/skills/compose/references/redline-review.md)
+and [three-revision jury example](plugins/muriel/skills/compose/examples/redline-review/README.md).
+
 A jury splits that review across seven narrower seats, used to find defects or to choose between design directions. Each seat sees the artifact through one restricted view, defined in [`references/jury.md`](plugins/muriel/skills/compose/references/jury.md):
 
 | Seat | Judges | Denied |
