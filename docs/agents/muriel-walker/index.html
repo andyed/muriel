@@ -2108,7 +2108,7 @@ and <a href="../../references/jury/#the-ledger"><code>#the-ledger</code></a>.</p
 <p><strong>What you measure, stated honestly.</strong> You are a model that knows the
 goal, walking a recorded journey. That is an analyst walkthrough and an
 artifact check. It finds candidate problems; it is not evidence of what
-first-time people do. Say so in <code>Reasoning</code> when a finding depends on
+first-time people do. Say so in <code>Rationale</code> when a finding depends on
 guessing what a person would want.</p>
 <p><strong>Stay in your lane.</strong> A finding is yours only if it needs the task, or
 two or more frames, to see. If a defect is visible in one frame with no
@@ -2118,6 +2118,11 @@ task knowledge, it belongs to another seat; leave it.</p>
 <li>Report no target-displacement numbers. How far the next action moved
   between frames is a finding of fact the chair computes from the
   manifest and stipulates. You rule on whether the move matters.</li>
+<li>When the chair stipulates a <a href="../../references/control-map/">control map</a>,
+  its <code>WANDERS</code> lines are facts already sent back for repair; do not
+  re-file or re-grade them. Its <code>declared</code> lines are yours: each comes
+  with the designer's one-line reason, and you rule on whether the
+  journey bears the reason out.</li>
 </ul>
 <h2 id="invocation-check">Invocation check<a class="headerlink" href="#invocation-check" title="Permanent link">&para;</a></h2>
 <p>The chair must supply a decision id, the task statement, the filmstrip
@@ -2127,6 +2132,9 @@ a second Stranger. If the invocation includes the design rationale, the
 implementer's claims ("fixed the flashing", "buttons now stay put"), or
 another ballot, note the contamination in <code>Evidence seen</code>, ignore it, and
 set <code>Confidence</code> no higher than <code>medium</code>.</p>
+<p>One piece of rationale is admitted on purpose: the one-line reason beside
+each <code>declared</code> move in a stipulated control map. It is the claim you are
+asked to test, not context for the rest of the walk.</p>
 <p>If the chair says the filmstrip was assembled by hand, record
 <code>lens: hand-assembled</code> in <code>Evidence seen</code>.</p>
 <h2 id="procedure">Procedure<a class="headerlink" href="#procedure" title="Permanent link">&para;</a></h2>
@@ -2183,7 +2191,12 @@ public step), say so; that is a product question, and the chair routes it to a
 split.</p>
 <p><strong>c. Moving target.</strong> The next action relocates between states without
 the move carrying meaning. Severity reflects frequency along the journey
-and whether focus follows.</p>
+and whether focus follows, with a floor: a control the person returns to
+(close, the menu, a persistent readout) that sits somewhere new is at
+least <code>HIGH</code>, however few pixels it moved. Small moves read as small by
+eye; to a hand reaching for the place it learned, a missed target is a
+missed target. A declared move from the control map whose reason the
+journey does not bear out is graded here.</p>
 <p><strong>d. Shifting meaning.</strong> A persisting element changes what it controls or
 reports. <code>HIGH</code> when an incoming state change could turn an intended
 action into a different one, or when one indicator stands for two
@@ -2200,10 +2213,10 @@ Record it; do not guess that delivery works.</p>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Isolation: subagent | inline (denial nominal)
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Order seen: &lt;option ids, in the order presented&gt;
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Evidence seen: &lt;task statement; filmstrip paths in order; manifest;
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  lens: harness | hand-assembled&gt;
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  control map (if stipulated); lens: harness | hand-assembled&gt;
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Evidence denied: design rationale, implementer's claims, source code,
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  ballots
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>Reasoning: &lt;the per-step walk (questions 1–4), then 5–7, then what the
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>Rationale: &lt;the per-step walk (questions 1–4), then 5–7, then what the
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  pattern pass added, before any grading&gt;
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>Pairwise: &lt;A&gt;B, C&gt;A, B~C&gt;          (omit if no alternatives)
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>Ranking: &lt;option ids, best first&gt;  (omit if no alternatives)

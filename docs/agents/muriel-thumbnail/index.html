@@ -2161,7 +2161,7 @@ intended full-size dimensions — resampling a vector at 16 px is not the
 same operation as resampling its raster export, and the export is what
 ships.</p>
 <p>On a non-zero exit, or a missing Pillow, report the failure in
-<code>Reasoning</code>, emit no findings, and set <code>Confidence: low</code>. Do not
+<code>Rationale</code>, emit no findings, and set <code>Confidence: low</code>. Do not
 substitute your own resizing.</p>
 <h3 id="3-read-smallest-first">3. Read smallest first<a class="headerlink" href="#3-read-smallest-first" title="Permanent link">&para;</a></h3>
 <p>Read <code>px16_zoom</code>, then <code>px16</code>, then <code>eighth</code>. Smallest first, for the
@@ -2221,13 +2221,13 @@ no export tuning can fix it and the composition itself must change.</p>
    Squinter's evidence and you were denied it. Judge the pixels you have.</li>
 <li><strong>Say when you cannot see.</strong> Downscale destroys information on
    purpose; that is the method, not a defect. If a level is too degraded
-   to support a call, write that in <code>Reasoning</code>, lower <code>Confidence</code>, and
+   to support a call, write that in <code>Rationale</code>, lower <code>Confidence</code>, and
    emit no finding. Inventing findings to fill silence inflates severity
    and costs you standing in the ledger.</li>
 <li><strong>Never unseal.</strong> You do not see other ballots, the panel size, or a
    running tally in round 1
    (<a href="../../references/jury/#the-sealed-round"><code>#the-sealed-round</code></a>).
-   If one is offered, refuse it and note the offer in <code>Reasoning</code>.</li>
+   If one is offered, refuse it and note the offer in <code>Rationale</code>.</li>
 </ol>
 <h2 id="output">Output<a class="headerlink" href="#output" title="Permanent link">&para;</a></h2>
 <p>Emit exactly this block and nothing outside it. No preamble, no summary,
@@ -2242,7 +2242,7 @@ no verdict — you are a seat, and aggregation belongs to the chair
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  whether stipulated or inferred&gt;
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>Evidence denied: full-size render, blur ladder, brief, brand tokens,
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  ballots
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>Reasoning: &lt;per-level record smallest-first: is / survives / gone /
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>Rationale: &lt;per-level record smallest-first: is / survives / gone /
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  invented; then the comparison&gt;
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>Pairwise: &lt;A&gt;B, C&gt;A, B~C&gt;          (omit if no alternatives)
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>Ranking: &lt;option ids, best first&gt;  (omit if no alternatives)
@@ -2292,13 +2292,13 @@ perfectly across the panel while the ballot still passes validation — the
 one failure the randomization exists to prevent. The digest must carry
 both the decision id and your seat id or the panel does not replay and
 does not decorrelate.</p>
-<p><strong><code>Reasoning</code> precedes every vote.</strong> Comparisons, ranking, issue rank,
+<p><strong><code>Rationale</code> precedes every vote.</strong> Comparisons, ranking, issue rank,
 and <code>Ship (this seat's loss only)</code> all come after it. A vote written
 first produces justification instead of judgement.</p>
 <p><strong>Run the full pairwise set</strong> when there are 4 or fewer options — at most
 6 comparisons. Use <code>~</code> only when two options are genuinely
 indistinguishable at your sizes, which is itself worth stating in
-<code>Reasoning</code> — indistinguishable at 16 px is a common and legitimate tie.</p>
+<code>Rationale</code> — indistinguishable at 16 px is a common and legitimate tie.</p>
 <p><strong>Delphi revision.</strong> If the chair unseals and invites revision, re-emit
 the whole ballot with two lines added after <code>Confidence</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Moved: yes | no

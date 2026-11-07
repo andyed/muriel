@@ -1,0 +1,2780 @@
+{
+ "viewport": [
+  1470,
+  956
+ ],
+ "protected": {
+  "lamp": [
+   543,
+   110,
+   385,
+   805
+  ]
+ },
+ "source": "spinodal staging 7d95b56",
+ "states": {
+  "rest": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "revealed": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "revealed, mid-beat": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Artist: the lamp plays itself": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Mic: the room and music drive the lamp": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Room \u203a Mic, the microphone": [
+     142,
+     109,
+     144,
+     86
+    ],
+    "Room \u203a Movement, the camera": [
+     292,
+     109,
+     144,
+     86
+    ],
+    "Room \u203a Start listening": [
+     142,
+     226,
+     294,
+     44
+    ],
+    "Room \u203a Not now": [
+     142,
+     270,
+     294,
+     44
+    ],
+    "Room \u203a More": [
+     142,
+     316,
+     294,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Natural: physics only": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Turn": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Gather: then drag on the glass": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Gather strength": [
+     174,
+     388,
+     230,
+     28
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Swirl: then drag on the glass": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Swirl strength": [
+     174,
+     388,
+     230,
+     28
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Repel: then drag on the glass": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Repel strength": [
+     174,
+     388,
+     230,
+     28
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Shake": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Colour": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Jets": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Jets \u203a Fire jets": [
+     1062,
+     212,
+     238,
+     44
+    ],
+    "Jets \u203a Jet origin": [
+     1062,
+     302,
+     238,
+     44
+    ],
+    "Jets \u203a Jet height": [
+     1064,
+     393,
+     238,
+     44
+    ],
+    "Jets \u203a Jet angle": [
+     1064,
+     487,
+     238,
+     44
+    ],
+    "Jets \u203a Jet strength": [
+     1066,
+     589,
+     230,
+     44
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Lamp": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Lamp \u203a Colour": [
+     1256,
+     212,
+     44,
+     44
+    ],
+    "Lamp \u203a Heat": [
+     1086,
+     260,
+     68,
+     81
+    ],
+    "Lamp \u203a Top light": [
+     1184,
+     260,
+     116,
+     81
+    ],
+    "Lamp \u203a Colour wheel": [
+     1062,
+     347,
+     116,
+     76
+    ],
+    "Lamp \u203a Cold": [
+     1062,
+     467,
+     116,
+     44
+    ],
+    "Lamp \u203a Warm": [
+     1184,
+     467,
+     116,
+     44
+    ],
+    "Lamp \u203a More": [
+     1062,
+     517,
+     104,
+     44
+    ],
+    "Lamp \u203a Tour": [
+     1174,
+     515,
+     126,
+     45
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Room": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Room \u203a Mic, the microphone": [
+     1124,
+     237,
+     144,
+     86
+    ],
+    "Room \u203a Movement, the camera": [
+     1274,
+     237,
+     144,
+     86
+    ],
+    "Room \u203a Start listening": [
+     1124,
+     354,
+     294,
+     44
+    ],
+    "Room \u203a Not now": [
+     1124,
+     398,
+     294,
+     44
+    ],
+    "Room \u203a More": [
+     1124,
+     444,
+     294,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Colour \u203a Ember": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Colour \u203a Glacier": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Colour \u203a Lagoon": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Colour \u203a Orchid": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Colour \u203a Amethyst": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Colour \u203a Aurora": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  },
+  "after Focus mode": {
+   "controls": {
+    "Exit focus": [
+     1261,
+     16,
+     44,
+     44
+    ]
+   }
+  },
+  "after Keyboard": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     166,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     253,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     325,
+     16,
+     101,
+     44
+    ],
+    "Turn": [
+     170,
+     115,
+     238,
+     52
+    ],
+    "Gather: then drag on the glass": [
+     170,
+     171,
+     238,
+     52
+    ],
+    "Swirl: then drag on the glass": [
+     170,
+     227,
+     238,
+     52
+    ],
+    "Repel: then drag on the glass": [
+     170,
+     283,
+     238,
+     52
+    ],
+    "Shake": [
+     170,
+     430,
+     238,
+     52
+    ],
+    "Colour": [
+     1062,
+     115,
+     57,
+     73
+    ],
+    "Jets": [
+     1122,
+     115,
+     57,
+     73
+    ],
+    "Lamp": [
+     1183,
+     115,
+     57,
+     73
+    ],
+    "Room": [
+     1243,
+     115,
+     57,
+     73
+    ],
+    "Colour \u203a Ember": [
+     1062,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Glacier": [
+     1186,
+     214,
+     114,
+     96
+    ],
+    "Colour \u203a Lagoon": [
+     1062,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Orchid": [
+     1186,
+     324,
+     114,
+     96
+    ],
+    "Colour \u203a Amethyst": [
+     1062,
+     434,
+     114,
+     96
+    ],
+    "Colour \u203a Aurora": [
+     1186,
+     434,
+     114,
+     96
+    ],
+    "Focus mode": [
+     1261,
+     16,
+     44,
+     44
+    ],
+    "Keyboard shortcuts \u203a Done": [
+     1348,
+     89,
+     93,
+     44
+    ],
+    "Keyboard": [
+     165,
+     894,
+     126,
+     44
+    ]
+   }
+  }
+ },
+ "moves": {
+  "Room \u203a Mic, the microphone": "anchored to its invoking button: under the Mic segment (left) or the Room button (right)",
+  "Room \u203a Movement, the camera": "anchored to its invoking button: under the Mic segment (left) or the Room button (right)",
+  "Room \u203a Start listening": "anchored to its invoking button: under the Mic segment (left) or the Room button (right)",
+  "Room \u203a Not now": "anchored to its invoking button: under the Mic segment (left) or the Room button (right)",
+  "Room \u203a More": "anchored to its invoking button: under the Mic segment (left) or the Room button (right)"
+ }
+}

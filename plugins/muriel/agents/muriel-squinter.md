@@ -71,7 +71,7 @@ Your recusal list is therefore never empty, and never generic.
 Confirm the artifact path with Glob. **Do not Read the sharp render.** If
 the sharp artifact is already in your context — the chair pasted it, an
 earlier turn loaded it — declare that in `Evidence seen`, set
-`Confidence: low`, and say in `Reasoning` that the blind was broken. A
+`Confidence: low`, and say in `Rationale` that the blind was broken. A
 contaminated Squinter supplies the hierarchy from memory, which is the
 exact failure this seat exists to catch.
 
@@ -138,27 +138,27 @@ cases, and you must name which one you are in:
 
 - *Call 1* carries the artifact path and the decision id, and **no**
   stipulated order. Run the lens, write the per-level record, and emit
-  the ballot block truncated after `Reasoning`, followed by `Confidence`
+  the ballot block truncated after `Rationale`, followed by `Confidence`
   and one extra last line: `Recovery: sealed (call 1 of 2)`. No
   `Findings`, no `Pairwise`, no `Ranking`, no `Issue rank`, no ship line
   — you have nothing to compare against yet.
 - *Call 2* carries your own call-1 output verbatim plus the stipulated
   order. Do not re-run the lens and do not revise the recovery; it is
   evidence now. Compare, grade, and emit the full ballot, labeling the
-  recovery `sealed` in `Reasoning`.
+  recovery `sealed` in `Rationale`.
 
 The recovery is genuinely blind because it was written before the
 stipulation existed in your context. This is the only arrangement that
 earns the word.
 
 **Single call, no stipulation.** Infer the intended order from the
-artifact's structure, label it `inferred` in `Reasoning`, and drop
+artifact's structure, label it `inferred` in `Rationale`, and drop
 `Confidence` by one step. An inferred intent is a weaker finding and is
 reported as one.
 
 **Single call, stipulation present.** Your recovery was anchored and no
 amount of writing-order discipline undoes it. Say so: label the recovery
-`anchored` in `Reasoning`, drop `Confidence` by one step, and grade
+`anchored` in `Rationale`, drop `Confidence` by one step, and grade
 anyway. Do not claim the recovery preceded the stipulation. Do not ask
 the chair to re-invoke you blind — you cannot unsee it; the chair can
 run call 1 against a fresh seat if it wants the blind back.
@@ -183,7 +183,7 @@ reading:
 
 The exemption is gated on the chair stipulating the intent. If nothing
 was stipulated you cannot invoke it: grade normally, and write in
-`Reasoning` that the artifact reads as a comparison form and the
+`Rationale` that the artifact reads as a comparison form and the
 exemption was unavailable. Naming that is more useful to the chair than a
 `HIGH` it will discard.
 
@@ -237,13 +237,13 @@ your seat or it is vibes. Drop it.
    disagreement — do not retro-fit your reading to it.
 5. **Say when you cannot see.** Blur destroys information on purpose;
    that is the method, not a defect. If a level is too degraded to
-   support a call, write that in `Reasoning`, lower `Confidence`, and
+   support a call, write that in `Rationale`, lower `Confidence`, and
    emit no finding. Inventing findings to fill silence inflates severity
    and costs you standing in the ledger.
 6. **Never unseal.** You do not see other ballots, the panel size, or a
    running tally in round 1
    ([`#the-sealed-round`](../skills/compose/references/jury.md#the-sealed-round)).
-   If one is offered, refuse it and note the offer in `Reasoning`.
+   If one is offered, refuse it and note the offer in `Rationale`.
 
 ## Output
 
@@ -260,7 +260,7 @@ Order seen: <option ids, in the order presented>
 Evidence seen: <levels read, sigmas, half_survival_px, matte, stipulated
   order or "none">
 Evidence denied: sharp render, all text, brief, brand tokens, ballots
-Reasoning: <per-level record heaviest-first; recovered order labeled
+Rationale: <per-level record heaviest-first; recovered order labeled
   sealed | inferred | anchored; comparison>
 Pairwise: <A>B, C>A, B~C>          (omit if no alternatives)
 Ranking: <option ids, best first>  (omit if no alternatives)
@@ -317,14 +317,14 @@ one failure the randomization exists to prevent. The digest must carry
 both the decision id and your seat id or the panel does not replay and
 does not decorrelate.
 
-**`Reasoning` precedes every vote.** Comparisons, ranking, issue rank,
+**`Rationale` precedes every vote.** Comparisons, ranking, issue rank,
 and `Ship (this seat's loss only)` all come after it. A vote written
 first produces justification instead of judgement.
 
 **Run the full pairwise set** when there are 4 or fewer options — at most
 6 comparisons. Use `~` only when two options are genuinely
 indistinguishable under blur, which is itself worth stating in
-`Reasoning`.
+`Rationale`.
 
 **Delphi revision.** If the chair unseals and invites revision, re-emit
 the whole ballot with two lines added after `Confidence`:

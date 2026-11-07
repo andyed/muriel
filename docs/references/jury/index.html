@@ -1640,6 +1640,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#routing-a-complaint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Routing a complaint
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-no-seat-holds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What no seat holds
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-chair" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2425,6 +2447,8 @@ owns product truth.</p>
 <li><a href="#delphi-round">Delphi round</a></li>
 <li><a href="#the-ledger">The ledger</a></li>
 <li><a href="#unanimity-smell-test">Unanimity smell test</a></li>
+<li><a href="#routing-a-complaint">Routing a complaint</a></li>
+<li><a href="#what-no-seat-holds">What no seat holds</a></li>
 <li><a href="#the-chair">The chair</a></li>
 <li><a href="#worked-example">Worked example</a></li>
 <li><a href="#naming-decisions">Naming decisions</a></li>
@@ -2450,6 +2474,12 @@ copy, or spacing work; a decision the calling agent has made and only wants
 ratified. A name is the one non-visual decision in scope; see <a href="#naming-decisions">Naming
 decisions</a>. A multi-step flow is in scope when its states
 are the artifact: the <a href="#the-roster">Walker</a> judges the sequence.
+Interactive UI whose controls show, hide, or change with state needs a
+<a href="../control-map/">control map</a> stipulated before any seat sits: a panel that
+walks journeys one at a time does not see a control wandering between them.
+A sitting called because the owner complained starts from the complaint, not
+the roster: <a href="#routing-a-complaint">route it</a> first. Defects, spec conflicts,
+and sound route to no seat at all.
 A single artifact with no alternatives is out of scope <strong>only when its premise
 is settled</strong> — run <a href="../../agents/muriel-critique/"><code>muriel-critique</code></a>
 alone. A single artifact whose premise is contested is in scope, and votes on
@@ -2471,10 +2501,16 @@ tooling and enter as stipulated evidence, never as motions:</p>
   facts, and the Loupe's line-end findings are limited to what this check
   cannot see (rasters, strokes outside its <code>--lines</code> scope);</li>
 <li>recorded seeds, dimensions, and export paths;</li>
-<li>for a flow, how far the next action moved between consecutive frames,
-  computed from the journey manifest's bounding boxes (arithmetic the chair
-  does; no muriel tool yet). The Walker rules on whether a move matters, never
-  on its size;</li>
+<li><code>python -m muriel control-map &lt;map.json&gt;</code> — every control's distinct
+  screen homes across every listed state, which states introduce a new
+  position, and how much of the protected subject each state covers (see
+  <a href="../control-map/">control map</a>). An undeclared second home is a fact and is
+  fixed before seating, never voted LOW. A declared move enters with its
+  stated reason, and the Walker rules on whether the reason holds, never on
+  the move's size;</li>
+<li>for a single flow, how far the next action moved between consecutive
+  frames, computed from the journey manifest's bounding boxes (arithmetic the
+  chair does);</li>
 <li><strong>conditional, may return nothing</strong> —
   <code>python -m muriel.tools.impeccable_bridge &lt;path&gt;</code> is a no-op when Node, npx,
   or the third-party <code>impeccable</code> CLI is absent, and degrades silently; the
@@ -2715,8 +2751,10 @@ Each frame has a manifest entry: state name, the next intended action's label,
 bounding box, and enabled state, and where focus sits. <em>Loss:</em> misses in
 continuity; willing to be wrong about anything visible in a single frame.
 <em>Access:</em> the task in the person's terms (goal, starting state, success
-criterion), the filmstrip, and the manifest; denied the design rationale, the
-implementer's claims about what was fixed, source code, and other ballots.
+criterion), the filmstrip, the manifest, and the <a href="../control-map/">control map</a>
+when stipulated, with its declared-move reasons; denied the rest of the design
+rationale, the implementer's claims about what was fixed, source code, and
+other ballots.
 <em>Judges:</em> at each step, the four cognitive-walkthrough questions from
 <a href="../task-analysis/#walk-first-use">task analysis</a>; whether the step is the
 person's work or a handoff the system could do; whether a control or indicator
@@ -2780,9 +2818,14 @@ normalization.</p>
   and 0 when they chose opposite options. Divide by (seat pairs × option
   pairs). This is the reliability figure.</li>
 </ul>
-<p><strong>Reasoning before the vote.</strong> The ballot emits reasoning <em>above</em> its
+<p><strong>Rationale before the vote.</strong> The ballot emits its <code>Rationale</code> <em>above</em> its
 comparisons, ranking, and ship decision. A vote written first anchors the
-rationale that follows, and you get justification, not judgement.</p>
+text that follows, and you get justification, not judgement. The field is
+named <code>Rationale</code>, not <code>Reasoning</code>: in a subagent prompt a field by that name
+reads as a request for the model's private chain of thought and can trip a
+safeguard, which on Spinodal (2026-11-05) forced the Walker to run from a
+paraphrase of its own definition. The rationale is the seat's account of the
+evidence, written for the chair.</p>
 <p><strong>Single artifact, no alternatives.</strong> In scope when the artifact's premise is
 contested; see <a href="#load-gate">Load gate</a>. Do not fake a comparison. Require a
 forced rank of the issues — no ties, which stops a seat calling everything
@@ -2800,7 +2843,7 @@ part of the split; it does not tally them into a verdict.</p>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>Order seen: &lt;option ids, in the order presented&gt;
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Evidence seen: &lt;what this seat was given&gt;
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>Evidence denied: &lt;what this seat was refused&gt;
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>Reasoning: &lt;prose; must precede Pairwise, Ranking, Issue rank, Ship&gt;
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>Rationale: &lt;prose; must precede Pairwise, Ranking, Issue rank, Ship&gt;
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>Pairwise: &lt;A&gt;B, C&gt;A, B~C&gt;          (omit if no alternatives)
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>Ranking: &lt;option ids, best first&gt;  (omit if no alternatives)
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>Findings:
@@ -2880,7 +2923,7 @@ disposition it later earns, exactly as a union finding is.</p>
 <h2 id="delphi-round">Delphi round<a class="headerlink" href="#delphi-round" title="Permanent link">&para;</a></h2>
 <p>Optional. Run one only when the split blocks a commit that must happen this
 session. Unseal round 1, show every juror the full split — all ballots, all
-reasoning — allow revision, and <strong>record who moved</strong>. A revised ballot carries
+rationales — allow revision, and <strong>record who moved</strong>. A revised ballot carries
 two extra lines: <code>Moved: yes | no</code> and <code>Moved because: &lt;the specific evidence
 in another ballot that changed it&gt;</code>.</p>
 <p>Movement toward the most confident or most verbose juror is a failure mode, not
@@ -3019,14 +3062,138 @@ fewest claims struck as <code>noise</code> this sitting; (3) lowest <code>noise_
 ledger, seats without 20 resolved findings ranking last. Ship the top ballot.
 If two ballots tie through all three, ship both unmerged and say they tied —
 that is still not a preference.</p>
+<h2 id="routing-a-complaint">Routing a complaint<a class="headerlink" href="#routing-a-complaint" title="Permanent link">&para;</a></h2>
+<p>When the owner says something is wrong, the words say which lens can answer.
+Seating whichever seats are handy produces a confident answer to a different
+question. On Spinodal (2026-11-05 to 11-07) muriel's costliest misses were
+routing errors:</p>
+<ul>
+<li>"the pie is … FUGGGGLY! … /muriel take it" seated the Loupe alone. The Loupe
+  judges finish at 4×; it found nothing and reported "ship yes".</li>
+<li>The Walker's "five gestures have no visible route" was marked fixed when a
+  line of text was added. The owner was still writing "totally unclear how
+  jets are suppose to work" a day later and "not discoverable as is" two days
+  later.</li>
+<li>A sound sitting fixed 36 spec and safety findings; the owner then cut sound
+  as "too pinbally". No seat listens.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel<span class="w"> </span>route<span class="w"> </span><span class="s2">"&lt;the owner's words, verbatim&gt;"</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel<span class="w"> </span>route<span class="w"> </span>--list
+</code></pre></div>
+<p><a href="https://github.com/andyed/muriel/blob/main/muriel/route.py"><code>muriel.route</code></a> matches loose cue words
+(it is built on the owner's own typing, typos included) and names, per lens,
+the first move, the seats and tools that can settle it, what closes it, and
+what will not settle it:</p>
+<table>
+<thead>
+<tr>
+<th>Lens</th>
+<th>Owner says</th>
+<th>First move</th>
+<th>Seats</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>defect</td>
+<td>"buttons do nothing", "can't close"</td>
+<td>repro and fix</td>
+<td>none</td>
+</tr>
+<tr>
+<td>spec</td>
+<td>"wasn't the target spec", "we said"</td>
+<td>reconcile the versioned spec</td>
+<td>none</td>
+</tr>
+<tr>
+<td>taste</td>
+<td>"ugly", "boring", "not happy with"</td>
+<td>owner side-by-side page</td>
+<td>Forger, Squinter</td>
+</tr>
+<tr>
+<td>reading</td>
+<td>"seen as a $ sign", "distinct from Protoplasm"</td>
+<td>cold read; sibling page</td>
+<td>Stranger, Thumbnail</td>
+</tr>
+<tr>
+<td>discoverability</td>
+<td>"unclear how", "not discoverable"</td>
+<td>Walker on first use; owner retries</td>
+<td>Walker, Stranger</td>
+</tr>
+<tr>
+<td>placement</td>
+<td>"random places", "obscures the canvas"</td>
+<td><a href="../control-map/">control map</a></td>
+<td>Walker</td>
+</tr>
+<tr>
+<td>motion</td>
+<td>"jerky", "too slow", "not fluid"</td>
+<td>clip or filmstrip, before and after</td>
+<td>Walker</td>
+</tr>
+<tr>
+<td>sound</td>
+<td>"pinbally", "harsh"</td>
+<td>matched-level A/B for the owner</td>
+<td>none</td>
+</tr>
+<tr>
+<td>magnitude</td>
+<td>"super subtle", "blends in"</td>
+<td>measurement sheet</td>
+<td>Squinter, Thumbnail</td>
+</tr>
+<tr>
+<td>wording</td>
+<td>"should be 'Get Studio'"</td>
+<td>text alone</td>
+<td>Pedant, Stranger</td>
+</tr>
+</tbody>
+</table>
+<p>A complaint can hit several lenses; all are reported, strongest first, and
+each gets its own first move. One that hits none comes back <code>UNROUTED</code>: ask
+the owner which question it is before seating anyone.</p>
+<p>A finding raised from a complaint is not <code>fixed</code> until its lens's close
+condition holds. For discoverability that is the owner retrying the first
+use; added copy is the implementer's claim, not the close.</p>
+<h2 id="what-no-seat-holds">What no seat holds<a class="headerlink" href="#what-no-seat-holds" title="Permanent link">&para;</a></h2>
+<p>Some questions belong to the owner, and a jury sitting in front of them
+delays the owner's answer while looking like one. Two recur:</p>
+<ul>
+<li><strong>Does it earn the pixels?</strong> Whether a control, panel, or overlay is
+  beautiful and useful enough to justify covering the thing the product
+  exists to show. The control map's coverage number is the fact; the call is
+  taste and product. ("Obscuring the canvas has a cost, make it worthwhile.")</li>
+<li><strong>Is it too close to a sibling?</strong> Closeness to the owner's other products
+  (a mark that is "more Protoplasm", a layout that reads as the sister app) is
+  a portfolio criterion. The Forger judges distance from generic output, not
+  from the house's own work.</li>
+</ul>
+<p>For either, the chair puts <strong>one page</strong> in front of the owner before seating:
+the options side by side at the shipping size, with a working link to each
+live build. A jury may still sit afterwards on execution. Three rounds of
+panel findings are not a substitute for a five-second look by the person who
+holds the taste; on Spinodal's v1 UI they passed what the owner rejected
+within the hour.</p>
 <h2 id="the-chair">The chair<a class="headerlink" href="#the-chair" title="Permanent link">&para;</a></h2>
 <p>The chair is <strong>not</strong> a juror. It casts no ballot, breaks no tie by preference,
 and contributes no findings of its own. Duties, in order:</p>
 <ol>
 <li><strong>Fix the question.</strong> One sentence the panel can answer. If it contains a
-   measurable term, stop and run the tool.</li>
+   measurable term, stop and run the tool. If the sitting answers an owner's
+   complaint, quote it verbatim, <a href="#routing-a-complaint">route it</a>, record the
+   route on the sitting, and seat nothing the route lists as unable to
+   settle it.</li>
 <li><strong>Run the deterministic checks</strong>, enter them as stipulated facts, and repair
-   fact-level failures before seating anyone.</li>
+   fact-level failures before seating anyone. For interactive UI that includes
+   the <a href="../control-map/">control map</a>. If the question is one <a href="#what-no-seat-holds">no seat
+   holds</a>, show the owner first.</li>
 <li><strong>Seat the panel.</strong> Only seats whose lenses and losses differ for this
    artifact. Three is a real panel; five is the ceiling. The roster has seven,
    so a full panel leaves at least two out. Seat the Walker only for a flow;
@@ -3049,6 +3216,12 @@ and contributes no findings of its own. Duties, in order:</p>
 <li><strong>Run the unanimity smell test.</strong></li>
 <li><strong>Write the finding,</strong> with the split left unresolved, and emit one ledger
     record per finding at <code>disposition: open</code>.</li>
+<li><strong>Hand back something the owner can open.</strong> Every sitting that changes a
+    build ends with: a working link to the build (https when it must open on
+    a phone), one page with the options or the before and after side by side,
+    and the exact URL parameter for anything still behind a flag. A finding
+    the owner has to assemble from piecemeal images, or a fix they can only
+    see by guessing a parameter, has not been handed back.</li>
 </ol>
 <p>The chair may not resolve a split. It reports the split and names the product
 question. That is the finding.</p>
@@ -3059,12 +3232,12 @@ which dwell-readout direction earns implementation? <strong>A</strong> — small
 strip, one mini heatmap per AOI, sorted by dwell. <strong>B</strong> — ranked horizontal
 bars, dwell in ms, AOI labels inline. <strong>C</strong> — annotated stimulus overlay, dwell
 numerals on the stimulus. Findings of fact, stipulated and not votable:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>dwell-a.svg → tick labels 4.6:1 on panel fill. CRITICAL. Repaired
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  pre-seating (label → cream); re-run 12.1:1.
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>dwell-b.svg → minimum text pair 11.2:1. Clean.
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>dwell-c.svg → numerals 7.4:1 over the darkest sampled stimulus region.
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  CRITICAL. Repaired pre-seating (opaque plate); re-run 12.9:1.
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>All three at 1400×900, seed 7, exported to render_assets/dwell/.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>dwell-a.svg → tick labels 4.6:1 on panel fill. CRITICAL. Repaired
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  pre-seating (label → cream); re-run 12.1:1.
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>dwell-b.svg → minimum text pair 11.2:1. Clean.
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>dwell-c.svg → numerals 7.4:1 over the darkest sampled stimulus region.
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>  CRITICAL. Repaired pre-seating (opaque plate); re-run 12.9:1.
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>All three at 1400×900, seed 7, exported to render_assets/dwell/.
 </code></pre></div>
 <p>None of that entered a ballot; two directions were repaired, not debated.
 Panel: all five seats, each as a subagent. The pedant read SVG source, so its
@@ -3074,43 +3247,43 @@ would have carried <code>subagent (denial partial — raster read)</code> instea
 nothing else. It did not receive the brief above, the question being decided,
 or the fact that the three artifacts are alternatives to one another.</p>
 <p>Round 1 sealed; ballots abridged to load-bearing lines:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>squinter   order B,A,C   pairwise B&gt;A, B&gt;C, C&gt;A   ranking B,C,A   high
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  Blurred, B is one descending wedge: a single unambiguous reading order.
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  A is nine equal-weight blobs, no focal point survives. C is the stimulus.
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>  A / "one dominant focal point" / HIGH — nine tiles at equal area and
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>  luminance; blur leaves no rank. Fix: scale tile area by dwell.
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>  Recused: typography, labeling, units
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>thumbnail  order C,B,A   pairwise B&gt;C, B&gt;A, A~C   ranking B,C,A   medium
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>  At 1/8 scale B keeps bar length; labels vanish but rank survives. A
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>  becomes noise. C's numerals are gone by 1/4 scale.
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>  C / "evaluate at multiple implied scales" / MEDIUM — panel ships in a
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>  320px rail. Fix: add a rank strip.   Recused: full-size composition
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>stranger   order A,C,B   pairwise C&gt;B, C&gt;A, B&gt;A   ranking C,B,A   high
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>  (brief denied; one Read per option, no re-read) On C I can say what it is
-<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>  for — where people looked on this screen — and point at the region. On B I
-<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>  read a ranking but could not say what the rows are; "AOI_03" meant nothing.
-<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>  B / "premise" / HIGH — identifiers opaque to anyone who did not define
-<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>  the AOIs; ranking legible, referent not. Fix: naming, not charting.
-<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>  Recused: craft, hierarchy, contrast
-<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>
-<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>forger     order C,A,B   pairwise C&gt;B, C&gt;A, A~B   ranking C,A,B   high
-<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>  (tokens denied) Forged B from a stock bar component in 3m40s, reached
-<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>  ~90%: same encoding, sort, inline labels. Could not reproduce the
-<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>  dwell-band shading. Forged C: gave up at 4m; AOI polygon registration is
-<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>  not template work.
-<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>  B / "anti-slop: domain-specific decisions" / MEDIUM — 90% forgeable in
-<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>  3m40s. Fix: make the dwell band carry more, or accept B as commodity.
-<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>  Recused: hierarchy, contrast, labeling
-<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>
-<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>pedant     order A,B,C   pairwise B&gt;C, B&gt;A, C&gt;A   ranking B,C,A   high
-<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>  B labels units on the axis. C prints bare numerals with no unit in frame.
-<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a>  A's legend says "dwell", its caption "fixation time" — not synonyms.
-<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a>  C / "label every number" / HIGH — 14 bare numerals, no unit anywhere.
-<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a>  A / "terminology drift" / CRITICAL, form_fatal: no — legend vs caption in
-<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>    one figure. Fix: pick one term and use it in both.
-<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a>  Recused: composition, scale survival, brand voice
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>squinter   order B,A,C   pairwise B&gt;A, B&gt;C, C&gt;A   ranking B,C,A   high
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  Blurred, B is one descending wedge: a single unambiguous reading order.
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  A is nine equal-weight blobs, no focal point survives. C is the stimulus.
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  A / "one dominant focal point" / HIGH — nine tiles at equal area and
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  luminance; blur leaves no rank. Fix: scale tile area by dwell.
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>  Recused: typography, labeling, units
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>thumbnail  order C,B,A   pairwise B&gt;C, B&gt;A, A~C   ranking B,C,A   medium
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>  At 1/8 scale B keeps bar length; labels vanish but rank survives. A
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>  becomes noise. C's numerals are gone by 1/4 scale.
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>  C / "evaluate at multiple implied scales" / MEDIUM — panel ships in a
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>  320px rail. Fix: add a rank strip.   Recused: full-size composition
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>stranger   order A,C,B   pairwise C&gt;B, C&gt;A, B&gt;A   ranking C,B,A   high
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>  (brief denied; one Read per option, no re-read) On C I can say what it is
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>  for — where people looked on this screen — and point at the region. On B I
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>  read a ranking but could not say what the rows are; "AOI_03" meant nothing.
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>  B / "premise" / HIGH — identifiers opaque to anyone who did not define
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>  the AOIs; ranking legible, referent not. Fix: naming, not charting.
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>  Recused: craft, hierarchy, contrast
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>forger     order C,A,B   pairwise C&gt;B, C&gt;A, A~B   ranking C,A,B   high
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>  (tokens denied) Forged B from a stock bar component in 3m40s, reached
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>  ~90%: same encoding, sort, inline labels. Could not reproduce the
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>  dwell-band shading. Forged C: gave up at 4m; AOI polygon registration is
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>  not template work.
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>  B / "anti-slop: domain-specific decisions" / MEDIUM — 90% forgeable in
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>  3m40s. Fix: make the dwell band carry more, or accept B as commodity.
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>  Recused: hierarchy, contrast, labeling
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>pedant     order A,B,C   pairwise B&gt;C, B&gt;A, C&gt;A   ranking B,C,A   high
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>  B labels units on the axis. C prints bare numerals with no unit in frame.
+<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>  A's legend says "dwell", its caption "fixation time" — not synonyms.
+<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>  C / "label every number" / HIGH — 14 bare numerals, no unit anywhere.
+<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>  A / "terminology drift" / CRITICAL, form_fatal: no — legend vs caption in
+<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>    one figure. Fix: pick one term and use it in both.
+<a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>  Recused: composition, scale survival, brand voice
 </code></pre></div>
 <p>One mechanic fires on the pedant's CRITICAL before aggregation. It is not
 form-fatal — aligning two words does not change A's encoding — so under <a href="#two-bodies-two-aggregation-rules">Two
@@ -3121,44 +3294,44 @@ defect body's. Had the pedant been scripted inline, the inline-seat restriction
 would have capped this at HIGH with <code>claimedSeverity: CRITICAL</code> preserved,
 because no second seat named the drift — one more reason to seat subagents.</p>
 <p>Finding, written by the chair:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Muriel jury finding
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Decision ID: gaze-dwell-readout-01
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Question: which dwell-readout direction earns implementation
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>Panel: squinter, thumbnail, stranger, forger, pedant (all subagents)
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>Stipulated facts: 3 contrast runs; A and C repaired pre-seating; seed 7;
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>  devibe not applicable (SVG exports, no scannable component source)
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>Ranking: B 0.52 &gt; C 0.41 &gt; A 0.07 (Bradley-Terry, 15 comparisons)
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>Separation: P(B&gt;C) = 3/5 = 0.60  (&lt; 0.65 — split trigger 3)
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>Concordance: 20/30 = 0.67   Unique contributors: 4/5   Collapsed: no
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>Defects (union, max severity):
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>  CRITICAL A — terminology drift, legend vs caption      (pedant)
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>             form_fatal: no — gates A's commit, does not delete it
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>             from the ranking
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>  HIGH     A — no focal point survives blur              (squinter)
-<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>  HIGH     B — AOI identifiers opaque without the brief  (stranger)
-<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>  HIGH     C — 14 unlabeled numerals                     (pedant)
-<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>  MEDIUM   C — numerals die below 1/4 scale              (thumbnail)
-<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>  MEDIUM   B — 90% forgeable in 3m40s                    (forger)
-<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>No mutually exclusive fix pairs on one target — nothing routed to the
-<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>  split by trigger 5.
-<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>Verdict on A: FAIL (CRITICAL, not form-fatal). A ranks last on the
-<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>  comparative body; the defect body gates its commit. Neither eliminated
-<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>  it from the ranking.
-<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>
-<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>Split: squinter + thumbnail rank B first; stranger + forger rank C first.
-<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>  Squinter and thumbnail optimize signal survival under degradation — B
-<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>  wins because bar length is the strongest channel and survives blur and
-<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>  downscale. Stranger and forger optimize referential grounding and
-<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>  distinctiveness — C wins because the answer is spatial and the spatial
-<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>  version cannot be forged. They are not disagreeing about craft. They
-<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>  disagree about whether this panel ranks AOIs or locates them.
-<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>
-<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>Product question, unresolved: does the dwell readout serve triage (which
-<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>  AOI, ranked) or inspection (where, in place)? Product call, not visual.
-<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>  Returned to the calling agent. If triage: ship B; carry AOI names not ids
-<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>  (stranger, HIGH); strengthen or drop the dwell band (forger, MEDIUM). If
-<a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>  inspection: ship C; add units (pedant, HIGH); add a downscale-surviving
-<a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a>  rank strip (thumbnail, MEDIUM).
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Muriel jury finding
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Decision ID: gaze-dwell-readout-01
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>Question: which dwell-readout direction earns implementation
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>Panel: squinter, thumbnail, stranger, forger, pedant (all subagents)
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>Stipulated facts: 3 contrast runs; A and C repaired pre-seating; seed 7;
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>  devibe not applicable (SVG exports, no scannable component source)
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>Ranking: B 0.52 &gt; C 0.41 &gt; A 0.07 (Bradley-Terry, 15 comparisons)
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>Separation: P(B&gt;C) = 3/5 = 0.60  (&lt; 0.65 — split trigger 3)
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>Concordance: 20/30 = 0.67   Unique contributors: 4/5   Collapsed: no
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>Defects (union, max severity):
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>  CRITICAL A — terminology drift, legend vs caption      (pedant)
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>             form_fatal: no — gates A's commit, does not delete it
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>             from the ranking
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>  HIGH     A — no focal point survives blur              (squinter)
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>  HIGH     B — AOI identifiers opaque without the brief  (stranger)
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>  HIGH     C — 14 unlabeled numerals                     (pedant)
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>  MEDIUM   C — numerals die below 1/4 scale              (thumbnail)
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>  MEDIUM   B — 90% forgeable in 3m40s                    (forger)
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>No mutually exclusive fix pairs on one target — nothing routed to the
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>  split by trigger 5.
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>Verdict on A: FAIL (CRITICAL, not form-fatal). A ranks last on the
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>  comparative body; the defect body gates its commit. Neither eliminated
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>  it from the ranking.
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>Split: squinter + thumbnail rank B first; stranger + forger rank C first.
+<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a>  Squinter and thumbnail optimize signal survival under degradation — B
+<a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a>  wins because bar length is the strongest channel and survives blur and
+<a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a>  downscale. Stranger and forger optimize referential grounding and
+<a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a>  distinctiveness — C wins because the answer is spatial and the spatial
+<a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a>  version cannot be forged. They are not disagreeing about craft. They
+<a id="__codelineno-7-31" name="__codelineno-7-31" href="#__codelineno-7-31"></a>  disagree about whether this panel ranks AOIs or locates them.
+<a id="__codelineno-7-32" name="__codelineno-7-32" href="#__codelineno-7-32"></a>
+<a id="__codelineno-7-33" name="__codelineno-7-33" href="#__codelineno-7-33"></a>Product question, unresolved: does the dwell readout serve triage (which
+<a id="__codelineno-7-34" name="__codelineno-7-34" href="#__codelineno-7-34"></a>  AOI, ranked) or inspection (where, in place)? Product call, not visual.
+<a id="__codelineno-7-35" name="__codelineno-7-35" href="#__codelineno-7-35"></a>  Returned to the calling agent. If triage: ship B; carry AOI names not ids
+<a id="__codelineno-7-36" name="__codelineno-7-36" href="#__codelineno-7-36"></a>  (stranger, HIGH); strengthen or drop the dwell band (forger, MEDIUM). If
+<a id="__codelineno-7-37" name="__codelineno-7-37" href="#__codelineno-7-37"></a>  inspection: ship C; add units (pedant, HIGH); add a downscale-surviving
+<a id="__codelineno-7-38" name="__codelineno-7-38" href="#__codelineno-7-38"></a>  rank strip (thumbnail, MEDIUM).
 </code></pre></div>
 <p>No Delphi round: the commit was not blocked this session, and the split is the
 useful output. Six ledger records emitted, one per finding and not one per
@@ -3239,7 +3412,7 @@ row (icon, title, subtitle), the tvOS home-screen tile and label, the iPhone
 home-screen label at 11 px with ellipsis truncation, and a browser tab. Build
 the sheet once and vary only the name string, so the options differ in nothing
 else. Render it with</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.capture<span class="w"> </span>file:///abs/path/A.html<span class="w"> </span>--tiers<span class="w"> </span>desktop<span class="w"> </span>--selector<span class="w"> </span><span class="s1">'#card'</span><span class="w"> </span>--slug<span class="w"> </span>A
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>python<span class="w"> </span>-m<span class="w"> </span>muriel.capture<span class="w"> </span>file:///abs/path/A.html<span class="w"> </span>--tiers<span class="w"> </span>desktop<span class="w"> </span>--selector<span class="w"> </span><span class="s1">'#card'</span><span class="w"> </span>--slug<span class="w"> </span>A
 </code></pre></div>
 <p>which names the PNG by its real pixel size — a 1200×630 card at the default
 scale of 2 is written as <code>A-desktop-2400x1260.png</code> — then run <code>muriel.squint</code>
@@ -3500,6 +3673,15 @@ its standing context; the chair cannot see the seat's.</p>
 <li><strong>Seat a naming panel on whatever names came to mind.</strong> The jury cannot add
   an option. Harvest source material and generate a long list first, and hand
   the human the long list, not only the shortlist.</li>
+<li><strong>Let jury rounds stand in for the owner's look.</strong> A panel cannot rule on
+  <a href="#what-no-seat-holds">what no seat holds</a>. Show the owner one side-by-side
+  page first; seat the panel on execution after.</li>
+<li><strong>Send a complaint to whichever seats are handy.</strong> "Ugly" to the Loupe gets
+  "no findings, ship yes"; "unclear how" closed by adding a label stays
+  unclear. <a href="#routing-a-complaint">Route it</a> first.</li>
+<li><strong>Seat a panel on interactive UI without a control map.</strong> The Walker walks
+  one journey at a time and rates a small move by eye; a control that has a
+  different home in every state passes every walk.</li>
 <li><strong>Let the chair vote.</strong> A chair with a preference is a seventh juror holding
   procedural power, and it will resolve splits it was meant to report.</li>
 <li><strong>Show round 1 ballots to a juror still voting.</strong> That measures conformity.</li>

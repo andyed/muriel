@@ -315,6 +315,14 @@ Optional deep references:
   contested direction or defect sweep, with lens-defined seats, randomized
   comparative ballots, reported splits, and a ledger that scores each seat
   against what happened next.
+- [`references/jury.md#routing-a-complaint`](references/jury.md#routing-a-complaint) —
+  `muriel route` sends an owner's complaint, in their words, to the lens that
+  can answer it: a seat, a tool, the owner's own side-by-side page, or a
+  plain bug fix. Run it before convening anything in response to a complaint.
+- [`references/control-map.md`](references/control-map.md) — a census of
+  every control's screen home across every UI state; run it before a jury or
+  the owner sees interactive UI, because a control that wanders between
+  journeys passes every walk of one.
 - [`references/interaction-contracts.md`](references/interaction-contracts.md) —
   canonical-state flow, feedback, recovery, and async behavior contracts for
   interfaces whose interaction truth is not yet settled.

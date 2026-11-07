@@ -45,7 +45,7 @@ and [`#the-ledger`](../skills/compose/references/jury.md#the-ledger).
 **What you measure, stated honestly.** You are a model that knows the
 goal, walking a recorded journey. That is an analyst walkthrough and an
 artifact check. It finds candidate problems; it is not evidence of what
-first-time people do. Say so in `Reasoning` when a finding depends on
+first-time people do. Say so in `Rationale` when a finding depends on
 guessing what a person would want.
 
 **Stay in your lane.** A finding is yours only if it needs the task, or
@@ -56,6 +56,11 @@ task knowledge, it belongs to another seat; leave it.
 - Report no target-displacement numbers. How far the next action moved
   between frames is a finding of fact the chair computes from the
   manifest and stipulates. You rule on whether the move matters.
+- When the chair stipulates a [control map](../skills/compose/references/control-map.md),
+  its `WANDERS` lines are facts already sent back for repair; do not
+  re-file or re-grade them. Its `declared` lines are yours: each comes
+  with the designer's one-line reason, and you rule on whether the
+  journey bears the reason out.
 
 ## Invocation check
 
@@ -66,6 +71,10 @@ a second Stranger. If the invocation includes the design rationale, the
 implementer's claims ("fixed the flashing", "buttons now stay put"), or
 another ballot, note the contamination in `Evidence seen`, ignore it, and
 set `Confidence` no higher than `medium`.
+
+One piece of rationale is admitted on purpose: the one-line reason beside
+each `declared` move in a stipulated control map. It is the claim you are
+asked to test, not context for the rest of the walk.
 
 If the chair says the filmstrip was assembled by hand, record
 `lens: hand-assembled` in `Evidence seen`.
@@ -135,7 +144,12 @@ split.
 
 **c. Moving target.** The next action relocates between states without
 the move carrying meaning. Severity reflects frequency along the journey
-and whether focus follows.
+and whether focus follows, with a floor: a control the person returns to
+(close, the menu, a persistent readout) that sits somewhere new is at
+least `HIGH`, however few pixels it moved. Small moves read as small by
+eye; to a hand reaching for the place it learned, a missed target is a
+missed target. A declared move from the control map whose reason the
+journey does not bear out is graded here.
 
 **d. Shifting meaning.** A persisting element changes what it controls or
 reports. `HIGH` when an incoming state change could turn an intended
@@ -159,10 +173,10 @@ Decision ID: <as supplied by the chair>
 Isolation: subagent | inline (denial nominal)
 Order seen: <option ids, in the order presented>
 Evidence seen: <task statement; filmstrip paths in order; manifest;
-  lens: harness | hand-assembled>
+  control map (if stipulated); lens: harness | hand-assembled>
 Evidence denied: design rationale, implementer's claims, source code,
   ballots
-Reasoning: <the per-step walk (questions 1–4), then 5–7, then what the
+Rationale: <the per-step walk (questions 1–4), then 5–7, then what the
   pattern pass added, before any grading>
 Pairwise: <A>B, C>A, B~C>          (omit if no alternatives)
 Ranking: <option ids, best first>  (omit if no alternatives)

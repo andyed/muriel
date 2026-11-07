@@ -33,11 +33,13 @@ owns product truth.
 9. [Delphi round](#delphi-round)
 10. [The ledger](#the-ledger)
 11. [Unanimity smell test](#unanimity-smell-test)
-12. [The chair](#the-chair)
-13. [Worked example](#worked-example)
-14. [Naming decisions](#naming-decisions)
-15. [Anti-patterns](#anti-patterns)
-16. [Prior art](#prior-art)
+12. [Routing a complaint](#routing-a-complaint)
+13. [What no seat holds](#what-no-seat-holds)
+14. [The chair](#the-chair)
+15. [Worked example](#worked-example)
+16. [Naming decisions](#naming-decisions)
+17. [Anti-patterns](#anti-patterns)
+18. [Prior art](#prior-art)
 
 ## Load gate
 
@@ -61,6 +63,12 @@ copy, or spacing work; a decision the calling agent has made and only wants
 ratified. A name is the one non-visual decision in scope; see [Naming
 decisions](#naming-decisions). A multi-step flow is in scope when its states
 are the artifact: the [Walker](#the-roster) judges the sequence.
+Interactive UI whose controls show, hide, or change with state needs a
+[control map](control-map.md) stipulated before any seat sits: a panel that
+walks journeys one at a time does not see a control wandering between them.
+A sitting called because the owner complained starts from the complaint, not
+the roster: [route it](#routing-a-complaint) first. Defects, spec conflicts,
+and sound route to no seat at all.
 A single artifact with no alternatives is out of scope **only when its premise
 is settled** — run [`muriel-critique`](../../../agents/muriel-critique.md)
 alone. A single artifact whose premise is contested is in scope, and votes on
@@ -84,10 +92,16 @@ tooling and enter as stipulated evidence, never as motions:
   facts, and the Loupe's line-end findings are limited to what this check
   cannot see (rasters, strokes outside its `--lines` scope);
 - recorded seeds, dimensions, and export paths;
-- for a flow, how far the next action moved between consecutive frames,
-  computed from the journey manifest's bounding boxes (arithmetic the chair
-  does; no muriel tool yet). The Walker rules on whether a move matters, never
-  on its size;
+- `python -m muriel control-map <map.json>` — every control's distinct
+  screen homes across every listed state, which states introduce a new
+  position, and how much of the protected subject each state covers (see
+  [control map](control-map.md)). An undeclared second home is a fact and is
+  fixed before seating, never voted LOW. A declared move enters with its
+  stated reason, and the Walker rules on whether the reason holds, never on
+  the move's size;
+- for a single flow, how far the next action moved between consecutive
+  frames, computed from the journey manifest's bounding boxes (arithmetic the
+  chair does);
 - **conditional, may return nothing** —
   `python -m muriel.tools.impeccable_bridge <path>` is a no-op when Node, npx,
   or the third-party `impeccable` CLI is absent, and degrades silently; the
@@ -343,8 +357,10 @@ Each frame has a manifest entry: state name, the next intended action's label,
 bounding box, and enabled state, and where focus sits. *Loss:* misses in
 continuity; willing to be wrong about anything visible in a single frame.
 *Access:* the task in the person's terms (goal, starting state, success
-criterion), the filmstrip, and the manifest; denied the design rationale, the
-implementer's claims about what was fixed, source code, and other ballots.
+criterion), the filmstrip, the manifest, and the [control map](control-map.md)
+when stipulated, with its declared-move reasons; denied the rest of the design
+rationale, the implementer's claims about what was fixed, source code, and
+other ballots.
 *Judges:* at each step, the four cognitive-walkthrough questions from
 [task analysis](task-analysis.md#walk-first-use); whether the step is the
 person's work or a handoff the system could do; whether a control or indicator
@@ -418,9 +434,14 @@ normalization.
   and 0 when they chose opposite options. Divide by (seat pairs × option
   pairs). This is the reliability figure.
 
-**Reasoning before the vote.** The ballot emits reasoning *above* its
+**Rationale before the vote.** The ballot emits its `Rationale` *above* its
 comparisons, ranking, and ship decision. A vote written first anchors the
-rationale that follows, and you get justification, not judgement.
+text that follows, and you get justification, not judgement. The field is
+named `Rationale`, not `Reasoning`: in a subagent prompt a field by that name
+reads as a request for the model's private chain of thought and can trip a
+safeguard, which on Spinodal (2026-11-05) forced the Walker to run from a
+paraphrase of its own definition. The rationale is the seat's account of the
+evidence, written for the chair.
 
 **Single artifact, no alternatives.** In scope when the artifact's premise is
 contested; see [Load gate](#load-gate). Do not fake a comparison. Require a
@@ -442,7 +463,7 @@ Isolation: subagent | inline (denial nominal)
 Order seen: <option ids, in the order presented>
 Evidence seen: <what this seat was given>
 Evidence denied: <what this seat was refused>
-Reasoning: <prose; must precede Pairwise, Ranking, Issue rank, Ship>
+Rationale: <prose; must precede Pairwise, Ranking, Issue rank, Ship>
 Pairwise: <A>B, C>A, B~C>          (omit if no alternatives)
 Ranking: <option ids, best first>  (omit if no alternatives)
 Findings:
@@ -532,7 +553,7 @@ disposition it later earns, exactly as a union finding is.
 
 Optional. Run one only when the split blocks a commit that must happen this
 session. Unseal round 1, show every juror the full split — all ballots, all
-reasoning — allow revision, and **record who moved**. A revised ballot carries
+rationales — allow revision, and **record who moved**. A revised ballot carries
 two extra lines: `Moved: yes | no` and `Moved because: <the specific evidence
 in another ballot that changed it>`.
 
@@ -674,15 +695,88 @@ ledger, seats without 20 resolved findings ranking last. Ship the top ballot.
 If two ballots tie through all three, ship both unmerged and say they tied —
 that is still not a preference.
 
+## Routing a complaint
+
+When the owner says something is wrong, the words say which lens can answer.
+Seating whichever seats are handy produces a confident answer to a different
+question. On Spinodal (2026-11-05 to 11-07) muriel's costliest misses were
+routing errors:
+
+- "the pie is … FUGGGGLY! … /muriel take it" seated the Loupe alone. The Loupe
+  judges finish at 4×; it found nothing and reported "ship yes".
+- The Walker's "five gestures have no visible route" was marked fixed when a
+  line of text was added. The owner was still writing "totally unclear how
+  jets are suppose to work" a day later and "not discoverable as is" two days
+  later.
+- A sound sitting fixed 36 spec and safety findings; the owner then cut sound
+  as "too pinbally". No seat listens.
+
+```bash
+python -m muriel route "<the owner's words, verbatim>"
+python -m muriel route --list
+```
+
+[`muriel.route`](../../../../../muriel/route.py) matches loose cue words
+(it is built on the owner's own typing, typos included) and names, per lens,
+the first move, the seats and tools that can settle it, what closes it, and
+what will not settle it:
+
+| Lens | Owner says | First move | Seats |
+|---|---|---|---|
+| defect | "buttons do nothing", "can't close" | repro and fix | none |
+| spec | "wasn't the target spec", "we said" | reconcile the versioned spec | none |
+| taste | "ugly", "boring", "not happy with" | owner side-by-side page | Forger, Squinter |
+| reading | "seen as a $ sign", "distinct from Protoplasm" | cold read; sibling page | Stranger, Thumbnail |
+| discoverability | "unclear how", "not discoverable" | Walker on first use; owner retries | Walker, Stranger |
+| placement | "random places", "obscures the canvas" | [control map](control-map.md) | Walker |
+| motion | "jerky", "too slow", "not fluid" | clip or filmstrip, before and after | Walker |
+| sound | "pinbally", "harsh" | matched-level A/B for the owner | none |
+| magnitude | "super subtle", "blends in" | measurement sheet | Squinter, Thumbnail |
+| wording | "should be 'Get Studio'" | text alone | Pedant, Stranger |
+
+A complaint can hit several lenses; all are reported, strongest first, and
+each gets its own first move. One that hits none comes back `UNROUTED`: ask
+the owner which question it is before seating anyone.
+
+A finding raised from a complaint is not `fixed` until its lens's close
+condition holds. For discoverability that is the owner retrying the first
+use; added copy is the implementer's claim, not the close.
+
+## What no seat holds
+
+Some questions belong to the owner, and a jury sitting in front of them
+delays the owner's answer while looking like one. Two recur:
+
+- **Does it earn the pixels?** Whether a control, panel, or overlay is
+  beautiful and useful enough to justify covering the thing the product
+  exists to show. The control map's coverage number is the fact; the call is
+  taste and product. ("Obscuring the canvas has a cost, make it worthwhile.")
+- **Is it too close to a sibling?** Closeness to the owner's other products
+  (a mark that is "more Protoplasm", a layout that reads as the sister app) is
+  a portfolio criterion. The Forger judges distance from generic output, not
+  from the house's own work.
+
+For either, the chair puts **one page** in front of the owner before seating:
+the options side by side at the shipping size, with a working link to each
+live build. A jury may still sit afterwards on execution. Three rounds of
+panel findings are not a substitute for a five-second look by the person who
+holds the taste; on Spinodal's v1 UI they passed what the owner rejected
+within the hour.
+
 ## The chair
 
 The chair is **not** a juror. It casts no ballot, breaks no tie by preference,
 and contributes no findings of its own. Duties, in order:
 
 1. **Fix the question.** One sentence the panel can answer. If it contains a
-   measurable term, stop and run the tool.
+   measurable term, stop and run the tool. If the sitting answers an owner's
+   complaint, quote it verbatim, [route it](#routing-a-complaint), record the
+   route on the sitting, and seat nothing the route lists as unable to
+   settle it.
 2. **Run the deterministic checks**, enter them as stipulated facts, and repair
-   fact-level failures before seating anyone.
+   fact-level failures before seating anyone. For interactive UI that includes
+   the [control map](control-map.md). If the question is one [no seat
+   holds](#what-no-seat-holds), show the owner first.
 3. **Seat the panel.** Only seats whose lenses and losses differ for this
    artifact. Three is a real panel; five is the ceiling. The roster has seven,
    so a full panel leaves at least two out. Seat the Walker only for a flow;
@@ -705,6 +799,12 @@ and contributes no findings of its own. Duties, in order:
 9. **Run the unanimity smell test.**
 10. **Write the finding,** with the split left unresolved, and emit one ledger
     record per finding at `disposition: open`.
+11. **Hand back something the owner can open.** Every sitting that changes a
+    build ends with: a working link to the build (https when it must open on
+    a phone), one page with the options or the before and after side by side,
+    and the exact URL parameter for anything still behind a flag. A finding
+    the owner has to assemble from piecemeal images, or a fix they can only
+    see by guessing a parameter, has not been handed back.
 
 The chair may not resolve a split. It reports the split and names the product
 question. That is the finding.
@@ -1128,6 +1228,15 @@ Do not:
 - **Seat a naming panel on whatever names came to mind.** The jury cannot add
   an option. Harvest source material and generate a long list first, and hand
   the human the long list, not only the shortlist.
+- **Let jury rounds stand in for the owner's look.** A panel cannot rule on
+  [what no seat holds](#what-no-seat-holds). Show the owner one side-by-side
+  page first; seat the panel on execution after.
+- **Send a complaint to whichever seats are handy.** "Ugly" to the Loupe gets
+  "no findings, ship yes"; "unclear how" closed by adding a label stays
+  unclear. [Route it](#routing-a-complaint) first.
+- **Seat a panel on interactive UI without a control map.** The Walker walks
+  one journey at a time and rates a small move by eye; a control that has a
+  different home in every state passes every walk.
 - **Let the chair vote.** A chair with a preference is a seventh juror holding
   procedural power, and it will resolve splits it was meant to report.
 - **Show round 1 ballots to a juror still voting.** That measures conformity.

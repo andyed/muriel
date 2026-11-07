@@ -2185,7 +2185,7 @@ matte, and you would then report a missing line that ships fine.</p>
 chair's <code>--budget</code> if one was set; do not raise it yourself. The budget
 is a cost the chair holds.</p>
 <p>On a non-zero exit, a missing Pillow, or a missing cairosvg for an SVG,
-report the failure in <code>Reasoning</code>, emit no findings, and set
+report the failure in <code>Rationale</code>, emit no findings, and set
 <code>Confidence: low</code>. Do not substitute your own crops, and never cut a
 crop from a full render you opened yourself: that is the composition you
 were denied.</p>
@@ -2259,13 +2259,13 @@ so the fix changes the form.</p>
    is reading the evidence you were denied. Judge each tile.</li>
 <li><strong>Say when you cannot see.</strong> A tile can be too compressed, too small
    (a cell cut short by the frame edge), or too dense to support a call.
-   Write that in <code>Reasoning</code>, lower <code>Confidence</code>, and emit no finding.
+   Write that in <code>Rationale</code>, lower <code>Confidence</code>, and emit no finding.
    Unread cells are not clean cells. Your ballot covers what you read,
    and <code>coverage</code> says how much that was.</li>
 <li><strong>Never unseal.</strong> You do not see other ballots, the panel size, or a
    running tally in round 1
    (<a href="../../references/jury/#the-sealed-round"><code>#the-sealed-round</code></a>).
-   If one is offered, refuse it and note the offer in <code>Reasoning</code>.</li>
+   If one is offered, refuse it and note the offer in <code>Rationale</code>.</li>
 </ol>
 <h2 id="output">Output<a class="headerlink" href="#output" title="Permanent link">&para;</a></h2>
 <p>Emit exactly this block and nothing outside it. No preamble, no summary,
@@ -2281,7 +2281,7 @@ no verdict. You are a seat, and aggregation belongs to the chair
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  conditions and whether stipulated or inferred&gt;
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>Evidence denied: full-size render, blur ladder, downscales, overview,
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  brief, brand tokens, ballots
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>Reasoning: &lt;per tile, in rank order: what is in it / what you checked /
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>Rationale: &lt;per tile, in rank order: what is in it / what you checked /
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  what is wrong; then the comparison&gt;
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>Pairwise: &lt;A&gt;B, C&gt;A, B~C&gt;          (omit if no alternatives)
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>Ranking: &lt;option ids, best first&gt;  (omit if no alternatives)
@@ -2331,7 +2331,7 @@ perfectly across the panel while the ballot still passes validation. That
 is the one failure the randomization exists to prevent. The digest must
 carry both the decision id and your seat id or the panel does not replay
 and does not decorrelate.</p>
-<p><strong><code>Reasoning</code> precedes every vote.</strong> Comparisons, ranking, issue rank,
+<p><strong><code>Rationale</code> precedes every vote.</strong> Comparisons, ranking, issue rank,
 and <code>Ship (this seat's loss only)</code> all come after it. A vote written
 first produces justification instead of judgement.</p>
 <p><strong>Run the full pairwise set</strong> when there are 4 or fewer options, at most

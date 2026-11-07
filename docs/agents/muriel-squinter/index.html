@@ -2131,7 +2131,7 @@ So:</p>
 <p>Confirm the artifact path with Glob. <strong>Do not Read the sharp render.</strong> If
 the sharp artifact is already in your context — the chair pasted it, an
 earlier turn loaded it — declare that in <code>Evidence seen</code>, set
-<code>Confidence: low</code>, and say in <code>Reasoning</code> that the blind was broken. A
+<code>Confidence: low</code>, and say in <code>Rationale</code> that the blind was broken. A
 contaminated Squinter supplies the hierarchy from memory, which is the
 exact failure this seat exists to catch.</p>
 <p>Raster in, raster out. If handed an SVG, ask the chair for a rasterized
@@ -2208,25 +2208,25 @@ cases, and you must name which one you are in:</p>
 <ul>
 <li><em>Call 1</em> carries the artifact path and the decision id, and <strong>no</strong>
   stipulated order. Run the lens, write the per-level record, and emit
-  the ballot block truncated after <code>Reasoning</code>, followed by <code>Confidence</code>
+  the ballot block truncated after <code>Rationale</code>, followed by <code>Confidence</code>
   and one extra last line: <code>Recovery: sealed (call 1 of 2)</code>. No
   <code>Findings</code>, no <code>Pairwise</code>, no <code>Ranking</code>, no <code>Issue rank</code>, no ship line
   — you have nothing to compare against yet.</li>
 <li><em>Call 2</em> carries your own call-1 output verbatim plus the stipulated
   order. Do not re-run the lens and do not revise the recovery; it is
   evidence now. Compare, grade, and emit the full ballot, labeling the
-  recovery <code>sealed</code> in <code>Reasoning</code>.</li>
+  recovery <code>sealed</code> in <code>Rationale</code>.</li>
 </ul>
 <p>The recovery is genuinely blind because it was written before the
 stipulation existed in your context. This is the only arrangement that
 earns the word.</p>
 <p><strong>Single call, no stipulation.</strong> Infer the intended order from the
-artifact's structure, label it <code>inferred</code> in <code>Reasoning</code>, and drop
+artifact's structure, label it <code>inferred</code> in <code>Rationale</code>, and drop
 <code>Confidence</code> by one step. An inferred intent is a weaker finding and is
 reported as one.</p>
 <p><strong>Single call, stipulation present.</strong> Your recovery was anchored and no
 amount of writing-order discipline undoes it. Say so: label the recovery
-<code>anchored</code> in <code>Reasoning</code>, drop <code>Confidence</code> by one step, and grade
+<code>anchored</code> in <code>Rationale</code>, drop <code>Confidence</code> by one step, and grade
 anyway. Do not claim the recovery preceded the stipulation. Do not ask
 the chair to re-invoke you blind — you cannot unsee it; the chair can
 run call 1 against a fresh seat if it wants the blind back.</p>
@@ -2249,7 +2249,7 @@ reading:</p>
 </ul>
 <p>The exemption is gated on the chair stipulating the intent. If nothing
 was stipulated you cannot invoke it: grade normally, and write in
-<code>Reasoning</code> that the artifact reads as a comparison form and the
+<code>Rationale</code> that the artifact reads as a comparison form and the
 exemption was unavailable. Naming that is more useful to the chair than a
 <code>HIGH</code> it will discard.</p>
 <p>Otherwise, severity is not a mood. Use these thresholds; they are what
@@ -2301,13 +2301,13 @@ your seat or it is vibes. Drop it.</p>
    disagreement — do not retro-fit your reading to it.</li>
 <li><strong>Say when you cannot see.</strong> Blur destroys information on purpose;
    that is the method, not a defect. If a level is too degraded to
-   support a call, write that in <code>Reasoning</code>, lower <code>Confidence</code>, and
+   support a call, write that in <code>Rationale</code>, lower <code>Confidence</code>, and
    emit no finding. Inventing findings to fill silence inflates severity
    and costs you standing in the ledger.</li>
 <li><strong>Never unseal.</strong> You do not see other ballots, the panel size, or a
    running tally in round 1
    (<a href="../../references/jury/#the-sealed-round"><code>#the-sealed-round</code></a>).
-   If one is offered, refuse it and note the offer in <code>Reasoning</code>.</li>
+   If one is offered, refuse it and note the offer in <code>Rationale</code>.</li>
 </ol>
 <h2 id="output">Output<a class="headerlink" href="#output" title="Permanent link">&para;</a></h2>
 <p>Emit exactly this block and nothing outside it. No preamble, no summary,
@@ -2321,7 +2321,7 @@ no verdict — you are a seat, and aggregation belongs to the chair
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Evidence seen: &lt;levels read, sigmas, half_survival_px, matte, stipulated
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  order or "none"&gt;
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>Evidence denied: sharp render, all text, brief, brand tokens, ballots
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>Reasoning: &lt;per-level record heaviest-first; recovered order labeled
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>Rationale: &lt;per-level record heaviest-first; recovered order labeled
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  sealed | inferred | anchored; comparison&gt;
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>Pairwise: &lt;A&gt;B, C&gt;A, B~C&gt;          (omit if no alternatives)
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>Ranking: &lt;option ids, best first&gt;  (omit if no alternatives)
@@ -2370,13 +2370,13 @@ perfectly across the panel while the ballot still passes validation — the
 one failure the randomization exists to prevent. The digest must carry
 both the decision id and your seat id or the panel does not replay and
 does not decorrelate.</p>
-<p><strong><code>Reasoning</code> precedes every vote.</strong> Comparisons, ranking, issue rank,
+<p><strong><code>Rationale</code> precedes every vote.</strong> Comparisons, ranking, issue rank,
 and <code>Ship (this seat's loss only)</code> all come after it. A vote written
 first produces justification instead of judgement.</p>
 <p><strong>Run the full pairwise set</strong> when there are 4 or fewer options — at most
 6 comparisons. Use <code>~</code> only when two options are genuinely
 indistinguishable under blur, which is itself worth stating in
-<code>Reasoning</code>.</p>
+<code>Rationale</code>.</p>
 <p><strong>Delphi revision.</strong> If the chair unseals and invites revision, re-emit
 the whole ballot with two lines added after <code>Confidence</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Moved: yes | no
