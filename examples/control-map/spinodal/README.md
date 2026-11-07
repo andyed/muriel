@@ -14,11 +14,14 @@ python -m muriel control-map map-1470x956.json
 | Viewport | States | Controls | Homes | Result |
 |---|---|---|---|---|
 | 390 × 844 touch | 11 | 25 | 22 | PASS |
-| 1470 × 956 mouse | 23 | 43 | 38 | FAIL: the Room panel's 5 controls have 2 homes, 990 px apart |
+| 1470 × 956 mouse | 23 | 43 | 38 | PASS with 5 declared moves (was FAIL: the Room panel's 5 controls have 2 homes, 990 px apart) |
 
 On desktop the Room panel opens under the Mic mode segment (left) or under the
 Room rail button (right), depending on which one was pressed
-(`desktop-after-mic.png`, `desktop-after-room.png`). On the phone each panel
+(`desktop-after-mic.png`, `desktop-after-room.png`). Andy kept it on
+2026-11-07; `declared-moves.json` records the reason, and the harvester
+merges it into every map it writes, so a re-harvest keeps the decision. A
+jury's Walker tests whether the journey bears the reason out. On the phone each panel
 opens on the side opposite its button (`phone-after-mic.png`,
 `phone-after-lamp.png`); the census does not see that, because each control
 still has one home.

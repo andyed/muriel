@@ -96,7 +96,12 @@ for (const vp of VIEWPORTS) {
         const hw = Math.max(...parts.outline.map(o => o.hw));
         return { lamp: [Math.round(parts.axisX - hw), Math.round(parts.capTopY), Math.round(2 * hw), Math.round(parts.baseBottomY - parts.capTopY)] };
     })();
-    const map = { viewport: [vp.w, vp.h], protected: protectedBox, source: 'spinodal staging 7d95b56', states };
+    // Intended moves, owner-approved, live beside the harvester so every re-harvest keeps them.
+    const declFile = path.join(path.dirname(new URL(import.meta.url).pathname), 'declared-moves.json');
+    const decl = fs.existsSync(declFile) ? JSON.parse(fs.readFileSync(declFile, 'utf8')) : {};
+    const ids = new Set(Object.values(states).flatMap(s => Object.keys(s.controls)));
+    const moves = Object.fromEntries(Object.entries(decl).filter(([k]) => !k.startsWith('_') && ids.has(k)));
+    const map = { viewport: [vp.w, vp.h], protected: protectedBox, source: 'spinodal staging 7d95b56', moves, states };
     fs.writeFileSync(path.join(out, `map-${tag}.json`), JSON.stringify(map, null, 1));
     console.log(tag, Object.keys(states).length, 'states,', new Set(Object.values(states).flatMap(s => Object.keys(s.controls))).size, 'controls');
     await ctx.close();

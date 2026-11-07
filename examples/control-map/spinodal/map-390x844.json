@@ -211,31 +211,31 @@
      44,
      44
     ],
-    "Room › Mic, the microphone": [
+    "Room \u203a Mic, the microphone": [
      209,
      121,
      82,
      86
     ],
-    "Room › Movement, the camera": [
+    "Room \u203a Movement, the camera": [
      297,
      121,
      82,
      86
     ],
-    "Room › Start listening": [
+    "Room \u203a Start listening": [
      209,
      260,
      169,
      44
     ],
-    "Room › Not now": [
+    "Room \u203a Not now": [
      209,
      304,
      169,
      44
     ],
-    "Room › More": [
+    "Room \u203a More": [
      209,
      350,
      169,
@@ -327,49 +327,49 @@
      44,
      44
     ],
-    "Lamp › Colour": [
+    "Lamp \u203a Colour": [
      137,
      89,
      44,
      44
     ],
-    "Lamp › Heat": [
+    "Lamp \u203a Heat": [
      19,
      137,
      68,
      81
     ],
-    "Lamp › Top light": [
+    "Lamp \u203a Top light": [
      100,
      137,
      82,
      81
     ],
-    "Lamp › Colour wheel": [
+    "Lamp \u203a Colour wheel": [
      12,
      224,
      82,
      84
     ],
-    "Lamp › Cold": [
+    "Lamp \u203a Cold": [
      12,
      344,
      82,
      44
     ],
-    "Lamp › Warm": [
+    "Lamp \u203a Warm": [
      100,
      344,
      82,
      44
     ],
-    "Lamp › More": [
+    "Lamp \u203a More": [
      12,
      394,
      70,
      44
     ],
-    "Lamp › Tour": [
+    "Lamp \u203a Tour": [
      90,
      392,
      92,
@@ -561,5 +561,12 @@
     ]
    }
   }
+ },
+ "moves": {
+  "Room \u203a Mic, the microphone": "anchored to its invoking button: under the Mic segment (left) or the Room button (right)",
+  "Room \u203a Movement, the camera": "anchored to its invoking button: under the Mic segment (left) or the Room button (right)",
+  "Room \u203a Start listening": "anchored to its invoking button: under the Mic segment (left) or the Room button (right)",
+  "Room \u203a Not now": "anchored to its invoking button: under the Mic segment (left) or the Room button (right)",
+  "Room \u203a More": "anchored to its invoking button: under the Mic segment (left) or the Room button (right)"
  }
 }

@@ -1,0 +1,8 @@
+{
+  "_decision": "Andy, 2026-11-07: keep the Room panel anchored to whichever control opened it.",
+  "Room › Mic, the microphone":   "anchored to its invoking button: under the Mic segment (left) or the Room button (right)",
+  "Room › Movement, the camera":  "anchored to its invoking button: under the Mic segment (left) or the Room button (right)",
+  "Room › Start listening":       "anchored to its invoking button: under the Mic segment (left) or the Room button (right)",
+  "Room › Not now":               "anchored to its invoking button: under the Mic segment (left) or the Room button (right)",
+  "Room › More":                  "anchored to its invoking button: under the Mic segment (left) or the Room button (right)"
+}
