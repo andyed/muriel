@@ -33,12 +33,13 @@ owns product truth.
 9. [Delphi round](#delphi-round)
 10. [The ledger](#the-ledger)
 11. [Unanimity smell test](#unanimity-smell-test)
-12. [What no seat holds](#what-no-seat-holds)
-13. [The chair](#the-chair)
-14. [Worked example](#worked-example)
-15. [Naming decisions](#naming-decisions)
-16. [Anti-patterns](#anti-patterns)
-17. [Prior art](#prior-art)
+12. [Routing a complaint](#routing-a-complaint)
+13. [What no seat holds](#what-no-seat-holds)
+14. [The chair](#the-chair)
+15. [Worked example](#worked-example)
+16. [Naming decisions](#naming-decisions)
+17. [Anti-patterns](#anti-patterns)
+18. [Prior art](#prior-art)
 
 ## Load gate
 
@@ -65,6 +66,9 @@ are the artifact: the [Walker](#the-roster) judges the sequence.
 Interactive UI whose controls show, hide, or change with state needs a
 [control map](control-map.md) stipulated before any seat sits: a panel that
 walks journeys one at a time does not see a control wandering between them.
+A sitting called because the owner complained starts from the complaint, not
+the roster: [route it](#routing-a-complaint) first. Defects, spec conflicts,
+and sound route to no seat at all.
 A single artifact with no alternatives is out of scope **only when its premise
 is settled** — run [`muriel-critique`](../../../agents/muriel-critique.md)
 alone. A single artifact whose premise is contested is in scope, and votes on
@@ -686,6 +690,53 @@ ledger, seats without 20 resolved findings ranking last. Ship the top ballot.
 If two ballots tie through all three, ship both unmerged and say they tied —
 that is still not a preference.
 
+## Routing a complaint
+
+When the owner says something is wrong, the words say which lens can answer.
+Seating whichever seats are handy produces a confident answer to a different
+question. On Spinodal (2026-11-05 to 11-07) muriel's costliest misses were
+routing errors:
+
+- "the pie is … FUGGGGLY! … /muriel take it" seated the Loupe alone. The Loupe
+  judges finish at 4×; it found nothing and reported "ship yes".
+- The Walker's "five gestures have no visible route" was marked fixed when a
+  line of text was added. The owner was still writing "totally unclear how
+  jets are suppose to work" a day later and "not discoverable as is" two days
+  later.
+- A sound sitting fixed 36 spec and safety findings; the owner then cut sound
+  as "too pinbally". No seat listens.
+
+```bash
+python -m muriel route "<the owner's words, verbatim>"
+python -m muriel route --list
+```
+
+[`muriel.route`](../../../../../muriel/route.py) matches loose cue words
+(it is built on the owner's own typing, typos included) and names, per lens,
+the first move, the seats and tools that can settle it, what closes it, and
+what will not settle it:
+
+| Lens | Owner says | First move | Seats |
+|---|---|---|---|
+| defect | "buttons do nothing", "can't close" | repro and fix | none |
+| spec | "wasn't the target spec", "we said" | reconcile the versioned spec | none |
+| taste | "ugly", "boring", "not happy with" | owner side-by-side page | Forger, Squinter |
+| reading | "seen as a $ sign", "distinct from Protoplasm" | cold read; sibling page | Stranger, Thumbnail |
+| discoverability | "unclear how", "not discoverable" | Walker on first use; owner retries | Walker, Stranger |
+| placement | "random places", "obscures the canvas" | [control map](control-map.md) | Walker |
+| motion | "jerky", "too slow", "not fluid" | clip or filmstrip, before and after | Walker |
+| sound | "pinbally", "harsh" | matched-level A/B for the owner | none |
+| magnitude | "super subtle", "blends in" | measurement sheet | Squinter, Thumbnail |
+| wording | "should be 'Get Studio'" | text alone | Pedant, Stranger |
+
+A complaint can hit several lenses; all are reported, strongest first, and
+each gets its own first move. One that hits none comes back `UNROUTED`: ask
+the owner which question it is before seating anyone.
+
+A finding raised from a complaint is not `fixed` until its lens's close
+condition holds. For discoverability that is the owner retrying the first
+use; added copy is the implementer's claim, not the close.
+
 ## What no seat holds
 
 Some questions belong to the owner, and a jury sitting in front of them
@@ -713,7 +764,10 @@ The chair is **not** a juror. It casts no ballot, breaks no tie by preference,
 and contributes no findings of its own. Duties, in order:
 
 1. **Fix the question.** One sentence the panel can answer. If it contains a
-   measurable term, stop and run the tool.
+   measurable term, stop and run the tool. If the sitting answers an owner's
+   complaint, quote it verbatim, [route it](#routing-a-complaint), record the
+   route on the sitting, and seat nothing the route lists as unable to
+   settle it.
 2. **Run the deterministic checks**, enter them as stipulated facts, and repair
    fact-level failures before seating anyone. For interactive UI that includes
    the [control map](control-map.md). If the question is one [no seat
@@ -1172,6 +1226,9 @@ Do not:
 - **Let jury rounds stand in for the owner's look.** A panel cannot rule on
   [what no seat holds](#what-no-seat-holds). Show the owner one side-by-side
   page first; seat the panel on execution after.
+- **Send a complaint to whichever seats are handy.** "Ugly" to the Loupe gets
+  "no findings, ship yes"; "unclear how" closed by adding a label stays
+  unclear. [Route it](#routing-a-complaint) first.
 - **Seat a panel on interactive UI without a control map.** The Walker walks
   one journey at a time and rates a small move by eye; a control that has a
   different home in every state passes every walk.

@@ -18,6 +18,16 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   journey looked coherent, and the one moving readout the Walker saw was
   rated LOW. `references/control-map.md` says how to harvest a map and who
   acts on each line.
+- **`muriel route`: send an owner's complaint to the lens that can answer
+  it.** Takes the complaint verbatim and names the first move, the seats and
+  tools that can settle it, what closes it, and what will not settle it,
+  across ten lenses (defect, spec, taste, reading, discoverability,
+  placement, motion, sound, magnitude, wording). Its cues and tests come from
+  the owner's own lines on Spinodal, typos kept. Built because muriel's
+  costliest misses there were routing errors: "FUGGGGLY" went to the Loupe
+  alone and came back "ship yes"; a discoverability finding was closed by
+  adding text while the owner kept saying the jets were unclear; a sound
+  sitting cleared 36 findings before the owner cut sound as "too pinbally".
 
 ### Changed
 
@@ -28,6 +38,10 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   which goes to the owner as one side-by-side page before any panel, and
   adds chair duty 11: hand back a working link, a side-by-side page, and
   the URL parameter for anything still behind a flag.
+- **The chair routes a complaint before seating anyone.** `jury.md` gains
+  [Routing a complaint](plugins/muriel/skills/compose/references/jury.md#routing-a-complaint);
+  chair duty 1 quotes the complaint and records its route, and a finding
+  raised from a complaint stays open until its lens's close condition holds.
 - **The Walker's moving-target rule has a floor.** A control the person
   returns to that sits somewhere new is at least HIGH, however few pixels
   it moved. The Walker now tests the control map's declared-move reasons,
