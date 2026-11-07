@@ -1,0 +1,565 @@
+{
+ "viewport": [
+  390,
+  844
+ ],
+ "protected": {
+  "lamp": [
+   27,
+   106,
+   336,
+   703
+  ]
+ },
+ "source": "spinodal staging 7d95b56",
+ "states": {
+  "rest": {
+   "controls": {
+    "Focus mode": [
+     330,
+     782,
+     44,
+     44
+    ]
+   }
+  },
+  "revealed": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     17,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     104,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     176,
+     16,
+     101,
+     44
+    ],
+    "Lamp": [
+     296,
+     16,
+     78,
+     44
+    ],
+    "Focus mode": [
+     330,
+     782,
+     44,
+     44
+    ],
+    "Gather: then drag on the glass": [
+     9,
+     190,
+     67,
+     93
+    ],
+    "Swirl: then drag on the glass": [
+     14,
+     317,
+     52,
+     76
+    ],
+    "Repel: then drag on the glass": [
+     12,
+     437,
+     57,
+     74
+    ]
+   }
+  },
+  "revealed, mid-beat": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     17,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     104,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     176,
+     16,
+     101,
+     44
+    ],
+    "Lamp": [
+     296,
+     16,
+     78,
+     44
+    ],
+    "Focus mode": [
+     330,
+     782,
+     44,
+     44
+    ],
+    "Gather: then drag on the glass": [
+     9,
+     190,
+     67,
+     93
+    ],
+    "Swirl: then drag on the glass": [
+     14,
+     317,
+     52,
+     76
+    ],
+    "Repel: then drag on the glass": [
+     12,
+     437,
+     57,
+     74
+    ]
+   }
+  },
+  "after Artist: the lamp plays itself": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     17,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     104,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     176,
+     16,
+     101,
+     44
+    ],
+    "Lamp": [
+     296,
+     16,
+     78,
+     44
+    ],
+    "Focus mode": [
+     330,
+     782,
+     44,
+     44
+    ],
+    "Gather: then drag on the glass": [
+     9,
+     190,
+     67,
+     93
+    ],
+    "Swirl: then drag on the glass": [
+     14,
+     317,
+     52,
+     76
+    ],
+    "Repel: then drag on the glass": [
+     12,
+     437,
+     57,
+     74
+    ]
+   }
+  },
+  "after Mic: the room and music drive the lamp": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     17,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     104,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     176,
+     16,
+     101,
+     44
+    ],
+    "Lamp": [
+     296,
+     16,
+     78,
+     44
+    ],
+    "Focus mode": [
+     330,
+     782,
+     44,
+     44
+    ],
+    "Room › Mic, the microphone": [
+     209,
+     121,
+     82,
+     86
+    ],
+    "Room › Movement, the camera": [
+     297,
+     121,
+     82,
+     86
+    ],
+    "Room › Start listening": [
+     209,
+     260,
+     169,
+     44
+    ],
+    "Room › Not now": [
+     209,
+     304,
+     169,
+     44
+    ],
+    "Room › More": [
+     209,
+     350,
+     169,
+     44
+    ]
+   }
+  },
+  "after Natural: physics only": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     17,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     104,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     176,
+     16,
+     101,
+     44
+    ],
+    "Lamp": [
+     296,
+     16,
+     78,
+     44
+    ],
+    "Focus mode": [
+     330,
+     782,
+     44,
+     44
+    ],
+    "Gather: then drag on the glass": [
+     9,
+     190,
+     67,
+     93
+    ],
+    "Swirl: then drag on the glass": [
+     14,
+     317,
+     52,
+     76
+    ],
+    "Repel: then drag on the glass": [
+     12,
+     437,
+     57,
+     74
+    ]
+   }
+  },
+  "after Lamp": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     17,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     104,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     176,
+     16,
+     101,
+     44
+    ],
+    "Lamp": [
+     296,
+     16,
+     78,
+     44
+    ],
+    "Focus mode": [
+     330,
+     782,
+     44,
+     44
+    ],
+    "Lamp › Colour": [
+     137,
+     89,
+     44,
+     44
+    ],
+    "Lamp › Heat": [
+     19,
+     137,
+     68,
+     81
+    ],
+    "Lamp › Top light": [
+     100,
+     137,
+     82,
+     81
+    ],
+    "Lamp › Colour wheel": [
+     12,
+     224,
+     82,
+     84
+    ],
+    "Lamp › Cold": [
+     12,
+     344,
+     82,
+     44
+    ],
+    "Lamp › Warm": [
+     100,
+     344,
+     82,
+     44
+    ],
+    "Lamp › More": [
+     12,
+     394,
+     70,
+     44
+    ],
+    "Lamp › Tour": [
+     90,
+     392,
+     92,
+     45
+    ]
+   }
+  },
+  "after Focus mode": {
+   "controls": {
+    "Exit focus": [
+     330,
+     782,
+     44,
+     44
+    ]
+   }
+  },
+  "after Gather: then drag on the glass": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     17,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     104,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     176,
+     16,
+     101,
+     44
+    ],
+    "Lamp": [
+     296,
+     16,
+     78,
+     44
+    ],
+    "Gather strength": [
+     323,
+     271,
+     50,
+     381
+    ],
+    "Focus mode": [
+     330,
+     782,
+     44,
+     44
+    ],
+    "Gather: then drag on the glass": [
+     9,
+     190,
+     67,
+     93
+    ],
+    "Swirl: then drag on the glass": [
+     14,
+     317,
+     52,
+     76
+    ],
+    "Repel: then drag on the glass": [
+     12,
+     437,
+     57,
+     74
+    ]
+   }
+  },
+  "after Swirl: then drag on the glass": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     17,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     104,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     176,
+     16,
+     101,
+     44
+    ],
+    "Lamp": [
+     296,
+     16,
+     78,
+     44
+    ],
+    "Swirl strength": [
+     323,
+     271,
+     50,
+     381
+    ],
+    "Focus mode": [
+     330,
+     782,
+     44,
+     44
+    ],
+    "Gather: then drag on the glass": [
+     9,
+     190,
+     67,
+     93
+    ],
+    "Swirl: then drag on the glass": [
+     14,
+     317,
+     52,
+     76
+    ],
+    "Repel: then drag on the glass": [
+     12,
+     437,
+     57,
+     74
+    ]
+   }
+  },
+  "after Repel: then drag on the glass": {
+   "controls": {
+    "Artist: the lamp plays itself": [
+     17,
+     16,
+     87,
+     44
+    ],
+    "Mic: the room and music drive the lamp": [
+     104,
+     16,
+     72,
+     44
+    ],
+    "Natural: physics only": [
+     176,
+     16,
+     101,
+     44
+    ],
+    "Lamp": [
+     296,
+     16,
+     78,
+     44
+    ],
+    "Repel strength": [
+     323,
+     271,
+     50,
+     381
+    ],
+    "Focus mode": [
+     330,
+     782,
+     44,
+     44
+    ],
+    "Gather: then drag on the glass": [
+     9,
+     190,
+     67,
+     93
+    ],
+    "Swirl: then drag on the glass": [
+     14,
+     317,
+     52,
+     76
+    ],
+    "Repel: then drag on the glass": [
+     12,
+     437,
+     57,
+     74
+    ]
+   }
+  }
+ }
+}
