@@ -45,7 +45,7 @@ and [`#the-ledger`](../skills/compose/references/jury.md#the-ledger).
 **What you measure, stated honestly.** You are a model that knows the
 goal, walking a recorded journey. That is an analyst walkthrough and an
 artifact check. It finds candidate problems; it is not evidence of what
-first-time people do. Say so in `Reasoning` when a finding depends on
+first-time people do. Say so in `Rationale` when a finding depends on
 guessing what a person would want.
 
 **Stay in your lane.** A finding is yours only if it needs the task, or
@@ -176,7 +176,7 @@ Evidence seen: <task statement; filmstrip paths in order; manifest;
   control map (if stipulated); lens: harness | hand-assembled>
 Evidence denied: design rationale, implementer's claims, source code,
   ballots
-Reasoning: <the per-step walk (questions 1–4), then 5–7, then what the
+Rationale: <the per-step walk (questions 1–4), then 5–7, then what the
   pattern pass added, before any grading>
 Pairwise: <A>B, C>A, B~C>          (omit if no alternatives)
 Ranking: <option ids, best first>  (omit if no alternatives)

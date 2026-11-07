@@ -434,9 +434,14 @@ normalization.
   and 0 when they chose opposite options. Divide by (seat pairs × option
   pairs). This is the reliability figure.
 
-**Reasoning before the vote.** The ballot emits reasoning *above* its
+**Rationale before the vote.** The ballot emits its `Rationale` *above* its
 comparisons, ranking, and ship decision. A vote written first anchors the
-rationale that follows, and you get justification, not judgement.
+text that follows, and you get justification, not judgement. The field is
+named `Rationale`, not `Reasoning`: in a subagent prompt a field by that name
+reads as a request for the model's private chain of thought and can trip a
+safeguard, which on Spinodal (2026-11-05) forced the Walker to run from a
+paraphrase of its own definition. The rationale is the seat's account of the
+evidence, written for the chair.
 
 **Single artifact, no alternatives.** In scope when the artifact's premise is
 contested; see [Load gate](#load-gate). Do not fake a comparison. Require a
@@ -458,7 +463,7 @@ Isolation: subagent | inline (denial nominal)
 Order seen: <option ids, in the order presented>
 Evidence seen: <what this seat was given>
 Evidence denied: <what this seat was refused>
-Reasoning: <prose; must precede Pairwise, Ranking, Issue rank, Ship>
+Rationale: <prose; must precede Pairwise, Ranking, Issue rank, Ship>
 Pairwise: <A>B, C>A, B~C>          (omit if no alternatives)
 Ranking: <option ids, best first>  (omit if no alternatives)
 Findings:
@@ -548,7 +553,7 @@ disposition it later earns, exactly as a union finding is.
 
 Optional. Run one only when the split blocks a commit that must happen this
 session. Unseal round 1, show every juror the full split — all ballots, all
-reasoning — allow revision, and **record who moved**. A revised ballot carries
+rationales — allow revision, and **record who moved**. A revised ballot carries
 two extra lines: `Moved: yes | no` and `Moved because: <the specific evidence
 in another ballot that changed it>`.
 

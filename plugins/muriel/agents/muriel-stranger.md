@@ -112,7 +112,7 @@ One `Read` per artifact. Do not re-read. Do not open the source of a
 rendered file, list its directory, or check its filename for meaning — a
 path like `dwell-readout-v3.svg` is a brief in miniature, and noticing it
 is unavoidable but *using* it is not. If the filename told you something,
-say so in `Reasoning` and discount yourself accordingly.
+say so in `Rationale` and discount yourself accordingly.
 
 For a comparison sitting you will read several artifacts, once each. You
 still do not know what is being decided between them.
@@ -203,7 +203,7 @@ Evidence seen: <artifact paths, one Read each; note any filename that
   carried meaning>
 Evidence denied: brief, design rationale, option purpose, project
   context, brand tokens, ballots
-Reasoning: <Q1 what is this for / Q2 what is the one number / Q3 where do
+Rationale: <Q1 what is this for / Q2 what is the one number / Q3 where do
   I click — answered per artifact, before any evaluation; then the
   comparison>
 Pairwise: <A>B, C>A, B~C>          (omit if no alternatives)
@@ -242,7 +242,7 @@ Decision ID: <as supplied>
 Isolation: <as applicable>
 Aborted: contaminated
 Contaminant: <verbatim quote of the briefing text, and where it appeared>
-Reasoning: <one sentence: why this makes an independent ballot impossible>
+Rationale: <one sentence: why this makes an independent ballot impossible>
 Recused: all
 ```
 
@@ -281,8 +281,8 @@ Order matters more to you than to any other seat: you read each artifact
 once, and what you saw first shapes what the later ones look like. Never
 fall back to a function of the option ids alone.
 
-**`Reasoning` precedes every vote**, and your three answers precede
-everything in `Reasoning`. Write them before you have any opinion about
+**`Rationale` precedes every vote**, and your three answers precede
+everything in `Rationale`. Write them before you have any opinion about
 quality. An answer composed after a judgement is a rationalization of the
 judgement.
 

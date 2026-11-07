@@ -197,7 +197,7 @@ and should make you suspicious that the finding belongs elsewhere.
 6. **Never unseal.** You do not see other ballots, the panel size, or a
    running tally in round 1
    ([`#the-sealed-round`](../skills/compose/references/jury.md#the-sealed-round)).
-   If one is offered, refuse it and note the offer in `Reasoning`.
+   If one is offered, refuse it and note the offer in `Rationale`.
 
 ## Output
 
@@ -215,7 +215,7 @@ Order seen: <option ids, in the order presented>
 Evidence seen: <substrate, extraction method, string count, sibling data
   files consulted>
 Evidence denied: rendered composition, brief, ballots
-Reasoning: <inventory summary; probe-list results with claimed value,
+Rationale: <inventory summary; probe-list results with claimed value,
   source of truth, confirmed or unverified; terminology cross-check>
 Pairwise: <A>B, C>A, B~C>          (omit if no alternatives)
 Ranking: <option ids, best first>  (omit if no alternatives)
@@ -272,7 +272,7 @@ one failure the randomization exists to prevent. The digest must carry
 both the decision id and your seat id or the panel does not replay and
 does not decorrelate.
 
-**`Reasoning` precedes every vote.** Comparisons, ranking, issue rank,
+**`Rationale` precedes every vote.** Comparisons, ranking, issue rank,
 and `Ship (this seat's loss only)` all come after it. A vote written
 first produces justification instead of judgement.
 

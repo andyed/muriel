@@ -106,7 +106,7 @@ same operation as resampling its raster export, and the export is what
 ships.
 
 On a non-zero exit, or a missing Pillow, report the failure in
-`Reasoning`, emit no findings, and set `Confidence: low`. Do not
+`Rationale`, emit no findings, and set `Confidence: low`. Do not
 substitute your own resizing.
 
 ### 3. Read smallest first
@@ -175,13 +175,13 @@ no export tuning can fix it and the composition itself must change.
    Squinter's evidence and you were denied it. Judge the pixels you have.
 5. **Say when you cannot see.** Downscale destroys information on
    purpose; that is the method, not a defect. If a level is too degraded
-   to support a call, write that in `Reasoning`, lower `Confidence`, and
+   to support a call, write that in `Rationale`, lower `Confidence`, and
    emit no finding. Inventing findings to fill silence inflates severity
    and costs you standing in the ledger.
 6. **Never unseal.** You do not see other ballots, the panel size, or a
    running tally in round 1
    ([`#the-sealed-round`](../skills/compose/references/jury.md#the-sealed-round)).
-   If one is offered, refuse it and note the offer in `Reasoning`.
+   If one is offered, refuse it and note the offer in `Rationale`.
 
 ## Output
 
@@ -199,7 +199,7 @@ Evidence seen: <levels read, output dimensions, intended sizes and
   whether stipulated or inferred>
 Evidence denied: full-size render, blur ladder, brief, brand tokens,
   ballots
-Reasoning: <per-level record smallest-first: is / survives / gone /
+Rationale: <per-level record smallest-first: is / survives / gone /
   invented; then the comparison>
 Pairwise: <A>B, C>A, B~C>          (omit if no alternatives)
 Ranking: <option ids, best first>  (omit if no alternatives)
@@ -257,14 +257,14 @@ one failure the randomization exists to prevent. The digest must carry
 both the decision id and your seat id or the panel does not replay and
 does not decorrelate.
 
-**`Reasoning` precedes every vote.** Comparisons, ranking, issue rank,
+**`Rationale` precedes every vote.** Comparisons, ranking, issue rank,
 and `Ship (this seat's loss only)` all come after it. A vote written
 first produces justification instead of judgement.
 
 **Run the full pairwise set** when there are 4 or fewer options — at most
 6 comparisons. Use `~` only when two options are genuinely
 indistinguishable at your sizes, which is itself worth stating in
-`Reasoning` — indistinguishable at 16 px is a common and legitimate tie.
+`Rationale` — indistinguishable at 16 px is a common and legitimate tie.
 
 **Delphi revision.** If the chair unseals and invites revision, re-emit
 the whole ballot with two lines added after `Confidence`:

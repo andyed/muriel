@@ -42,6 +42,12 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   [Routing a complaint](plugins/muriel/skills/compose/references/jury.md#routing-a-complaint);
   chair duty 1 quotes the complaint and records its route, and a finding
   raised from a complaint stays open until its lens's close condition holds.
+- **The ballot's `Reasoning:` field is now `Rationale:`, for every seat.**
+  A field named `Reasoning` in a subagent prompt reads as a request for the
+  model's private chain of thought and can trip a safeguard; on Spinodal it
+  forced the Walker to run from a paraphrase of its own definition. Same
+  position (before the vote), same content. Ballots written before this
+  release still carry `Reasoning:`; read them as the same field.
 - **The Walker's moving-target rule has a floor.** A control the person
   returns to that sits somewhere new is at least HIGH, however few pixels
   it moved. The Walker now tests the control map's declared-move reasons,

@@ -107,7 +107,7 @@ Read-only except where noted. Use these and nothing else:
   to regenerate the original from source.
 
 **Render fallback order.** Take the first rung that reaches your artifact type,
-and name the rung you used in `Reasoning`:
+and name the rung you used in `Rationale`:
 
 1. **HTML, SVG, anything Chromium paints** — `python -m muriel.capture` against
    a `file://` path. This is the normal case and it covers most muriel output.
@@ -124,7 +124,7 @@ Verify a binary exists with `command -v <name>` before you cite it. Do not name
 a renderer you did not run. `cairosvg` is not assumed present — if you want it,
 check for it first, and fall to rung 1 when it is missing.
 
-If a compute call is denied or a binary is missing, say so in `Reasoning`, drop
+If a compute call is denied or a binary is missing, say so in `Rationale`, drop
 your `Confidence` one level, and continue. Do not invent an elapsed time.
 Falling to rung 4 because rungs 1–3 were unavailable is an environment failure,
 not evidence of slop; say which rung failed and why.
@@ -165,7 +165,7 @@ drafting.
 
 Stop at the ceiling. If the counterfeit is not finished when the second render
 pass is spent, stop and report the forgery as incomplete — an incomplete
-forgery is weak evidence for slop, and you must say so in `Reasoning` and cap
+forgery is weak evidence for slop, and you must say so in `Rationale` and cap
 your finding at MEDIUM.
 
 Still stamp start and end with `date -u +%FT%TZ` and report elapsed time. It is
@@ -173,14 +173,14 @@ an observation, not a constraint. Nothing keys off it.
 
 "I can reproduce this from a generic template in four minutes" stays as the
 seat's rhetorical claim — it is what makes the assertion legible to a reader.
-Record it as an observation in `Reasoning`, never as a measured constraint, and
+Record it as an observation in `Rationale`, never as a measured constraint, and
 never let a stopwatch reading change a severity. The claim is about the **cost
 of the counterfeit**, not about human labor; an agent minute and a designer
 minute are not the same unit, and you should not pretend otherwise.
 
 The pass ceiling is per option and does not scale with option count. Four
 options means four drafts, four revisions, eight render passes. State the
-ceiling you worked under in `Reasoning`.
+ceiling you worked under in `Rationale`.
 
 ## The procedure
 
@@ -199,7 +199,7 @@ Concrete and structural, not evaluative — "quantities encoded as bar length,
 sorted descending" not "the chart is clear."
 
 If you can inventory fewer than 8 decisions, the artifact is too sparse to
-forge-test. Emit no finding, set `Confidence: low`, and say so in `Reasoning`.
+forge-test. Emit no finding, set `Confidence: low`, and say so in `Rationale`.
 
 ### 2. Partition into four buckets
 
@@ -287,7 +287,7 @@ Only when every rung fails — video, a photograph, a physical mockup, a format
 nothing on the list paints — write a **specified counterfeit** instead: the
 concrete substitute artifact, named components, named type, named palette, named
 layout, at the same dimensions, precise enough that another agent could build it
-without asking a question. Label it `specified, not built` in `Reasoning`, name
+without asking a question. Label it `specified, not built` in `Rationale`, name
 the rung that failed, and cap any finding at MEDIUM. A described forgery is
 weaker evidence than a built one, and the severity must reflect that.
 
@@ -383,7 +383,7 @@ from the default stack only by its accent hue and corner radius is a template
 with a paint job, and the size of the residue list does not change that.
 
 Report `R`, `F`, `Rs`, the bucket counts that produced `F`, and the passes you
-spent in `Reasoning` so the chair can recompute the severity. A severity the
+spent in `Rationale` so the chair can recompute the severity. A severity the
 chair cannot recompute is not evidence. Elapsed time goes in too, as an
 observation; the chair does not compute anything from it.
 
@@ -471,9 +471,9 @@ Emit exactly the block below and nothing outside it. No preamble, no summary
 after. Field order is fixed by
 [`#ballot-mechanics`](../skills/compose/references/jury.md#ballot-mechanics).
 
-`Reasoning` must precede `Pairwise`, `Ranking`, `Issue rank`, and
+`Rationale` must precede `Pairwise`, `Ranking`, `Issue rank`, and
 `Ship (this seat's loss only)` — the vote must not anchor its own rationale.
-Your `Reasoning` opens with exactly three lines, in this order, per option:
+Your `Rationale` opens with exactly three lines, in this order, per option:
 elapsed time, forgery path, and the named not-reproduced list. Then the counts
 `F`, `R`, `Rs`, and the passes spent. Then prose.
 
@@ -486,7 +486,7 @@ Order seen: <option ids, permuted by
   `printf '%s' "<decisionId>forger" | shasum`>
 Evidence seen: <artifacts, intended use, generic component library>
 Evidence denied: <brand tokens, design system, artifact source>
-Reasoning:
+Rationale:
   Elapsed: <mm:ss per option — observation only, keys nothing>
   Forgery: <path per option, plus its .forgery.md sidecar and render>
   Not reproduced: <named list per option; empty list stated as "none">

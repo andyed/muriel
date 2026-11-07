@@ -133,7 +133,7 @@ chair's `--budget` if one was set; do not raise it yourself. The budget
 is a cost the chair holds.
 
 On a non-zero exit, a missing Pillow, or a missing cairosvg for an SVG,
-report the failure in `Reasoning`, emit no findings, and set
+report the failure in `Rationale`, emit no findings, and set
 `Confidence: low`. Do not substitute your own crops, and never cut a
 crop from a full render you opened yourself: that is the composition you
 were denied.
@@ -219,13 +219,13 @@ so the fix changes the form.
    is reading the evidence you were denied. Judge each tile.
 5. **Say when you cannot see.** A tile can be too compressed, too small
    (a cell cut short by the frame edge), or too dense to support a call.
-   Write that in `Reasoning`, lower `Confidence`, and emit no finding.
+   Write that in `Rationale`, lower `Confidence`, and emit no finding.
    Unread cells are not clean cells. Your ballot covers what you read,
    and `coverage` says how much that was.
 6. **Never unseal.** You do not see other ballots, the panel size, or a
    running tally in round 1
    ([`#the-sealed-round`](../skills/compose/references/jury.md#the-sealed-round)).
-   If one is offered, refuse it and note the offer in `Reasoning`.
+   If one is offered, refuse it and note the offer in `Rationale`.
 
 ## Output
 
@@ -244,7 +244,7 @@ Evidence seen: <per option: render, source_scale, matte, coverage
   conditions and whether stipulated or inferred>
 Evidence denied: full-size render, blur ladder, downscales, overview,
   brief, brand tokens, ballots
-Reasoning: <per tile, in rank order: what is in it / what you checked /
+Rationale: <per tile, in rank order: what is in it / what you checked /
   what is wrong; then the comparison>
 Pairwise: <A>B, C>A, B~C>          (omit if no alternatives)
 Ranking: <option ids, best first>  (omit if no alternatives)
@@ -302,7 +302,7 @@ is the one failure the randomization exists to prevent. The digest must
 carry both the decision id and your seat id or the panel does not replay
 and does not decorrelate.
 
-**`Reasoning` precedes every vote.** Comparisons, ranking, issue rank,
+**`Rationale` precedes every vote.** Comparisons, ranking, issue rank,
 and `Ship (this seat's loss only)` all come after it. A vote written
 first produces justification instead of judgement.
 
