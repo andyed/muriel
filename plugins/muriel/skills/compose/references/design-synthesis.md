@@ -123,6 +123,13 @@ Generate mechanisms, not cosmetic variants. Include a baseline or smallest
 change when it is viable. Each option must differ in state, rules, information
 flow, interaction, composition, or user leverage—not merely in naming or skin.
 
+Apply [affordances before instructions](../SKILL.md#affordances-before-instructions)
+while choosing the mechanism. Describe how its controls, content, and feedback
+make the action discoverable before proposing any helper copy. A concept that
+depends on a permanent paragraph explaining basic controls needs another design
+pass. Reserve prose for an actual information need, and test the interaction
+without the redundant coaching text.
+
 Do not fill an option quota. Two real alternatives are better than four padded
 ones. Preserve surprising concepts long enough to test their mechanism, but do
 not protect novelty from product constraints.

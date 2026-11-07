@@ -155,6 +155,31 @@ Within the human-visible slice already in scope:
   reviewed this rendered state?** Then ask: **Am I applying design judgment, or
   copying implementation details from a different context?**
 
+## Affordances before instructions
+
+In product UI, communicate basic operations through the controls and their
+behavior. Do not add permanent coaching such as “click to explore,” “scroll to
+zoom,” or “select an item to see details” as a substitute for interaction design.
+Before adding instructional copy, improve the relevant signifier: control shape
+and placement, a visible scroll boundary, a zoom control, pointer/focus feedback,
+selection state, or an immediate response to input. Use actual content identities
+(titles, favicons, site names) instead of invented generic labels for things the
+user is inspecting.
+
+Audit visible prose sentence by sentence: does it identify content, state,
+consequences, or a recovery action, or merely narrate a basic operation? Remove
+the narration and verify the affordance in idle, hover, focus, selected, and
+touch states. A missing affordance is a design defect to fix, not a request for
+another explanatory footer. Keep design rationale in the agent's report or
+documentation, outside the product flow.
+
+Preserve useful labels, units, legends, accessible names, keyboard help, error
+recovery, and information needed for a consequential decision. Unfamiliar
+behavior may warrant concise contextual help when the affordance alone is
+insufficient; prefer help on demand or a targeted first-use cue over permanent
+tutorial chrome. Explicit teaching artifacts may explain the concept they teach.
+This is a decision rule, not a blanket ban on explanatory text.
+
 ## Universal constraints
 
 - Preserve the project's brand and tokens. If none exist, use a restrained
