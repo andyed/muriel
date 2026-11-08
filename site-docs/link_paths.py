@@ -15,12 +15,20 @@ HTML_ASSET = re.compile(r'(?P<prefix>\b(?:src|srcset)=["\'])(?P<url>[^"\'\s]+)(?
 FENCES = re.compile(r'(^[ \t]*(?:`{3,}|~{3,})[^\n]*\n.*?^[ \t]*(?:`{3,}|~{3,})[ \t]*$)', re.M | re.S)
 
 
+def _excluded(file):
+    inclusion = getattr(file, 'inclusion', None)
+    return bool(inclusion and inclusion.is_excluded())
+
+
 def on_page_markdown(markdown, *, page, config, files):
     source = Path(page.file.abs_src_path).resolve()
     # Native site pages already use the publication layout.
     if source.is_relative_to(REPO / 'site-docs'):
         return markdown
-    published = {Path(f.abs_src_path).resolve(): f for f in files if f.abs_src_path}
+    # exclude_docs files are still in `files` but never built; treat them as
+    # repository-only so links to them go to GitHub, not to a missing page.
+    published = {Path(f.abs_src_path).resolve(): f for f in files
+                 if f.abs_src_path and not _excluded(f)}
 
     def rewrite_url(original, html=False):
         url = urlsplit(original)

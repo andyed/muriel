@@ -46,6 +46,13 @@ class LinkPathsTest(unittest.TestCase):
     def test_repository_file_uses_github(self):
         self.assertEqual(self.render('[tool](../../tool.py)'), '[tool](https://github.com/andyed/muriel/blob/main/tool.py)')
 
+    def test_excluded_page_uses_github(self):
+        # exclude_docs keeps the file in `files` but never builds it (2026-11-07 docs failure).
+        held = self.file('assets/social/case.md', 'brand-assets/social/case.md', 'brand-assets/social/case/')
+        held.inclusion = SimpleNamespace(is_excluded=lambda: True)
+        self.assertEqual(self.render('[case](../../assets/social/case.md)'),
+                         '[case](https://github.com/andyed/muriel/blob/main/assets/social/case.md)')
+
     def test_demo_directory_uses_published_index(self):
         self.assertEqual(self.render('[demo](../demo/)'), '[demo](../examples/demo/index.html)')
 
