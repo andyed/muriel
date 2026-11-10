@@ -19,6 +19,7 @@ Usage
     muriel diagram-check fig.svg           # a11y + label + contrast gate
     muriel dimensions                      # print the dimensions registry
     muriel heroshot in.png out.png --tilt 12
+    muriel rasterize fig.svg -o fig.png    # SVG to PNG, cairosvg or ImageMagick
     muriel tilt-shift raw.png hero.png
     muriel venn spec.json out.png
     muriel styleguide examples/muriel-brand.toml --css
@@ -63,6 +64,7 @@ SUBCOMMANDS: dict[str, tuple[str, str]] = {
     "line-ends":      ("muriel.line_ends",                  "Rendered check: fail any stroke whose end lands on nothing (Playwright)"),
     "loupe":          ("muriel.loupe",                      "Fixed-scale 4× crops, densest first — do joints and line ends resolve up close?"),
     "palettes":       ("muriel.palettes",                   "List / generate / validate categorical palettes (CVD + contrast)"),
+    "rasterize":      ("muriel.rasterize",                  "SVG to PNG for a visual audit: cairosvg, else ImageMagick with fonts pinned to installed faces"),
     "redline":        ("muriel.redline",                    "Build an offline critique presentation from PNG captures and evidence"),
     "route":          ("muriel.route",                      "Send an owner's complaint to the lens that can answer it — which seat, tool, or owner page"),
     "smartcrop":      ("muriel.tools.smartcrop",            "Saliency-aware crop solver (edges + optional faces / text / saliency)"),

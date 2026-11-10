@@ -121,7 +121,7 @@ Exit status:
 Limitations
 -----------
 
-- Raster in, raster out. Rasterize SVG upstream (``cairosvg``) first.
+- Raster in, raster out. Rasterize SVG upstream (``muriel.rasterize``) first.
 - Judges luminance masses, not text. Contrast ratios belong to
   ``muriel.contrast``; this module deliberately reports none.
 - Pillow's ``GaussianBlur`` is a three-pass box approximation, so the
