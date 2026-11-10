@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@@TITLE@@ — Muriel review</title>
+<style>
+:root{color-scheme:dark;--bg:#0a0a0f;--surface:#17171e;--ink:#f3f0e4;--muted:#c6c5cb;--accent:#9ce9e0;--red:#ffc0c3;--line:#767680}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:500 16px/1.5 system-ui,sans-serif}
+header,main{max-width:1600px;margin:auto;padding:24px 32px}header{padding-bottom:8px}h1{font-size:clamp(25px,3vw,38px);line-height:1.15;margin:8px 0 12px}h2{font-size:22px;margin:0 0 8px}h3{font-size:18px;margin:0}p{margin:8px 0}header p{max-width:85ch;color:var(--muted)}.eyebrow{color:var(--accent);margin:0}
+button,input{font:inherit}button{min-height:44px;background:transparent;border:1px solid var(--line);border-radius:6px;color:var(--ink);padding:8px 14px;cursor:pointer}button:hover{background:#292930}button[aria-pressed=true],button[aria-current=step]{border-color:var(--accent);box-shadow:inset 0 -3px var(--accent)}button:disabled{color:var(--muted);border-style:dashed;cursor:default}button:focus-visible,input:focus-visible,[tabindex]:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+[hidden]{display:none!important}.toolbar,.navigation,.options{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.toolbar{margin-bottom:14px}.navigation{flex:1}.options{margin-left:auto}label{display:flex;gap:10px;align-items:center;min-height:44px}input[type=checkbox]{width:22px;height:22px;accent-color:var(--accent)}input[type=range]{width:100%;min-height:44px;accent-color:var(--accent)}.scrubber{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;margin-bottom:12px}.steps{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}.steps button{flex:1;text-align:left;min-width:140px}.steps small{display:block;font-size:16px;color:var(--muted)}
+.review{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:24px;align-items:start}.canvas-scroll{overflow:auto;max-height:75vh;overscroll-behavior:contain;border:1px solid var(--line);background:#24242b}.canvas{position:relative;isolation:isolate;min-width:0}.canvas img{position:absolute;top:0;left:0;display:block;height:auto;max-width:none}.overlay{position:absolute;inset:0;pointer-events:none;width:100%;height:100%}.overlay rect,.overlay line{vector-effect:non-scaling-stroke;stroke:#b00024;stroke-width:3;fill:none}.overlay .halo{stroke:#fff4e8;stroke-width:6}.overlay .marker{fill:#a30021;stroke:#fff4e8;stroke-width:2;vector-effect:non-scaling-stroke}.overlay text{fill:#fff;font:700 20px system-ui;paint-order:stroke;stroke:#a30021;stroke-width:2}
+.frame-meta{color:var(--muted);margin:12px 0 20px}.source{overflow-wrap:anywhere}.source summary{cursor:pointer;min-height:44px;padding:10px 0}.source code{display:block;font:500 14px/1.5 ui-monospace,monospace;overflow-wrap:anywhere;color:var(--muted)}.findings{list-style:none;padding:0;margin:0}.finding{border-top:1px solid var(--line);padding:14px 0}.finding button{width:100%;text-align:left;border:0;padding:8px 10px;display:flex;gap:10px;align-items:start}.finding button[aria-pressed=true]{background:#23232a;box-shadow:inset 3px 0 var(--accent)}.number{color:var(--accent);font-variant-numeric:tabular-nums}.status{color:var(--red);display:block;margin:6px 0}.status.addressed{color:var(--accent)}.status.unverified{color:#f5dfa4}.detail{padding:4px 10px}.detail dt{color:var(--muted);margin-top:14px}.detail dd{margin:3px 0 0}.measure{font-variant-numeric:tabular-nums;color:var(--accent)}.empty{color:var(--muted)}.error{border:2px solid var(--red);padding:16px}.static img{max-width:100%;height:auto}.static section{margin-top:32px}.static li{margin:18px 0}.js-ready .static{display:none}
+.review>section,.review>aside{min-width:0}.source code{font-size:16px}
+@media(max-width:950px){.review{grid-template-columns:minmax(0,1fr)}.findings{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:20px}.canvas-scroll{max-height:65vh}}
+@media(max-width:560px){header,main{padding:20px 16px}.options{margin-left:0}.steps button{min-width:100px}.scrubber{grid-template-columns:1fr;gap:0}.canvas-scroll{max-height:60vh}}
+@media(prefers-reduced-motion:no-preference){.overlay{animation:appear 180ms ease-out}@keyframes appear{from{opacity:0}to{opacity:1}}}
+@media print{.interactive{display:none!important}.js-ready .static{display:block}body{background:white;color:black}.static{color:black}.static img{max-height:80vh;object-fit:contain}.static section{break-before:page}header p{color:#333}}
+</style>
+<header><p class="eyebrow">Muriel · Redline review</p><h1>@@TITLE@@</h1><p>@@SUMMARY@@</p></header>
+<main>
+<div id="app" class="interactive" hidden>
+  <div class="toolbar">
+    <div class="navigation"><button id="prev" aria-label="Previous revision">Previous</button><button id="play" aria-pressed="false">Play revisions</button><button id="next" aria-label="Next revision">Next</button></div>
+    <div class="options"><button id="compare" aria-pressed="false">Compare original</button><button id="scale" aria-pressed="false">Actual pixels</button><label><input id="annotations" type="checkbox" checked>Redlines</label></div>
+  </div>
+  <div class="scrubber"><label for="revision">Revision</label><input id="revision" type="range" min="0" step="1" value="0"></div>
+  <nav class="steps" aria-label="Captured revisions" id="steps"></nav>
+  <p id="error" role="alert" class="error" hidden></p>
+  <div class="review">
+    <section aria-labelledby="frame-title">
+      <h2 id="frame-title"></h2>
+      <div class="canvas-scroll" id="viewport" tabindex="0" aria-label="Capture viewport"><div class="canvas" id="canvas"><img id="capture" alt=""><svg id="overlay" class="overlay" aria-hidden="true"></svg></div></div>
+      <div class="frame-meta"><p id="frame-note"></p><p id="capture-size"></p><details class="source"><summary>Capture provenance</summary><p id="source"></p><code id="hash"></code></details></div>
+    </section>
+    <aside aria-label="Findings"><h2 id="findings-title">Findings</h2><ol id="findings" class="findings"></ol></aside>
+  </div>
+  <p id="announcement" role="status" aria-live="polite"></p>
+</div>
+<div class="static">@@FALLBACK@@</div>
+</main>
+<script type="application/json" id="review-data">@@DATA@@</script>
+<script>
+(() => {
+  'use strict';
+  const review = JSON.parse(document.getElementById('review-data').textContent);
+  const el = id => document.getElementById(id);
+  const frames = review.frames;
+  const state = {index:0, compare:false, finding:null, selections:Object.create(null), pixels:false, redlines:true, playing:false};
+  const width = Math.max(...frames.map(f => f.width)), height = Math.max(...frames.map(f => f.height));
+  let timer = null;
+  function stop(){clearTimeout(timer);state.playing=false;el('play').textContent='Play revisions';el('play').setAttribute('aria-pressed','false');}
+  function shown(){return frames[state.compare ? 0 : state.index];}
+  function setRevision(index){stop();state.index=index;state.compare=false;render();}
+  function append(parent,tag,text,attrs={}){const n=document.createElement(tag);n.textContent=text;Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));parent.append(n);return n;}
+  function shape(tag,attrs){const n=document.createElementNS('http://www.w3.org/2000/svg',tag);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));el('overlay').append(n);return n;}
+  function outline(tag,attrs){shape(tag,{...attrs,class:'halo'});shape(tag,attrs);}
+  function paint(){
+    const f=shown(), selected=f.findings.find(x=>x.id===state.finding);
+    el('overlay').replaceChildren();el('overlay').toggleAttribute('hidden',!state.redlines);
+    el('canvas').style.width=state.pixels ? width+'px' : '100%';
+    el('canvas').style.aspectRatio=width+'/'+height;
+    el('capture').style.width=(f.width/width*100)+'%';
+    el('overlay').setAttribute('viewBox',`0 0 ${width} ${height}`);
+    if(!selected)return;
+    if(selected.rect){
+      const [x,y,w,h]=selected.rect;
+      outline('rect',{x,y,width:w,height:h});
+      const cx=Math.max(17,Math.min(width-17,x+16)),cy=Math.max(17,Math.min(height-17,y+16));
+      shape('circle',{cx,cy,r:16,class:'marker'});
+      shape('text',{x:cx,y:cy+7,'text-anchor':'middle'}).textContent=f.findings.indexOf(selected)+1;
+    }
+    const m=selected.measure;
+    if(m){
+      const [x1,y1]=m.from,[x2,y2]=m.to;
+      outline('line',{x1,y1,x2,y2});
+      for(const [x,y] of [m.from,m.to])outline('line',m.axis==='x'?{x1:x,y1:y-7,x2:x,y2:y+7}:{x1:x-7,y1:y,x2:x+7,y2:y});
+    }
+  }
+  function selectFinding(id){stop();state.finding=id;state.selections[shown().id]=id;renderFindings();paint();el('findings').querySelector('button[aria-pressed=true]')?.focus({preventScroll:true});}
+  function renderFindings(){
+    const f=shown();el('findings').replaceChildren();
+    el('findings-title').textContent=`Findings · ${f.findings.length}`;
+    if(!f.findings.length){append(el('findings'),'li','No findings supplied for this capture.',{class:'empty'});return;}
+    f.findings.forEach((finding,i)=>{
+      const li=append(el('findings'),'li','',{class:'finding'});
+      const btn=append(li,'button','',{'aria-pressed':String(finding.id===state.finding)});
+      append(btn,'span',String(i+1),{class:'number'});append(btn,'span',finding.title);
+      btn.addEventListener('click',()=>selectFinding(finding.id));
+      append(li,'span',finding.severity+' · '+finding.status,{class:'status '+finding.status});
+      if(finding.id===state.finding){
+        const dl=append(li,'dl','',{class:'detail'});
+        for(const [label,key] of [['Rule','rule'],['Evidence','evidence'],['Change / next action','fix']]){append(dl,'dt',label);append(dl,'dd',finding[key]);}
+        if(finding.measure)append(li,'p',`${finding.measure.label}: ${finding.measure.pixels} capture px`,{class:'measure'});
+        if(!finding.rect&&!finding.measure)append(li,'p','Whole-artifact finding',{class:'empty'});
+      }
+    });
+  }
+  function render(){
+    const f=shown();
+    state.finding=state.selections[f.id] || (f.findings.some(x=>x.id===state.finding)?state.finding:f.findings[0]?.id||null);
+    state.selections[f.id]=state.finding;
+    el('capture').src=f.image;el('capture').alt=f.label;el('error').hidden=true;
+    el('frame-title').textContent=(state.compare?'Original · ':'')+f.label;
+    el('frame-note').textContent=f.note;el('source').textContent=f.source;el('hash').textContent='SHA-256 '+f.sha256;
+    el('capture-size').textContent=`${f.width} × ${f.height} capture px · `+(state.pixels?'actual pixels':'fit to viewport');
+    el('revision').value=state.index;el('revision').setAttribute('aria-valuetext',frames[state.index].label);
+    el('compare').disabled=state.index===0;el('compare').setAttribute('aria-pressed',String(state.compare));
+    el('compare').textContent=state.compare?'Return to revision':'Compare original';
+    el('prev').disabled=state.index===0;el('next').disabled=state.index===frames.length-1;
+    el('play').disabled=frames.length===1;el('scale').setAttribute('aria-pressed',String(state.pixels));
+    el('scale').textContent=state.pixels?'Fit capture':'Actual pixels';
+    [...el('steps').children].forEach((n,i)=>{if(i===state.index)n.setAttribute('aria-current','step');else n.removeAttribute('aria-current');});
+    renderFindings();paint();
+    el('announcement').textContent=`${state.compare?'Comparing original. ':''}${f.label}. ${f.findings.filter(x=>x.status==='open').length} open; ${f.findings.filter(x=>x.status==='unverified').length} unverified.`;
+  }
+  function schedule(){timer=setTimeout(()=>{if(state.index===frames.length-1){stop();return;}state.index++;render();schedule();},2400);}
+  frames.forEach((f,i)=>{const b=append(el('steps'),'button',f.label);append(b,'small',`${i+1} / ${frames.length}`);b.addEventListener('click',()=>setRevision(i));});
+  el('revision').max=frames.length-1;
+  el('revision').addEventListener('input',e=>setRevision(Number(e.target.value)));
+  el('prev').addEventListener('click',()=>setRevision(Math.max(0,state.index-1)));
+  el('next').addEventListener('click',()=>setRevision(Math.min(frames.length-1,state.index+1)));
+  el('compare').addEventListener('click',()=>{stop();state.compare=!state.compare;render();});
+  el('scale').addEventListener('click',()=>{stop();state.pixels=!state.pixels;render();});
+  el('annotations').addEventListener('change',e=>{stop();state.redlines=e.target.checked;paint();});
+  el('play').addEventListener('click',()=>{if(state.playing){stop();return;}state.compare=false;if(state.index===frames.length-1)state.index=0;state.playing=true;el('play').textContent='Pause revisions';el('play').setAttribute('aria-pressed','true');render();schedule();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){stop();if(state.compare){state.compare=false;render();}}});
+  el('capture').addEventListener('error',()=>{stop();el('error').hidden=false;el('error').textContent='This capture could not be decoded. Inspect the source PNG; its redlines are unavailable.';el('overlay').replaceChildren();});
+  el('capture').addEventListener('load',()=>{const f=shown();if(el('capture').naturalWidth!==f.width||el('capture').naturalHeight!==f.height){el('error').hidden=false;el('error').textContent='Capture dimensions differ from the recorded frame.';}});
+  render();el('app').hidden=false;document.documentElement.classList.add('js-ready');
+})();
+</script>
+</html>

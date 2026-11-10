@@ -104,6 +104,10 @@ errors, overflow, image loading, and final export dimensions.
 
 ## Load deeper only when needed
 
+For a landing page or campaign with an unsettled audience, argument, or next
+action, consult [marketing pages](../references/marketing-pages.md). It supplies
+visitor-context and evidence checks without prescribing a page template.
+
 Read [`../references/web-recipes.md`](../references/web-recipes.md) only for
 exact Marginalia syntax, Pandoc transforms, light-editorial tokens, capture
 recipes, or data-URI implementation details. Do not load it for routine product

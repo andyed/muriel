@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Q3 2026 overview</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F4F2EE; font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #1C2430; }
+  #panel { width: 1200px; padding: 32px; background: #F4F2EE; }
+  .header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+  .title { display: flex; align-items: center; gap: 12px; }
+  .title h1 { font-size: 30px; font-weight: 700; margin: 0; }
+  .chip { font-size: 14px; font-weight: 700; color: #5A4300; background: #F6E7B8; border-radius: 6px; padding: 4px 8px; }
+  .story { font-size: 18px; color: #3A4452; margin-top: 6px; }
+  .sub { font-size: 14px; color: #5B6472; margin-top: 4px; }
+  .actions { display: flex; gap: 12px; }
+  .btn { font: inherit; font-size: 15px; font-weight: 600; border-radius: 8px; padding: 10px 18px; }
+  .btn.primary { background: #D7ECEE; color: #0B4F57; border: 1px solid #0E6E78; }
+  .btn.secondary { background: transparent; color: #1C2430; border: 1px solid #A7AFBA; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
+  .kpi { background: #24303F; border-radius: 10px; padding: 18px 20px; min-height: 140px; }
+  .kpi .label { font-size: 18px; font-weight: 600; color: #D5DCE5; }
+  .kpi .value { font-size: 42px; font-weight: 700; margin-top: 4px; color: #FFFFFF; }
+  .kpi .delta { display: inline-block; margin-top: 8px; font-size: 16px; font-weight: 700; padding: 3px 9px; border-radius: 6px; }
+  .favorable { background: #CFEBD7; color: #14532D; }
+  .unfavorable { background: #F9D3CD; color: #7F1D1D; }
+  .card { background: #fff; border-radius: 10px; border: 1px solid #E2DED6; padding: 16px 20px 10px; }
+  svg text { font-family: Inter, system-ui, sans-serif; }
+</style>
+</head>
+<body>
+<div id="panel">
+  <div class="header">
+    <div>
+      <div class="title"><h1>Q3 2026 overview</h1><span class="chip">Sample data</span></div>
+      <div class="story">Signups ran 39% above Q2 while revenue fell 12% below it.</div>
+      <div class="sub">Jul 1 – Sep 29, 2026 (13 weeks) · updated Oct 1, 2026</div>
+    </div>
+    <div class="actions">
+      <button class="btn secondary">Export CSV</button>
+      <button class="btn primary">View full report</button>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="label">Monthly active users (Sep)</div><div class="value">12,480</div><span class="delta favorable">▲ 8.2% vs Jun</span></div>
+    <div class="kpi"><div class="label">Revenue (Q3)</div><div class="value">$184.2k</div><span class="delta unfavorable">▼ 12% vs Q2</span></div>
+    <div class="kpi"><div class="label">Churn (Sep)</div><div class="value">3.1%</div><span class="delta favorable">▼ 0.4 pp vs Jun</span></div>
+    <div class="kpi"><div class="label">Avg. session length (Q3)</div><div class="value">4.2 min</div><span class="delta favorable">▲ 0.3 min vs Q2</span></div>
+  </div>
+
+  <div class="card">
+    <svg width="1096" height="390" viewBox="0 0 1096 390" role="img" aria-label="Signups and revenue per week, weeks of Jul 1 to Sep 23 2026, sample data. week of Jul 1: 1,150 signups, $15.8k revenue; week of Jul 8: 1,250 signups, $15.6k revenue; week of Jul 15: 1,075 signups, $15.1k revenue; week of Jul 22: 1,350 signups, $14.9k revenue; week of Jul 29: 1,300 signups, $14.6k revenue; week of Aug 5: 1,450 signups, $14.4k revenue; week of Aug 12: 1,400 signups, $14.1k revenue; week of Aug 19: 1,550 signups, $13.9k revenue; week of Aug 26: 1,500 signups, $13.7k revenue; week of Sep 2: 1,650 signups, $13.5k revenue; week of Sep 9: 1,600 signups, $13.2k revenue; week of Sep 16: 1,750 signups, $13.0k revenue; week of Sep 23: 1,800 signups, $12.4k revenue. Q2 averages: 1,040 signups and $16.1k revenue per week."><text x="12" y="18" font-size="16" font-weight="700" fill="#1C2430">Signups per week</text><g stroke="#E2DED6" stroke-width="1"><line x1="72" y1="110.0" x2="966" y2="110.0"/><line x1="72" y1="46.0" x2="966" y2="46.0"/></g><g fill="#A9C1DA"><path d="M83.4,174 V105.4 Q83.4,100.4 88.4,100.4 H124.4 Q129.4,100.4 129.4,105.4 V174 Z"/><path d="M152.2,174 V99.0 Q152.2,94.0 157.2,94.0 H193.2 Q198.2,94.0 198.2,99.0 V174 Z"/><path d="M220.9,174 V110.2 Q220.9,105.2 225.9,105.2 H261.9 Q266.9,105.2 266.9,110.2 V174 Z"/><path d="M289.7,174 V92.6 Q289.7,87.6 294.7,87.6 H330.7 Q335.7,87.6 335.7,92.6 V174 Z"/><path d="M358.5,174 V95.8 Q358.5,90.8 363.5,90.8 H399.5 Q404.5,90.8 404.5,95.8 V174 Z"/><path d="M427.2,174 V86.2 Q427.2,81.2 432.2,81.2 H468.2 Q473.2,81.2 473.2,86.2 V174 Z"/><path d="M496.0,174 V89.4 Q496.0,84.4 501.0,84.4 H537.0 Q542.0,84.4 542.0,89.4 V174 Z"/><path d="M564.8,174 V79.8 Q564.8,74.8 569.8,74.8 H605.8 Q610.8,74.8 610.8,79.8 V174 Z"/><path d="M633.5,174 V83.0 Q633.5,78.0 638.5,78.0 H674.5 Q679.5,78.0 679.5,83.0 V174 Z"/><path d="M702.3,174 V73.4 Q702.3,68.4 707.3,68.4 H743.3 Q748.3,68.4 748.3,73.4 V174 Z"/><path d="M771.1,174 V76.6 Q771.1,71.6 776.1,71.6 H812.1 Q817.1,71.6 817.1,76.6 V174 Z"/><path d="M839.8,174 V67.0 Q839.8,62.0 844.8,62.0 H880.8 Q885.8,62.0 885.8,67.0 V174 Z"/><path d="M908.6,174 V63.8 Q908.6,58.8 913.6,58.8 H949.6 Q954.6,58.8 954.6,63.8 V174 Z"/></g><line x1="72" y1="107.4" x2="966" y2="107.4" stroke="#0E6E78" stroke-width="2" stroke-dasharray="6 5"/><text x="974" y="112.4" font-size="15" font-weight="700" fill="#0E6E78">Q2 avg 1,040</text><line x1="72" y1="174" x2="966" y2="174" stroke="#5B6472" stroke-width="1"/><g font-size="14" fill="#5B6472" text-anchor="end"><text x="62" y="179.0">0</text><text x="62" y="115.0">1,000</text><text x="62" y="51.0">2,000</text></g><text x="12" y="220" font-size="16" font-weight="700" fill="#1C2430">Revenue per week</text><g stroke="#E2DED6" stroke-width="1"><line x1="72" y1="304.0" x2="966" y2="304.0"/><line x1="72" y1="248.0" x2="966" y2="248.0"/></g><g fill="#D9B8AE"><path d="M83.4,360 V276.5 Q83.4,271.5 88.4,271.5 H124.4 Q129.4,271.5 129.4,276.5 V360 Z"/><path d="M152.2,360 V277.6 Q152.2,272.6 157.2,272.6 H193.2 Q198.2,272.6 198.2,277.6 V360 Z"/><path d="M220.9,360 V280.4 Q220.9,275.4 225.9,275.4 H261.9 Q266.9,275.4 266.9,280.4 V360 Z"/><path d="M289.7,360 V281.6 Q289.7,276.6 294.7,276.6 H330.7 Q335.7,276.6 335.7,281.6 V360 Z"/><path d="M358.5,360 V283.2 Q358.5,278.2 363.5,278.2 H399.5 Q404.5,278.2 404.5,283.2 V360 Z"/><path d="M427.2,360 V284.4 Q427.2,279.4 432.2,279.4 H468.2 Q473.2,279.4 473.2,284.4 V360 Z"/><path d="M496.0,360 V286.0 Q496.0,281.0 501.0,281.0 H537.0 Q542.0,281.0 542.0,286.0 V360 Z"/><path d="M564.8,360 V287.2 Q564.8,282.2 569.8,282.2 H605.8 Q610.8,282.2 610.8,287.2 V360 Z"/><path d="M633.5,360 V288.3 Q633.5,283.3 638.5,283.3 H674.5 Q679.5,283.3 679.5,288.3 V360 Z"/><path d="M702.3,360 V289.4 Q702.3,284.4 707.3,284.4 H743.3 Q748.3,284.4 748.3,289.4 V360 Z"/><path d="M771.1,360 V291.1 Q771.1,286.1 776.1,286.1 H812.1 Q817.1,286.1 817.1,291.1 V360 Z"/><path d="M839.8,360 V292.2 Q839.8,287.2 844.8,287.2 H880.8 Q885.8,287.2 885.8,292.2 V360 Z"/><path d="M908.6,360 V295.6 Q908.6,290.6 913.6,290.6 H949.6 Q954.6,290.6 954.6,295.6 V360 Z"/></g><line x1="72" y1="269.8" x2="966" y2="269.8" stroke="#0E6E78" stroke-width="2" stroke-dasharray="6 5"/><text x="974" y="274.8" font-size="15" font-weight="700" fill="#0E6E78">Q2 avg $16.1k</text><line x1="72" y1="360" x2="966" y2="360" stroke="#5B6472" stroke-width="1"/><g font-size="14" fill="#5B6472" text-anchor="end"><text x="62" y="365.0">$0k</text><text x="62" y="309.0">$10k</text><text x="62" y="253.0">$20k</text></g><g font-size="14" fill="#5B6472" text-anchor="middle"><text x="106.4" y="382">Jul 1</text><text x="175.2" y="382">Jul 8</text><text x="243.9" y="382">Jul 15</text><text x="312.7" y="382">Jul 22</text><text x="381.5" y="382">Jul 29</text><text x="450.2" y="382">Aug 5</text><text x="519.0" y="382">Aug 12</text><text x="587.8" y="382">Aug 19</text><text x="656.5" y="382">Aug 26</text><text x="725.3" y="382">Sep 2</text><text x="794.1" y="382">Sep 9</text><text x="862.8" y="382">Sep 16</text><text x="931.6" y="382">Sep 23</text></g></svg>
+  </div>
+</div>
+</body>
+</html>

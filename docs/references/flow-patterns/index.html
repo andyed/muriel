@@ -1823,6 +1823,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#p13-transient-in-the-layout-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        P13 Transient in the layout flow
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2335,6 +2346,9 @@ nothing the walk did not already find, cut it.</p>
 <li><strong>Status:</strong> confirmed. User report, 2026-10-29 (Protoplasm export). The fix
   was verified in the 2026-10-29 Walker sitting: one slot, 0 px shift across
   10 frames.</li>
+<li><strong>Recurrence, 2026-11-05 (Protoplasm Jets panel):</strong> P1 came back through P13
+  below, in a different panel. That was the third time the cause had been fixed
+  in only one panel.</li>
 </ul>
 <h3 id="p2-relabel-under-the-finger">P2 Relabel under the finger<a class="headerlink" href="#p2-relabel-under-the-finger" title="Permanent link">&para;</a></h3>
 <ul>
@@ -2458,6 +2472,38 @@ nothing the walk did not already find, cut it.</p>
 <li><strong>Basis:</strong> <a href="../task-analysis/#model-goals-and-methods">task analysis</a>: put the
   deciding information where the choice happens.</li>
 <li><strong>Status:</strong> candidate. 2026-10-29 export sitting, W7.</li>
+</ul>
+<h3 id="p13-transient-in-the-layout-flow">P13 Transient in the layout flow<a class="headerlink" href="#p13-transient-in-the-layout-flow" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Across frames:</strong> a timed message (toast, caption, "saved") is inserted
+  into a container's normal flow. Its arrival pushes every control below it
+  out of place, and its expiry pulls them back. The person sees a flicker and
+  the panel's edge jumping. A tap aimed during the window lands on a different
+  control.</li>
+<li><strong>Fix:</strong> a transient never takes layout space. Show it in an overlay, or in
+  a slot reserved at full height whether or not it is filled. Remove the
+  mechanism, not one panel's exposure to it. Gate it with a geometry check:
+  open each panel, trigger its actions, sample every control's rect before,
+  during and after the transient's lifetime, and fail on any shift.</li>
+<li><strong>Basis:</strong> P1, applied to system-timed changes. A move the person did not
+  cause, made while they are aiming, carries no meaning (muriel continuity
+  rules).</li>
+<li><strong>Evidence:</strong> Protoplasm, 2026-11-05, logged at Andy's request as a major UI
+  design failure. One global 1.8 s caption (<code>#action-caption</code>) was moved into
+  whichever corner panel was open (<code>show-corners.ts</code>, <code>panel.prepend(caption)</code>).
+  Measured at 844 × 390: after a drive-mode tap, the Jets panel's heading, mode
+  row, direction row and Strength slider each dropped 63 px, then returned
+  2 s later. Earlier fixes exempted Layers (2026-10-23) and the deck
+  (2026-10-29) one at a time. Turn, Sprinkle and Hands kept the mechanism, and
+  no check covered geometry over time.</li>
+<li><strong>Status:</strong> confirmed. Three user reports, then the fix on Protoplasm master
+  <code>2f5a6b7</code> (2026-11-05). It removed the mechanism for every panel and
+  rebuilt Turn as a dial with no caption or readout. Verified the same day:
+  corner-controls-check <code>flyout-controls-hold-still-while-in-use</code> passed with
+  0 px over 7 actions and 14 samples. A before/after capture at the same base
+  commit (<code>scripts/turn-dial-compare.mjs</code>) showed the old panel's controls
+  moving 14 to 78 px and the dial's 0 px at 1280 × 800, 390 × 844 and
+  844 × 390.</li>
 </ul>
 <h2 id="sources">Sources<a class="headerlink" href="#sources" title="Permanent link">&para;</a></h2>
 <ul>

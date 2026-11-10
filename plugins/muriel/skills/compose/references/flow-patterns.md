@@ -44,6 +44,9 @@ nothing the walk did not already find, cut it.
 - **Status:** confirmed. User report, 2026-10-29 (Protoplasm export). The fix
   was verified in the 2026-10-29 Walker sitting: one slot, 0 px shift across
   10 frames.
+- **Recurrence, 2026-11-05 (Protoplasm Jets panel):** P1 came back through P13
+  below, in a different panel. That was the third time the cause had been fixed
+  in only one panel.
 
 ### P2 Relabel under the finger
 
@@ -167,6 +170,38 @@ nothing the walk did not already find, cut it.
 - **Basis:** [task analysis](task-analysis.md#model-goals-and-methods): put the
   deciding information where the choice happens.
 - **Status:** candidate. 2026-10-29 export sitting, W7.
+
+### P13 Transient in the layout flow
+
+- **Across frames:** a timed message (toast, caption, "saved") is inserted
+  into a container's normal flow. Its arrival pushes every control below it
+  out of place, and its expiry pulls them back. The person sees a flicker and
+  the panel's edge jumping. A tap aimed during the window lands on a different
+  control.
+- **Fix:** a transient never takes layout space. Show it in an overlay, or in
+  a slot reserved at full height whether or not it is filled. Remove the
+  mechanism, not one panel's exposure to it. Gate it with a geometry check:
+  open each panel, trigger its actions, sample every control's rect before,
+  during and after the transient's lifetime, and fail on any shift.
+- **Basis:** P1, applied to system-timed changes. A move the person did not
+  cause, made while they are aiming, carries no meaning (muriel continuity
+  rules).
+- **Evidence:** Protoplasm, 2026-11-05, logged at Andy's request as a major UI
+  design failure. One global 1.8 s caption (`#action-caption`) was moved into
+  whichever corner panel was open (`show-corners.ts`, `panel.prepend(caption)`).
+  Measured at 844 × 390: after a drive-mode tap, the Jets panel's heading, mode
+  row, direction row and Strength slider each dropped 63 px, then returned
+  2 s later. Earlier fixes exempted Layers (2026-10-23) and the deck
+  (2026-10-29) one at a time. Turn, Sprinkle and Hands kept the mechanism, and
+  no check covered geometry over time.
+- **Status:** confirmed. Three user reports, then the fix on Protoplasm master
+  `2f5a6b7` (2026-11-05). It removed the mechanism for every panel and
+  rebuilt Turn as a dial with no caption or readout. Verified the same day:
+  corner-controls-check `flyout-controls-hold-still-while-in-use` passed with
+  0 px over 7 actions and 14 samples. A before/after capture at the same base
+  commit (`scripts/turn-dial-compare.mjs`) showed the old panel's controls
+  moving 14 to 78 px and the dial's 0 px at 1280 × 800, 390 × 844 and
+  844 × 390.
 
 ## Sources
 
