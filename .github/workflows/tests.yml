@@ -32,11 +32,19 @@ jobs:
         run: node tests/multiscale-browser.mjs
 
   test:
-    runs-on: ubuntu-latest
+    name: test (${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.13']
+        include:
+          # 3.9 is the floor requires-python promises. ubuntu-latest moved to
+          # 26.04, which setup-python has no 3.9 build for, so the floor runs
+          # on 24.04 until support for 3.9 is dropped on purpose.
+          - python-version: '3.9'
+            os: ubuntu-24.04
+          - python-version: '3.13'
+            os: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
