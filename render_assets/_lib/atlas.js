@@ -43,6 +43,66 @@ const PARTIAL_UPLOAD_MAX = 4;
 /** Atlas dimension cap. 4096 is universally supported; 8192 is not. */
 const MAX_ATLAS_PX = 4096;
 
+// What is known about each image element: the URL it held when it was
+// checked, and whether drawing it leaves a canvas readable.
+const originClean = new WeakMap();
+let probe = null;   // context of a 1x1 canvas that takes the first draw of each image
+
+/**
+ * Would drawing this image taint the canvas it lands on?
+ *
+ * A tainted canvas stays tainted: every later readback and every texture
+ * upload from it throws SecurityError, so one such image costs the whole
+ * atlas, and the throw surfaces in the consumer's frame loop rather than here.
+ * The browser offers no flag to ask in advance. The only test is to draw the
+ * image somewhere expendable and try to read that back.
+ *
+ * The probe draw is aimed outside the probe's one pixel. Chromium and WebKit
+ * mark a canvas when the draw is issued, before working out that nothing
+ * lands, so the mark arrives and the image is never decoded for it. Aimed
+ * inside, the same check decoded every image on the main thread: about 10 ms
+ * more per 2400 px image and 20 ms per 4000 px one, against nothing measurable
+ * this way (Chrome 157). Firefox 150 does not taint for `<foreignObject>` at
+ * all, so it needs no check and loses nothing to this one.
+ *
+ * `crossOrigin` does not cover this. An SVG that holds a `<foreignObject>`
+ * (Mermaid and draw.io exports do) is not origin-clean in Chrome or Safari
+ * even when it is same-origin and CORS-approved, and `createImageBitmap` of
+ * it carries the same mark.
+ *
+ * Only image elements are checked. They are the one source that arrives
+ * straight from a URL; a canvas source is the consumer's own drawing, and
+ * checking it would cost a readback of the whole source on every capture.
+ * The answer is kept per element and URL, so a card's `<img>` drawn again on
+ * every relabel is probed once.
+ *
+ * Exported for a consumer that has another way to show such an image (a
+ * drawable card that holds it captures clean) and wants to choose it before
+ * `draw()` refuses.
+ */
+export function taintsCanvas(image) {
+  if (typeof HTMLImageElement === 'undefined' || !(image instanceof HTMLImageElement)) return false;
+  const src = image.currentSrc || image.src;
+  const known = originClean.get(image);
+  if (known && known.src === src) return !known.clean;
+  if (!probe) {
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 1;
+    // Read on every use and never shown, so keep it off the GPU.
+    probe = canvas.getContext('2d', { willReadFrequently: true });
+  }
+  let clean = true;
+  try {
+    probe.drawImage(image, 2, 2, 1, 1);   // off the canvas: marks it, decodes nothing
+    probe.getImageData(0, 0, 1, 1);
+  } catch {
+    clean = false;
+    probe = null;   // the probe took the taint in the atlas's place; start a new one
+  }
+  originClean.set(image, { src, clean });
+  return !clean;
+}
+
 /**
  * One canvas-backed texture atlas holding fixed-size square slots.
  *
@@ -159,6 +219,8 @@ export class TileAtlas {
     const iw = image.naturalWidth || image.width;
     const ih = image.naturalHeight || image.height;
     if (!iw || !ih) return false;
+    // Before the atlas is touched: there is no undoing a taint afterwards.
+    if (taintsCanvas(image)) return false;
 
     const scale = Math.min(w / iw, h / ih);
     const dw = Math.max(1, Math.round(iw * scale));
@@ -537,7 +599,10 @@ export class AtlasPair {
       const slots = tier === 'far' ? this.farSlot : this.nearSlot;
       if (ok && slots[index] === slot) {
         const atlas = tier === 'far' ? this.far : this.near;
-        if (atlas.draw(slot, img) && this.onTileReady) this.onTileReady(index, tier);
+        // A refused draw fails the tile like a failed load, so the item gives
+        // its slot back and is not requested again every frame.
+        if (!atlas.draw(slot, img)) this._failJob({ index, tier, slot });
+        else if (this.onTileReady) this.onTileReady(index, tier);
       } else if (!ok) {
         this._failJob({ index, tier, slot });
       }

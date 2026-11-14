@@ -53,6 +53,13 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   it moved. The Walker now tests the control map's declared-move reasons,
   the one piece of design rationale it is given.
 
+### Fixed
+
+- **One bad cover no longer stops a tile field.** `TileAtlas.draw` refuses
+  an image that would taint the atlas canvas, such as an SVG holding a
+  `<foreignObject>`, and the loader fails that one tile like a broken image
+  (`tests/spatial-atlas-taint.test.mjs`).
+
 ## [0.15.0] — 2026-10-30
 
 **muriel designs behavior, and the jury sees sequences.** muriel now frames itself as an interaction and visual-design system. Task analysis, GOMS, and task observation decide which work a flow should ask of a person before its controls are arranged; interaction contracts check that a flow holds together across its states; semantic zoom, linked displays, brushing, and faceted exploration share one multiscale contract. The jury grows from five seats to seven: the Loupe judges finish in 4× close-ups, and the Walker walks a flow frame by frame with the task in hand. Diagrams gain seven generators and carry their data and an accessible-figure contract; `muriel.collection` validates Wunderkammer collections; a prose channel says how to write the text people read; `muriel line-ends` fails strokes that end on nothing. Long-form notes: [`releases/v0.15.0.md`](releases/v0.15.0.md).
