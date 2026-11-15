@@ -32,19 +32,15 @@ jobs:
         run: node tests/multiscale-browser.mjs
 
   test:
-    name: test (${{ matrix.python-version }})
-    runs-on: ${{ matrix.os }}
+    # Pinned, not ubuntu-latest: setup-python has no Python 3.9 build for
+    # Ubuntu 26.04, so when ubuntu-latest moved there the 3.9 job failed at
+    # setup, before any test ran. 24.04 is the newest image that has both
+    # ends of the matrix. Unpin when the floor moves past 3.9.
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
-        include:
-          # 3.9 is the floor requires-python promises. ubuntu-latest moved to
-          # 26.04, which setup-python has no 3.9 build for, so the floor runs
-          # on 24.04 until support for 3.9 is dropped on purpose.
-          - python-version: '3.9'
-            os: ubuntu-24.04
-          - python-version: '3.13'
-            os: ubuntu-latest
+        python-version: ['3.9', '3.13']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
