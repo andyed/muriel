@@ -112,7 +112,9 @@ Keep a click or explicit action as a clear route from preview to commitment.
 
 Source inspected at Clipwall commit `6ac1e70`, 16 October 2026. Clipwall was
 the private predecessor of [Wunderkammer](https://github.com/andyed/wunderkammer/tree/v0.3.0),
-and the files named here are public at its v0.3.0 tag. This is source and
+and the files named here are public at its v0.3.0 tag. One default has changed
+since then: from 0.4.0, zooming no longer opens details by itself (see
+"Scale-driven detail" below). This is source and
 contract evidence, not a new runtime or user study. Read
 [`docs/PHILOSOPHY.md`](https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/PHILOSOPHY.md),
 [`docs/ARCHITECTURE.md`](https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/ARCHITECTURE.md),
@@ -125,6 +127,16 @@ contract evidence, not a new runtime or user study. Read
 - **Scale-driven detail** follows the preview path. The flat-wall rule uses
   projected size, separate open/close thresholds, and a sticky current item.
   The detail pane overlays a fixed stage; it does not move the camera.
+  The rule was on by default from 0.1.0 through 0.3.0. Since 0.4.0
+  (14 November 2026) it runs only when the address carries `?zoomdetail=on`;
+  without that a zoom opens nothing and a click opens an item's details. It
+  was switched off because it was not working in use, and what went wrong was
+  not recorded at the time. Wunderkammer's
+  [`TODO.md`](https://github.com/andyed/wunderkammer/blob/v0.5.0/TODO.md)
+  lists what to find out before it returns, and
+  [`docs/ZOOM_DETAIL.md` at v0.5.0](https://github.com/andyed/wunderkammer/blob/v0.5.0/docs/ZOOM_DETAIL.md)
+  describes it switched on. Treat the rule as a worked answer to the six
+  questions above, not as a default that held up in use.
 - **Unobscured area** matters: selection of the preview candidate considers the
   space left by the detail rail, using its width whether currently open or not.
 - **Spatial promotion** makes near items readable DOM cards. It does not also
