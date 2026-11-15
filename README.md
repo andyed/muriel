@@ -58,9 +58,15 @@ A channel is one output medium. Each has a markdown file of recipes, tools, and 
 
 Two references apply to every channel. [Dimensions](plugins/muriel/skills/compose/channels/dimensions.md) covers social cards, device sizes, paper, and video resolutions. [Style guides](plugins/muriel/skills/compose/channels/style-guides.md) defines the `brand.toml` schema, which imports from Google Stitch `design.md` (`muriel import`) and exports W3C design tokens (`muriel export-dtcg`).
 
-The web and kinetic-type docs default to two sibling projects, [marginalia](https://github.com/andyed/marginalia) and [iblipper](https://github.com/andyed/iblipper2025), because they pass muriel's rules without changes. Substitute your own libraries freely. Each channel names the library it assumes, and none of the rules depend on it.
+## Companion projects
 
-Collections of many images default to a third sibling, [Wunderkammer](https://github.com/andyed/wunderkammer), whose 3D views draw with muriel's renderer; [`references/collections.md`](plugins/muriel/skills/compose/references/collections.md) covers when to use it and how.
+muriel hands some work to sibling projects. Each lives in its own repository and works without muriel, and the channel or reference that uses one names it.
+
+- **[marginalia](https://github.com/andyed/marginalia)** is the [Web channel](plugins/muriel/skills/compose/channels/web.md)'s default for prose-led pages. It is editorial HTML and CSS (callouts, pull quotes, margin notes, footnotes, drop caps) with no dependencies, plus a Markdown converter and a Pandoc filter for one source that goes to HTML, PDF and DOCX.
+- **[Wunderkammer](https://github.com/andyed/wunderkammer)** is the default for collections of many images: an explorer a person pans, filters and compares in, and an agent reads selections back from. [`muriel.collection`](muriel/collection.py) writes its collection documents, and its 3D views draw with muriel's spatial renderer. [`references/collections.md`](plugins/muriel/skills/compose/references/collections.md) covers when to use it and how.
+- **[iblipper](https://github.com/andyed/iblipper2025)** is the default for kinetic type.
+
+marginalia and iblipper pass muriel's rules without changes. Substitute your own libraries freely. Each channel names the library it assumes, and none of the rules depend on it.
 
 ## Design languages
 
