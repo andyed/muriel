@@ -38,11 +38,11 @@ Wunderkammer describes the format. In short:
 
 The checks follow one Wunderkammer release at a time, because each wall
 refuses the fields added after it. ``validate()`` checks for
-``WUNDERKAMMER`` (0.3.0, the release muriel's collections reference pins)
+``WUNDERKAMMER`` (0.5.0, the release muriel's collections reference pins)
 unless ``release`` names another one in ``RELEASES``. 0.2.0 adds
-``ui.nouns``, which 0.1.0 refuses, and 0.3.0 adds no fields. ``"next"`` is
-Wunderkammer's work after 0.3.0, which adds a clip's ``video``. ``SINCE``
-lists each added field with the first release that accepts it.
+``ui.nouns``, which 0.1.0 refuses; 0.4.0 adds a clip's ``video``; 0.3.0
+and 0.5.0 add no fields. ``SINCE`` lists each added field with the first
+release that accepts it.
 
 Where Python and JavaScript differ, the port follows JavaScript: string
 limits count UTF-16 code units, numbers compare as doubles, ``trim()`` and
@@ -69,7 +69,6 @@ Or from the command line::
     python -m muriel.collection build albums.csv --out collection.json --group decade
     python -m muriel.collection validate collection.json
     python -m muriel.collection validate collection.json --release 0.1.0
-    python -m muriel.collection validate collection.json --release next
 
 ``validate`` exits 0 when the document is valid, 1 when it has problems
 (each printed with its path), and 2 when it read nothing or the input is
@@ -101,15 +100,16 @@ FORMAT = "wunderkammer.collection"
 VERSION = 1
 #: The release validate() checks for by default: the one muriel's
 #: references/collections.md pins. Move both together.
-WUNDERKAMMER = "0.3.0"
+WUNDERKAMMER = "0.5.0"
 #: The releases validate() can check for, oldest first. Each one has a
-#: pinned commit in tests/test_collection.py's REFERENCE. "next" is
-#: Wunderkammer after 0.3.0; rename it to the release that ships it.
-RELEASES = ("0.1.0", "0.2.0", "0.3.0", "next")
+#: pinned commit in tests/test_collection.py's REFERENCE. Unreleased
+#: Wunderkammer work goes last as "next"; rename it to the release that
+#: ships it.
+RELEASES = ("0.1.0", "0.2.0", "0.3.0", "0.4.0", "0.5.0")
 #: Each field added after 0.1.0, with the first release that accepts it.
 #: An older release refuses it as unsupported, as that release's wall does.
 #: A clip field is named ``clips.<field>``.
-SINCE = MappingProxyType({"ui.nouns": "0.2.0", "clips.video": "next"})
+SINCE = MappingProxyType({"ui.nouns": "0.2.0", "clips.video": "0.4.0"})
 LIMITS = MappingProxyType({
     "clips": 50000, "problems": 25, "sheets": 4096, "sheetSlots": 8, "sheetEdge": 4096, "sheetPx": 16384,
 })

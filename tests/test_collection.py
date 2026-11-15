@@ -55,11 +55,12 @@ REFERENCE = {
     "0.1.0": "caadd2e558e94eb7df109e9c389cbfccfef23781",   # tag v0.1.0
     "0.2.0": "dc16ee877a5c165f0fdec8beec0cd33847a6ce40",   # tag v0.2.0, with ui.nouns
     "0.3.0": "04c13dede6aa0a8e0dc133eaf62889582af31f21",   # tag v0.3.0, the same collection fields as 0.2.0
-    "next": "4c86e7961b7a8d394fdb02e44e8bca146e2ce06a",    # feat/video-tiles, with a clip's video
+    "0.4.0": "9abe5bbb3a85eed8c581baba0e53306a51fa6485",   # tag v0.4.0, with a clip's video
+    "0.5.0": "9e0071a992d1437a6670376fdc3cc5cab40c9dbd",   # tag v0.5.0, the same collection fields as 0.4.0
 }
 #: Unreleased Wunderkammer commits whose validator files differ from every
 #: pin's but validate as the mapped release does (layer 4).
-EQUIVALENT = {}   # 1dbda0c's validator files are v0.3.0's, now pinned in REFERENCE
+EQUIVALENT = {}   # 4c86e79's validator files (feat/video-tiles) are v0.4.0's, now pinned in REFERENCE
 #: Every (release, commit) the differential tests run.
 PINS = [*REFERENCE.items(), *((release, commit) for commit, release in EQUIVALENT.items())]
 #: wall/collection.mjs and every module it imports.
@@ -67,7 +68,10 @@ VALIDATOR_FILES = ("wall/collection.mjs", "wall/facet-counts.mjs")
 UI_FIELDS = {"0.1.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets",
              "0.2.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns",
              "0.3.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns",
-             "next": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns"}
+             "0.4.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns",
+             "0.5.0": "title, defaultGroup, facetOrder, facetLabels, hiddenFacets, nouns"}
+#: The releases whose walls read a clip's video.
+HAS_VIDEO = RELEASES[RELEASES.index(col.SINCE["clips.video"]):]
 
 
 def doc(**over):
@@ -291,11 +295,11 @@ def test_images_sheets_says_what_cells_are_when_a_clip_also_has_a_file():
 def test_a_clip_may_name_a_video_http_blob_or_relative_never_data():
     clips = [{"id": "a", "cover": "covers/a.webp", "video": "video/a.mp4", "kind": "video"},
              {"id": "b", "video": "https://cdn.example/b.webm"}]
-    assert validate(doc(clips=clips), base_url="https://host.example/c/collection.json", release="next") == []
-    assert validate(doc(clips=[{"id": "a", "video": "video/a.mp4"}]), release="next") == []
+    assert validate(doc(clips=clips), base_url="https://host.example/c/collection.json", release="0.4.0") == []
+    assert validate(doc(clips=[{"id": "a", "video": "video/a.mp4"}])) == []   # the default release reads it
     for video in ["data:video/mp4;base64,AAAA", "javascript:alert(1)", "file:///tmp/a.mp4", ""]:
         assert any(p.startswith("clips[0].video") for p in problems_of(doc(clips=[{"id": "a", "video": video}]),
-                                                                        base_url=None, release="next")), video
+                                                                        base_url=None, release="0.4.0")), video
 
 
 # ─── the shipped example ─────────────────────────────────────────────────
@@ -314,7 +318,7 @@ def test_the_psychodeli_example_validates():
 
 _CLIP_FIELDS = ("id, url, title, cover, coverVariants, detailCover, media, {}sheetSlots, sourceUrl, sourceLabel, "
                 "note, tags, props, source, kind, captured, palette, projection")
-CLIP_FIELDS = {release: _CLIP_FIELDS.format("video, " if release == "next" else "") for release in RELEASES}
+CLIP_FIELDS = {release: _CLIP_FIELDS.format("video, " if release in HAS_VIDEO else "") for release in RELEASES}
 
 
 def planted(mutate, base=doc, base_url=None, release=col.WUNDERKAMMER):
@@ -393,7 +397,7 @@ def test_the_supported_clip_list_is_the_releases_own(release):
 def test_a_clip_video_by_release(release):
     video = planted(lambda d: d["clips"][0].update(video="javascript:x"), release=release)
     prop = planted(lambda d: d["clips"][0]["props"].update(video="x"), release=release)
-    if release == "next":
+    if release in HAS_VIDEO:
         assert video == ["clips[0].video must be an http(s) or blob: URL"]
         assert prop == ["clips[0].props.video is hidden by the clip's own video field; rename the attribute"]
     else:
@@ -421,13 +425,13 @@ def test_a_clip_video_by_release(release):
     ("video/a.mp4", "not a url", "must be a valid URL"),
 ])
 def test_video_schemes(value, base_url, expected):
-    result = planted(lambda d: d.update(clips=[{"id": "a", "video": value}]), base_url=base_url, release="next")
+    result = planted(lambda d: d.update(clips=[{"id": "a", "video": value}]), base_url=base_url, release="0.4.0")
     assert result == ([f"clips[0].video {expected}"] if expected else [])
 
 
 def test_an_unknown_release_is_an_error():
-    with pytest.raises(ValueError, match=r"known: 0\.1\.0, 0\.2\.0, 0\.3\.0, next\)"):
-        validate(doc(), release="0.4.0")
+    with pytest.raises(ValueError, match=r"known: 0\.1\.0, 0\.2\.0, 0\.3\.0, 0\.4\.0, 0\.5\.0\)"):
+        validate(doc(), release="0.9.0")
 
 
 def test_every_added_field_names_a_known_release():
@@ -820,20 +824,20 @@ def test_cli_validate_prints_warnings_and_still_passes(tmp_path):
 def test_cli_validate_checks_for_a_release(tmp_path):
     path = tmp_path / "c.json"
     path.write_text(json.dumps(doc(ui={"title": "Cats", "nouns": {"item": "cat", "items": "cats"}})), encoding="utf-8")
-    assert run_cli("validate", path).returncode == 0   # the default, 0.3.0, accepts ui.nouns
+    assert run_cli("validate", path).returncode == 0   # the default, 0.5.0, accepts ui.nouns
     r = run_cli("validate", path, "--release", "0.1.0")
     assert r.returncode == 1
     assert f"- ui.nouns is not supported (supported: {UI_FIELDS['0.1.0']})" in r.stdout.splitlines()
     assert r.stderr.strip() == ("note: ui.nouns is newer than Wunderkammer 0.1.0; "
                                 "for a wall from release 0.2.0, validate with --release 0.2.0")
-    assert run_cli("validate", path, "--release", "0.4.0").returncode == 2
+    assert run_cli("validate", path, "--release", "0.9.0").returncode == 2
     # A clip field newer than the release is noted at its clip's path.
     path.write_text(json.dumps(doc(clips=[{"id": "a", "video": "a.mp4"}, {"id": "b", "video": "b.mp4"}])), encoding="utf-8")
-    r = run_cli("validate", path)
+    r = run_cli("validate", path, "--release", "0.3.0")
     assert r.returncode == 1
     assert r.stderr.strip() == ("note: clips.video is newer than Wunderkammer 0.3.0; "
-                                "for a wall from release next, validate with --release next")
-    assert run_cli("validate", path, "--release", "next").returncode == 0
+                                "for a wall from release 0.4.0, validate with --release 0.4.0")
+    assert run_cli("validate", path).returncode == 0   # the default reads a clip's video
     # A problem the release does not explain draws no note.
     path.write_text(json.dumps(doc(ui={"corpusName": "x"})), encoding="utf-8")
     r = run_cli("validate", path, "--release", "0.1.0")
@@ -1012,7 +1016,7 @@ def test_both_validators_agree(tmp_path, pinned, release, commit):
         assert noun_cases[0] == [] and any(p.startswith("ui.nouns.item ") for o in noun_cases for p in o)
     # And the clip video rule: read and judged where the release has it, refused unread where it does not.
     video_cases = outcomes[6 + len(_NOUNS):6 + len(_NOUNS) + 3 * len(_VIDEOS)]
-    if release == "next":
+    if release in HAS_VIDEO:
         assert any(p.startswith("clips[0].video must be an http(s) or blob: URL") for o in video_cases for p in o)
         assert all(any(p.startswith("clips[0].props.video is hidden") for p in o) for o in video_cases)
     else:

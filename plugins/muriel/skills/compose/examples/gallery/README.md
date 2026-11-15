@@ -20,14 +20,14 @@ of featured work and includes a motion-token tuner.
 
 Explore a collection of Psychodeli frames. Survey the wall, filter or group the
 items, then inspect an individual frame without losing the collection’s structure.
-The guide documents release 0.3.0; the external live demo can evolve independently.
+The guide documents release 0.5.0; the external live demo can evolve independently.
 
 [![Wunderkammer collection wall grouped by capture month](../wunderkammer-explore.webp)](https://andyed.github.io/clipwall-demo/)
 
 [Try the wall ↗](https://andyed.github.io/clipwall-demo/) ·
 [Spatial aisle ↗](https://andyed.github.io/clipwall-demo/?view=aisle&group=year) ·
 [Read the guide](../../references/collections.md) ·
-[View source ↗](https://github.com/andyed/wunderkammer/tree/v0.3.0)
+[View source ↗](https://github.com/andyed/wunderkammer/tree/v0.5.0)
 
 ### Linked Atlas
 

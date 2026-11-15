@@ -31,6 +31,14 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- **`muriel.collection` follows Wunderkammer 0.5.0.** `validate()` and
+  `muriel collection validate` now check for 0.5.0 by default, so a clip's
+  `video` passes without `--release`. The release that was called `next` is
+  0.4.0, and `--release next` is gone; `--release 0.3.0` still refuses
+  `video`, as that wall does. The collections reference pins every link to
+  the `v0.5.0` tag, gives the example's size as 301, and records the
+  jsDelivr content types as re-checked on 2026-11-15.
+
 - **The jury stipulates the control map before seating on interactive UI.**
   `jury.md` replaces the "no muriel tool yet" displacement note with the
   census, gains [What no seat holds](plugins/muriel/skills/compose/references/jury.md#what-no-seat-holds)
