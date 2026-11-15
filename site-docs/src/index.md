@@ -30,8 +30,8 @@ an agent can read back the exact selection.
 [Build your own](references/collections.md) ·
 [Read the Visible Language lineage](vocabularies/visible-language.md)
 
-The collection guide covers **Wunderkammer 0.3.0**, including spatial views and
-collection documents. The screenshot comes from that release; the live demo
+The collection guide covers **Wunderkammer 0.5.0**, including spatial views and
+collection documents. The screenshot comes from release 0.3.0; the live demo
 can change independently.
 
 ## Start here
