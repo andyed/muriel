@@ -32,7 +32,11 @@ jobs:
         run: node tests/multiscale-browser.mjs
 
   test:
-    runs-on: ubuntu-latest
+    # Pinned, not ubuntu-latest: setup-python has no Python 3.9 build for
+    # Ubuntu 26.04, so when ubuntu-latest moved there the 3.9 job failed at
+    # setup, before any test ran. 24.04 is the newest image that has both
+    # ends of the matrix. Unpin when the floor moves past 3.9.
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
