@@ -2336,7 +2336,9 @@ Keep a click or explicit action as a clear route from preview to commitment.</p>
 <h2 id="wunderkammer-as-an-inspected-implementation-precedent">Wunderkammer as an inspected implementation precedent<a class="headerlink" href="#wunderkammer-as-an-inspected-implementation-precedent" title="Permanent link">&para;</a></h2>
 <p>Source inspected at Clipwall commit <code>6ac1e70</code>, 16 October 2026. Clipwall was
 the private predecessor of <a href="https://github.com/andyed/wunderkammer/tree/v0.3.0">Wunderkammer</a>,
-and the files named here are public at its v0.3.0 tag. This is source and
+and the files named here are public at its v0.3.0 tag. One default has changed
+since then: from 0.4.0, zooming no longer opens details by itself (see
+"Scale-driven detail" below). This is source and
 contract evidence, not a new runtime or user study. Read
 <a href="https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/PHILOSOPHY.md"><code>docs/PHILOSOPHY.md</code></a>,
 <a href="https://github.com/andyed/wunderkammer/blob/v0.3.0/docs/ARCHITECTURE.md"><code>docs/ARCHITECTURE.md</code></a>,
@@ -2348,7 +2350,17 @@ contract evidence, not a new runtime or user study. Read
   change presentation, while search and facets change membership.</li>
 <li><strong>Scale-driven detail</strong> follows the preview path. The flat-wall rule uses
   projected size, separate open/close thresholds, and a sticky current item.
-  The detail pane overlays a fixed stage; it does not move the camera.</li>
+  The detail pane overlays a fixed stage; it does not move the camera.
+  The rule was on by default from 0.1.0 through 0.3.0. Since 0.4.0
+  (14 November 2026) it runs only when the address carries <code>?zoomdetail=on</code>;
+  without that a zoom opens nothing and a click opens an item's details. It
+  was switched off because it was not working in use, and what went wrong was
+  not recorded at the time. Wunderkammer's
+  <a href="https://github.com/andyed/wunderkammer/blob/v0.5.0/TODO.md"><code>TODO.md</code></a>
+  lists what to find out before it returns, and
+  <a href="https://github.com/andyed/wunderkammer/blob/v0.5.0/docs/ZOOM_DETAIL.md"><code>docs/ZOOM_DETAIL.md</code> at v0.5.0</a>
+  describes it switched on. Treat the rule as a worked answer to the six
+  questions above, not as a default that held up in use.</li>
 <li><strong>Unobscured area</strong> matters: selection of the preview candidate considers the
   space left by the detail rail, using its width whether currently open or not.</li>
 <li><strong>Spatial promotion</strong> makes near items readable DOM cards. It does not also
