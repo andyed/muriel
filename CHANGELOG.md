@@ -8,6 +8,21 @@ version numbers follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **`muriel rasterize` — SVG to PNG without Cairo.** The critique agent's
+  rasterize step called `cairosvg`, which on Windows installs and then fails
+  at import (no `libcairo-2.dll`). `muriel.rasterize` keeps cairosvg first
+  and falls back to ImageMagick 7 (`magick`), whose Windows build carries
+  librsvg and Cairo itself. Its librsvg reads only the first family of a
+  `font-family` stack and rounds weight 600 to Bold, so before the render
+  every stack is resolved against `magick -list font`. The CSS keywords muriel's
+  generators lead with (`ui-sans-serif`, `system-ui`, `ui-monospace`)
+  resolve to the faces a browser picks. On Windows, intermediate weights
+  become their named faces ("Segoe UI Semibold"), chosen by the CSS
+  weight-matching rule. Prints the backend, every substitution, leftover
+  font fallbacks, and a note when `<image>` elements are present, since
+  ImageMagick's librsvg drops them. The critique agent and the repo's
+  permission allowlist now point at it.
+
 - **`muriel control-map`: every control's home, in every state, as fact.**
   Reads a JSON census of a UI's settled states and each state's controls,
   and reports each control's distinct screen homes, the states that put a
