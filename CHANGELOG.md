@@ -39,6 +39,12 @@ version numbers follow [Semantic Versioning](https://semver.org/).
   the `v0.5.0` tag, gives the example's size as 301, and records the
   jsDelivr content types as re-checked on 2026-11-15.
 
+- **The zooming reference says details on zoom is off by default in
+  Wunderkammer.** `references/zooming-interfaces.md` described the flat
+  wall's scale-driven detail rule as it stood at 0.3.0. Since 0.4.0 the rule
+  runs only with `?zoomdetail=on`, and the reference now says so, says why,
+  and links the open questions.
+
 - **The jury stipulates the control map before seating on interactive UI.**
   `jury.md` replaces the "no muriel tool yet" displacement note with the
   census, gains [What no seat holds](plugins/muriel/skills/compose/references/jury.md#what-no-seat-holds)
